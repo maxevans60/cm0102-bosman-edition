@@ -334,7 +334,7 @@ static void tick(void)
 static void at_quit(void)
 {
     if (hosting) lobby_host_close();
-    relay_host_stop();
+    relay_host_finish(1000);
     lobby_finish(2000);
 }
 

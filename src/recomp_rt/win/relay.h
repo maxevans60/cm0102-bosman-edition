@@ -46,6 +46,9 @@
 /* Host, on the game's thread. Each call with another code or token starts a new relay connection. */
 void relay_host_set(const char *lobby, const char *code, const char *token);
 void relay_host_stop(void);
+/* At the program's end: stops the host's relay connection and waits at most ms until the last bytes of each
+ * channel (the QUIT of net_core.c) went to the relay and the connection closed. */
+void relay_host_finish(int ms);
 /* The next human manager's connection for the game's listen socket, or HN_INVALID. *addr is
  * LR_RELAY_PEERS + channel in network order. */
 hn_sock relay_take_joiner(uint32_t *addr, uint16_t *port);

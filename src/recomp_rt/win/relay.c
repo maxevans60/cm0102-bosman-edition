@@ -80,6 +80,16 @@ static int take(Queue *q, hn_sock s)
     return got;
 }
 
+/* Reads and drops what s still holds, then closes it. A socket closed with unread bytes resets the connection,
+ * and the game's end then loses the bytes that it has not read yet: a joiner saw "the connection was lost" in
+ * place of the host's QUIT (net_core.c) when the host quit (test 4 of the spec, 2026-10-29). */
+static void close_quietly(hn_sock s)
+{
+    uint8_t buf[4096];
+    for (int i = 0; i < 1024 && hn_recv(s, buf, sizeof buf) > 0; i++) {}
+    hn_close(s);
+}
+
 int relay_url(char *out, size_t room, const char *lobby, const char *code, const char *query)
 {
     char host[256];
@@ -117,6 +127,7 @@ typedef struct {
 /* Shared with the host thread, under hn_lock. */
 static struct {
     int started, active, gen, replaced;   /* replaced: 4001 for this code and token */
+    int idle_gen;                  /* the gen that the thread last saw with no connection and nothing wanted */
     char lobby[256], code[9], token[96];
     struct {
         hn_sock s;
@@ -134,7 +145,7 @@ static void close_channel(Channel *c)
             "bytes\n", (int)(c - host_channels), (unsigned long long)((hn_ms() - c->opened) / 1000), c->frames_out,
             (unsigned long long)c->bytes_out, c->frames_in, (unsigned long long)c->bytes_in);
     give(&c->to_game, c->mine);
-    hn_close(c->mine);
+    close_quietly(c->mine);
     drop(&c->batch), drop(&c->to_game);
     memset(c, 0, sizeof *c);
 }
@@ -192,14 +203,14 @@ static int kick(WsConn *w, int n)
 }
 
 /* Sends every channel's batch. -1 when the relay connection broke. */
-static int send_batches(WsConn *w, Channel *ch, uint64_t *last_sent)
+static int send_batches(WsConn *w, Channel *ch, uint64_t *last_sent, int force)
 {
     static uint8_t frame[RELAY_BATCH_MAX + 16384 + 1];
     for (int i = 0; i < RELAY_CHANNELS; i++) {
         Channel *c = &ch[i];
         size_t n = c->open ? c->batch.len - c->batch.off : 0;
         /* At most one frame each RELAY_BATCH_MS for each channel, unless it ends or its batch is full. */
-        if (n && !c->ended && n < RELAY_BATCH_MAX && hn_ms() - c->last_frame < RELAY_BATCH_MS) n = 0;
+        if (n && !force && !c->ended && n < RELAY_BATCH_MAX && hn_ms() - c->last_frame < RELAY_BATCH_MS) n = 0;
         if (n) {
             frame[0] = (uint8_t)i;
             memcpy(frame + 1, c->batch.p + c->batch.off, n);
@@ -234,12 +245,22 @@ static void host_thread(void *unused)
         hn_unlock();
         uint64_t now = hn_ms();
         if (w && (!active || want != gen)) {
+            /* The host stops (its game ends, relay_host_finish): the last bytes of each channel go first, for
+             * example the QUIT of net_core.c, which the game wrote just before. */
+            if (!active) {
+                for (int i = 0; i < RELAY_CHANNELS; i++)
+                    if (ch[i].open && !ch[i].ended) take(&ch[i].batch, ch[i].mine);
+                send_batches(w, ch, &last_sent, 1);
+            }
             close_all(ch);
             ws_close(w, 1000);
             w = NULL;
             fprintf(stderr, "recomp: relay: the host's connection closed\n");
         }
         if (!active) {
+            hn_lock();
+            host.idle_gen = want;
+            hn_unlock();
             gen = -1, retry_at = 0, backoff = RETRY_FIRST_MS;
             hn_sleep(50);
             continue;
@@ -331,7 +352,7 @@ static void host_thread(void *unused)
                 due = 1;
         }
         /* One moment for all channels: a screen that the host sends to every human manager leaves together. */
-        int broke = due && send_batches(w, ch, &last_sent) < 0;
+        int broke = due && send_batches(w, ch, &last_sent, 0) < 0;
         if (!broke && now - last_sent >= RELAY_PING_MS) {
             broke = ws_send(w, 1, "ping", 4, SEND_MS) < 0;
             last_sent = now;
@@ -367,6 +388,19 @@ void relay_host_stop(void)
     if (host.active) host.active = 0, host.gen++;
     host.replaced = 0;
     hn_unlock();
+}
+
+void relay_host_finish(int ms)
+{
+    relay_host_stop();
+    uint64_t until = hn_ms() + (uint64_t)ms;
+    for (;;) {
+        hn_lock();
+        int done = !host.started || host.idle_gen == host.gen;
+        hn_unlock();
+        if (done || hn_ms() >= until) return;
+        hn_sleep(10);
+    }
 }
 
 hn_sock relay_take_joiner(uint32_t *addr, uint16_t *port)
@@ -441,7 +475,7 @@ static void joiner_thread(void *arg)
             "%llu bytes\n", (unsigned long long)((hn_ms() - opened) / 1000), frames_out,
             (unsigned long long)bytes_out, frames_in, (unsigned long long)bytes_in);
     ws_close(l->w, code ? 0 : 1000);
-    hn_close(l->mine);
+    close_quietly(l->mine);
     drop(&batch), drop(&to_game);
     free(l);
 }
