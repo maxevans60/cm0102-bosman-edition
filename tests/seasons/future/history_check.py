@@ -52,6 +52,7 @@ the rules above. --known: a TSV with check, competition, year
 """
 import collections
 import csv
+import datetime
 import os
 import re
 import struct
@@ -289,6 +290,12 @@ def check(game, rules=None):
             if not conf and len(older) >= 3:
                 top, n = collections.Counter(older).most_common(1)[0]
                 conf = top if n * 5 >= len(older) * 4 else ""
+        # the competition record on another continent than its rules (open item 21: the UEFA Nations League built
+        # on the record of the Asian Cup qualifiers, continent Asia)
+        record = game.continents.get(comp["continent"], "")
+        if rule.get("confs") and record in CONF_IDS and record not in rule["confs"]:
+            faults.append(("comp-continent", name, save_year, f"the record has continent {record}, the competition "
+                                                              f"is {'|'.join(sorted(rule['confs']))}"))
         if conf:
             for r in game_rows:
                 for role, p in (("winner", r[4]), ("runner-up", r[5])):
@@ -330,6 +337,53 @@ def check(game, rules=None):
     return sorted(faults, key=lambda f: (f[1], f[0], f[2]))
 
 
+def read_nations(path):
+    """The rows of nations.tsv: [{kind, season, from (month, day), nation, to}]."""
+    if not path or not os.path.exists(path):
+        return []
+    out = []
+    for r in tsv(path):
+        month, day = (int(x) for x in r["from"].split("-"))
+        out.append({"kind": r["kind"], "season": int(r["season"]), "from": (month, day), "nation": r["nation"],
+                    "to": r["to"]})
+    return out
+
+
+def due(game, change):
+    """1 when a change of nations.tsv holds at the save date: with changing rules on from its date, with changing
+    rules off only when its season is not after the start season (the data of a later start holds it)."""
+    if not game.changing:
+        return change["season"] <= game.start
+    month, day = change["from"]
+    year = game.date[0]
+    start = (datetime.date(change["season"], month, day) - datetime.date(change["season"], 1, 1)).days
+    return change["season"] <= game.start or (year, game.date[1]) >= (change["season"], start)
+
+
+def check_nations(game, changes):
+    """[(check, nation, season, detail)]: a live record (with a continent) under a name that a due rename
+    replaced, and a nation in another confederation than a due move gives. A dead record (no continent) beside
+    the live one of its later name is no fault."""
+    faults = []
+    live = {}
+    for nid, (name, conf) in game.nations.items():
+        if conf:
+            live.setdefault(name, []).append(conf)
+    year = game.date[0]
+    for c in changes:
+        if not due(game, c):
+            continue
+        if c["kind"] == "rename" and c["nation"] in live:
+            faults.append(("nation-name", c["nation"], c["season"],
+                           f"a live record named {c['nation']} in {year}; from {c['season']} the name is {c['to']}"))
+        elif c["kind"] == "confed":
+            for conf in live.get(c["nation"], []):
+                if conf != c["to"]:
+                    faults.append(("nation-confed", c["nation"], c["season"],
+                                   f"{c['nation']} is in {conf} in {year}; from {c['season']} it is in {c['to']}"))
+    return faults
+
+
 def place(p):
     return f"{p[0]} ({p[1]})" if p[0] and p[1] else p[0]
 
@@ -352,7 +406,7 @@ def write(game, label, out, faults, known):
 def main(argv):
     args = [a for a in argv[1:]]
     opts = {}
-    for k in ("--out", "--rules", "--names", "--known", "--label"):
+    for k in ("--out", "--rules", "--names", "--known", "--label", "--nations"):
         if k in args:
             i = args.index(k)
             opts[k] = args[i + 1]
@@ -364,12 +418,13 @@ def main(argv):
     rules = Rules(opts.get("--rules", default if os.path.exists(default) else None),
                   opts.get("--names", os.path.join(HERE, "history_names.tsv")))
     known = read_known(opts.get("--known", os.path.join(HERE, "history_known.tsv")))
+    nations = read_nations(opts.get("--nations", os.path.join(HERE, "nations.tsv")))
     new = 0
     for path in args:
         game = Game(path)
         label = opts.get("--label") if len(args) == 1 and "--label" in opts else \
             re.sub(r"[^A-Za-z0-9.-]+", "_", os.path.relpath(path, os.path.dirname(os.path.dirname(path))))
-        faults = check(game, rules)
+        faults = sorted(check(game, rules) + check_nations(game, nations), key=lambda f: (f[1], f[0], f[2]))
         if "--out" in opts:
             write(game, label, opts["--out"], faults, known)
         fresh = [f for f in faults if not is_known(known, f[0], f[1], f[2])]

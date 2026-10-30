@@ -13,6 +13,7 @@ and a known-fault list. All data is made up, so the fixture holds no data of a d
 """
 import csv
 import os
+import re
 import struct
 import subprocess
 import sys
@@ -27,7 +28,7 @@ CHECKER = os.path.join(HERE, "history_check.py")
 CONTINENTS = ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"]
 NATIONS = [("Aland", 2), ("Borduria", 2), ("Carpania", 2), ("Durania", 1), ("Elbonia", 1), ("Freedonia", 3),
            ("Genovia", 3), ("Hatay", 5),
-           ("Ruritania", 3), ("Kurlandia", 5), ("Osterlich", 5)]
+           ("Ruritania", 3), ("Kurlandia", 5), ("Osterlich", 5), ("Old Genovia", -1)]
 CLUBS = [("Aland City", 0), ("Aland United", 0), ("Borduria Sport", 1), ("Carpania FC", 2), ("Durania Stars", 3),
          ("Elbonia Rovers", 4)]
 SIDE0 = 100                                  # national side ids follow the club ids
@@ -35,7 +36,7 @@ SIDE0 = 100                                  # national side ids follow the club
 COMPS = [(0, "Aland League", 2, 0, "club"), (1, "Euro Super Cup", 2, -1, "club"),
          (10, "World Finals", -1, -1, "nation"), (11, "Euro Finals", 2, -1, "nation"),
          (12, "Asia Finals", 1, -1, "nation"), (13, "Americas Finals", 3, -1, "nation"),
-         (14, "Hatay Cup", 5, -1, "nation")]
+         (14, "Hatay Cup", 5, -1, "nation"), (15, "Nations Shield", 1, -1, "nation")]
 
 
 def side(n):
@@ -71,10 +72,25 @@ def history():
     for y in range(2015, 2040):                                       # Hatay Cup: clean, its class ended
         a, b = ((7, 9), (9, 10), (10, 7))[y % 3]
         rows.append((14, y, side(a), side(b), -1, -1))
+    for y in (2020, 2024):                                            # Nations Shield: a European cup on
+        rows.append((15, y, side(1), side(2), -1, -1))                # an Asian record (rules run only)
     return rows, want
 
 
-def records():
+# Nation changes (nations.tsv): the save is on day 189 of 2040 with changing rules on.
+NATION_CHANGES = ("kind\tseason\tfrom\tnation\tto\tsource\n"
+                  "rename\t2024\t09-01\tHatay\tHatay Republic\tdue in the start season\n"
+                  "rename\t2030\t09-01\tRuritania\tNeo-Ruritania\tdue, a live record\n"
+                  "rename\t2030\t09-01\tOld Genovia\tGenovia\tdue, a dead record (no continent)\n"
+                  "rename\t2040\t09-01\tKurlandia\tCourland\tnot due before 1 September 2040\n"
+                  "confed\t2035\t09-01\tDurania\tUEFA\tdue, still in AFC\n"
+                  "confed\t2020\t02-01\tElbonia\tAFC\tdue, in AFC\n")
+NATION_FAULTS = {("nation-name", "Hatay", 2024), ("nation-name", "Ruritania", 2030),
+                 ("nation-confed", "Durania", 2035)}
+NATION_FAULTS_OFF = {("nation-name", "Hatay", 2024)}             # changing rules off: only to the start season
+
+
+def records(changing=1):
     def pad(b, n):
         return b + bytes(n - len(b))
 
@@ -104,6 +120,7 @@ def records():
         struct.pack_into("<ii", r, 0x59, c, n)
         comp[part] += r
     rows, want = history()
+    want |= NATION_FAULTS
     hist = {"club": bytearray(), "nation": bytearray()}
     files = {cid: part for cid, _, _, _, part in COMPS}
     for i, (cid, y, a, b, c, h) in enumerate(rows):
@@ -120,7 +137,7 @@ def records():
     members = [("continent.dat", cont), ("nation.dat", bytes(nat)), ("club.dat", clubs), ("nat_club.dat", sides),
                ("club_comp.dat", bytes(comp["club"])), ("nation_comp.dat", bytes(comp["nation"])),
                ("club_comp_history.dat", bytes(hist["club"])), ("nation_comp_history.dat", bytes(hist["nation"])),
-               ("news.dat", bytes(news)), ("bosman_season.dat", struct.pack("<4i", 1, 16, 2025, 1)),
+               ("news.dat", bytes(news)), ("bosman_season.dat", struct.pack("<4i", 1, 16, 2025, changing)),
                ("World Finals_10.tmp", part(2200)), ("Asia Finals_12.tmp", part(2043)),
                ("Euro Finals_11.tmp", b"\0" * 64), ("Americas Finals_13.tmp", b"\0" * 64),
                ("Euro Super Cup_1.tmp", b"\0" * 64), ("Hatay Cup_14.tmp", part(2999))]
@@ -150,6 +167,24 @@ def faults(folder, label):
         return {(r["check"], r["competition"], int(r["year"])): r["known"] for r in csv.DictReader(f, delimiter="\t")}
 
 
+def renames_match():
+    """The rename rows of nations.tsv against season_intl_renames (season_intl_rules.c)."""
+    src = open(os.path.join(ROOT, "src", "recomp_rt", "win", "season_intl_rules.c"), encoding="latin-1").read()
+    code = set()
+    for season, old, new in re.findall(r'\{(\d{4}), "([^"]*)", ((?:"[^"]*"\s*)+),', src):
+        name = "".join(re.findall(r'"([^"]*)"', new))
+        code.add((int(season), old, bytes(name, "latin-1").decode("unicode_escape").encode("latin-1")
+                  .decode("latin-1")))
+    with open(os.path.join(HERE, "nations.tsv"), encoding="utf-8") as f:
+        rows = {(int(r["season"]), r["nation"], r["to"])
+                for r in csv.DictReader((l for l in f if not l.startswith("#")), delimiter="\t")
+                if r["kind"] == "rename"}
+    if not code or rows != code:
+        return [f"nations.tsv renames differ from season_intl_renames: only in the file {sorted(rows - code)}, "
+                f"only in the code {sorted(code - rows)}"]
+    return []
+
+
 def main():
     work = tempfile.mkdtemp(prefix="history-check-")
     members, want = records()
@@ -158,8 +193,11 @@ def main():
     bad = []
     empty = os.path.join(work, "none.tsv")
     open(empty, "w").write("check\tcompetition\tyear\tnote\n")
+    nations = os.path.join(work, "nations.tsv")
+    with open(nations, "w", encoding="utf-8") as f:
+        f.write("# a note line\n" + NATION_CHANGES)
 
-    code, out = run([sav, "--out", work, "--label", "plain", "--known", empty])
+    code, out = run([sav, "--out", work, "--label", "plain", "--known", empty, "--nations", nations])
     got = faults(work, "plain")
     if set(got) != want:
         bad.append(f"plain run: missed {sorted(want - set(got))}, extra {sorted(set(got) - want)}")
@@ -183,17 +221,20 @@ def main():
         f.write("# a note line\ncomp\tname\tkind\tconfed\thas_host\tcycle\tnext_year\tend_year\n"
                 "americas\tAmericas Finals\tintl_finals\tCONCACAF\t1\t2\t2041\tnone\n"
                 "world\tWorld Finals\tintl_finals\tFIFA\t1\t4\t2038\t2034\n"
-                "esc\tEuro Super Cup\tleague\tUEFA\t0\t1\t2041\tnone\n")
+                "esc\tEuro Super Cup\tleague\tUEFA\t0\t1\t2041\tnone\n"
+                "shield\tNations Shield\tnations_league\tUEFA\t0\t4\t2028\tnone\n")
     names = os.path.join(work, "names.tsv")
     with open(names, "w", encoding="utf-8") as f:
         f.write("# a note line\npattern\tcomp\nAmericas Finals\tamericas\n(The )?World Finals\tworld\n"
-                "Euro Super Cup\tesc\n")
+                "Euro Super Cup\tesc\nNations Shield\tshield\n")
     known = os.path.join(work, "known.tsv")
     with open(known, "w", encoding="utf-8") as f:
         f.write("check\tcompetition\tyear\tnote\nduplicate\tEuro Finals\t*\tplanted\n")
-    code, out = run([sav, "--out", work, "--label", "rules", "--rules", rules, "--names", names, "--known", known])
+    code, out = run([sav, "--out", work, "--label", "rules", "--rules", rules, "--names", names, "--known", known,
+                     "--nations", nations])
     got = faults(work, "rules")
-    want2 = want - {("missing", "World Finals", 2038), ("same-final", "Euro Super Cup", 2028)}
+    want2 = (want - {("missing", "World Finals", 2038), ("same-final", "Euro Super Cup", 2028)}) | \
+        {("comp-continent", "Nations Shield", 2040)}
     if set(got) != want2:
         bad.append(f"rules run: missed {sorted(want2 - set(got))}, extra {sorted(set(got) - want2)}")
     if got.get(("duplicate", "Euro Finals", 2028)) != "known":
@@ -203,9 +244,20 @@ def main():
     with open(known, "a", encoding="utf-8") as f:
         for c, comp, y in sorted(want2):
             f.write(f"{c}\t{comp}\t{y}\tplanted\n")
-    code, out = run([sav, "--rules", rules, "--names", names, "--known", known])
+    code, out = run([sav, "--rules", rules, "--names", names, "--known", known, "--nations", nations])
     if code != 0:
         bad.append(f"known run: exit code {code} with only known faults\n{out}")
+
+    # Changing rules off: only the nation changes up to the start season are due.
+    off = os.path.join(work, "off.sav")
+    write_sav(off, records(changing=0)[0])
+    run([off, "--out", work, "--label", "off", "--known", empty, "--nations", nations])
+    got = {k for k in faults(work, "off") if k[0].startswith("nation-")}
+    if got != NATION_FAULTS_OFF:
+        bad.append(f"changing rules off: nation faults {sorted(got)}, not {sorted(NATION_FAULTS_OFF)}")
+
+    # nations.tsv holds the renames of the season code.
+    bad += renames_match()
 
     for b in bad:
         print("FAIL  " + b)
