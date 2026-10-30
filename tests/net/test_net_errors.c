@@ -94,6 +94,51 @@ static int read_packet(uint32_t c, uint8_t *out, unsigned n)
     return (int)have;
 }
 
+/* A control packet that arrives between the runtime's look for one and the game's read (slice 9's quit leg of
+ * 2026-10-29: the host's game read a PONG as a packet of opcode 0xbe & 31 = 30). The host sends a PING at every call
+ * for RACE_MS and no game bytes; the joiner reads as receive_packet 0x77af20 does, one byte at a time. Every byte
+ * that the joiner's game gets is a control packet that reached it. */
+#define RACE_MS 3000
+static void test_control_race(void)
+{
+    uint32_t me;
+    if (hn_route_address(&me) < 0) return;
+    uint16_t port = (uint16_t)(24000 + getpid() % 4000 * 2 + 1);
+    pid_t pid = fork();
+    if (!pid) {
+        nc_set_identity("7.7.7", "", "");
+        nc_set_ping_every(0);
+        nc_start();
+        uint32_t l = nc_socket(2, 1);
+        nc_setopt(l, NC_SOL_SOCKET, NC_SO_REUSEADDR, 1, 0);
+        nc_nonblocking(l, 1);
+        if (nc_bind(l, me, port) < 0 || nc_listen(l, 16) < 0) _exit(10);
+        uint32_t a = NC_INVALID;
+        for (uint64_t until = hn_ms() + 8000; a == NC_INVALID && hn_ms() < until; hn_sleep(2)) a = nc_accept(l, NULL, NULL);
+        if (a == NC_INVALID) _exit(11);
+        nc_nonblocking(a, 1);
+        uint8_t b[8];
+        for (uint64_t until = hn_ms() + RACE_MS + 500; hn_ms() < until; hn_sleep(1)) nc_recv(a, b, 1);
+        nc_close(a);
+        _exit(0);
+    }
+    hn_sleep(200);
+    nc_set_identity("7.7.7", "", "");
+    uint32_t c = nc_socket(2, 1);
+    CHECK(nc_connect(c, me, port) == 0, "race: connect: %d", nc_error());
+    nc_nonblocking(c, 1);
+    long leaked = 0;
+    uint8_t b[8];
+    for (uint64_t until = hn_ms() + RACE_MS; hn_ms() < until;) {
+        long r = nc_recv(c, b, 1);
+        if (r > 0) leaked += r;
+    }
+    CHECK(leaked == 0, "race: the game read %ld bytes of control packets", leaked);
+    nc_close(c);
+    int status;
+    waitpid(pid, &status, 0);
+}
+
 static void test_control(void)
 {
     uint32_t me;
@@ -442,6 +487,7 @@ int main(void)
     test_connect_errors();
     test_connection_test();
     test_control();
+    test_control_race();
     test_broken_control();
     printf("%s\n", failures ? "net_errors: FAILED" : "net_errors: ok");
     return failures != 0;
