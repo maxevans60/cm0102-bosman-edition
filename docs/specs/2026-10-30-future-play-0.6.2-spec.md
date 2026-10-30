@@ -153,9 +153,9 @@ Merge danger: two-way door. Blast radius: every season game after 2099, and the 
 Blocked by: none (after the merge of the checker branch)
 Delivers: the checker lists entrants with their route in and checks them against the year's access rule. It checks nation names and confederations by year, counts the under-21 and under-23 players of each nation, and writes the Tier B world-health report.
 Merge danger: two-way door, tests only. Blast radius: false passes or false faults in the checker.
-- [ ] On existing saves, the checker finds Yugoslavia after 2006 in a 2001 game, and every fault the forum player reported.
-- [ ] A fixture save with a wrong entrant fails the entrant check.
-- [ ] The world-health report reads squad sizes, under-21 and under-23 counts, managers, balances and save size from a save.
+- [x] On existing saves, the checker finds Yugoslavia after 2006 in a 2001 game, and every fault the forum player reported.
+- [x] A fixture save with a wrong entrant fails the entrant check.
+- [x] The world-health report reads squad sizes, under-21 and under-23 counts, managers, balances and save size from a save.
 
 ### 3. Tier A switch
 Blocked by: 1, 2

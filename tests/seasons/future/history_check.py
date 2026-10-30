@@ -65,7 +65,8 @@ edition's year or the year before, else "qualifier". Checks, for the editions wh
 save date (a confederation check for every edition):
     entrant-confed entrants from another confederation than the rules give (also the short name's); in the World
                   Cup qualifying up to 2 teams of each other confederation pass (the play-off between
-                  confederations); a nation with a due move to a confederation of the competition passes
+                  confederations); a nation with a due move to a confederation of the competition passes, and so
+                  does the winner of a route competition (a Mexican winner of the Copa Sudamericana in the Recopa)
     entrant-count  a finals edition with another count of teams than the finals table of the season code
                   (season_intl_table.c; after its last row the count of the last row), or than access.tsv
     entrant-host   a host of the finals table that the data holds is not an entrant
@@ -85,12 +86,13 @@ per live nation. Time per game day is not in a save. Checks:
 kind, confed (FIFA or nation: no check, else codes joined by |), has_host (0: no host check, 1: every row from
 the start on needs one), cycle (0: the competition ended) and end_year (a year or none). --names (default
 history_names.tsv next to this file) gives the key of each competition name of a save; a name with no key keeps
-the rules above. --known: a TSV with check, competition, year
+the rules above. --known: a TSV with check, competition (* for any text), year
 (or *) and a note; a fault that matches is printed as "known". Exit code 1 when a fault is not known.
 """
 import collections
 import csv
 import datetime
+import fnmatch
 import os
 import re
 import struct
@@ -256,7 +258,9 @@ def read_known(path):
 
 
 def is_known(known, check, comp, year):
-    return any(k["check"] == check and k["competition"] == comp and k["year"] in ("*", str(year)) for k in known)
+    """The competition of a known row may hold * for any text (fnmatch)."""
+    return any(k["check"] == check and fnmatch.fnmatchcase(comp, k["competition"]) and k["year"] in ("*", str(year))
+               for k in known)
 
 
 def number(v):
@@ -607,11 +611,12 @@ def entrants(game, rules, access, changes=()):
                 route += [f"{'winner' if p == 1 else 'place ' + str(p)} {c} {y}" for y, c, p in held.get(t, ())
                           if y in (year - 1, year) and c != name]
                 listing.append((cid, name, year, first, last, t, tname, nation, conf, "; ".join(route) or "qualifier"))
+                by_route = any(t in won[r] for r in routes)          # a route winner enters from any confederation
                 for shown, cs in confs:
-                    if cs and conf and conf not in cs and not due_to[nation] & cs and \
+                    if cs and conf and conf not in cs and not by_route and not due_to[nation] & cs and \
                             not any(year < m for m in moved.get(nation, ())):
                         foreign[(shown, "|".join(sorted(cs)))].append(f"{tname} ({conf})")
-                if routes and done and not any(t in won[r] for r in routes) and all(by_key.get(r) for r in routes):
+                if routes and done and not by_route and all(by_key.get(r) for r in routes):
                     faults.append(("entrant-route", name, year, f"{tname} ({nation}) won none of {', '.join(routes)} in "
                                                                 f"{year} or the edition before"))
             for (shown, cs), teams_ in sorted(foreign.items()):
