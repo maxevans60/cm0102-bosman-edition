@@ -58,7 +58,7 @@ The smoke test plays a fixed set of clicks through the main screens in the class
 
 ## Platform checks
 
-The game ships for Mac, Windows and Linux. At each release the release script builds all three packages. The Windows build runs its smoke test under wine on the Mac. The Linux build is made and checked in a linux/amd64 container. Each platform runs the smoke test in both screen modes and a season change with a save and load.
+The game ships for Mac, Windows and Linux. At each release the release script builds all three packages. The Windows build runs its smoke test under wine on the Mac. The Linux build is made and checked in a linux/amd64 container. Then `tools/linux/arch_check.sh` runs the AppImage on a current Arch image with Mesa, under X11 and Wayland, with a graphics renderer (the other Linux checks use the SDL dummy drivers). Each platform runs the smoke test in both screen modes and a season change with a save and load.
 
 ## Rules source checks
 
