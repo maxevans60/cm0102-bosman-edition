@@ -84,6 +84,15 @@ int main(int argc, char **argv)
     CHECK(season_club_edition(&intercontinental, 2024, &e) && e.clubs == 6 && e.row->season == 2024,
           "the FIFA Intercontinental Cup of 2024/25 with 6 clubs");
     CHECK(!season_club_edition(&intercontinental, 2023, &e), "no FIFA Intercontinental Cup in 2023/24");
+    /* The row 2026/27 gives "26 August – December 2026", no last day (spec review): the days of 2025/26 (14 September
+     * to 17 December) moved a year, never all rounds on one day; after the table the same. */
+    for (int y = 2024; y <= LAST; y++)
+        if (!season_club_edition(&intercontinental, y, &e) || e.last - e.first < 60 ||
+            month_day(e.last, e.last_year) < 1201) {
+            CHECK(0, "the FIFA Intercontinental Cup of %d from September to December (days %d to %d)", y, e.first,
+                  e.last);
+            break;
+        }
     CHECK(season_club_next_edition(&intercontinental, 2001) == 2024, "the first FIFA Intercontinental Cup is 2024/25");
 
     /* Q7: the Suruga Bank Championship ends in 2019 and never comes back. */

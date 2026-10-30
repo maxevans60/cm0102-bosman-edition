@@ -288,8 +288,6 @@ entrant-host	OFC*Nations Cup*	2016	open item 45
 entrant-host	OFC*Nations Cup*	2024	open item 45
 entrant-host	Africa*Cup of Nations	2002	open item 46: the host does not play (Mali 2002)
 entrant-host	Africa*Cup of Nations	2027	open item 46: Kenya, Tanzania and Uganda do not play in 2027
-entrant-route	Intercontinental Cup	*	open item 47: a data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7; then the original's drawn club passes (slice 9a)
-entrant-confed	CONCACAF Champions*	2020	open item 49: the Argentine club Atlanta in the CONCACAF Champions Cup
-entrant-confed	CONCACAF Champions*	2021	open item 49
-entrant-confed	CONCACAF Champions*	2022	open item 49
+entrant-route	Intercontinental Cup	2002	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)
+entrant-route	Intercontinental Cup	2003	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)
 entrant-dead	*CONCACAF Nations League*	*	open item 51: the dead Netherlands Antilles plays beside Curaçao

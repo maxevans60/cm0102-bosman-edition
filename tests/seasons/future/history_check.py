@@ -86,8 +86,8 @@ save date (a confederation check for every edition):
                   start year: an edition of the start year may come from the data); a route competition with no
                   row written in the game (a year after the start) in the year or one cycle before did not play
                   (its nations are not selected), and its place goes to a drawn club, as the original draws one
-                  (WorldClubChamp::pick_entrant 0x92ae60, World_Club_Cup 0x92baa8): as many entrants as such
-                  routes may come by no route (slice 9a)
+                  (WorldClubChamp::pick_entrant 0x92ae60, World_Club_Cup 0x92baa8): each such route lets one
+                  entrant of its confederation come by no route (slice 9a)
     save-part      a fixtures part whose size does not fit its count (not read)
 
 World health (--health), Tier B: <label>.health.tsv holds the save size and part count, the players, under-21 and
@@ -611,10 +611,11 @@ def entrants(game, rules, access, changes=()):
         return {w for y, w in by_key.get(key, ()) if y in years}
 
     def played(key, year):
-        """1 when the game wrote a row of route competition key (a year after the start) at most one cycle before
-        the year: else its nations are not selected and a club comes by the original's draw (slice 9a)."""
+        """1 when the game wrote a row of route competition key (a year after the start) in the window of winners():
+        else its nations are not selected and a club of its confederation comes by the original's draw (slice 9a).
+        A route that stopped by a fault of the game also counts as not played; the check `missing` reports it."""
         cycle = number(rules.rows.get(key, {}).get("cycle")) or 1
-        return any(game.start < y <= year and year - y <= cycle for y, w in by_key.get(key, ()))
+        return any(game.start < y <= year and year - y <= cycle + 1 for y, w in by_key.get(key, ()))
 
     save_day = datetime.date(game.date[0], 1, 1).toordinal() + game.date[1] if game.date[0] > 1900 else 0
     live = {n for n, conf in game.nations.values() if conf}
@@ -665,9 +666,17 @@ def entrants(game, rules, access, changes=()):
                             not any(year < m for m in moved.get(nation, ())):
                         foreign[(shown, "|".join(sorted(cs)))].append(f"{tname} ({conf})")
                 if won and done and year > game.start and not by_route and all(by_key.get(r) for r in won):
-                    no_route.append(f"{tname} ({nation}) won none of {', '.join(won)} in {year} or the edition before")
-            if len(no_route) > sum(1 for r in won if not played(r, year)):   # the places of routes that did not play
-                faults += [("entrant-route", name, year, text) for text in no_route]
+                    no_route.append((conf, f"{tname} ({nation}) won none of {', '.join(won)} in {year} or the edition "
+                                           f"before"))
+            # each route that did not play leaves one place to a drawn club of its confederation
+            free = [set(c.split("|")) if (c := rules.rows.get(r, {}).get("confed")) else None
+                    for r in won if not played(r, year)]
+            for conf, text in no_route:
+                take = next((i for i, cs in enumerate(free) if cs is None or conf in cs), None)
+                if take is None:
+                    faults.append(("entrant-route", name, year, text))
+                else:
+                    free.pop(take)
             if dead:
                 faults.append(("entrant-dead", name, year, f"{len(dead)} entrants of a nation under an old name: "
                                                            f"{', '.join(dead[:6])}"))

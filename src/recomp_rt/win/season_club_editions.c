@@ -26,8 +26,9 @@ static int day_key(Day d) { return d.year * 400 + d.month * 32 + d.day; }
 /* The dates of a text part: each "<day>" with its own month, or followed by "and", "-" or an en dash and another
  * day; a missing month or year comes from the next date that has one. Returns the first and last date, 0 when
  * none. Numbers of other meaning (club counts, "2007 J.League Cup") have no month after them and are not days. */
-static int text_dates(const char *t, size_t len, int default_year, Day *first, Day *last)
+static int text_dates(const char *t, size_t len, int default_year, Day *first, Day *last, int *open_end)
 {
+    *open_end = 0;
     Day d[32];
     int n = 0, joined[32] = {0};
     const char *end = t + len;
@@ -62,6 +63,10 @@ static int text_dates(const char *t, size_t len, int default_year, Day *first, D
             const char *s = r + link;
             while (s < end && *s == ' ') s++;
             linked = s < end && *s >= '0' && *s <= '9';
+            /* "26 August – December 2026": the end has a month and no day, so the last date is not known. */
+            for (int m = 0; x.month && !linked && m < 12; m++)
+                if ((size_t)(end - s) >= strlen(month_names[m]) && !strncmp(s, month_names[m], strlen(month_names[m])))
+                    *open_end = 1;
         }
         if (!x.month && !linked) { p = q - 1; continue; }
         joined[n] = linked;
@@ -136,7 +141,8 @@ static int edition_of_part(const SeasonClubCup *k, const SeasonRule *r, int i, i
         if (semi) { len -= (size_t)(semi + 1 - t); t = semi + 1; }
     }
     Day a, b;
-    if (!text_dates(t, len, default_year, &a, &b)) return 0;
+    int open_end;
+    if (!text_dates(t, len, default_year, &a, &b, &open_end)) return 0;
     /* A late edition (the Sudamericana of 2020, final 23 January 2021) plays at the normal time (Q277): its final on
      * 20 December, so the edition ends before the entry's update day of 10 January and its season start runs. */
     if (k->calendar && b.year > a.year) b = (Day){20, 12, a.year};
@@ -149,10 +155,30 @@ static int edition_of_part(const SeasonClubCup *k, const SeasonRule *r, int i, i
     e->legs = has(t, len, "two-legged") || has(t, len, "two legs") ? 2 : 1;
     e->final_legs = e->legs == 2 && !has(t, len, "single-match final") ? 2 : 1;
     e->row = r;
+    e->open_end = open_end;
     return e->clubs >= 2;
 }
 
+static int edition_in_table(const SeasonClubCup *k, int y, SeasonClubEdition *e);
+
+/* An edition whose text gives no last day ("26 August – December 2026", the FIFA Intercontinental Cup of 2026/27)
+ * takes the days and months of the edition before, moved to its year; with none before it is not known. */
 int season_club_edition_in_table(const SeasonClubCup *k, int y, SeasonClubEdition *e)
+{
+    if (!edition_in_table(k, y, e)) return 0;
+    if (!e->open_end) return 1;
+    SeasonClubEdition before;
+    for (int x = y - 1; x >= SEASON_RULE_FIRST && x >= y - 4; x--)
+        if (edition_in_table(k, x, &before) && !before.open_end) {
+            season_club_edition_move(&before, y - x);
+            e->first = before.first, e->last = before.last, e->year = before.year, e->last_year = before.last_year;
+            e->open_end = 0;
+            return 1;
+        }
+    return 0;
+}
+
+static int edition_in_table(const SeasonClubCup *k, int y, SeasonClubEdition *e)
 {
     if (!k->calendar) {
         const SeasonRule *r = row_of(k->comp, y);

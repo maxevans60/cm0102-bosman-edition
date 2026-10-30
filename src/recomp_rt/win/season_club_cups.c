@@ -722,7 +722,7 @@ RT_WRAP(004c6430, assign_libertadores_places)
     if (!rec || !edition(k, y, &e)) return;
     Cpu saved = cpu;
     /* The latest row with a "places:" text: the row of year y in the table, after it the last row's (slice 9a). */
-    const SeasonRule *r = season_club_places_row(k->def->comp, y);
+    const SeasonRule *r = season_club_places_row(k->def->comp, season_changing_rules() ? y : season_start_year());
     int arg = r ? row_places(r->format_text, "ARG") : -1, bra = r ? row_places(r->format_text, "BRA") : -1;
     int rows = (int8_t)g_mem[seeding + 0x6e], others = 0;
     for (int i = 0; i < rows && i < 11; i++) {

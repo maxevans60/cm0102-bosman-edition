@@ -34,6 +34,7 @@ typedef struct {
     int clubs;                          /* the club count of the edition */
     int legs, final_legs;               /* 1 or 2 */
     const SeasonRule *row;              /* the table row that gives the edition */
+    int open_end;                       /* 1 while the text gives no last day (see season_club_edition_in_table) */
 } SeasonClubEdition;
 
 /* Day of the year from 0, with the month starts of Date.cpp (0x9b8448, 0x9b8460) and its leap test. */

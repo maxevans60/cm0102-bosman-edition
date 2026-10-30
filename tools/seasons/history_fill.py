@@ -24,8 +24,11 @@ of that competition are added (`add`, nothing cleared). The US Open Cup: Con_Cha
 CONCACAF place 1 to its newest winner (0x4afd80), and September 2010 ODB, December 2010 SIM, April 2011 SIM and
 March 2012 SIM hold no US Open Cup row. Where such a database holds a row of a GAP_COMPETITIONS competition whose
 winner is a club of another nation than the competition's, the row is cleared and the researched row of its label
-added (`clear`, `add`): five databases of 2020/21 to 2022/23 name club 977, Atlanta of Argentina, as the 2019 US
-Open Cup winner in place of Atlanta United FC, and the CONCACAF Champions Cup took it (0.6.2 open item 49).
+added (`clear`, `add` with result `differ`): eleven databases, April 2021 to May 2026, name club 977, Atlanta of
+Argentina, as the 2019 US Open Cup winner in place of Atlanta United FC, and the CONCACAF Champions Cup of 2020 to
+2022 starts took it (0.6.2 open item 49). Only clubs of the club table are tested (a national side has no nation
+field there). Note: a --write run on a database folder that lacks some databases of the first run leaves their
+rows out of plan.tsv; the rows of item 49 were added from this function's output on test-fixtures/databases.
 
 --write writes docs/research/history-0.6.0/fill-report.tsv (counts per database) and unmatched.tsv (names that do
 not match in a database). The files hold competition and club names only.
@@ -243,7 +246,7 @@ def gap_rows(name, start, folder, rows, ref, alias, plan, report, shift=0):
         if c:
             comps.setdefault(c[1], (cid, c[2]))
     names = Names(d, ref, alias)
-    added = 0
+    added = differ = 0
     for comp in GAP_COMPETITIONS:
         if comp not in comps:
             continue
@@ -267,8 +270,9 @@ def gap_rows(name, start, folder, rows, ref, alias, plan, report, shift=0):
             plan.append("\t".join(["add", name, str(start), comp, r["label"], r.get("part", ""),
                                    "add" if wrong is None else "differ"] + [x for v in places for x in v]))
             added += 1
+            differ += wrong is not None
     if added:
-        report.append("\t".join(map(str, [name, start, added, added, added, 0, 0, 0, 0, 0, 0, 0])))
+        report.append("\t".join(map(str, [name, start, added, added, added - differ, 0, differ, 0, 0, 0, 0, 0])))
         print(report[-1], flush=True)
 
 
