@@ -474,7 +474,7 @@ uint32_t rt_staff_reserve_size(void);
 
 /* Full player search (#57, src/recomp_rt/win/playersearch.c): 1 when the option is on. The replaced jumps
  * at 0x7afc8d, 0x7afc9d and 0x7afcdf in tools/recomp/widescreen.py ask it. */
-uint32_t rt_full_player_search(uint32_t screen);
+uint32_t rt_full_player_search(uint32_t screen, uint32_t staff);
 /* The limit of the list with the option on (playersearch.c): the sites 0x7afbb3, 0x7afdda, 0x7afe5e, 0x7afe6b
  * and 0x7af467 in tools/recomp/widescreen.py. */
 void rt_full_player_search_reset(void);

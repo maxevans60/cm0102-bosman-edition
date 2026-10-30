@@ -125,6 +125,10 @@ if(NOT WIN32)
     add_executable(heap_test tests/recomp/test_heap.c src/recomp_rt/heap.c)
     target_include_directories(heap_test PRIVATE src/recomp_rt)
     add_test(NAME heap COMMAND heap_test)
+    # The zone of the heap for the player search (0.6.1, playersearch.c).
+    add_executable(heap_zone_test tests/recomp/test_heap_zone.c src/recomp_rt/heap.c)
+    target_include_directories(heap_zone_test PRIVATE src/recomp_rt)
+    add_test(NAME heap_zone COMMAND heap_zone_test)
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.

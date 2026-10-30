@@ -130,12 +130,13 @@ static uint32_t next_fixture(uint32_t club)
 static int picking;
 
 void o_0062c680(void);
+int playersearch_holds_update(uint32_t staff);     /* playersearch.c: an extra player of the full search */
 
 /* The daily fitness update of one player, thiscall (staff), ret 4. It draws random numbers and changes
  * the player (0x62c680 pseudocode). */
 RT_WRAP(0062c680, daily_update)
 {
-    if (picking) {
+    if (picking || playersearch_holds_update(rt_arg(0))) {
         rt_ret_stdcall(cpu.eax, 1);
         return;
     }
