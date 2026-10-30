@@ -30,7 +30,7 @@ CHECKER = os.path.join(HERE, "history_check.py")
 CONTINENTS = ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"]
 NATIONS = [("Aland", 2), ("Borduria", 2), ("Carpania", 2), ("Durania", 1), ("Elbonia", 1), ("Freedonia", 3),
            ("Genovia", 3), ("Hatay", 5),
-           ("Ruritania", 3), ("Kurlandia", 5), ("Osterlich", 5), ("Old Genovia", -1)]
+           ("Ruritania", 3), ("Kurlandia", 5), ("Osterlich", 5), ("Old Genovia", -1), ("Bonairia", -1)]
 CLUBS = [("Aland City", 0), ("Aland United", 0), ("Borduria Sport", 1), ("Carpania FC", 2), ("Durania Stars", 3),
          ("Elbonia Rovers", 4)]
 SIDE0 = 100                                  # national side ids follow the club ids
@@ -39,7 +39,7 @@ COMPS = [(0, "Aland League", 2, 0, "club"), (1, "Euro Super Cup", 2, -1, "club")
          (10, "World Finals", -1, -1, "nation"), (11, "Euro Finals", 2, -1, "nation"),
          (12, "Asia Finals", 1, -1, "nation"), (13, "Americas Finals", 3, -1, "nation"),
          (14, "Hatay Cup", 5, -1, "nation"), (15, "Nations Shield", 1, -1, "nation"),
-         (16, "Champions Match", 2, -1, "club")]
+         (16, "Champions Match", 2, -1, "club"), (17, "Qual Zone", 1, -1, "nation")]
 
 
 def side(n):
@@ -67,8 +67,9 @@ def history():
     rows.append((11, 2028, side(2), side(0), side(1), side(1)))
     want.add(("duplicate", "Euro Finals", 2028))
     for y in range(2003, 2040, 4):                                    # Asia Finals: a European runner-up in 2031
-        rows.append((12, y, side(3 + y % 2), side(1) if y == 2031 else side(4 - y % 2), -1, side(3)))
-    want.add(("confederation", "Asia Finals", 2031))
+        rows.append((12, y, side(3 + y % 2), side(1) if y == 2031 else side(10) if y == 2027 else side(4 - y % 2),
+                     -1, side(3)))
+    want.add(("confederation", "Asia Finals", 2031))                 # 2027: Osterlich moves after it, no fault
     for y in list(range(2015, 2027, 2)) + [2031, 2033, 2035, 2037, 2039]:   # Americas Finals: 2027 and 2029 lost
         rows.append((13, y, side(5), side(6 if y // 2 % 2 else 8), -1, side(5)))
     want.add(("gap", "Americas Finals", 2031))
@@ -90,8 +91,10 @@ NATION_CHANGES = ("kind\tseason\tfrom\tnation\tto\tsource\n"
                   "rename\t2030\t09-01\tOld Freedonia\tFreedonia\tdue, the side keeps the old name\n"
                   "rename\t2040\t09-01\tKurlandia\tCourland\tnot due before 1 September 2040\n"
                   "confed\t2035\t09-01\tDurania\tUEFA\tdue, still in AFC\n"
-                  "confed\t2020\t02-01\tElbonia\tAFC\tdue, in AFC\n")
-NATION_FAULTS = {("nation-name", "Hatay", 2024), ("nation-name", "Ruritania", 2030),
+                  "confed\t2020\t02-01\tElbonia\tAFC\tdue, in AFC\n"
+                  "confed\t2030\t09-01\tOsterlich\tCONMEBOL\tdue; an Asia Finals runner-up in 2027, before the move\n"
+                  "rename\t2040\t07-08\tOsterlich\tNova Osterlich\tdue on the save date, day 189 of 2040\n")
+NATION_FAULTS = {("nation-name", "Hatay", 2024), ("nation-name", "Ruritania", 2030), ("nation-name", "Osterlich", 2040),
                  ("nation-confed", "Durania", 2035), ("side-name", "Old Freedonia", 2030)}
 SHORT_NAMES = {15: "Asia Shield"}                               # the short name (+0x38) of a competition
 SIDE_NAMES = {"Freedonia": "Old Freedonia"}                      # the national side's name, when not the nation's
@@ -103,13 +106,25 @@ NATION_FAULTS_OFF = {("nation-name", "Hatay", 2024)}             # changing rule
 # of the Aland League and of the Euro Super Cup meet; Carpania FC won neither in 2039, Elbonia Rovers (AFC) in 2040.
 FIXTURES_2038 = [(10, side(0), side(1), 160), (10, side(4), side(0), 164), (10, side(1), side(4), 168),
                  (10, side(0), side(1), 175)]
-FIXTURES_2039 = [(16, 0, 3, 220), (1, 0, 1, 100)]
-FIXTURES_2040 = [(16, 0, 5, 150), (16, 2, 0, 250)]        # the second match is after the save date: not checked
+# Champions Match 2039 also has Durania Stars (AFC, due to move to UEFA: only its nation fault). Euro Super Cup 2040:
+# the holder of 2039 (Borduria Sport) does not play. Americas Finals 2039, after the table: its host Freedonia does
+# not play. Qual Zone (a World Cup qualifying, AFC): 2039 has a European side among 4 teams (a play-off, passes)
+# and the dead Old Genovia; Bonairia (no continent, never renamed) passes. Nations Shield 2039: two European sides
+# under the Asian short name.
+FIXTURES_2039 = [(16, 0, 3, 220), (16, 4, 0, 222), (1, 0, 1, 100), (13, side(6), side(8), 150),
+                 (17, side(3), side(4), 120), (17, side(0), side(11), 124), (17, side(12), side(3), 127),
+                 (15, side(0), side(1), 130)]
+FIXTURES_2040 = [(16, 0, 5, 150), (16, 3, 0, 250), (1, 0, 3, 100)]   # the match of day 250 is after the save date
 ENTRANT_FAULTS = {("entrant-count", "World Finals", 2038), ("entrant-host", "World Finals", 2038),
                   ("entrant-route", "Champions Match", 2039), ("entrant-route", "Champions Match", 2040),
-                  ("entrant-confed", "Champions Match", 2040)}
+                  ("entrant-confed", "Champions Match", 2040), ("entrant-holder", "Euro Super Cup", 2040),
+                  ("entrant-host", "Americas Finals", 2039), ("entrant-dead", "Qual Zone", 2039),
+                  ("entrant-confed", "Asia Shield", 2039), ("entrant-count", "Champions Match", 2039)}
+ENTRANT_FAULTS_PLAIN = {("entrant-dead", "Qual Zone", 2039),       # found with no rules file too; Ruritania
+                        ("entrant-dead", "Americas Finals", 2039)}  # plays under the name its rename replaced
 TABLE = '{"world", 2037, 2038, 4, 0, 2038, 6, 1, "Carpania/Karpania", "row-1"},\n'
-ACCESS = "comp\tfrom\tto\tteams\troutes\tsource\nchamp\t2030\tnone\t2\twinner:aland;winner:esc\tmade up\n"
+ACCESS = ("comp\tfrom\tto\tteams\troutes\tsource\nchamp\t2030\tnone\t2\twinner:aland;winner:esc\tmade up\n"
+          "esc\t2030\tnone\t\tholder\tmade up\n")
 
 
 def fixture_part(fixtures):
@@ -125,7 +140,9 @@ def fixture_part(fixtures):
 
 # World health: Aland has 30 players born in 2010 (none under 23 in 2040), Borduria 30 of all ages; one Borduria
 # player has a wrong age field; Carpania FC's balance has wrapped.
-HEALTH_FAULTS = {("empty-squad", "Aland", 2040), ("overflow", "age", 2040), ("overflow", "balance", 2040)}
+# Aland's players are in its senior squad; Borduria's in no squad, so its senior and under-21 squads are empty.
+HEALTH_FAULTS = {("no-youth", "Aland", 2040), ("empty-squad", "Borduria", 2040),
+                 ("empty-squad", "Borduria under-21", 2040), ("overflow", "age", 2040), ("overflow", "balance", 2040)}
 
 
 def staff():
@@ -138,7 +155,7 @@ def staff():
         struct.pack_into("<hh", r, 0x10, 300, born)                 # born on day 300: the birthday is after day 189
         struct.pack_into("<h", r, 0x18, age)
         struct.pack_into("<ii", r, 0x1A, nation, -1)
-        struct.pack_into("<i", r, 0x24, side(nation) if i % 2 else -1)
+        struct.pack_into("<i", r, 0x24, side(nation) if nation == 0 and i % 2 else -1)
         r[0x28] = 11
         struct.pack_into("<ii", r, 0x39, -1, 0)
         struct.pack_into("<i", r, 0x61, i)
@@ -168,15 +185,17 @@ def records(changing=1):
         struct.pack_into("<i", r, 0x71, c)
         nat += r
 
-    def club(cid, name, nation):
+    def club(cid, name, nation, manager=-1):
         r = bytearray(0x245)
         struct.pack_into("<i", r, 0, cid)
         r[4:4 + len(name)] = name.encode()
         struct.pack_into("<i", r, 0x53, nation)
+        struct.pack_into("<i", r, 0xCF, manager)
         return bytes(r)
 
     clubs = b"".join(club(i, n, nat_) for i, (n, nat_) in enumerate(CLUBS))
-    sides = b"".join(club(side(i), SIDE_NAMES.get(n, n), i) for i, (n, _) in enumerate(NATIONS))
+    sides = b"".join(club(side(i), SIDE_NAMES.get(n, n), i, 0 if i < 2 else -1) for i, (n, _) in enumerate(NATIONS))
+    sides += b"".join(club(side(len(NATIONS) + i), n + " U21", i, -1) for i, (n, _) in enumerate(NATIONS))
     comp = {"club": bytearray(), "nation": bytearray()}
     for cid, name, c, n, part in COMPS:
         r = bytearray(0x6B)
@@ -187,7 +206,7 @@ def records(changing=1):
         r[0x38:0x38 + len(short)] = short
         comp[part] += r
     rows, want = history()
-    want |= NATION_FAULTS
+    want |= NATION_FAULTS | ENTRANT_FAULTS_PLAIN
     hist = {"club": bytearray(), "nation": bytearray()}
     files = {cid: part for cid, _, _, _, part in COMPS}
     for i, (cid, y, a, b, c, h) in enumerate(rows):
@@ -295,12 +314,13 @@ def main():
                 "shield\tNations Shield\tnations_league\tUEFA\t0\t4\t2028\tnone\n"
                 "asia_shield\tAsia Shield\tintl_qual\tAFC\t0\t4\t2028\tnone\n"
                 "champ\tChampions Match\tsuper_cup\tUEFA\t0\t1\t2041\tnone\n"
-                "aland\tAland League\tleague\tnation\t0\t1\t2041\tnone\n")
+                "aland\tAland League\tleague\tnation\t0\t1\t2041\tnone\n"
+                "wc_qual_zone\tQual Zone\tintl_qual\tAFC\t0\t4\t2041\tnone\n")
     names = os.path.join(work, "names.tsv")
     with open(names, "w", encoding="utf-8") as f:
         f.write("# a note line\npattern\tcomp\nAmericas Finals\tamericas\n(The )?World Finals\tworld\n"
                 "Euro Super Cup\tesc\nNations Shield\tshield\nAsia Shield\tasia_shield\n"
-                "Champions Match\tchamp\nAland League\taland\n")
+                "Champions Match\tchamp\nAland League\taland\nQual Zone\twc_qual_zone\n")
     known = os.path.join(work, "known.tsv")
     with open(known, "w", encoding="utf-8") as f:
         f.write("check\tcompetition\tyear\tnote\nduplicate\tEuro Finals\t*\tplanted\n")
@@ -342,25 +362,44 @@ def main():
     # The entrant list: the routes in of the Champions Match of 2039.
     with open(os.path.join(work, "rules.entrants.tsv"), encoding="utf-8") as f:
         lines = f.read().splitlines()
-    for want_line in ("16\tChampions Match\t2039\t2039-08-09\t2039-08-09\t0\tAland City\tAland\tUEFA\twinner aland; "
+    for want_line in ("16\tChampions Match\t2039\t2039-08-09\t2039-08-11\t0\tAland City\tAland\tUEFA\twinner aland; "
                       "winner Aland League 2038; winner Aland League 2039",
-                      "16\tChampions Match\t2039\t2039-08-09\t2039-08-09\t3\tCarpania FC\tCarpania\tUEFA\t"
+                      "16\tChampions Match\t2039\t2039-08-09\t2039-08-11\t3\tCarpania FC\tCarpania\tUEFA\t"
                       "place 2 Euro Super Cup 2038; place 2 Euro Super Cup 2039",
-                      "10\tWorld Finals\t2038\t2038-06-10\t2038-06-25\t104\tElbonia\tElbonia\tAFC\tqualifier"):
+                      "10\tWorld Finals\t2038\t2038-06-10\t2038-06-25\t104\tElbonia\tElbonia\tAFC\tqualifier",
+                      "1\tEuro Super Cup\t2039\t2039-04-11\t2039-04-11\t1\tAland United\tAland\tUEFA\ttitle holder; "
+                      "place 2 Aland League 2038; place 2 Aland League 2039"):
         if want_line not in lines:
             bad.append(f"entrant list: no line {want_line!r}")
 
     # World health: the report and its faults.
     run([sav, "--out", work, "--label", "health", "--known", empty, "--nations", nations, "--health"])
-    got = {k for k in faults(work, "health") if k[0] in ("empty-squad", "overflow")}
+    got = {k for k in faults(work, "health") if k[0] in ("empty-squad", "no-youth", "overflow")}
     if got != HEALTH_FAULTS:
         bad.append(f"health run: faults {sorted(got)}, not {sorted(HEALTH_FAULTS)}")
     with open(os.path.join(work, "health.health.tsv"), encoding="utf-8") as f:
         report = f.read().splitlines()
     for want_line in ("#\tplayers\t60", "#\tunder_21\t17", "#\tunder_23\t23", "#\tbalances_over_32_bits\t1",
-                      "Aland\tUEFA\t30\t0\t0\t15\t\t1", "Borduria\tUEFA\t30\t17\t23\t15\t\t1"):
+                      "Aland\tUEFA\t30\t0\t0\t15\t0\t1", "Borduria\tUEFA\t30\t17\t23\t0\t0\t1",
+                      "Carpania\tUEFA\t0\t0\t0\t0\t0\t0"):
         if want_line not in report:
             bad.append(f"health report: no line {want_line!r}")
+
+    # A club cup from July to May: two matches a day every 3 weeks, a winter break of 105 days, a final on its own,
+    # then 40 days to the next first round. One edition a season.
+    sys.path.insert(0, HERE)
+    import history_check
+    import datetime
+    days = []
+    for season in (2038, 2039):
+        d = datetime.date(season, 7, 8).toordinal()
+        while d < datetime.date(season + 1, 5, 20).toordinal():
+            days += [(d, 0, 1), (d, 2, 3)]
+            d += 105 if datetime.date.fromordinal(d).month == 11 else 21
+        days.append((datetime.date(season + 1, 5, 29).toordinal(), 0, 2))
+    got = [(y, len(t)) for y, _, _, t in history_check.editions_of(days)]
+    if got != [(2039, 4), (2040, 4)]:
+        bad.append(f"editions of a July to May cup: {got}, not [(2039, 4), (2040, 4)]")
 
     # nations.tsv holds the renames of the season code.
     bad += renames_match()

@@ -58,8 +58,9 @@ Nations (--nations, default nations.tsv next to this file), for the changes due 
     side-name     a national side named with the old name while its nation holds the new one
     nation-confed a nation in another confederation than a move gives
 
-Entrants: the fixtures parts give the teams of each edition (an edition: fixtures with no gap of more than 60
-days, its year the year of the last match). The list gives each team's route in: title holder (the winner of
+Entrants: the fixtures parts give the teams of each edition (an edition: fixtures with no gap of more than 150
+days, or after a final: a day of one match and then 25 days or more with none; its year the year of the last
+match). The list gives each team's route in: title holder (the winner of
 the edition before), host, the winner of a route competition, a winner or place 2 or 3 in the history of the
 edition's year or the year before, else "qualifier". Checks, for the editions whose last match is before the
 save date (a confederation check for every edition):
@@ -69,16 +70,30 @@ save date (a confederation check for every edition):
                   does the winner of a route competition (a Mexican winner of the Copa Sudamericana in the Recopa)
     entrant-count  a finals edition with another count of teams than the finals table of the season code
                   (season_intl_table.c; after its last row the count of the last row), or than access.tsv
-    entrant-host   a host of the finals table that the data holds is not an entrant
+    entrant-host   a host of the finals table that the data holds is not an entrant; after the table, the host of
+                  the edition's history row
+    entrant-dead   entrants of a nation under the old name of a due rename, in an edition after the rename's
+                  season (the dead record beside the live one,
+                  or a record the rename missed); a nation with no continent in the data (Bonaire, Guadeloupe)
+                  is no fault
+    entrant-holder the title holder is not an entrant (access.tsv "holder": the Champions League from 2006, the
+                  Libertadores), when the edition before is at most one cycle and one year before; not for an
+                  edition of the start year or before (it began before the game, the holder may be out)
     entrant-route  an entrant of a fixed-route competition (access.tsv: UEFA Super Cup, Recopa, Suruga Bank,
-                  Intercontinental Cup, Finalissima) won none of its route competitions in the year of the match
-                  or the edition before (checked when every route competition has history rows)
+                  Intercontinental Cup, Finalissima, FIFA Intercontinental Cup) won none of its route competitions
+                  in the year of the match or the edition before, when that edition is at most one cycle and one
+                  year before (checked when every route competition has history rows, for an edition after the
+                  start year: an edition of the start year may come from the data)
+    save-part      a fixtures part whose size does not fit its count (not read)
 
 World health (--health), Tier B: <label>.health.tsv holds the save size and part count, the players, under-21 and
 under-23 players (age from the birth date at the save date), the squads of the senior and under-21 sides, the
 clubs and national sides with a manager, and the club balances (lowest, highest, outside 32 bits), then one row
 per live nation. Time per game day is not in a save. Checks:
-    empty-squad   a nation with 23 players or more and none under 21 or none under 23 (Q17, Q31)
+    empty-squad   a senior side with no player in its squad while 23 players or more hold the nationality, or an
+                  under-21 side with none while 11 or more of them are under 21 (Q17)
+    no-youth      a nation with 23 players or more and none under 21 or none under 23 (Q31: the under-21 and
+                  Olympic squads then empty)
     overflow      an age field that is not the age from the birth date (more than 1 year apart), or a balance
                   of 2^62 or more
 
@@ -111,7 +126,9 @@ PART = re.compile(r"^(.*)_(\d+)\.tmp$")
 SEASON = re.compile(r"^\d{4}(-\d{2})? ")
 FIXTURES = re.compile(r"^fixtures_\d+\.tmp$")
 FIXTURE = 0x4F
-GAP = 60                                      # days between two editions of a competition, at the least
+GAP = 150                                     # days between two editions, at the least (the Champions League has
+                                              # a winter break of 69 days, 105 in the World Cup year 2022)
+FINAL_GAP = 25                                # days with no match after a final, at the least
 # continent ids of the data (Africa, Asia, Europe, North America, Oceania, South America in every database)
 CONF_IDS = ["CAF", "AFC", "UEFA", "CONCACAF", "OFC", "CONMEBOL"]
 
@@ -237,10 +254,14 @@ class Rules:
         self.rows = {r["comp"]: r for r in tsv(path)} if path else {}
         self.names = [(re.compile(r["pattern"], re.I), r["comp"]) for r in tsv(names)] if path and names else []
 
+    def key(self, name):
+        """The key of a competition name in the names file, or None (a key needs no row in the rules file)."""
+        bare = SEASON.sub("", name)
+        return next((k for pat, k in self.names if pat.fullmatch(bare)), None)
+
     def get(self, name):
         """{} or {key, kind, confs (a set, or None: any), has_host (None, 0 or 1), cycle, end}."""
-        bare = SEASON.sub("", name)
-        key = next((k for pat, k in self.names if pat.fullmatch(bare)), None)
+        key = self.key(name)
         r = self.rows.get(key)
         if not r:
             return {}
@@ -415,7 +436,7 @@ def read_nations(path):
 
 def due(game, change):
     """1 when a change of nations.tsv holds at the save date: with changing rules on from its date, with changing
-    rules off only when its season is not after the start season (the data of a later start holds it)."""
+    rules off only when its season is not after the start year (the data of a later start holds it)."""
     if not game.changing:
         return change["season"] <= game.start
     month, day = change["from"]
@@ -484,14 +505,19 @@ def fixtures(game):
 
 
 def editions_of(fx):
-    """[(year, first day, last day, teams)]: the fixtures of a competition in runs with no gap of more than GAP
-    days, each an edition with the year of its last match."""
+    """[(year, first day, last day, teams)]: the fixtures of a competition split after a final (a day with one match
+    and then FINAL_GAP days or more with none) and at a gap of more than GAP days, each an edition with the year of
+    its last match. A winter break comes after a day of many matches, so a club cup from July to May stays one
+    edition."""
+    per_day = collections.defaultdict(list)
+    for day, home, away in fx:
+        per_day[day].append((home, away))
     out = []
-    for day, home, away in sorted(fx):
-        if not out or day - out[-1][2] > GAP:
+    for day in sorted(per_day):
+        if not out or day - out[-1][2] > GAP or (day - out[-1][2] >= FINAL_GAP and len(per_day[out[-1][2]]) == 1):
             out.append([0, day, day, set()])
         out[-1][2] = day
-        out[-1][3].update(t for t in (home, away) if t >= 0)
+        out[-1][3].update(t for pair in per_day[day] for t in pair if t >= 0)
     return [(datetime.date.fromordinal(e[2]).year, e[1], e[2], e[3]) for e in out]
 
 
@@ -507,15 +533,18 @@ def finals_table(path=None):
             out[cls].append((int(year), int(teams), [h for h in hosts.split(";") if h]))
     for rows in out.values():
         rows.sort()
+    if os.path.exists(path) and not out:
+        raise ValueError(f"{path}: no row of the finals table read (has its struct changed?)")
     return out
 
 
 def read_access(path):
-    """{key: [(from, to or None, teams or None, [route keys])]} of access.tsv."""
+    """{key: [(from, to or None, teams or None, [route keys, or "holder"])]} of access.tsv."""
     out = collections.defaultdict(list)
     if path and os.path.exists(path):
         for r in tsv(path):
-            routes = [x.split(":", 1)[1] for x in r.get("routes", "").split(";") if x.startswith("winner:")]
+            routes = [x.split(":", 1)[1] if x.startswith("winner:") else x
+                      for x in r.get("routes", "").split(";") if x.startswith("winner:") or x == "holder"]
             out[r["comp"]].append((int(r["from"]), number(r["to"]), number(r["teams"]), routes))
     return out
 
@@ -552,7 +581,7 @@ def entrants(game, rules, access, changes=()):
     held = collections.defaultdict(list)                      # club: [(year, competition name, place)]
     for cid, year, a, b, c, h in game.rows:
         name = game.comps[cid]["name"]
-        key = rules.get(name).get("key")
+        key = rules.key(name)
         if key:
             by_key[key].append((year, a))
         for place, t in ((1, a), (2, b), (3, c)):
@@ -560,6 +589,7 @@ def entrants(game, rules, access, changes=()):
                 held[t].append((year, name, place))
     hosts = {(cid, year): h for cid, year, a, b, c, h in game.rows if h >= 0}
     moved, due_to = collections.defaultdict(list), collections.defaultdict(set)
+    renamed = {ch["nation"]: (ch["season"], ch["to"]) for ch in changes if ch["kind"] == "rename" and due(game, ch)}
     for ch in changes:
         if ch["kind"] == "confed":
             moved[ch["nation"]].append(ch["season"])
@@ -567,9 +597,13 @@ def entrants(game, rules, access, changes=()):
                 due_to[ch["nation"]].add(ch["to"])            # reported once, by check_nations
 
     def winners(key, year):
-        """The winners of a route competition in the year of the match and in its last edition before that year
-        (a super cup in August follows a final in May of its year, the Finalissima of 2022 the Euro of 2020)."""
-        years = {max([y for y, w in by_key.get(key, ()) if y < year], default=0), year}
+        """The winners of a route competition in the year of the match and in its last edition before that year,
+        when that edition is at most one cycle and one year before (a super cup in August follows a final in May of
+        its year, the Finalissima of 2022 the Euro of 2020; a route competition that stopped gives no winner)."""
+        cycle = rules.rows.get(key, {}).get("cycle")
+        cycle = number(cycle) or 1
+        before = max([y for y, w in by_key.get(key, ()) if y < year], default=0)
+        years = {year} | ({before} if year - before <= cycle + 1 else set())
         return {w for y, w in by_key.get(key, ()) if y in years}
 
     save_day = datetime.date(game.date[0], 1, 1).toordinal() + game.date[1] if game.date[0] > 1900 else 0
@@ -590,12 +624,14 @@ def entrants(game, rules, access, changes=()):
         for year, first, last, teams in eds:
             done = last <= save_day
             want, host_names, routes = access.rule(key, year) if key else (None, [], [])
-            won = {r: winners(r, year) for r in routes}
-            # the World Cup qualifying holds the play-off between confederations: at most 2 teams of each other
-            # confederation (the play-off tournament of 2026, in the record of the OFC qualifying, has 2 of CONCACAF
-            # and 1 each of AFC, CAF and CONMEBOL)
-            playoff = 2 if (key or "").startswith("wc_qual_") else 0
-            foreign = collections.defaultdict(list)
+            won = {r: winners(r, year) for r in routes if r != "holder"}
+            holder = "holder" in routes
+            # the World Cup qualifying holds the play-off between confederations: 2 teams of other confederations
+            # in a campaign (a tie such as Bahrain against Trinidad and Tobago in 2005), or an edition of at most 6
+            # teams (the play-off tournament of 2026, in the record of the OFC qualifying: 2 of CONCACAF and 1 each of
+            # AFC, CAF, CONMEBOL and OFC)
+            playoff = (key or "").startswith("wc_qual_")
+            foreign, dead = collections.defaultdict(list), []
             prev = [w for y, w in sorted(by_key.get(key, ())) if y < year][-1:] if key else []
             host = hosts.get((cid, year), -1)
             host_nations = [game.clubs.get(host, ("", -1))[1]] if host >= 0 else []
@@ -607,27 +643,39 @@ def entrants(game, rules, access, changes=()):
                     route.append("title holder")
                 if game.clubs.get(t, ("", -1))[1] in host_nations or nation in host_alias:
                     route.append("host")
-                route += [f"winner {r}" for r in routes if t in won[r]]
+                route += [f"winner {r}" for r in won if t in won[r]]
                 route += [f"{'winner' if p == 1 else 'place ' + str(p)} {c} {y}" for y, c, p in held.get(t, ())
                           if y in (year - 1, year) and c != name]
                 listing.append((cid, name, year, first, last, t, tname, nation, conf, "; ".join(route) or "qualifier"))
-                by_route = any(t in won[r] for r in routes)          # a route winner enters from any confederation
+                by_route = any(t in won[r] for r in won)              # a route winner enters from any confederation
+                if nation in renamed and year > renamed[nation][0]:
+                    dead.append(f"{tname} ({nation}, {renamed[nation][1]} from {renamed[nation][0]})")
                 for shown, cs in confs:
                     if cs and conf and conf not in cs and not by_route and not due_to[nation] & cs and \
                             not any(year < m for m in moved.get(nation, ())):
                         foreign[(shown, "|".join(sorted(cs)))].append(f"{tname} ({conf})")
-                if routes and done and not by_route and all(by_key.get(r) for r in routes):
-                    faults.append(("entrant-route", name, year, f"{tname} ({nation}) won none of {', '.join(routes)} in "
+                if won and done and year > game.start and not by_route and all(by_key.get(r) for r in won):
+                    faults.append(("entrant-route", name, year, f"{tname} ({nation}) won none of {', '.join(won)} in "
                                                                 f"{year} or the edition before"))
+            if dead:
+                faults.append(("entrant-dead", name, year, f"{len(dead)} entrants of a nation under an old name: "
+                                                           f"{', '.join(dead[:6])}"))
+            if holder and done and year > game.start and prev and prev[0] not in teams and \
+                    year - max(y for y, w in by_key[key] if y < year) <= (rule.get("cycle") or 1) + 1:
+                faults.append(("entrant-holder", name, year, f"the title holder {game.club(prev[0])[0]} is not an "
+                                                             f"entrant"))
             for (shown, cs), teams_ in sorted(foreign.items()):
-                per = collections.Counter(t.rsplit(" (", 1)[1] for t in teams_)
-                if max(per.values()) <= playoff:
+                if playoff and (len(teams_) <= 2 or len(teams) <= 6):
                     continue
                 faults.append(("entrant-confed", shown, year, f"{len(teams_)} entrants from another confederation "
                                                               f"than {cs}: {', '.join(teams_[:6])}"
                                                               f"{' ...' if len(teams_) > 6 else ''}"))
             if want and done and len(teams) != want:
                 faults.append(("entrant-count", name, year, f"{len(teams)} entrants, the access rule has {want}"))
+            if done and not host_names and host >= 0 and rule.get("kind") == "intl_finals" and \
+                    game.clubs.get(host, ("", -1))[1] not in {game.clubs.get(t, ("", -1))[1] for t in teams}:
+                faults.append(("entrant-host", name, year, f"the host {game.club(host)[0]} of the history row is "
+                                                           f"not an entrant"))
             if done:                                      # a host of the table that the data holds plays
                 names = {game.nations.get(game.clubs.get(t, ("", -1))[1], ("", ""))[0] for t in teams}
                 for h in host_names:
@@ -645,18 +693,20 @@ MONEY_32 = 1 << 31                            # the 32-bit readers of the balanc
 MONEY_WRAP = 1 << 62                          # no club reaches it: a balance beyond it has wrapped
 SQUAD = 23                                    # a nation with this many players fills a squad; with no player under
                                               # 21 or under 23 its under-21 or Olympic squad is empty (Q17, Q31)
+ELEVEN = 11                                   # under-21 players that fill an under-21 side
 
 
 def health(game):
     """The world-health numbers of a save: (summary dict, [per nation row], faults). Squads: staff with a national
     side at +0x24 and the job Player (11) at +0x28 (database_get_job_name 0x53ad00).
-    staff.dat (0x6e bytes a record; season_national_fill.c, database inventory section 3.1): +0x10 s16 day of
-    birth from 0, +0x12 s16 year of birth, +0x18 s16 age, +0x1a nation, +0x61 player row (-1: no player).
+    staff.dat (0x6e bytes a record): +0x10 s16 day of birth from 0, +0x12 s16 year of birth (both read by the
+    research of slice 2 and checked on 83,140 players of a 2028 save against +0x18), +0x18 s16 age (picker.c:70),
+    +0x1a nation (season_national_fill.c:13), +0x61 the player data, in a save its row or -1 (picker.c:69).
     Managers: club and national side +0xcf, the manager's staff id or -1 (database_get_club_manager 0x53ca90); the
     senior side of nation n is row n of nat_club.dat. Balance: finance.dat, 0x167 bytes a team, clubs first,
     +0x00 s64 (the finance record, 0x596587; run-logs/future-audit/audit.md)."""
     sav = game.sav
-    staff = sav.read("staff.dat")
+    staff = sav.read("staff.dat") if "staff.dat" in sav.members else b""
     year, day = game.date
     players, u21, u23 = collections.Counter(), collections.Counter(), collections.Counter()
     squad = collections.Counter()
@@ -671,7 +721,7 @@ def health(game):
         if not 1800 < byear < 3000:
             continue
         real = year - byear - (1 if day < bday else 0)        # the age at the save date, from the birth date
-        if abs(age - real) > 1:
+        if year and abs(age - real) > 1:
             age_bad.append((s32(staff, o), age, real))
         n = s32(staff, o + 0x1a)
         players[n] += 1
@@ -697,9 +747,15 @@ def health(game):
         rows.append((name, conf, players[nid], u21[nid], u23[nid], squad[ids[0]] if ids[0] is not None else "",
                      squad[ids[1]] if ids[1] is not None else "",
                      int(side_manager.get(nid, False)) if has_side else ""))
+        if ids[0] is not None and players[nid] >= SQUAD and squad[ids[0]] == 0:
+            faults.append(("empty-squad", name, year, f"the senior side of {name} has no player in its squad, "
+                                                      f"{players[nid]} players hold the nationality"))
+        if ids[1] is not None and u21[nid] >= ELEVEN and squad[ids[1]] == 0:
+            faults.append(("empty-squad", name + " under-21", year, f"the under-21 side of {name} has no player in "
+                                                                    f"its squad, {u21[nid]} players are under 21"))
         if players[nid] >= SQUAD and (u21[nid] == 0 or u23[nid] == 0):
-            faults.append(("empty-squad", name, year, f"{name}: {players[nid]} players, {u21[nid]} under 21, "
-                                                      f"{u23[nid]} under 23"))
+            faults.append(("no-youth", name, year, f"{name}: {players[nid]} players, {u21[nid]} under 21, "
+                                                   f"{u23[nid]} under 23"))
     if age_bad:
         sid, age, real = age_bad[0]
         faults.append(("overflow", "age", year, f"{len(age_bad)} players with an age field that is not the age "
@@ -785,6 +841,7 @@ def main(argv):
             re.sub(r"[^A-Za-z0-9.-]+", "_", os.path.relpath(path, os.path.dirname(os.path.dirname(path))))
         listing, entry = entrants(game, rules, access, nations)
         summary, rows, sick = health(game) if "--health" in opts else ({}, [], [])
+        sick += [("save-part", n, game.date[0], "the size does not fit its count, not read") for n in game.unread]
         faults = sorted(check(game, rules, nations) + check_nations(game, nations) + sorted(set(entry)) + sick,
                         key=lambda f: (f[1], f[0], f[2]))
         if "--out" in opts:
