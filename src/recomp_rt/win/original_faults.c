@@ -20,6 +20,33 @@ static int fixes_on(void)
     return on;
 }
 
+/* A name of the game for a log line, with each byte above 0x7e as '?': the test scripts read the log as UTF-8, and
+ * the game's names are Latin-1 ("S\xe3o Tom\xe9"). */
+static const char *log_name(uint32_t at)
+{
+    static char out[64];
+    size_t i = 0;
+    for (const char *p = win_str(at); *p && i < sizeof out - 1; p++)
+        out[i++] = (unsigned char)*p > 0x7e ? '?' : *p;
+    out[i] = 0;
+    return out;
+}
+
+/* `game_run_to_start_date` 0x5cc850 (called from create_game at 0x829fd9) plays the days of a new game up to its
+ * start date, across a change of month. The fix stays off there, so a new game starts as the original's does (about
+ * 95 of 213 national teams of the 3.9.68 data have no manager then) and changes only at the first month change in
+ * play (Q152: the same-save set ends before it). */
+static int creating;
+
+void o_005cc850(void);
+
+RT_WRAP(005cc850, run_to_start_date)
+{
+    creating = 1;
+    o_005cc850();
+    creating = 0;
+}
+
 /* 1 when a vacancy opens for this club although `club_can_be_managed` 0x544820 refuses it: a senior national team,
  * by the club id range of 0x544835..0x544857, with a nation (+0x53, 0x54482e). The original asks for more than 150
  * players of the nation (0x544859), or 100 in `add_job_vacancy` (0x69bafb). */
@@ -27,14 +54,14 @@ uint32_t rt_national_vacancy(uint32_t club, uint32_t site)
 {
     static const char *const why[] = {"the vacancy", "a retirement", "a move to another national team", "the month check",
                                        "a departure"};
-    if (!fixes_on() || !club) return 0;
+    if (!fixes_on() || creating || !club) return 0;
     uint32_t nation = rd32(g_mem, club + 0x53u);
     if (!nation) return 0;
     int32_t id = (int32_t)rd32(g_mem, club), clubs = (int32_t)rd32(g_mem, CLUB_COUNT);
     int32_t nations = (int32_t)rd32(g_mem, NATION_COUNT);
     if (id < clubs - 2 * nations || id >= clubs - nations) return 0;
     if (site)    /* site 0, the bound in add_job_vacancy, always follows one of the others */
-        fprintf(stderr, "recomp: national manager: a vacancy for %s after %s (%d players)\n", win_str(club + 4u),
+        fprintf(stderr, "recomp: national manager: a vacancy for %s after %s (%d players)\n", log_name(club + 4u),
                 why[site < 5u ? site : 0u], (int32_t)rd32(g_mem, nation + 0x88u));
     return 1;
 }
@@ -114,7 +141,7 @@ RT_WRAP(00598800, get_transfer_budget)
     /* test switch (tests/seasons/original_faults_run.py money): the budgets of a club above 2,147,483,647 */
     if (getenv("RECOMP_MONEY_LOG") && (int64_t)rd64(g_mem, finance) > INT32_MAX) {
         uint32_t club = rd32(g_mem, 0xae23b4u) + rd32(g_mem, finance + 8u) * 0x245u;
-        fprintf(stderr, "recomp: money budget: %s from 0x%x: %lld, the caller sees %lld\n", win_str(club + 4u), from,
+        fprintf(stderr, "recomp: money budget: %s from 0x%x: %lld, the caller sees %lld\n", log_name(club + 4u), from,
                 (long long)v, wide ? (long long)v : (long long)(int32_t)cpu.eax);
     }
 }
