@@ -194,3 +194,9 @@ from save_size import INSNS as SAVE_SIZE_INSNS  # noqa: E402
 
 assert not set(SAVE_SIZE_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(SAVE_SIZE_INSNS)
+
+# International caps above 255 (0.6.2 slice 12) in the same way.
+from caps_wide import INSNS as CAPS_INSNS  # noqa: E402
+
+assert not set(CAPS_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(CAPS_INSNS)
