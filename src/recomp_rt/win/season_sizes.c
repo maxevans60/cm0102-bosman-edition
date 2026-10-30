@@ -91,14 +91,12 @@ static int within(const char *file, int n)
     return n;
 }
 
-/* The row of a season, or the last row before it (Q248: after the last row the rules stay). */
+/* The row of a season, or the last row before it (Q248: after the last row the rules stay, with no end year,
+ * 0.6.2 Q1). */
 static const SeasonRule *row_of_season(const char *file, int season)
 {
-    for (int s = season; s >= SEASON_FIRST_YEAR && s > season - 10; s--) {
-        const SeasonRule *r = season_rules_find(s, file, 0);
-        if (r) return r;
-    }
-    return NULL;
+    int s = season_rules_last_season(season, file);
+    return s ? season_rules_find(s, file, 0) : NULL;
 }
 
 /* 1 when the real season of a row begins with the year ("2011", "2010/11", "2011-12 (first stage ...)"). */

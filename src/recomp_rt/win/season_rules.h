@@ -66,6 +66,14 @@ const SeasonRule *season_rules_find(int season, const char *file, int n);
 /* The same by a scan of every row, for the test of the index that season_rules_find uses. */
 const SeasonRule *season_rules_find_scan(int season, const char *file, int n);
 
+/* The year from which an object's year means that it waits with no edition to come: 2998 and 2999 (NEVER and
+ * IDLE_YEAR 2999 of season_comps.c and season_divisions_ita.c, 2998 for the Greek group, the year before 2999). */
+#define SEASON_RULE_IDLE 2998
+/* The latest season at or before season that has a row of file, or 0 when none has or season is an idle year
+ * (SEASON_RULE_IDLE or later). After the last row of the file that row stays, with no end year (0.6.2 Q1, Q248):
+ * no lookback limit, so the league, play-off and size rules go on after the table (faults 8 and 9). */
+int season_rules_last_season(int season, const char *file);
+
 /* The competition classes of the original (comp_classes.c of the build, tools/seasons/make_comp_classes.py). */
 typedef enum { SEASON_KIND_COMP, SEASON_KIND_LEAGUE, SEASON_KIND_CUP } SeasonCompKind;
 typedef struct {
