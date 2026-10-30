@@ -1039,11 +1039,16 @@ int season_nl_in_ctor(void) { return in_ctor; }
  * Qualifying" (key id 0x9cf784: its name check at 0x606e24 names EUROPEAN_CHAMPIONSHIP_QUALIFYING, 0x9d7a68). The
  * copy holds whatever the fields hold, ids before the id pass or pointers after it, as the two records are in the
  * same state. The nation (+0x5d, -2 for both) and the level (+0x69: 12; the officials code compares it at 0x79d447)
- * stay. The type of its fixtures does not change: 0x669470 reads the continent only for a record that the list
- * 0x669ae0 does not hold, and the wrap nl_international below holds the Nations League. The make function runs
- * at the first edition and at every load, so a save of 0.6.0 or 0.6.1 gets the record at load, and its next save
- * keeps it (the record is in nation_comp.dat of the save). No original code reads the record (nations doc 5.5),
- * so no other competition changes. */
+ * stay. The type of its fixtures does not change: 0x48dd70 asks the list 0x669ae0 before 0x669470, and the wrap
+ * nl_international below holds the Nations League. The game's decisions do change, as intended: the match day
+ * code plays the matches of a continental competition on the full engine when its continent (+0x59) holds a
+ * loaded nation (0x6b66b6..0x6b66ce mark the continents, 0x6b6919..0x6b692d test the record's), so on continent
+ * Asia the Nations League of a European game had quick results, and now it plays as the Euro qualifying does.
+ * Other readers of +0x59 (inference from a search, not each read): the human interest flags 0x6b634b, the entrant
+ * test 0x48dba5 and the key nation entry 0x669597. The make function runs at the first edition and at every load,
+ * so a save of 0.6.0 or 0.6.1 gets the record at load, and its next save keeps it (the record is in
+ * nation_comp.dat of the save). Only the Nations League uses the record (nations doc 5.5), so no other
+ * competition changes. */
 
 static void nl_record_to_europe(const SeasonCompDef *d, uint32_t rec, int loading)
 {
