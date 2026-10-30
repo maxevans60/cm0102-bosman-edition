@@ -286,9 +286,9 @@ Merge danger: one-way door if it changes the save format. Blast radius: every sa
 
 ### 19. Nation names, Kazakhstan and the Netherlands Antilles
 Blocked by: none
-Delivers: the national sides of a renamed nation take the nation's name, in a new game, at each season point and at the load of an older save. Kazakhstan moves from the AFC to UEFA from the 2002/03 season. The dead Netherlands Antilles plays no competition beside Curaçao. Faults 42, 43 and 51.
+Delivers: the national sides of a renamed nation take the nation's name, in a new game, at each season point and at the load of an older save. Kazakhstan moves from the AFC to UEFA from the 2002/03 season. The dead Netherlands Antilles plays no competition beside Curaçao (fault 51, already fixed on main). Faults 42, 43 and 51.
 Merge danger: two-way door. The load of a 0.6.1 save gives its old side names the nation's names, and that changes only names. Blast radius: the names that the fixtures, results and history screens show for six national sides, and the international competitions of 2001 and 2002 starts, where Kazakhstan now plays the UEFA qualifiers and no longer the AFC ones.
-- [ ] The checker finds no side-name and no nation-confed fault in a 2001 start with changing rules on, played past the 2002 season point, and in a 2025 start on the December 2025 data.
-- [ ] The checker finds no entrant-dead fault in the CONCACAF Nations League of a 2016 to 2025 start.
-- [ ] history_check_test.py: the UEFA moves of nations.tsv match the season code.
+- [x] The checker finds no side-name and no nation-confed fault in a 2001 start with changing rules on, played past the 2002 season point, and in a 2025 start on the December 2025 data.
+- [x] The checker finds no entrant-dead fault in the CONCACAF Nations League of a 2022 start played to November 2023. Fault 51 is not on main: only saves of builds before 29b9dc82 show it, so this slice changes no code for it.
+- [x] history_check_test.py: the UEFA moves of nations.tsv match the season code.
 - [ ] Same-save set PASS.
