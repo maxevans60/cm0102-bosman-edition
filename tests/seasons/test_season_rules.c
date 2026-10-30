@@ -97,7 +97,8 @@ int main(int argc, char **argv)
     /* 0.6.2 slice 10 (faults 8 and 9): the last row of a file stays to 2301 and later, with no lookback limit. For
      * every file of every row and every season from 2001 to 2301, season_rules_last_season gives the latest season
      * at or before it that has a row of the file, by a scan of every row. The leagues lost their rows in 2037 (a
-     * 10-season lookback) and the Brazilian state leagues in 2057 (30 seasons). An idle year gives none. */
+     * 10-season lookback) and the Brazilian state leagues in 2057 (30 seasons). The year of an ended competition
+     * gives none. */
     int last_all = 0, lw = 0, lk = 0;
     for (int i = 0; i < season_rules_count(); i++)
         if (season_rules_row(i)->season > last_all) last_all = season_rules_row(i)->season;
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
                                           season_rules_last_season(season, f), want);
                 }
             }
-            if (season_rules_last_season(SEASON_RULE_IDLE, f) || season_rules_last_season(2999, f)) lw++;
+            if (season_rules_last_season(SEASON_RULE_ENDED, f) || season_rules_last_season(2999, f)) lw++;
         }
     }
     CHECK(lk > 50000 && !lw, "last season to 2301: %d of %d wrong", lw, lk);

@@ -91,8 +91,8 @@ static int within(const char *file, int n)
     return n;
 }
 
-/* The row of a season, or the last row before it (Q248: after the last row the rules stay, with no end year,
- * 0.6.2 Q1). */
+/* The row of a season, or the last row before it (Q248: after the last row the rules stay, with no end year:
+ * the after-table rule). */
 static const SeasonRule *row_of_season(const char *file, int season)
 {
     int s = season_rules_last_season(season, file);

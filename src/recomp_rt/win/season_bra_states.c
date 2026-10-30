@@ -305,7 +305,7 @@ static int state_clubs(const State *st, uint32_t self, uint32_t *out, int max)
 /* The club count of the object's row: the start season at a new game and with changing rules off (Q232), else the
  * row of the edition +0x40. The state objects hold the game year there (2001 in a 2001/02 game, whose state
  * championships play in the first months of 2002: the row 2001/02, real season 2002). The nearest earlier known
- * count (Q248), with no end year (0.6.2 Q1). 0 when none is known. */
+ * count (Q248), with no end year (the after-table rule). 0 when none is known. */
 static int row_count(uint32_t obj)
 {
     const char *file = season_change_file(obj);

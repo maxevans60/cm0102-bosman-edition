@@ -361,7 +361,7 @@ int season_rules_last_season(int season, const char *file)
     if (!last_row_season)
         for (int i = 0; i < nrows; i++)
             if (rows[i].season > last_row_season) last_row_season = rows[i].season;
-    if (season >= SEASON_RULE_IDLE) return 0;
+    if (season >= SEASON_RULE_ENDED) return 0;
     for (int s = season < last_row_season ? season : last_row_season; s >= SEASON_RULE_FIRST; s--)
         if (season_rules_find(s, file, 0)) return s;
     return 0;

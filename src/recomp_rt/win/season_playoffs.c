@@ -171,8 +171,8 @@ static const SeasonLeagueRule *league_rule(const char *file, int season)
     return NULL;
 }
 
-/* The row of the rules of a season, or the last before it with no end year (Q248, 0.6.2 Q1), as season_sizes.c
- * reads it. */
+/* The row of the rules of a season, or the last before it with no end year (the after-table rule, Q248), as
+ * season_sizes.c reads it. */
 static const SeasonRule *row_of_season(const char *file, int season)
 {
     int s = season_rules_last_season(season, file);
