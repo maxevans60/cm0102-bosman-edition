@@ -10,7 +10,8 @@ their history rows, a news list, the .tmp parts of finals classes, three fixture
 finance records. The game starts in 2025 and the save is on day 189 of 2040. The data holds one fault for each
 check of the checker, and some competitions hold none. The test runs the checker and compares its faults with the
 planted list, then runs it again with a rules file, a finals table, an access file and a known-fault list, then
-with changing rules off, then with --health. It also compares the renames and UEFA moves of nations.tsv with the season code.
+with changing rules off, then with --health. It also compares the renames and UEFA moves of nations.tsv with the
+season code.
 All data is made up, so the fixture holds no data of a database.
 """
 import csv
@@ -279,7 +280,8 @@ def uefa_moves_match():
     code moves to UEFA, and its season (open item 43 of 0.6.2: Kazakhstan from 2002)."""
     src = open(os.path.join(ROOT, "src", "recomp_rt", "win", "season_intl_rules.c"), encoding="latin-1").read()
     body = re.search(r"int season_intl_uefa_from\(const char \*name\)\s*\{(.*?)\n\}", src, re.S)
-    code = {(int(y), n) for n, y in re.findall(r'strcasecmp\(name, "([^"]+)"\)\)\s*return (\d{4})',
+    # both forms: `if (!strcasecmp(name, "X")) return 2002;` and `!strcasecmp(name, "X") ? 2016 : 0`
+    code = {(int(y), n) for n, y in re.findall(r'strcasecmp\(name, "([^"]+)"\)\)?\s*(?:return|\?)\s*(\d{4})',
                                                body.group(1) if body else "")}
     with open(os.path.join(HERE, "nations.tsv"), encoding="utf-8") as f:
         rows = {(int(r["season"]), r["nation"])

@@ -53,7 +53,6 @@
 #define CLUB_SIZE 0x245u
 #define CLUB_NAME_AT 0x4u               /* long name, 51 bytes */
 #define CLUB_SHORT_AT 0x38u             /* short name, 26 bytes */
-#define CLUB_NATION 0x53u               /* the nation record, a pointer after the load */
 #define CONTINENT_ASIA 0x9cfa0cu        /* key continent ids (sweep section 8) */
 #define CONTINENT_OCEANIA 0x9cfa18u
 #define CONTINENT_EUROPE 0x9cfa10u
@@ -1063,18 +1062,14 @@ static int nations_rename(int season, int news)
     return done;
 }
 
+static int same_name(const char *name, void *now) { return !strcasecmp(name, (const char *)now); }
+
 /* 1 when old is an earlier name of now in a chain of the rename table (Yugoslavia for Serbia and Montenegro and
- * for Serbia). Names compare without case (the databases from 2019 write "eSwatini"). */
+ * for Serbia), without case (season_intl_later_held). */
 static int earlier_name(const char *old, const char *now)
 {
-    const char *n = old;
-    for (int step = 0; n && step <= NATION_RENAMES; step++) {
-        const char *next = NULL;
-        for (int i = 0; i < NATION_RENAMES; i++)
-            if (!strcasecmp(nation_renames[i].old, n)) next = nation_renames[i].name;
-        if (next && !strcasecmp(next, now)) return 1;
-        n = next;
-    }
+    for (int i = 0; i < NATION_RENAMES; i++)
+        if (!strcasecmp(nation_renames[i].old, old)) return season_intl_later_held(i, same_name, (void *)now);
     return 0;
 }
 
@@ -1083,18 +1078,19 @@ static int earlier_name(const char *old, const char *now)
  * which the fixtures, results and history screens show. A side whose name is an earlier name of its nation's name
  * takes the nation's name and short name: after nations_rename, and in the data that already holds the new name
  * beside an old side (December 2025: the nations Czechia and Türkiye, the sides "Czech Republic" and "Turkey").
- * A dead record beside the live one (Yugoslavia beside Serbia) keeps its side, which has its own name. No key club
+ * These rows are the nat_club.dat part of a save; a side that the data puts elsewhere (team_nation: Denmark in
+ * October 2019) is not renamed. A dead record beside the live one (Yugoslavia beside Serbia) keeps its side,
+ * which has its own name. No key club
  * of set_key_ids 0x601a40 (the club chain of 0x6146b0) is a national side, so a load keeps every key. Returns the
  * count. */
 static int sides_rename(void)
 {
     int done = 0, clubs = (int)rd32(g_mem, CLUB_COUNT), nations = nation_count();
-    uint32_t base = rd32(g_mem, CLUBS), first = rd32(g_mem, NATIONS);
-    if (!readable(base) || !readable(first) || clubs < 2 * nations) return 0;
+    uint32_t base = rd32(g_mem, CLUBS);
+    if (!readable(base) || !readable(rd32(g_mem, NATIONS)) || clubs < 2 * nations) return 0;
     for (int i = clubs - 2 * nations; i < clubs; i++) {
-        uint32_t club = base + (uint32_t)i * CLUB_SIZE, n = rd32(g_mem, club + CLUB_NATION);
-        if (!readable(n) || n < first || (n - first) % NATION_SIZE || (int)((n - first) / NATION_SIZE) >= nations)
-            continue;
+        uint32_t club = base + (uint32_t)i * CLUB_SIZE, n = team_nation(club);
+        if (!n) continue;
         const char *side = win_str(club + CLUB_NAME_AT), *name = win_str(n + NATION_NAME);
         if (!strcmp(side, name) || !earlier_name(side, name)) continue;
         if (logging()) fprintf(stderr, "recomp: season intl: national side %s is now %s\n", side, name);
@@ -1270,7 +1266,8 @@ static void intl_entry(const SeasonChange *c)
 
 /* A new game and a load: the national sides of the renamed nations (sides_rename). In a new game the club records
  * point at their nations only once the original has made the game; a save of 0.6.1 or before holds the old side
- * names, which the load gives the nation's name. */
+ * names, which the load gives the nation's name. A load moves no nation to UEFA: a 0.6.1 save with Kazakhstan in
+ * the AFC keeps it there to its next season point, so no competition loses an entrant in the middle of a season. */
 static void intl_sides(int start_year)
 {
     (void)start_year;
