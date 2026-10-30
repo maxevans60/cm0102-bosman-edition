@@ -1,5 +1,5 @@
 # Future play to 2300 (0.6.2)
-Status: Draft (open decisions below)
+Status: Ready
 
 ## Problem
 
@@ -64,6 +64,7 @@ After-table rules:
 - Hosts after the table come from the original game's host rule. The original keeps host rows that roll on by a fixed step: 32 years for the World Cup, Euros and Olympics, and 16 for the Africa Cup of Nations. Five years before each edition, the host is drawn from three candidate pairs (Q4).
 - Announced editions and hosts are added to the tables first, and each fact is checked against a source (Q5).
 - A drawn pair that names a nation that no longer exists is drawn again from the other pairs (Q6).
+- Where the original rule does not fit (the Copa América and Asian Cup rows, whose roll does not match their cycle, the Gold Cup and OFC Nations Cup with no original rows, and a row whose three pairs all name nations that no longer exist), the host rotates in order through the nations that hosted that competition in the table and still exist (Q32).
 - The World Cup qualifiers take the place counts of the continued edition, so 48-team finals get 48 qualifiers and hosts (fault 32).
 - Every league, play-off, substitute, foreign player and cup rule keeps its last table row, with no end year and no fall-back to the start year (Q1).
 - The Copa Sudamericana, Recopa, FIFA Intercontinental Cup and AFC Champions League Two continue every year in their last known format (Q2).
@@ -93,7 +94,7 @@ Year limits:
 
 Test switches (Q9, Q30):
 - The Tier A switch and the date jump switch are in the normal build. The program reads them once at start, and both are off by default. The same-save set proves that they change nothing when off.
-- A Tier A run keeps the calendar, draws, entrants, league tables, season changes, history, finances, and save and load. It skips the AI transfer market, background matches, retirements, new players, contracts, injuries and AI manager moves. Each match gets an instant result from the two sides' reputation, so the stronger side wins more often (Q16).
+- A Tier A run keeps the calendar, draws, entrants, league tables, season changes, history, finances, retirements, new players, and save and load. It skips the AI transfer market, background matches, contracts, injuries and AI manager moves (Q16, changed by Q31: without retirements and new players, ages wrap and the under-21 and Olympic squads empty). Each match gets an instant result from the two sides' reputation, so the stronger side wins more often (Q16).
 - Tier A counts as the same as the normal game over 10 years when they agree on editions, dates, hosts and entrant rules. Winners can differ (Q10). Two windows: one from a 2013 start, inside the tables, and one from a 2098 date jump, after the tables.
 - Checks that depend on real results, such as the same finalists in a row, count only in Tier B.
 
@@ -130,8 +131,7 @@ Similar tests that exist: the start-season soaks, the long games, full play and 
 
 ## Open decisions
 
-1. Tier A skip list (review of 30 October). With no retirements and no new players, ages pass 127 and wrap in the signed age byte, and the under-21 and under-23 (Olympic) squads are empty after about 20 years. Recommended: Tier A keeps retirements and new players. This changes Q16. Slice 14 makes that work faster.
-2. Hosts where the original rule does not fit. The Copa América rows roll 12 years and the Asian Cup rows 20, which do not match their 4-year cycles. The Gold Cup and the OFC Nations Cup have no original host rows. And all three pairs of a row can name nations that no longer exist. Recommended: in these cases the host rotates in order through the nations that hosted that competition in the table and still exist.
+None. Two decisions from the review were settled by Max on 30 October 2026 (Q31, Q32), see Decisions.
 
 ## Slices
 
@@ -181,7 +181,7 @@ Merge danger: one-way door, because the repair changes old saves at load. Blast 
 
 ### 5. Hosts
 Blocked by: 4a
-Delivers: hosts from the announced editions, then from the original host rule, with the rule of open decision 2 where the original rule does not fit. Every final writes its host into its history row. Euro 2020 and 2028 and the Gold Cup after 2031 have hosts. Faults 3 (hosts), 12, 14 and 18.
+Delivers: hosts from the announced editions, then from the original host rule, with the rotation of Q32 where the original rule does not fit. Every final writes its host into its history row. Euro 2020 and 2028 and the Gold Cup after 2031 have hosts. Faults 3 (hosts), 12, 14 and 18.
 Merge danger: two-way door. Blast radius: hosts and automatic host places.
 - [ ] The checker finds no final without a host to 2300.
 - [ ] A host drawn as a nation that no longer exists is drawn again (unit test), including the case where all pairs name such nations.
