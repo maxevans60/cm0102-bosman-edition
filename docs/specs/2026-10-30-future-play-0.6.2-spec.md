@@ -1,5 +1,5 @@
 # Future play to 2300 (0.6.2)
-Status: Ready
+Status: Draft (open decisions below)
 
 ## Problem
 
@@ -87,10 +87,15 @@ Original game faults, fixed in every game, base game included (Q23, Q24, Q27):
 
 The same game (Q152): every game code change keeps the same saves in the same-save set, unless the change acts only after a table end year, after 2099 or above £2.1 billion, which the set does not reach. The speed fixes give the same results as the code they replace (Q18).
 
+Year limits:
+- The season code has no year limit for rules, hooks and saves. The latest start year of Choose Season, the date jump limit and the rule lookups are separate values. Tests run to 2301 to prove there is no limit at 2300.
+- One slice owns the format of the season part of the save. Slices 1, 12 and 13 change it in that order, each with its own part version.
+
 Test switches (Q9, Q30):
 - The Tier A switch and the date jump switch are in the normal build. The program reads them once at start, and both are off by default. The same-save set proves that they change nothing when off.
 - A Tier A run keeps the calendar, draws, entrants, league tables, season changes, history, finances, and save and load. It skips the AI transfer market, background matches, retirements, new players, contracts, injuries and AI manager moves. Each match gets an instant result from the two sides' reputation, so the stronger side wins more often (Q16).
-- Tier A counts as the same as the normal game over 10 years from one start when they agree on editions, dates, hosts and entrant rules. Winners can differ (Q10).
+- Tier A counts as the same as the normal game over 10 years when they agree on editions, dates, hosts and entrant rules. Winners can differ (Q10). Two windows: one from a 2013 start, inside the tables, and one from a 2098 date jump, after the tables.
+- Checks that depend on real results, such as the same finalists in a row, count only in Tier B.
 
 The history checker:
 - It reads a save, writes the history rows of every competition, and checks them against the expected rule of each competition (the competitions file in the tests).
@@ -104,7 +109,7 @@ The run set (Q11, Q14, Q15, Q22):
 - Tier A, also: a 2001 game with England, Spain and Brazil only, and one game where the manager runs a national team.
 - One Tier A run to 2300 every night.
 - Date jumps to 2098, 2198 and 2298.
-- Tier B: a few long games in the background, with checkpoint saves each decade.
+- Tier B: a few long games in the background, with checkpoint saves each decade. It fails when the save would pass the 4 GB file limit before 2300, when a game day in a later decade takes more than twice as long as in the first seasons, or when a national team has no manager for more than one season.
 - 0.6.2 ships only when the checker finds no fault to 2300 in the whole run set. The run set joins the release checks of every later release (Q12).
 
 ## Testing
@@ -125,57 +130,67 @@ Similar tests that exist: the start-season soaks, the long games, full play and 
 
 ## Open decisions
 
-None.
+1. Tier A skip list (review of 30 October). With no retirements and no new players, ages pass 127 and wrap in the signed age byte, and the under-21 and under-23 (Olympic) squads are empty after about 20 years. Recommended: Tier A keeps retirements and new players. This changes Q16. Slice 14 makes that work faster.
+2. Hosts where the original rule does not fit. The Copa América rows roll 12 years and the Asian Cup rows 20, which do not match their 4-year cycles. The Gold Cup and the OFC Nations Cup have no original host rows. And all three pairs of a row can name nations that no longer exist. Recommended: in these cases the host rotates in order through the nations that hosted that competition in the table and still exist.
 
 ## Slices
 
-Each slice is one fresh session in its own worktree, with two fresh Opus review agents on its diff. No merge or push without Max's yes. The merge of the history checker branch (claude/future-2-history) comes before slice 2.
+Each slice is one fresh session in its own worktree, with two fresh Opus review agents on its diff. No merge or push without Max's yes. The merge of the history checker branch (claude/future-2-history) comes before slice 2. Every check "to 2300" also needs slices 1 and 13, because the save fails at 999 parts in about 2232.
 
-### 1. Remove the 2099 limits, and add the date jump switch
+First wave, in parallel: 1, 2, 11, 14 and 17. Slices 12 and 13 follow slice 1 in that order, because all three change the season part of the save.
+
+### 1. Remove the year limits, and add the date jump switch
 Blocked by: none
-Delivers: season hooks, cup rules, cup groups, new cups, saves, season parts and news parts work after 2099 and above 200 news seasons. New games start up to 2300 under the date jump switch. Faults 6, 10, 23, 24, 25, 31 and 35.
+Delivers: season hooks, cup rules, cup groups, new cups, saves, season parts and news parts work after 2099 with no upper year limit, and with more than 200 news seasons. The latest start year, the date jump limit and the rule lookups are separate values. New games start up to 2300 under the date jump switch. Owner of the season part format for this release. Faults 6, 10, 23, 24, 25, 31 and 35.
 Merge danger: two-way door. Blast radius: every season game after 2099, and the load of season parts.
-- [ ] A date jump to 2198 and to 2298 plays to 1 January, saves, loads and plays on, with no box.
-- [ ] Unit tests show no rule falls back to the start year after 2099.
+- [ ] A date jump to 2098 plays past July 2101, with a save and load after the 2100/01 season change, and no box.
+- [ ] A date jump to 2298 plays through the 2300/01 season change, with a save and load, and no box.
+- [ ] Unit tests to 2301 show no rule falls back to the start year and no hook stops.
 - [ ] A 0.6.1 save loads.
 - [ ] Same-save set PASS.
 
 ### 2. History checker: entrants, nation names and world health
 Blocked by: none (after the merge of the checker branch)
-Delivers: the checker lists entrants with their route in and checks them against the year's access rule. It checks nation names and confederations by year, and writes the Tier B world-health report.
+Delivers: the checker lists entrants with their route in and checks them against the year's access rule. It checks nation names and confederations by year, counts the under-21 and under-23 players of each nation, and writes the Tier B world-health report.
 Merge danger: two-way door, tests only. Blast radius: false passes or false faults in the checker.
 - [ ] On existing saves, the checker finds Yugoslavia after 2006 in a 2001 game, and every fault the forum player reported.
 - [ ] A fixture save with a wrong entrant fails the entrant check.
-- [ ] The world-health report reads squad sizes, managers, balances and save size from a save.
+- [ ] The world-health report reads squad sizes, under-21 and under-23 counts, managers, balances and save size from a save.
 
 ### 3. Tier A switch
-Blocked by: 2
+Blocked by: 1, 2
 Delivers: a test switch that skips the work in the decisions above and gives instant results from reputation. It measures the time per year.
 Merge danger: two-way door. Off by default. Blast radius: none for players if the same-save set passes.
-- [ ] 10 years from a 2013 start in Tier A and in the normal game agree on editions, dates, hosts and entrant rules.
+- [ ] 10 years from a 2013 start and 10 years from a 2098 date jump, each in Tier A and in the normal game, agree on editions, dates, hosts and entrant rules.
+- [ ] Each nation keeps eligible under-21 and under-23 players in 2050 and 2100 of a Tier A run.
 - [ ] Same-save set PASS with the switch off.
 - [ ] The time per year is measured and reported.
 
-### 4. International finals continue
-Blocked by: 1
-Delivers: every international final and its qualifiers continue on the last cycle. The 48-team qualifiers fill 48 places. The Confederations Cup stays ended. A start after 2200 has no final in the past. Old saves stuck at the idle year are repaired at load. Faults 1, 13, 15, 32 and 34, and Q8.
-Merge danger: one-way door, because the repair changes old saves at load. Blast radius: every international competition.
-- [ ] A Tier A run to 2100 and the nightly run to 2300 give every final on its cycle, and the checker finds no gap.
-- [ ] A 0.6.0 save past 2030 plays the next World Cup after a load.
+### 4a. International finals continue
+Blocked by: 1, 2, 3
+Delivers: every international final and its qualifiers continue on the last cycle. The 48-team qualifiers fill 48 places. The Confederations Cup stays ended. A start after 2200 has no final in the past. Faults 1, 13, 15, 32 and 34.
+Merge danger: two-way door. Blast radius: every international competition.
+- [ ] A Tier A run to 2100 gives every final on its cycle, and the checker finds no gap.
 - [ ] Unit tests: no class returns the idle year.
 
+### 4b. Repair of saves stuck at the idle year
+Blocked by: 4a
+Delivers: a save with a competition waiting for the idle year moves it to its next edition at load (Q8).
+Merge danger: one-way door, because the repair changes old saves at load. Blast radius: every international competition in loaded saves.
+- [ ] Fixture: a 2098 date jump made on the 0.6.1 build (its finals wait for 2200). After a load in 0.6.2, it plays the next World Cup, Euros and Olympics.
+
 ### 5. Hosts
-Blocked by: 4
-Delivers: hosts from the announced editions, then from the original host rule, with a redraw for nations that no longer exist. Every final writes its host into its history row. Euro 2020 and 2028 and the Gold Cup after 2031 have hosts. Faults 3 (hosts), 12, 14 and 18.
+Blocked by: 4a
+Delivers: hosts from the announced editions, then from the original host rule, with the rule of open decision 2 where the original rule does not fit. Every final writes its host into its history row. Euro 2020 and 2028 and the Gold Cup after 2031 have hosts. Faults 3 (hosts), 12, 14 and 18.
 Merge danger: two-way door. Blast radius: hosts and automatic host places.
 - [ ] The checker finds no final without a host to 2300.
-- [ ] A host drawn as a nation that no longer exists is drawn again (unit test).
+- [ ] A host drawn as a nation that no longer exists is drawn again (unit test), including the case where all pairs name such nations.
 - [ ] The host of each announced edition matches its source.
 
 ### 6. Finals that stop before their table ends
 Blocked by: 2
-Delivers: the Copa América, Africa Cup of Nations and Asian Cup go on in a 2001 game. Faults 2 and 19.
-Merge danger: two-way door. Blast radius: the classes that the cause touches. The cause is still unknown.
+Delivers: the Copa América, Africa Cup of Nations and Asian Cup go on in a 2001 game. Faults 2 and 19. The cause is unknown, so the first session finds the cause and says whether the fix needs a second session.
+Merge danger: two-way door. Blast radius: the classes that the cause touches.
 - [ ] Long game seed 6 (2001 start) to 2030: the checker finds every edition of the three finals.
 
 ### 7. History rows
@@ -186,43 +201,50 @@ Merge danger: two-way door. Blast radius: the history screens of every start.
 - [ ] The 2023 and 2010 starts show the World Cup in its real years.
 
 ### 8. The Nations League and the Asian Cup qualifiers
-Blocked by: 2
+Blocked by: 2, 3
 Delivers: the UEFA Nations League has its own European record. The Asian Cup qualifiers hold only Asian nations. Saves with the wrong record are repaired at load. Faults 4 and 21.
-Merge danger: one-way door if the repair changes saves at load. Blast radius: both competitions and their history.
+Merge danger: one-way door, because the repair changes saves at load. Blast radius: both competitions and their history.
 - [ ] The checker finds no nation from the wrong confederation in either competition to 2100.
 - [ ] A 0.6.1 save with the fault loads and plays both competitions correctly.
 
-### 9. Club cups after the table
-Blocked by: 1
-Delivers: the four club cups continue every year, the Club World Cup is played every four years from 2029, no club cup stops in 2101, the Suruga Bank finalists are right to 2019, and the Super Cup venue changes each year. Faults 5, 7, 11 and 22.
+### 9a. Club cups after the table
+Blocked by: 1, 2, 3
+Delivers: the Copa Sudamericana, Recopa, FIFA Intercontinental Cup and AFC Champions League Two continue every year. The Club World Cup is played every four years from 2029. No club cup stops in 2101. The 2027 Libertadores row gets its places text. Faults 7 and 11.
 Merge danger: two-way door. Blast radius: continental and world club cups.
-- [ ] Tier A to 2100: the checker finds every edition and right entrants.
-- [ ] Suruga Bank finalists match the year's J.League Cup and Sudamericana winners.
+- [ ] Tier A to 2100: the checker finds every edition with the right entrants.
+
+### 9b. Suruga Bank finalists and the Super Cup venue
+Blocked by: 2
+Delivers: the Suruga Bank finalists are the year's J.League Cup and Copa Sudamericana winners to 2019. The UEFA Super Cup venue changes each year after 2027. Faults 5 and 22, Q28.
+Merge danger: two-way door. Blast radius: these two competitions.
+- [ ] Long game to 2019: each Suruga Bank final has that year's two winners (checked in Tier B or a normal game, because it depends on results).
+- [ ] Tier A to 2040: no two Super Cups in a row in one venue.
 
 ### 10. Leagues and domestic cups after the table
-Blocked by: 1
+Blocked by: 1, 2, 3
 Delivers: leagues, play-offs and Brazilian state leagues keep their last rules with no end year. Faults 8 and 9.
 Merge danger: two-way door. Blast radius: promotion and relegation in every league.
 - [ ] Tier A to 2100: league sizes, promotion and play-off places stay as in the last table row.
-- [ ] Unit tests to 2300: no lookback limit ends a rule.
+- [ ] Unit tests to 2301: no lookback limit ends a rule.
 
 ### 11. Original faults: national managers, money, manager age
 Blocked by: none
-Delivers: every national team gets a new manager, money above £2.1 billion is right on screen and in AI budgets, and the manager's age is right after 2100. Faults 26, 27, 28 and 33.
-Merge danger: two-way door. It changes the base game after the first national manager retires. Blast radius: national team jobs and AI transfer budgets.
-- [ ] A save with a retired national manager of a small nation opens a vacancy.
-- [ ] A save edited to a balance of £2.5 billion shows £2.5 billion, and the club still bids.
+Delivers: every national team gets a new manager, money above £2.1 billion is right on every screen and in AI budgets, and the manager's age is right after 2100. Faults 26, 27, 28 and 33.
+Merge danger: two-way door. The base game changes after the first national manager retires. The same-save set does not reach that point, so it must PASS. A loaded save with a national team that has no manager gets one at the next month change. That is an expected change. Blast radius: national team jobs, money screens and AI transfer budgets.
+- [ ] A save with a retired national manager of a small nation opens a vacancy. A save where a national team already has no manager fills it at the next month change.
+- [ ] Saves edited to balances of £2.5 billion, £5 billion and £12 billion show the right balance, and the club still bids.
+- [ ] Every screen that formats money through the 32-bit Cash object is traced and fixed.
 - [ ] Same-save set PASS.
 
 ### 12. Caps in a wider field
-Blocked by: none
+Blocked by: 1
 Delivers: caps count above 255. Fault 30.
 Merge danger: one-way door, because the save holds a new field. Blast radius: caps and first-cap history rows.
 - [ ] A player edited to 255 caps gets 256 at the next cap, and no second "first cap" row.
 - [ ] A 0.6.1 save loads with the right caps.
 
 ### 13. Save parts merged across seasons
-Blocked by: none
+Blocked by: 12
 Delivers: the part count of a save stops growing. Fault 29.
 Merge danger: one-way door, because the save format changes. Blast radius: every save and load. Old saves must load.
 - [ ] A save with 990 parts saves again and loads.
@@ -237,8 +259,8 @@ Merge danger: two-way door. Blast radius: every game, if a result changes.
 - [ ] Time per game day of the second year drops, measured against the profile of 30 October 2026.
 
 ### 15. Run set and release check
-Blocked by: 1, 2, 3
-Delivers: one script runs the whole run set in parallel within the game limit, keeps checkpoint saves, runs the checker on each save, and joins the release script.
+Blocked by: 1, 2, 3, 13
+Delivers: one script runs the whole run set in parallel within the game limit, keeps checkpoint saves, runs the checker on each save, applies the Tier B limits, and joins the release script.
 Merge danger: two-way door, tests only. Blast radius: release checks.
 - [ ] The script runs the run set and writes one pass or fail per game.
 - [ ] The release script stops on any checker fault.
@@ -249,3 +271,15 @@ Delivers: the run set passes to 2300 with no fault, and 0.6.2 is released.
 Merge danger: the release itself. Max's yes is needed for each push and for the publish.
 - [ ] The whole run set passes.
 - [ ] Release skill steps done, with Max's yes.
+
+### 17. Date span audit
+Blocked by: none
+Delivers: a check of the callers of the original's day-span function that the audit did not read (201 of 215). A 16-bit span wraps after about 60 years, so a span from an old date can be wrong from about 2061. Each caller gets a verdict, and each fault goes to the open items with a fix slice.
+Merge danger: two-way door, read only.
+- [ ] Every caller has a verdict with its address.
+
+### 18. Save size growth (only if Tier B confirms it)
+Blocked by: 15
+Delivers: if a Select All save grows about 25 MB a season, it reaches the 4 GB file limit in about 2160. Tier B measures the growth. If the growth holds, this slice finds what grows and keeps the save under the limit to 2300.
+Merge danger: one-way door if it changes the save format. Blast radius: every save.
+- [ ] Tier B save size stays under 4 GB to 2300 at the measured rate.
