@@ -210,6 +210,11 @@ if(NOT WIN32)
         src/recomp_rt/win/season_uefa_ko_lookup.c)
     target_include_directories(season_uefa_days_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_uefa_days COMMAND season_uefa_days_test)
+    # The FIFA days after the table (0.6.2 slice 14, fault 16): the same days as the year by year steps, to 2300.
+    add_executable(season_fifa_days_test tests/seasons/test_season_fifa_days.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_fifa_days_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_fifa_days COMMAND season_fifa_days_test)
     # The UEFA league phase draw (0.6.0 slice 25): pots, opponents, nation rules and match days.
     add_executable(season_uefa_league_test tests/seasons/test_season_uefa_league.c
         src/recomp_rt/win/season_uefa_league_draw.c)

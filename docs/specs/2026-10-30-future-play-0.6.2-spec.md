@@ -255,8 +255,8 @@ Merge danger: one-way door, because the save format changes. Blast radius: every
 Blocked by: none
 Delivers: the new-player sort, the transfer shortlist search, the retirement search and the FIFA day steps run faster with the same results. Fault 16.
 Merge danger: two-way door. Blast radius: every game, if a result changes.
-- [ ] Same-save set PASS.
-- [ ] Time per game day of the second year drops, measured against the profile of 30 October 2026.
+- [x] Same-save set PASS.
+- [x] Time per game day of the second year drops, measured against the profile of 30 October 2026.
 
 ### 15. Run set and release check
 Blocked by: 1, 2, 3, 13

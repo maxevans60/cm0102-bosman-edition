@@ -20,6 +20,14 @@ void season_from_day_of_year(int y, int doy, int *m, int *d);
 /* The real FIFA day of month m (1 to 12) in year y nearest to day `want`, or 0 when the month has none. After the
  * last year of the list: that year's days, 364 days a year later (7 more when the drift passes 3 days). */
 int season_fifa_day(int y, int m, int want);
+/* The FIFA days of year y as days of the year (0 is 1 January), in table order, at most max of them. A year has
+ * fewer than SEASON_FIFA_YEAR_MAX (ctest season_fifa_days). */
+#define SEASON_FIFA_YEAR_MAX 64
+int season_fifa_year_days(int y, int doys[], int max);
+
+/* Days from 1 January 1970 (month 1 to 12), and back (H. Hinnant's civil calendar algorithms). */
+long season_abs_day(int y, int m, int d);
+void season_from_abs_day(long z, int *y, int *m, int *d);
 
 /* 1 when day d of month m (1 to 12) of year y meets a FIFA day: within a day of one (more than two players on
  * duty within a day stop a club match, NationalTeams::can_schedule_club_fixture 0x776fc0), or between two FIFA
