@@ -155,6 +155,8 @@ RT_WRAP(00598800, get_transfer_budget)
             cpu.eax = (uint32_t)INT32_MAX, cpu.edx = 0;
             news_club = rd32(g_mem, finance + 8u);    /* rt_news_wide: a news item may carry this budget */
             news_full = v;
+        } else if (rd32(g_mem, finance + 8u) == news_club) {
+            news_full = 0;    /* the club's budget fits now: an amount of exactly 2,147,483,647 is its own */
         }
         else if (v < INT32_MIN) cpu.eax = 0x80000000u, cpu.edx = 0xffffffffu;
     }
