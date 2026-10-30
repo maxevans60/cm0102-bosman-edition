@@ -22,3 +22,14 @@ uint32_t rt_caps_full(uint32_t staff)
 {
     return caps_wide_full(rd32(g_mem, staff + STAFF_ID), rd8(g_mem, staff + STAFF_CAPS));
 }
+
+void o_0086cc50(void);
+
+/* `Staff_Records::add_first_cap_record` 0x86cc50, thiscall (player, unused): a log line for each first-cap history
+ * row (tests/seasons/caps_wide_run.py). Its one direct caller is 0x76b8c3, for a player whose caps byte is 0. */
+RT_WRAP(0086cc50, first_cap_record)
+{
+    uint32_t staff = rt_arg(0);
+    if (staff) fprintf(stderr, "recomp: caps: first cap of staff %u\n", rd32(g_mem, staff + STAFF_ID));
+    o_0086cc50();
+}
