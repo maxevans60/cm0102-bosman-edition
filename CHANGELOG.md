@@ -14,6 +14,7 @@ Fixes for 0.6.0: crashes at save and start, wrong names, and faster new games.
 - Assistant: Pick best team no longer puts a player who cannot play into the eleven.
 - A new game with all nations is two to three times faster. "Player histories" takes about 25 seconds in place of about 4 minutes.
 - The Mac disk image shows the logo once, without a second "Bosman Edition" line under it.
+- Choose Season: the 2001/02 tile has three versions of the official data. Each click on the chosen tile changes the version: 3.9.60, the original data, then 3.9.65, the December 2001 update, then 3.9.68, with the summer 2002 transfers. The tile shows the version in use, and Start writes it into the `database` line of `settings.txt`. The default is now 3.9.60. A `settings.txt` that already has a `database` line keeps its version.
 
 ## 0.6.0 (pre-release)
 

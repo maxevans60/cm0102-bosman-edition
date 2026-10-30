@@ -75,8 +75,8 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_FOREIGN_COLOURS) == 1);
     CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
     CHECK(options_bool(OPT_CHANGING_RULES) == 1);
-    CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
-    CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.68"));
+    CHECK(options_enum(OPT_DATABASE) == DATABASE_3960);
+    CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.60"));   /* item 11 of 0.6.1: the original data */
     CHECK(options_enum(OPT_SEASON) == 0 && !strcmp(options_string(OPT_SEASON), "2001/02"));
 }
 
@@ -220,7 +220,7 @@ int main(void)
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3960);
     put("database = 3.9.99\n");
     options_load(path);
-    CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
+    CHECK(options_enum(OPT_DATABASE) == DATABASE_3960);
     const char *before = "# my notes\nDatabase = 3.9.65\r\nsound = off\n";
     put(before);
     options_load(path);
@@ -246,7 +246,7 @@ int main(void)
     CHECK(options_enum(OPT_DATABASE) == DATABASE_CUSTOM && !strcmp(options_string(OPT_DATABASE), "folder:Zo\xc3\xab Update"));
     put("database = folder:\n");
     options_load(path);
-    CHECK(options_enum(OPT_DATABASE) == DATABASE_3968);
+    CHECK(options_enum(OPT_DATABASE) == DATABASE_3960);
     put("# x\ndatabase = 3.9.60\r\nsound = off\n");
     options_load(path);
     CHECK(options_set_enum(OPT_DATABASE, "folder:Upper Case") == 1);
