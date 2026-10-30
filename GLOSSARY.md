@@ -124,6 +124,30 @@ _Avoid_: input field, edit box, text field
 A test that runs one function of the original in an emulator, runs the same function of the hand port, and compares the results.
 _Avoid_: emulation test, golden test
 
+**Tier A run**:
+A test run to a far year that plays only the competitions: calendar, draws, entrants, league tables, season changes and history. Results come at once from club and nation reputation. It skips the transfer market, background matches, retirements, new players, contracts, injuries and AI manager moves.
+_Avoid_: fast mode, fast-forward mode, competition-only run
+
+**Tier B run**:
+A test run to a far year with the full game world, to check player pools, managers, money, save size and speed over many decades.
+_Avoid_: world run, full run
+
+**Date jump**:
+A test start of a new game in a far year (2098, 2198 or 2298), with every date of the database moved to that year.
+_Avoid_: time jump, far start
+
+**Run set**:
+The fixed list of Tier A, Tier B and date jump games that a release must pass: start seasons, databases, nations, seeds and end years.
+_Avoid_: matrix, test grid
+
+**Checkpoint save**:
+A save that a Tier A or Tier B run keeps at a set year, so a later test can start there.
+_Avoid_: snapshot, milestone save
+
+**History checker**:
+The test tool that reads a save and checks the history rows and entrants of every competition against the expected rules.
+_Avoid_: history audit, save checker
+
 ### Data
 
 **Nation table**:
@@ -207,6 +231,14 @@ _Avoid_: dump, season log
 **Season jump**:
 A test run that plays from season to season with no match engine, the original's quick results only, and writes the rules report.
 _Avoid_: fast forward, simulation run
+
+**After-table rule**:
+What a competition or league does in a season after the last row of its rules table: it continues on its last cycle with its last rules, with no end year.
+_Avoid_: fall-back, default rule
+
+**Idle year**:
+A year that a competition with no next edition was set to wait for (2200). Since 0.6.2 no competition uses it.
+_Avoid_: never year, sentinel year
 
 **Season change**:
 The day on which a competition starts its next season: the update day of its league table entry, mostly 20 or 21 June, in January or February for calendar-year leagues. With changing rules on, the competition takes the rules of the new season then, and the player gets the news item of that season's changes.
