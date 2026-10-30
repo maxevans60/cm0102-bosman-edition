@@ -93,7 +93,7 @@ per live nation. Time per game day is not in a save. Checks:
     empty-squad   a senior side with no player in its squad while 23 players or more hold the nationality, or an
                   under-21 side with none while 11 or more of them are under 21 (Q17)
     no-youth      a nation with 23 players or more and none under 21 or none under 23 (Q31: the under-21 and
-                  Olympic squads then empty)
+                  Olympic squads then empty). A fault that fails a Tier B run (Q35, open item 52)
     overflow      an age field that is not the age from the birth date (more than 1 year apart), or a balance
                   of 2^62 or more
 

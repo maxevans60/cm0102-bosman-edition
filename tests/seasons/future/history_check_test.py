@@ -377,6 +377,16 @@ def main():
     got = {k for k in faults(work, "health") if k[0] in ("empty-squad", "no-youth", "overflow")}
     if got != HEALTH_FAULTS:
         bad.append(f"health run: faults {sorted(got)}, not {sorted(HEALTH_FAULTS)}")
+    # no-youth alone fails the run (Q35): every other fault of the save is known.
+    only = os.path.join(work, "only-youth.tsv")
+    with open(only, "w", encoding="utf-8") as f:
+        f.write("check\tcompetition\tyear\tnote\n")
+        for c, comp, y in faults(work, "health"):
+            if c != "no-youth":
+                f.write(f"{c}\t{comp}\t{y}\tplanted\n")
+    code, out = run([sav, "--known", only, "--nations", nations, "--health"])
+    if code != 1 or "FAULT  no-youth  Aland" not in out:
+        bad.append(f"health run: no-youth alone gives exit code {code}, not 1")
     with open(os.path.join(work, "health.health.tsv"), encoding="utf-8") as f:
         report = f.read().splitlines()
     for want_line in ("#\tplayers\t60", "#\tunder_21\t17", "#\tunder_23\t23", "#\tbalances_over_32_bits\t1",
