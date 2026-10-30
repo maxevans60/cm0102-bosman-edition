@@ -5,6 +5,7 @@ Usage:
     python3 tests/seasons/caps_wide_run.py wide <cm0102_recomp> <game folder> --keep <folder> [--days 60]
     python3 tests/seasons/caps_wide_run.py load <cm0102_recomp> <game folder> --keep <folder> --save <in.sav>
         [--days 1]
+    python3 tests/seasons/caps_wide_run.py screen <cm0102_recomp> <game folder> --keep <folder> [--steps <a,b,...>]
 
 wide: sets the caps byte (staff +0x22) of every player of start.sav of the test fixtures (17 July 2001) with at least
 one cap to 255, loads it, goes on holiday and saves --days game days later (tests/fixtures/fixtures.py play). The
@@ -24,6 +25,11 @@ The checks: no box and code 0; no player's caps byte falls, and a byte rises by 
 the caps above 255 of the input's season part (version 3) are all in the end save's part, none lower. With a save of
 0.6.1 (no caps field) the end part must hold no caps unless a player passed 255 in those days. A build of 0.6.1
 format (main before this slice) that loads a save of version 3 must load it too: it sees the byte 255.
+
+screen: start.sav with every Arsenal player who has caps at the byte 255 and a season part of version 3 that gives them
+300 caps and more (one more each, by staff id), then the steps (default: the squad screen, dumped). With
+"2500 click 45 165,4500 click 148 156,9000 click 210 234,13000 dump {d}/profile.bmp,14000 quit" the profile of
+Seaman must read "English (311 caps)". Look at the picture: the run checks only that the game loads and ends.
 """
 import os
 import struct
@@ -197,11 +203,60 @@ def load(argv):
     return fails
 
 
+def add_member(sav, name, data, path):
+    """Writes sav to path with one more stored member (a new row of the container, its bytes at the end)."""
+    sav.save(path)
+    blob = bytearray(open(path, "rb").read())
+    count = struct.unpack_from("<i", blob, 8)[0]
+    raw = savfile.encode(data) if sav.compressed else data
+    row = 12 + count * savfile.ENTRY_SIZE
+    struct.pack_into("<2I", blob, row, len(blob), len(data))
+    blob[row + 8:row + savfile.ENTRY_SIZE] = name.encode().ljust(savfile.ENTRY_SIZE - 8, b"\0")
+    struct.pack_into("<i", blob, 8, count + 1)
+    os.remove(path)
+    with open(path, "xb") as f:
+        f.write(blob + raw)
+
+
+def screen(argv):
+    program, game = os.path.abspath(argv[0]), os.path.abspath(argv[1])
+    keep = os.path.abspath(soak_run.arg(argv, "--keep"))
+    work = os.path.join(keep, "screen")
+    os.makedirs(work, exist_ok=True)
+    sav = savfile.Sav(os.path.join(fixtures.DEFAULT_DIR, "start.sav"))
+    clubs, staff = sav.read_member("club.dat"), bytearray(sav.read_member("staff.dat"))
+    arsenal = [struct.unpack_from("<i", clubs, r * 0x245)[0] for r in range(len(clubs) // 0x245)
+               if clubs[r * 0x245 + 4:r * 0x245 + 0x37].split(b"\0")[0] == b"Arsenal"][0]
+    wide_caps = {}
+    for r in range(len(staff) // STAFF_SIZE):
+        o = r * STAFF_SIZE
+        if struct.unpack_from("<i", staff, o + 0x39)[0] == arsenal and staff[o + CAPS] >= 1:
+            sid = struct.unpack_from("<i", staff, o)[0]
+            wide_caps[sid] = 300 + len(wide_caps)
+            staff[o + CAPS] = 255
+    sav.write_member("staff.dat", staff)
+    body = struct.pack("<IIII", 0, 0, 0, 0) + struct.pack("<I", len(wide_caps))
+    body += b"".join(struct.pack("<II", k, v) for k, v in sorted(wide_caps.items()))
+    part = struct.pack("<IIII", 3, 16 + len(body), 2001, 0) + body
+    save = os.path.join(work, "start.sav")
+    if os.path.exists(save):
+        os.remove(save)
+    add_member(sav, "bosman_season.dat", part, save)
+    print(f"Arsenal players at 255 with the caps of the season part: {sorted(wide_caps.items())}")
+    steps = os.path.join(work, "steps.txt")
+    with open(steps, "w") as f:
+        f.write("\n".join(soak_run.arg(argv, "--steps", "2500 click 45 165,4500 click 148 156,9000 dump {d}/squad.bmp,"
+                                      "10000 quit").split(",")) + "\n")
+    out = os.path.join(work, "out")
+    code = fixtures.play(program, game, work, "start.sav", steps, out, "classic", {}, None)
+    return [] if code == 0 else [f"the run failed (code {code})"]
+
+
 def main(argv):
-    if len(argv) < 4 or argv[1] not in ("wide", "load") or "--keep" not in argv:
+    if len(argv) < 4 or argv[1] not in ("wide", "load", "screen") or "--keep" not in argv:
         print(__doc__)
         return 2
-    fails = (wide if argv[1] == "wide" else load)(argv[2:])
+    fails = {"wide": wide, "load": load, "screen": screen}[argv[1]](argv[2:])
     for f in fails:
         print(f"FAIL: {f}")
     print("FAIL" if fails else "PASS")
