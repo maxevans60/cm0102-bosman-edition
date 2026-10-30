@@ -15,7 +15,7 @@
 #include <stdint.h>
 
 /* The limits of a row. tools/seasons/make_rules.py has the same, so a bad table stops the build. */
-#define SEASON_RULE_FIRST 2001       /* seasons: start years 2001 to 2099 */
+#define SEASON_RULE_FIRST 2001       /* the seasons of a table row: 2001 to 2099 (after the last row the rule stays) */
 #define SEASON_RULE_LAST 2099
 #define SEASON_RULE_MAX_COUNT 100000 /* the largest count */
 

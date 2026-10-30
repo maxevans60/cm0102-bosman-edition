@@ -371,8 +371,8 @@ static void test_cups(void)
 /* ---- Year limits (season_years.c, 0.6.2 slice 1) ---- */
 
 /* From each start to END_YEAR: a competition takes the rules of its own year with changing rules on, the start
- * year's with them off, the season hooks run in every season after the start with changing rules on, and a save
- * part takes every season. Faults 6, 10, 23, 24, 25 and 31 of 0.6.2 failed here at 2100. */
+ * year's with them off, and the season hooks run in every season after the start with changing rules on. Faults 6,
+ * 10 and 25 of 0.6.2 failed here at 2100. The season part and its news: ctest season_part. */
 static void test_years(void)
 {
     static const int starts[] = {2001, 2002, 2025, 2098, 2099, 2198, 2298, 2300};
@@ -388,7 +388,6 @@ static void test_years(void)
                 if (season_hooks_due(y) != due)
                     fault("years.hooks", "start %d rules %d: the season hooks of %d %s", starts[s], rules, y,
                           due ? "do not run" : "run");
-                if (!season_year_ok(y)) fault("years.part", "a season part refuses the season %d", y);
             }
             if (season_hooks_due(starts[s] - 1)) fault("years.hooks", "start %d: hooks before the start", starts[s]);
             if (season_rule_year(0) != starts[s])
@@ -407,6 +406,7 @@ static void test_years(void)
 
 int main(int argc, char **argv)
 {
+    unsetenv("RECOMP_DATE_JUMP");          /* the switch is checked off (test_years) */
     if (argc != 2) {
         fprintf(stderr, "usage: %s KNOWN_FAULTS.tsv\n", argv[0]);
         return 2;

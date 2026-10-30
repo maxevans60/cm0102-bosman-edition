@@ -307,7 +307,7 @@ static int read_part(const char *host, int *year, int *rules, int news)
         uint32_t form = get32(data), length = get32(data + 4);
         if (form < 1 || length < 16 || length > size) break;
         uint32_t y = get32(data + 8), r = get32(data + 12);
-        if (y > SEASON_YEAR_MAX || !season_year_ok((int)y) || r > 1) break;
+        if (y > SEASON_YEAR_MAX || !season_year_ok((int)y) || r > 1) break;   /* the first test: no u32 to int wrap */
         /* Version 2 and every later version hold whole news fields after +16 (see the top). A load that
          * cannot read them is refused: the changed names in them are needed to load the game's data
          * (season_change_rename). */

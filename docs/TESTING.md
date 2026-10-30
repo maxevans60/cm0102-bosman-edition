@@ -46,7 +46,7 @@ Long games run from 2001/02 to 2027/28 with all nations and different random see
 
 ## Date jumps
 
-A date jump starts a new game in a far year, with every date of the database moved to that year. It needs an Update Team or Custom database. The test variable `RECOMP_START_SEASON` takes a start year up to 2099. With the date jump switch `RECOMP_DATE_JUMP=1` it takes a year up to 2300. The program reads the switch once at the start, and it is off by default. The same-save set proves that the switch changes nothing when it is off. The season code itself has no year limit: its hooks, rules and save parts work in every year (ctest `future_2300` and `season_part` step them to 2301).
+A date jump starts a new game in a far year, with every date of the database moved to that year. It needs an Update Team or Custom database. The test variable `RECOMP_START_SEASON` takes a start year up to 2099. With the date jump switch `RECOMP_DATE_JUMP=1` it takes a year up to 2300. The program reads the switch once at the start, and it is off by default. The same-save set proves that the switch changes nothing in a game of the normal start years (run `date-jump-on`). The season code itself has no year limit: its hooks, rules and save parts work in every year (ctest `future_2300` and `season_part` step them to 2301).
 
 ## Memory and big saves
 

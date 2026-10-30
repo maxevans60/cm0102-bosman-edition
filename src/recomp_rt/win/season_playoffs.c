@@ -384,7 +384,7 @@ void season_playoffs_fixture_log(uint32_t f)
         strncmp(name, "Spanish", 7))
         return;
     int y = (int16_t)rd16(g_mem, f + 0x28), d = (int16_t)rd16(g_mem, f + 0x2a);
-    if (y < 1990 || y > 2100 || d < 0 || d > 366) return;
+    if (y < 1990 || y > SEASON_YEAR_MAX || d < 0 || d > 366) return;
     int key = d >= 180 ? y : y - 1, when = y * 400 + d, i;
     for (i = 0; i < n; i++)
         if (seen[i].rec == rec && seen[i].key == key) break;
