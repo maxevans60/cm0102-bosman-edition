@@ -421,6 +421,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 f.write(f"{key} = {value}\n")
             if CUSTOM_DB:
                 f.write(f"database = folder:{os.path.basename(CUSTOM_DB)}\n")
+            elif "database" not in options:
+                f.write("database = 3.9.68\n")     # the base game (Q152); the default is 3.9.60 since 0.6.1
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                    RECOMP_USER_DIR=user,
                    RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days), RECOMP_IDLE_COUNT="1",
@@ -672,8 +674,8 @@ def main(argv):
         os.makedirs(user)
         with open(os.path.join(user, "settings.txt"), "w") as f:
             f.write(f"display = {mode}\n")
-            if database:
-                f.write(f"database = {database}\n")
+            # The base game (Q152) without --database: the option's default is 3.9.60 since 0.6.1.
+            f.write(f"database = {database or '3.9.68'}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
                    RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots)))
         env["RECOMP_USER_DIR"] = user
