@@ -57,9 +57,11 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define MAX_PARTS 999u             /* zopen 0x9326e0 refuses a new part when the count is 999: 0x932a3e
                                       cmp edi, 0x3e7 and jl to the add (bytes 81 ff e7 03 00 00 7c 26) */
 /* The largest part that a reader takes. Version 1 has 16 bytes; version 2 adds the news texts (8 KB a season
- * at most, season_change.c) and the changed names, about 0.9 MB for 99 seasons, so the limit holds. It only
- * stops a damaged row from asking for a block of gigabytes. */
-#define PART_MAX (1u << 20)
+ * at most, season_change.c) and the changed names. Up to 0.6.1 the limit was 1 MB, about 0.9 MB for 99 seasons.
+ * 0.6.2 (slice 1) has no year limit, so the limit is 64 MB, more than 8 KB of news in each of 7000 seasons. It
+ * only stops a damaged row from asking for a block of gigabytes. */
+#define PART_MAX (1u << 26)
+#define INDEX_MAX (1u << 20)       /* the largest index.dat that lacks_key_comps reads (the 1 MB of 0.6.1) */
 
 /* The test switch RECOMP_SEASON_CODE=off (Q342): the season code does nothing. The start year stays 2001, so
  * every year site of tools/recomp/seasons.py gives the original's result; the runtime reads and writes no
@@ -79,14 +81,17 @@ int season_code_on(void)
 void season_init(void)
 {
     if (!season_code_on()) return;
+    if (season_date_jump()) fprintf(stderr, "recomp: date jump switch on: a new game starts up to %d\n", SEASON_JUMP_LAST);
     const char *v = getenv("RECOMP_START_SEASON");     /* test only, until the Choose Season screen */
     if (!v || !*v) return;
     int y = atoi(v);
-    if (y < SEASON_FIRST_YEAR || y > SEASON_LAST_YEAR) {
-        fprintf(stderr, "recomp: RECOMP_START_SEASON=%s is not a year from %d to %d, so 2001 is used\n", v,
-                SEASON_FIRST_YEAR, SEASON_LAST_YEAR);
+    if (y < SEASON_FIRST_YEAR || y > season_last_start_year()) {
+        fprintf(stderr, "recomp: RECOMP_START_SEASON=%s is not a year from %d to %d, so 2001 is used%s\n", v,
+                SEASON_FIRST_YEAR, season_last_start_year(),
+                season_date_jump() ? "" : " (a later year needs the date jump switch RECOMP_DATE_JUMP=1)");
         return;
     }
+    if (y > SEASON_NEW_GAME_LAST) fprintf(stderr, "recomp: date jump: a new game in %d\n", y);
     new_year = y;
     rt_season_year = (uint32_t)y;
     fprintf(stderr, "recomp: a new game starts in %d/%02d\n", y, (y + 1) % 100);
@@ -120,7 +125,7 @@ int season_next_rules(void)
 
 int season_set_new_game(int start_year, int changing_rules)
 {
-    if (!season_code_on() || start_year < SEASON_FIRST_YEAR || start_year > SEASON_LAST_YEAR) return 0;
+    if (!season_code_on() || start_year < SEASON_FIRST_YEAR || start_year > season_last_start_year()) return 0;
     new_year = start_year;
     new_rules = changing_rules < 0 ? -1 : !!changing_rules;
     if (game_on) return 1;          /* a game runs: the values apply at its end, to the next new game */
@@ -302,7 +307,7 @@ static int read_part(const char *host, int *year, int *rules, int news)
         uint32_t form = get32(data), length = get32(data + 4);
         if (form < 1 || length < 16 || length > size) break;
         uint32_t y = get32(data + 8), r = get32(data + 12);
-        if (y < SEASON_FIRST_YEAR || y > SEASON_LAST_YEAR || r > 1) break;
+        if (y > SEASON_YEAR_MAX || !season_year_ok((int)y) || r > 1) break;   /* the first test: no u32 to int wrap */
         /* Version 2 and every later version hold whole news fields after +16 (see the top). A load that
          * cannot read them is refused: the changed names in them are needed to load the game's data
          * (season_change_rename). */
@@ -427,7 +432,7 @@ static int lacks_key_comps(const char *host)
         int index = !strncmp(name, "index.dat", NAME_SIZE);
         if (!index && strncmp(name, "club_comp.dat", NAME_SIZE) && strncmp(name, "nation_comp.dat", NAME_SIZE)) continue;
         uint32_t offset = get32(row), size = get32(row + 4);
-        if (size > MAX_RECORDS * RECORD || (index && size > PART_MAX)) goto done;
+        if (size > MAX_RECORDS * RECORD || (index && size > INDEX_MAX)) goto done;
         uint32_t room = version == 2 || version == 4 ? 2 * size : size;
         free(stored), free(data);
         stored = malloc(room + 1), data = malloc(size + 1);

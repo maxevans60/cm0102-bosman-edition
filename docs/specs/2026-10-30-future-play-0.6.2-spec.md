@@ -143,11 +143,11 @@ First wave, in parallel: 1, 2, 11, 14 and 17. Slices 12 and 13 follow slice 1 in
 Blocked by: none
 Delivers: season hooks, cup rules, cup groups, new cups, saves, season parts and news parts work after 2099 with no upper year limit, and with more than 200 news seasons. The latest start year, the date jump limit and the rule lookups are separate values. New games start up to 2300 under the date jump switch. Owner of the season part format for this release. Faults 6, 10, 23, 24, 25, 31 and 35.
 Merge danger: two-way door. Blast radius: every season game after 2099, and the load of season parts.
-- [ ] A date jump to 2098 plays past July 2101, with a save and load after the 2100/01 season change, and no box.
-- [ ] A date jump to 2298 plays through the 2300/01 season change, with a save and load, and no box.
-- [ ] Unit tests to 2301 show no rule falls back to the start year and no hook stops.
-- [ ] A 0.6.1 save loads.
-- [ ] Same-save set PASS.
+- [x] A date jump to 2098 plays past July 2101, with a save and load after the 2100/01 season change, and no box.
+- [x] A date jump to 2298 plays through the 2300/01 season change, with a save and load, and no box.
+- [x] Unit tests to 2301 show no rule falls back to the start year and no hook stops.
+- [x] A 0.6.1 save loads.
+- [x] Same-save set PASS.
 
 ### 2. History checker: entrants, nation names and world health
 Blocked by: none (after the merge of the checker branch)

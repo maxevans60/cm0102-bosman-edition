@@ -28,7 +28,7 @@
  * RECOMP_SEASON_JUMP=<year>: the game plays on with no match engine, and the program ends with code 0 after
  * the end report of the season that starts in that year. The test steps put the manager on holiday
  * (tests/seasons/rules_report_check.py), so the days pass with no input. A value that is not a year from 2001
- * to 2099 stops the program at the start (season_report_init).
+ * to SEASON_YEAR_MAX stops the program at the start (season_report_init).
  *
  * No match engine: the original has a switch for it, ENABLE_MATCH_ENGINE=NO in its setup file
  * (create_game_from_setup_file 0x827110 compares with "YES" 0xa812c0 and "NO" 0xa812bc and writes the byte
@@ -341,8 +341,9 @@ void season_report_init(void)
     if (v && *v) {
         char *end;
         long y = strtol(v, &end, 10);
-        if (*end || y < 2001 || y > 2099) {
-            fprintf(stderr, "cm0102_recomp: RECOMP_SEASON_JUMP=%s is not a year from 2001 to 2099.\n", v);
+        if (*end || y < SEASON_FIRST_YEAR || y > SEASON_YEAR_MAX) {
+            fprintf(stderr, "cm0102_recomp: RECOMP_SEASON_JUMP=%s is not a year from %d to %d.\n", v,
+                    SEASON_FIRST_YEAR, SEASON_YEAR_MAX);
             exit(2);
         }
         jump_to = (int)y;

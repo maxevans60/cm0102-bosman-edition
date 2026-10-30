@@ -53,9 +53,7 @@ static int season_game(void)
 /* The season of a cup: its year with changing rules on, the start year with changing rules off (Q232). */
 static int cup_season(uint32_t cup)
 {
-    if (!season_changing_rules()) return season_start_year();
-    int y = (int16_t)rd16(g_mem, cup + CUP_YEAR);
-    return y >= SEASON_FIRST_YEAR && y <= SEASON_LAST_YEAR ? y : season_start_year();
+    return season_rule_year((int16_t)rd16(g_mem, cup + CUP_YEAR));
 }
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)

@@ -130,9 +130,7 @@ static int season_game(void)
 
 static int cup_season(uint32_t cup)
 {
-    if (!season_changing_rules()) return season_start_year();
-    int y = (int16_t)rd16(g_mem, cup + CUP_YEAR);
-    return y >= SEASON_FIRST_YEAR && y <= SEASON_LAST_YEAR ? y : season_start_year();
+    return season_rule_year((int16_t)rd16(g_mem, cup + CUP_YEAR));
 }
 
 /* Test only: RECOMP_CUP_GROUPS_TEST=1 gives the League Cup the test format (season_cups_more.c). */

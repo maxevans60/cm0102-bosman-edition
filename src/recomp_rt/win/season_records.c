@@ -11,6 +11,7 @@
 #include "season_dates.h"
 #include "season_names.h"
 #include "season_records.h"
+#include "season_rules.h"
 #include "seasons_db.h"
 #include "../host.h"
 
@@ -140,7 +141,7 @@ int season_records_load(const char *path)
         char *c[12];
         if (!split(line, c, 12)) return fail_table(path, lineno, "a wrong number of columns");
         RecordRow *r = &rows[nrows];
-        r->season = number(c[0], 2002, SEASON_LAST_YEAR);
+        r->season = number(c[0], 2002, SEASON_RULE_LAST);
         r->division = c[1];
         r->real = c[2];
         r->name = c[3];

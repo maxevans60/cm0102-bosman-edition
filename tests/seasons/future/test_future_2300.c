@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define END_YEAR 2300
+#define END_YEAR 2301           /* one year past 2300: no limit at 2300 (0.6.2 spec, year limits) */
 
 /* ---- The season state of the test (season.c in the game) ---- */
 
@@ -368,10 +368,45 @@ static void test_cups(void)
     }
 }
 
+/* ---- Year limits (season_years.c, 0.6.2 slice 1) ---- */
+
+/* From each start to END_YEAR: a competition takes the rules of its own year with changing rules on, the start
+ * year's with them off, and the season hooks run in every season after the start with changing rules on. Faults 6,
+ * 10 and 25 of 0.6.2 failed here at 2100. The season part and its news: ctest season_part. */
+static void test_years(void)
+{
+    static const int starts[] = {2001, 2002, 2025, 2098, 2099, 2198, 2298, 2300};
+    for (size_t s = 0; s < sizeof starts / sizeof starts[0]; s++) {
+        for (int rules = 0; rules <= 1; rules++) {
+            game(starts[s], rules);
+            for (int y = starts[s]; y <= END_YEAR; y++) {
+                int want = rules ? y : starts[s];
+                if (season_rule_year(y) != want)
+                    fault("years.rule_year", "start %d rules %d: the competition of %d takes the rules of %d, want %d",
+                          starts[s], rules, y, season_rule_year(y), want);
+                int due = y == starts[s] ? y != SEASON_FIRST_YEAR : rules;
+                if (season_hooks_due(y) != due)
+                    fault("years.hooks", "start %d rules %d: the season hooks of %d %s", starts[s], rules, y,
+                          due ? "do not run" : "run");
+            }
+            if (season_hooks_due(starts[s] - 1)) fault("years.hooks", "start %d: hooks before the start", starts[s]);
+            if (season_rule_year(0) != starts[s])
+                fault("years.rule_year", "start %d: a year field 0 does not take the start year", starts[s]);
+        }
+    }
+    /* The date jump switch: off by default (this test runs without RECOMP_DATE_JUMP). */
+    if (season_date_jump() || season_last_start_year() != SEASON_NEW_GAME_LAST)
+        fault("years.jump_default", "the latest start year is %d with the switch %d", season_last_start_year(),
+              season_date_jump());
+    if (SEASON_JUMP_LAST < END_YEAR - 1 || SEASON_YEAR_MAX < END_YEAR)
+        fault("years.limits", "date jump to %d, years to %d", SEASON_JUMP_LAST, SEASON_YEAR_MAX);
+}
+
 /* ---- Known faults ---- */
 
 int main(int argc, char **argv)
 {
+    unsetenv("RECOMP_DATE_JUMP");          /* the switch is checked off (test_years) */
     if (argc != 2) {
         fprintf(stderr, "usage: %s KNOWN_FAULTS.tsv\n", argv[0]);
         return 2;
@@ -380,6 +415,7 @@ int main(int argc, char **argv)
     if (!getenv("FUTURE_ONLY") || strstr(getenv("FUTURE_ONLY"), "intl")) test_intl();
     if (!getenv("FUTURE_ONLY") || strstr(getenv("FUTURE_ONLY"), "uefa")) test_uefa();
     if (!getenv("FUTURE_ONLY") || strstr(getenv("FUTURE_ONLY"), "cups")) test_cups();
+    if (!getenv("FUTURE_ONLY") || strstr(getenv("FUTURE_ONLY"), "years")) test_years();
 
     FILE *f = fopen(argv[1], "r");
     if (!f) {

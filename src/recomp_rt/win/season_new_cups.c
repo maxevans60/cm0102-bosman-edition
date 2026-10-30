@@ -132,9 +132,7 @@ const char *season_new_cups_making(void) { return making ? making->file : NULL; 
 
 static int season_of(uint32_t cup)
 {
-    if (!season_changing_rules()) return season_start_year();
-    int y = (int16_t)rd16(g_mem, cup + CUP_YEAR);
-    return y >= SEASON_FIRST_YEAR && y <= SEASON_LAST_YEAR ? y : season_start_year();
+    return season_rule_year((int16_t)rd16(g_mem, cup + CUP_YEAR));
 }
 
 /* A day of the year (0 = 1 January) of a day and month (0 to 11), leap years ignored: only for an order. */

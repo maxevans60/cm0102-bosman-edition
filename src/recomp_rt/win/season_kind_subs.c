@@ -61,8 +61,7 @@ static int season_of(uint32_t comp)
      * competition that is skipped, or an unwind between hooks, cannot leave it set. */
     if (pass_season && (int16_t)rd16(g_mem, 0xae2c90) == pass_day && (int16_t)rd16(g_mem, 0xae2c92) == pass_year)
         return pass_season;
-    int y = (int16_t)rd16(g_mem, comp + COMP_YEAR);
-    return y >= SEASON_FIRST_YEAR && y <= SEASON_LAST_YEAR ? y : season_start_year();
+    return season_rule_year((int16_t)rd16(g_mem, comp + COMP_YEAR));
 }
 
 /* A fixture is made for every match, so the lookup is cached by the class file and the season. The file

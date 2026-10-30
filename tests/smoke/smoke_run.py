@@ -238,6 +238,9 @@ SAME_SAVE_RUNS = [
     # The Turkish groups of Summer 2002 act only with that database: with their test switch off the save of the
     # 3.9.68 data is that of normal.
     ("turkish-groups-off", {"faster_days": "off", "_env": {"RECOMP_TURKISH_GROUPS": "off"}}),
+    # The date jump switch (0.6.2 slice 1, Q30) only raises the latest start year of a new game to 2300: with it on,
+    # a game of the normal start years gives the save of normal.
+    ("date-jump-on", {"faster_days": "off", "_env": {"RECOMP_DATE_JUMP": "1"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
