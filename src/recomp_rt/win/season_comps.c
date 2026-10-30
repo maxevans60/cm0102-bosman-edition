@@ -218,7 +218,10 @@ static int def_next_edition(const SeasonCompDef *d, int s)
     int h = d->held(d, s);
     if (h < 0) return 0;
     if (h) return s;
-    for (int y = s + 1; y <= SEASON_LAST_YEAR; y++)
+    /* A rule ends with the last row of its table (SEASON_RULE_LAST at most), and a row of one season may hold the
+     * edition of the next: after that the rule stays, so a later search finds nothing new. */
+    int last = s > SEASON_RULE_LAST + 2 ? s : SEASON_RULE_LAST + 2;
+    for (int y = s + 1; y <= last; y++)
         if (d->held(d, y) == 1) return y;
     return NEVER;
 }

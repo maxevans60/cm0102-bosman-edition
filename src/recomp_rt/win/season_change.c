@@ -466,11 +466,11 @@ int season_change_part_read(const uint8_t *in, uint32_t n)
     season_change_reset();
     if (n < 4) return 0;
     uint32_t count = get32(in), at = 4;
-    if (count > 200u) return 0;
+    if (count > (n - 4) / 12) return 0;            /* 12 bytes a season at least: no limit of seasons (0.6.2 fault 31) */
     for (uint32_t i = 0; i < count; i++) {
         if (n - at < 12) return 0;
         uint32_t season = get32(in + at), posted = get32(in + at + 4), len = get32(in + at + 8);
-        if (season < SEASON_FIRST_YEAR || season > SEASON_LAST_YEAR + 1 || posted > 1 || len > TEXT_ROOM ||
+        if (season > SEASON_YEAR_MAX || !season_year_ok((int)season) || posted > 1 || len > TEXT_ROOM ||
             n - at - 12 < len || news_of((int)season))
             return 0;
         SeasonNews *s = news_new((int)season);
@@ -504,7 +504,7 @@ int season_change_part_read(const uint8_t *in, uint32_t n)
     rename_count = (int)names;
     if (n - at < 4) return 0;
     uint32_t point = get32(in + at);
-    if (point && (point < SEASON_FIRST_YEAR || point > SEASON_LAST_YEAR + 1)) return 0;
+    if (point && (point > SEASON_YEAR_MAX || !season_year_ok((int)point))) return 0;
     season_point = (int)point;
     at += 4;
     return season_friendly_part_read(in + at, n - at);   /* row A18; nothing more in a save before it */
@@ -770,8 +770,7 @@ static void update_pass(void)
      * (game_run_to_start_date 0x5cc850, called from create_game at 0x829fd9) and on the update days of the
      * start year after the start date (25 July, 15 August). A later season: only with changing rules on. */
     int start = season == season_start_year();
-    if (!any || season < season_start_year() || season > SEASON_LAST_YEAR || (!start && !season_changing_rules()) ||
-        (start && season == SEASON_FIRST_YEAR)) {
+    if (!any || !season_hooks_due(season)) {
         o_005d5ae0();
         return;
     }

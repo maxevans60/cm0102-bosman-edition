@@ -631,14 +631,14 @@ static void log_stats(void)
         if (c > (int)EMPTY_YEAR && rd32(g_mem, r + 0x39)) { set++; inside += c >= N - 2 && c <= N + CONTRACT_YEARS; }
         if (m > (int)EMPTY_YEAR) { nat_set++; nat_inside += m >= N - 2 && m <= N + CONTRACT_YEARS; }
         if (j > (int)EMPTY_YEAR && rd32(g_mem, r + 0x39)) {
-            if (j > joined_max && j < 2100) joined_max = j;
+            if (j > joined_max && j < N + 100) joined_max = j;
             joined_n[j >= N - 1 && j <= N ? 0 : j < N - 1 ? 1 : 2]++;
         }
     }
     uint32_t hist = rd32(g_mem, HISTORY_PTR), n_hist = rows_of(T_HISTORY, HISTORY_COUNT);
     for (uint32_t i = 0; hist && i < n_hist; i++) {
         int y = (int)rd16(g_mem, hist + i * HISTORY_SIZE + 8);
-        if (y > career_max && y < 2100) career_max = y;
+        if (y > career_max && y < N + 100) career_max = y;
     }
     uint32_t off = rd32(g_mem, OFFICIALS_PTR), n_off = rows_of(T_OFFICIALS, OFFICIALS_COUNT), young = 0, born = 0;
     for (uint32_t i = 0; off && i < n_off; i++) {

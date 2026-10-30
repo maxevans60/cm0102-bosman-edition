@@ -21,6 +21,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_intl.h"
+#include "season_rules.h"
 #include "season_wc48.h"
 #include "season_nl.h"                     /* slice 28: the Gold Cup */
 
@@ -70,6 +71,9 @@ static const struct { const char *file; uint32_t key; } host_comps[] = {
 };
 #define HOST_COMPS ((int)(sizeof host_comps / sizeof host_comps[0]))
 #define KEY_CONFED 0x9cf964u
+/* The last year of the host rows that hosts_apply writes and checks: 4 years after the last rules row, as up to
+ * 0.6.1. The hosts after the table are slice 5 of 0.6.2. */
+#define HOST_ROWS_LAST (SEASON_RULE_LAST + 4)
 #define CONFED_ANY_YEAR 2200            /* the year that the Confederations Cup row of every year moves to */
 
 static int logging(void)
@@ -262,7 +266,7 @@ static void hosts_apply(uint32_t self, int from_season, int sort)
         if (!any) any = row_find(rows, count, confed, CONFED_ANY_YEAR);
     }
     int extra = 0;
-    for (int y = from_season; any && y <= SEASON_LAST_YEAR + 4; y++)
+    for (int y = from_season; any && y <= HOST_ROWS_LAST; y++)
         if (!season_intl_edition("fifa_confed", y) && !row_find(rows, count, confed, y)) extra++;
     for (int c = 0; c < HOST_COMPS; c++) {
         uint32_t key = rd32(g_mem, host_comps[c].key);
@@ -289,7 +293,7 @@ static void hosts_apply(uint32_t self, int from_season, int sort)
         wr32(g_mem, self, rows);
     }
     int used = count;
-    for (int y = from_season; any && y <= SEASON_LAST_YEAR + 4; y++) {
+    for (int y = from_season; any && y <= HOST_ROWS_LAST; y++) {
         if (season_intl_edition("fifa_confed", y) || row_find(rows, used, confed, y)) continue;
         uint32_t row = rows + (uint32_t)used++ * ROW_SIZE;
         memcpy(g_mem + row, g_mem + any, ROW_SIZE);
@@ -323,7 +327,7 @@ static void hosts_apply(uint32_t self, int from_season, int sort)
         for (int c = 0; c < HOST_COMPS; c++)
             if (rd32(g_mem, host_comps[c].key) == rd32(g_mem, row + ROW_COMP)) file = host_comps[c].file;
         if (!file || year <= 0 || cycle <= 0) continue;
-        for (int y = year + cycle; y <= SEASON_LAST_YEAR + 4; y += cycle)
+        for (int y = year + cycle; y <= HOST_ROWS_LAST; y += cycle)
             if (season_intl_edition(file, y)) {
                 wr8(g_mem, row + ROW_CYCLE, 0);
                 break;

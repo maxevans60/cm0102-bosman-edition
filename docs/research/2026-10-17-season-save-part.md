@@ -83,7 +83,7 @@ The runtime wraps `load_game_data` 0x82a9c0. Before the original runs, it reads 
 
 - A file that is not a container (a bad header, rows that cannot be read) has no part for the runtime: the original's load then reports the file itself.
 - A part of any version from 1 on is read when its length is at least 16 and not larger than its size. A later version keeps the first four fields (section 4), so this version reads the year and changing rules of a later save.
-- A part is damaged when: its size is below 16 or above 1 MiB (a limit that only stops a damaged row from asking for gigabytes; version 1 has 16 bytes), its bytes end early or do not decode, its version is 0, its length is below 16 or larger than its size, the year is outside 2001 to 2099, or changing rules is not 0 or 1.
+- A part is damaged when: its size is below 16 or above 64 MiB (1 MiB up to 0.6.1; a limit that only stops a damaged row from asking for gigabytes; version 1 has 16 bytes), its bytes end early or do not decode, its version is 0, its length is below 16 or larger than its size, the year is outside 2001 to 32767 (2001 to 2099 up to 0.6.1; 0.6.2 has no year limit, 32767 is the largest year of the game date), or changing rules is not 0 or 1.
 - A damaged part stops the load before the original runs. The wrap shows a message box of the game: "This saved game cannot be loaded. Its season data is damaged, or it comes from a newer version of the Bosman Edition." Then it returns 0. The original's callers treat 0 as a failed load: the load list call at 0x81c53a shows its own box "Setup..cpp 1044" (from 0x81c668) and the game ends, as for any failed load in the original. A test run showed both boxes and the end (code 255).
 - A load that fails in the original sets the values of a new game again.
 
@@ -101,7 +101,7 @@ Little endian, 16 bytes, stored in the container like any part.
 |---|---|---|
 | +0 | 4 | format version: 1 |
 | +4 | 4 | length of the part in bytes: 16 |
-| +8 | 4 | start year, 2001 to 2099 |
+| +8 | 4 | start year, 2001 to 32767 (a new game starts by 2099, a date jump by 2300) |
 | +12 | 4 | changing rules: 0 off, 1 on |
 
 Rules for later slices:

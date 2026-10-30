@@ -111,6 +111,32 @@ int main(void)
                  "%d bytes written past it, same bytes back", len, 16 + size, (16 + size) % 16, size, past);
         check(read == 1 && size == n && !past && !memcmp(in, out, n), text);
     }
+    /* 0.6.2 faults 23 and 31: a part with news in each season from 2001 to 2301 (301 seasons, more than 200) and the
+     * season point 2301 reads back, and writes the same bytes. Up to 0.6.1 the read refused more than 200 seasons and
+     * a season or point after 2100. */
+    {
+        static uint8_t in[16384], out[16384];
+        uint32_t at = put32(in, 301);
+        for (uint32_t y = 2001; y <= 2301; y++) {
+            at += put32(in + at, y);
+            at += put32(in + at, 1);
+            at += put32(in + at, 3);
+            memcpy(in + at, "abc", 3);
+            at += 3;
+        }
+        at += put32(in + at, 0);
+        at += put32(in + at, 2301);
+        season_change_reset();
+        int read = season_change_part_read(in, at);
+        uint32_t size = season_change_part_size();
+        if (read && size <= sizeof out) season_change_part_write(out);
+        snprintf(text, sizeof text, "news in 301 seasons, 2001 to 2301, season point 2301: read %d, size %u of %u, "
+                 "same bytes back", read, size, at);
+        check(read == 1 && size == at && !memcmp(in, out, at), text);
+        put32(in, 302);
+        season_change_reset();
+        check(season_change_part_read(in, at) == 0, "a news count larger than the part holds: damaged");
+    }
     season_change_reset();
     check(season_change_part_size() == 0, "after a reset: no part");
     printf("%s\n", failures ? "FAIL" : "PASS");

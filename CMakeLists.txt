@@ -245,7 +245,7 @@ if(NOT WIN32)
     set_tests_properties(season_subs PROPERTIES FIXTURES_REQUIRED rules_table)
     # The whole season part of a save (0.6.1 items 4 and 10): its write keeps inside its size.
     add_executable(season_part_test tests/seasons/test_season_part.c
-        src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c)
+        src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_years.c)
     target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_part COMMAND season_part_test)
     # The key competition check of a load (0.6.1 item 10): the names of the player's cm0102.exe and its Data.
@@ -276,7 +276,8 @@ if(NOT WIN32)
         src/recomp_rt/win/season_uefa_table.c src/recomp_rt/win/season_uefa_lookup.c
         src/recomp_rt/win/season_uefa_ko_lookup.c src/recomp_rt/win/season_uefa_dates_table.c
         src/recomp_rt/win/season_uefa_days.c src/recomp_rt/win/season_fifa_days_table.c
-        src/recomp_rt/win/season_cups.c src/recomp_rt/win/season_cups_table.c src/si/date.c)
+        src/recomp_rt/win/season_cups.c src/recomp_rt/win/season_cups_table.c src/si/date.c
+        src/recomp_rt/win/season_years.c)
     target_include_directories(future_2300_test PRIVATE src/recomp_rt/win include)
     target_compile_options(future_2300_test PRIVATE -O2)    # 300 years of days: seconds, not half a minute
     add_test(NAME future_2300 COMMAND future_2300_test "${CMAKE_SOURCE_DIR}/tests/seasons/future/known_faults.tsv")
