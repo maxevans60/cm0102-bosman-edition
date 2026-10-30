@@ -52,7 +52,7 @@ Each feature is a line in `settings.txt` in the save folder and can be switched 
 | Windows | Run `Setup.exe`. If Windows shows "Windows protected your PC", click More info, then Run anyway. |
 | Linux and Steam Deck | Download the `.AppImage`, allow it to run as a program in its Properties, and double-click it. On the Steam Deck, do this in Desktop Mode. The trackpad is the mouse. |
 
-Saved games are in `~/Library/Application Support/cm0102` on a Mac, `%APPDATA%\cm0102` on Windows and `~/.local/share/cm0102` on Linux. A new version does not touch them.
+Saved games are in `~/Library/Application Support/cm0102` on a Mac, `%APPDATA%\cm0102` on Windows and `~/.local/share/cm0102` on Linux. A new version does not touch them. The Open folder button on Load Game opens this folder, and so does the one on the Save folder row of the Bosman Edition Options box, which also shows its full path.
 
 ## Roadmap
 
