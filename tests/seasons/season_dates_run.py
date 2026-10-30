@@ -354,7 +354,11 @@ def main(argv):
                 fail(f"{label}: last {COMP} row {res['comp']}, not the year {year}")
             for comp in FINALS:
                 want, have = last_final(comp, year), res["finals"].get(comp)
-                if have == want:
+                # A final of the start year after July (the World Cup 2022 in December, April 2023 in 2022/23) may
+                # stand as the data gives it: the game plays that edition, and its row replaces the data's
+                # (season_history.c, 0x4afce0).
+                later = FINALS[comp].get(year)
+                if have == want or (later and have == (year, later[0])):
                     print(f"ok    {label}: last {comp} row {have[0]} {have[1]}")
                 else:
                     fail(f"{label}: last {comp} row {have}, the last final before the start is {want}")
