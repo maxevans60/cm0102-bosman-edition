@@ -21,8 +21,8 @@ team here:
   chosen candidate is no longer free (0x68fbf4, 0x68fc51, 0x68fd6a). They now open it too.
 The other 17 calls of 0x544820 (board confidence, news, the human job lists) keep the original's rule, so a small
 nation's manager is not judged by a board, as before. Under-21 teams stay unmanaged, as in the original (0x544857).
-A national team record of a nation that no longer exists (East Germany, West Germany) gets a manager too: nothing
-here knows which nations exist in a year. While `game_run_to_start_date` 0x5cc850 makes a new game the fix is off,
+A nation that no longer exists gets no vacancy (Q43): its record has no continent (+0x71), as East and West Germany,
+the Soviet Union and Zaire in the 3.9.68 data and the old record of a renamed nation in a season game. While `game_run_to_start_date` 0x5cc850 makes a new game the fix is off,
 so a new game starts as the original's (about 95 of 213 national teams of the 3.9.68 data have no manager) and
 changes at its first month change in play.
 

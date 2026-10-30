@@ -16,6 +16,8 @@ both saves (nat_club.dat: the first nation-count rows; the manager at club +0xcf
 +0x88) and checks:
     - at the end, every senior national team has a manager, but for at most 2 (a vacancy waits for its start date;
       the default of 400 days ends in mid August, after the contract ends of 30 June and the month check of 1 August)
+    - no nation without a continent (a nation that no longer exists, such as East Germany) gets a new manager; the
+      first check counts only the nations with a continent
     - a national manager left in the run and his team got a new manager (a retirement or a move to a club)
     - no message box, and the program ends with code 0
 --keep-faults runs with RECOMP_ORIGINAL_FAULTS=keep (the original's rule). The checks must then fail: this is the
@@ -61,7 +63,8 @@ VACANCY = "recomp: national manager: a vacancy for "
 
 
 def national_managers(path):
-    """{team name: (manager staff id or -1, players of the nation)} of the senior national teams of a save."""
+    """{team name: (manager staff id or -1, players of the nation, 1 when the nation has a continent)} of the senior
+    national teams of a save. A nation with no continent (id -1 at +0x71) no longer exists or is not a FIFA member."""
     sav = savfile.Sav(path)
     teams, nations = sav.read_member("nat_club.dat"), sav.read_member("nation.dat")
     staff = len(sav.read_member("staff.dat")) // STAFF_SIZE
@@ -72,7 +75,8 @@ def national_managers(path):
         name = rec[4:0x37].split(b"\0")[0].decode("latin-1")
         nation, manager = struct.unpack_from("<i", rec, 0x53)[0], struct.unpack_from("<i", rec, 0xcf)[0]
         players = struct.unpack_from("<i", nations, nation * NATION_SIZE + 0x88)[0]
-        out[name] = (manager if 0 <= manager < staff else -1, players)
+        continent = struct.unpack_from("<i", nations, nation * NATION_SIZE + 0x71)[0]
+        out[name] = (manager if 0 <= manager < staff else -1, players, int(continent >= 0))
     return out
 
 
@@ -96,13 +100,16 @@ def managers(argv):
     before, after = national_managers(save), national_managers(end)
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read().split("\n")
     vacancies = [x[len(VACANCY):] for x in log if x.startswith(VACANCY)]
-    print(f"senior national teams with a manager: {sum(m >= 0 for m, _ in before.values())} of {len(before)} at the "
-          f"start, {sum(m >= 0 for m, _ in after.values())} at the end; {len(vacancies)} vacancies of the fix "
+    print(f"senior national teams with a manager: {sum(m >= 0 for m, *_ in before.values())} of {len(before)} at the "
+          f"start, {sum(m >= 0 for m, *_ in after.values())} at the end; {len(vacancies)} vacancies of the fix "
           f"({sum('after a retirement' in v for v in vacancies)} after a retirement, "
           f"{sum('after a move to another national team' in v for v in vacancies)} after a move, "
           f"{sum('after a departure' in v for v in vacancies)} after a departure, "
           f"{sum('after the month check' in v for v in vacancies)} at a month check)")
-    empty = sorted(t for t, (m, _) in after.items() if m < 0)
+    empty = sorted(t for t, (m, _, live) in after.items() if m < 0 and live)
+    dead = sorted(t for t, (m, _, live) in after.items() if not live and m >= 0 and m != before[t][0])
+    if dead:
+        fails.append(f"a nation that no longer exists got a manager: {', '.join(dead)}")
     if len(empty) > 2:
         fails.append(f"{len(empty)} senior national teams have no manager at the end: {', '.join(empty[:12])}"
                      + (" ..." if len(empty) > 12 else ""))

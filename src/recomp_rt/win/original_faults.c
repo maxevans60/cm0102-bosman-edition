@@ -48,15 +48,19 @@ RT_WRAP(005cc850, run_to_start_date)
 }
 
 /* 1 when a vacancy opens for this club although `club_can_be_managed` 0x544820 refuses it: a senior national team,
- * by the club id range of 0x544835..0x544857, with a nation (+0x53, 0x54482e). The original asks for more than 150
- * players of the nation (0x544859), or 100 in `add_job_vacancy` (0x69bafb). */
+ * by the club id range of 0x544835..0x544857, with a nation (+0x53, 0x54482e) that exists. The original asks for more
+ * than 150 players of the nation (0x544859), or 100 in `add_job_vacancy` (0x69bafb). A nation that no longer exists
+ * has no continent (+0x71 null; the data load 0x5315a0 links an id of -1 as null): in the 3.9.68 data East and West
+ * Germany, the Soviet Union, the Commonwealth of Soviet States, Czechoslovakia and Zaire (and Pays Basque and Timor,
+ * not FIFA members then), and in a season game the old record of a renamed nation (season_intl.c dead_records). The original's pools leave such a nation out, so it gets
+ * no manager either (Q43). */
 uint32_t rt_national_vacancy(uint32_t club, uint32_t site)
 {
     static const char *const why[] = {"the vacancy", "a retirement", "a move to another national team", "the month check",
                                        "a departure"};
     if (!fixes_on() || creating || !club) return 0;
     uint32_t nation = rd32(g_mem, club + 0x53u);
-    if (!nation) return 0;
+    if (!nation || !rd32(g_mem, nation + 0x71u)) return 0;
     int32_t id = (int32_t)rd32(g_mem, club), clubs = (int32_t)rd32(g_mem, CLUB_COUNT);
     int32_t nations = (int32_t)rd32(g_mem, NATION_COUNT);
     if (id < clubs - 2 * nations || id >= clubs - nations) return 0;

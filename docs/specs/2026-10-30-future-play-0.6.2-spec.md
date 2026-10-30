@@ -85,6 +85,10 @@ Original game faults, fixed in every game, base game included (Q23, Q24, Q27):
 - Every national team opens a vacancy when its manager retires.
 - The club info screen and the AI transfer budget use the full 64-bit balance.
 - The human manager's age comes from the birth date.
+- Every national team with no manager gets one at the first month change in play, also a team that had none at the start of the game. A nation that no longer exists in that year gets no manager (Q43).
+- The top wage fix acts from a balance of about £1.65 billion, where the original's 32-bit sum already wraps (Q44).
+- The human manager's age stops at 127, the largest age the game's byte holds, in place of the age from the birth date (Q45).
+- Every money text that can pass £2,147,483,647 is traced and shows the full amount, news items included (Q46).
 
 The same game (Q152): every game code change keeps the same saves in the same-save set, unless the change acts only after a table end year, after 2099 or above £2.1 billion, which the set does not reach. The speed fixes give the same results as the code they replace (Q18).
 
@@ -230,7 +234,7 @@ Merge danger: two-way door. Blast radius: promotion and relegation in every leag
 ### 11. Original faults: national managers, money, manager age
 Blocked by: none
 Delivers: every national team gets a new manager, money above £2.1 billion is right on every screen and in AI budgets, and the manager's age is right after 2100. Faults 26, 27, 28 and 33.
-Merge danger: two-way door. The base game changes after the first national manager retires. The same-save set does not reach that point, so it must PASS. A loaded save with a national team that has no manager gets one at the next month change. That is an expected change. Blast radius: national team jobs, money screens and AI transfer budgets.
+Merge danger: two-way door. The base game changes at the first month change in play (1 August in a 2001 game): about 95 national teams of the 3.9.68 data have no manager from the start and get one then (Q43). The same-save set does not reach that point, so it must PASS. A loaded save with a national team that has no manager gets one at the next month change. That is an expected change. Blast radius: national team jobs, money screens and AI transfer budgets.
 - [x] A save with a retired national manager of a small nation opens a vacancy. A save where a national team already has no manager fills it at the next month change.
 - [x] Saves edited to balances of £2.5 billion, £5 billion and £12 billion show the right balance, and the club still bids.
 - [ ] Every screen that formats money through the 32-bit Cash object is traced and fixed.
