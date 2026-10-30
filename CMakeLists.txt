@@ -236,6 +236,12 @@ if(NOT WIN32)
         src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c)
     target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_part COMMAND season_part_test)
+    # The key competition check of a load (0.6.1 item 10): the names of the player's cm0102.exe and its Data.
+    add_executable(season_load_check_test tests/seasons/test_season_load_check.c
+        src/recomp_rt/win/season_load_check.c src/cm3/key_comp_names.c src/cm3/key_ids_table.c)
+    target_include_directories(season_load_check_test PRIVATE src/recomp_rt/win include)
+    get_filename_component(CM0102_GAME_DIR "${CM0102_EXE}" DIRECTORY)
+    add_test(NAME season_load_check COMMAND season_load_check_test "${CM0102_EXE}" "${CM0102_GAME_DIR}/Data")
     # The nation rules (0.6.0 slice 17): windows, foreign player limits and the work permit rule. The encoder reads
     # the research parts; its outputs are committed and checked here; the lookup runs on the C table.
     add_executable(season_nation_test tests/seasons/test_season_nation.c src/recomp_rt/win/season_nation.c
@@ -351,7 +357,12 @@ if(EXISTS "${CM0102_EXE}")
         src/recomp_rt/heap.c
         ${RECOMP_HOST}
         ${RECOMP_WIN}
+        src/cm3/key_comp_names.c
+        src/cm3/key_ids_table.c
     )
+    # The key table of set_key_ids for the load check (season_load_check.c): the port's headers for these two only.
+    set_source_files_properties(src/cm3/key_comp_names.c src/cm3/key_ids_table.c TARGET_DIRECTORY cm0102_recomp
+        PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/include")
     add_dependencies(cm0102_recomp recomp_gen)
     # 0.6.0 slice 11c: the build stops when the history table is not the one plan.tsv gives, or a row is not valid.
     add_custom_command(
