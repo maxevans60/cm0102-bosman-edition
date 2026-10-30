@@ -283,3 +283,12 @@ Blocked by: 15
 Delivers: if a Select All save grows about 25 MB a season, it reaches the 4 GB file limit in about 2160. Tier B measures the growth. If the growth holds, this slice finds what grows and keeps the save under the limit to 2300.
 Merge danger: one-way door if it changes the save format. Blast radius: every save.
 - [ ] Tier B save size stays under 4 GB to 2300 at the measured rate.
+
+### 19. Nation names, Kazakhstan and the Netherlands Antilles
+Blocked by: none
+Delivers: the national sides of a renamed nation take the nation's name, in a new game, at each season point and at the load of an older save. Kazakhstan moves from the AFC to UEFA from the 2002/03 season. The dead Netherlands Antilles plays no competition beside Curaçao. Faults 42, 43 and 51.
+Merge danger: two-way door. The load of a 0.6.1 save gives its old side names the nation's names, and that changes only names. Blast radius: the names that the fixtures, results and history screens show for six national sides, and the international competitions of 2001 and 2002 starts, where Kazakhstan now plays the UEFA qualifiers and no longer the AFC ones.
+- [ ] The checker finds no side-name and no nation-confed fault in a 2001 start with changing rules on, played past the 2002 season point, and in a 2025 start on the December 2025 data.
+- [ ] The checker finds no entrant-dead fault in the CONCACAF Nations League of a 2016 to 2025 start.
+- [ ] history_check_test.py: the UEFA moves of nations.tsv match the season code.
+- [ ] Same-save set PASS.
