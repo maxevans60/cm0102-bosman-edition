@@ -487,8 +487,9 @@ static uint32_t round_table(const ClubCup *k, uint32_t obj, int *rounds)
 
 /* The club at `place` (0 winner, 1 runner-up) of the latest history row of record rec written in year y or
  * before, or 0. The latest row up to y gives the reigning champion of a competition whose edition of year y ends
- * after the pick (the CONCACAF Champions Cup plays from 28 September, after the Intercontinental Cup's pick). */
-static uint32_t history_club(uint32_t rec, int y, int place)
+ * after the pick (the CONCACAF Champions Cup plays from 28 September, after the Intercontinental Cup's pick).
+ * exact: only a row of year y itself (the last one when the year is held twice, open item 17). */
+static uint32_t history_club(uint32_t rec, int y, int place, int exact)
 {
     uint32_t rows = rd32(g_mem, HISTORY), best = 0;
     int32_t count = (int32_t)rd32(g_mem, HISTORY_COUNT);
@@ -496,7 +497,7 @@ static uint32_t history_club(uint32_t rec, int y, int place)
     for (int32_t i = 0; rec && rows && i < count; i++) {
         uint32_t row = rows + (uint32_t)i * HISTORY_ROW;
         int year = (int16_t)rd16(g_mem, row + 8);
-        if (rd32(g_mem, row + 4) != rec || year > y || year < best_year) continue;
+        if (rd32(g_mem, row + 4) != rec || year > y || (exact && year != y) || year < best_year) continue;
         best = rd32(g_mem, row + 0xa + 4u * (uint32_t)place);
         best_year = year;
     }
@@ -513,8 +514,8 @@ static int listed(const uint32_t *out, int n, uint32_t club)
 static int add_winner(uint32_t *out, int n, uint32_t rec, int y, uint32_t obj, uint32_t continent)
 {
     (void)obj;
-    uint32_t c = history_club(rec, y, 0);
-    if (!c || listed(out, n, c)) c = history_club(rec, y, 1);
+    uint32_t c = history_club(rec, y, 0, 0);
+    if (!c || listed(out, n, c)) c = history_club(rec, y, 1, 0);
     if (!c || listed(out, n, c)) c = season_comps_top_club(continent, out, n);
     if (c && !listed(out, n, c)) out[n++] = c;
     return n;
@@ -529,25 +530,12 @@ static int pick_recopa(const ClubCup *k, uint32_t obj, int year, uint32_t *out, 
     return m;
 }
 
-/* The club at `place` of the history row of record rec written in year y itself, or 0 (no edition that year). The
- * last row of that year, when the year is held twice (open item 17). */
-static uint32_t history_club_of_year(uint32_t rec, int y, int place)
-{
-    uint32_t rows = rd32(g_mem, HISTORY), club = 0;
-    int32_t count = (int32_t)rd32(g_mem, HISTORY_COUNT);
-    for (int32_t i = 0; rec && rows && i < count; i++) {
-        uint32_t row = rows + (uint32_t)i * HISTORY_ROW;
-        if (rd32(g_mem, row + 4) == rec && (int16_t)rd16(g_mem, row + 8) == y)
-            club = rd32(g_mem, row + 0xa + 4u * (uint32_t)place);
-    }
-    return club;
-}
-
 /* A club drawn as WorldClubChamp::pick_entrant 0x92ae60 draws one for a competition that does not run: the clubs of
- * the continent (and of `nation` when it is not 0) of reputation 5000 or more, the floor 1500 lower each pass until
- * 6 or more (0x92afb1..0x92b033, at most 2000), then comp_util_sort_and_shuffle_top_clubs 0x4afbd0 (list, count,
- * min(count, 4)): sorted by reputation (0x4b07d0), random swaps among the top three times that (utils_random
- * 0x90cfc0). The first club not yet picked (0x92b065..0x92b093). 0 when the continent has none. */
+ * the continent of reputation 5000 or more, the floor 1500 lower each pass until 6 or more (0x92afb1..0x92b033, at
+ * most 2000), then comp_util_sort_and_shuffle_top_clubs 0x4afbd0 (list, count, min(count, 4)): sorted by
+ * reputation (0x4b07d0), random swaps among the top three times that (utils_random 0x90cfc0). The first club not
+ * yet picked (0x92b065..0x92b093). 0 when there is none. The original has no nation filter: `nation` (not 0) is
+ * ours, so that a national cup's place goes to a club of its nation. */
 static uint32_t drawn_club(uint32_t continent_key, uint32_t nation, const uint32_t *out, int n)
 {
     uint32_t clubs = rd32(g_mem, CLUBS), want = rd32(g_mem, continent_key);
@@ -573,8 +561,9 @@ static uint32_t drawn_club(uint32_t continent_key, uint32_t nation, const uint32
             if (!listed(out, n, c)) club = c;
         }
     }
+    if (rt_unwinding) return 0;
     game_free(list);
-    return rt_unwinding ? 0 : club;
+    return club;
 }
 
 /* The winner (else the runner-up) of record rec in year y; for a year with no edition of rec (the competition does
@@ -583,9 +572,10 @@ static uint32_t drawn_club(uint32_t continent_key, uint32_t nation, const uint32
  * year. */
 static int add_winner_of_year(uint32_t *out, int n, uint32_t rec, int y, uint32_t continent)
 {
-    uint32_t c = history_club_of_year(rec, y, 0);
-    if (!c || listed(out, n, c)) c = history_club_of_year(rec, y, 1);
-    if (!c || listed(out, n, c)) c = rec ? drawn_club(continent, rd32(g_mem, rec + 0x5d), out, n) : 0;
+    uint32_t c = history_club(rec, y, 0, 1);
+    if (!c || listed(out, n, c)) c = history_club(rec, y, 1, 1);
+    uint32_t nation = rec ? rd32(g_mem, rec + 0x5d) : 0;
+    if (!c || listed(out, n, c)) c = nation ? drawn_club(continent, nation, out, n) : 0;
     if (rt_unwinding) return n;
     if (!c || listed(out, n, c)) c = drawn_club(continent, 0, out, n);
     if (rt_unwinding) return n;
