@@ -185,13 +185,11 @@ RT_WRAP(0081ef70, network_play_input)
         return;
     }
     uint16_t invite = (int16_t)rt_arg(0) == -1 ? invite_command(INVITE_NETWORK_PLAY) : 0;
-    if (invite) {                  /* an invite link: Join Network Game (invite.c), with the command word */
-        uint16_t before = rd16(g_mem, 0xdd6bdeu);
-        wr16(g_mem, 0xdd6bdeu, invite);
-        o_0081ef70();
-        wr16(g_mem, 0xdd6bdeu, before);
+    if (invite) {                  /* an invite link: Join Network Game (invite.c) */
+        invite_call(o_0081ef70, invite);
         return;
     }
+    if ((int16_t)rt_arg(0) >= 0) invite_clicked();
     o_0081ef70();
 }
 

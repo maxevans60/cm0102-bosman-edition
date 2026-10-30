@@ -22,14 +22,14 @@ Cases:
               types the password and joins.
     gone      the link names a game code that is not open: the joiner's "Unable To Join" box says that the game
               is no longer in the list.
+    version   the joiner runs another version (RECOMP_TEST_VERSION): the box names both versions.
 """
-import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 import time
-import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import network_run as nr  # noqa: E402
@@ -74,8 +74,12 @@ def main(argv):
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
     lobby_url, shots, slow, only = None, None, 1.0, None
     rest = args[2:]
-    while len(rest) >= 2:
-        k, v = rest.pop(0), rest.pop(0)
+    while rest:
+        k = rest.pop(0)
+        if not rest:
+            print(__doc__)
+            return 2
+        v = rest.pop(0)
         if k == "--lobby-url":
             lobby_url = v
         elif k == "--shots":
@@ -105,7 +109,11 @@ def main(argv):
     env = {"RECOMP_LOBBY_URL": lobby_url, "RECOMP_TEST_NO_LAN_ROWS": "1"}
     shots = shots or tempfile.mkdtemp(prefix="cm0102-invite-")
     print(f"lobby {lobby_url}, shots {shots}")
-    cases = [c for c in ("link", "running", "password", "gone") if not only or c in only]
+    every = ("link", "running", "password", "gone", "version")
+    if only and set(only) - set(every):
+        print(f"unknown case: {sorted(set(only) - set(every))}")
+        return 2
+    cases = [c for c in every if not only or c in only]
     try:
         for case in cases:
             run(case, program, game, lobby_url, env, os.path.join(shots, case), slow, check)
@@ -121,8 +129,7 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
     work = tempfile.mkdtemp(prefix="cm0102-invite-work-")
     name = "Invite" + case.capitalize()
     nr.GAME_NAME = name
-    host_steps = pr.host_steps() if case == "password" else nr.host_steps(1)
-    host_steps = [s.replace("type Bosman", f"type {name}") for s in host_steps]
+    host_steps = pr.host_steps() if case == "password" else nr.host_steps(1)   # they type nr.GAME_NAME
     stop = __import__("threading").Event()
     __import__("threading").Thread(target=nr.keep_awake, args=(lobby_url, stop), daemon=True).start()
     host = join = second = None
@@ -140,9 +147,10 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
         if code:
             link = f"cm0102://join/{code}"
             steps = joiner_steps(1, password=case == "password")
-            if case == "gone":
+            if case in ("gone", "version"):
                 steps = nr.START[:-1] + [LIST, "9000 dump {d}/join1-1-box.bmp", "10000 quit"]
-            join, e = nr.start(program, game, work, "join1", steps, shots, slow, env,
+            jenv = dict(env, RECOMP_TEST_VERSION="0.0.1") if case == "version" else env
+            join, e = nr.start(program, game, work, "join1", steps, shots, slow, jenv,
                                args=() if case == "running" else (link,))
             errs.append(e)
             if case == "running":
@@ -172,6 +180,7 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
         for e in errs:
             e.close()
         stop.set()
+        shutil.rmtree(work, ignore_errors=True)
     jerr = open(os.path.join(shots, "join1-stderr.txt"), errors="replace").read() \
         if os.path.exists(os.path.join(shots, "join1-stderr.txt")) else ""
     dump = lambda f: os.path.join(shots, f)
@@ -179,8 +188,8 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
         check(join.returncode == 0, f"{case}: the joiner ended with code {join.returncode}")
     if host:
         check(host.returncode == 0, f"{case}: the host ended with code {host.returncode}")
-    check("recomp: invite: the game opens Join Network Game" in jerr and 'recomp: invite: Join "' in jerr,
-          f"{case}: the runtime opened the game list and pressed Join")
+    check("recomp: invite: the game opens Join Network Game" in jerr and "script reached screen:0x81f8d0" in jerr
+          and 'recomp: invite: Join "' in jerr, f"{case}: the runtime opened the game list and pressed Join")
     if case in ("link", "running"):
         check("recomp: relay: joined" in jerr, f"{case}: the joiner joined through the relay")
         for host_shot, join_shot, what in (("host-1-name.bmp", "join1-1-name.bmp", "Enter Name"),
@@ -202,9 +211,12 @@ def run(case, program, game, lobby_url, env, shots, slow, check):
             check(share <= 0.01, f"password: the joiner's Enter Name equals the host's: {share:.2%} differ")
         else:
             check(False, "password: Enter Name: dump missing")
-    else:
+    elif case == "gone":
         check("join box: This network game is no longer in the list" in jerr,
               "gone: the box says that the game is no longer in the list")
+    else:
+        check("join box: This network game runs Bosman Edition" in jerr and "you have 0.0.1" in jerr,
+              "version: the box names both versions")
 
 
 if __name__ == "__main__":

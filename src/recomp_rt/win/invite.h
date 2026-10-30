@@ -30,7 +30,7 @@ void invite_poll(void);
 /* The last game that an invite link found, or NULL. For tests and logs. */
 const LobbyRow *invite_last(void);
 
-/* Join this online game, as a click on its row in the game list (see invite.c). Called once for each invite link,
+/* Join this network game, as a click on its row in the game list (see invite.c). Called once for each invite link,
  * on the game's thread. */
 void invite_join(const LobbyRow *row);
 
@@ -38,6 +38,11 @@ void invite_join(const LobbyRow *row);
  * that call, or 0. */
 enum { INVITE_SETUP, INVITE_NETWORK_PLAY };
 uint16_t invite_command(int screen);
+/* Calls the input with the command word 0xdd6bde set to command, and gives the word its old value back
+ * (net_password.c, which keeps that word for the join again of slice 6). */
+void invite_call(void (*original)(void), uint16_t command);
+/* The player clicked a widget on one of the screens on the way: the join of the link ends. */
+void invite_clicked(void);
 /* The game list's input with no widget: 1 when out holds the Join text, and the input must take Next. */
 int invite_list_join(char *out, unsigned room);
 

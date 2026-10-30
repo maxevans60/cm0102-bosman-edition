@@ -324,6 +324,8 @@ int lr_shown_text(const char *code, char out[50])
     return 0;
 }
 
+int lr_lobby_result(void) { return lobby_result; }
+
 void lr_lobby(const LobbyRow *r, int n, int result)
 {
     rows_n = n < LOBBY_ROWS ? n : LOBBY_ROWS;
