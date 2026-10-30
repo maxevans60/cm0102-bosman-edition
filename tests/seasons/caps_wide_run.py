@@ -17,8 +17,9 @@ default of 60 days takes in the internationals of August and September 2001. The
     - no edited player gets a first-cap history row (the log line "recomp: caps: first cap of staff <id>", and the
       rows of type 6 in staff history.tmp grow only by the number of those lines)
     - no message box, and the program ends with code 0
-The end save stays in <keep>/wide/out/samesave.sav for the load check. On a build without the fix (main) the first
-three checks fail: this is the proof that the run finds the fault.
+The end save stays in <keep>/wide/out/samesave.sav for the load check. On a build without the fix (main) the first and
+second checks fail (no log line, bytes wrapped to 0), and the history rows grow by more than the log (main has no first
+cap log): this is the proof that the run finds the fault.
 
 load: loads --save, a save made on holiday (tests/seasons/soak_run.py load_leg), plays --days game days and saves.
 The checks: no box and code 0; no player's caps byte falls, and a byte rises by at most one (a cap on those days);

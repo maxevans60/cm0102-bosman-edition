@@ -165,10 +165,11 @@ static void season_box(const char *title, const char *text)
 }
 
 /* The part of a game: written only when the game is not 2001 with changing rules off, or when the season
- * code holds news or changed names (season_change.c): a load needs the names in the data (season_change_rename). */
+ * code holds news or changed names (season_change.c): a load needs the names in the data (season_change_rename).
+ * Also when a player has more than 255 caps (caps_wide.c, in the size): a 2001 game keeps them too. */
 static int part_needed(void)
 {
-    return rt_season_year != SEASON_FIRST_YEAR || rules_now || season_change_part_size() != 0;   /* caps too */
+    return rt_season_year != SEASON_FIRST_YEAR || rules_now || season_change_part_size() != 0;
 }
 
 static int read_at(int fd, int64_t at, void *buf, uint32_t n)

@@ -8,7 +8,9 @@
  * Here the byte stops at 255, and the runtime keeps the full count of each player above 255, by staff id (staff +0).
  * Every reader of the byte in the game then sees 255, the most it can hold, and the screens that show caps read the
  * full count. Older builds that load the save see 255. The counts go into the season part of the save (version 3,
- * season.c and season_change.c). Below 255 nothing changes: the store is empty and the game is the original's. */
+ * season.c and season_change.c). Below 255 nothing changes: the store is empty and the game is the original's.
+ * With the test switch RECOMP_SEASON_CODE=off no season part is written, so a save keeps only the byte 255. A count
+ * left by a player whose id a new player takes (the byte then starts below 255) goes when that byte reaches 255. */
 #ifndef RECOMP_CAPS_WIDE_H
 #define RECOMP_CAPS_WIDE_H
 

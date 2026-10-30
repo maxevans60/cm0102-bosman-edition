@@ -21,6 +21,20 @@ outside the repo): the other readers compare, sort or copy the byte, and see 255
 - 0x80e5f1 of `search_screens_build_player_search_screen` 0x808690, staff in esi
 - 0x874e7f, 0x874ea2 and 0x874ec3 of `staff_screens_build_profile_screen` 0x870700: the nationality line with more than
   one cap (read at 0x874e6a), for more than one goal, one goal and none, staff in ebx
+
+The two sorts by caps compare the full counts: `compare_players_by_caps_then_name` 0x486970 (0x4869a7, 0x4869aa: a in
+esi, b in ecx, then sub eax, edx at 0x4869ad) and `search_screens_compare_staff_by_caps` 0x81a630 (0x81a66a, 0x81a66d,
+sub at 0x81a670). Both clear eax and edx first.
+
+The national team record "most caps" is a signed word at record +0x2f9, -1 for none. `Club_Records::Club_Records`
+0x444520 sets it from every player at a new game (0x44483d compare, jle at 0x444845; 0x444847 store) and
+`Club_Records::update_records_for_match` 0x444930 after each international (0x445ef3 compare, jle at 0x445efb;
+0x445f3d store). They take the full count up to 32767 (rt_caps_word), so a record above 255 is kept and beaten.
+
+The club info tab's "Total Number Of Caps" is a word (ClubSquadStats +0x32, shown by a movsx at 0x4624c4) that
+`club_screen_collect_squad_stats` 0x487840 adds each player's caps to (0x487ad1 movzx ax, then 0x487ad6 add). The add
+takes the full count. ax keeps the byte, as before: 0x487ada loads al again and the code after it masks with 0xff, and
+the and at 0x487ae4 sets the flags again.
 """
 
 INSNS = {
@@ -39,4 +53,13 @@ INSNS = {
     0x874E7F: ("and eax, 0xff", "eax = rt_caps_full(ebx);"),
     0x874EA2: ("and eax, 0xff", "eax = rt_caps_full(ebx);"),
     0x874EC3: ("and eax, 0xff", "eax = rt_caps_full(ebx);"),
+    0x4869A7: ("mov al, byte ptr [esi + 0x22]", "eax = rt_caps_full(esi);"),
+    0x4869AA: ("mov dl, byte ptr [ecx + 0x22]", "edx = rt_caps_full(ecx);"),
+    0x81A66A: ("mov al, byte ptr [esi + 0x22]", "eax = rt_caps_full(esi);"),
+    0x81A66D: ("mov dl, byte ptr [ecx + 0x22]", "edx = rt_caps_full(ecx);"),
+    0x44483D: ("movzx dx, byte ptr [esi + 0x22]", "edx = (edx & 0xffff0000u) | rt_caps_word(esi);"),
+    0x444847: ("movzx cx, byte ptr [esi + 0x22]", "ecx = (ecx & 0xffff0000u) | rt_caps_word(esi);"),
+    0x445EF3: ("movzx cx, byte ptr [esi + 0x22]", "ecx = (ecx & 0xffff0000u) | rt_caps_word(esi);"),
+    0x445F3D: ("movzx dx, byte ptr [esi + 0x22]", "edx = (edx & 0xffff0000u) | rt_caps_word(esi);"),
+    0x487AD6: ("add word ptr [esi + 0x32], ax", "W16(esi + 0x32u, (uint16_t)(R16(esi + 0x32u) + rt_caps_word(edi)));"),
 }

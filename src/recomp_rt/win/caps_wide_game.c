@@ -23,6 +23,13 @@ uint32_t rt_caps_full(uint32_t staff)
     return caps_wide_full(rd32(g_mem, staff + STAFF_ID), rd8(g_mem, staff + STAFF_CAPS));
 }
 
+/* The full caps for a signed word (the most caps record of a national team, club record +0x2f9): at most 32767. */
+uint32_t rt_caps_word(uint32_t staff)
+{
+    uint32_t caps = rt_caps_full(staff);
+    return caps > 0x7fffu ? 0x7fffu : caps;
+}
+
 void o_0086cc50(void);
 
 /* `Staff_Records::add_first_cap_record` 0x86cc50, thiscall (player, unused): a log line for each first-cap history
