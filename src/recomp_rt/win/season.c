@@ -53,8 +53,6 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define PART_NAME "bosman_season.dat"
 #define PART_VERSION 1u
 #define PART_VERSION_NEWS 2u       /* with the news texts of season_change.c */
-#define PART_VERSION_CAPS 3u       /* also the caps above 255 (0.6.2 slice 12, caps_wide.c) */
-#define PART_VERSION_GOALS 4u      /* also the goals above 255 (0.6.2 item 66) */
 #define PART_SIZE 16u
 #define HEADER_ROWS 1000u
 #define ROW_SIZE 0x10cu

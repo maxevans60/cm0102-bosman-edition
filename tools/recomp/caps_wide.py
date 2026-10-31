@@ -55,7 +55,10 @@ after it to the call at 0x76b8fd only moves values. The screens that show goals 
 - 0x80e630 of `search_screens_build_player_search_screen` 0x808690, staff in esi
 - 0x874e79 and 0x874eed of `staff_screens_build_profile_screen` 0x870700: the goals of the nationality line with more
   than one cap (read at 0x874e71) and with one cap (read at 0x874ee6), staff in ebx
-Each clears the register first (xor) or masks it with 0xff.
+Each clears the register first (xor) or masks it with 0xff. The two sorts by goals compare the full counts, as those by
+caps: 0x486a67 and 0x486a6a of `compare_players_by_international_goals_then_name` 0x486a30 (sub at 0x486a6d) and
+0x81a6fa and 0x81a6fd of `search_screens_compare_staff_by_international_goals` 0x81a6c0 (sub at 0x81a700), after
+xor eax, eax and xor edx, edx.
 """
 
 INSNS = {
@@ -99,4 +102,8 @@ INSNS = {
     0x80E630: ("mov cl, byte ptr [esi + 0x23]", "ecx = rt_goals_full(esi);"),
     0x874E79: ("and ecx, 0xff", "ecx = rt_goals_full(ebx);"),
     0x874EED: ("and eax, 0xff", "eax = rt_goals_full(ebx);"),
+    0x486A67: ("mov al, byte ptr [esi + 0x23]", "eax = rt_goals_full(esi);"),
+    0x486A6A: ("mov dl, byte ptr [ecx + 0x23]", "edx = rt_goals_full(ecx);"),
+    0x81A6FA: ("mov al, byte ptr [esi + 0x23]", "eax = rt_goals_full(esi);"),
+    0x81A6FD: ("mov dl, byte ptr [ecx + 0x23]", "edx = rt_goals_full(ecx);"),
 }

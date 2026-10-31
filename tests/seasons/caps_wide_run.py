@@ -248,6 +248,9 @@ def load(argv):
     gb0, gb1 = caps_bytes(start, GOALS), caps_bytes(end, GOALS)
     gfell = sorted(s for s in gb0 if s in gb1 and gb1[s] < gb0[s])
     glost = sorted(s for s in g0 if g1.get(s, 0) < g0[s])
+    gnew = sorted(set(g1) - set(g0) - set(log_lines(os.path.join(work, "stderr.txt"), GOALS_ADD)[0]))
+    if gnew:
+        fails.append(f"{len(gnew)} players have goals above 255 that no goal of this run gave, for example staff {gnew[0]}")
     print(f"  goals: {len(gfell)} bytes fell; {len(g0)} counts above 255 before, {len(g1)} after")
     if gfell:
         fails.append(f"{len(gfell)} goals bytes fell, for example staff {gfell[0]}: {gb0[gfell[0]]} to {gb1[gfell[0]]}")
