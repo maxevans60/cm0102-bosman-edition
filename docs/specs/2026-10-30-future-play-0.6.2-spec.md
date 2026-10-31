@@ -250,7 +250,7 @@ Merge danger: one-way door, because the save holds a new field. Blast radius: ca
 ### 13. Save parts merged across seasons
 Blocked by: 12
 Delivers: the part count of a save stops growing. Fault 29.
-Merge danger: one-way door, because the save format changes. Blast radius: every save and load. Old saves must load.
+Merge danger: one-way door, because the save format changes. Blast radius: every save and load. Old saves must load. Every save made after this slice has merged parts (a new game keeps fixtures_2001.tmp and fixtures_2002.tmp from its first day), and 0.6.0, 0.6.1 and earlier 0.6.2 builds cannot load it: their load stops at the box "Cup..cpp 5246". The changelog of 0.6.2 must say so.
 - [x] A save with 990 parts saves again and loads.
 - [x] 0.6.0 and 0.6.1 saves load.
 - [x] Same-save set PASS.

@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/save_parts_run.py fill <cm0102_recomp> <game folder> --keep <folder> [--parts 990,999]
-        [--save <in.sav>] [--keep-parts]
+        [--save <in.sav>] [--rules on|off] [--keep-parts]
     python3 tests/seasons/save_parts_run.py old <cm0102_recomp> <game folder> --keep <folder> --save <in.sav>
         [--holiday]
 
@@ -13,12 +13,15 @@ holiday, saves 3 game days later, then loads the new save and saves again 3 days
 play). The checks, for each of the two saves:
     - the program ends with code 0 and writes the save (the original stops at 999 parts: "save_game_data(): unable
       to pack the temporary files", 0x82fea5)
-    - the save holds at most 200 parts, and every filler file with its bytes (tools/save/savfile.py reads the files of
-      a merged part)
-    - fixtures_2001.tmp and fixtures_2002.tmp are there
+    - the save has a merged part for each type of two temporary files or more, and every filler file with its bytes
+      (tools/save/savfile.py reads the files of a merged part)
+    - every temporary file of the loaded save is still there, and no message box showed
     - the second load wrote the files of the merged parts back ("save parts: ... gave" in the log)
---keep-parts runs with RECOMP_SAVE_PARTS=keep (the original's parts): the checks must then fail for 999 parts. This
-is the proof that they find the fault. The build before slice 13 fails in the same way.
+--keep-parts runs with RECOMP_SAVE_PARTS=keep (the original's parts) and leaves out the check of the merged parts.
+With --save allleagues.sav of the test fixtures, --rules on and --parts 990 the game writes about 130 new temporary
+files (the competitions of changing rules), so with the original's parts the second save fails with "save_game_data():
+unable to pack the temporary files": this is the proof that the test finds the fault. With start.sav no new file
+comes, so the original's parts pass too.
 
 old: loads a save of an older build (0.6.0, 0.6.1, or main before slice 13: season part versions 1 to 4), saves 3
 game days later, loads that save and saves again 3 days later. --holiday for a save made on holiday (a soak leg, which
@@ -44,7 +47,6 @@ import fixtures  # noqa: E402
 
 FIXTURES = "/Users/max/Projects/cm0102/test-fixtures"
 HOLIDAY_STEPS = ["2500 click 45 165", "4500 click 150 427 | 199 474", "7000 click 705 572"]
-MAX_PARTS = 200
 
 
 def filler(n):
@@ -65,23 +67,34 @@ def make_save(source, parts, path):
     return added
 
 
-def check(save, log, added, step):
-    fails = []
+def expected_merged(sav):
+    """The merged parts that a save of these files must have: one for each type of two temporary files or more."""
+    types = {}
+    for n in tmp_names(sav):
+        types.setdefault(re.sub(r"\d+", "#", n), []).append(n)
+    return sorted(t + savfile.MERGED for t, files in types.items() if len(files) >= 2)
+
+
+def check(save, log, added, step, before):
     if not os.path.exists(save):
-        return [f"{step}: no save (the log: {last_line(log)})"]
+        return [f"{step}: no save ({soak_run.first_box(log) or last_line(log)})"]
+    fails = []
     sav = savfile.Sav(save)
     real = sav.real_members()
-    merged = [m.name for m in real if m.name.lower().endswith(savfile.MERGED)]
+    merged = sorted(m.name for m in real if m.name.lower().endswith(savfile.MERGED))
     files = {m.name: m for m in sav.members}
     print(f"{step}: {len(real)} parts, {len(merged)} merged: {', '.join(merged)}")
-    if len(real) > MAX_PARTS:
-        fails.append(f"{step}: the save holds {len(real)} parts")
+    if os.environ.get("RECOMP_SAVE_PARTS") != "keep" and merged != expected_merged(sav):
+        fails.append(f"{step}: merged parts {merged}, expected {expected_merged(sav)}")
     lost = [n for n, data in added.items() if n not in files or sav.read_member(n) != data]
     if lost:
         fails.append(f"{step}: {len(lost)} filler files are missing or changed, for example {lost[0]}")
-    for name in ("fixtures_2001.tmp", "fixtures_2002.tmp"):
-        if name not in files:
-            fails.append(f"{step}: no {name}")
+    gone = sorted(tmp_names(before) - tmp_names(sav))
+    if gone:
+        fails.append(f"{step}: {len(gone)} temporary files of the loaded save are missing: {', '.join(gone[:5])}")
+    box = soak_run.first_box(log)
+    if box:
+        fails.append(f"{step}: {box}")
     return fails
 
 
@@ -89,14 +102,18 @@ def last_line(log):
     if not os.path.exists(log):
         return "none"
     lines = [x for x in open(log, encoding="latin-1").read().split("\n") if x.strip()]
-    return lines[-1] if lines else "empty"
+    pack = [x for x in lines if "unable to pack" in x]
+    return pack[0] if pack else lines[-1] if lines else "empty"
+
+
+RULES = []      # the options of the fill runs: [("changing_rules", "on")] with --rules on
 
 
 def run(program, game, work, name, out):
     steps = os.path.join(work, "steps.txt")
     with open(steps, "w") as f:
         f.write("\n".join(HOLIDAY_STEPS) + "\n")
-    code = fixtures.play(program, game, work, name, steps, out, "classic", {}, 3)
+    code = fixtures.play(program, game, work, name, steps, out, "classic", RULES, 3)
     return code, os.path.join(out, "samesave.sav"), os.path.join(out, "stderr.txt")
 
 
@@ -116,10 +133,7 @@ def old_check(save, before, step):
     lost = sorted(tmp_names(before) - names)
     if lost:
         fails.append(f"{step}: {len(lost)} temporary files of the old save are missing: {', '.join(lost[:5])}")
-    types = {}
-    for n in names:
-        types.setdefault(re.sub(r"\d+", "#", n), []).append(n)
-    want = sorted(t + savfile.MERGED for t, files in types.items() if len(files) >= 2)
+    want = expected_merged(sav)
     if want != merged:
         fails.append(f"{step}: merged parts {merged}, expected {want}")
     if "bosman_season.dat" in {m.name for m in before.real_members()} and "bosman_season.dat" not in real:
@@ -147,11 +161,10 @@ def old(argv):
             shutil.copyfile(save, os.path.join(work, "in.sav"))
             code, result, log = run(program, game, work, "in.sav", os.path.join(work, "out"))
             box = None
-        boxes = [x for x in open(log, encoding="latin-1").read().split("\n")
-                 if "box" in x and "CD Not Required" not in x] if os.path.exists(log) else []
+        box = box or soak_run.first_box(log)
         found = old_check(result, before, f"{step} save (code {code})")
-        if code != 0 or box or boxes:
-            found.append(f"{step}: code {code}, box {box or (boxes[0] if boxes else None)}")
+        if code != 0 or box:
+            found.append(f"{step}: code {code}, box {box}")
         fails += found
         if found:
             break
@@ -178,14 +191,16 @@ def main(argv):
     os.environ["RECOMP_SAVE_PARTS_LOG"] = "1"
     if "--keep-parts" in argv:
         os.environ["RECOMP_SAVE_PARTS"] = "keep"
+    RULES[:] = [("changing_rules", soak_run.arg(argv, "--rules", "off"))]
     fails = []
     for parts in (int(x) for x in soak_run.arg(argv, "--parts", "990,999").split(",")):
         work = os.path.join(keep, f"parts-{parts}")
         os.makedirs(work, exist_ok=True)
         added = make_save(source, parts, os.path.join(work, "start.sav"))
+        before = savfile.Sav(os.path.join(work, "start.sav"))
         print(f"{parts} parts: {len(added)} filler files added")
         code, first, log = run(program, game, work, "start.sav", os.path.join(work, "first"))
-        found = check(first, log, added, f"{parts} parts, first save (code {code})")
+        found = check(first, log, added, f"{parts} parts, first save (code {code})", before)
         if code != 0:
             found.append(f"{parts} parts: the first run failed (code {code})")
         fails += found
@@ -195,7 +210,7 @@ def main(argv):
         os.makedirs(again, exist_ok=True)
         os.replace(first, os.path.join(again, "first.sav"))
         code, second, log = run(program, game, again, "first.sav", os.path.join(again, "out"))
-        found = check(second, log, added, f"{parts} parts, second save (code {code})")
+        found = check(second, log, added, f"{parts} parts, second save (code {code})", before)
         if code != 0:
             found.append(f"{parts} parts: the second run failed (code {code})")
         gave = [x for x in open(log, encoding="latin-1").read().split("\n") if "save parts:" in x and "gave" in x]

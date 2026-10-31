@@ -12,14 +12,16 @@
  * '#' ("fixtures_#.tmp"); a type with two files or more is one part, named after the type with ".parts"
  * ("fixtures_#.tmp.parts"). The original's load leaves such a part alone: its name test 0x933a00 compares the pattern
  * after "*." with the text after the last dot of the name (0x933aa2..0x933ab9), here "parts". A type with one file
- * stays a part of its own, as in the original. The count of types
- * stops growing when the season tables end, so the part count stops growing.
+ * stays a part of its own, as in the original. The count of types stops growing when the season tables end, so the
+ * part count stops growing.
  *
  * A merged part holds "BEPARTS1", the count of files (u32), and for each file in name order the length of its name
  * (u32), the name, its size (u32) and its bytes. The load (`zextract_matching_files` 0x933320, at 0x82acbc) writes
  * these files back into the temp folder, so the game finds every file it wrote, and the disk check of the load
- * (`zget_matching_size` 0x933860, at 0x82ac50) counts their sizes. A save of a build before 0.6.2 that has no merged
- * part loads as before. A build before 0.6.2 does not know a merged part: it loads such a save without those files.
+ * (`zget_matching_size` 0x933860, at 0x82ac50) counts their sizes. A merged part holds less than 4 GB (the row keeps
+ * a u32 size): the files of a type past that stay parts of their own. A save with no merged part (0.6.1 and before)
+ * loads as before. A build before slice 13 does not know a merged part: such a save stops its load at the box
+ * "Cup..cpp 5246", because the files of the competitions are missing.
  */
 #include "win.h"
 #include "../rt.h"
@@ -46,6 +48,7 @@
 #define MAGIC "BEPARTS1"
 #define ENDING ".parts"
 #define MAX_FILES 100000
+#define MERGED_MAX 0xf0000000ull   /* the bytes of one merged part at most, below the u32 size of its row */
 
 static int parts_on(void)
 {
@@ -83,6 +86,7 @@ static int type_of(const char *name, char *out, size_t room)
 
 typedef struct {
     char *name, *host, *type;
+    uint64_t size;
     int merged;
 } File;
 
@@ -100,7 +104,9 @@ static void list_add(const char *name, const char *host, void *ctx)
     if (!f) return;
     l->files = f;
     int typed = type_of(name, type, sizeof type - strlen(ENDING));
-    l->files[l->count++] = (File){strdup(name), strdup(host), typed ? strdup(type) : NULL, 0};
+    HostStat st;
+    uint64_t size = host_stat(host, &st) == 0 ? st.size : 0;
+    l->files[l->count++] = (File){strdup(name), strdup(host), typed ? strdup(type) : NULL, size, 0};
 }
 
 static void list_free(List *l)
@@ -141,7 +147,7 @@ static void flush(Writer *w)
 {
     if (!w->fill || w->bad) return;
     uint32_t args[4] = {w->part + PART_BUFFER, 1, w->fill, w->part};
-    if (rt_callback(ZWRITE, 4, args) != w->fill) w->bad = 1;
+    if (rt_callback(ZWRITE, 4, args) != w->fill || rt_unwinding) w->bad = 1;
     w->fill = 0;
 }
 
@@ -174,13 +180,15 @@ static int write_merged(uint32_t archive, uint32_t arg3, uint32_t arg4, const Fi
     snprintf((char *)g_mem + name_at, NAME_SIZE, "%s" ENDING, files[0].type);
     uint32_t open_args[5] = {archive, name_at, 1, arg3, arg4};
     Writer w = {rt_callback(ZOPEN, 5, open_args), 0, 0};
-    if (!w.part) return 1;
+    if (rt_unwinding || !w.part) return 1;
+    uint64_t total = 12;
     put(&w, MAGIC, 8);
     put32(&w, (uint32_t)n);
     for (int i = 0; i < n && !w.bad; i++) {
         int fd = host_open(files[i].host, O_RDONLY, 0);
         int64_t size = fd < 0 ? -1 : host_seek(fd, 0, SEEK_END);
-        if (size < 0 || size > 0xffffffffLL || host_seek(fd, 0, SEEK_SET) != 0) {
+        total += 8 + strlen(files[i].name) + (uint64_t)(size < 0 ? 0 : size);
+        if (size < 0 || total > MERGED_MAX || host_seek(fd, 0, SEEK_SET) != 0) {
             if (fd >= 0) host_close(fd);
             w.bad = 1;
             break;
@@ -198,9 +206,10 @@ static int write_merged(uint32_t archive, uint32_t arg3, uint32_t arg4, const Fi
         host_close(fd);
     }
     flush(&w);
+    if (rt_unwinding) return 1;
     wr32(g_mem, slot_at, w.part);
     rt_callback(ZCLOSE, 1, &slot_at);
-    return w.bad;
+    return w.bad || rt_unwinding;
 }
 
 void o_00933610(void);
@@ -222,9 +231,19 @@ RT_WRAP(00933610, add_matching_files)
     for (int i = 0; i < l.count;) {
         int j = i + 1;
         while (j < l.count && l.files[i].type && l.files[j].type && !strcmp(l.files[i].type, l.files[j].type)) j++;
-        for (int k = i; k < j; k++) l.files[k].merged = l.files[i].type && j - i >= 2;
-        if (j - i >= 2 && l.files[i].type) merged++;
-        else single += j - i;
+        /* The files of the type in name order while the part stays below MERGED_MAX; the rest stay single. */
+        int in = 0;
+        uint64_t bytes = 12;
+        for (int k = i; k < j && l.files[i].type; k++) {
+            uint64_t more = 8 + strlen(l.files[k].name) + l.files[k].size;
+            if (bytes + more > MERGED_MAX) break;
+            bytes += more;
+            in++;
+        }
+        if (in < 2) in = 0;
+        for (int k = i; k < j; k++) l.files[k].merged = k - i < in;
+        if (in) merged++;
+        single += j - i - in;
         i = j;
     }
     if (!merged) {                 /* the original's parts: a game of one season, or the test switch */
@@ -266,13 +285,11 @@ RT_WRAP(00933610, add_matching_files)
 
 /* ---- The load ---- */
 
-/* Reads the container at host path: calls each for every row whose name ends with ".parts" and whose type matches
- * the pattern. Returns 0, or 1 when the container cannot be read (the original's load reports that itself). */
+/* A reader of one part of the container, from its offset. */
 typedef struct {
     int fd, compressed;
     uint8_t buf[1 << 16];
     uint32_t have, at;             /* bytes in buf, read position */
-    int pending;                   /* a run byte (0x81 or more) waits for its value: the count, else -1 */
     uint32_t repeat;               /* bytes of a run still to give */
     uint8_t value;
 } Reader;
@@ -346,10 +363,12 @@ typedef struct {
     char name[NAME_SIZE];
 } Row;
 
-/* The rows of merged parts whose type matches pattern. -1 when the file is no container. */
-static int merged_rows(const char *host, const char *pattern, Row **rows, int *compressed)
+/* The rows of merged parts whose type matches pattern, and in *singles the count of other rows that match it. -1 when
+ * the file is no container. */
+static int merged_rows(const char *host, const char *pattern, Row **rows, int *compressed, int *singles)
 {
     *rows = NULL;
+    *singles = 0;
     int fd = host_open(host, O_RDONLY, 0), n = 0;
     if (fd < 0) return -1;
     uint8_t head[12], row[ROW_SIZE];
@@ -371,7 +390,10 @@ static int merged_rows(const char *host, const char *pattern, Row **rows, int *c
         char name[NAME_SIZE];
         memcpy(name, row + ROW_NAME, NAME_SIZE - 1);
         name[NAME_SIZE - 1] = 0;
-        if (!ends_with(name, ENDING)) continue;
+        if (!ends_with(name, ENDING)) {
+            *singles += glob(pattern, name);
+            continue;
+        }
         name[strlen(name) - strlen(ENDING)] = 0;
         if (!glob(pattern, name)) continue;
         Row *more = realloc(*rows, sizeof(Row) * (size_t)(n + 1));
@@ -390,7 +412,7 @@ static int merged_rows(const char *host, const char *pattern, Row **rows, int *c
 }
 
 /* Writes the files of the merged part at offset into the Windows folder dir. 0 on success. */
-static int extract(const char *host, int compressed, const Row *row, const char *dir, int *files)
+static int extract(const char *host, int compressed, const Row *row, const char *dir, const char *pattern, int *files)
 {
     static Reader r;
     static uint8_t chunk[1 << 16];
@@ -410,7 +432,11 @@ static int extract(const char *host, int compressed, const Row *row, const char 
             break;
         }
         name[len] = 0;
-        if (strchr(name, '\\') || strchr(name, '/') || strchr(name, ':') || !get32(&r, &size)) {
+        /* Only a file of the part's own type that the pattern takes, as the original's name test (0x933a00): a
+         * damaged or made-up part writes no other file into the folder. */
+        char type[NAME_SIZE];
+        if (strchr(name, '\\') || strchr(name, '/') || strchr(name, ':') || !glob(pattern, name) ||
+            !type_of(name, type, sizeof type) || strcmp(type, row->name) || !get32(&r, &size)) {
             bad = 1;
             break;
         }
@@ -454,9 +480,12 @@ RT_WRAP(00933320, extract_matching_files)
     o_00933320();
     if (rt_unwinding || !win_existing_file(archive, host, sizeof host)) return;
     Row *rows;
-    int compressed = 0, n = merged_rows(host, pattern, &rows, &compressed), files = 0, bad = 0;
-    for (int i = 0; i < n && !bad; i++) {
-        if (extract(host, compressed, &rows[i], dir, &files)) {
+    int compressed = 0, singles, n = merged_rows(host, pattern, &rows, &compressed, &singles), files = 0, bad = 0;
+    /* The original gives 0 when it could not write a file of a part of its own (0x93352d..0x9335ce): the load
+     * fails then, merged parts or not. */
+    int failed = n > 0 && singles && !cpu.eax;
+    for (int i = 0; i < n && !bad && !failed; i++) {
+        if (extract(host, compressed, &rows[i], dir, pattern, &files)) {
             fprintf(stderr, "cm0102_recomp: the part %s" ENDING " of the save %s is damaged, so the game does not "
                             "load it.\n", rows[i].name, archive);
             bad = 1;
@@ -465,7 +494,7 @@ RT_WRAP(00933320, extract_matching_files)
     free(rows);
     if (n > 0 && getenv("RECOMP_SAVE_PARTS_LOG"))   /* test switch: tests/seasons/save_parts_run.py */
         fprintf(stderr, "recomp: save parts: %d merged parts gave %d temporary files in %s\n", n, files, dir);
-    if (bad) cpu.eax = 0;
+    if (bad || failed) cpu.eax = 0;
     else if (files) cpu.eax = 1;
 }
 
@@ -480,7 +509,7 @@ RT_WRAP(00933860, matching_size)
     o_00933860();
     if (rt_unwinding || !win_existing_file(archive, host, sizeof host)) return;
     Row *rows;
-    int compressed, n = merged_rows(host, pattern, &rows, &compressed);
+    int compressed, singles, n = merged_rows(host, pattern, &rows, &compressed, &singles);
     uint64_t total = cpu.eax;
     for (int i = 0; i < n; i++) total += rows[i].size;
     free(rows);

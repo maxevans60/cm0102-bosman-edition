@@ -500,6 +500,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
             if merged:      # a save of 0.6.2 or later with merged parts (slice 13): compare the files
                 a, b = save_files(saves[base]), save_files(saves[name])
             differ = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
+            if merged and open(saves[base], "rb").read(8) != open(saves[name], "rb").read(8):
+                differ.append("the file header (version and flags)")
             if merged and not differ:
                 print(f"ok    {name}: the save holds the same files as {base} (merged parts)")
                 continue

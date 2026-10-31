@@ -154,6 +154,8 @@ class Sav:
         real = self.real_members()
         if len(real) >= MAX_ENTRIES:
             raise ValueError("the container is full")
+        if len(name.encode("latin-1")) > 259:
+            raise ValueError("a member name has at most 259 bytes")
         m = Member(len(real), len(self.blob) + 1 << 40, len(data), name)   # after every member of the file
         m.data, m.changed = bytes(data), True
         self.members.insert(len(real), m)
