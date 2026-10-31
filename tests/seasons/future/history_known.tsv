@@ -257,7 +257,6 @@ duplicate	Veikkausliiga	*	open items 3 and 17: two rows for one year (start-year
 gap	Welsh Cup	*	open items 2 and 19: editions not written
 duplicate	Ykkönen	*	open items 3 and 17: two rows for one year (start-year overlap, history fill and game edition)
 duplicate	Ykkösliiga	*	open items 3 and 17: two rows for one year (start-year overlap, history fill and game edition)
-missing	FIFA Intercontinental Cup	*	open item 11: no edition after 2026
 gap	OFC Men's Nations Cup	2024	open items 2 and 19: editions not written
 missing	OFC Men's Nations Cup	2028	open items 2 and 19: editions not written
 same-final	CONCACAF Gold Cup	2009	real results: the same finalists count only in Tier B (spec, Decisions)
@@ -278,9 +277,5 @@ entrant-host	OFC*Nations Cup*	2016	open item 45
 entrant-host	OFC*Nations Cup*	2024	open item 45
 entrant-host	Africa*Cup of Nations	2002	open item 46: the host does not play (Mali 2002)
 entrant-host	Africa*Cup of Nations	2027	open item 46: Kenya, Tanzania and Uganda do not play in 2027
-entrant-route	Intercontinental Cup	*	open item 47: entrants that won neither the Champions League nor the Libertadores (ended 2004)
-entrant-confed	OFC Club Championship	2006	open item 48: Australian clubs in the 2006 edition, after Australia moved to the AFC
-entrant-confed	CONCACAF Champions*	2020	open item 49: the Argentine club Atlanta in the CONCACAF Champions Cup
-entrant-confed	CONCACAF Champions*	2021	open item 49
-entrant-confed	CONCACAF Champions*	2022	open item 49
-entrant-route	FIFA Intercontinental Cup	*	open item 50: entrants that are not the continental champions
+entrant-route	Intercontinental Cup	2002	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)
+entrant-route	Intercontinental Cup	2003	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)

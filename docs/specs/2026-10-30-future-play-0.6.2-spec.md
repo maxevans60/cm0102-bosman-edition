@@ -215,7 +215,7 @@ Merge danger: one-way door, because the repair changes saves at load. Blast radi
 Blocked by: 1, 2, 3
 Delivers: the Copa Sudamericana, Recopa, FIFA Intercontinental Cup and AFC Champions League Two continue every year. The Club World Cup is played every four years from 2029. No club cup stops in 2101. The 2027 Libertadores row gets its places text. Faults 7 and 11.
 Merge danger: two-way door. Blast radius: continental and world club cups.
-- [ ] Tier A to 2100: the checker finds every edition with the right entrants.
+- [ ] Tier A to 2100: the checker finds every edition with the right entrants. Not run: slice 3 is not on main. Normal game in its place: a 2098 date jump to August 2101 gives every edition of the Sudamericana, Recopa, FIFA Intercontinental Cup and ACL Two from 2098 to 2101 and the Club World Cup of 2101, with no club cup entrant fault (run-logs/0.6.2-s9a/j2098).
 
 ### 9b. Suruga Bank finalists and the Super Cup venue
 Blocked by: 2
