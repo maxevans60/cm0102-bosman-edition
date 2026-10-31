@@ -138,8 +138,8 @@ static int rules_season(int year)
 }
 
 /* 1 when the table holds a row of a Serie C group in any season. Without one (no rules table: a missing or damaged
- * Seasons/rules.tsv, "The game plays without the table", or a table with no Italian rows) the era is the state of
- * the game, as every other part of the game then keeps the structure it has. */
+ * Seasons/rules.tsv, season_rules.c "The game plays without the table", or a table with no Serie C group rows) the
+ * era is the state of the game, so that a save of the era goes on in the era. */
 static int groups_in_table(void)
 {
     static const char *const comp[GROUPS] = {"Serie C group A", "Serie C group B", "Serie C group C"};
@@ -156,16 +156,17 @@ static int groups_in_table(void)
 
 static int extra_division_flag(void);
 
-/* The game is in the era by its state: the group C object exists, and with the extra division flag C2/B has ended
- * (change_into_era ends C2/B and C2/C; in a two-group C2 season C2/C has ended and C2/B plays). Without the flag the
- * module makes group C only in the era (season_ita_group_c). A save of the era that loads without the table still
- * has these objects (the module makes group C again from its saved file, season_comps_before_comp_table). */
+/* The game is in the era by its state: the group C object exists, and with the extra division flag C2/B has ended.
+ * change_into_era ends C2/B and C2/C (year 2999, idle), and at the next load C2/B has no object (rt_ita_c2_none: its
+ * division has no clubs). In a two-group C2 season C2/C has ended and C2/B plays, so that season is not the era.
+ * Without the flag the module makes group C only in the era (season_ita_group_c), and a save of the era makes it again
+ * from its saved file (season_comps_before_comp_table). */
 static int era_by_state(void)
 {
     uint32_t c2a = object_of(KEY_C2A), c2b = object_of(KEY_C2B);
     if (!c2a) return 0;
     if (!extra_division_flag()) return 1;
-    return c2b && (int16_t)rd16(g_mem, c2b + 0x40) == IDLE_YEAR;
+    return !c2b || (int16_t)rd16(g_mem, c2b + 0x40) == IDLE_YEAR;
 }
 
 static int era_of_year(int year)

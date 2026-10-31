@@ -16,9 +16,10 @@ Each run is a season jump of tests/seasons/rules_report_check.py with Italy. The
               again from its saved file)
     load-c2   the same with the extra division (the original's C2 objects load; the module makes none)
     load-no-table  the load run, but the new program has no rules table (a missing or damaged Seasons/rules.tsv,
-              "The game plays without the table"): the game stays in the era with the counts its groups hold
-              (open item 62: on main the start of group C read the era from the table only, so C2/A's
-              create_table 0x653a90 counted 18 clubs and the box "ita_ser_c2a..cpp 551" came at the change)
+              "The game plays without the table"): the game stays in the era with the counts its groups hold.
+              When the era came only from the table, the start of group C went to the original's code, C2/A's
+              create_table 0x653a90 counted 18 clubs and the box "ita_ser_c2a..cpp 551" came at the change
+    load-c2-no-table  the same with the extra division (after the load C2/B has no object)
     c2-two    September 2010 ODB, changing rules on, the extra division, 2010/11 to the end of 2014/15: Serie C2 of
               three groups, then two groups from 2011/12 to 2013/14 (Q529: C2/C ends), then the Serie C
     c2-two-off September 2011 ODB, changing rules off, the extra division, 2011/12 and 2012/13: two C2 groups of 20
@@ -326,6 +327,7 @@ RUNS = {
     "load": run_load("load", []),
     "load-c2": run_load("load-c2", ["c2"]),
     "load-no-table": run_load("load-no-table", [], table="no-rules.tsv"),
+    "load-c2-no-table": run_load("load-c2-no-table", ["c2"], table="no-rules.tsv"),
     "c2-two": run_two("c2-two", 2010, 2014, "September 2010 ODB", "on", {2011: [20, 20], 2012: [18, 18], 2013: [18, 18]}),
     "c2-load": run_two_load("c2-load"),
     "c2-two-off": run_two("c2-two-off", 2011, 2012, "September 2011 ODB", "off", {2011: [20, 20], 2012: [20, 20]}),
