@@ -9,9 +9,9 @@
 # many rows are named in the note:
 #   F2099 (fixed in 0.6.2 slice 1): up to 0.6.1 season_change.c:773 ran no season hook for a season above 2099.
 #   F2101: season_club_cups.c:1118 ends the next-edition search at 2101: every club cup of that file stops.
-#   F2037: the 10-season lookback (season_playoffs.c:178, season_divisions.c:146, season_sizes.c:97) finds no row
-#          after 2037, so league sizes, promotion and play-off rules stop.
-#   F2057: the 30-season lookback of season_bra_states.c:314 finds no row after 2057.
+#   F2037 (fixed in 0.6.2 slice 10): up to 0.6.1 the 10-season lookback (season_playoffs.c, season_divisions.c,
+#          season_sizes.c) found no row after 2037, so league sizes, promotion and play-off rules stopped.
+#   F2057 (fixed in 0.6.2 slice 10): up to 0.6.1 the 30-season lookback of season_bra_states.c found no row after 2057.
 #   FCUP2099 (fixed in 0.6.2 slice 1): up to 0.6.1 the cups, cup groups, new cups, four-club super cups and the
 #          substitute rule took the start year's rule for a competition year above 2099.
 comp	name	kind	confed	has_host	table_years	cycle	next_year	end_year	code_after_table	status	source	note
@@ -56,13 +56,13 @@ con_merc_cup	Copa Merconorte	club_continental	CONMEBOL|CONCACAF	0		0		2001	NEVER
 conmebol_merc	Copa Mercosur	club_continental	CONMEBOL	0		0		2001	NEVER 2999	code as decided	season_kind_club_world.c:next_edition	
 asia_cup_winner	Asian Cup Winners Cup	club_continental	AFC	0		0		2002	NEVER 2999	code as decided	season_kind_club_world.c:next_edition	
 asia_super_cup	Asian Super Cup	super_cup	AFC	0		0		2002	NEVER 2999	code as decided	season_kind_club_world.c:next_edition	
-leagues_all	All leagues of the rules table (about 260 keys)	league	nation	0		1	2029	none	keep the 2027/28 row for 10 seasons, then no row from 2037 (10-season lookback)	fault	season_playoffs.c:row_of_season; season_divisions.c:row_in; season_sizes.c:row_of_season	One row for all leagues. F2037: club counts, promotion, relegation and play-off rules stop in 2037.
-league_playoffs	Promotion play-offs	league	nation	0		1	2029	none	as leagues_all: no play-off from 2037; the first play-off place goes up direct	fault	season_playoffs.c:season_playoffs_shape	F2037.
+leagues_all	All leagues of the rules table (about 260 keys)	league	nation	0		1	2029	none	keep the 2027/28 row with no end year (season_rules_last_season)	code as decided	season_playoffs.c:row_of_season; season_divisions.c:row_in; season_sizes.c:row_of_season; season_rules.c:season_rules_last_season	One row for all leagues. F2037 fixed in 0.6.2 slice 10.
+league_playoffs	Promotion play-offs	league	nation	0		1	2029	none	as leagues_all: the play-off of the last row stays with no end year	code as decided	season_playoffs.c:season_playoffs_shape	F2037 fixed in 0.6.2 slice 10.
 ger_3liga	3. Liga in the Regionalliga object	league	Germany	0		0		2007	not held from 2008	code as decided	season_divisions.c:liga3_row	
 gre_super_league2_group	Super League 2 group (Greece)	league	Greece	0		0		2026	rows 2026 and 2027 not held: group idle at 2998	code as decided	season_divisions.c:gre_held	Check the 2026 and 2027 rows against the real league.
 ita_serie_c_c2	Serie C2 groups B and C (Italy)	league	Italy	0		0		2014	IDLE_YEAR 2999 after 2013	code as decided	season_divisions_ita.c:c2_row	Serie C groups keep the last row with no lookback limit.
 aus_nsl	National Soccer League (Australia)	league	Australia	0		0		2004	no rows after 2004	code as decided	season_league_table.c	
-bra_states	Brazilian state championships	league	Brazil	0		1	2028	none	keeps the last row for 30 seasons, then the original region from 2057	fault	season_bra_states.c:row_count	F2057.
+bra_states	Brazilian state championships	league	Brazil	0		1	2028	none	keeps the last known count with no end year (season_rules_last_season)	code as decided	season_bra_states.c:row_count	F2057 fixed in 0.6.2 slice 10.
 cup_formats	Round formats of 13 domestic cups	domestic_cup	nation	0		1	2029	none	keep the last row (season_cups_row), with no end year	code as decided	season_cups.c:season_cups_row; season_kind_cups.c:cup_season	ctest future_2300 checks the pure lookup to 2300 (passes).
 cup_groups	Group stages of three domestic cups	domestic_cup	nation	0		1	2029	none	keep the last format, with no end year	code as decided	season_cups_more.c:season_cup_groups	
 fra_lge_cup	Coupe de la Ligue	domestic_cup	France	0		0		2020	SEASON_CUPS_NEVER 2999 after the last held row, never again	code as decided	season_cup_breaks.c:season_cups_next	end_year: history year of the last held edition (end year of an autumn-spring season); ger_lge_cup, ire_lge_cup, ire_super_cup and kor_league_cup not checked for the season form.
