@@ -32,8 +32,8 @@ The Tier B limits, over the legs of a Tier B game:
 The checker's --health faults (empty-squad, no-youth, overflow) are checker faults of Tier B.
 
 Disk (open item 53): a leg starts only with --floor-gb free on the disk of --out. A game keeps the save of one leg in
-each decade (the first save of the decade) and the last save; it deletes the user, home and shots folders of every
-other leg once the next leg has loaded its save and passed. Each leg keeps stderr.txt (gzipped) and report.tsv.
+each decade (the first save of the decade) and the last save, and of these legs only the save; it deletes the user,
+home and shots folders of every other leg once the next leg has loaded its save and passed. Each leg keeps stderr.txt (gzipped) and report.tsv.
 A failed leg keeps its folder.
 
 Room: a leg starts only while fewer than --jobs games of this run play, fewer than --machine games run on the Mac,
@@ -238,8 +238,8 @@ def tsv_row(path, values, head=None):
 
 
 def tidy(work, keep_save):
-    """Deletes a passed leg's game folders: all of them, or all but the user folder when its save is kept. The
-    stderr.txt is gzipped."""
+    """Deletes a passed leg's game folders: all of them, or all but the save when it is kept. The stderr.txt is
+    gzipped."""
     err = os.path.join(work, "stderr.txt")
     if os.path.exists(err):
         with open(err, "rb") as f, gzip.open(err + ".gz", "wb") as g:
@@ -247,6 +247,12 @@ def tidy(work, keep_save):
         os.remove(err)
     for d in ("home", "shots") + (() if keep_save else ("user",)):
         shutil.rmtree(os.path.join(work, d), ignore_errors=True)
+    user = os.path.join(work, "user")
+    if keep_save and os.path.isdir(user):            # the kept save only, not the database copy or the temp files
+        for n in os.listdir(user):
+            if n != SAVE_NAME:
+                p = os.path.join(user, n)
+                shutil.rmtree(p) if os.path.isdir(p) and not os.path.islink(p) else os.remove(p)
 
 
 def play_game(row, o):

@@ -65,8 +65,21 @@ def main():
     if [c for c, _ in run_set.tier_b_limits(good[:3] + [leg(3, 2005, 1000, 4 * GB)])] != ["size"]:
         bad.append("Tier B limits: a save of 4 GB is not a fault")
 
-    # The release check on made-up runs: no save, so only the results and the commit count.
+    # A passed leg: a kept leg keeps its save and the gzipped log, another leg the log only.
     work = tempfile.mkdtemp(prefix="run-set-")
+    for keep in (True, False):
+        leg_dir = os.path.join(work, f"leg-{keep}")
+        for d in ("user/Databases/December 2025", "home", "shots"):
+            os.makedirs(os.path.join(leg_dir, d))
+        for n in ("user/" + run_set.SAVE_NAME, "user/match_stats_matches.tmp", "stderr.txt", "report.tsv"):
+            open(os.path.join(leg_dir, n), "w").write("x")
+        run_set.tidy(leg_dir, keep)
+        left = sorted(os.path.relpath(os.path.join(d, n), leg_dir) for d, _, fs in os.walk(leg_dir) for n in fs)
+        want = sorted(["report.tsv", "stderr.txt.gz"] + (["user/" + run_set.SAVE_NAME] if keep else []))
+        if left != want:
+            bad.append(f"tidy (keep {keep}): {left}, not {want}")
+
+    # The release check on made-up runs: no save, so only the results and the commit count.
     head = run_set.git("rev-parse", "HEAD")
     passed = [[r["name"], r["tier"], r["set"], "pass", "", "2101", "10", "0", "1"] for r in release]
     results(os.path.join(work, "ok"), f"# commit {head} clean program x 2026-10-31 09:00", passed)
