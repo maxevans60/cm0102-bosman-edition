@@ -34,6 +34,7 @@
 #define CLUB_COMP_SIZE 0x6bu
 
 #define GROW_HISTORY 0x00527f60u   /* database_grow_comp_history_table (count): blank rows at the end, 1 on success */
+#define GAME_DAY 0xae2c90u          /* s16, the day of the year of the game date (from 0) */
 #define GAME_YEAR 0xae2c92u         /* u16, the year of the game date: the label year that 0x4afce0 writes */
 #define FIX_BASE_GAME 1             /* 0.6.2 slice 7: the rows after the start also go in the base game */
 
@@ -49,7 +50,7 @@ static uint32_t n_added, n_cleared, n_unmatched, n_duplicates;
  * the lookup 0x4afd80 sorts the whole table (qsort 0x945333 at 0x4afd9b), so an index does not last. Rows of one
  * label that the game writes in one year all stay. In memory only: a save of the calendar year of the start
  * between two such rows of one competition does not keep them apart. */
-typedef struct { uint32_t comp, label, place[4]; } Own;
+typedef struct { uint32_t comp, label, place[4], day; } Own;     /* day: year * 400 + day of the year */
 static Own *own;
 static size_t own_n, own_cap;
 
@@ -367,14 +368,17 @@ int season_history_after_start_on(void)
 
 static uint32_t n_after;
 
-static int is_own(uint32_t r)
+/* 1 when the game wrote row r in this program; *day gets the day it wrote it. */
+static int own_row(uint32_t r, uint32_t *day)
 {
     for (size_t k = 0; k < own_n; k++) {
         const Own *o = &own[k];
         if (o->comp != rd32(g_mem, r + 4) || o->label != rd16(g_mem, r + 8)) continue;
         int f = 0;
         while (f < 4 && o->place[f] == rd32(g_mem, r + 0xa + 4 * (uint32_t)f)) f++;
-        if (f == 4) return 1;
+        if (f < 4) continue;
+        if (day) *day = o->day;
+        return 1;
     }
     return 0;
 }
@@ -388,6 +392,19 @@ static uint32_t rows_of_label(uint32_t hist, uint32_t count, uint32_t comp, int 
         n += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == label;
     }
     return n;
+}
+
+/* 1 when the competition holds two or more rows a year in most of the 10 years before the start that have rows (the
+ * halves of a split season, two groups of one division). */
+static int split_season(uint32_t hist, uint32_t count, uint32_t comp, int S)
+{
+    int years = 0, two = 0;
+    for (int y = S - 10; y < S; y++) {
+        uint32_t k = rows_of_label(hist, count, comp, y);
+        years += k > 0;
+        two += k >= 2;
+    }
+    return years && two * 2 > years;
 }
 
 void season_history_drop_after_start(int S, int official)
@@ -437,24 +454,27 @@ void o_004afce0(void);
  * 2013 under 2013).
  * A second edition in one calendar year (a final that moves across the new year: the Emperor's Cup on 1 January
  * 2005 and on 31 December 2005, the Turkish Super Cup from August to January) takes the next free label, so each
- * edition keeps a row of its own; not for a split season (two rows a year). The label goes in through the game
- * year [0xae2c92], which is set back right after the call. */
+ * edition keeps a row of its own. The label goes in through the game year [0xae2c92], which only 0x4afd57 reads
+ * in 0x4afce0 and its callee 0x527f60; it is set back right after the call. The first-season clear runs to S + 1:
+ * after it every row of a later label is a row of the game. */
 RT_WRAP(004afce0, comp_util_add_history_record)
 {
     uint32_t obj = rt_arg(0), hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
     uint32_t comp = obj ? rd32(g_mem, obj + 4) : 0;
     int year = (int)rd16(g_mem, GAME_YEAR), S = season_start_year(), n = 0;
-    if (comp && hist && season_history_after_start_on()) {
+    uint32_t today = (uint32_t)year * 400u + (uint32_t)(int16_t)rd16(g_mem, GAME_DAY);
+    int on = comp && hist && season_history_after_start_on();
+    if (on && year <= S + 1) {
         int same = 0;
         for (uint32_t i = 0; year == S && i < count; i++) {
             uint32_t r = hist + i * HISTORY_SIZE;
-            same += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == year && !is_own(r);
+            same += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == year && !own_row(r, NULL);
         }
         for (uint32_t i = 0; i < count; i++) {
             uint32_t r = hist + i * HISTORY_SIZE;
             int label = (int)rd16(g_mem, r + 8);
             if (rd32(g_mem, r + 4) != comp || label < year || (label == year && (year != S || same >= 2)) ||
-                is_own(r))
+                own_row(r, NULL))
                 continue;
             wr32(g_mem, r + 4, 0);
             n++;
@@ -463,21 +483,28 @@ RT_WRAP(004afce0, comp_util_add_history_record)
             fprintf(stderr, "recomp: season history: %d data rows of label %d or later cleared before the game's "
                             "row\n", n, year);
     }
+    /* A second edition in one calendar year: the label is held by a row of the game (every row from S + 1 on, after
+     * the drop at the creation, or a row this program wrote) from another day. Not for a split season: two rows a
+     * year in most of the 10 years before the start, or in the year before. */
     int label = year;
-    if (comp && hist && season_history_after_start_on() && rows_of_label(hist, count, comp, year - 1) < 2) {
-        while (label < year + 8 && rows_of_label(hist, count, comp, label) == 1) {
-            int game_row = label >= S + 2;          /* the data holds no row after the start (see above) */
-            for (uint32_t i = 0; !game_row && i < count; i++) {
-                uint32_t r = hist + i * HISTORY_SIZE;
-                game_row = rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == label && is_own(r);
+    if (on && !split_season(hist, count, comp, S) && rows_of_label(hist, count, comp, year - 1) < 2) {
+        while (label < year + 8) {
+            int game_row = 0, same_day = 0, any = 0;
+            for (uint32_t i = 0; i < count; i++) {
+                uint32_t r = hist + i * HISTORY_SIZE, day = 0;
+                if (rd32(g_mem, r + 4) != comp || (int)rd16(g_mem, r + 8) != label) continue;
+                any = 1;
+                int mine = own_row(r, &day);
+                game_row |= mine || label >= S + 1;
+                same_day |= mine && day == today;
             }
-            if (!game_row) break;
+            if (!any || !game_row || same_day) break;
             label++;
         }
         if (label != year && getenv("RECOMP_HISTORY_LOG"))
             fprintf(stderr, "recomp: season history: a second edition in %d gets the label %d\n", year, label);
     }
-    Own o = {comp, (uint32_t)label, {rt_arg(1), rt_arg(2), rt_arg(3), rt_arg(4)}};
+    Own o = {comp, (uint32_t)label, {rt_arg(1), rt_arg(2), rt_arg(3), rt_arg(4)}, today};
     if (label != year) wr16(g_mem, GAME_YEAR, (uint32_t)label);
     o_004afce0();
     if (label != year) wr16(g_mem, GAME_YEAR, (uint32_t)year);
