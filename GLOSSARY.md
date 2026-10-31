@@ -280,6 +280,10 @@ _Avoid_: start season (for the number), base year
 The part `bosman_season.dat` of a saved game that holds its start year and changing rules. A save has it only when the start year is not 2001 or changing rules is on.
 _Avoid_: season block, save field, header
 
+**Merged part**:
+A part of a saved game that holds all temporary files of one type, such as every `fixtures_<year>.tmp`. Its name is the type with `.parts` at the end, such as `fixtures_#.tmp.parts`. A type with one file stays a part of its own.
+_Avoid_: pack, bundle, archive part
+
 ### Options and features
 
 **Settings file**:

@@ -79,7 +79,7 @@ Saves:
 - A save from 0.6.0 or 0.6.1 with a competition waiting for the idle year moves it to its next edition after the save's date, at load (Q8).
 - Saves, season parts and news parts accept years up to at least 2300 and news in more than 200 seasons.
 - Caps go in a wider field, kept in the season part of the save. The original byte stops at 255 (Q25).
-- The save keeps each type of data in one part, merged across seasons, so the part count stops growing. Older saves still load (Q26).
+- The save keeps each type of data in one part, merged across seasons, so the part count stops growing. Older saves still load (Q26). A type is the name of a temporary file with each run of digits as '#', such as `fixtures_#.tmp`; a type with two files or more is one merged part, a type with one file stays a part of its own. The data files (`.dat`) are one part each already.
 
 Original game faults, fixed in every game, base game included (Q23, Q24, Q27):
 - Every national team opens a vacancy when its manager retires.
@@ -251,9 +251,9 @@ Merge danger: one-way door, because the save holds a new field. Blast radius: ca
 Blocked by: 12
 Delivers: the part count of a save stops growing. Fault 29.
 Merge danger: one-way door, because the save format changes. Blast radius: every save and load. Old saves must load.
-- [ ] A save with 990 parts saves again and loads.
-- [ ] 0.6.0 and 0.6.1 saves load.
-- [ ] Same-save set PASS.
+- [x] A save with 990 parts saves again and loads.
+- [x] 0.6.0 and 0.6.1 saves load.
+- [x] Same-save set PASS.
 
 ### 14. Speed fixes
 Blocked by: none
