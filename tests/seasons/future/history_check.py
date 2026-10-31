@@ -165,11 +165,17 @@ class LazySav:
         for i, (off, size, name) in enumerate(order):
             nxt = order[i + 1][0] if i + 1 < len(order) else end
             self.members[name] = (off, size, nxt - off)
+        # The files of merged parts (0.6.2 slice 13, tools/save/savfile.py): read once, kept in memory.
+        self.files = {}
+        for name in [n for n in self.members if n.lower().endswith(savfile.MERGED)]:
+            self.files.update(savfile.split_merged(self.read(name)))
 
     def names(self):
-        return list(self.members)
+        return list(self.members) + list(self.files)
 
     def read(self, name):
+        if name in self.files:
+            return self.files[name]
         off, size, raw = self.members[name]
         self.f.seek(off)
         data = self.f.read(raw)
