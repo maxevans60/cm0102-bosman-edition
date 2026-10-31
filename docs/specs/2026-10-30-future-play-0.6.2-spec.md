@@ -217,8 +217,8 @@ Merge danger: two-way door. Blast radius: continental and world club cups.
 Blocked by: 2
 Delivers: the Suruga Bank finalists are the year's J.League Cup and Copa Sudamericana winners to 2019. The UEFA Super Cup venue changes each year after 2027. Faults 5 and 22, Q28.
 Merge danger: two-way door. Blast radius: these two competitions.
-- [ ] Long game to 2019: each Suruga Bank final has that year's two winners (checked in Tier B or a normal game, because it depends on results).
-- [ ] Tier A to 2040: no two Super Cups in a row in one venue.
+- [x] Long game to 2019: each Suruga Bank final has that year's two winners (checked in Tier B or a normal game, because it depends on results).
+- [x] Tier A to 2040: no two Super Cups in a row in one venue.
 
 ### 10. Leagues and domestic cups after the table
 Blocked by: 1, 2, 3
