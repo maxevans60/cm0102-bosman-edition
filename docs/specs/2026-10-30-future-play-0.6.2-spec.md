@@ -208,8 +208,8 @@ Merge danger: two-way door. Blast radius: the history screens of every start.
 Blocked by: 2, 3
 Delivers: the UEFA Nations League has its own European record. The Asian Cup qualifiers hold only Asian nations. Saves with the wrong record are repaired at load. Faults 4 and 21.
 Merge danger: one-way door, because the repair changes saves at load. Blast radius: both competitions and their history.
-- [ ] The checker finds no nation from the wrong confederation in either competition to 2100.
-- [ ] A 0.6.1 save with the fault loads and plays both competitions correctly.
+- [ ] The checker finds no nation from the wrong confederation in either competition to 2100. (Slice 8: none in a game from 2018 to April 2030, before slice 3. A game to 2100 waits for the Tier A switch. A 2098 date jump makes no Nations League, a separate fault.)
+- [x] A 0.6.1 save with the fault loads and plays both competitions correctly. (Run "repair" of tests/seasons/season_nl_run.py. No code plays the Asian Cup qualifiers: their record is the Nations League's.)
 
 ### 9a. Club cups after the table
 Blocked by: 1, 2, 3
