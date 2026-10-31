@@ -14,14 +14,18 @@ its folder to play it again.
 
 A game: legs of leg_years seasons, each played with tests/seasons/soak_run.py's new_game_leg or load_leg (the season
 jump, the manager on holiday, all of RECOMP_FIXED_CLOCK, RECOMP_SCREEN_LOG and a stop at the first box). Every leg
-saves in July after its last season, the last leg too (the season jump runs to the season after `last`), so the last
-save holds the end of the season `last`. Tier A sets RECOMP_TIER_A=1 (slice 3); a jump sets RECOMP_DATE_JUMP=1 and
-plays the December 2025 database. The databases of the other start years are those of tests/seasons/gate_run.py.
+saves on about 20 July after its last season (RECOMP_SAVE_AFTER_DAYS, counted from the save it loaded), the last leg
+too (the season jump runs to the season after `last`), so the last save holds the end of the season `last`. A save
+before July of the year after its last season fails the leg. Tier A sets RECOMP_TIER_A=1 (slice 3); a jump sets
+RECOMP_DATE_JUMP=1 and plays the December 2025 database. The databases of the other start years are those of
+tests/seasons/gate_run.py; the runner unpacks the own databases once, before the games start.
 
 After each leg: the leg's own checks (soak_run: no box, no line of the season change net, exit code 0, a save), then
-the history checker on the save (history_check.py with its rules, names, nations, access and known files; with
---health for Tier B). A fault that is not on the known list fails the game; the game plays on, so one run lists the
-faults of every decade. A leg that is not ok fails the game and ends it.
+the history checker on the save (history_check.py with its rules, names, nations and access files; with --health for
+Tier B). Every fault fails the game, a fault of the known list too: 0.6.2 ships only when the checker finds no fault in
+the run set (Q12); faults.tsv marks the known ones. The game plays on, so one run lists the faults of every decade. A
+leg that is not ok fails the game and ends it. At the end, every division and domestic cup must move on from each
+season to the next over the reports of all legs (league-stall: rules_report_check.league_stalls, as soak_run.py).
 
 The Tier B limits, over the legs of a Tier B game:
     no-manager  a national side with no manager in two saves in a row (more than one season)
@@ -33,20 +37,25 @@ The checker's --health faults (empty-squad, no-youth, overflow) are checker faul
 
 Disk (open item 53): a leg starts only with --floor-gb free on the disk of --out. A game keeps the save of one leg in
 each decade (the first save of the decade) and the last save, and of these legs only the save; it deletes the user,
-home and shots folders of every other leg once the next leg has loaded its save and passed. Each leg keeps stderr.txt (gzipped) and report.tsv.
-A failed leg keeps its folder.
+home and shots folders of every other leg once the next leg has loaded its save and passed. Each leg keeps
+stderr.txt (gzipped) and report.tsv. A failed leg keeps its folder.
 
 Room: a leg starts only while fewer than --jobs games of this run play, fewer than --machine games run on the Mac,
 the load of the last minute is below 24 and /Users/max/Projects/cm0102/run-logs/HOLD does not exist.
 
-Files in --out: results.tsv (a head line with the commit, whether the checkout had changes, and the program's
-sha256, then one row per game: name, tier, set, result, reason, reached, legs, faults, seconds), and per game
-<name>/legs.tsv (one row per leg), <name>/faults.tsv (the new checker faults), <name>/result.tsv and the leg folders.
+The program: when it lies in this checkout, the script first builds it (build-slot.sh cmake --build, target
+cm0102_recomp), so it is the build of the checkout's game code. Each result records the commit, "clean" (a program
+of this checkout with no change in GAME_CODE), "changes" or "outside" (a program from elsewhere, for tests only), the
+program's sha256 and the row of run_set.tsv it was played for.
 
---verify <folder>: exit 1 unless every row of the set (status run or waits) has the result pass, the run's commit
-has the game code of the checkout (no change in GAME_CODE since: src, tools/recomp, tools/seasons and
-docs/research/rules-0.6.0), and the checker of this
-checkout, on every save the run kept, finds no fault that is not on the known list.
+Files in --out: results.tsv (a head line, then one row per game: name, tier, set, result, reason, reached, legs,
+faults, seconds, commit, code, program, row), and per game <name>/legs.tsv (one row per leg), <name>/faults.tsv,
+<name>/result.tsv, run.log and the leg folders. A game whose runner stops with no result gets the result fail.
+
+--verify <folder>: exit 1 unless every row of the set (a row that waits too) has the result pass, played for the same
+row of run_set.tsv, with a clean program, all with one program, at a commit whose game code (GAME_CODE: src,
+tools/recomp, tools/seasons and docs/research/rules-0.6.0) is that of the checkout; every checkpoint save that
+legs.tsv lists still exists; and the checker of this checkout finds no fault on any save the run kept.
 """
 import csv
 import datetime
@@ -80,6 +89,9 @@ GAME_CODE = ["src", "tools/recomp", "tools/seasons", "docs/research/rules-0.6.0"
 FOUR_GB = 4 << 30
 DAYS = 365.25
 SAVE_NAME = "samesave.sav"                    # the save of a leg (smoke_run.SAVE_NAME)
+SWITCHES = ("RECOMP_TIER_A", "RECOMP_DATE_JUMP", "RECOMP_TEST_EXTRA")
+SAVE_ON = (7, 20)                             # every leg saves on about 20 July after its last season
+LEG_HEAD = ["leg", "seasons", "result", "seconds", "save_date", "save_mb", "faults", "note"]
 
 
 def arg(argv, name, default=None):
@@ -155,8 +167,13 @@ class Checker:
         self.nations = hc.read_nations(os.path.join(HERE, "nations.tsv"))
         self.access = hc.Access(hc.finals_table(), hc.read_access(os.path.join(HERE, "access.tsv")))
 
+    def is_known(self, fault):
+        return hc.is_known(self.known, fault[0], fault[1], fault[2])
+
     def run(self, save, health):
-        """(game, new faults [(check, competition, year, detail)], health summary, health rows)."""
+        """(game, faults [(check, competition, year, detail)], health summary, health rows). Every fault counts, a
+        known one too: 0.6.2 ships only when the checker finds no fault in the run set (Q12). is_known marks the
+        faults of history_known.tsv in the lists."""
         game = hc.Game(save)
         faults = hc.check(game, self.rules, self.nations) + hc.check_nations(game, self.nations)
         faults += sorted(set(hc.entrants(game, self.rules, self.access, self.nations)[1]))
@@ -165,7 +182,7 @@ class Checker:
             summary, rows, sick = hc.health(game)
             faults += sick
         faults += [("save-part", n, game.date[0], "the size does not fit its count, not read") for n in game.unread]
-        return game, [f for f in faults if not hc.is_known(self.known, f[0], f[1], f[2])], summary, rows
+        return game, faults, summary, rows
 
 
 # ---- The Tier B limits ----
@@ -263,11 +280,13 @@ def play_game(row, o):
     log = lambda text: print(f"{row['name']}: {text}", flush=True)  # noqa: E731
     began = time.time()
     if row["status"] == "waits":
-        return finish(folder, row, "waits", row["note"], "", 0, 0, began)
+        return finish(folder, row, "waits", row["note"], "", 0, 0, began, o)
     if row["tier"] == "A" and not program_has(o["program"], "RECOMP_TIER_A"):
-        return finish(folder, row, "waits", "the program has no Tier A switch (slice 3)", "", 0, 0, began)
-    env = {"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"}}.get(row["tier"], {})
-    os.environ.update(env)                      # one game a process: soak_run's leg_env copies os.environ
+        return finish(folder, row, "waits", "the program has no Tier A switch (slice 3)", "", 0, 0, began, o)
+    for name in SWITCHES:                       # a switch of the shell must not reach a game of another tier
+        os.environ.pop(name, None)
+    os.environ.update({"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"}}.get(row["tier"], {}))
+    # one game a process: soak_run's leg_env copies os.environ
     so = {"program": o["program"], "game": o["game"], "start": row["start"], "last": row["last"] + 1,
           "seed": row["seed"], "nations": row["nations"].split(","), "database": database_of(row, o),
           "rules": row["changing"], "extra": []}
@@ -275,12 +294,15 @@ def play_game(row, o):
     health = row["tier"] == "B"
     legs, kept_decades, save, previous_work, new_faults = [], set(), None, None, 0
     plan = legs_of(row)
+    since = datetime.date(row["start"], 7, 1)          # the first day of a new game: about 1 July of the start year
     for k, (s0, s1) in enumerate(plan):
         work = os.path.join(folder, f"leg{k:03d}")
         if os.path.exists(work):
             return finish(folder, row, "fail", f"{work} exists: delete the game's folder to play it again", "",
-                          k, new_faults, began)
-        days = round(DAYS * (s1 - s0 + 1))
+                          k, new_faults, began, o)
+        # RECOMP_SAVE_AFTER_DAYS counts game days from the leg's first day: from the save it loads, to 20 July after
+        # its last season, so leap years do not move the saves
+        days = (datetime.date(s1 + 1, *SAVE_ON) - since).days
         so["timeout"] = 14400 * (s1 - s0 + 1)
         wait_room(o, log)
         if k == 0:
@@ -294,17 +316,24 @@ def play_game(row, o):
         seasons = f"{s0}/{(s0 + 1) % 100:02d} to {s1}/{(s1 + 1) % 100:02d}"
         if result != "ok":
             tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, result, f"{took:.0f}", "", "", "", box or net or ""],
-                    ["leg", "seasons", "result", "seconds", "save_date", "save_mb", "new_faults", "note"])
+                    LEG_HEAD)
             return finish(folder, row, "fail", f"leg {k} ({seasons}): {result} {box or net or ''}".strip(), "", k,
-                          new_faults, began)
+                          new_faults, began, o)
         loaded = os.path.join(work, "user", "soak.sav")         # load_leg's copy of the save it loaded
         if os.path.exists(loaded):
             os.remove(loaded)
         game, faults, summary, rows = checker.run(saved, health)
         year = game.date[0]
+        if (year, game.date[1]) < (s1 + 1, 181):         # the save must come after the season change of s1
+            tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, "short", f"{took:.0f}",
+                                                       f"{year}-{game.date[1] + 1:03d}", "", "", ""], LEG_HEAD)
+            return finish(folder, row, "fail", f"leg {k} ({seasons}): the save is of day {game.date[1] + 1} of {year}, "
+                                               f"before July {s1 + 1}", "", k, new_faults, began, o)
+        since = datetime.date(year, 1, 1) + datetime.timedelta(days=game.date[1])
         for c, comp, y, detail in faults:
-            tsv_row(os.path.join(folder, "faults.tsv"), [c, comp, y, detail, os.path.relpath(saved, folder)],
-                    ["check", "competition", "year", "detail", "save"])
+            tsv_row(os.path.join(folder, "faults.tsv"), [c, comp, y, "known" if checker.is_known((c, comp, y)) else "new",
+                                                         detail, os.path.relpath(saved, folder)],
+                    ["check", "competition", "year", "known", "detail", "save"])
         new_faults += len(faults)
         no_manager = None
         if health:
@@ -317,27 +346,38 @@ def play_game(row, o):
             kept_decades.add(year // 10)
         tsv_row(os.path.join(folder, "legs.tsv"),
                 [k, seasons, "ok", f"{took:.0f}", f"{year}-{game.date[1] + 1:03d}", f"{size / 1e6:.0f}", len(faults),
-                 "checkpoint" if keep else ""],
-                ["leg", "seasons", "result", "seconds", "save_date", "save_mb", "new_faults", "note"])
-        log(f"leg {k} ({seasons}) ok in {took:.0f} s, save of {year} ({size / 1e6:.0f} MB), {len(faults)} new faults")
+                 "checkpoint" if keep else ""], LEG_HEAD)
+        log(f"leg {k} ({seasons}) ok in {took:.0f} s, save of {year} ({size / 1e6:.0f} MB), {len(faults)} faults")
         if previous_work:
             tidy(previous_work[0], previous_work[1])
         previous_work, save = (work, keep), saved
     if previous_work:
         tidy(previous_work[0], previous_work[1])
     limits = tier_b_limits(legs, row["last"]) if health else []
+    # every division and domestic cup moves on from one season to the next, over the reports of all legs (O278)
+    import rules_report_check as rrc
+    comps = [c for k in range(len(plan)) for c in rrc.read_report(os.path.join(folder, f"leg{k:03d}", "report.tsv"))[1]
+             if os.path.exists(os.path.join(folder, f"leg{k:03d}", "report.tsv"))]
+    limits += [("league-stall", line) for line in rrc.league_stalls(comps)]
     for c, detail in limits:
-        tsv_row(os.path.join(folder, "faults.tsv"), [c, "Tier B", legs[-1]["year"], detail, ""],
-                ["check", "competition", "year", "detail", "save"])
+        tsv_row(os.path.join(folder, "faults.tsv"), [c, "Tier B" if c != "league-stall" else "leagues",
+                                                     legs[-1]["year"], "new", detail, ""],
+                ["check", "competition", "year", "known", "detail", "save"])
     reached = f"{legs[-1]['year']}" if legs else ""
     if new_faults or limits:
-        return finish(folder, row, "fail", f"{new_faults} checker faults, {len(limits)} Tier B limits (faults.tsv)",
-                      reached, len(plan), new_faults + len(limits), began)
-    return finish(folder, row, "pass", "", reached, len(plan), 0, began)
+        return finish(folder, row, "fail", f"{new_faults} checker faults, {len(limits)} other (faults.tsv)",
+                      reached, len(plan), new_faults + len(limits), began, o)
+    return finish(folder, row, "pass", "", reached, len(plan), 0, began, o)
 
 
-def finish(folder, row, result, reason, reached, legs, faults, began):
-    values = [row["name"], row["tier"], row["set"], result, reason, reached, legs, faults, f"{time.time() - began:.0f}"]
+def row_key(row):
+    """The row as run_set.tsv holds it, but the note: a result counts only for the row it was played for."""
+    return "|".join(str(row[c]) for c in COLUMNS if c != "note")
+
+
+def finish(folder, row, result, reason, reached, legs, faults, began, o):
+    values = [row["name"], row["tier"], row["set"], result, reason, reached, legs, faults, f"{time.time() - began:.0f}",
+              o["commit"], o["code"], o["sha"], row_key(row)]
     with open(os.path.join(folder, "result.tsv"), "w", encoding="utf-8", newline="") as f:
         csv.writer(f, delimiter="\t", lineterminator="\n").writerow(values)
     print(f"{row['name']}: {result.upper()} {reason}".rstrip(), flush=True)
@@ -346,24 +386,28 @@ def finish(folder, row, result, reason, reached, legs, faults, began):
 
 # ---- The run ----
 
-RESULT_HEAD = ["name", "tier", "set", "result", "reason", "reached", "legs", "faults", "seconds"]
+RESULT_HEAD = ["name", "tier", "set", "result", "reason", "reached", "legs", "faults", "seconds", "commit", "code",
+               "program", "row"]
 
 
 def git(*args):
     return subprocess.run(["git", "-C", ROOT] + list(args), capture_output=True, text=True).stdout.strip()
 
 
-def head_line(program):
+def identity(program):
+    """(commit, code, program sha256): code is "clean" for a program of this checkout's build folder whose game code
+    has no change, else "changes" or "outside" (a program from elsewhere, for tests only)."""
     with open(program, "rb") as f:
         sha = hashlib.sha256(f.read()).hexdigest()
-    dirty = "changes" if git("status", "--porcelain", "--", *GAME_CODE) else "clean"
-    return f"# commit {git('rev-parse', 'HEAD')} {dirty} program {sha} {datetime.datetime.now():%Y-%m-%d %H:%M}"
+    inside = os.path.realpath(program).startswith(os.path.realpath(ROOT) + os.sep)
+    code = "outside" if not inside else "changes" if git("status", "--porcelain", "--", *GAME_CODE) else "clean"
+    return git("rev-parse", "HEAD"), code, sha
 
 
 def write_results(o, rows):
     out = os.path.join(o["out"], "results.tsv")
     with open(out, "w", encoding="utf-8", newline="") as f:
-        f.write(o["head"] + "\n")
+        f.write(f"# commit {o['commit']} {o['code']} program {o['sha']} {datetime.datetime.now():%Y-%m-%d %H:%M}\n")
         w = csv.writer(f, delimiter="\t", lineterminator="\n")
         w.writerow(RESULT_HEAD)
         for r in rows:
@@ -372,7 +416,7 @@ def write_results(o, rows):
                 with open(done, encoding="utf-8") as g:
                     w.writerow(next(csv.reader(g, delimiter="\t")))
             else:
-                w.writerow([r["name"], r["tier"], r["set"], "not run", "", "", "", "", ""])
+                w.writerow([r["name"], r["tier"], r["set"], "not run"] + [""] * (len(RESULT_HEAD) - 4))
     return out
 
 
@@ -381,15 +425,35 @@ def run(argv):
          "jobs": int(arg(argv, "--jobs", 2)), "machine": int(arg(argv, "--machine", 12)),
          "floor": float(arg(argv, "--floor-gb", 100)), "databases": arg(argv, "--databases", DATABASES),
          "own": arg(argv, "--own-dbs", OWN_DBS)}
-    rows = chosen(read_set(), arg(argv, "--set", "release"), arg(argv, "--only", "").split(",") if "--only" in argv else None)
+    only = arg(argv, "--only", "").split(",") if "--only" in argv else None
+    rows = chosen(read_set(), arg(argv, "--set", "release"), only)
+    if only and set(only) - {r["name"] for r in rows}:
+        print(f"run_set.py: not in the set: {', '.join(sorted(set(only) - {r['name'] for r in rows}))}")
+        return 2
     os.makedirs(o["out"], exist_ok=True)
-    o["head"] = head_line(o["program"])
+    build = os.path.dirname(o["program"])
+    if os.path.realpath(build).startswith(os.path.realpath(ROOT) + os.sep):     # the program of this checkout's tree
+        if subprocess.run(["/Users/max/Projects/cm0102/build-slot.sh", "cmake", "--build", build, "--target",
+                           "cm0102_recomp"], capture_output=True).returncode != 0:
+            print(f"run_set.py: the build in {build} failed")
+            return 2
+    o["commit"], o["code"], o["sha"] = identity(o["program"])
+    for r in rows:                              # unpack the own databases once, before the games start
+        if r["status"] == "run":
+            database_of(r, o)
     todo = [r for r in rows if not os.path.exists(os.path.join(o["out"], r["name"], "result.tsv"))]
     running = {}
     while todo or running:
         for name, p in list(running.items()):
             if p.poll() is not None:
                 del running[name]
+                done = os.path.join(o["out"], name, "result.tsv")
+                if not os.path.exists(done):            # the child stopped with no result: a fail, with its last line
+                    with open(os.path.join(o["out"], name, "run.log"), encoding="utf-8", errors="replace") as g:
+                        last = ([l.strip() for l in g if l.strip()] or ["no output"])[-1]
+                    row = next(r for r in rows if r["name"] == name)
+                    finish(os.path.join(o["out"], name), row, "fail", f"the runner stopped (exit {p.returncode}): "
+                                                                       f"{last}", "", "", "", time.time(), o)
                 write_results(o, rows)
         while todo and len(running) < o["jobs"]:
             r = todo.pop(0)
@@ -398,7 +462,8 @@ def run(argv):
                 running[r["name"]] = subprocess.Popen(
                     [sys.executable, "-I", os.path.abspath(__file__), "--one", r["name"], o["program"], o["game"],
                      "--out", o["out"], "--machine", str(o["machine"]), "--floor-gb", str(o["floor"]),
-                     "--databases", o["databases"], "--own-dbs", o["own"], "--jobs", str(o["jobs"])],
+                     "--databases", o["databases"], "--own-dbs", o["own"], "--commit", o["commit"], "--code",
+                     o["code"], "--sha", o["sha"]],
                     stdout=logf, stderr=subprocess.STDOUT)
             print(f"{r['name']}: started", flush=True)
             time.sleep(30)                  # the games do not all make their worlds at once
@@ -416,49 +481,65 @@ def one(argv):
     rest = [a for i, a in enumerate(argv) if i not in (argv.index("--one"), argv.index("--one") + 1)]
     o = {"program": os.path.abspath(rest[1]), "game": os.path.abspath(rest[2]), "out": os.path.abspath(arg(rest, "--out")),
          "machine": int(arg(rest, "--machine", 12)), "floor": float(arg(rest, "--floor-gb", 100)),
-         "databases": arg(rest, "--databases", DATABASES), "own": arg(rest, "--own-dbs", OWN_DBS)}
+         "databases": arg(rest, "--databases", DATABASES), "own": arg(rest, "--own-dbs", OWN_DBS),
+         "commit": arg(rest, "--commit"), "code": arg(rest, "--code"), "sha": arg(rest, "--sha")}
     row = next(r for r in read_set() if r["name"] == name)
     return 0 if play_game(row, o)[3] in ("pass", "waits") else 1
 
 
 # ---- The release check ----
 
-def verify(folder, which="release"):
-    """Lines of the faults of a run for the release check; empty when it passes."""
+def verify(folder, which="release", rows=None):
+    """Lines of the faults of a run for the release check; empty when it passes. rows: the run set (run_set.tsv)."""
+    rows = chosen(rows if rows is not None else read_set(), which)
     out = []
     path = os.path.join(folder, "results.tsv")
     if not os.path.exists(path):
         return [f"{path} does not exist"]
     with open(path, encoding="utf-8") as f:
-        head = f.readline().split()
-        results = {r["name"]: r for r in csv.DictReader(f, delimiter="\t")}
-    if len(head) < 4 or head[:2] != ["#", "commit"]:
-        return [f"{path}: no commit in its head line"]
-    commit, state = head[2], head[3]
-    if state != "clean":
-        out.append(f"the run was made from a checkout with changes to the game code ({commit})")
-    diff = subprocess.run(["git", "-C", ROOT, "diff", "--quiet", commit, "HEAD", "--"] + GAME_CODE)
-    if diff.returncode != 0:
-        out.append(f"the game code changed after the run's commit {commit[:8]} ({', '.join(GAME_CODE)})")
-    for row in chosen(read_set(), which):
+        results = {r["name"]: r for r in csv.DictReader((l for l in f if not l.startswith("#")), delimiter="\t")}
+    programs = set()
+    for row in rows:
         r = results.get(row["name"])
         if not r:
             out.append(f"{row['name']}: not in the run")
-        elif r["result"] != "pass":
+            continue
+        if r["result"] != "pass":
             out.append(f"{row['name']}: {r['result']} {r['reason']}".rstrip())
+        if r.get("row") != row_key(row):
+            out.append(f"{row['name']}: played for another row of run_set.tsv ({r.get('row')})")
+        if r.get("code") != "clean":
+            out.append(f"{row['name']}: played with a program that is not a build of the checkout's game code "
+                       f"({r.get('code')})")
+        commit = r.get("commit") or ""
+        if not commit or subprocess.run(["git", "-C", ROOT, "diff", "--quiet", commit, "HEAD", "--"] + GAME_CODE,
+                                        capture_output=True).returncode != 0:
+            out.append(f"{row['name']}: the game code changed after its commit {commit[:8] or '(none)'} "
+                       f"({', '.join(GAME_CODE)})")
+        programs.add(r.get("program"))
+        legs = os.path.join(folder, row["name"], "legs.tsv")
+        if r["result"] == "pass" and os.path.exists(legs):
+            with open(legs, encoding="utf-8") as f:
+                for leg in csv.DictReader(f, delimiter="\t"):
+                    save = os.path.join(folder, row["name"], f"leg{int(leg['leg']):03d}", "user", SAVE_NAME)
+                    if leg["note"] == "checkpoint" and not os.path.exists(save):
+                        out.append(f"{row['name']}: the checkpoint save of leg {leg['leg']} is gone")
+        elif r["result"] == "pass":
+            out.append(f"{row['name']}: no legs.tsv")
+    if len(programs) > 1:
+        out.append(f"the games were played with {len(programs)} different programs")
     checker = Checker()
-    for row in chosen(read_set(), which):
+    for row in rows:
         for dirpath, _, files in os.walk(os.path.join(folder, row["name"])):
-            for n in files:
-                if n == SAVE_NAME:
-                    save = os.path.join(dirpath, n)
-                    try:
-                        _, faults, _, _ = checker.run(save, row["tier"] == "B")
-                    except Exception as e:      # a save the checker cannot read is a fault of the run
-                        out.append(f"{row['name']}: {os.path.relpath(save, folder)}: not read ({e})")
-                        continue
-                    for c, comp, y, detail in faults:
-                        out.append(f"{row['name']}: {os.path.relpath(save, folder)}: {c} {comp} {y}: {detail}")
+            if SAVE_NAME in files:
+                save = os.path.join(dirpath, SAVE_NAME)
+                try:
+                    _, faults, _, _ = checker.run(save, row["tier"] == "B")
+                except Exception as e:          # a save the checker cannot read is a fault of the run
+                    out.append(f"{row['name']}: {os.path.relpath(save, folder)}: not read ({e})")
+                    continue
+                for c, comp, y, detail in faults:
+                    out.append(f"{row['name']}: {os.path.relpath(save, folder)}: {c} {comp} {y}: {detail}")
     return out
 
 

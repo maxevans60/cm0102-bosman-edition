@@ -26,7 +26,7 @@
 #   --site-assets  the site's pictures (logo, screenshots). They go into site-assets.zip on the release,
 #                  where the Pages workflow fetches them, so git never holds them. logo.png also gives
 #                  the intro logo, Data/bosman_logo.rgn of each download (tools/release/make_intro_logo.py).
-#   --run-set      the --out folder of a full run of the future run set (tests/seasons/future/run_set.py, 0.6.2 slice
+#   --run-set      the --out folder of a run of the whole future run set (tests/seasons/future/run_set.py, 0.6.2 slice
 #                  15). Before any build the script runs its release check (run_set.py --verify) and stops when a
 #                  game of the set did not pass, when the checker of this checkout finds a fault on a save the run
 #                  kept, or when the game code changed after the run's commit (Q12). Not needed with --stage-only.

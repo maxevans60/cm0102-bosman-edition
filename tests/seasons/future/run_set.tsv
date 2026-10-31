@@ -39,3 +39,4 @@ b2001	B	2001	on	all	1	2300	1	release	run	Tier B: the full world to 2300
 b2025	B	2025	on	all	1	2300	1	release	run	Tier B: a 2025 start to 2300
 quick2025	normal	2025	on	England	1	2026	1	quick	run	tests the script: two seasons, one save and load
 quickjump	jump	2098	on	England	1	2099	1	quick	run	tests the script: a date jump, two seasons
+quicka	A	2025	on	England	1	2034	5	quick	run	tests the script: Tier A, two legs of five seasons

@@ -12,6 +12,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import history_check_test as hct  # noqa: E402
 import run_set  # noqa: E402
 
 GB = 1 << 30
@@ -53,11 +54,13 @@ def main():
     checks = {
         "no-manager": good[:5] + [leg(5, 2007, 1050, 205e6, {"Wales"}), leg(6, 2008, 1060, 206e6, {"Wales"})],
         "slow": good[:20] + [leg(k, 2002 + k, 2500, 220e6) for k in range(20, 30)],
+        # leg 0 also makes the game and is slow: it must not set the speed of the first seasons
+        "slow ": [leg(0, 2002, 9000, 200e6)] + good[1:20] + [leg(k, 2002 + k, 2500, 220e6) for k in range(20, 30)],
         "size": [leg(k, 2002 + k, 1000, 200e6 + 30e6 * k) for k in range(30)],
     }
     for check, game in checks.items():
         got = {c for c, _ in run_set.tier_b_limits(game)}
-        if got != {check}:
+        if got != {check.strip()}:
             bad.append(f"Tier B limits: {check} not found alone, got {got}")
     one_season = good[:5] + [leg(5, 2007, 1050, 205e6, {"Wales"}), leg(6, 2008, 1060, 206e6, {"Chile"})]
     if run_set.tier_b_limits(one_season):
@@ -79,26 +82,62 @@ def main():
         if left != want:
             bad.append(f"tidy (keep {keep}): {left}, not {want}")
 
-    # The release check on made-up runs: no save, so only the results and the commit count.
+    # The release check on made-up runs. Each game passes with one leg and no kept save, unless a case says else.
     head = run_set.git("rev-parse", "HEAD")
-    passed = [[r["name"], r["tier"], r["set"], "pass", "", "2101", "10", "0", "1"] for r in release]
-    results(os.path.join(work, "ok"), f"# commit {head} clean program x 2026-10-31 09:00", passed)
-    if run_set.verify(os.path.join(work, "ok")):
-        bad.append(f"verify: faults in a run where every game passed: {run_set.verify(os.path.join(work, 'ok'))[:3]}")
-    failed = [r[:3] + (["fail", "3 checker faults"] if r[0] == "b2001" else r[3:5]) + r[5:] for r in passed]
-    results(os.path.join(work, "fail"), f"# commit {head} clean program x 2026-10-31 09:00", failed)
-    if not any(line.startswith("b2001: fail") for line in run_set.verify(os.path.join(work, "fail"))):
-        bad.append("verify: a failed game passes")
-    results(os.path.join(work, "short"), f"# commit {head} clean program x 2026-10-31 09:00", passed[1:])
-    if not any("not in the run" in line for line in run_set.verify(os.path.join(work, "short"))):
-        bad.append("verify: a game missing from the run passes")
-    old = run_set.git("rev-list", "-1", "HEAD", "--", "src")          # the last commit that changed the game code
-    results(os.path.join(work, "old"), f"# commit {old}~1 clean program x 2026-10-31 09:00", passed)
-    if not any("game code changed" in line for line in run_set.verify(os.path.join(work, "old"))):
-        bad.append("verify: a run of older game code passes")
-    results(os.path.join(work, "dirty"), f"# commit {head} changes program x 2026-10-31 09:00", passed)
-    if not any("changes to the game code" in line for line in run_set.verify(os.path.join(work, "dirty"))):
-        bad.append("verify: a run from a changed checkout passes")
+    runs = [r for r in release if r["status"] == "run"]      # the rows a run can pass; the waiting row comes below
+
+    def result(r, **change):
+        values = {"name": r["name"], "tier": r["tier"], "set": r["set"], "result": "pass", "reason": "",
+                  "reached": "2101", "legs": "1", "faults": "0", "seconds": "1", "commit": head, "code": "clean",
+                  "program": "sha-x", "row": run_set.row_key(r)}
+        values.update(change)
+        return [str(values[c]) for c in run_set.RESULT_HEAD]
+
+    def make(name, rows, checkpoint=None, save=None):
+        folder = os.path.join(work, name)
+        results(folder, "# a head line", rows)
+        for r in rows:
+            os.makedirs(os.path.join(folder, r[0]), exist_ok=True)
+            with open(os.path.join(folder, r[0], "legs.tsv"), "w", encoding="utf-8") as f:
+                f.write("\t".join(run_set.LEG_HEAD) + "\n")
+                f.write(f"0\t2001/02 to 2001/02\tok\t1\t2002-201\t1\t0\t{'checkpoint' if r[0] == checkpoint else ''}\n")
+        if save:
+            os.makedirs(os.path.join(folder, checkpoint, "leg000", "user"))
+            hct.write_sav(os.path.join(folder, checkpoint, "leg000", "user", run_set.SAVE_NAME), save)
+        return run_set.verify(folder, rows=runs)
+
+    def finds(lines, text):
+        return any(text in line for line in lines)
+
+    ok = make("ok", [result(r) for r in runs])
+    if ok:
+        bad.append(f"verify: faults in a run where every game passed: {ok[:3]}")
+    cases = [
+        ("fail", [result(r, result="fail", reason="3 checker faults") if r["name"] == "b2001" else result(r)
+                  for r in runs], "b2001: fail 3 checker faults"),
+        ("short", [result(r) for r in runs[1:]], "not in the run"),
+        ("old", [result(r, commit=run_set.git("rev-list", "-1", "HEAD", "--", "src") + "~1") for r in runs],
+         "game code changed"),
+        ("dirty", [result(r, code="changes") for r in runs], "not a build of the checkout"),
+        ("outside", [result(r, code="outside") for r in runs], "not a build of the checkout"),
+        ("two", [result(r, program="sha-y" if r["name"] == "b2025" else "sha-x") for r in runs], "different programs"),
+        ("row", [result(r, row=run_set.row_key(dict(r, last=2099))) if r["name"] == "a2013s2" else result(r)
+                 for r in runs], "another row"),
+    ]
+    for name, rows_, text in cases:
+        if not finds(make(name, rows_), text):
+            bad.append(f"verify ({name}): no line with {text!r}")
+    if not finds(make("gone", [result(r) for r in runs], checkpoint="b2001"), "checkpoint save of leg 0 is gone"):
+        bad.append("verify: a lost checkpoint save passes")
+    members, _ = hct.records()
+    lines = make("faults", [result(r) for r in runs], checkpoint="a2006s1", save=members)
+    for text in ("samesave.sav: duplicate Euro Finals 2028", "samesave.sav: no-host World Finals 2034",
+                 "samesave.sav: same-final Euro Super Cup 2028"):      # history faults that the fixture plants
+        if not finds(lines, text):
+            bad.append(f"verify: the checker does not find {text!r} on a kept save")
+    waiting = run_set.verify(os.path.join(work, "ok"))                 # the real set: a2001nation waits
+    if not finds(waiting, "a2001nation: not in the run"):
+        bad.append("verify: the waiting row a2001nation does not block a release")
     code = subprocess.run([sys.executable, "-I", os.path.join(HERE, "run_set.py"), "--verify",
                            os.path.join(work, "fail")], capture_output=True).returncode
     if code != 1:
