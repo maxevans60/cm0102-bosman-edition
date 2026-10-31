@@ -597,9 +597,21 @@ static void wide_pool(uint32_t self)
                         "%d groups\n", year_of(self) + 2, n, have, groups);
 }
 
+/* The return address of build_entry_pool's call in the ctor 0x918200 (0x918339); start_new_season calls it at
+ * 0x9194cf. */
+#define POOL_CTOR_RET 0x0091833eu
+
+/* 1 when the wide pool waits for start_new_season: a ctor's campaign whose World Cup before it lies after the game
+ * year (a 2001 game makes the 2006 campaign at the new game, and start_new_season 0x9194cf makes its pool again
+ * after the 2002 World Cup, before the draw). So a new game of 2001 keeps the original's memory to that point. */
+static int wide_waits(uint32_t self, uint32_t ret)
+{
+    return ret == POOL_CTOR_RET && year_of(self) > (int16_t)rd16(g_mem, GAME_DATE + 2u) + 2;
+}
+
 RT_WRAP(00919e30, wcq26_europe_pool)
 {
-    uint32_t self = cpu.ecx;
+    uint32_t self = cpu.ecx, ret = rd32(g_mem, cpu.esp);
     o_00919e30();
     if (!rt_unwinding && !europe_on(self) && is(self, VT_EUROPE)) {
         uint32_t eax = cpu.eax;
@@ -610,7 +622,7 @@ RT_WRAP(00919e30, wcq26_europe_pool)
      * few nations (0x91a08c). */
     if (!rt_unwinding && europe_wide(self)) {
         uint32_t eax = cpu.eax;
-        if (eax == 1u) wide_pool(self);
+        if (eax == 1u && !wide_waits(self, ret)) wide_pool(self);
         if (!rt_unwinding) cpu.eax = eax;
         return;
     }
