@@ -78,7 +78,9 @@ save date (a confederation check for every edition):
                   is no fault
     entrant-missing a live UEFA nation with a national side is not an entrant of a European World Cup qualifying
                   edition of at least 30 teams that began in the game: every member enters, less the European
-                  hosts of its World Cup, less Russia from 2026 and less a nation that joins UEFA later (open item 57)
+                  hosts of its World Cup, less Russia from 2026 and less a nation that joins UEFA later (open item
+                  57). Only where the season code builds the whole pool (uefa_all): not the 2002 campaign, not a
+                  2001 game with changing rules off, from 2026 only with changing rules on or a 2025 start
     entrant-holder the title holder is not an entrant (access.tsv "holder": the Champions League from 2006, the
                   Libertadores), when the edition before is at most one cycle and one year before; not for an
                   edition of the start year or before (it began before the game, the holder may be out)
@@ -686,7 +688,7 @@ def entrants(game, rules, access, changes=()):
                     if not names & alias and alias & live:
                         faults.append(("entrant-host", name, year, f"the host {h} is not an entrant"))
             if key == "wc_qual_uefa" and done and len(teams) >= MISSING_MIN and \
-                    first >= datetime.date(game.start, 7, 1).toordinal():
+                    first >= datetime.date(game.start, 7, 1).toordinal() and uefa_all(game, year):
                 missing = uefa_missing(game, access, changes, year, datetime.date.fromordinal(first).year,
                                        {game.club(t)[1] for t in teams})
                 if missing:
@@ -697,6 +699,17 @@ def entrants(game, rules, access, changes=()):
 
 
 MISSING_MIN = 30                              # the group stage of a European qualifying (a play-off edition is less)
+
+
+def uefa_all(game, year):
+    """1 when the season code puts every UEFA member in the European World Cup qualifying edition of this year: a
+    season game (not 2001 with changing rules off, season_intl_on), for the World Cups of 2006 to 2022
+    (season_wcq26.c europe_wide) and from 2026 with changing rules on or a start from 2025 (season_wcq26, Q232).
+    The 2002 campaign keeps the original's holder and cap."""
+    wc = year + (2 - year % 4) % 4
+    if game.start == 2001 and not game.changing:
+        return 0
+    return 2006 <= wc <= 2022 or (wc >= 2026 and (game.changing or game.start >= 2025))
 
 
 def uefa_missing(game, access, changes, year, first_year, entered):

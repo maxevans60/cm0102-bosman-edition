@@ -306,8 +306,15 @@ def uefa_missing_rule():
     access = history_check.Access({"world_cup": [(2006, 32, ["Borduria"]), (2026, 48, [])]})
     changes = [{"kind": "confed", "season": 2016, "nation": "Kosovo", "to": "UEFA"}]
     bad = []
+    for start, changing, year, want in ((2001, 0, 2005, 0), (2001, 1, 2001, 0), (2001, 1, 2005, 1),
+                                        (2013, 0, 2017, 1), (2013, 0, 2025, 0), (2013, 1, 2025, 1),
+                                        (2025, 0, 2029, 1)):
+        game.start, game.changing = start, changing
+        if history_check.uefa_all(game, year) != want:
+            bad.append(f"uefa_all of a {start} start (changing rules {changing}) in {year}: not {want}")
     for year, first, entered, want in ((2005, 2004, {"Aland", "Russia"}, []),          # Borduria hosts 2006
                                        (2005, 2004, {"Russia"}, ["Aland"]),
+                                       (2021, 2021, {"Aland", "Borduria", "Kosovo"}, ["Russia"]),  # in up to 2022
                                        (2025, 2025, {"Aland", "Borduria", "Kosovo"}, []),  # Russia out from 2026
                                        (2013, 2012, {"Aland", "Borduria", "Russia"}, []),  # Kosovo joins in 2016
                                        (2017, 2016, {"Aland", "Borduria", "Russia"}, ["Kosovo"])):
