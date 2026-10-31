@@ -290,12 +290,14 @@ Merge danger: one-way door if it changes the save format. Blast radius: every sa
 
 ### 19. Nation names, Kazakhstan and the Netherlands Antilles
 Blocked by: none
-Delivers: the national sides of a renamed nation take the nation's name, in a new game, at each season point and at the load of an older save. Kazakhstan moves from the AFC to UEFA from the 2002/03 season. The dead Netherlands Antilles plays no competition beside Curaçao (fault 51, already fixed on main). Faults 42, 43 and 51.
-Merge danger: two-way door. The load of a 0.6.1 save gives its old side names the nation's names, and that changes only names. Blast radius: the names that the fixtures, results and history screens show for six national sides, and the international competitions of 2001 and 2002 starts, where Kazakhstan now plays the UEFA qualifiers and no longer the AFC ones.
+Delivers: the national sides of a renamed nation take the nation's name, in a new game, at each season point and at the load of an older save. Kazakhstan moves from the AFC to UEFA from the 2002/03 season. The dead Netherlands Antilles plays no competition beside Curaçao (fault 51, already fixed on main). Every UEFA member plays the World Cup qualifying of 2006 to 2022, apart from the hosts (fault 57). Faults 42, 43, 51 and 57.
+Merge danger: two-way door. The load of a 0.6.1 save gives its old side names the nation's names, and that changes only names. Blast radius: the names that the fixtures, results and history screens show for six national sides, and the international competitions of 2001 and 2002 starts, where Kazakhstan now plays the UEFA qualifiers and no longer the AFC ones, and the European World Cup qualifying of 2006 to 2022, whose groups now hold 5 or 6 nations.
 - [x] The checker finds no side-name and no nation-confed fault in a 2001 start with changing rules on, played past the 2002 season point, and in a 2025 start on the December 2025 data.
 - [x] The checker finds no entrant-dead fault in the CONCACAF Nations League of a 2022 start played to November 2023. Fault 51 is not on main: only saves of builds before 29b9dc82 show it, so this slice changes no code for it.
 - [x] history_check_test.py: the UEFA moves of nations.tsv match the season code.
 - [x] Same-save set PASS.
+- [x] Fault 57: a 2001 game has 51 European nations in the 2006 qualifying, a 2013 start 52 in 2018 (all of its data less Russia, the host) and a 2017 start 55 in 2022. The checker finds no entrant-missing fault there. history_check_test.py tests the rule.
+- [ ] Fault 57: same-save set PASS against main 99bf45fb.
 
 ### 20. A youth pool for every nation
 Blocked by: none
