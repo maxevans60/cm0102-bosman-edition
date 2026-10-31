@@ -228,7 +228,7 @@ Merge danger: two-way door. Blast radius: these two competitions.
 Blocked by: 1, 2, 3
 Delivers: leagues, play-offs and Brazilian state leagues keep their last rules with no end year. Faults 8 and 9.
 Merge danger: two-way door. Blast radius: promotion and relegation in every league.
-- [ ] Tier A to 2100: league sizes, promotion and play-off places stay as in the last table row. Run as a date jump from 2098 to 2100 (slice 3 not on main yet): every division keeps the places and sizes of a 2027 start, except the Brazilian Série A and B, which drift inside the table too (fault 63, open).
+- [x] Tier A to 2100: league sizes, promotion and play-off places stay as in the last table row. Run as a date jump from 2098 to 2100 (slice 3 not on main then): every division keeps the places and sizes of 2027/28 in a 2025 start, Série A and B too after the fix of open item 63.
 - [x] Unit tests to 2301: no lookback limit ends a rule.
 
 ### 11. Original faults: national managers, money, manager age

@@ -188,7 +188,9 @@ int season_playoffs_shape(const char *file, int season, int *direct)
     const SeasonRule *r = row_of_season(file, season);
     const SeasonLeagueRule *e = r ? league_rule(file, r->season) : NULL;
     if (!e || e->po_up != PLAYOFF_CLUBS || r->up < 0) return 0;
-    /* Two ties whose winners both go up (Série B from 2025) are not one play-off for one place. */
+    /* Two ties whose winners both go up (Série B from 2025) are not one play-off for one place. The test is wider than
+     * season_playoffs_winners_up ("the two winners go up"): the rows of Belgium and Portugal 2008/09 say "two
+     * winners" too, and are no play-off of this kind either. */
     if (r->playoffs_text && strstr(r->playoffs_text, "two winners")) return 0;
     int d;
     if (e->po_up_first == r->up && r->up >= 1) d = r->up - 1;
