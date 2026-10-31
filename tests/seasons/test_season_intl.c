@@ -240,6 +240,8 @@ int main(void)
     CHECK(season_intl_gold_busy(2017, doy_of(2017, 7, 5)), "2001 on: two days before the Gold Cup");
     CHECK(!season_intl_gold_busy(2017, doy_of(2017, 7, 4)), "2001 on: three days before");
     CHECK(!season_intl_gold_busy(2016, doy_of(2016, 7, 10)), "2001 on: no Gold Cup in 2016");
+    CHECK(season_intl_gold_busy(2017, doy_of(2017, 8, 6)), "2001 on: the last day of the 2017 span (7 July + 30)");
+    CHECK(!season_intl_gold_busy(2017, doy_of(2017, 8, 7)), "2001 on: the day after the span");
     CHECK(season_intl_gold_busy(2019, doy_of(2019, 7, 10)), "2001 on: Gold Cup 2019 of 16 from 15 June");
     CHECK(season_intl_gold_busy(2029, doy_of(2029, 6, 25)), "2001 on: after the table, every two years on 2027's days");
     CHECK(!season_intl_gold_busy(2030, doy_of(2030, 6, 25)), "2001 on: none in 2030");
