@@ -296,3 +296,14 @@ Merge danger: two-way door. The load of a 0.6.1 save gives its old side names th
 - [x] The checker finds no entrant-dead fault in the CONCACAF Nations League of a 2022 start played to November 2023. Fault 51 is not on main: only saves of builds before 29b9dc82 show it, so this slice changes no code for it.
 - [x] history_check_test.py: the UEFA moves of nations.tsv match the season code.
 - [x] Same-save set PASS.
+
+### 20. A youth pool for every nation
+Blocked by: none
+Delivers: every nation with 23 players or more keeps players under 21 and under 23 (Q35). Open item 52.
+- The cause, read in code: a new player (regenerate_as_youth_player 0x7abac0) takes the nation of a retired player. Some nations are not loaded and had 349 players or fewer at the start (+0x88, counted once by 0x524d70). Their new players are 23 to 27 in most cases (0x7abe87..0x7abeee). Their young players grow up and none follow.
+- The fix, in every game: a short nation gets the young ages of the original. Short means fewer than 1 in 20 players under 21, or fewer than 1 in 10 under 23. A nation that will have none under 21 or none under 23 within a year gets the next new player of a nation that is not short.
+Merge danger: two-way door. The base game changes from the first new player of a nation that is short or runs out. In an England-only 2001 game (start.sav) that is 24 March 2002, a new player for Croatia. In the 2025 start of the gate runs it is the first new player after the July 2027 save. No nation is short or runs out at the start of a 2001 game, so the same-save set must PASS. Blast radius: the age and nation of new players.
+- [x] Unit test: the rule cases, and a 300-year model where no nation runs out.
+- [x] The 2041 forum save played one year: main has 27 no-youth faults, the fix none.
+- [x] An England-only 2001 game to July 2009: main has 15 no-youth faults, the fix none. A 2025 start from July 2027 to May 2028: main has 21, the fix none.
+- [x] Same-save set PASS against main.
