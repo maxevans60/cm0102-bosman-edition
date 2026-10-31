@@ -291,4 +291,4 @@ Merge danger: two-way door. The load of a 0.6.1 save gives its old side names th
 - [x] The checker finds no side-name and no nation-confed fault in a 2001 start with changing rules on, played past the 2002 season point, and in a 2025 start on the December 2025 data.
 - [x] The checker finds no entrant-dead fault in the CONCACAF Nations League of a 2022 start played to November 2023. Fault 51 is not on main: only saves of builds before 29b9dc82 show it, so this slice changes no code for it.
 - [x] history_check_test.py: the UEFA moves of nations.tsv match the season code.
-- [ ] Same-save set PASS.
+- [x] Same-save set PASS.
