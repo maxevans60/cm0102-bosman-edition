@@ -38,6 +38,13 @@ The checks (each run):
             2020-21 draw and its first matchdays) and saves. The log must name the repair at load, and the
             history checker must find the fault in the 0.6.1 save and none in the new save. The save:
             RECOMP_NL_REPAIR_SAVE, else test-fixtures/nl-asia-record-0.6.1.sav; with neither the run fails.
+    late    open item 61: a date jump (RECOMP_DATE_JUMP=1) to 2098 with the December 2025 data, changing rules
+            on, saved after 400 days (August 2099). The table ends with the 2026-27 editions, so the game takes
+            its last editions again (decision A): both Nations Leagues are made, the UEFA one plays its finals in
+            June 2099 and the history checker finds the 2099 rows of both and no record fault.
+    late-off  the same with changing rules off (Q232: the start season's rules, the last row after the table).
+    late-2027 an odd start: 2027 (no date jump), changing rules on, saved after 760 days (August 2029): the first
+            edition is the 2028 one, made in 2027, and the 2029 rows of both follow.
 The history checker (tests/seasons/future/history_check.py) also reads the save of the first game of run "save":
 no comp-continent, comp-name, confederation or entrant-confed fault may name the UEFA Nations League or the
 "Asian Cup Quals" (open items 4 and 21).
@@ -76,7 +83,12 @@ RUNS = {
     "save": (2018, "October 2018", "on", 2019, "2018-19", ["2018-19", "2020-21"]),
     "2010": (2010, "September 2010", "on", 2010, None, []),
     "repair": (2018, "October 2018", "on", 2020, None, []),
+    "late": (2098, "December 2025", "on", 2099, None, []),
+    "late-off": (2098, "December 2025", "off", 2099, None, []),
+    "late-2027": (2027, "December 2025", "on", 2029, None, []),
 }
+# The late runs: game days to the save, and the year of the history rows that must follow.
+LATE = {"late": (400, 2099), "late-off": (400, 2099), "late-2027": (760, 2029)}
 REPAIR_SAVE = os.environ.get("RECOMP_NL_REPAIR_SAVE") or "/Users/max/Projects/cm0102/test-fixtures/nl-asia-record-0.6.1.sav"
 REPAIR_DAYS = 400
 CHECKER = os.path.join(HERE, "future", "history_check.py")
@@ -369,11 +381,48 @@ def repair_run(program, game, keep, reuse):
     return fails
 
 
+def late_run(program, game, name, keep, reuse):
+    """Runs "late" and "late-off" (see the top): a game that starts after the table has both Nations Leagues."""
+    start, database, rules, last, _, _ = RUNS[name]
+    days, row_year = LATE[name]
+    work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-season-nl-{name}-")
+    save = os.path.join(work, "user", smoke_run.SAVE_NAME)
+    if not reuse:
+        if os.path.isdir(work):                          # rrc.run makes the folders of a new game
+            shutil.rmtree(work)
+        code, _ = rrc.run(program, game, last, start, database_folder(database), ["England"], [], work, 7200,
+                          {"changing_rules": rules},
+                          dict(BASE_ENV, RECOMP_DATE_JUMP="1", RECOMP_SAVE_AFTER_DAYS=str(days)))
+        if code != 0:
+            return [f"{name}: the run ended with code {code} ({work})"]
+    log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read().split("\n")
+    fails = [f"{name}: {x.strip()}" for x in log if "recomp: message box from" in x]
+    for d in ("new_uefa_nations_league", "new_concacaf_nations_league"):
+        if not any(f"new competition {d} made for" in x for x in log):
+            fails.append(f"{name}: no object {d}")
+    finals = [m.group(2) for m in map(FINALS.search, log) if m and not m.group(1).startswith("CONCACAF")]
+    if not any(len([t for t in f.split(";") if t.strip()]) == 4 for f in finals):
+        fails.append(f"{name}: no UEFA finals of four nations")
+    if not os.path.exists(save):
+        return fails + [f"{name}: the game did not save ({work})"]
+    found = record_faults(save, work, name)
+    if found is None:
+        return fails + [f"{name}: the history checker did not read the save ({work}/check)"]
+    fails += [f"{name}: the history checker: {x}" for x in found]
+    rows = open(os.path.join(work, "check", name + ".history.tsv"), encoding="latin-1").read().split("\n")
+    for comp in ("UEFA Nations League", "CONCACAF Nations League"):
+        if not any(f"\t{comp}\t{row_year}\t" in x for x in rows):
+            fails.append(f"{name}: no {comp} history row of {row_year} ({work}/check)")
+    return fails
+
+
 def one(program, game, name, keep, reuse):
     if name == "save":
         return save_run(program, game, keep, reuse)
     if name == "repair":
         return repair_run(program, game, keep, reuse)
+    if name.startswith("late"):
+        return late_run(program, game, name, keep, reuse)
     start, database, rules, last, _, _ = RUNS[name]
     work = os.path.join(keep, name) if keep else tempfile.mkdtemp(prefix=f"cm0102-season-nl-{name}-")
     if not reuse:
