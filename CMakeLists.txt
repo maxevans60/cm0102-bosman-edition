@@ -137,7 +137,7 @@ if(NOT WIN32)
     # the editions and the rules of the code sites.
     add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
     add_executable(season_intl_test tests/seasons/test_season_intl.c src/recomp_rt/win/season_intl_rules.c
-        src/recomp_rt/win/season_intl_table.c)
+        src/recomp_rt/win/season_intl_table.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_intl_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_intl COMMAND season_intl_test)
     # Nations Leagues (0.6.0 slice 28): the C table of the editions and leagues matches the tables, and the

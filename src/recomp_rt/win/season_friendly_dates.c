@@ -49,6 +49,7 @@
 #include "season_uefa_days.h"
 #include "season_names.h"
 #include "season_intl.h"
+#include "season_nl.h"                 /* season_gold_cup_busy */
 #include "season_change.h"
 
 #include <stdio.h>
@@ -287,7 +288,8 @@ static int finals_busy(uint32_t a, uint32_t b, int y, int doy)
         if (!readable(cont)) continue;
         for (int c = 0; c < SEASON_CONFS; c++)
             if (rd32(g_mem, cont) == rd32(g_mem, KEY_CONTINENTS + 4u * (uint32_t)c) &&
-                season_intl_finals_busy(c, y, doy))
+                (season_intl_finals_busy(c, y, doy) ||
+                 (c == SEASON_CONF_NORTH_AMERICA && season_gold_cup_busy(y, doy))))   /* open item 55 */
                 return 1;
     }
     return 0;
@@ -309,6 +311,17 @@ static int fifa_target_by(uint32_t home, uint32_t away, int y, int d, int ey, in
             if (ey && (y > ey || (y == ey && c > ed)) && c > d) continue;      /* past its stage's last day */
             for (int k = 0; k < n; k++) ok |= doys[k] == c;
             if (!ok || finals_busy(home, away, y, c) || side_busy(home, away, y, c)) continue;
+            return rt_unwinding ? -1 : c;
+        }
+    /* Open item 55: no free FIFA day, and its own day lies in a final's days. It then takes the nearest free day
+     * that is not a FIFA day, with the same bounds, rather than meet the final. */
+    if (rt_unwinding || !finals_busy(home, away, y, d)) return -1;
+    for (int dist = 1; dist <= SNAP_DAYS && !rt_unwinding; dist++)
+        for (int sign = -1; sign <= 1; sign += 2) {
+            int c = d + sign * dist;
+            if (c < 0 || c >= days_in(y) || (y == today_year && c < today + 2) || y < today_year) continue;
+            if (ey && (y > ey || (y == ey && c > ed)) && c > d) continue;
+            if (finals_busy(home, away, y, c) || side_busy(home, away, y, c)) continue;
             return rt_unwinding ? -1 : c;
         }
     return -1;
@@ -401,9 +414,12 @@ static void stay_info(uint32_t rec, uint32_t home, uint32_t away, int d, int y, 
 static void log_move(uint32_t rec, uint32_t home, uint32_t away, int d, int c, int y, const char *how)
 {
     if (!getenv("RECOMP_SCREEN_LOG")) return;
+    int doys[FIFA_DOYS_MAX], n = c >= 0 ? fifa_doys(y, doys, FIFA_DOYS_MAX) : 0, fifa = 0;
+    for (int k = 0; k < n; k++) fifa |= doys[k] == c;
     if (c >= 0)
-        fprintf(stderr, "recomp: intl dates: %.40s %.30s v %.30s moves from day %d to the FIFA day %d of %d%s\n",
-                win_str(rec + 4), win_str(home + 4), win_str(away + 4), d, c, y, how);
+        fprintf(stderr, "recomp: intl dates: %.40s %.30s v %.30s moves from day %d to the %s %d of %d%s\n",
+                win_str(rec + 4), win_str(home + 4), win_str(away + 4), d, fifa ? "FIFA day" : "free day (no free "
+                "FIFA day, its day lies in a final's days)", c, y, how);
     else
         stay_info(rec, home, away, d, y, how);
 }
