@@ -78,7 +78,7 @@ After-table rules:
 Saves:
 - A save from 0.6.0 or 0.6.1 with a competition waiting for the idle year moves it to its next edition after the save's date, at load (Q8).
 - Saves, season parts and news parts accept years up to at least 2300 and news in more than 200 seasons.
-- Caps go in a wider field, kept in the season part of the save. The original byte stays as the low part for older readers (Q25).
+- Caps go in a wider field, kept in the season part of the save. The original byte stops at 255 (Q25).
 - The save keeps each type of data in one part, merged across seasons, so the part count stops growing. Older saves still load (Q26).
 
 Original game faults, fixed in every game, base game included (Q23, Q24, Q27):
@@ -244,8 +244,8 @@ Merge danger: two-way door. The base game changes at the first month change in p
 Blocked by: 1
 Delivers: caps count above 255. Fault 30.
 Merge danger: one-way door, because the save holds a new field. Blast radius: caps and first-cap history rows.
-- [ ] A player edited to 255 caps gets 256 at the next cap, and no second "first cap" row.
-- [ ] A 0.6.1 save loads with the right caps.
+- [x] A player edited to 255 caps gets 256 at the next cap, and no second "first cap" row.
+- [x] A 0.6.1 save loads with the right caps.
 
 ### 13. Save parts merged across seasons
 Blocked by: 12

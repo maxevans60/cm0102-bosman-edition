@@ -250,7 +250,8 @@ if(NOT WIN32)
     set_tests_properties(season_subs PROPERTIES FIXTURES_REQUIRED rules_table)
     # The whole season part of a save (0.6.1 items 4 and 10): its write keeps inside its size.
     add_executable(season_part_test tests/seasons/test_season_part.c
-        src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_years.c)
+        src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_years.c
+        src/recomp_rt/win/caps_wide.c)
     target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_part COMMAND season_part_test)
     # The key competition check of a load (0.6.1 item 10): the names of the player's cm0102.exe and its Data.

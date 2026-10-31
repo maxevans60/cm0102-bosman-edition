@@ -331,6 +331,12 @@ uint32_t rt_ruling_body_held(uint32_t body, uint32_t staff);
 /* The loan's ban hold and restore (win/season_new_cups.c, tools/recomp/discipline_ban.py at 0x55647d, 0x55671e): 1
  * when a domestic body of one nation applies at a club of the other through the All-Ireland cup. */
 uint32_t rt_ban_nation_applies(uint32_t club, uint32_t body);
+/* International caps above 255 (0.6.2 slice 12, win/caps_wide_game.c, tools/recomp/caps_wide.py): the caps byte
+ * after one more cap at 0x76b8ce (it stops at 255), and the full caps of a staff record for the screens, the sorts
+ * and the most caps record. */
+uint32_t rt_caps_add(uint32_t staff, uint32_t byte);
+uint32_t rt_caps_full(uint32_t staff);
+uint32_t rt_caps_word(uint32_t staff);       /* the same, at most 32767: the most caps record word */
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);

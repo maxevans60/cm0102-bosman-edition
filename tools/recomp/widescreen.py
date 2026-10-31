@@ -201,3 +201,9 @@ from original_faults import INSNS as ORIGINAL_FAULT_INSNS  # noqa: E402
 
 assert not set(ORIGINAL_FAULT_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(ORIGINAL_FAULT_INSNS)
+
+# International caps above 255 (0.6.2 slice 12) in the same way.
+from caps_wide import INSNS as CAPS_INSNS  # noqa: E402
+
+assert not set(CAPS_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(CAPS_INSNS)
