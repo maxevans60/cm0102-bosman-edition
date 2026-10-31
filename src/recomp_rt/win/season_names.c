@@ -172,9 +172,15 @@ int season_names_init(const char *game_dir)
 static const NameRow *row_of(const char *comp_file, int season, int n)
 {
     const NameRow *exact = NULL, *last = NULL;
-    /* After the last season of the table its names stay (the after-table rule): a new game after 2027/28 (a date
-     * jump) took the database's 2001 names, such as "English Premier Division" for the Premier League. */
-    if (season > last_season) season = last_season;
+    /* After the last season of the table each file keeps the names of its last season with a name (the after-table
+     * rule; Argentina's last names are of 2025/26). A new game after 2027/28 (a date jump) took the database's 2001
+     * names, such as "English Premier Division" for the Premier League. Up to the last season nothing changes. */
+    if (season > last_season) {
+        int named = 0;
+        for (int i = 0; i < nrows; i++)
+            if (rows[i].season > named && !strcmp(rows[i].file, comp_file)) named = rows[i].season;
+        season = named;
+    }
     for (int i = 0; i < nrows; i++) {
         const NameRow *r = &rows[i];
         if (r->season != season || strcmp(r->file, comp_file)) continue;

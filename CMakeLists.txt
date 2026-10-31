@@ -195,6 +195,11 @@ if(NOT WIN32)
     add_test(NAME season_names_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_names.py" --check)
     # 0.6.1 item 2: the abbreviation column of the names table (Select Team shows it).
     add_test(NAME season_names_abbr COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/names_abbr_check.py")
+    # 0.6.2 open item 71: after the table each file keeps the names of its last season with a name, to 2301.
+    add_executable(season_names_test tests/seasons/test_season_names.c src/recomp_rt/win/season_names.c
+        src/recomp_rt/host/posix.c)
+    target_include_directories(season_names_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_names COMMAND season_names_test "${CMAKE_BINARY_DIR}/seasons/names.tsv" "${CMAKE_BINARY_DIR}/seasons")
     # Future testing step 2: the history checker finds each planted fault of a small fixture save that it writes.
     add_test(NAME season_future_history_check COMMAND python3 -I
         "${CMAKE_SOURCE_DIR}/tests/seasons/future/history_check_test.py")
