@@ -38,6 +38,7 @@ typedef struct {
 static char *text;
 static NameRow *rows;
 static int nrows;
+static int last_season;            /* the latest season of a row (0 with no table) */
 
 static int fail(const char *path, int line, const char *why)
 {
@@ -47,6 +48,7 @@ static int fail(const char *path, int line, const char *why)
     text = NULL;
     rows = NULL;
     nrows = 0;
+    last_season = 0;
     return 0;
 }
 
@@ -92,6 +94,7 @@ int season_names_load(const char *path)
     text = NULL;
     rows = NULL;
     nrows = 0;
+    last_season = 0;
     FILE *f = host_fopen(path, "rb");
     if (!f) return 0;
     fseek(f, 0, SEEK_END);
@@ -137,6 +140,8 @@ int season_names_load(const char *path)
         nrows++;
     }
     if (nrows != want) return fail(path, lineno, "fewer rows than line 1 says");
+    for (int i = 0; i < nrows; i++)
+        if (rows[i].season > last_season) last_season = rows[i].season;
     return nrows;
 }
 
@@ -167,6 +172,9 @@ int season_names_init(const char *game_dir)
 static const NameRow *row_of(const char *comp_file, int season, int n)
 {
     const NameRow *exact = NULL, *last = NULL;
+    /* After the last season of the table its names stay (the after-table rule): a new game after 2027/28 (a date
+     * jump) took the database's 2001 names, such as "English Premier Division" for the Premier League. */
+    if (season > last_season) season = last_season;
     for (int i = 0; i < nrows; i++) {
         const NameRow *r = &rows[i];
         if (r->season != season || strcmp(r->file, comp_file)) continue;
