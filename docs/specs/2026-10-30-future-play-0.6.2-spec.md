@@ -266,8 +266,8 @@ Merge danger: two-way door. Blast radius: every game, if a result changes.
 Blocked by: 1, 2, 3, 13
 Delivers: one script runs the whole run set in parallel within the game limit, keeps checkpoint saves, runs the checker on each save, applies the Tier B limits, and joins the release script.
 Merge danger: two-way door, tests only. Blast radius: release checks.
-- [ ] The script runs the run set and writes one pass or fail per game.
-- [ ] The release script stops on any checker fault.
+- [x] The script runs the run set and writes one pass or fail per game.
+- [x] The release script stops on any checker fault.
 
 ### 16. Full run set, every finding fixed, release 0.6.2
 Blocked by: all
