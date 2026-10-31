@@ -85,6 +85,7 @@ Original game faults, fixed in every game, base game included (Q23, Q24, Q27):
 - Every national team opens a vacancy when its manager retires.
 - The club info screen and the AI transfer budget use the full 64-bit balance.
 - The human manager's age comes from the birth date.
+- History rows of editions after the start date are cleared, so each edition has one row; the game's own row replaces the data row of the same edition (Q48, 30 October 2026). A new base game then differs from the original in its history rows and in the first-season holders that the game reads from them (the 2001 Charity Shield: Manchester United, not Arsenal, against Liverpool).
 
 The same game (Q152): every game code change keeps the same saves in the same-save set, unless the change acts only after a table end year, after 2099 or above £2.1 billion, which the set does not reach. The speed fixes give the same results as the code they replace (Q18).
 
