@@ -89,6 +89,8 @@ Original game faults, fixed in every game, base game included (Q23, Q24, Q27):
 - The top wage fix acts from a balance of about £1.65 billion, where the original's 32-bit sum already wraps (Q44).
 - The human manager's age stops at 127, the largest age the game's byte holds, in place of the age from the birth date (Q45).
 - Every money text that can pass £2,147,483,647 is traced and shows the full amount, news items included (Q46).
+- History rows of editions after the start date are cleared, so each edition has one row; the game's own row replaces the data row of the same edition (Q48, 30 October 2026). A new base game then differs from the original in its history rows and in the first-season holders that the game reads from them (the 2001 Charity Shield: Manchester United, not Arsenal, against Liverpool).
+- The same-save set under Q48 (slice 7, 31 October 2026): a loaded 2001 save differs only in nation_comp_history.dat and index.dat, the 3.9.68 row Copa América 2001 Colombia / Mexico, which goes when the game writes its own 2001 final (29 July). The new game differs in its history rows and all that follows the changed holders. The run rules-on differs from normal through one row only (a bisect of the 128 rows of 2002): the Asian Cup Winners' Cup 2002 Al Hilal. Without it the newest holder is Al Shabab (2001), and with changing rules on the season code makes the Asian Super Cup edition (season_kind_club_world.c), whose Cup Winners' Cup entrant is that holder. Accepted by the lead for Max (31 October 2026).
 
 The same game (Q152): every game code change keeps the same saves in the same-save set, unless the change acts only after a table end year, after 2099 or above £2.1 billion, which the set does not reach. The speed fixes give the same results as the code they replace (Q18).
 
@@ -202,7 +204,7 @@ Blocked by: 2
 Delivers: one row per year at the start, and history years in their right places for every database. Faults 3 (duplicates), 17 and 20.
 Merge danger: two-way door. Blast radius: the history screens of every start.
 - [ ] The checker finds no year held twice in the starts of the run set.
-- [ ] The 2023 and 2010 starts show the World Cup in its real years.
+- [x] The 2023 and 2010 starts show the World Cup in its real years.
 
 ### 8. The Nations League and the Asian Cup qualifiers
 Blocked by: 2, 3
