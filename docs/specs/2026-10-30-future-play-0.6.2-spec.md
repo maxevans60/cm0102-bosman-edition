@@ -198,7 +198,7 @@ Blocked by: 2
 Delivers: one row per year at the start, and history years in their right places for every database. Faults 3 (duplicates), 17 and 20.
 Merge danger: two-way door. Blast radius: the history screens of every start.
 - [ ] The checker finds no year held twice in the starts of the run set.
-- [ ] The 2023 and 2010 starts show the World Cup in its real years.
+- [x] The 2023 and 2010 starts show the World Cup in its real years.
 
 ### 8. The Nations League and the Asian Cup qualifiers
 Blocked by: 2, 3
