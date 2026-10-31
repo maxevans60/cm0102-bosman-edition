@@ -297,7 +297,7 @@ Merge danger: two-way door. The load of a 0.6.1 save gives its old side names th
 - [x] history_check_test.py: the UEFA moves of nations.tsv match the season code.
 - [x] Same-save set PASS.
 - [x] Fault 57: a 2001 game has 51 European nations in the 2006 qualifying, a 2013 start 52 in 2018 (all of its data less Russia, the host) and a 2017 start 55 in 2022. The checker finds no entrant-missing fault there. history_check_test.py tests the rule.
-- [ ] Fault 57: same-save set PASS against main 99bf45fb.
+- [x] Fault 57: same-save set against main 99bf45fb: start, prematch, new game, yeovil and match equal main (ref-build). Yeovil fails only original-faults-keep, as main does (open item 72).
 
 ### 20. A youth pool for every nation
 Blocked by: none
