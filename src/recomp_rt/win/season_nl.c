@@ -360,7 +360,7 @@ static const SeasonNlEdition *edition(NlConf *c, int year)
 
 /* The first edition of a new game for season s: the table's first edition from s on, else (open item 61: a start
  * after the table, for example a date jump to 2098) the first edition of `edition` whose league phase starts in
- * season s or later. Up to 0.6.2 such a game had no Nations League: season_nl_first gives NULL after the table. */
+ * season s or later. Up to 0.6.1 such a game had no Nations League: season_nl_first gives NULL after the table. */
 static const SeasonNlEdition *first_edition(NlConf *c, int s)
 {
     const SeasonNlEdition *e = season_nl_first(c->confed, s);
@@ -1097,8 +1097,10 @@ static void nl_record_to_europe(const SeasonCompDef *d, uint32_t rec, int loadin
 static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
 {
     NlConf *c = conf_of_def(d);
-    const SeasonNlEdition *e = loading || !c ? NULL : first_edition(c, year);
-    if (!c || (!loading && !e)) return 0;
+    const SeasonNlEdition *first = loading || !c ? NULL : first_edition(c, year);
+    if (!c || (!loading && !first)) return 0;
+    SeasonNlEdition copy = first ? *first : (SeasonNlEdition){0};
+    const SeasonNlEdition *e = first ? &copy : NULL;    /* first can be c->repeat, which edition() writes again */
     uint32_t v = build_vtable(d);
     uint32_t na[1] = {QUAL_SIZE};
     uint32_t obj = v ? call_cdecl(GAME_NEW, 1, na) : 0;
