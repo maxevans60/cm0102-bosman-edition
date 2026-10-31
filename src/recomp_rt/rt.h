@@ -409,6 +409,9 @@ uint32_t rt_oceania_step(uint32_t original);
 uint32_t rt_club_world_month(uint32_t original);
 uint32_t rt_club_world_day(uint32_t original);
 uint32_t rt_club_world_waits(uint32_t obj);
+/* The top-up's reputation rule for an under-21 side (0.6.2 fault 65, win/season_national_fill.c, tools/recomp/seasons.py
+ * at 0x90dd67): 1 keeps its virtual players. 0 in the base game. */
+uint32_t rt_u21_keeps_virtual(uint32_t club);
 /* The CONCACAF Champions Cup's club count of the edition of `year` (slice 26c, win/season_club_cups.c): 8 in the
  * base game and with no row. */
 uint32_t rt_concacaf_clubs(uint32_t year, uint32_t original);
