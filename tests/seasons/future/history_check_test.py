@@ -293,6 +293,30 @@ def uefa_moves_match():
     return []
 
 
+def uefa_missing_rule():
+    """entrant-missing (open item 57): the European host of the World Cup, Russia from the 2026 cycle and a nation
+    that joins UEFA after the edition's first year are no fault; a member that does not enter is."""
+    import types
+    sys.path.insert(0, HERE)
+    import history_check
+    game = types.SimpleNamespace(
+        nations={0: ("Aland", "UEFA"), 1: ("Borduria", "UEFA"), 2: ("Russia", "UEFA"), 3: ("Kosovo", "UEFA"),
+                 4: ("Carpania", "AFC"), 5: ("Dead Land", "")},
+        side_names=[("Aland", 0), ("Borduria", 1), ("Russia", 2), ("Kosovo", 3), ("Carpania", 4), ("Dead Land", 5)])
+    access = history_check.Access({"world_cup": [(2006, 32, ["Borduria"]), (2026, 48, [])]})
+    changes = [{"kind": "confed", "season": 2016, "nation": "Kosovo", "to": "UEFA"}]
+    bad = []
+    for year, first, entered, want in ((2005, 2004, {"Aland", "Russia"}, []),          # Borduria hosts 2006
+                                       (2005, 2004, {"Russia"}, ["Aland"]),
+                                       (2025, 2025, {"Aland", "Borduria", "Kosovo"}, []),  # Russia out from 2026
+                                       (2013, 2012, {"Aland", "Borduria", "Russia"}, []),  # Kosovo joins in 2016
+                                       (2017, 2016, {"Aland", "Borduria", "Russia"}, ["Kosovo"])):
+        got = history_check.uefa_missing(game, access, changes, year, first, entered)
+        if got != want:
+            bad.append(f"entrant-missing of {year}: {got}, not {want}")
+    return bad
+
+
 def main():
     work = tempfile.mkdtemp(prefix="history-check-")
     members, want = records()
@@ -433,6 +457,7 @@ def main():
     # nations.tsv holds the renames of the season code.
     bad += renames_match()
     bad += uefa_moves_match()
+    bad += uefa_missing_rule()
 
     for b in bad:
         print("FAIL  " + b)

@@ -76,6 +76,9 @@ save date (a confederation check for every edition):
                   season (the dead record beside the live one,
                   or a record the rename missed); a nation with no continent in the data (Bonaire, Guadeloupe)
                   is no fault
+    entrant-missing a live UEFA nation with a national side is not an entrant of a European World Cup qualifying
+                  edition of at least 30 teams that began in the game: every member enters, less the European
+                  hosts of its World Cup, less Russia from 2026 and less a nation that joins UEFA later (open item 57)
     entrant-holder the title holder is not an entrant (access.tsv "holder": the Champions League from 2006, the
                   Libertadores), when the edition before is at most one cycle and one year before; not for an
                   edition of the start year or before (it began before the game, the holder may be out)
@@ -682,7 +685,37 @@ def entrants(game, rules, access, changes=()):
                     alias = set(h.split("/"))
                     if not names & alias and alias & live:
                         faults.append(("entrant-host", name, year, f"the host {h} is not an entrant"))
+            if key == "wc_qual_uefa" and done and len(teams) >= MISSING_MIN and \
+                    first >= datetime.date(game.start, 7, 1).toordinal():
+                missing = uefa_missing(game, access, changes, year, datetime.date.fromordinal(first).year,
+                                       {game.club(t)[1] for t in teams})
+                if missing:
+                    faults.append(("entrant-missing", name, year, f"{len(missing)} live UEFA nations do not play: "
+                                                                  f"{', '.join(missing[:6])}"
+                                                                  f"{' ...' if len(missing) > 6 else ''}"))
     return listing, faults
+
+
+MISSING_MIN = 30                              # the group stage of a European qualifying (a play-off edition is less)
+
+
+def uefa_missing(game, access, changes, year, first_year, entered):
+    """The live UEFA nations with a national side that are not entrants of a European World Cup qualifying edition
+    (open item 57 of 0.6.2): every UEFA member enters, less the European hosts of its World Cup (the first World
+    Cup year from the edition's year), less Russia from the 2026 cycle (Q29) and less a nation that joins UEFA
+    after the edition's first year (nations.tsv: Kosovo from 2016)."""
+    wc = year + (2 - year % 4) % 4
+    hosts = {x for h in access.rule("world_cup", wc)[1] for x in h.split("/")}
+    later = {c["nation"] for c in changes if c["kind"] == "confed" and c["to"] == "UEFA" and c["season"] > first_year}
+    sides = {nid for _, nid in game.side_names}
+    out = []
+    for nid, (nation, conf) in sorted(game.nations.items()):
+        if conf != "UEFA" or nid not in sides or nation in entered or nation in hosts or nation in later:
+            continue
+        if nation == "Russia" and wc >= 2026:
+            continue
+        out.append(nation)
+    return sorted(out)
 
 
 # ---- World health (Tier B) ----
