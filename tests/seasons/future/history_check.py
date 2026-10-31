@@ -31,7 +31,8 @@ pattern is absent; then the check reads nothing.
 
 Checks (one row of <label>.faults.tsv each, check names in the first column):
     duplicate     a competition holds the same label year twice (three times for a split season: two rows a year in
-                  most of the 10 years before the start, the Argentine and Mexican first divisions)
+                  most of the 10 years before the start, or an Argentine or Mexican competition with two rows in any
+                  year before it: the game plays two titles a year there)
     no-host       a row with no host in a competition whose rows have hosts (more than half of its rows)
     confederation a winner or runner-up from another confederation, in a row from the start year on. The
                   confederation is the rules file's, else the competition's continent, else the continent of
@@ -346,7 +347,9 @@ def check(game, rules=None, changes=()):
         # season (Apertura and Clausura) holds two rows a year
         per_year = collections.Counter(years)
         before = [per_year[y] for y in range(start - 10, start) if per_year[y]]
-        most = 2 if before and sum(1 for k in before if k == 2) * 2 > len(before) else 1
+        split_nation = game.nations.get(comp["nation"], ("", ""))[0] in ("Argentina", "Mexico")
+        most = 2 if before and (sum(1 for k in before if k == 2) * 2 > len(before) or
+                                (split_nation and any(per_year[y] == 2 for y in per_year if y < start))) else 1
         for y, n in sorted(per_year.items()):
             if n > most and y >= start - 1:
                 pairs = "; ".join(f"{r[4][0]} / {r[5][0]}" for r in rs if r[3] == y)
