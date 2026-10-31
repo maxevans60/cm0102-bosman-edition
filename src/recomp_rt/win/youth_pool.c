@@ -41,8 +41,8 @@
  * A game changes from the first new player of a nation that is short or runs out. At the start of a 2001 game no
  * nation is either. The start, prematch and all-leagues fixtures have no nation of 23 players or more that is
  * short or has none under 20 or none under 22. The lowest shares are 6 % under 21 and 13 % under 23. In an
- * England-only 2001 game seven nations are short by July 2004. A 2025 start has nations that are short or run out
- * in its first two years (Angola and Algeria short, Belarus out of players under 20, July 2027).
+ * England-only 2001 game (start.sav) the first change is on 24 March 2002, a new player for Croatia. A 2025 start
+ * has nations that are short or run out at once (the gate save of July 2027: Algeria and Guinea-Bissau).
  *
  * The counts come from one pass over the staff table at the first new player of each call of 0x7a65d0. Then each
  * new player changes the counts of his slot. A queued slot keeps its old player data until the new player takes
