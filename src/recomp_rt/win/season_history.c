@@ -359,6 +359,19 @@ void season_history_fill(const char *name, int N)
 
 /* --- Rows after the start (0.6.2 slice 7, open items 3 and 17; the head of season_history.h). --- */
 
+/* Test switch RECOMP_HISTORY_AFTER_START, read once: off (neither part), create (only the drop at the creation),
+ * write (only the work at 0x4afce0); unset: both. */
+static int after_start_part(char part)
+{
+    static int mode = -1;
+    if (mode < 0) {
+        const char *v = getenv("RECOMP_HISTORY_AFTER_START");
+        mode = !v || !*v ? 3 : !strcmp(v, "off") ? 0 : !strcmp(v, "create") ? 1 : !strcmp(v, "write") ? 2 : 3;
+        if (mode != 3) fprintf(stderr, "recomp: season history: rows after the start: %s only\n", v);
+    }
+    return part == 'c' ? (mode & 1) != 0 : (mode & 2) != 0;
+}
+
 int season_history_after_start_on(void)
 {
     if (!season_code_on()) return 0;
@@ -410,7 +423,7 @@ static int split_season(uint32_t hist, uint32_t count, uint32_t comp, int S)
 void season_history_drop_after_start(int S, int official)
 {
     n_after = 0;
-    if (!season_history_after_start_on()) return;
+    if (!season_history_after_start_on() || !after_start_part('c')) return;
     uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
     if (!hist) return;
     uint32_t *drop = malloc((count + 1) * sizeof *drop), n = 0;
@@ -463,7 +476,7 @@ RT_WRAP(004afce0, comp_util_add_history_record)
     uint32_t comp = obj ? rd32(g_mem, obj + 4) : 0;
     int year = (int)rd16(g_mem, GAME_YEAR), S = season_start_year(), n = 0;
     uint32_t today = (uint32_t)year * 400u + (uint32_t)(int16_t)rd16(g_mem, GAME_DAY);
-    int on = comp && hist && season_history_after_start_on();
+    int on = comp && hist && season_history_after_start_on() && after_start_part('w');
     if (on && year <= S + 1) {
         int same = 0;
         for (uint32_t i = 0; year == S && i < count; i++) {
