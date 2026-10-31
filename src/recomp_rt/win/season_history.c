@@ -434,7 +434,11 @@ void o_004afce0(void);
  * the game year), and in the calendar year of the start the row of this label, unless the data holds two or more
  * rows of it (the Argentine and Mexican first divisions keep the two halves of a season under one label, and in
  * the Update Team databases those halves ended before the start: Autumn 2013 holds the Inicial 2012 and the Final
- * 2013 under 2013). */
+ * 2013 under 2013).
+ * A second edition in one calendar year (a final that moves across the new year: the Emperor's Cup on 1 January
+ * 2005 and on 31 December 2005, the Turkish Super Cup from August to January) takes the next free label, so each
+ * edition keeps a row of its own; not for a split season (two rows a year). The label goes in through the game
+ * year [0xae2c92], which is set back right after the call. */
 RT_WRAP(004afce0, comp_util_add_history_record)
 {
     uint32_t obj = rt_arg(0), hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
@@ -459,8 +463,24 @@ RT_WRAP(004afce0, comp_util_add_history_record)
             fprintf(stderr, "recomp: season history: %d data rows of label %d or later cleared before the game's "
                             "row\n", n, year);
     }
-    Own o = {comp, (uint32_t)year, {rt_arg(1), rt_arg(2), rt_arg(3), rt_arg(4)}};
+    int label = year;
+    if (comp && hist && season_history_after_start_on() && rows_of_label(hist, count, comp, year - 1) < 2) {
+        while (label < year + 8 && rows_of_label(hist, count, comp, label) == 1) {
+            int game_row = label >= S + 2;          /* the data holds no row after the start (see above) */
+            for (uint32_t i = 0; !game_row && i < count; i++) {
+                uint32_t r = hist + i * HISTORY_SIZE;
+                game_row = rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == label && is_own(r);
+            }
+            if (!game_row) break;
+            label++;
+        }
+        if (label != year && getenv("RECOMP_HISTORY_LOG"))
+            fprintf(stderr, "recomp: season history: a second edition in %d gets the label %d\n", year, label);
+    }
+    Own o = {comp, (uint32_t)label, {rt_arg(1), rt_arg(2), rt_arg(3), rt_arg(4)}};
+    if (label != year) wr16(g_mem, GAME_YEAR, (uint32_t)label);
     o_004afce0();
+    if (label != year) wr16(g_mem, GAME_YEAR, (uint32_t)year);
     if (rt_unwinding || !comp) return;
     if (own_n == own_cap) {
         size_t cap = own_cap ? own_cap * 2 : 64;
