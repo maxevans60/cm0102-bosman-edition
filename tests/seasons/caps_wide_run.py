@@ -29,7 +29,8 @@ edited player keeps the byte 255, and the season part of the end save is version
 each 256 or more. On the slice 12 build the first two checks fail.
 
 load: loads --save, a save made on holiday (tests/seasons/soak_run.py load_leg), plays --days game days and saves.
-The checks: no box and code 0; no player's caps byte falls, and a byte rises by at most one (a cap on those days);
+The checks: no box and code 0; no player's caps byte falls (a record that holds a new person, by its birth date, is
+left out), and a byte rises by at most one (a cap on those days);
 the caps above 255 of the input's season part (version 3) are all in the end save's part, none lower; no goals byte
 falls and no stored goals count (version 4) is lost. With a save of
 0.6.1 (no caps field) the end part must hold no caps unless a player passed 255 in those days. A build of 0.6.1
@@ -100,6 +101,14 @@ def caps_bytes(sav, at=CAPS):
     """{staff id: caps byte} (or goals byte, at=GOALS) of every staff record."""
     st = sav.read_member("staff.dat")
     return {struct.unpack_from("<i", st, r * STAFF_SIZE)[0]: st[r * STAFF_SIZE + at]
+            for r in range(len(st) // STAFF_SIZE)}
+
+
+def births(sav):
+    """{staff id: birth day and year (+0x10, +0x12)}: a record whose birth date changes holds a new person (a retired
+    person's record used again for a new player, whose caps and goals start at 0)."""
+    st = sav.read_member("staff.dat")
+    return {struct.unpack_from("<i", st, r * STAFF_SIZE)[0]: st[r * STAFF_SIZE + 0x10:r * STAFF_SIZE + 0x14]
             for r in range(len(st) // STAFF_SIZE)}
 
 
@@ -225,12 +234,14 @@ def load(argv):
         return fails + ["no save at the end"]
     start, end = savfile.Sav(save), savfile.Sav(end_path)
     (f0, p0, g0), (f1, p1, g1) = season_part(start), season_part(end)
+    same = {s for s, d in births(start).items() if births(end).get(s) == d}
     b0, b1 = caps_bytes(start), caps_bytes(end)
+    b0 = {s: v for s, v in b0.items() if s in same}
     adds, _ = log_lines(os.path.join(work, "stderr.txt"))
     fell = sorted(s for s in b0 if s in b1 and b1[s] < b0[s])
     jump = sorted(s for s in b0 if s in b1 and b1[s] > b0[s] + 1)
     rose = sum(1 for s in b0 if s in b1 and b1[s] == b0[s] + 1)
-    print(f"{len(b0)} staff; caps bytes: {rose} rose by one, {len(fell)} fell, {len(jump)} rose by more; season part "
+    print(f"{len(b0)} staff with the same person ({len(births(start)) - len(same)} records hold a new person); caps bytes: {rose} rose by one, {len(fell)} fell, {len(jump)} rose by more; season part "
           f"version {f0} with {len(p0)} caps above 255, then version {f1} with {len(p1)}")
     top = max(b0, key=lambda s: (p0.get(s, b0[s]), -s))
     print(f"  most caps: staff {top}, {p0.get(top, b0[top])} before, {p1.get(top, b1.get(top))} after")
@@ -238,7 +249,7 @@ def load(argv):
         fails.append(f"{len(fell)} caps bytes fell, for example staff {fell[0]}: {b0[fell[0]]} to {b1[fell[0]]}")
     if jump:
         fails.append(f"{len(jump)} caps bytes rose by more than one")
-    lost = sorted(s for s in p0 if p1.get(s, 0) < p0[s])
+    lost = sorted(s for s in p0 if s in same and p1.get(s, 0) < p0[s])
     if lost:
         fails.append(f"{len(lost)} caps above 255 are lost or lower after the load, for example staff {lost[0]}")
     new = sorted(set(p1) - set(p0) - set(adds))
@@ -246,8 +257,9 @@ def load(argv):
         fails.append(f"{len(new)} players have caps above 255 that no cap of this run gave, for example staff {new[0]}")
     # International goals (item 66): no goals byte falls, and no stored count is lost.
     gb0, gb1 = caps_bytes(start, GOALS), caps_bytes(end, GOALS)
+    gb0 = {s: v for s, v in gb0.items() if s in same}
     gfell = sorted(s for s in gb0 if s in gb1 and gb1[s] < gb0[s])
-    glost = sorted(s for s in g0 if g1.get(s, 0) < g0[s])
+    glost = sorted(s for s in g0 if s in same and g1.get(s, 0) < g0[s])
     gnew = sorted(set(g1) - set(g0) - set(log_lines(os.path.join(work, "stderr.txt"), GOALS_ADD)[0]))
     if gnew:
         fails.append(f"{len(gnew)} players have goals above 255 that no goal of this run gave, for example staff {gnew[0]}")
