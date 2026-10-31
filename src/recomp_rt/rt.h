@@ -337,6 +337,10 @@ uint32_t rt_ban_nation_applies(uint32_t club, uint32_t body);
 uint32_t rt_caps_add(uint32_t staff, uint32_t byte);
 uint32_t rt_caps_full(uint32_t staff);
 uint32_t rt_caps_word(uint32_t staff);       /* the same, at most 32767: the most caps record word */
+/* International goals above 255 (0.6.2 item 66): the goals byte after the goals of a match at 0x76b8d6, and the full
+ * goals of a staff record for the screens. */
+uint32_t rt_goals_add(uint32_t staff, uint32_t byte, uint32_t goals);
+uint32_t rt_goals_full(uint32_t staff);
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);

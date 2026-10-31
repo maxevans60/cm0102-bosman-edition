@@ -428,11 +428,12 @@ void season_change_reset(void)
     creating = 0;                               /* also when a longjmp left create_game */
 }
 
-/* Version 3 (0.6.2 slice 12) when the game has caps above 255 (caps_wide.c): the row A18 list then always has its
- * count, so the readers of 0.6.0 and 0.6.1 take the list and leave the caps after it (season_friendly_part_read of
+/* Version 3 (0.6.2 slice 12) when the game has caps above 255, version 4 (item 66) when it has goals above 255
+ * (caps_wide.c): the row A18 list then always has its count, so the readers of 0.6.0 and 0.6.1 take the list and
+ * leave the caps and goals after it (season_friendly_part_read of
  * those versions reads the entries that the count gives and ignores the bytes after them). Else version 2 or 1, as
  * before. */
-static int part_caps(void) { return caps_wide_count() > 0; }
+static int part_caps(void) { return caps_wide_form() != 0; }
 
 uint32_t season_change_part_size(void)
 {
@@ -446,7 +447,7 @@ uint32_t season_change_part_size(void)
 
 int season_change_part_form(void)
 {
-    return part_caps() ? 3 : season_change_part_size() ? 2 : 1;
+    return part_caps() ? caps_wide_form() : season_change_part_size() ? 2 : 1;
 }
 
 static void put32(uint8_t *p, uint32_t v) { memcpy(p, &v, 4); }
@@ -479,7 +480,7 @@ void season_change_part_write(uint8_t *out)
         put32(out + at, 0);
         pending = 4;
     }
-    caps_wide_part_write(out + at + pending);   /* version 3 */
+    caps_wide_part_write(out + at + pending);   /* version 3 or 4 */
 }
 
 int season_change_part_read(const uint8_t *in, uint32_t n, uint32_t form)
@@ -530,16 +531,13 @@ int season_change_part_read(const uint8_t *in, uint32_t n, uint32_t form)
     season_point = (int)point;
     at += 4;
     if (form < 3) return season_friendly_part_read(in + at, n - at);   /* row A18; nothing more in a save before it */
-    /* Version 3: the row A18 list with its count and whole entries, then the caps above 255. */
+    /* Version 3 and later: the row A18 list with its count and whole entries, then the caps (and goals) above 255. */
     if (n - at < 4) return 0;
     uint32_t pending = get32(in + at);
     if (pending > (n - at - 4) / SEASON_FRIENDLY_ENTRY) return 0;
     uint32_t list = 4 + pending * SEASON_FRIENDLY_ENTRY;
     if (!season_friendly_part_read(in + at, list)) return 0;
-    uint32_t caps = n - at - list;
-    /* A later version keeps the caps field (u32 count, 8 bytes a player) here and adds its own after it. */
-    if (form > 3 && caps >= 4 && get32(in + at + list) <= (caps - 4) / 8) caps = 4 + 8 * get32(in + at + list);
-    if (!caps_wide_part_read(in + at + list, caps)) {
+    if (!caps_wide_part_read(in + at + list, n - at - list, form)) {   /* the caps, and from version 4 the goals */
         season_change_reset();
         return 0;
     }

@@ -15,8 +15,9 @@
  * Version 2 (0.6.0 slice 16) adds the news texts, the changed names and the last season point of the season
  * change after +16 (season_change.h). A game with none of them writes version 1. A later version keeps the
  * fields of version 2 first, so this reader takes them and leaves what follows.
- * Version 3 (0.6.2 slice 12) adds the caps above 255 after the row A18 list (season_change.h, caps_wide.h). A game
- * with no player above 255 caps writes version 1 or 2 as before.
+ * Version 3 (0.6.2 slice 12) adds the caps above 255 after the row A18 list, and version 4 (item 66) the goals above
+ * 255 after the caps (season_change.h, caps_wide.h). A game with no player above 255 caps or goals writes version 1
+ * or 2 as before.
  *
  * The original opens a part by its exact name (zopen 0x9326e0, the name scan at 0x93293b) and extracts only
  * the parts whose name ends in .tmp (load_game_data 0x82a9c0 calls 0x933320 with "*.tmp" at 0x82acbc), so it
@@ -52,7 +53,6 @@ static int game_on;                             /* 1 from a made or loaded game 
 #define PART_NAME "bosman_season.dat"
 #define PART_VERSION 1u
 #define PART_VERSION_NEWS 2u       /* with the news texts of season_change.c */
-#define PART_VERSION_CAPS 3u       /* also the caps above 255 (0.6.2 slice 12, caps_wide.c) */
 #define PART_SIZE 16u
 #define HEADER_ROWS 1000u
 #define ROW_SIZE 0x10cu
