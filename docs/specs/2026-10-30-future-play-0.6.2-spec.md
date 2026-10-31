@@ -240,8 +240,8 @@ Merge danger: two-way door. The base game changes after the first national manag
 Blocked by: 1
 Delivers: caps count above 255. Fault 30.
 Merge danger: one-way door, because the save holds a new field. Blast radius: caps and first-cap history rows.
-- [ ] A player edited to 255 caps gets 256 at the next cap, and no second "first cap" row.
-- [ ] A 0.6.1 save loads with the right caps.
+- [x] A player edited to 255 caps gets 256 at the next cap, and no second "first cap" row.
+- [x] A 0.6.1 save loads with the right caps.
 
 ### 13. Save parts merged across seasons
 Blocked by: 12
