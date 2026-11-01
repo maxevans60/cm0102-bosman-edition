@@ -403,6 +403,9 @@ static void set_slots(uint32_t rec, int first, int v)
         if (rd8(g_mem, rec + (uint32_t)s) != 0xff) wr8(g_mem, rec + (uint32_t)s, (uint32_t)v);
 }
 
+#define PAULISTA_FOREIGN_FROM 2025
+#define PAULISTA_FOREIGN_LIMIT 7
+
 /* TRANSFER_MANAGER restriction lookup 0x8cf6b0, thiscall (fixture, record, collapse flag), ret 0xc. */
 void o_008cf6b0(void);
 RT_WRAP(008cf6b0, restriction_lookup)
@@ -427,6 +430,10 @@ RT_WRAP(008cf6b0, restriction_lookup)
     memcpy(before, g_mem + rec, 6);
     if (top || st.squad_non_eu == SEASON_NATION_NONE) set_slots(rec, 3, st.squad_non_eu);
     if (top || st.squad_foreign == SEASON_NATION_NONE) set_slots(rec, 0, st.squad_foreign);
+    /* Campeonato Paulista: at most 7 foreign players on the match sheet (starters and subs) from 2025/26 (real 2026).
+     * The original's Brazilian filler 0x43f2a0 gives every competition but the first division 2 foreign players, and
+     * the table above acts only in the first division. */
+    if (!strcmp(file, "bra_reg_sp") && season >= PAULISTA_FOREIGN_FROM) set_slots(rec, 0, PAULISTA_FOREIGN_LIMIT);
     if (log_on() && memcmp(before, g_mem + rec, 6)) {
         static unsigned shown;
         if (shown++ < 12)

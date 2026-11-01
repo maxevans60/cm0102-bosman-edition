@@ -2,6 +2,10 @@
 
 CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes bugs. A minor release (0.2.0) adds features. A major release (1.0.0 and later) can break saved games or settings. Releases below 1.0.0 are test releases.
 
+## Unreleased
+
+- Campeonato Paulista: a match squad (starters and substitutes) may hold at most 7 foreign players, from 2025/26 on. Before, the game's own Brazilian rule of 2 foreign players applied to every competition but the first division. The Série A is unchanged. The change is in the shared game code, so it holds on Windows and macOS.
+
 ## 0.6.1 (pre-release)
 
 Fixes for 0.6.0: crashes at save and start, wrong names, and faster new games.
