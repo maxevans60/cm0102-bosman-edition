@@ -61,6 +61,8 @@ static const OptionDef defs[OPT_COUNT] = {
     [OPT_SEASON] = {"season", KIND_ENUM, "2001/02",
         "2001/02|2002/03|2003/04|2004/05|2005/06|2006/07|2007/08|2008/09|2009/10|2010/11|2011/12|2012/13|2013/14|2014/15|2015/16|2016/17|2017/18|2018/19|2019/20|2020/21|2021/22|2022/23|2023/24|2024/25|2025/26",
         "season = the season of a new game, 2001/02 to 2025/26. The Choose Season screen sets it together with database."},
+    [OPT_RATING_COLOURS] = {"rating_colours", KIND_SWITCH, "on", NULL,
+        "rating_colours = on colours the match ratings of the Player Ratings view and the Match Rating view of the tactics screen: red, amber or green."},
 };
 
 #define TEXT_MAX 1100

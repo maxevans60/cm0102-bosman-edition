@@ -52,6 +52,7 @@ int win_existing_file(const char *winpath, char *out, size_t room);
  * gives the count, -1 when the folder has no host path. While win_find_hide is set, a find leaves out the names for
  * which it gives 1. win_create_file opens a Windows path to write from the start, as CreateFileA with CREATE_ALWAYS
  * (in the user folder): a host descriptor, or -1. */
+int win_newest_save(char *out, size_t room);
 int win_list_files(const char *folder, const char *mask, void (*each)(const char *name, const char *host, void *ctx),
                    void *ctx);
 void win_find_hide(int (*hidden)(const char *name));

@@ -55,6 +55,7 @@ extern const uint32_t rt_site_setup_menu, rt_site_setup_subheading;
 #define SEASON_ID 0x7d39         /* the action id of the item; the original uses no such id */
 #define OPTIONS_ID 0x7d3d        /* the item that opens the Bosman Edition Options box (options_screen.c) */
 #define EXTRAS_ID 0x7d3f         /* the item that opens Extras */
+#define LAST_ID 0x7d40           /* the item that loads the newest saved game (0.9.0) */
 #define FIRST_EXTRA 6            /* items 6 to 8 of the original: Hall Of Fame, Game Credits, Web Sites (ids 7 to 9) */
 #define EXTRAS 3
 
@@ -406,9 +407,11 @@ RT_WRAP(005ed300, menu_build)
         fill_item(item + 7 * ITEM_SIZE, "Extras", EXTRAS_ID);
         if (setup_menu_b()) make_strip();
         else make_top_row();
-        wr32(g_mem, cpu.esp + 4 + 4 * 3, MENU_Y + 4 * ROW_H);   /* y2 */
-        wr32(g_mem, cpu.esp + 4 + 4 * 5, 4);                     /* rows */
-        wr32(g_mem, cpu.esp + 4 + 4 * 7, 8);                     /* count */
+        /* Item 8 of the original (Web Sites) is in Extras now. Its cell holds Load Last Save, a fixed text. */
+        fill_item(item + 8 * ITEM_SIZE, "Load Last Save", LAST_ID);
+        wr32(g_mem, cpu.esp + 4 + 4 * 3, MENU_Y + 5 * ROW_H);   /* y2 */
+        wr32(g_mem, cpu.esp + 4 + 4 * 5, 5);                     /* rows */
+        wr32(g_mem, cpu.esp + 4 + 4 * 7, 9);                     /* count */
     }
     o_005ed300();
 }
@@ -498,6 +501,25 @@ RT_WRAP(0081bd70, setup_input)
     if (id == EXTRAS_ID) {
         extras_open();
         rt_ret_cdecl((uint32_t)-4);
+        return;
+    }
+    if (id == LAST_ID) {
+        /* Load Last Save: hand the newest saved game to the game as the Load Game dialog does (the game frees the path at 0x81c682). The input runs
+         * as it does after the dialog pops: with -1, the pending result type 5 (a saved game), its path and the
+         * flag [0xb77c84] set (the pending part 0x81c4cc..0x81c53a, which calls the load 0x82a9c0). */
+        char win[1100];
+        if (!win_newest_save(win, sizeof win)) {
+            rt_ret_cdecl(0);                            /* no saved game: the item does nothing */
+            return;
+        }
+        uint32_t path = rt_alloc_str(win);              /* a block of the game's heap: the pending part frees it */
+        uint32_t flag = rd32(g_mem, 0xb77c84);
+        wr32(g_mem, cpu.esp + 4, (uint32_t)-1);
+        wr32(g_mem, 0xdd6be0, 5);
+        wr32(g_mem, 0xdd6be4, path);
+        wr32(g_mem, 0xb77c84, 1);
+        o_0081bd70();
+        wr32(g_mem, 0xb77c84, flag);
         return;
     }
     o_0081bd70();

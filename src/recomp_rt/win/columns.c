@@ -98,6 +98,25 @@ uint32_t columns_attribute_colour(int v)
     return v <= 5 ? COLOUR_LOW : v <= 10 ? COLOUR_MID : v <= 15 ? COLOUR_GOOD : COLOUR_TOP;
 }
 
+/* The colour of a match rating, 1 to 10 (0.9.0): red to 4, amber for 5 and 6, light green for 7, bright green from 8.
+ * 0 for a value outside 1 to 10. Ratings in the game run 1 to 10 (the rating byte of 0x723350 prints with "%d"). */
+uint32_t columns_rating_colour(int v)
+{
+    if (v < 1 || v > 10) return 0;
+    return v <= 4 ? COLOUR_LOW : v <= 6 ? COLOUR_MID : v <= 7 ? COLOUR_GOOD : COLOUR_TOP;
+}
+
+/* The rating colour of a text that is a whole number, or 0. */
+static uint32_t rating_text_colour(const char *s)
+{
+    int v = 0, n = 0;
+    while (*s == ' ') s++;
+    for (; *s >= '0' && *s <= '9' && n < 3; s++, n++) v = v * 10 + (*s - '0');
+    while (*s == ' ') s++;
+    if (!n || *s) return 0;
+    return columns_rating_colour(v);
+}
+
 /* Calls of the game's functions. Each keeps the registers of the caller. */
 static uint32_t call_this(uint32_t fn, uint32_t self, int n, const uint32_t *args)
 {
@@ -188,6 +207,8 @@ static int tactics_condition_view(void)
  * condition before the rating. */
 static const uint8_t ratings_move[16] = {0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17};
 static const uint8_t ratings_weights[18] = {14, 1, 5, 1, 60, 21, 12, 7, 7, 14, 1, 5, 1, 60, 21, 12, 7, 7};
+static const uint8_t ratings_move_same[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+static const uint8_t ratings_weights_same[16] = {14, 1, 5, 1, 70, 21, 7, 7, 14, 1, 5, 1, 70, 21, 7, 7};
 enum { RATINGS_CONDITION = 6 };
 
 /* Called by the area create wrap (display.c) before the original: the call sites of the two lists get
@@ -279,6 +300,7 @@ static void tactics_add_labels(int area, int with_condition)
     scratch_restore();
 }
 
+static void rate_colour_area(int area, int col, int per);
 void o_00899ea0(void);
 
 /* The tactics screen build, a screen node function. */
@@ -299,12 +321,15 @@ RT_WRAP(00899ea0, tactics_build)
     tactics_building = 0;
     int area = cols.area;
     columns_off();
-    if (!rt_unwinding && area >= 0) tactics_add_labels(area, !condition_view);
+    if (!rt_unwinding && area >= 0) {
+        tactics_add_labels(area, !condition_view);
+        if (!condition_view) rate_colour_area(area, 9, 0);      /* the rating moved from column 7 to 9 */
+    }
 }
 
 /* --- The Player Ratings view. --- */
 
-static struct { int area, widget[2][20]; uint32_t summary; } ratings = {-1, {{0}}, 0};
+static struct { int area, wide, widget[2][20]; uint32_t summary; } ratings = {-1, 0, {{0}}, 0};
 
 /* The condition of the player in a row of the view, in per cent, or -1. The view reads its rows from the
  * match summary (0x722ed0: summary + 0x190 + team * 0x625 + row * 0x49, person number at +0, 0xfb at
@@ -342,9 +367,30 @@ static int widget_ok(int w, int column, int row)
            (int32_t)rd32(g_mem, a + 0x24) == row;
 }
 
+/* Colours the rating cells of an area: the widgets of the columns col and col + per (the two teams) get the colour
+ * of the number in their text. Only a colour field is written (+0x78), as for the condition. The cells' text is at
+ * +0x80 of the widget record. */
+static void rate_colour_area(int area, int col, int per)
+{
+    if (!options_bool(OPT_RATING_COLOURS)) return;
+    for (int w = 0; w < MAX_WIDGETS; w++) {
+        uint32_t a = WIDGETS + WIDGET_SIZE * (uint32_t)w;
+        if ((int16_t)rd16(g_mem, a + 0x7a) != area) continue;
+        int c = (int32_t)rd32(g_mem, a + 0x20);
+        if (c != col && c != col + per) continue;
+        uint32_t colour = rating_text_colour(win_str(a + 0x80));
+        if (colour) wr16(g_mem, a + 0x78, (uint16_t)colour);
+    }
+}
+
+static void ratings_colour(void)
+{
+    if (ratings.area >= 0) rate_colour_area(ratings.area, ratings.wide ? 7 : 6, ratings.wide ? 9 : 8);
+}
+
 static void ratings_refresh(void)
 {
-    if (ratings.area < 0) return;
+    if (ratings.area < 0 || !ratings.wide) return;
     scratch_keep();
     for (int team = 0; team < 2; team++)
         for (int row = 0; row < 20; row++) {
@@ -374,17 +420,29 @@ RT_WRAP(00722ed0, ratings_build)
 {
     columns_off();
     ratings.area = -1;
-    if (columns_wanted()) {
+    ratings.wide = columns_wanted();
+    if (ratings.wide) {
         cols.pending = 1;
         cols.columns = 16;
         cols.move = ratings_move;
         cols.weights = ratings_weights;
         cols.new_columns = 18;
+    } else if (options_bool(OPT_RATING_COLOURS)) {
+        /* The same columns and weights as the original: this only tells the runtime which area the view uses. */
+        cols.pending = 1;
+        cols.columns = 16;
+        cols.move = ratings_move_same;
+        cols.weights = ratings_weights_same;
+        cols.new_columns = 16;
     }
     o_00722ed0();
     int area = cols.area;
     columns_off();
     if (rt_unwinding || area < 0) return;
+    if (!ratings.wide) {
+        ratings.area = area;
+        return;
+    }
     uint32_t slot0 = node_slot(0);
     ratings.summary = slot0 ? rd32(g_mem, slot0 + 0x5f) : node_slot(0x20);
     scratch_keep();
@@ -394,13 +452,17 @@ RT_WRAP(00722ed0, ratings_build)
     scratch_restore();
     ratings.area = area;
     ratings_refresh();
+    ratings_colour();
 }
 
 /* The Player Ratings update: the runtime updates the conditions after it. */
 RT_WRAP(00723350, ratings_update)
 {
     o_00723350();
-    if (!rt_unwinding) ratings_refresh();
+    if (!rt_unwinding) {
+        ratings_refresh();
+        ratings_colour();
+    }
 }
 
 /* --- Condition and morale colours. --- */
