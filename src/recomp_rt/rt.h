@@ -381,6 +381,9 @@ uint32_t rt_caps_word(uint32_t staff);       /* the same, at most 32767: the mos
  * tools/recomp/match_day.py at 0x6b3d2d and 0x6b3d76). */
 void rt_match_day_keep_place(uint32_t list);
 void rt_match_day_set_place(uint32_t list);
+/* Test switch RECOMP_TEST_MARKET_WEEKLY (open item 193, win/market_weekly.c, tools/recomp/market_weekly.py at
+ * 0x5cdc4e): the Enable Computer Bids flag that the day loop reads, 0 on days that are not Mondays when it is on. */
+uint32_t rt_market_bids_flag(uint32_t flag);
 /* International goals above 255 (0.6.2 item 66): the goals byte after the goals of a match at 0x76b8d6, and the full
  * goals of a staff record for the screens. */
 uint32_t rt_goals_add(uint32_t staff, uint32_t byte, uint32_t goals);

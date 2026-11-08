@@ -87,11 +87,16 @@ DATABASES = "/Users/max/Projects/cm0102/test-fixtures/databases"
 OWN_DBS = "/Users/max/Projects/cm0102/own-dbs"
 JUMP_DATABASE = "December 2025"
 COLUMNS = ["name", "tier", "start", "changing", "nations", "seed", "last", "leg_years", "set", "status", "note"]
-TIERS = {"A", "B", "jump", "normal", "late"}
+TIERS = {"A", "B", "jump", "normal", "late", "weekly"}
 # late (open item 193): the full world (as Tier B, with its health checks and limits) from a checkpoint save of a Tier
 # A row. Its optional column `from` names that row (same changing rules, nations and seed); its start is the year of
 # the save, so the game plays the seasons start to last in the full world on top of a long Tier A history.
 OPTIONAL = ["from"]
+# weekly (open item 193, Max 8 November 2026): the full world with the test-only market, RECOMP_TEST_MARKET_WEEKLY=1
+# (market_weekly.c): the AI market of the day loop runs on Mondays only. Faster, but it is not the shipped game; b2001
+# and b2025 play the real market.
+TIER_ENV = {"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"},
+            "weekly": {"RECOMP_TEST_MARKET_WEEKLY": "1"}}
 SETS = {"release": {"release", "nightly"}, "nightly": {"nightly"}, "quick": {"quick"},
         "all": {"release", "nightly", "quick"}}
 # What makes the game: its code, the recompiler, and the tables and their sources that the build and the release turn
@@ -100,7 +105,8 @@ GAME_CODE = ["src", "tools/recomp", "tools/seasons", "docs/research/rules-0.6.0"
 FOUR_GB = 4 << 30
 DAYS = 365.25
 SAVE_NAME = "samesave.sav"                    # the save of a leg (smoke_run.SAVE_NAME)
-SWITCHES = ("RECOMP_TIER_A", "RECOMP_DATE_JUMP", "RECOMP_TEST_EXTRA", "RECOMP_TEST_NATION_JOB")
+SWITCHES = ("RECOMP_TIER_A", "RECOMP_DATE_JUMP", "RECOMP_TEST_EXTRA", "RECOMP_TEST_NATION_JOB",
+            "RECOMP_TEST_MARKET_WEEKLY")
 # Q15: the rows whose human manager also manages a national team. Leg 0 sets RECOMP_TEST_NATION_JOB (nation_job.c): at
 # the first human turn the runtime appoints him through the original's appoint_manager_to_club 0x69ebc0, to this
 # nation or, when it has a manager, to the first senior national team with none and a nation value over 150. The
@@ -154,7 +160,7 @@ def read_set(path=None):
 
 def full_world(row):
     """A game of the full world with the health checks and the Tier B limits."""
-    return row["tier"] in ("B", "late")
+    return row["tier"] in ("B", "late", "weekly")
 
 
 def checker_tier(row):
@@ -443,7 +449,9 @@ def play_game(row, o):
         return finish(folder, row, "waits", "the program has no Tier A switch (slice 3)", "", 0, 0, began, o)
     for name in SWITCHES:                       # a switch of the shell must not reach a game of another tier
         os.environ.pop(name, None)
-    os.environ.update({"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"}}.get(row["tier"], {}))
+    if row["tier"] == "weekly" and not program_has(o["program"], "RECOMP_TEST_MARKET_WEEKLY"):
+        return finish(folder, row, "waits", "the program has no weekly market switch (item 193)", "", 0, 0, began, o)
+    os.environ.update(TIER_ENV.get(row["tier"], {}))
     # one game a process: soak_run's leg_env copies os.environ
     base = next(r for r in read_set() if r["name"] == row["from"]) if row.get("from") else row
     so = {"program": o["program"], "game": o["game"], "start": row["start"], "last": row["last"] + 1,

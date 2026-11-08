@@ -234,3 +234,9 @@ from match_day import INSNS as MATCH_DAY_INSNS  # noqa: E402
 
 assert not set(MATCH_DAY_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(MATCH_DAY_INSNS)
+
+# The test switch RECOMP_TEST_MARKET_WEEKLY (open item 193) in the same way.
+from market_weekly import INSNS as MARKET_WEEKLY_INSNS  # noqa: E402
+
+assert not set(MARKET_WEEKLY_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(MARKET_WEEKLY_INSNS)
