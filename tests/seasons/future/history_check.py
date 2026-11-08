@@ -1029,8 +1029,13 @@ def entrants(game, rules, access, changes=()):
         for n, (year, first, last, teams) in enumerate(eds):
             # the last edition with a match fewer than RUNNING days before the save date may still run: the July
             # qualifying of a Champions League, which the title holder enters later in the group stage (open item
-            # 70). A last day of one match is a final: the edition has ended (the World Cup final in mid July).
-            final = sum(1 for d, h, a in fx if d == last) == 1
+            # 70). A last day of one match is a final: the edition has ended (the World Cup final in mid July). A
+            # final comes after a day of at most two matches (semi-finals, a third place match), as in editions_of.
+            # A lone match after a day of more is a moved qualifying tie: the 2141/42 Champions League of pass 4
+            # had 12 matches on 19 July and one on 20 July 2141.
+            days = collections.Counter(d for d, h, a in fx if first <= d <= last)
+            before = max((d for d in days if d < last), default=None)
+            final = days[last] == 1 and (before is None or days[before] <= 2)
             done = last <= save_day and not (n == len(eds) - 1 and save_day - last < RUNNING and not final)
             want, host_names, routes = access.rule(key, year, game.start == 2001 and not game.changing) if key \
                 else (None, [], [])
