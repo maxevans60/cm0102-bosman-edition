@@ -360,7 +360,12 @@ def main():
         bad.append(f"late: verify does not check a late save like a Tier A history ({lines[:3]})")
 
     # Open item 193: the weekly rows play the full world with the test-only market switch, and no other row has it.
-    weekly = {r["name"]: r for r in release if r["tier"] == "weekly"}
+    if [r for r in release if r["tier"] == "weekly"] or len(release) != 35:
+        bad.append(f"weekly: the release set has {len(release)} games or a weekly row (the lead: 35, weekly rows in "
+                   f"background so --verify does not wait for them)")
+    weekly = {r["name"]: r for r in run_set.chosen(rows, "background") if r["tier"] == "weekly"}
+    if {r["name"] for r in run_set.chosen(rows, "all") if r["tier"] == "weekly"} != set(weekly):
+        bad.append("weekly: --set all does not hold the background rows")
     if set(weekly) != {"bw2001", "bw2025"} or any(r["last"] != 2300 or r["leg_years"] != 1 or
                                                    "TEST-ONLY MARKET" not in r["note"] for r in weekly.values()):
         bad.append(f"weekly: rows {sorted(weekly)}, not bw2001 and bw2025 to 2300 in legs of one season marked TEST-ONLY")

@@ -8,7 +8,8 @@ Usage:
         [--only <name,...>] [--jobs 2] [--machine 12] [--floor-gb 100] [--databases <folder>] [--own-dbs <folder>]
     python3 tests/seasons/future/run_set.py --verify <folder> [--set release]
 
---set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script) or
+--set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script),
+background (games that play on after the release, not in --verify; open item 193) or
 all. --only: these rows of the set. A game whose folder holds result.tsv is done and is not played again; delete
 its folder to play it again.
 
@@ -98,7 +99,7 @@ OPTIONAL = ["from"]
 TIER_ENV = {"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"},
             "weekly": {"RECOMP_TEST_MARKET_WEEKLY": "1"}}
 SETS = {"release": {"release", "nightly"}, "nightly": {"nightly"}, "quick": {"quick"},
-        "all": {"release", "nightly", "quick"}}
+        "background": {"background"}, "all": {"release", "nightly", "quick", "background"}}
 # What makes the game: its code, the recompiler, and the tables and their sources that the build and the release turn
 # into the game's season data (tools/seasons, docs/research/rules-0.6.0).
 GAME_CODE = ["src", "tools/recomp", "tools/seasons", "docs/research/rules-0.6.0"]
