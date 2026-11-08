@@ -1,6 +1,7 @@
 # Known faults of history_check.py on the saves of run-logs/release-test-0.6.0 (0.6.0, 30 October 2026).
 # Each row matches one check of one competition in every year (*). Remove a row when its fix lands.
 # Columns rules and accepted (optional): rules "on" or "off" limits the row to a game with that changing-rules setting.
+# The year of a row may be a range A-B (for example 2003-2010): it covers a fault of those years in a save of those years.
 # accepted "design" or "real" marks a row whose note cites a source (an address of the original, a rules row, a web page)
 # that shows the game matches the original or real life: it is no fault for Q12 and the run set counts it apart.
 check	competition	year	note	rules	accepted
@@ -88,6 +89,9 @@ entrant-host	Africa*Cup of Nations	2002	original design, changing rules off only
 entrant-route	Intercontinental Cup	2002	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)
 entrant-route	Intercontinental Cup	2003	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)
 no-host	OFC*Nations Cup	2008	not a fault: the 2008 OFC Nations Cup was played home and away with no host (int-continental-87)		real
+full-squad	*	*	original design (item 191, cm0102.exe 3.9.68): a club with 50 squad slots releases players only in assess_club_squad 0x83cb40 (release tests 0x83da77, 0x83dabf, 0x83db54; transfer list 0x83db9b) and regens stop at 50 players at 0x7ad1bd, so a full club keeps few young players; run_set reports a club as new when it is full in 3 saves of a game in a row		design
+missing	Leinster Senior Cup	2003-2010	real history: no edition from 2000/01 to 2008/09 (the 2000/01 edition was abandoned for foot-and-mouth disease, the next was 2010; en.wikipedia.org "Leinster Senior Cup (association football)", read 8 November 2026); the fault shows while a save of 2003 to 2010 holds no later edition		real
+missing	OFC Club Championship	2002-2005	real history: no OFC club championship in 2002, 2003 and 2004 (the editions were 2001, 2005, 2006 and 2007; en.wikipedia.org "OFC Champions League", history table "2002-2004: Not held", read 8 November 2026); the fault shows while a save of 2002 to 2005 holds no later edition		real
 gap	Leinster Senior Cup	2010	real history: no edition from 2002/03 to 2008/09 (rules rows wal-nir-irl-46 to -196 not held; en.wikipedia.org "Leinster Senior Cup (association football)", read 1 November 2026: no competition between 2001 and 2009)		real
 gap	Leinster Senior Cup	2023	real history: 2019/20 abandoned, 2020/21 and 2021/22 not held for COVID-19 (the same source; rules rows wal-nir-irl-471 to -521 not held)		real
 gap	OFC*Champions League	2005	real calendar: no OFC club championship in 2002, 2003 and 2004 (the editions were 2001, 2005, 2006 and 2007; en.wikipedia.org "OFC Champions League", read 8 November 2026; first pass of the run set, 1 November 2026)		real

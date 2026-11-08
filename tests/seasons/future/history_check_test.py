@@ -984,6 +984,16 @@ def main():
         got = history_check.known_status(known, *args)
         if got != want_:
             bad.append(f"known_status{args} is {got}, not {want_}")
+    # a year range accepts a fault of those years in a save of those years, and no other
+    rng = [{"check": "missing", "competition": "R Cup", "year": "2003-2010", "note": "n", "rules": "", "accepted": "real"}]
+    for args, want_ in ((("missing", "R Cup", 2003, None, 2005), "accepted"), (("missing", "R Cup", 2003, None, 2010), "accepted"),
+                        (("missing", "R Cup", 2003, None, 2011), None), (("missing", "R Cup", 2003, None, 2002), None),
+                        (("missing", "R Cup", 2003, None, None), None), (("missing", "R Cup", 2011, None, 2005), None),
+                        (("missing", "R Cup", 2002, None, 2005), None), (("gap", "R Cup", 2003, None, 2005), None),
+                        (("missing", "S Cup", 2003, None, 2005), None)):
+        got = history_check.known_status(rng, *args)
+        if got != want_:
+            bad.append(f"known_status range {args} is {got}, not {want_}")
     if history_check.is_known(known, "gap", "B Cup", 2001, "off") is not True or \
             history_check.is_known(known, "gap", "B Cup", 2001, "on") is not False:
         bad.append("is_known does not follow the rules condition")

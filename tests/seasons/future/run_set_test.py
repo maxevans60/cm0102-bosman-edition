@@ -235,6 +235,7 @@ def main():
     class FakeGame:
         def __init__(self, changing):
             self.changing = changing
+            self.date = (2022, 7, 1)
     checker = run_set.Checker.__new__(run_set.Checker)
     checker.known = [{"check": "gap", "competition": "A Cup", "year": "2022", "note": "source", "rules": "",
                       "accepted": "real"},
@@ -248,6 +249,21 @@ def main():
         kinds, n = run_set.grade(checker, faults, FakeGame(changing))
         if kinds != want_kinds or n != want_kinds.count("accepted"):
             bad.append(f"grade (changing rules {changing}): {kinds} and {n}, not {want_kinds}")
+    # full-squad (item 191): accepted by the design row, new again for a club full in 3 saves in a row
+    checker.known = [{"check": "full-squad", "competition": "*", "year": "*", "note": "design 0x83cb40", "rules": "",
+                      "accepted": "design"}]
+    streak, seen = {}, []
+    for leg, clubs in enumerate((["Alpha", "Beta"], ["Alpha"], ["Alpha", "Beta"], ["Beta"], ["Alpha"])):
+        fs = [("full-squad", c, 2010 + leg, "d") for c in clubs]
+        kinds, n = run_set.grade(checker, fs, FakeGame(0), streak)
+        seen.append((kinds, n))
+    # Alpha: legs 0,1,2 in a row -> new on leg 2; Beta: 0, then 2, 3 -> never 3 in a row; Alpha: leg 4 after a break
+    want = [(["accepted", "accepted"], 2), (["accepted"], 1), (["new", "accepted"], 1), (["accepted"], 1),
+            (["accepted"], 1)]
+    if seen != want:
+        bad.append(f"grade full-squad streak: {seen}, not {want}")
+    if run_set.grade(checker, [("full-squad", "Alpha", 2010, "d")] * 1, FakeGame(0))[0] != ["accepted"]:
+        bad.append("grade without a streak does not accept a full-squad fault")
     old_read = run_set.hc.read_known
     run_set.hc.read_known = lambda path: [{"check": "duplicate", "competition": "Euro Finals", "year": "2028",
                                            "note": "source", "rules": "", "accepted": "real"}]
