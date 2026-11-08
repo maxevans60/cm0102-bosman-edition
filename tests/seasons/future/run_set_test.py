@@ -338,6 +338,11 @@ def main():
         got = run_set.play_game(dict(gone, name="late2281"), lo)
         if got[3] != "fail" or "no checkpoint save in 2281" not in got[4]:
             bad.append(f"late: a missing checkpoint save does not fail the game ({got[3]} {got[4]})")
+    commit = make("late-commit", [result(r, commit=run_set.git("rev-parse", "HEAD~1")) if r["name"] == "a2001to2300"
+                                  else result(r) for r in runs])
+    if finds(commit, "late2291"):
+        bad.append("verify: a late row fails when its Tier A row ran the same program from an older commit of the "
+                   "same game code")
     other = make("late-other", [result(r, program="sha-y") if r["name"] == "a2001to2300" else result(r) for r in runs])
     if not finds(other, "late2291: its checkpoint save comes from a2001to2300, which was not played with the same"):
         bad.append("verify: a late row whose Tier A row used another program passes")

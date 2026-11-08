@@ -714,9 +714,9 @@ def verify(folder, which="release", rows=None):
         programs.add(r.get("program"))
         if row.get("from"):
             base = results.get(row["from"])
-            if not base or base.get("program") != r.get("program") or base.get("commit") != r.get("commit"):
+            if not base or base.get("program") != r.get("program"):     # each row's game code is checked above
                 out.append(f"{row['name']}: its checkpoint save comes from {row['from']}, which was not played with "
-                           f"the same program and commit")
+                           f"the same program")
         legs = os.path.join(folder, row["name"], "legs.tsv")
         if r["result"] == "pass" and os.path.exists(legs):
             with open(legs, encoding="utf-8") as f:
