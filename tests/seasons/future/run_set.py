@@ -185,12 +185,12 @@ class Checker:
         self.nations = hc.read_nations(os.path.join(HERE, "nations.tsv"))
         self.access = hc.Access(hc.finals_table(), hc.read_access(os.path.join(HERE, "access.tsv")))
 
-    def is_known(self, fault, rules=None):
-        return hc.is_known(self.known, fault[0], fault[1], fault[2], rules)
+    def is_known(self, fault, rules=None, save=None):
+        return hc.is_known(self.known, fault[0], fault[1], fault[2], rules, save)
 
     def status(self, fault, game):
         """"accepted", "known" or "new" for a fault of this game (the changing-rules setting of the save counts)."""
-        return hc.known_status(self.known, fault[0], fault[1], fault[2], hc.rules_of(game)) or "new"
+        return hc.known_status(self.known, fault[0], fault[1], fault[2], hc.rules_of(game), game.date[0]) or "new"
 
     def run(self, save, health, tier=None):
         """(game, faults [(check, competition, year, detail)], health summary, health rows). Every fault counts, a

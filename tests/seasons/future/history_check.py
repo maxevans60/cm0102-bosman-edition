@@ -369,15 +369,26 @@ def rules_of(game):
     return "on" if game.changing else "off"
 
 
-def known_status(known, check, comp, year, rules=None):
+def year_matches(spec, year, save=None):
+    """Does the year column of a known row cover a fault of this year in a save of year save? "*" covers every year,
+    a year that year, and a range "A-B" the years A to B when the save is also in A to B (a fault of a gap in real
+    history lasts only while the real gap lasts, so a save after B is not covered). A range needs the save year."""
+    if spec in ("*", str(year)):
+        return True
+    m = re.fullmatch(r"(\d{4})-(\d{4})", spec)
+    return bool(m) and save is not None and int(m[1]) <= year <= int(m[2]) and int(m[1]) <= save <= int(m[2])
+
+
+def known_status(known, check, comp, year, rules=None, save=None):
     """"accepted", "known" or None for a fault. The competition of a known row may hold * for any text (fnmatch). A row
     with a rules condition ("on" or "off" in the column rules) matches only a game with that changing-rules setting
     (rules: "on" or "off"; None matches no conditional row). A row whose column accepted is "design" or "real"
     cites a source that shows the game matches the original or real life: accepted, not a fault (Q12). Another matching
-    row is known: a fault that waits for its fix. An accepted row wins over a known one."""
+    row is known: a fault that waits for its fix. An accepted row wins over a known one. The year of a row may be a
+    range A-B (see year_matches), so that one sourced row accepts a "missing" fault of a real gap for the whole gap."""
     found = None
     for k in known:
-        if k["check"] != check or not fnmatch.fnmatchcase(comp, k["competition"]) or k["year"] not in ("*", str(year)):
+        if k["check"] != check or not fnmatch.fnmatchcase(comp, k["competition"]) or not year_matches(k["year"], year, save):
             continue
         if (k.get("rules") or "") not in ("", rules):
             continue
@@ -387,8 +398,8 @@ def known_status(known, check, comp, year, rules=None):
     return found
 
 
-def is_known(known, check, comp, year, rules=None):
-    return known_status(known, check, comp, year, rules) is not None
+def is_known(known, check, comp, year, rules=None, save=None):
+    return known_status(known, check, comp, year, rules, save) is not None
 
 
 def number(v):
@@ -1452,7 +1463,7 @@ def write(game, label, out, faults, known):
         w = csv.writer(f, delimiter="\t", lineterminator="\n")
         w.writerow(["check", "competition", "year", "known", "detail"])
         for c, name, y, d in faults:
-            w.writerow([c, name, y, known_status(known, c, name, y, rules_of(game)) or "new", d])
+            w.writerow([c, name, y, known_status(known, c, name, y, rules_of(game), game.date[0]) or "new", d])
 
 
 RESULT_CHECKS = {"same-final"}               # checks of real results: Tier A's results come from reputation
@@ -1510,7 +1521,7 @@ def main(argv):
             write_entrants(listing, os.path.join(opts["--out"], label + ".entrants.tsv"))
             if summary:
                 write_health(summary, rows, os.path.join(opts["--out"], label + ".health.tsv"))
-        fresh = [f for f in faults if not is_known(known, f[0], f[1], f[2], rules_of(game))]
+        fresh = [f for f in faults if not is_known(known, f[0], f[1], f[2], rules_of(game), game.date[0])]
         new += len(fresh)
         y, d = game.date
         print(f"{label}: start {game.start}{'' if game.changing else ' (changing rules off)'}, save day {d} of {y}, {len(game.rows)} history rows, "
@@ -1518,7 +1529,7 @@ def main(argv):
         if summary:
             print("    health: " + ", ".join(f"{k} {v}" for k, v in summary.items()))
         for c, name, yr, detail in faults:
-            print(f"    {known_status(known, c, name, yr, rules_of(game)) or 'FAULT'}  {c}  {name} {yr}: {detail}")
+            print(f"    {known_status(known, c, name, yr, rules_of(game), game.date[0]) or 'FAULT'}  {c}  {name} {yr}: {detail}")
     return 1 if new else 0
 
 

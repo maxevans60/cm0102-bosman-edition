@@ -235,6 +235,7 @@ def main():
     class FakeGame:
         def __init__(self, changing):
             self.changing = changing
+            self.date = (2022, 7, 1)
     checker = run_set.Checker.__new__(run_set.Checker)
     checker.known = [{"check": "gap", "competition": "A Cup", "year": "2022", "note": "source", "rules": "",
                       "accepted": "real"},
