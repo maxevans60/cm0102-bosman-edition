@@ -19,6 +19,7 @@
 #include "season_comps.h"
 #include "season_titles.h"
 #include "season_bra_states.h"
+#include "season_history_start.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -526,14 +527,12 @@ void season_history_drop_after_start(int S, int official)
 
 void o_004afce0(void);
 
-/* 1 when history row r of record comp is the championship of another state than the one the game plays on that
- * record (open item 176, season_bra_states_other_state): its winner's state, else its runner-up's. Such a row is no
- * edition of the game's championship, so the clear of the start year passes it and does not count it. */
-static int other_state_row(uint32_t comp, uint32_t r)
+/* The state of history row r of record comp (season_bra_states_other_state): 1 for a championship of another state
+ * than the one the game plays on that record, 0 for that state, -1 not known. By its winner, else its runner-up. */
+static int row_state(uint32_t comp, uint32_t r)
 {
     int k = season_bra_states_other_state(comp, rd32(g_mem, r + 0xa));
-    if (k < 0) k = season_bra_states_other_state(comp, rd32(g_mem, r + 0xe));
-    return k == 1;
+    return k < 0 ? season_bra_states_other_state(comp, rd32(g_mem, r + 0xe)) : k;
 }
 
 /* comp_util_add_history_record, cdecl (Comp *comp, Club *first, Club *second, Club *third, Club *host): the row of
@@ -558,18 +557,36 @@ RT_WRAP(004afce0, comp_util_add_history_record)
     uint32_t today = (uint32_t)year * 400u + (uint32_t)(int16_t)rd16(g_mem, GAME_DAY);
     int on = comp && hist && season_history_after_start_on() && after_start_part('w');
     if (on && year <= S + 1) {
-        int same = 0;
+        int m = 0;
         for (uint32_t i = 0; year == S && i < count; i++) {
             uint32_t r = hist + i * HISTORY_SIZE;
-            same += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == year && !own_row(r, NULL) &&
-                    !other_state_row(comp, r);
+            m += rd32(g_mem, r + 4) == comp && (int)rd16(g_mem, r + 8) == year && !own_row(r, NULL);
+        }
+        if (m) {                /* the data rows of the start year's label (season_history_start.c) */
+            uint32_t *at = malloc((count + 1) * sizeof *at);
+            int *state = malloc((count + 1) * sizeof *state);
+            m = 0;
+            unsigned char *clear = malloc(count + 1);
+            if (!at || !state || !clear) rt_fatal("season history: no memory");
+            for (uint32_t i = 0; i < count; i++) {
+                uint32_t r = hist + i * HISTORY_SIZE;
+                if (rd32(g_mem, r + 4) != comp || (int)rd16(g_mem, r + 8) != year || own_row(r, NULL)) continue;
+                at[m] = r;
+                state[m++] = row_state(comp, r);
+            }
+            season_history_start_clear(m, state, clear);
+            for (int j = 0; j < m; j++)
+                if (clear[j]) {
+                    wr32(g_mem, at[j] + 4, 0);
+                    n++;
+                }
+            free(at);
+            free(state);
+            free(clear);
         }
         for (uint32_t i = 0; i < count; i++) {
             uint32_t r = hist + i * HISTORY_SIZE;
-            int label = (int)rd16(g_mem, r + 8);
-            if (rd32(g_mem, r + 4) != comp || label < year ||
-                (label == year && (year != S || same >= 2 || other_state_row(comp, r))) || own_row(r, NULL))
-                continue;
+            if (rd32(g_mem, r + 4) != comp || (int)rd16(g_mem, r + 8) <= year || own_row(r, NULL)) continue;
             wr32(g_mem, r + 4, 0);
             n++;
         }
