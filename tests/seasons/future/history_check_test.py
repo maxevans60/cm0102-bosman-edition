@@ -143,7 +143,9 @@ FIXTURES_2040 = [(16, 0, 5, 150), (16, 3, 0, 250), (1, 0, 3, 100),   # the match
                  (27, 3, 4, 20),
                  (19, 4, 0, 140),
                  (21, 8, 9, 187), (21, 10, 11, 187),   # Holders Cup 2040: a qualifying day 2 days before the save date,
-                                                      # still running (open item 70): its holder enters later, no fault
+                 (21, 12, 13, 187), (21, 8, 11, 188),  # still running (open item 70): its holder enters later, no fault.
+                                                      # The lone match of day 188 after a day of three is a moved tie,
+                                                      # no final (the 2141/42 qualifying of pass 4, open item 70)
                  (22, 8, 9, 180), (22, 10, 11, 180), (22, 8, 10, 186),   # Holders Final 2040: a final (one match) 3 days
                                                                         # before the save date has ended: its holder fault
                  (23, 0, 6, 200), (24, side(0), side(1), 201),   # duty clash: Aland City (3 of Aland's) the day before
