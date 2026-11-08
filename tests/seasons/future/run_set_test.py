@@ -263,6 +263,62 @@ def main():
     if row_[-1] != 3 or len(row_) != len(run_set.RESULT_HEAD):
         bad.append(f"finish: the result row {row_} has no accepted count at the end")
 
+    # Open item 193: a late row (the full world from a checkpoint save of a Tier A row).
+    head_line = "\t".join(run_set.COLUMNS + ["from"]) + "\n"
+    tier_a = "a\tA\t2001\ton\tall\t1\t2300\t10\trelease\trun\t\t\n"
+    for line, ok_ in (("l\tlate\t2291\ton\tall\t1\t2300\t1\trelease\trun\tn\ta\n", True),
+                      ("l\tlate\t2290\ton\tall\t1\t2300\t1\trelease\trun\tn\ta\n", False),   # no save of 2290
+                      ("l\tlate\t2291\toff\tall\t1\t2300\t1\trelease\trun\tn\ta\n", False),  # other rules
+                      ("l\tlate\t2291\ton\tall\t1\t2300\t1\trelease\trun\tn\t\n", False),    # no from
+                      ("l\tB\t2001\ton\tall\t1\t2300\t1\trelease\trun\tn\ta\n", False)):     # from on B
+        path = os.path.join(work, "late_set.tsv")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(head_line + tier_a + line)
+        try:
+            got = run_set.read_set(path)
+            if not ok_:
+                bad.append(f"late: read_set takes {line.strip()!r}")
+            elif got[1]["from"] != "a" or got[0]["from"] != "":
+                bad.append("late: the column from is not read")
+        except SystemExit:
+            if ok_:
+                bad.append(f"late: read_set refuses {line.strip()!r}")
+    if any("from=" in run_set.row_key(r) for r in rows if r["tier"] != "late"):
+        bad.append("late: the row key of a row with no `from` changed (old results would not verify)")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(head_line + tier_a + "l\tlate\t2291\ton\tall\t1\t2300\t1\trelease\trun\tn\ta\n")
+    late = dict(run_set.read_set(path)[1])
+    if not run_set.row_key(late).endswith("|from=a") or run_set.checker_tier(late) != "A" or \
+            not run_set.full_world(late) or run_set.full_world(dict(late, tier="A")):
+        bad.append("late: row key, checker tier or full world")
+    out = os.path.join(work, "late_out")
+    os.makedirs(os.path.join(out, "a", "leg028", "user"))
+    with open(os.path.join(out, "a", "legs.tsv"), "w", encoding="utf-8") as f:
+        f.write("\t".join(run_set.LEG_HEAD) + "\n")
+        f.write("27\t2271/72 to 2280/81\tok\t1\t2281-202\t1\t0\tcheckpoint\n")
+        f.write("28\t2281/82 to 2290/91\tok\t1\t2291-201\t1\t0\tcheckpoint\n")
+    with open(os.path.join(out, "a", "result.tsv"), "w") as f:
+        f.write("a\n")
+    if run_set.checkpoint(late, {"out": out}, log=lambda t: None, poll=0) is not None:
+        bad.append("late: a checkpoint without its save file")
+    save = os.path.join(out, "a", "leg028", "user", run_set.SAVE_NAME)
+    open(save, "wb").close()
+    if run_set.checkpoint(late, {"out": out}, log=lambda t: None, poll=0) != (save, run_set.game_days(2291, 200)):
+        bad.append("late: the checkpoint of 2291 is not leg 28's save of day 201")
+    if run_set.checkpoint(dict(late, start=2301), {"out": out}, log=lambda t: None, poll=0) is not None:
+        bad.append("late: an ended Tier A row gives a checkpoint it did not save")
+    late_rows = [dict(late, name="late1")]
+    late_res = [result(late_rows[0])]
+    folder = os.path.join(work, "late_verify")
+    results(folder, "# a head line", late_res)
+    os.makedirs(os.path.join(folder, "late1", "leg000", "user"))
+    hct.write_sav(os.path.join(folder, "late1", "leg000", "user", run_set.SAVE_NAME), members)
+    with open(os.path.join(folder, "late1", "legs.tsv"), "w", encoding="utf-8") as f:
+        f.write("\t".join(run_set.LEG_HEAD) + "\n0\t2291/92 to 2291/92\tok\t1\t2292-201\t1\t0\tcheckpoint\n")
+    lines = run_set.verify(folder, rows=late_rows)
+    if not finds(lines, "duplicate Euro Finals 2028") or finds(lines, "same-final"):
+        bad.append(f"late: verify does not check a late save like a Tier A history ({lines[:3]})")
+
     for b in bad:
         print("FAIL  " + b)
     print(f"{'ok  ' if not bad else 'FAIL'}  run set: {len(release)} games in the release set, legs, Tier B limits and "
