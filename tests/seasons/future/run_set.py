@@ -163,6 +163,32 @@ def checker_tier(row):
     return "A" if row["tier"] == "late" else row["tier"]
 
 
+PROGRAM_FILE = "program.tsv"                  # <out>/<name>/program.tsv: commit, code and sha256 of the game's program
+
+
+def game_program(out, name):
+    """The sha256 of the program that plays (or played) the game `name` in --out: its program.tsv, else its
+    result.tsv, else the head line of results.tsv (a game started by an older run_set.py has no program.tsv). None
+    when nothing records it."""
+    folder = os.path.join(out, name)
+    for path, pick in ((os.path.join(folder, PROGRAM_FILE), lambda v: v[2]),
+                       (os.path.join(folder, "result.tsv"), lambda v: v[RESULT_HEAD.index("program")])):
+        if os.path.exists(path):
+            with open(path, encoding="utf-8") as f:
+                values = next(csv.reader(f, delimiter="\t"), [])
+            try:
+                return pick(values) or None
+            except IndexError:
+                pass
+    head = os.path.join(out, "results.tsv")
+    if os.path.exists(head):
+        with open(head, encoding="utf-8") as f:
+            words = f.readline().split()
+        if "program" in words[:-1]:
+            return words[words.index("program") + 1]
+    return None
+
+
 def checkpoint(row, o, log=print, poll=300):
     """(save, game_days of its date) of the late row's start: the save of the `from` row's leg that saved in the year
     row["start"], in the same --out. Waits while that row plays and has not saved it yet; None when the row has ended
@@ -407,6 +433,8 @@ def play_game(row, o):
     import soak_run
     folder = os.path.join(o["out"], row["name"])
     os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(folder, PROGRAM_FILE), "w", encoding="utf-8") as f:
+        f.write(f"{o['commit']}\t{o['code']}\t{o['sha']}\n")
     log = lambda text: print(f"{row['name']}: {text}", flush=True)  # noqa: E731
     began = time.time()
     if row["status"] == "waits":
@@ -432,6 +460,12 @@ def play_game(row, o):
             return finish(folder, row, "fail", f"{row['from']} ended with no checkpoint save in {row['start']}", "",
                           0, 0, began, o)
         save, since = found
+        made_by = game_program(o["out"], row["from"])
+        if made_by != o["sha"]:             # the Tier A seasons must be the same game code as the full-world ones
+            return finish(folder, row, "fail", f"the checkpoint save of {row['from']} comes from another program "
+                                               f"({(made_by or 'not recorded')[:12]}, this one {o['sha'][:12]})", "",
+                          0, 0, began, o)
+        log(f"leg 0 loads {os.path.relpath(save, o['out'])}")
     for k, (s0, s1) in enumerate(plan):
         work = os.path.join(folder, f"leg{k:03d}")
         if os.path.exists(work):
@@ -678,6 +712,11 @@ def verify(folder, which="release", rows=None):
             out.append(f"{row['name']}: the game code changed after its commit {commit[:8] or '(none)'} "
                        f"({', '.join(GAME_CODE)})")
         programs.add(r.get("program"))
+        if row.get("from"):
+            base = results.get(row["from"])
+            if not base or base.get("program") != r.get("program") or base.get("commit") != r.get("commit"):
+                out.append(f"{row['name']}: its checkpoint save comes from {row['from']}, which was not played with "
+                           f"the same program and commit")
         legs = os.path.join(folder, row["name"], "legs.tsv")
         if r["result"] == "pass" and os.path.exists(legs):
             with open(legs, encoding="utf-8") as f:

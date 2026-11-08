@@ -307,6 +307,41 @@ def main():
         bad.append("late: the checkpoint of 2291 is not leg 28's save of day 201")
     if run_set.checkpoint(dict(late, start=2301), {"out": out}, log=lambda t: None, poll=0) is not None:
         bad.append("late: an ended Tier A row gives a checkpoint it did not save")
+    # The checkpoint save must come from a game of the same program (lead, 8 November 2026).
+    if run_set.game_program(out, "a") is not None:
+        bad.append("late: game_program finds a program that nothing records")
+    with open(os.path.join(out, "results.tsv"), "w", encoding="utf-8") as f:
+        f.write("# commit c1 clean program sha-head 2026-11-08 18:00\n")
+    if run_set.game_program(out, "a") != "sha-head":
+        bad.append("late: game_program does not fall back to the head line of results.tsv")
+    with open(os.path.join(out, "a", "result.tsv"), "w", encoding="utf-8") as f:
+        f.write("\t".join(result(dict(late, name="a", tier="A"), program="sha-result")) + "\n")
+    if run_set.game_program(out, "a") != "sha-result":
+        bad.append("late: game_program does not read result.tsv")
+    with open(os.path.join(out, "a", run_set.PROGRAM_FILE), "w", encoding="utf-8") as f:
+        f.write("c1\tclean\tsha-a\n")
+    if run_set.game_program(out, "a") != "sha-a":
+        bad.append("late: game_program does not read program.tsv first")
+    real = [r for r in rows if r["name"] == "late2291"]
+    if not real or real[0]["from"] != "a2001to2300" or real[0]["last"] != 2300:
+        bad.append("late: no row late2291 from a2001to2300 to 2300")
+    else:
+        lo = {"program": "/no/program", "game": "/no/game", "out": out, "databases": run_set.DATABASES,
+              "own": run_set.OWN_DBS, "commit": "c1", "code": "clean", "sha": "sha-b", "machine": 12, "floor": 0}
+        os.rename(os.path.join(out, "a"), os.path.join(out, "a2001to2300"))
+        got = run_set.play_game(real[0], lo)
+        if got[3] != "fail" or "comes from another program" not in got[4]:
+            bad.append(f"late: a checkpoint save of another program does not fail the game ({got[3]} {got[4]})")
+        if open(os.path.join(out, "late2291", run_set.PROGRAM_FILE)).read() != "c1\tclean\tsha-b\n":
+            bad.append("late: play_game does not record its program in program.tsv")
+        gone = dict(real[0], start=2281, last=2290)          # the Tier A row ended with no save of 2281
+        got = run_set.play_game(dict(gone, name="late2281"), lo)
+        if got[3] != "fail" or "no checkpoint save in 2281" not in got[4]:
+            bad.append(f"late: a missing checkpoint save does not fail the game ({got[3]} {got[4]})")
+    other = make("late-other", [result(r, program="sha-y") if r["name"] == "a2001to2300" else result(r) for r in runs])
+    if not finds(other, "late2291: its checkpoint save comes from a2001to2300, which was not played with the same"):
+        bad.append("verify: a late row whose Tier A row used another program passes")
+
     late_rows = [dict(late, name="late1")]
     late_res = [result(late_rows[0])]
     folder = os.path.join(work, "late_verify")
