@@ -343,10 +343,31 @@ def nation_job_check(text):
     return ""
 
 
-def grade(checker, faults, game):
+STUCK_LEGS = 3          # a club that is full (check full-squad) in this many saves of a game in a row is no design effect
+
+
+def stuck(streak, faults, kinds):
+    """Regrades the accepted full-squad faults of one leg. streak maps a club to the number of saves in a row in which
+    it was full (the saves before this one); it is updated in place. A club full in STUCK_LEGS saves in a row is a
+    club that never releases players: its fault is "new" again (item 191). Returns the new kinds."""
+    now = {comp for c, comp, y, detail in faults if c == "full-squad"}
+    for club in list(streak):
+        if club not in now:
+            del streak[club]
+    for club in now:
+        streak[club] = streak.get(club, 0) + 1
+    return ["new" if kind == "accepted" and c == "full-squad" and streak[comp] >= STUCK_LEGS else kind
+            for (c, comp, y, detail), kind in zip(faults, kinds)]
+
+
+def grade(checker, faults, game, streak=None):
     """([the kind of each fault: "new", "known" or "accepted"], the number of accepted ones). An accepted fault cites
-    a source that shows the game matches the original or real life; it is no fault for Q12 and is counted apart."""
+    a source that shows the game matches the original or real life; it is no fault for Q12 and is counted apart.
+    streak (a dict, one a game) makes an accepted full-squad fault new again for a club that is full in 3 saves in a
+    row (see stuck)."""
     kinds = [checker.status((c, comp, y), game) for c, comp, y, detail in faults]
+    if streak is not None:
+        kinds = stuck(streak, faults, kinds)
     return kinds, kinds.count("accepted")
 
 
@@ -371,6 +392,7 @@ def play_game(row, o):
     checker = Checker()
     health = row["tier"] == "B"
     legs, kept_decades, save, previous_work, new_faults, accepted = [], set(), None, None, 0, 0
+    full_streak = {}                                    # club -> saves in a row in which it was full
     plan = legs_of(row)
     since = game_days(row["start"], 181)              # the first day of a new game: about 1 July of the start year
     for k, (s0, s1) in enumerate(plan):
@@ -425,7 +447,7 @@ def play_game(row, o):
             return finish(folder, row, "fail", f"leg {k} ({seasons}): the save is of day {game.date[1] + 1} of {year}, "
                                                f"before July {s1 + 1}", "", k, new_faults, began, o)
         since = game_days(year, game.date[1])
-        kinds, here = grade(checker, faults, game)
+        kinds, here = grade(checker, faults, game, full_streak)
         for (c, comp, y, detail), kind in zip(faults, kinds):
             tsv_row(os.path.join(folder, "faults.tsv"), [c, comp, y, kind, detail, os.path.relpath(saved, folder)],
                     ["check", "competition", "year", "known", "detail", "save"])
