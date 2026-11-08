@@ -17,7 +17,10 @@ jump, the manager on holiday, all of RECOMP_FIXED_CLOCK, RECOMP_SCREEN_LOG and a
 saves on about 20 July after its last season (RECOMP_SAVE_AFTER_DAYS, counted from the save it loaded), the last leg
 too (the season jump runs to the season after `last`), so the last save holds the end of the season `last`. A save
 before July of the year after its last season fails the leg. Tier A sets RECOMP_TIER_A=1 (slice 3); a jump sets
-RECOMP_DATE_JUMP=1 and plays the December 2025 database. The databases of the other start years are those of
+RECOMP_DATE_JUMP=1 and plays the December 2025 database. A late row (open item 193) plays the full world from the checkpoint save
+of its `from` row (a Tier A row of the same --out) in the year `start`: its leg 0 waits for that save, then loads it
+with no test switch, and it gets the Tier B checks and limits. The save holds the Tier A seasons' history, so the
+checker skips the checks of real results, as in Tier A. The databases of the other start years are those of
 tests/seasons/gate_run.py; the runner unpacks the own databases once, before the games start.
 
 After each leg: the leg's own checks (soak_run: no box, no line of the season change net, exit code 0, a save), then
@@ -86,7 +89,11 @@ DATABASES = "/Users/max/Projects/cm0102/test-fixtures/databases"
 OWN_DBS = "/Users/max/Projects/cm0102/own-dbs"
 JUMP_DATABASE = "December 2025"
 COLUMNS = ["name", "tier", "start", "changing", "nations", "seed", "last", "leg_years", "set", "status", "note"]
-TIERS = {"A", "B", "jump", "normal"}
+TIERS = {"A", "B", "jump", "normal", "late"}
+# late (open item 193): the full world (as Tier B, with its health checks and limits) from a checkpoint save of a Tier
+# A row. Its optional column `from` names that row (same changing rules, nations and seed); its start is the year of
+# the save, so the game plays the seasons start to last in the full world on top of a long Tier A history.
+OPTIONAL = ["from"]
 SETS = {"release": {"release", "nightly"}, "nightly": {"nightly"}, "quick": {"quick"},
         "all": {"release", "nightly", "quick"}}
 # What makes the game: its code, the recompiler, and the tables and their sources that the build and the release turn
@@ -135,11 +142,82 @@ def read_set(path=None):
                 raise SystemExit(f"run_set.tsv: row {r.get('name')} does not fit the columns ({bad or 'a value'})")
             for c in ("start", "seed", "last", "leg_years"):
                 r[c] = int(r[c])
+            for c in OPTIONAL:
+                r[c] = r.get(c) or ""
+            if (r["tier"] == "late") != bool(r["from"]):
+                raise SystemExit(f"run_set.tsv: row {r['name']}: a late row needs `from`, and only a late row has it")
             rows.append(r)
     names = [r["name"] for r in rows]
     if len(set(names)) != len(names):
         raise SystemExit("run_set.tsv: a name is used twice")
+    for r in rows:
+        if r["tier"] == "late":
+            a = next((x for x in rows if x["name"] == r["from"]), None)
+            if not a or a["tier"] != "A" or any(a[c] != r[c] for c in ("changing", "nations", "seed")) or \
+                    not a["start"] < r["start"] <= a["last"] + 1 or (r["start"] - a["start"]) % a["leg_years"]:
+                raise SystemExit(f"run_set.tsv: row {r['name']}: `from` must name a Tier A row of the same changing "
+                                 f"rules, nations and seed, with a checkpoint save in the year {r['start']}")
     return rows
+
+
+def full_world(row):
+    """A game of the full world with the health checks and the Tier B limits."""
+    return row["tier"] in ("B", "late")
+
+
+def checker_tier(row):
+    """The tier for the checker's filter: a late game holds the history of its Tier A seasons, so like Tier A it
+    skips the checks of real results (hc.tier_a_faults)."""
+    return "A" if row["tier"] == "late" else row["tier"]
+
+
+PROGRAM_FILE = "program.tsv"                  # <out>/<name>/program.tsv: commit, code and sha256 of the game's program
+
+
+def game_program(out, name):
+    """The sha256 of the program that plays (or played) the game `name` in --out: its program.tsv, else its
+    result.tsv, else the head line of results.tsv (a game started by an older run_set.py has no program.tsv). None
+    when nothing records it."""
+    folder = os.path.join(out, name)
+    for path, pick in ((os.path.join(folder, PROGRAM_FILE), lambda v: v[2]),
+                       (os.path.join(folder, "result.tsv"), lambda v: v[RESULT_HEAD.index("program")])):
+        if os.path.exists(path):
+            with open(path, encoding="utf-8") as f:
+                values = next(csv.reader(f, delimiter="\t"), [])
+            try:
+                return pick(values) or None
+            except IndexError:
+                pass
+    head = os.path.join(out, "results.tsv")
+    if os.path.exists(head):
+        with open(head, encoding="utf-8") as f:
+            words = f.readline().split()
+        if "program" in words[:-1]:
+            return words[words.index("program") + 1]
+    return None
+
+
+def checkpoint(row, o, log=print, poll=300):
+    """(save, game_days of its date) of the late row's start: the save of the `from` row's leg that saved in the year
+    row["start"], in the same --out. Waits while that row plays and has not saved it yet; None when the row has ended
+    without it."""
+    folder = os.path.join(o["out"], row["from"])
+    said = False
+    while True:
+        legs = os.path.join(folder, "legs.tsv")
+        if os.path.exists(legs):
+            with open(legs, encoding="utf-8") as f:
+                for leg in csv.DictReader(f, delimiter="\t"):
+                    if leg["result"] == "ok" and leg["save_date"].startswith(f"{row['start']}-"):
+                        save = os.path.join(folder, f"leg{int(leg['leg']):03d}", "user", SAVE_NAME)
+                        if os.path.exists(save):
+                            return save, game_days(row["start"], int(leg["save_date"].split("-")[1]) - 1)
+        if os.path.exists(os.path.join(folder, "result.tsv")):
+            return None
+        if not said:
+            log(f"waiting: the checkpoint save of {row['from']} in {row['start']}")
+            said = True
+        time.sleep(poll)
 
 
 def chosen(rows, which, only=None):
@@ -385,6 +463,8 @@ def play_game(row, o):
     import soak_run
     folder = os.path.join(o["out"], row["name"])
     os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(folder, PROGRAM_FILE), "w", encoding="utf-8") as f:
+        f.write(f"{o['commit']}\t{o['code']}\t{o['sha']}\n")
     log = lambda text: print(f"{row['name']}: {text}", flush=True)  # noqa: E731
     began = time.time()
     if row["status"] == "waits":
@@ -395,15 +475,28 @@ def play_game(row, o):
         os.environ.pop(name, None)
     os.environ.update({"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"}}.get(row["tier"], {}))
     # one game a process: soak_run's leg_env copies os.environ
+    base = next(r for r in read_set() if r["name"] == row["from"]) if row.get("from") else row
     so = {"program": o["program"], "game": o["game"], "start": row["start"], "last": row["last"] + 1,
-          "seed": row["seed"], "nations": row["nations"].split(","), "database": database_of(row, o),
+          "seed": row["seed"], "nations": row["nations"].split(","), "database": database_of(base, o),
           "rules": row["changing"], "extra": []}
     checker = Checker()
-    health = row["tier"] == "B"
+    health = full_world(row)
     legs, kept_decades, save, previous_work, new_faults, accepted = [], set(), None, None, 0, 0
     full_streak = {}                                    # club -> saves in a row in which it was full
     plan = legs_of(row)
     since = game_days(row["start"], 181)              # the first day of a new game: about 1 July of the start year
+    if row["tier"] == "late":                         # leg 0 loads the Tier A row's save of the start year
+        found = checkpoint(row, o, log)
+        if not found:
+            return finish(folder, row, "fail", f"{row['from']} ended with no checkpoint save in {row['start']}", "",
+                          0, 0, began, o)
+        save, since = found
+        made_by = game_program(o["out"], row["from"])
+        if made_by != o["sha"]:             # the Tier A seasons must be the same game code as the full-world ones
+            return finish(folder, row, "fail", f"the checkpoint save of {row['from']} comes from another program "
+                                               f"({(made_by or 'not recorded')[:12]}, this one {o['sha'][:12]})", "",
+                          0, 0, began, o)
+        log(f"leg 0 loads {os.path.relpath(save, o['out'])}")
     for k, (s0, s1) in enumerate(plan):
         work = os.path.join(folder, f"leg{k:03d}")
         if os.path.exists(work):
@@ -414,7 +507,7 @@ def play_game(row, o):
         days = game_days(s1 + 1, SAVE_ON) - since
         so["timeout"] = 14400 * (s1 - s0 + 1)
         wait_room(o, log)
-        if k == 0:
+        if k == 0 and row["tier"] != "late":
             if row["name"] in NATION_JOB:
                 os.environ["RECOMP_TEST_NATION_JOB"] = NATION_JOB[row["name"]]     # leg 0 only: a loaded game keeps it
             code, took, box = soak_run.new_game_leg(so, work, days)
@@ -448,7 +541,7 @@ def play_game(row, o):
         loaded = os.path.join(work, "user", "soak.sav")         # load_leg's copy of the save it loaded
         if os.path.exists(loaded):
             os.remove(loaded)
-        game, faults, summary, rows = checker.run(saved, health, row["tier"])
+        game, faults, summary, rows = checker.run(saved, health, checker_tier(row))
         year = game.date[0]
         if (year, game.date[1]) < (s1 + 1, 181):         # the save must come after the season change of s1
             tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, "short", f"{took:.0f}",
@@ -505,7 +598,7 @@ def play_game(row, o):
 
 def row_key(row):
     """The row as run_set.tsv holds it, but the note: a result counts only for the row it was played for."""
-    return "|".join(str(row[c]) for c in COLUMNS if c != "note")
+    return "|".join([str(row[c]) for c in COLUMNS if c != "note"] + [f"{c}={row[c]}" for c in OPTIONAL if row.get(c)])
 
 
 def finish(folder, row, result, reason, reached, legs, faults, began, o, accepted=0):
@@ -650,6 +743,11 @@ def verify(folder, which="release", rows=None):
             out.append(f"{row['name']}: the game code changed after its commit {commit[:8] or '(none)'} "
                        f"({', '.join(GAME_CODE)})")
         programs.add(r.get("program"))
+        if row.get("from"):
+            base = results.get(row["from"])
+            if not base or base.get("program") != r.get("program"):     # each row's game code is checked above
+                out.append(f"{row['name']}: its checkpoint save comes from {row['from']}, which was not played with "
+                           f"the same program")
         legs = os.path.join(folder, row["name"], "legs.tsv")
         if r["result"] == "pass" and os.path.exists(legs):
             with open(legs, encoding="utf-8") as f:
@@ -667,7 +765,7 @@ def verify(folder, which="release", rows=None):
             if SAVE_NAME in files:
                 save = os.path.join(dirpath, SAVE_NAME)
                 try:
-                    game, faults, _, _ = checker.run(save, row["tier"] == "B", row["tier"])
+                    game, faults, _, _ = checker.run(save, full_world(row), checker_tier(row))
                     faults = [f for f in faults if checker.status(f, game) != "accepted"]
                 except Exception as e:          # a save the checker cannot read is a fault of the run
                     out.append(f"{row['name']}: {os.path.relpath(save, folder)}: not read ({e})")
