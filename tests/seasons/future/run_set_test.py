@@ -80,7 +80,7 @@ def main():
         "slow": good[:20] + [leg(k, 2002 + k, 2500, 220e6) for k in range(20, 30)],
         # leg 0 also makes the game and is slow: it must not set the speed of the first seasons
         "slow ": [leg(0, 2002, 9000, 200e6)] + good[1:20] + [leg(k, 2002 + k, 2500, 220e6) for k in range(20, 30)],
-        "size": [leg(k, 2002 + k, 1000, 200e6 + 30e6 * k) for k in range(30)],
+        "size": [leg(k, 2002 + k, 1000, 200e6 + 30e6 * k) for k in range(31)],
     }
     for check, game in checks.items():
         got = {c for c, _ in run_set.tier_b_limits(game)}
@@ -91,6 +91,28 @@ def main():
         bad.append("Tier B limits: a side with no manager in one save only fails")
     if [c for c, _ in run_set.tier_b_limits(good[:3] + [leg(3, 2005, 1000, 4 * GB)])] != ["size"]:
         bad.append("Tier B limits: a save of 4 GB is not a fault")
+
+    # Open item 192: b2001 of pass 4 (run-logs/runset-pass4/run/b2001/legs.tsv, MB). The first seasons grow 20 to 26 MB
+    # a season while the first player generation builds its history; the projection waits 30 seasons.
+    b2001 = [121, 145, 170, 196, 220, 242, 264, 286, 307, 327]
+    young = [leg(k, 2002 + k, 1000, mb * 1e6) for k, mb in enumerate(b2001)]
+    if run_set.tier_b_limits(young):
+        bad.append(f"Tier B limits: a young Tier B game gives a size fault: {run_set.tier_b_limits(young)}")
+    # The same start, then the rate falls to the Tier A rate of 8.4 MB by 2030: 2.9 GB at the end of 2300, no fault.
+    level = list(b2001)
+    for k in range(10, 40):
+        level.append(level[-1] + max(8.4, 20 - 0.6 * (k - 9)))
+    levelled = [leg(k, 2002 + k, 1000, mb * 1e6) for k, mb in enumerate(level)]
+    if run_set.tier_b_limits(levelled):
+        bad.append(f"Tier B limits: a game whose rate levels at 8.4 MB fails: {run_set.tier_b_limits(levelled)}")
+    # The same start, then a rate that stays at 20 MB a season: 6.6 GB at the end of 2300, a fault.
+    steady = [leg(k, 2002 + k, 1000, (327 + 20 * (k - 9)) * 1e6 if k > 9 else b2001[k] * 1e6) for k in range(40)]
+    if [c for c, _ in run_set.tier_b_limits(steady)] != ["size"]:
+        bad.append("Tier B limits: a steady rate that passes 4 GB is not a fault after 30 seasons")
+    # Only the last 10 seasons count: an early fast start does not fail a game that grows slowly now.
+    if [c for c, _ in run_set.tier_b_limits(steady[:30] + [leg(k, 2002 + k, 1000, steady[29]["bytes"] + 5e6 *
+                                                             (k - 29)) for k in range(30, 41)])]:
+        bad.append("Tier B limits: the rate of the first seasons still counts after 30 seasons")
 
     # Open item 68: one group of the Greek Super League 2 plays from 2026/27, the other waits at 2998.
     def gre(season, year1, year2, clubs=14):
