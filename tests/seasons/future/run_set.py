@@ -35,8 +35,10 @@ The Tier B limits, over the legs of a Tier B game:
     no-manager  a national side with no manager in two saves in a row (more than one season)
     slow        the time per game day of a decade is more than twice that of the first seasons (the median of legs
                 1 and 2; leg 0 also makes the game)
-    size        a save of 4 GB or more, or a save size that, at the growth per year of the last 50 years of saves,
-                would pass 4 GB before the end of 2300
+    size        a save of 4 GB or more, or, once the game has 30 seasons of saves, a save size that at the growth
+                per year of the last 10 seasons would pass 4 GB before the end of 2300 (open item 192: the history
+                of the first player generation makes the growth of the first seasons about 2.5 times the later
+                rate, so the projection waits for it and reads only the recent rate)
 The checker's --health faults (empty-squad, no-youth, overflow) are checker faults of Tier B.
 
 Disk (open item 53): a leg starts only with --floor-gb free on the disk of --out. A game keeps the save of one leg in
@@ -91,6 +93,12 @@ SETS = {"release": {"release", "nightly"}, "nightly": {"nightly"}, "quick": {"qu
 # into the game's season data (tools/seasons, docs/research/rules-0.6.0).
 GAME_CODE = ["src", "tools/recomp", "tools/seasons", "docs/research/rules-0.6.0"]
 FOUR_GB = 4 << 30
+# Open item 192: person history (player stats, staff, injury) grows until the first player generation has retired,
+# then a new player reuses the history records of the retired one (PlayerStats::reset_player 0x7c6650, FILE_LLIST
+# add_node 0x58e340). The Tier A run to 2301 grew 10.3 MB a season in the 2010s and 8.3 MB from the 2060s; b2001
+# grew 26 MB a season in 2004 and 20 MB in 2011. So the projection starts after 30 seasons and uses the last 10.
+SIZE_FIRST_SEASONS = 30
+SIZE_WINDOW = 10
 DAYS = 365.25
 SAVE_NAME = "samesave.sav"                    # the save of a leg (smoke_run.SAVE_NAME)
 SWITCHES = ("RECOMP_TIER_A", "RECOMP_DATE_JUMP", "RECOMP_TEST_EXTRA", "RECOMP_TEST_NATION_JOB")
@@ -239,7 +247,8 @@ def tier_b_limits(legs, last_year=2300):
             faults.append(("size", f"the save of {year} has {size / 1e9:.2f} GB"))
             break
     else:
-        window = [(y, s) for y, s in sized if y >= sized[-1][0] - 50] if sized else []
+        old_enough = bool(sized) and sized[-1][0] - sized[0][0] >= SIZE_FIRST_SEASONS
+        window = [(y, s) for y, s in sized if y >= sized[-1][0] - SIZE_WINDOW] if old_enough else []
         if len(window) >= 2 and window[-1][0] > window[0][0]:
             per_year = (window[-1][1] - window[0][1]) / (window[-1][0] - window[0][0])
             at_end = window[-1][1] + per_year * (last_year + 1 - window[-1][0])
