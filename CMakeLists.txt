@@ -326,6 +326,10 @@ if(NOT WIN32)
         src/recomp_rt/win/season_fifa_days_table.c)
     target_include_directories(season_fifa_days_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_fifa_days COMMAND season_fifa_days_test)
+    # The day rule of the test switch RECOMP_TEST_MARKET_WEEKLY (open item 193).
+    add_executable(market_weekly_test tests/seasons/test_market_weekly.c src/recomp_rt/win/market_weekly_day.c)
+    target_include_directories(market_weekly_test PRIVATE src/recomp_rt/win)
+    add_test(NAME market_weekly COMMAND market_weekly_test)
     # Open item 163: the South American qualifying rounds on the FIFA windows of each cycle, 2006 to 2302.
     add_executable(season_conmebol_days_test tests/seasons/test_season_conmebol_days.c
         src/recomp_rt/win/season_conmebol_days.c src/recomp_rt/win/season_uefa_days.c
