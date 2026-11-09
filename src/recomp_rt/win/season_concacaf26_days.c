@@ -22,7 +22,10 @@
  *   September and early October) keep 3 days between their pairs;
  * - the first round on the pair of the March window of W - 2;
  * - the second round on the pair of the June window of W - 2, the first day of the March window of W - 1 and the
- *   pair of the June window of W - 1;
+ *   pair of the June window of W - 1. Real 2026 played all five rounds in June (the windows of 2024 and 2025 held
+ *   9 and 6 days); the list's June windows after 2026 hold 6 days (Thursday to Tuesday), so three rounds 3 days
+ *   apart do not fit one of them, and the fifth round takes the March window of W - 1 (an inference; March of
+ *   W - 1 holds no Nations League match after item 209, which keeps its editions to W - 4 and W - 3);
  * - the third round on the pairs of the first three windows from 1 September of W - 1. */
 #include "season_concacaf26_days.h"
 #include "season_uefa_days.h"
