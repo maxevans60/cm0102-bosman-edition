@@ -358,6 +358,11 @@ if(NOT WIN32)
         src/recomp_rt/win/season_fifa_days_table.c)
     target_include_directories(season_tie_legs_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_tie_legs COMMAND season_tie_legs_test)
+    add_executable(season_concacaf26_days_test tests/seasons/test_season_concacaf26_days.c
+        src/recomp_rt/win/season_concacaf26_days.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_concacaf26_days_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_concacaf26_days COMMAND season_concacaf26_days_test)
     add_executable(youth_pool_test tests/seasons/test_youth_pool.c src/recomp_rt/win/youth_pool_rule.c)
     target_include_directories(youth_pool_test PRIVATE src/recomp_rt/win)
     add_test(NAME youth_pool COMMAND youth_pool_test)
