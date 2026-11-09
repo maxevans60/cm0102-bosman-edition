@@ -23,6 +23,21 @@ const SeasonNlEdition *season_nl_first(const char *confed, int s)
     return NULL;
 }
 
+/* Item 209 (season_nl.h). */
+int season_nl_held_after(const char *confed, int last, int year, int (*wc)(int))
+{
+    if (!confed || year <= last) return 0;
+    if (!strcmp(confed, "CONCACAF") && wc) return !wc(year + 1) && !wc(year + 2);
+    return (year - last) % 2 == 0;
+}
+
+int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int))
+{
+    for (int y = (year < last ? last : year) + 1; y <= year + 8; y++)
+        if (season_nl_held_after(confed, last, y, wc)) return y;
+    return 0;
+}
+
 /* The table is sorted by confederation, then season (make_nl.py). */
 const SeasonNlEdition *season_nl_after(const SeasonNlEdition *e)
 {

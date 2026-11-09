@@ -30,6 +30,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
+#include "season_intl.h"
 #include "season_nl.h"
 #include "season_wcq26.h"
 
@@ -333,8 +334,24 @@ static const SeasonNlEdition *last_edition(const NlConf *c)
     return last;
 }
 
+/* 1 when a World Cup is played in year y: the table's World Cup years (season_intl_table.c, the year the class
+ * holds is the finals year), then its last step (decision A). Reads only the table, so it changes no state. */
+static int wc_year(int y)
+{
+    int last = 0, prev = 0;
+    for (int i = 0; i < season_intl_edition_count; i++) {
+        const SeasonIntlEdition *e = &season_intl_editions[i];
+        if (strcmp(e->file, "world_cup")) continue;
+        if (e->year == y) return 1;
+        prev = last, last = e->year;
+    }
+    int step = last - prev;
+    return last && prev && step > 0 && y > last && (y - last) % step == 0;
+}
+
 /* The edition of a year in this game. With changing rules on, the table's edition; after the table's last
- * edition the last one again every two years (Q248: the rules stay). With changing rules off, the edition of
+ * edition the last one again: every two years for UEFA (Q248: the rules stay), in the years that the CONCACAF World
+ * Cup qualifying leaves free for CONCACAF (item 209, season_nl_held_after). With changing rules off, the edition of
  * the start season, again every two years (Q232). NULL for a year with no edition. */
 static const SeasonNlEdition *edition(NlConf *c, int year)
 {
@@ -351,11 +368,26 @@ static const SeasonNlEdition *edition(NlConf *c, int year)
         if (base && base->year == year) return base;
         if (base && base->year > year) base = NULL;
     }
-    if (!base || (year - base->year) % 2) return NULL;
+    if (!base) return NULL;
+    /* After the table with changing rules on, an edition of the item 209 year rule; a held object of a year on
+     * the old two-year step (a save of round AG or before) plays its edition out (held_year below moves a
+     * waiting one). */
+    if (season_changing_rules() ? !season_nl_held_after(c->confed, base->year, year, wc_year) && (year - base->year) % 2
+                                : (year - base->year) % 2)
+        return NULL;
     c->repeat = *base;
     c->repeat.season = base->season + (year - base->year);
     c->repeat.year = year;
     return &c->repeat;
+}
+
+/* Item 209: 1 for a year that holds an edition of this game (edition() also takes a year of the old step, for
+ * an edition that a save already plays). */
+static int held_year(const NlConf *c, int year)
+{
+    const SeasonNlEdition *last = last_edition(c);
+    if (!season_changing_rules() || !last || year <= last->year) return 1;
+    return season_nl_held_after(c->confed, last->year, year, wc_year);
 }
 
 /* The first edition of a new game for season s: the table's first edition from s on, else (open item 61: a start
@@ -365,8 +397,8 @@ static const SeasonNlEdition *first_edition(NlConf *c, int s)
 {
     const SeasonNlEdition *e = season_nl_first(c->confed, s);
     if (e) return e;
-    for (int y = s - 2; y <= s + 2; y++) {
-        e = edition(c, y);
+    for (int y = s - 2; y <= s + 4; y++) {
+        e = held_year(c, y) ? edition(c, y) : NULL;
         if (e && e->season >= s) return e;
     }
     return NULL;
@@ -374,10 +406,14 @@ static const SeasonNlEdition *first_edition(NlConf *c, int s)
 
 static int next_year(const NlConf *c, int year)
 {
-    if (season_changing_rules())
+    if (season_changing_rules()) {
         for (int i = 0; i < season_nl_edition_count; i++)
             if (!strcmp(season_nl_editions[i].confed, c->confed) && season_nl_editions[i].year > year)
                 return season_nl_editions[i].year;
+        const SeasonNlEdition *last = last_edition(c);
+        int y = last ? season_nl_next_after(c->confed, last->year, year, wc_year) : 0;
+        if (y) return y;
+    }
     return year + 2;
 }
 
@@ -878,8 +914,33 @@ static void update_for_date(void)
     NlConf *conf = conf_of(self);
     if (conf && readable(today)) {
         int year = year_of(self);
-        const SeasonNlEdition *e = edition(conf, year);
         int day = (int16_t)rd16(g_mem, today), ty = (int16_t)rd16(g_mem, today + 2u);
+        uint32_t held0 = stage_at(self, 0);
+        if (!held_year(conf, year) && !(rd32(g_mem, self + F_DRAWN) && readable(held0) && year_of(held0) == year)) {
+            /* Item 209: an object of a save that waits for a draw in a year with no edition now (2028 or 2032 for
+             * CONCACAF) moves to the year after its last edition (stage one keeps that edition's year) that
+             * holds one: after 2030-31 the 2031 edition, whose draw day becomes tomorrow if it has passed. */
+            int next = next_year(conf, readable(held0) && year_of(held0) < year ? year_of(held0) : year - 1);
+            const SeasonNlEdition *n = edition(conf, next);
+            /* Not an edition whose first matchday has passed (a save from September 2031 waits for 2034). */
+            for (int k = 0; k < 4 && n && !rt_unwinding; k++) {
+                int my = next + n->md[0].year, md = season_nl_day_of_year(n->md[0].day, n->md[0].month, my);
+                if (my > ty || (my == ty && md > day)) break;
+                next = next_year(conf, next);
+                n = edition(conf, next);
+            }
+            if (rt_unwinding) return;
+            if (n) {
+                wr16(g_mem, self + F_YEAR, (uint32_t)next);
+                set_draw_day(self, n);
+                if (logging())
+                    fprintf(stderr, "recomp: season nl: the %s %d edition is not held; the next is %d, draw day %d of %d\n",
+                            conf->confed, year, next, (int16_t)rd16(g_mem, self + F_DRAW_DAY),
+                            next + (int16_t)rd16(g_mem, self + F_DRAW_YEAR));
+                year = next;
+            }
+        }
+        const SeasonNlEdition *e = edition(conf, year);
         int dday = (int16_t)rd16(g_mem, self + F_DRAW_DAY), dy = year + (int16_t)rd16(g_mem, self + F_DRAW_YEAR);
         if (e && full && day == dday && ty == dy) {
             SeasonNlEdition cur = *e;
@@ -1138,8 +1199,9 @@ static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int load
 /* Open item 61: the rule of a season for the comps module (season_comps.h, `held`). The rules table ends with a
  * row "not_held" for 2027 (no edition known after 2026-27), and after the last row its rule stays (Q248), so a
  * game that started from 2027 on got no Nations League: the module made no object and, for CONCACAF, no
- * record. After the last table edition the last cycle continues (decision A): an edition's league phase is in
- * every second season and its finals in the season after, so every season holds one. A game that started
+ * record. After the last table edition the last cycle continues (decision A): for UEFA an edition's league phase
+ * is in every second season and its finals in the season after, so every season holds one; CONCACAF has seasons
+ * with none (item 209), where the object waits for its next draw. A game that started
  * earlier keeps its object and is not changed (the module makes an object once). Inside the table: the table. */
 static int nl_held(const SeasonCompDef *d, int s)
 {

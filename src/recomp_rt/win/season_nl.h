@@ -93,6 +93,17 @@ const SeasonNlEdition *season_nl_first(const char *confed, int s);
 /* The edition after e, or NULL. */
 const SeasonNlEdition *season_nl_after(const SeasonNlEdition *e);
 
+/* 0.6.2 item 209: the years of the editions after the table's last edition (year `last`) with changing rules on.
+ * UEFA: every second year from `last` (Q248). CONCACAF: a year whose autumn the confederation's World Cup
+ * qualifying leaves free, as in the 2023-26 cycle (league phases September to November 2023 and 2024, qualifying
+ * from March 2024). The game's CONCACAF section holds the campaign year W - 2 for the World Cup of year W
+ * (0x914a91) and plays from March of W - 2 to November of W - 1 (preliminary ties in spring, the semi-final groups
+ * in September to November of W - 2, the final group in W - 1), so an edition starts in W - 4 and W - 3 only.
+ * wc(y): 1 when a World Cup is played in year y. season_nl_held_after gives 1 for a year that holds an edition;
+ * season_nl_next_after the first such year after `year` (0 for none within 8 years). */
+int season_nl_held_after(const char *confed, int last, int year, int (*wc)(int));
+int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int));
+
 /* The result of one nation in one edition. The rules rank and move these rows; the nation is the game's id. */
 typedef struct {
     int nation;                 /* the game's nation id (or a test id) */
