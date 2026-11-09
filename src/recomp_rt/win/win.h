@@ -56,6 +56,8 @@ int win_list_files(const char *folder, const char *mask, void (*each)(const char
                    void *ctx);
 void win_find_hide(int (*hidden)(const char *name));
 int win_create_file(const char *winpath);
+/* Deletes the user-folder file of a Windows path (not a save): 1 when a file was deleted (history_trim.c). */
+int win_delete_file(const char *winpath);
 /* The Windows path of a host folder (C:\ plus the host path). */
 void win_windows_path(const char *host, char *out, size_t room);
 extern char win_cwd[1024];             /* current folder, as a Windows path */
