@@ -12,9 +12,11 @@ rules on, every Asian nation enters, and the weakest 2 x (nations - 40) play two
 campaign year; the winners take the last places of the group draw (25 March of the next year).
 
 One new game, Tier A, England's leagues, seed 1, changing rules on, the 3.9.68 database, a 2001/02 start:
-- leg 1 to 11 October 2004 (the 2006 cycle's first round is under way), a save;
-- leg 2 loads it and saves one day later: the Asian section's part of the save is the same (save and load in the
-  middle of the first round give the same game);
+- leg 1 to 6 September 2004 (the 2006 cycle's round is made, from 1 August), a save;
+- leg 2 loads it and saves one day later: the Asian section's part of the save is the same;
+- leg 0 plays the same game unbroken to 31 March 2005: the round's fixtures and results equal those of leg 3 (save
+  and load in the middle of the first round give the same round). The runtime keeps no state of the round outside the
+  object, so a load in the same run cannot miss a round;
 - leg 3 loads the save of leg 1 and plays to 31 March 2005 (after the group draw), a save;
 - with --cycles 2, leg 4 loads that and plays to 31 March 2009 (the 2010 cycle);
 - leg 5, not Tier A, a 2008/09 start to 20 October 2008: Timor (no player in the data) plays both legs of its tie
@@ -24,7 +26,7 @@ Item 200: Timor (no continent in the 3.9.68 data) joins the AFC in 2005/06, so i
 cycle (the 2006 cycle's round is in October 2004, before it joined).
 
 The checks: every leg ends with code 0 and no message box; in each cycle Brunei (and Timor in 2010) plays two matches of the Asian
-section between 15 September of the campaign year and the group draw (25 March); the section's matches of that
+section between 1 August of the campaign year and the group draw (25 March); the section's matches of that
 time are two-leg ties (each pair of teams meets twice). On main before item 196 Brunei plays no match: the test
 fails there.
 """
@@ -41,17 +43,17 @@ import history_check  # noqa: E402
 import soak_run  # noqa: E402
 
 START = datetime.date(2001, 7, 1)          # 3.9.68, 2001/02: the game's first day (soak_run's leg counts from it)
-MIDDLE = datetime.date(2004, 10, 11)
+MIDDLE = datetime.date(2004, 9, 6)
 NATION = "Brunei"
 TIMOR = "Timor"                 # item 200: no continent in the 3.9.68 data, in the AFC from 2005/06
 SECTIONS = ("World Cup Asian Qualifying Section", "FIFA World Cup qualification (AFC)")   # base, rules-on name
 
 
 def first_round(save, campaign):
-    """[(day, home name, away name)] of the Asian section from 15 September of campaign to 24 March after it."""
+    """[(day, home name, away name)] of the Asian section from 1 August of campaign to 24 March after it."""
     game = history_check.Game(save)
     ids = {cid for cid, c in game.comps.items() if c["name"] in SECTIONS}
-    lo = datetime.date(campaign, 9, 15).toordinal()
+    lo = datetime.date(campaign, 8, 1).toordinal()
     hi = datetime.date(campaign + 1, 3, 24).toordinal()
     name = lambda t: game.club(t)[1] or game.club(t)[0]     # noqa: E731
     return sorted((f[0], name(f[1]), name(f[2])) for cid in ids for f in history_check.fixtures(game).get(cid, [])
@@ -75,8 +77,11 @@ def check_cycle(save, campaign, nations=(NATION,)):
     bad = [sorted(p) for p, n in pairs.items() if n != 2]
     if not pairs or bad:
         fails.append(f"{campaign + 2}: ties that do not meet twice: {bad}")
+    near = clashes(save, campaign)
+    if near:
+        fails.append(f"{campaign + 2}: a team of the round has another match within 2 days of a leg: {near}")
     if not fails:
-        print(f"ok    {campaign + 2}: {', '.join(nations)} play a two-leg first-round tie")
+        print(f"ok    {campaign + 2}: {', '.join(nations)} play a two-leg first-round tie, no other match near a leg")
     return fails
 
 
@@ -87,7 +92,7 @@ def played(save, nation, campaign):
     game = history_check.Game(save)
     ids = {cid for cid, c in game.comps.items() if c["name"] in SECTIONS}
     name = lambda t: game.club(t)[1] or game.club(t)[0]     # noqa: E731
-    lo, hi = datetime.date(campaign, 9, 15), datetime.date(campaign + 1, 3, 24)
+    lo, hi = datetime.date(campaign, 8, 1), datetime.date(campaign + 1, 3, 24)
     out = []
     for part in game.fixture_parts:
         b = game.sav.read(part)
@@ -102,6 +107,30 @@ def played(save, nation, campaign):
             if lo <= day <= hi and any(name(t).startswith(nation) for t in (h, a)):
                 out.append((day, name(h), name(a)) + struct.unpack_from("<bb", b, o + 0x43))
     return sorted(out)
+
+
+def clashes(save, campaign):
+    """[(leg day, other day, competition, home, away)]: another match of a team of the round within 2 days of a
+    leg (the review of item 196 found Bhutan's second leg of 13 October 2004 beside the Asian Cup qualifying of the
+    14th)."""
+    game = history_check.Game(save)
+    ids = {cid for cid, c in game.comps.items() if c["name"] in SECTIONS}
+    lo, hi = datetime.date(campaign, 8, 1), datetime.date(campaign + 1, 3, 24)
+    rows = []
+    for part in game.fixture_parts:
+        b = game.sav.read(part)
+        count = struct.unpack_from("<i", b, 0)[0] if len(b) >= 4 else 0
+        for i in range(count if 4 + count * 0x4f == len(b) else 0):
+            o = 4 + i * 0x4f
+            cid = struct.unpack_from("<i", b, o)[0]
+            h, a = struct.unpack_from("<ii", b, o + 0xc)
+            y, d = struct.unpack_from("<hh", b, o + 0x28)
+            if cid in game.comps and 1900 < y < 3000 and 0 <= d < 366:
+                rows.append((datetime.date(y, 1, 1) + datetime.timedelta(d), cid, h, a))
+    legs = [r for r in rows if r[1] in ids and lo <= r[0] <= hi]
+    name = lambda t: game.club(t)[1] or game.club(t)[0]     # noqa: E731
+    return [(str(r[0]), str(o[0]), game.comps[o[1]]["name"], name(o[2]), name(o[3])) for r in legs for o in rows
+            if o[1] not in ids and set(o[2:]) & set(r[2:]) and abs((o[0] - r[0]).days) <= 2]
 
 
 def section_parts(save):
@@ -152,6 +181,18 @@ def main(argv):
         fails += leg_fails("3", code, box, saved(w3))
         if not fails:
             fails += check_cycle(saved(w3), 2004)
+        # The same game unbroken (no save in the round): the round's fixtures and results equal those of the game
+        # saved and loaded in the middle of it (Tier A results come from reputation).
+        w0 = os.path.join(keep, "leg0-unbroken")
+        code, took, box = soak_run.new_game_leg(o, w0, (end - START).days)
+        print(f"      leg 0 (unbroken) to {end}: {took:.0f} s")
+        fails += leg_fails("0", code, box, saved(w0))
+        if not fails:
+            a, b = played(saved(w0), "", 2004), played(saved(w3), "", 2004)
+            if not a or a != b:
+                fails.append(f"the round differs after a save and a load in it: unbroken {a}, loaded {b}")
+            else:
+                print(f"ok    the round's {len(a)} matches are the same in the unbroken and the loaded game")
         if not fails and cycles > 1:
             w4 = os.path.join(keep, "leg4")
             end4 = datetime.date(2009, 3, 31)

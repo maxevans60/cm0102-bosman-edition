@@ -12,7 +12,7 @@
  * itself is group A (0x912ad0) and stages 0 to 8 the others (0x913540 writes slot +0xc[g], +0x30 = g); then +0x45 =
  * 1. Before it League::update_for_date 0x6847c0 does nothing (+0x45 0, 0x684811).
  *
- * The change. From 15 September of the campaign year c (+0x40) to the draw day, on the first update day while +0x45
+ * The change. From 1 August of the campaign year c (+0x40) to the draw day, on the first update day while +0x45
  * is 0 and +0x30 is -1 (the pool of the cycle is made, no round yet; the slots themselves tell nothing: the ctor's
  * stage array comes from malloc uncleared, 0x911d00, and start_new_season frees the stages but keeps their
  * pointers, 0x9133ab..0x9133c1): every Asian nation whose national team names
@@ -22,7 +22,9 @@
  * (season_afc_first_plan) as a Cup_Stage (0x522e00) in slot 0, +0x30 = 0; the list +0xef becomes the G - W byes
  * and, for each tie, its seed as a stand-in. The round is made then, not at the pool, so a game made in 2001/02
  * keeps the base game's sections at the new game (a pool built at the new game would put the round's fixtures of
- * October 2004 into the save of the first day).
+ * October 2004 into the save of the first day). The days (season_afc_first_days): a FIFA window from 1 October of c
+ * where no team of the round has another match within 2 days of a leg (window_free; the store would move one of
+ * the two, resolve_same_day_clash 0x5ae380), else such a window from August, else the first window.
  *
  * While slot 0 holds the ties (+0x45 0, +0x30 0, a Cup_Stage, vtable 0x969468) the wrap of update_for_date calls
  * the stage's update (vtable +0x14, as League::update_for_date does at 0x6848f8 once +0x45 is 1), and advance_stage
@@ -33,8 +35,9 @@
  * Save and load. League save 0x6891c0 writes stages 0 to +0x30 (a Cup_Stage as type 1) and League load 0x687b10
  * reads them back (0x688ec7, Cup_Stage 0x5230e0), so the ties come back with +0x30 = 0. save_extra_data 0x914410
  * and load_extra_data 0x914200 write and read the list +0xef with its count +0xf3: the stand-ins are teams, so the
- * save keeps the original's shape. A save made before this change has no tie and a list of 40: it plays on as
- * before and its next cycle gets the round.
+ * save keeps the original's shape. A save made before this change has no tie and a list of 40. Loaded before the
+ * draw of its cycle with a FIFA window left, it gets the round in that cycle (+0x45 0 and +0x30 -1 are the state of
+ * a cycle with no round yet); else it plays that cycle as before and the next cycle gets the round.
  *
  * The rest of the class with a stage 0 that is a tie. The Cup_Stage passes its results to the section's status
  * 0x912500 (Cup 0x519690 at 0x51970c) with stage 0: stage < 9, a winner (status 1) gets nothing, a loser (0xfe)
@@ -180,7 +183,8 @@ static int group_places(uint32_t self)
     return ee >= 0 && ee <= 3 ? GROUP_PLACES - ee : -1;      /* 0x912db0 knows 0 to 3 (0x912dbd) */
 }
 
-/* The Asian nations that can enter, sorted best first by the original's compare, into out (max). */
+/* The Asian nations that can enter, sorted best first by the original's compare, into out (max). out NULL: the
+ * count only, with no allocation (a day of a cycle with no round changes no memory). */
 static int asian_pool(uint32_t self, uint32_t *out, int max)
 {
     uint32_t nations = rd32(g_mem, NATIONS);
@@ -197,8 +201,10 @@ static int asian_pool(uint32_t self, uint32_t *out, int max)
         uint32_t team = call_cdecl(NATIONAL_TEAM, 1, a);
         if (rt_unwinding) return 0;
         if (!readable(team) || rd32(g_mem, team + 0x53u) != nation) continue;
-        out[n++] = team;
+        if (out) out[n] = team;
+        n++;
     }
+    if (!out) return n;
     uint32_t arr = game_malloc((uint32_t)(n ? n : 1) * 4u);
     if (rt_unwinding || !arr) return 0;
     for (int i = 0; i < n; i++) wr32(g_mem, arr + 4u * (uint32_t)i, out[i]);
@@ -242,6 +248,44 @@ static uint32_t round_record(int c, int teams, long draw, long leg1, long leg2)
     return rec;
 }
 
+/* The day the groups are drawn (+0xb6 day of the year, +0x40 + +0xb8 year: set_up_rules 0x912eb0 sets 25 March of
+ * the year after +0x40), as days from 1 January 1970. update_for_date 0x913140 draws on that day only. */
+static long groups_draw_day(uint32_t self)
+{
+    return season_abs_day(year_of(self) + (int16_t)rd16(g_mem, self + F_DRAW_YEAR), 1, 1) +
+           (int16_t)rd16(g_mem, self + F_DRAW_DAY);
+}
+
+int season_fifa_team_busy_near(uint32_t team, int y, int doy, int days);    /* season_friendly_dates.c */
+
+typedef struct {
+    const uint32_t *pool;
+    const SeasonAfcFirstPlan *plan;
+    int busy;
+} FreeCtx;
+
+static int team_near(uint32_t team, long z)
+{
+    int y, m, d;
+    season_from_abs_day(z, &y, &m, &d);
+    return season_fifa_team_busy_near(team, y, season_day_of_year(y, m, d), 2);
+}
+
+/* 1 when no team of the round has a match within 2 days of either leg (CLASH_DAYS of season_friendly_dates.c). */
+static int window_free(long leg1, long leg2, void *ctx)
+{
+    FreeCtx *fc = ctx;
+    for (int k = 0; k < fc->plan->ties && !rt_unwinding; k++)
+        for (int s = 0; s < 2; s++) {
+            uint32_t team = fc->pool[fc->plan->pair[k][s]];
+            if (team_near(team, leg1) || team_near(team, leg2)) {
+                fc->busy++;
+                return 0;
+            }
+        }
+    return !rt_unwinding;
+}
+
 /* Makes the round of the cycle (head comment). Returns 1 when slot 0 holds the ties. */
 static int build(uint32_t self)
 {
@@ -251,11 +295,23 @@ static int build(uint32_t self)
     uint32_t pool[AFC_FIRST_MAX_POOL];
     SeasonAfcFirstPlan plan;
     if (places <= 0) return 0;
-    int p = asian_pool(self, pool, AFC_FIRST_MAX_POOL);
+    /* The window and the count first: neither allocates, so a cycle with no round (each day from the build day to
+     * the draw tests it again; no state outside the object, so a load or a new game in the same run starts clean)
+     * changes no memory of the game. */
+    int dated = season_afc_first_days(c, today, groups_draw_day(self), NULL, NULL, &draw, &leg1, &leg2);
+    int p = asian_pool(self, NULL, AFC_FIRST_MAX_POOL);
     if (rt_unwinding) return 0;
     int w = season_afc_first_plan(p, places, &plan);
-    int dated = w > 0 && season_afc_first_days(c, today, &draw, &leg1, &leg2);
-    if (!dated) {
+    if (dated && w > 0) {
+        p = asian_pool(self, pool, AFC_FIRST_MAX_POOL);
+        if (rt_unwinding) return 0;
+        w = season_afc_first_plan(p, places, &plan);
+        /* The window: the first where no team of the round has another match within 2 days of a leg. */
+        FreeCtx fc = {pool, &plan, 0};
+        dated = season_afc_first_days(c, today, groups_draw_day(self), window_free, &fc, &draw, &leg1, &leg2);
+        if (rt_unwinding) return 0;
+    }
+    if (!dated || w <= 0) {
         if (logging() && logged_year != c) {
             logged_year = c;
             fprintf(stderr, "recomp: season intl: wc qualifying %d: AFC pool of %d for %d places: %s\n", c + 2, p,
@@ -340,11 +396,14 @@ static uint32_t tie_winner(uint32_t cup, int k)
     return 0;
 }
 
-/* The draw day: the winners into the list, the stage freed, slot 0 cleared, +0x30 = -1. */
+/* The draw day: the winners into the list, the stage freed, slot 0 cleared, +0x30 = -1. The second legs end 15 days
+ * before the draw at the latest (season_afc_first_days, ctest season_afc_first), so every tie is decided. A tie that
+ * is not (a leg moved past the draw) keeps its seed in the list, and the stage is not freed: its fixtures still name
+ * it, so it stays allocated (logged) while the original's draw writes slot 0. */
 static void finish(uint32_t self)
 {
     uint32_t cup = slot0(self), rows = rd32(g_mem, cup + F_CUP_ROWS), list = rd32(g_mem, self + F_LIST);
-    int n = (int16_t)rd16(g_mem, cup + F_TEAMS), count = (int)rd32(g_mem, self + F_LIST_COUNT);
+    int n = (int16_t)rd16(g_mem, cup + F_TEAMS), count = (int)rd32(g_mem, self + F_LIST_COUNT), open = 0;
     for (int k = 0; readable(rows) && readable(list) && k < n / 2; k++) {
         uint32_t a = rd32(g_mem, rows + 12u * (uint32_t)k), b = rd32(g_mem, rows + 12u * (uint32_t)k + 6u);
         uint32_t win = tie_winner(cup, k);
@@ -355,6 +414,7 @@ static void finish(uint32_t self)
         }
         if (at < 0) continue;
         if (!win) {
+            open++;
             fprintf(stderr, "recomp: season intl: wc qualifying %d: AFC first round tie %s v %s not decided on the "
                             "draw day, %s goes on\n", year_of(self) + 2, team_name(a), team_name(b),
                     team_name(rd32(g_mem, list + 4u * (uint32_t)at)));
@@ -365,9 +425,14 @@ static void finish(uint32_t self)
             fprintf(stderr, "recomp: season intl: wc qualifying %d: AFC first round: %s goes to the groups\n",
                     year_of(self) + 2, team_name(win));
     }
-    uint32_t one[1] = {1};
-    call_this(rd32(g_mem, rd32(g_mem, cup)), cup, 1, one);         /* scalar deleting dtor, as 0x9133b7 */
-    if (rt_unwinding) return;
+    if (!open) {
+        uint32_t one[1] = {1};
+        call_this(rd32(g_mem, rd32(g_mem, cup)), cup, 1, one);     /* scalar deleting dtor, as 0x9133b7 */
+        if (rt_unwinding) return;
+    } else {
+        fprintf(stderr, "recomp: season intl: wc qualifying %d: AFC first round stage kept (%d ties open)\n",
+                year_of(self) + 2, open);
+    }
     wr32(g_mem, rd32(g_mem, self + F_STAGES), 0);
     wr32(g_mem, self + F_STAGE, 0xffffffffu);
 }
@@ -387,15 +452,9 @@ RT_WRAP(00913140, afc_first_update)
     if (on(self) && rd32(g_mem, self + F_DRAWN) == 0) {
         long now = today_abs();
         if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && now >= season_afc_first_build_day(year_of(self)) &&
-            now < season_abs_day(year_of(self) + 1, 3, 25)) {
-            /* Once a cycle: a cycle with no round (no window) meets this every day, so it is kept by year. */
-            static int tried_year, tried_self;
-            if (tried_year != year_of(self) || tried_self != (int)self) {
-                tried_year = year_of(self);
-                tried_self = (int)self;
-                build(self);
-                if (rt_unwinding) return;
-            }
+            now < groups_draw_day(self)) {
+            build(self);
+            if (rt_unwinding) return;
         }
         if (ties_live(self)) {
             if (full && draw_day(self)) {

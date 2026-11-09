@@ -44,29 +44,36 @@ static int cmp_long(const void *a, const void *b)
     return x < y ? -1 : x > y;
 }
 
-long season_afc_first_build_day(int c) { return season_abs_day(c, 9, 15); }
+long season_afc_first_build_day(int c) { return season_abs_day(c, 8, 1); }
 
-int season_afc_first_days(int c, long today, long *draw, long *leg1, long *leg2)
+int season_afc_first_days(int c, long today, long groups_draw, SeasonAfcFirstFree free_fn, void *ctx, long *draw,
+                          long *leg1, long *leg2)
 {
     long days[2 * SEASON_FIFA_YEAR_MAX];
-    int n = 0;
+    int n = 0, found = 0;
     for (int y = c; y <= c + 1; y++) {
         int doys[SEASON_FIFA_YEAR_MAX], k = season_fifa_year_days(y, doys, SEASON_FIFA_YEAR_MAX);
         long base = season_abs_day(y, 1, 1);
         for (int i = 0; i < k; i++) days[n++] = base + doys[i];
     }
     qsort(days, (size_t)n, sizeof days[0], cmp_long);
-    long from = season_abs_day(c, 10, 1), last = season_abs_day(c + 1, 3, 10);
-    if (from < today + 8) from = today + 8;
-    for (int i = 0; i < n; i++) {
-        if (days[i] < from) continue;
-        for (int j = i + 1; j < n && days[j] - days[i] <= 6; j++) {
-            if (days[j] - days[i] < 3 || days[j] > last) continue;
-            *leg1 = days[i];
-            *leg2 = days[j];
-            *draw = days[i] - 7 > today ? days[i] - 7 : today + 1;
-            return 1;
+    long last = groups_draw - AFC_FIRST_DRAW_GAP;
+    /* The passes: a free window from 1 October, a free window from August (the build day), the first window from
+     * 1 October, the first window from August. */
+    for (int pass = 0; pass < 4 && !found; pass++) {
+        long from = pass % 2 == 0 ? season_abs_day(c, 10, 1) : season_abs_day(c, 8, 1);
+        if (from < today + 8) from = today + 8;
+        for (int i = 0; i < n && !found; i++) {
+            if (days[i] < from) continue;
+            for (int j = i + 1; j < n && days[j] - days[i] <= 6 && !found; j++) {
+                if (days[j] - days[i] < 3 || days[j] > last) continue;
+                if (pass < 2 && free_fn && !free_fn(days[i], days[j], ctx)) continue;
+                *leg1 = days[i];
+                *leg2 = days[j];
+                found = 1;
+            }
         }
     }
-    return 0;
+    if (found) *draw = *leg1 - 7 > today ? *leg1 - 7 : today + 1;
+    return found;
 }

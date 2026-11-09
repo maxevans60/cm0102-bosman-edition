@@ -26,12 +26,18 @@ int season_afc_first_plan(int pool, int places, SeasonAfcFirstPlan *plan);
 
 /* The days of the round of the campaign of year c (wc_asia_league +0x40, the World Cup two years later), as days
  * from 1 January 1970: both legs on FIFA days (season_fifa_year_days) of one FIFA window, 3 to 6 days apart, the
- * first leg on or after 1 October of c and at least 8 days after today, the second leg by 10 March of c + 1 (the
- * groups are drawn on 25 March, set_up_rules 0x912eb0). The round is drawn 7 days before the first leg, not
- * before tomorrow. Returns 1, or 0 when no window fits (a game that starts after early March of c + 1). */
-int season_afc_first_days(int c, long today, long *draw, long *leg1, long *leg2);
+ * first leg at least 8 days after today, from 1 October of c when a window there is free (free_fn), else from
+ * August, the second leg at least AFC_FIRST_DRAW_GAP days before groups_draw, the day the groups are drawn (wc_asia_league +0xb6 and +0xb8: 25 March of c + 1,
+ * set_up_rules 0x912eb0), so every tie is decided on the draw day. The round is drawn 7 days before the first leg,
+ * not before tomorrow. Returns 1, or 0 when no window fits. */
+#define AFC_FIRST_DRAW_GAP 15
+/* free(leg1, leg2, ctx): 1 when no team of the round has another match near the legs; the first window it accepts
+ * is taken, and the first window of all when it accepts none. NULL: every window is free. */
+typedef int (*SeasonAfcFirstFree)(long leg1, long leg2, void *ctx);
+int season_afc_first_days(int c, long today, long groups_draw, SeasonAfcFirstFree free_fn, void *ctx, long *draw,
+                          long *leg1, long *leg2);
 
-/* The day from which a campaign of year c makes its round: 15 September of c. */
+/* The day from which a campaign of year c makes its round: 1 August of c (after the pool of 25 July). */
 long season_afc_first_build_day(int c);
 
 #endif
