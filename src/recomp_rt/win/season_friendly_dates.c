@@ -251,6 +251,37 @@ static int national_side(uint32_t club)
  * 6 September 2008, match_eng.cpp 652). The day lists of all types (count: the s8 at 0xb64738, key nation entries).
  * self: the fixture that moves, when it is stored on that day (it is not a match beside itself). */
 static char busy_why[160];              /* what side_busy found last (for the stay line) */
+static char duty_first[160];            /* the first such tie (for the stay line) */
+
+/* ---- A qualifier outranks a friendly (0.6.2 item 208) ----
+ *
+ * The snap placed the game's friendlies first (snap_rows above: each row on the FIFA day of its month), so a
+ * friendly could hold the FIFA day of a qualifier made later: in a replay of 2031 to 2033 the 18 pairs of a CAF round
+ * planned for 4 June 2032 and the 5 of a CONMEBOL round planned for 24 September 2031 went to days that are not FIFA
+ * days, each side having a game friendly on the planned day (run-logs/0.6.2-s203/probe-lines.txt). The original ranks
+ * a friendly below a competition match: when add_fixture 0x5aa680 stores a match of higher priority (+0x3a) than its
+ * clash, each clashing fixture of the Friendly competition (Friendly::is_friendly_comp 0x5c6710, at 0x5aa9be) is
+ * cancelled with Friendly::cancel 0x5c6570 (at 0x5aa9d0, this the Friendly object [0xae2c74]), which posts the friendly's cancelled news and removes it
+ * (0x5cb9e0 for national sides, remove_fixture 0x5abc30 for clubs). Real life: a friendly is arranged around the
+ * competitive matches of its window. So in the snap a friendly does not hold a day (side_busy, side_near), and when a
+ * qualifier's day is chosen, each friendly of a side of its two nations (senior, B or Under 21) from CLASH_DAYS before
+ * to CLASH_DAYS after that day, not yet played (+0x43 -1), is cancelled with 0x5c6570 before add_fixture stores the
+ * qualifier. Running seasons with changing rules only, as the snap. */
+#define FRIENDLY_COMP 0x04u                 /* Friendly +4: the friendly competition record (0x5c6710) */
+#define COMP_COUNT 0xae2378u                /* the competition count: an id from it - 0x7f on is a friendly (0x5c6710) */
+#define F_CANCEL_FRIENDLY 0x005c6570u       /* Friendly::cancel, thiscall (Fixture *, Club *) ret 8 */
+#define FRIENDLY_OBJ 0xae2c74u              /* the Friendly object (this of 0x5c6710 and 0x5c6570 at 0x5aa9b7) */
+
+/* 1 when fixture f is of the Friendly competition: Friendly::is_friendly_comp 0x5c6710 (its record is Friendly +4, or
+ * its id is the competition count - 0x7f or more). */
+static int friendly_fixture(uint32_t f)
+{
+    uint32_t rec = rd32(g_mem, f + 0x14);
+    if (!readable(rec)) return 0;
+    uint32_t fo = rd32(g_mem, FRIENDLY_OBJ);
+    if (readable(fo) && rec == rd32(g_mem, fo + FRIENDLY_COMP)) return 1;
+    return (int32_t)rd32(g_mem, rec) >= (int32_t)rd32(g_mem, COMP_COUNT) - 0x7f;
+}
 
 /* 1 when the fixture of club h v club w takes a national side of club a or club b: one of them is a or b, or a
  * national side (senior, B or Under 21, national_side) of the nation of a or b (club +0x53). The old test compared
@@ -278,7 +309,7 @@ static int side_busy(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
             for (uint32_t node = readable(list) ? rd32(g_mem, list + 2) : 0, k = 0; readable(node) && k < 4000;
                  node = rd32(g_mem, node + 6), k++) {
                 uint32_t f = rd32(g_mem, node);
-                if (!readable(f) || f == self) continue;
+                if (!readable(f) || f == self || friendly_fixture(f)) continue;     /* item 208 */
                 uint32_t h = rd32(g_mem, f + 0x1c), w = rd32(g_mem, f + 0x20);
                 uint32_t rec = rd32(g_mem, f + 0x14);
                 int nat = season_fifa_fixture_takes_side(h, w, a, b);
@@ -326,7 +357,7 @@ static int side_near(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
                 for (uint32_t node = readable(list) ? rd32(g_mem, list + 2) : 0, k = 0; readable(node) && k < 4000;
                      node = rd32(g_mem, node + 6), k++) {
                     uint32_t f = rd32(g_mem, node);
-                    if (!readable(f) || f == self) continue;
+                    if (!readable(f) || f == self || friendly_fixture(f)) continue;     /* item 208 */
                     uint32_t h = rd32(g_mem, f + 0x1c), w = rd32(g_mem, f + 0x20);
                     if (h == a || h == b || w == a || w == b) return 1;
                 }
@@ -583,6 +614,19 @@ static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int
     *how = " (stage plan)";
     if (pair_free(home, away, y, (int)(p - y0), 0)) return rt_unwinding ? -1 : (int)(p - y0);
     if (rt_unwinding) return -1;
+    static char not_free[400];             /* the move line names what holds the planned day (log only) */
+    snprintf(not_free, sizeof not_free, " (stage plan: its planned day was not free)");
+    if (getenv("RECOMP_SCREEN_LOG")) {
+        int c = (int)(p - y0);
+        uint32_t na = rd32(g_mem, home + 0x53), nb = rd32(g_mem, away + 0x53);
+        busy_why[0] = duty_first[0] = 0;
+        const char *what = finals_busy(home, away, y, c) ? "a final of its confederation"
+                         : side_busy(home, away, y, c, 0) ? busy_why
+                         : side_near(home, away, y, c, 0) ? "a match of a side within 2 days"
+                         : duty_ties(na, nb, y, c) ? duty_first + (duty_first[0] == ':' ? 2 : 0) : "?";
+        if (rt_unwinding) return -1;
+        snprintf(not_free, sizeof not_free, " (stage plan: its planned day %d was not free: %s)", c, what);
+    }
     season_stage_window(stage_plan, stage_n, r, stage_first, stage_last_fifa, &lo, &hi);
     if (lo < y0) lo = y0;
     if (hi > y0 + days_in(y) - 1) hi = y0 + days_in(y) - 1;
@@ -595,7 +639,7 @@ static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int
                 long c = p + sign * dist;
                 if (c < lo || c > top || fifa_or_real(c, sa) == pass) continue;
                 if (pair_free(home, away, y, (int)(c - y0), 0)) {
-                    *how = " (stage plan: its planned day was not free)";
+                    *how = not_free;
                     return rt_unwinding ? -1 : (int)(c - y0);
                 }
             }
@@ -625,7 +669,6 @@ static int players_of(uint32_t c, uint32_t n, uint32_t m)
 
 /* The ties of continental club competitions within a day of day d of year y whose club holds more than two players
  * of nation n or m: the original's duty rule (NationalTeams::can_schedule_club_fixture 0x776fc0) meets those. */
-static char duty_first[160];            /* the first such tie (for the stay line) */
 
 static int duty_ties(uint32_t n, uint32_t m, int y, int d)
 {
@@ -680,6 +723,51 @@ static void stay_info(uint32_t rec, uint32_t home, uint32_t away, int d, int y, 
                     "stage%s%s; %d continental club ties within a day of it have a club with more than two of the "
                     "nations' players%s%s\n", win_str(rec + 4), win_str(home + 4), win_str(away + 4), d, y, reach,
             reach ? ", " : "", held, ties, ties ? duty_first : "", how);
+}
+
+/* Item 208: cancel the friendlies of a side of the nations of club a and club b from CLASH_DAYS before to CLASH_DAYS
+ * after day doy of year y (the rule above). self: a stored qualifier that moves (not a friendly). */
+#define CANCEL_MAX 64
+static void cancel_friendlies(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
+{
+    uint32_t fo = rd32(g_mem, FRIENDLY_OBJ);
+    if (!readable(fo)) return;
+    uint32_t found[CANCEL_MAX];
+    int n = 0, types = (int8_t)g_mem[TYPE_COUNT];
+    if (types < 2 || types > 40) types = 2;
+    for (int off = -CLASH_DAYS; off <= CLASH_DAYS && !rt_unwinding; off++) {
+        int yy = y, dd = doy + off;
+        if (dd < 0) dd += days_in(--yy);
+        else if (dd >= days_in(yy)) dd -= days_in(yy++);
+        for (int slice = 0; slice < 3 && !rt_unwinding; slice++)
+            for (int type = 0; type < types && !rt_unwinding; type++) {
+                uint32_t list = day_list(yy, dd, slice, type);
+                if (rt_unwinding) return;
+                for (uint32_t node = readable(list) ? rd32(g_mem, list + 2) : 0, k = 0; readable(node) && k < 4000;
+                     node = rd32(g_mem, node + 6), k++) {
+                    uint32_t f = rd32(g_mem, node);
+                    if (!readable(f) || f == self || !friendly_fixture(f) || (int8_t)g_mem[f + 0x43] != -1) continue;
+                    if (!season_fifa_fixture_takes_side(rd32(g_mem, f + 0x1c), rd32(g_mem, f + 0x20), a, b)) continue;
+                    int seen = 0;
+                    for (int i = 0; i < n; i++) seen |= found[i] == f;
+                    if (!seen && n < CANCEL_MAX) found[n++] = f;
+                }
+            }
+    }
+    Cpu saved = cpu;
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        uint32_t f = found[i], h = rd32(g_mem, f + 0x1c), w = rd32(g_mem, f + 0x20);
+        int fy = (int16_t)rd16(g_mem, f + 0x28), fd = (int16_t)rd16(g_mem, f + 0x2a);
+        if (getenv("RECOMP_SCREEN_LOG"))
+            fprintf(stderr, "recomp: intl dates: the friendly %.30s v %.30s on day %d of %d is cancelled for the "
+                            "qualifier of %.30s v %.30s on day %d of %d\n", readable(h) ? win_str(h + 4) : "-",
+                    readable(w) ? win_str(w + 4) : "-", fd, fy, win_str(a + 4), win_str(b + 4), doy, y);
+        cpu.ecx = fo;
+        uint32_t args[2] = {f, 0};
+        rt_callback(F_CANCEL_FRIENDLY, 2, args);
+        if (rt_unwinding) return;
+        cpu = saved;
+    }
 }
 
 static void log_move(uint32_t rec, uint32_t home, uint32_t away, int d, int c, int y, const char *how)
@@ -762,6 +850,8 @@ static void move_pending(void)
             end_year = ey, end_day = ed;
             continue;
         }
+        cancel_friendlies(home, away, y, c, f);                                 /* item 208 */
+        if (rt_unwinding) return;
         uint32_t saved_esp = cpu.esp;
         cpu.esp -= 0x60;
         uint32_t copy = cpu.esp;
@@ -873,6 +963,8 @@ void season_fifa_snap_fixture(uint32_t fix, uint32_t ret)
     const char *how = "";
     int c = planned_target(rec, home, away, y, d, &how);
     if (c == NO_PLAN) c = fifa_target(home, away, y, d), how = "";
+    if (rt_unwinding) return;
+    cancel_friendlies(home, away, y, c >= 0 ? c : d, 0);
     if (rt_unwinding || c == d) return;
     if (c >= 0) wr16(g_mem, fix + 0x2a, (uint16_t)c);
     log_move(rec, home, away, d, c, y, how);
