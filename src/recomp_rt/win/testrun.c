@@ -22,6 +22,8 @@
 #include "season_history.h"
 #include "season_rules.h"
 
+void history_trim_screen_check(void);
+
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,6 +94,7 @@ RT_WRAP(005cde40, human_turn)
             uint32_t args[2] = {rt_alloc_str(path), 0x16};
             uint32_t r = rt_callback(SAVE_GAME, 2, args);
             fprintf(stderr, "recomp: saved %s after %d game days (result %u)\n", path, today - first_day, r);
+            history_trim_screen_check();    /* RECOMP_TEST_CLUB_HISTORY=1 only (history_trim.c) */
             if (rt_on_fatal) rt_on_fatal();
             SDL_Quit();
             exit(0);

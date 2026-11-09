@@ -95,6 +95,8 @@ Saves can now be up to 4 GB. A save that would be larger stops with a clear mess
 
 A save holds at most 999 parts. The game keeps a temporary file for each season, so the temporary files of one type go into one merged part. `tests/seasons/save_parts_run.py fill` adds temporary files until a save holds 990 and 999 parts, then saves and loads twice. Each save must hold at most 200 parts and every added file. `tests/seasons/save_parts_run.py old` loads a save of 0.6.0, 0.6.1 or an earlier 0.6.2 build, saves and loads twice, and checks that every temporary file of the old save is still there. These checks run at the merge of a save change.
 
+Every game keeps the club records history and the fixtures of the last 50 seasons (open item 192), so a game with all nations stays below 4 GB to 2300. `tests/seasons/history_trim_run.py` loads a Tier A save of July 2061 and plays one season. Each club's list must then hold at most 50 seasons in order, the history file may grow only for clubs with fewer than 50, the Club History list of every club must build, and the save must hold the fixtures of the last 50 years and no older ones. The check runs at the merge of a change to these files. The same-save run `history-keep-all` turns the trim off.
+
 ## Screen sweeps and smoke screenshots
 
 The screen sweep opens the tables, results, fixtures, schedule and history of every competition, once each season. The data sweep reads each competition from memory at the start and end of each season. It looks for dates outside the season and for empty tables where the rules give clubs. The scripts are `tests/seasons/screen_sweep_run.py` and `tests/seasons/data_sweep_run.py`. They run at each release.

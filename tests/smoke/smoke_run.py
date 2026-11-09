@@ -22,6 +22,8 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     silent   sound = off: sound changes no game decision
     off      every switch option off: no option changes a game decision
     sleep-off  RECOMP_IDLE_SLEEP=0: the idle sleep (#58) changes no game decision
+    history-keep-all  RECOMP_HISTORY_SEASONS=0: the trim of the club records history and the fixtures to 50
+               seasons (open item 192, history_trim.c) changes no game decision
     rules-on, rules-off  changing_rules (0.6.0 slice 11): a new game with it on has the season part
                bosman_season.dat in its save; from slice 17 it also plays by the rules table of 2001/02 (RULES_ON_PARTS). Every new-game run has
                changing_rules = off unless it sets it (new_game_runs), so the new game is the base game.
@@ -258,6 +260,8 @@ SAME_SAVE_RUNS = [
     ("online-off", {"faster_days": "off", "online_play": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
+    # Open item 192 has no option: the trim to 50 seasons acts in every game, and keeps all with this variable.
+    ("history-keep-all", {"faster_days": "off", "_env": {"RECOMP_HISTORY_SEASONS": "0"}}),
     # Q342: the season code off (slice 11 year sites, the season part, the Choose Season code) gives the save of
     # normal, a 2001/02 game with changing rules off. From slice 13 the base game of 0.6.0 is the reference.
     ("season-code-off", {"faster_days": "off", "_env": {"RECOMP_SEASON_CODE": "off"}}),
@@ -405,6 +409,7 @@ MATCH_RUNS = [
     ("online-on", {"online_play": "on"}),
     ("online-off", {"online_play": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
+    ("history-keep-all", {"_env": {"RECOMP_HISTORY_SEASONS": "0"}}),
     ("season-code-off", {"_env": {"RECOMP_SEASON_CODE": "off"}}),
     ("box-fixes-off", {"_env": {"RECOMP_BOX_FIXES": "off"}}),
     ("host-loops-off", {"_env": {"RECOMP_QSORT": "original", "RECOMP_HOT": "original", "RECOMP_FTOL": "original",
