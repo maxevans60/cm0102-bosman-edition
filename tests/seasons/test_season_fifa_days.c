@@ -100,6 +100,24 @@ int main(void)
     printf("%ld days 2001 to 2300, %ld meet a FIFA day, at most %d FIFA days a year; season_fifa_meets in 2300: "
            "%.4f ms a call\n", days, met, most, ms);
     if (ms > 0.5) printf("season_fifa_meets takes %.3f ms a call in 2300, more than 0.5 ms\n", ms), bad++;
+    /* The Club World Cup after the June FIFA window (open item 201): an edition of 14 June starts at least
+     * SEASON_CWC_AFTER_WINDOW days after the last June FIFA day of its year, and 2025 keeps the real 14 June. */
+    for (int y = 2025; y <= 2301; y += 4) {
+        int doys[SEASON_FIFA_YEAR_MAX], n = season_fifa_year_days(y, doys, SEASON_FIFA_YEAR_MAX), end = -1;
+        int june = season_day_of_year(y, 6, 1), july = season_day_of_year(y, 7, 1);
+        for (int i = 0; i < n; i++)
+            if (doys[i] >= june && doys[i] < july && doys[i] > end) end = doys[i];
+        int first = season_day_of_year(y, 6, 14), moved = season_cwc_after_window(y, first);
+        if (moved < first || (end >= 0 && moved < end + SEASON_CWC_AFTER_WINDOW) ||
+            (end >= 0 && first >= end + SEASON_CWC_AFTER_WINDOW && moved != first) || moved >= july) {
+            if (bad++ < 40) printf("Club World Cup %d: 14 June (day %d) moves to day %d, the last June FIFA day is "
+                                   "%d\n", y, first, moved, end);
+        }
+    }
+    if (season_cwc_after_window(2025, season_day_of_year(2025, 6, 14)) != season_day_of_year(2025, 6, 14))
+        printf("Club World Cup 2025 does not start on 14 June\n"), bad++;
+    if (season_cwc_after_window(2033, season_day_of_year(2033, 12, 7)) != season_day_of_year(2033, 12, 7))
+        printf("a December edition moves\n"), bad++;
     printf("%s (%d differences)\n", bad ? "FAIL" : "PASS", bad);
     return bad != 0;
 }

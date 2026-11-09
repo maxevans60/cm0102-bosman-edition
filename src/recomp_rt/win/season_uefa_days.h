@@ -25,6 +25,12 @@ int season_fifa_day(int y, int m, int want);
 #define SEASON_FIFA_YEAR_MAX 64
 int season_fifa_year_days(int y, int doys[], int max);
 
+/* The Club World Cup after the June FIFA window (open item 201). The first day (day of the year) of an edition that
+ * starts in June, at least SEASON_CWC_AFTER_WINDOW days after the last June FIFA day of year y; first itself when it
+ * is late enough or not in June. */
+#define SEASON_CWC_AFTER_WINDOW 4
+int season_cwc_after_window(int y, int first);
+
 /* Days from 1 January 1970 (month 1 to 12), and back (H. Hinnant's civil calendar algorithms). */
 long season_abs_day(int y, int m, int d);
 void season_from_abs_day(long z, int *y, int *m, int *d);

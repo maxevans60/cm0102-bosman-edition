@@ -37,6 +37,7 @@
 #include "season_club_editions.h"
 #include "season_comps.h"
 #include "season_rules.h"
+#include "season_uefa_days.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -410,6 +411,11 @@ static int edition_dates(int edition, KnockoutDates *d)
         d->first = day_of_year(d1, m1, d->year);
         d->last = day_of_year(d2, m2, d->year);
         if (d->first >= d->last) continue;
+        /* After the June FIFA window (open item 201, season_cwc_after_window), with changing rules on: the whole
+         * edition moves, so its rounds keep their gaps. A December edition does not move. */
+        int later = season_changing_rules() ? season_cwc_after_window(d->year, d->first) - d->first : 0;
+        d->first += later;
+        d->last += later;
         return 1;
     }
     return 0;
