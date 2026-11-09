@@ -181,6 +181,7 @@ RUNNING = 14                                  # days: an edition with a match th
 GAP = 150                                     # days between two editions, at the least (the Champions League has
                                               # a winter break of 69 days, 105 in the World Cup year 2022)
 FINAL_GAP = 25                                # days with no match after a final, at the least
+MOVED = 3                                     # days: add_fixture moves a clashing fixture this far (open item 201)
 RECENT = 60                                   # a team of the round after a break played this many days before it
 PAUSE = 300                                   # days: the longest pause of a home-and-away group (the OFC Nations Cup
                                               # of 2008 from 21 November 2007 to 14 June 2008, 206 days)
@@ -813,12 +814,15 @@ def editions_of(fx):
         recent = last is not None and teams and all(last - seen.get(t, last - RECENT - 1) <= RECENT for t in teams)
         group_end = before is not None and len(per_day[before]) > 2 and recent
         paused = len(per_day[day]) == 1 and recent         # a knockout round that goes on after a break
+        # a lone match up to MOVED days after a day of more than two matches is a group match that the game moved
+        # (open item 201: the Club World Cup took the FIFA day of a June qualifier), not a final
+        moved = last is not None and before is not None and len(per_day[before]) > 2 and last - before <= MOVED
         n = len(out[-1][3]) if out else 0
         group_paused = (last is not None and GAP < day - last <= PAUSE and len(per_day[last]) >= 2 and
                         len(met) < n * (n - 1) // 2 and
                         all(p[0] in out[-1][3] and p[1] in out[-1][3] and p not in met for p in per_day[day]))
         if not out or (day - last > GAP and not group_paused) or \
-                (day - last >= FINAL_GAP and len(per_day[last]) == 1 and not group_end and not paused):
+                (day - last >= FINAL_GAP and len(per_day[last]) == 1 and not group_end and not paused and not moved):
             out.append([0, day, day, set()])
             seen, last, met = {}, None, set()
         out[-1][2] = day

@@ -217,3 +217,19 @@ const SeasonLeagueDay *season_uefa_group_days(int season, int days)
         if (EL_REAL[r].season == season) return EL_REAL[r].thu;
     return GROUP_DATES_6;
 }
+
+/* The real 2025 Club World Cup began on 14 June, four days after the June window's last day of 10 June (FIFA Club
+ * World Cup 2025, en.wikipedia.org "2025 FIFA Club World Cup", read 9 November 2026). The game moves each later
+ * edition's 14 June to its year, while the June FIFA days of the table and of the years after it (season_fifa_day)
+ * fall up to 14 June. A national qualifier then meets the edition's first round, or a tie that add_fixture 0x5aa680
+ * moves a few days to either side, and add_fixture moves the qualifier off its FIFA day as the weaker fixture
+ * (0x5aaa25, again at 0x5aaa38). */
+int season_cwc_after_window(int y, int first)
+{
+    int june = season_day_of_year(y, 6, 1), july = season_day_of_year(y, 7, 1);
+    if (first < june || first >= july) return first;
+    int doys[SEASON_FIFA_YEAR_MAX], n = season_fifa_year_days(y, doys, SEASON_FIFA_YEAR_MAX), end = -1;
+    for (int i = 0; i < n; i++)
+        if (doys[i] >= june && doys[i] < july && doys[i] > end) end = doys[i];
+    return end >= 0 && first < end + SEASON_CWC_AFTER_WINDOW ? end + SEASON_CWC_AFTER_WINDOW : first;
+}
