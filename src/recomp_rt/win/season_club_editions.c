@@ -305,7 +305,7 @@ int season_club_second_leg(const SeasonClubEdition *e, const SeasonClubRound *r,
 }
 
 /* 1 when day doy of year y (it may lie before or after the year) meets a FIFA day. */
-static int meets_fifa(int y, int doy)
+static int meets_fifa_day(int y, int doy)
 {
     while (doy < 0) doy += 365 + season_club_is_leap(--y);
     while (doy >= 365 + season_club_is_leap(y)) doy -= 365 + season_club_is_leap(y++);
@@ -313,6 +313,9 @@ static int meets_fifa(int y, int doy)
     season_from_day_of_year(y, doy, &m, &d);
     return season_fifa_meets(y, m, d);
 }
+
+int season_club_meets_duty(int y, int doy) { return meets_fifa_day(y, doy) || meets_fifa_day(y, doy + 1); }
+
 
 int season_club_plan_rounds(const char *comp, const SeasonClubEdition *e, int n, SeasonClubRound *r)
 {
@@ -331,16 +334,21 @@ int season_club_plan_rounds(const char *comp, const SeasonClubEdition *e, int n,
         count = season_club_plan_knockout(e, n, r);
     }
     /* Open item 95: the players of a club are on duty from the day before their side's match to the day after
-     * (NationalTeams::get_international_duty_club 0x7757d0), so a match next to a FIFA day loses them. Each round
+     * (NationalTeams::get_international_duty_club 0x7757d0), so a match next to a FIFA day loses them. The original
+     * adds a linked Under 21 or 'B' match on the day before each senior national match that is not a tournament
+     * match, between nations of reputation above 2499 (ReserveComp::add_b_or_under21_fixture 0x7e6720, called from add_fixture 0x5aa680 at 0x5aab09), so the
+     * players of those sides are on duty from two days before the FIFA day (open item 163: the Copa Sudamericana
+     * of 8 August 2011, two days before the FIFA day of 10 August, lost 3 players of 12 de Octubre to Paraguay's
+     * Under 21 match with Cameroon on 9 August). season_club_meets_duty holds both. Each round
      * (both legs) takes the nearest day that meets none, at most 21 days either way, the later one first, and never
-     * before the round before it and its draw. With no such day it keeps its day. */
-    int after = -1000;
+     * before the round before it and its draw, nor before the first day. With no such day it keeps its day. */
+    int after = e->first;                       /* round 0 never before the edition's first day */
     for (int i = 0; i < count; i++) {
         int gap = season_club_second_leg(e, &r[i], count), want = r[i].match < after ? after : r[i].match, m = want;
         for (int k = 0; k <= 21; k++) {
             int up = want + k, down = want - k;
-            if (!meets_fifa(e->year, up) && !(gap && meets_fifa(e->year, up + gap))) { m = up; break; }
-            if (k && down >= after && !meets_fifa(e->year, down) && !(gap && meets_fifa(e->year, down + gap))) {
+            if (!season_club_meets_duty(e->year, up) && !(gap && season_club_meets_duty(e->year, up + gap))) { m = up; break; }
+            if (k && down >= after && !season_club_meets_duty(e->year, down) && !(gap && season_club_meets_duty(e->year, down + gap))) {
                 m = down;
                 break;
             }

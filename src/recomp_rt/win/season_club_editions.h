@@ -73,10 +73,15 @@ typedef struct { int id, teams, ties, fresh, first, legs, match; } SeasonClubRou
  * the final on the last day (7 days before it for two legs). Returns the count. */
 int season_club_plan_knockout(const SeasonClubEdition *e, int n, SeasonClubRound *r);
 
+/* 1 when day doy of year y (it may lie before or after the year) meets the duty of a national side: it meets a FIFA
+ * day (season_fifa_meets: the day before to the day after, or a window), or the day after it does (the linked Under 21
+ * or 'B' match on the day before a senior national match, open item 163). */
+int season_club_meets_duty(int y, int doy);
+
 /* The rounds of an edition of comp with n clubs: the stepladder of the FIFA Intercontinental Cup, or a knockout.
- * No match day (each leg) meets a FIFA day (season_fifa_meets: the day before to the day after, or a window), as the
- * UEFA league phase keeps its days off them (season_uefa_days.c): a round moves on to the first free day, at most 21
- * days, and stays after the round before it (open item 95). Returns the count. */
+ * No match day (each leg) meets the duty of a national side (season_club_meets_duty), as the UEFA league phase keeps
+ * its days off the FIFA days (season_uefa_days.c): a round moves to the nearest free day, at most 21 days, and stays
+ * after the round before it (open items 95 and 163). Returns the count. */
 int season_club_plan_rounds(const char *comp, const SeasonClubEdition *e, int n, SeasonClubRound *r);
 
 /* The day of the second leg after the first: 7, or for one round of two legs the days of the edition. */
