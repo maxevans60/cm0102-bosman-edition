@@ -104,6 +104,16 @@ const SeasonNlEdition *season_nl_after(const SeasonNlEdition *e);
 int season_nl_held_after(const char *confed, int last, int year, int (*wc)(int));
 int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int));
 
+/* Item 209: the table edition whose draw day an edition of `year` after the table takes (season_nl.c edition).
+ * Friendly::update_international_friendlies 0x5cbb00 arranges friendlies 12 weeks ahead, and
+ * arrange_international_friendlies 0x5cbdf0 skips a nation only for fixtures already stored within 4 days of the
+ * date, so a league phase drawn less than 12 weeks before its first matchday meets friendlies that were made first.
+ * The real CONCACAF draws lie 16 to 23 weeks before the first matchday (27 March 2019, 16 May 2023, 6 May 2024),
+ * except in a World Cup year (23 July 2026: the finals were in North America). So for CONCACAF the draw of the
+ * latest table edition of the same kind of year (wc(year) the same); for UEFA, and when no such edition exists,
+ * the last edition (NULL when the confederation has none). */
+const SeasonNlEdition *season_nl_draw_of(const char *confed, int year, int (*wc)(int));
+
 /* The result of one nation in one edition. The rules rank and move these rows; the nation is the game's id. */
 typedef struct {
     int nation;                 /* the game's nation id (or a test id) */

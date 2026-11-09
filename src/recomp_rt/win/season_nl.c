@@ -378,6 +378,14 @@ static const SeasonNlEdition *edition(NlConf *c, int year)
     c->repeat = *base;
     c->repeat.season = base->season + (year - base->year);
     c->repeat.year = year;
+    /* Item 209: the draw of an edition after the table is far enough ahead of its first window that the friendlies
+     * of that window are arranged around it (season_nl_draw_of). The 2026-27 draw (23 July) lay 9 weeks before
+     * its first matchday: copied to the 2027 and 2031 editions, the friendlies of the North American rows of
+     * 7 September and 9 October (0x5ca4f0, offset 1) came first, and 35 matches of the 2031 league phase in a
+     * replay (run-logs/0.6.2-s209/rep-fix) moved off the FIFA days. */
+    const SeasonNlEdition *d = season_changing_rules() && year > base->year ? season_nl_draw_of(c->confed, year,
+                                                                                                  wc_year) : NULL;
+    if (d) c->repeat.draw = d->draw;
     return &c->repeat;
 }
 

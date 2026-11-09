@@ -18,7 +18,9 @@ record), Tier A, England's leagues, seed 1, changing rules on, played
 to 30 November 2032. The checks: the leg ends with code 0 and no message box; the Nations League has league-phase
 matches (September to November) in 2027, 2030 and 2031 and none in 2028, 2029 and 2032; and from 2027 on no month of
 September to November holds matches of both the Nations League and the World Cup qualifying (CONCACAF), and no
-Nations League match (the March finals too) is within 3 days of a qualifier of the same side. On the
+Nations League match (the March finals too) is within 3 days of a qualifier of the same side; and from 2027 on the
+snap moves no Nations League match to a day that is not a FIFA day (a draw less than 12 weeks before the first
+matchday met the friendlies of the window, 0x5cbb00: 29 such moves in 2031 before the draw fix). On the
 code before item 209 the 2028 and 2032 editions are played and share the autumn of 2032 with the qualifying: the
 test fails there.
 
@@ -108,6 +110,24 @@ def check(save):
     return fails
 
 
+def off_fifa(stderr):
+    """Nations League matches from FROM on that the snap moves to a day that is not a FIFA day. Friendlies are made
+    12 weeks ahead (0x5cbb00): an edition drawn later than that meets them and moves off the window."""
+    moves = collections.Counter()
+    try:
+        with open(stderr, encoding="latin-1") as f:
+            for line in f:
+                if "intl dates: " + NL in line and "(not a FIFA day" in line:
+                    y = int(line.split(" of ")[-1].split()[0])
+                    if y >= FROM:
+                        moves[y] += 1
+    except OSError:
+        return ["no stderr.txt"]
+    print("      Nations League moves off the FIFA days: " + (", ".join(f"{y} {n}" for y, n in sorted(moves.items()))
+                                                          or "none"))
+    return [f"Nations League matches moved off the FIFA days: {sum(moves.values())}"] if moves else []
+
+
 def main(argv):
     if len(argv) < 3:
         print(__doc__)
@@ -116,6 +136,7 @@ def main(argv):
     keep = argv[argv.index("--keep") + 1] if "--keep" in argv else tempfile.mkdtemp(prefix="cm0102-nl-wcq-")
     os.environ["RECOMP_TIER_A"] = "1"
     os.environ["RECOMP_SEASON_NL_LOG"] = "1"
+    os.environ["RECOMP_SCREEN_LOG"] = "1"      # the move lines of the snap (season_friendly_dates.c log_move)
     o = {"program": program, "game": game, "rules": "on", "seed": 1, "start": 2021, "last": 2033,
          "database": os.path.join(DATABASES, "October 2021"), "nations": ["England"], "extra": [], "timeout": 7200}
     w = os.path.join(keep, "leg")
@@ -129,6 +150,7 @@ def main(argv):
         fails.append("no save")
     else:
         fails += check(save)
+        fails += off_fifa(os.path.join(w, "stderr.txt"))
     for f in fails:
         print("FAIL ", f)
     print("PASS" if not fails else f"FAILED: {len(fails)}")
