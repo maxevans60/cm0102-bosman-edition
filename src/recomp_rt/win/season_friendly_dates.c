@@ -48,6 +48,7 @@
 #include "season.h"
 #include "season_uefa_days.h"
 #include "season_conmebol_days.h"
+#include "season_stage_plan.h"
 #include "season_names.h"
 #include "season_intl.h"
 #include "season_change.h"
@@ -147,7 +148,10 @@ void season_friendly_dates_day(void)
     if (!rt_unwinding && pending_count) move_pending();
 }
 
-void season_friendly_dates_reset(void) { friendly_obj = 0, moved_season = -1, pending_count = 0; }
+void season_fifa_stage_end(void);
+
+/* A new or loaded game: also the stage bound and plan, which a create_fixtures that unwound did not end. */
+void season_friendly_dates_reset(void) { friendly_obj = 0, moved_season = -1, pending_count = 0; season_fifa_stage_end(); }
 
 static void snap_rows(uint32_t self)
 {
@@ -470,6 +474,137 @@ static int fifa_target_by(uint32_t home, uint32_t away, int y, int d, int ey, in
     return -1;
 }
 
+/* ---- The plan of the stage (items 203 and 204) ----
+ *
+ * fifa_target_by moves each qualifier on its own, as add_fixture 0x5aa680 stores it, so the rounds of a stage lost
+ * their order: in the AFC third round of the 2034 cycle (a2021s1 replay, 2033) matchdays 5 and 6 went back to June,
+ * before matchday 1 (item 203), and matchdays 7 and 8 kept days 1 or 2 days from matchdays 3 and 4 of the same sides,
+ * so add_fixture's clash move (0x5aaa25) moved them 3 to 5 days (item 204). Real life: a stage's rounds play in order
+ * on the FIFA windows (the AFC third round of the 2026 cycle: 10 matchdays in the windows of September 2024 to June
+ * 2025, two a window; en.wikipedia.org, "2026 FIFA World Cup qualification – AFC third round").
+ *
+ * So the stage's days are planned once, from its round table (season_fifa_stage_begin: League::create_fixtures
+ * 0x6835c0 dates each fixture from its round record, 0x6839f8..0x683a10 and 0x683d97..0x683db6), at the first fixture
+ * the snap sees (the plan needs a pair: its confederation gives the South American real days and the finals' days).
+ * The pure rule is season_stage_plan.c: rounds in order, at least SEASON_STAGE_GAP (CLASH_DAYS + 1) days apart, each a
+ * FIFA day from today + 2 to the stage bound (window_from), else its own day, else another day between its neighbours;
+ * the most rounds on FIFA days, then the least total move.
+ *
+ * The rule per fixture (planned_target): its round's planned day when the pair's checks allow it (finals_busy,
+ * side_busy, side_near, duty_ties, as fifa_target_by); else the nearest FIFA day with those checks between the
+ * round's share of the days between its neighbours' planned days (season_stage_window: each gap split in two halves
+ * SEASON_STAGE_GAP apart), so it cannot pass, or come within the gap of, a fixture of another round; else the
+ * nearest other day there with the same checks (no clash for add_fixture to move, item 204); else the planned day.
+ * A fixture whose day is no round's (not from the round table) takes fifa_target_by, as before. */
+#define NO_PLAN (-2)
+static int stage_n, stage_state;            /* rounds; state 0 not planned yet, 1 planned, -1 no plan */
+static long stage_own[SEASON_STAGE_MAX], stage_plan[SEASON_STAGE_MAX], stage_first, stage_last, stage_last_fifa;
+
+typedef struct {
+    uint32_t home, away;
+    int sa;                                 /* a South American pair: its real matchdays count as FIFA days */
+} PlanPair;
+
+/* 1 when day z is a FIFA day (or a real South American matchday of a South American pair) of its year. */
+static int fifa_or_real(long z, int sa)
+{
+    int y, m, dd, doys[FIFA_DOYS_MAX], n;
+    season_from_abs_day(z, &y, &m, &dd);
+    n = fifa_doys(y, doys, FIFA_DOYS_MAX);
+    int doy = day_of_year(y, m, dd);
+    for (int k = 0; k < n; k++)
+        if (doys[k] == doy) return 1;
+    return sa && season_conmebol_real_day(z);
+}
+
+static int plan_day_ok(long z, void *ctx)
+{
+    const PlanPair *p = ctx;
+    if (rt_unwinding || !fifa_or_real(z, p->sa)) return 0;
+    int y, m, dd;
+    season_from_abs_day(z, &y, &m, &dd);
+    return !finals_busy(p->home, p->away, y, day_of_year(y, m, dd));
+}
+
+static void make_plan(uint32_t rec, uint32_t home, uint32_t away)
+{
+    stage_state = -1;
+    if (!stage_n || !end_year) return;
+    int ty = (int16_t)rd16(g_mem, GAME_DATE + 2), td = (int16_t)rd16(g_mem, GAME_DATE);
+    stage_first = season_abs_day(ty, 1, 1) + td + 2;
+    stage_last = season_abs_day(end_year, 1, 1) + end_day;
+    /* window_from: the FIFA window that holds the stage's last day or starts the day after it, in its year */
+    int doys[FIFA_DOYS_MAX], n = fifa_doys(end_year, doys, FIFA_DOYS_MAX), e = end_day;
+    while (e + 1 < days_in(end_year) && window_from(doys, n, end_day, e + 1)) e++;
+    stage_last_fifa = season_abs_day(end_year, 1, 1) + e;
+    PlanPair p = {home, away, south_american(home, away)};
+    int on = season_stage_plan(stage_own, stage_n, stage_first, stage_last, stage_last_fifa, plan_day_ok, &p,
+                               stage_plan);
+    if (rt_unwinding) return;
+    stage_state = on < 0 ? -1 : 1;
+    if (!getenv("RECOMP_SCREEN_LOG")) return;
+    char list[1200] = "";
+    size_t at = 0;
+    for (int r = 0; r < stage_n && at < sizeof list - 1; r++) {
+        int y, m, dd;
+        season_from_abs_day(stage_plan[r], &y, &m, &dd);
+        at += (size_t)snprintf(list + at, sizeof list - at, "%s%ld>%d", r ? " " : "",
+                               stage_own[r] - season_abs_day(y, 1, 1), day_of_year(y, m, dd));
+    }
+    fprintf(stderr, "recomp: intl dates: stage plan of %.40s ending day %d of %d: %d rounds, %d on FIFA days%s: %s\n",
+            win_str(rec + 4), end_day, end_year, stage_n, on < 0 ? 0 : on, on < 0 ? " (no plan: rounds keep the "
+            "snap of each fixture)" : "", list);
+}
+
+/* 1 when the pair can play day c of year y: no final of their confederation, no national match of their nations
+ * that day, no match of either side within CLASH_DAYS, and no continental club tie within a day with a club of more
+ * than two of their players (the checks of fifa_target_by). */
+static int pair_free(uint32_t home, uint32_t away, int y, int c, uint32_t self)
+{
+    uint32_t na = rd32(g_mem, home + 0x53), nb = rd32(g_mem, away + 0x53);
+    return !finals_busy(home, away, y, c) && !side_busy(home, away, y, c, self) && !side_near(home, away, y, c, self) &&
+           !duty_ties(na, nb, y, c) && !rt_unwinding;
+}
+
+/* The day of a qualifier of the planned stage on day d of year y (the rule above), NO_PLAN when the stage has no plan
+ * or d is no round's day. *how: the text of the move line. */
+static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int d, const char **how)
+{
+    if (!stage_n || stage_state < 0) return NO_PLAN;
+    if (!stage_state) make_plan(rec, home, away);
+    if (rt_unwinding) return -1;
+    if (stage_state != 1) return NO_PLAN;
+    long y0 = season_abs_day(y, 1, 1), z = y0 + d;
+    int r = 0;
+    while (r < stage_n && stage_own[r] != z) r++;
+    if (r == stage_n) return NO_PLAN;
+    long p = stage_plan[r], lo, hi;
+    if (p < y0 || p >= y0 + days_in(y)) return NO_PLAN;          /* not in its year: cannot happen (the plan) */
+    *how = " (stage plan)";
+    if (pair_free(home, away, y, (int)(p - y0), 0)) return rt_unwinding ? -1 : (int)(p - y0);
+    if (rt_unwinding) return -1;
+    season_stage_window(stage_plan, stage_n, r, stage_first, stage_last_fifa, &lo, &hi);
+    if (lo < y0) lo = y0;
+    if (hi > y0 + days_in(y) - 1) hi = y0 + days_in(y) - 1;
+    int sa = south_american(home, away);
+    for (int pass = 0; pass < 2; pass++) {                       /* FIFA days, then any other day */
+        long top = pass && hi > stage_last ? stage_last : hi;  /* no other day after the stage's last */
+        long reach = p - lo > top - p ? p - lo : top - p;
+        for (long dist = 1; dist <= reach && !rt_unwinding; dist++)
+            for (int sign = -1; sign <= 1; sign += 2) {
+                long c = p + sign * dist;
+                if (c < lo || c > top || fifa_or_real(c, sa) == pass) continue;
+                if (pair_free(home, away, y, (int)(c - y0), 0)) {
+                    *how = " (stage plan: its planned day was not free)";
+                    return rt_unwinding ? -1 : (int)(c - y0);
+                }
+            }
+    }
+    if (rt_unwinding) return -1;
+    *how = " (stage plan: no free day between its neighbours)";
+    return (int)(p - y0);
+}
+
 static int fifa_target(uint32_t home, uint32_t away, int y, int d)
 {
     return fifa_target_by(home, away, y, d, end_year, end_day, 0);
@@ -554,8 +689,8 @@ static void log_move(uint32_t rec, uint32_t home, uint32_t away, int d, int c, i
     for (int k = 0; k < n; k++) fifa |= doys[k] == c;
     if (c >= 0)
         fprintf(stderr, "recomp: intl dates: %.40s %.30s v %.30s moves from day %d to the %s %d of %d%s\n",
-                win_str(rec + 4), win_str(home + 4), win_str(away + 4), d, fifa ? "FIFA day" : "day (not a FIFA day: "
-                "none was free, and its day lies in a final's days)", c, y, how);
+                win_str(rec + 4), win_str(home + 4), win_str(away + 4), d, fifa ? "FIFA day" : *how ? "day (not a "
+                "FIFA day)" : "day (not a FIFA day: none was free, and its day lies in a final's days)", c, y, how);
     else
         stay_info(rec, home, away, d, y, how);
 }
@@ -735,10 +870,12 @@ void season_fifa_snap_fixture(uint32_t fix, uint32_t ret)
                                                  (int16_t)end_year, (int16_t)end_day};
         return;
     }
-    int c = fifa_target(home, away, y, d);
+    const char *how = "";
+    int c = planned_target(rec, home, away, y, d, &how);
+    if (c == NO_PLAN) c = fifa_target(home, away, y, d), how = "";
     if (rt_unwinding || c == d) return;
     if (c >= 0) wr16(g_mem, fix + 0x2a, (uint16_t)c);
-    log_move(rec, home, away, d, c, y, "");
+    log_move(rec, home, away, d, c, y, how);
 }
 
 /* League::create_fixtures 0x6835c0 of a league (the wrap in season_uefa_league.c): its last match day bounds the
@@ -747,6 +884,7 @@ void season_fifa_snap_fixture(uint32_t fix, uint32_t ret)
 void season_fifa_stage_begin(uint32_t league)
 {
     end_year = end_day = 0;
+    stage_n = 0, stage_state = 0;
     uint32_t t = rd32(g_mem, league + 0xba);
     int n = (int16_t)rd16(g_mem, league + 0xa9), base = (int16_t)rd16(g_mem, league + 0x40);
     if (!readable(t) || n < 1 || n > 200) return;
@@ -754,10 +892,23 @@ void season_fifa_stage_begin(uint32_t league)
         uint32_t rec = t + 0x41u * (uint32_t)r;
         int y = base + (int16_t)rd16(g_mem, rec + 2), d = (int16_t)rd16(g_mem, rec);
         if (y > end_year || (y == end_year && d > end_day)) end_year = y, end_day = d;
+        /* The round days, sorted and each once (a stage of more rounds than the plan holds has no plan). */
+        long z = season_abs_day(y, 1, 1) + d;
+        int at = 0, seen = 0;
+        while (at < stage_n && stage_own[at] < z) at++;
+        seen = at < stage_n && stage_own[at] == z;
+        if (seen) continue;
+        if (stage_n == SEASON_STAGE_MAX) {
+            stage_state = -1;
+            continue;
+        }
+        memmove(stage_own + at + 1, stage_own + at, sizeof stage_own[0] * (size_t)(stage_n - at));
+        stage_own[at] = z;
+        stage_n++;
     }
 }
 
-void season_fifa_stage_end(void) { end_year = end_day = 0; }
+void season_fifa_stage_end(void) { end_year = end_day = 0, stage_n = 0, stage_state = 0; }
 
 /* ---- No TV move for qualifiers on FIFA days (0.6.2 item 205) ----
  *
