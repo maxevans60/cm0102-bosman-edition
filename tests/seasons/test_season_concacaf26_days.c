@@ -1,7 +1,7 @@
 /* The match days of the CONCACAF World Cup qualifying in the 2026 shape (item 214, season_concacaf26_days.c).
  *   2026: the real days (22 and 26 March 2024; 5, 8 and 11 June 2024, 6 and 10 June 2025; 4 and 8 September,
  *   9 and 13 October, 13 and 18 November 2025), each a day of the FIFA days list.
- *   2030 to 2098: the window rule on the FIFA days list; every day is a FIFA day, the rounds come in order, two
+ *   2030 to 2302: the window rule on the FIFA days list; every day is a FIFA day, the rounds come in order, two
  *   rounds of a stage at least 3 days apart, the legs of a tie 3 to 6 days apart, the draw before the first leg,
  *   and nothing of the autumn of W - 2 (the Nations League's league phase of item 209 takes W - 4 and W - 3). */
 #include "season_concacaf26_days.h"
@@ -79,7 +79,7 @@ int main(void)
           "2030 third round");
 
     int ok = 0;
-    for (int wc = 2030; wc <= 2098; wc += 4) {
+    for (int wc = 2030; wc <= 2302; wc += 4) {
         if (!season_cc26_days(wc, table, NULL, &p)) {
             CHECK(0, "%d: no plan", wc);
             continue;
