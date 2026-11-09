@@ -228,6 +228,10 @@ if(NOT WIN32)
         src/recomp_rt/win/season_wcq26_places.c)
     target_include_directories(season_wcq26_places_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_wcq26_places COMMAND season_wcq26_places_test)
+    add_executable(season_caf_pool_test tests/seasons/test_season_caf_pool.c
+        src/recomp_rt/win/season_caf_pool_plan.c)
+    target_include_directories(season_caf_pool_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_caf_pool COMMAND season_caf_pool_test)
     # Nations Leagues (0.6.0 slice 28): the C table of the editions and leagues matches the tables, and the
     # ranking, promotion and relegation and play-off path rules.
     add_test(NAME season_nl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_nl.py" --check)

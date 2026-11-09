@@ -158,13 +158,19 @@ PATCHES = {
     0x913BCE: (0x2, "rt_wcq26_asia_playoff_row(esi, 0, 2u)"),       # play-off 0x913b60: the row after them, stage 9
     0x913BDA: (0x2, "rt_wcq26_asia_playoff_row(esi, 1, 2u)"),       # and stage 10
     0x911CF6: (0xD, "rt_wcq26_asia_stages(esi, 0xdu)"),             # ctor: no stage 12 (tie with Europe)
-    0x910133: (0x32, "rt_wcq26_africa_first(esi, 0x32u)"),          # first round 0x910120: 2 x (pool - 45)
-    0x90F6F0: (0x32, "rt_wcq26_africa_first(edi, 0x32u)"),          # template 0x90f600: first round teams
-    0x90F6F5: (0x19, "(rt_wcq26_africa_first(edi, 0x32u) / 2u)"),   # and ties
+    0x910133: (0x32, "rt_caf_first(esi, 0x32u)"),               # first round 0x910120: 2 x (pool - 45)
+    0x90F6F0: (0x32, "rt_caf_first(edi, 0x32u)"),               # template 0x90f600: first round teams
+    0x90F6F5: (0x19, "(rt_caf_first(edi, 0x32u) / 2u)"),        # and ties
     0x90F357: (0x5, "rt_wcq26_africa_groups(esi, 5u)"),             # ctor: stage count (9 groups)
     0x91058A: (0x5, "rt_wcq26_africa_groups(esi, 5u)"),             # start_new_season: stage count
     0x90F768: (0x5, "rt_wcq26_africa_groups(edi, 5u)"),             # template: group stages below 9
     0x90FC24: (0x5, "rt_wcq26_africa_groups(ecx, 5u)"),             # slot 17 0x90fbf0: winners of stages below 9
+    # Every African nation enters (0.6.2 item 199, season_caf_pool.c): the pool builder 0x9106a0 (this in esi)
+    # reads every nation of the table into an array of that size, and load_extra_data 0x910f00 (this in ebx)
+    # allocates +0xb6 slots when that is more than the original's 52.
+    0x910896: (0x34, "rt_caf_pool_cap(esi, 0x34u)"),
+    0x9107ED: (0xD0, "rt_caf_pool_bytes(esi, 0xd0u)"),
+    0x910FEC: (0xD0, "rt_caf_load_bytes(ebx, 0xd0u)"),
     0x91E076: (0x3, "rt_wcq26_oceania_stages(esi, 3u)"),            # ctor: stage count 4 (the tournament)
     0x91F002: (0xC, "(4u * rt_wcq26_oceania_stages(esi, 3u))"),     # start_new_season: malloc of the stage array
     0x91F004: (0x3, "rt_wcq26_oceania_stages(esi, 3u)"),            # start_new_season: stage count
@@ -364,6 +370,7 @@ INSNS = {
     0x919F90: ("mov dword ptr [esi + 0xf2], eax", "W32(esi + 0xf2u, eax); rt_wcq26_europe_format(esi);"),
     0x91785C: ("sub al, cl", "t0 = (eax & 0xffu); t1 = rt_wcq26_concacaf_hosts(esi, ecx & 0xffu) & 0xffu; t2 = ((t0 - t1) & 0xffu); SETF(K_SUB | SZ1, t0, t1, t2, 0); eax = (eax & 0xffffff00u) | t2;"),
     0x910A4A: ("mov byte ptr [esp + 0x13], al", "W8(esp + 0x13u, rt_wcq26_africa_groups(esi, eax & 0xffu));"),
+    0x910A4E: ("mov dword ptr [esp + 0x18], eax", "W32(esp + 0x18u, rt_caf_group_size(esi, eax));"),  # item 199
 
     # World Cup of 48 teams (0.6.0 slice 29, win/season_wc48.c). start_new_season 0x92d330 keeps the stage array
     # and the slot array of the ctor (+0xc, count +0x2c; +0x14, room +0x38). After the step (0x92d409) an edition
@@ -433,7 +440,7 @@ INSNS = {
     # F1: the African pool builder 0x9106a0 (this in esi) compares its count ebx with the pool size +0xb6. Before
     # the compare a pool of 50 or more takes the format of no host (South Africa 2010 stays out of the pool by
     # the compare at 0x9108aa).
-    0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); rt_wcq26_africa_format(esi); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
+    0x9108D8: ("cmp ebx, dword ptr [esi + 0xb6]", "rt_wcq_africa_format(esi, ebx); rt_wcq26_africa_format(esi); rt_caf_pool(esi, ebx); t0 = ebx; t1 = R32(esi + 0xb6u); t2 = t0 - t1; SETF(K_SUB | SZ4, t0, t1, t2, 0);"),
 
     # UEFA Nations League (0.6.0 slice 28, season_nl.c). EuroChampQual::update_for_date 0x57fd60 makes the group
     # stages 0 to 7 on its draw day (create_group_stage 0x57ed10 at 0x57ff2e, `cmp edi, 8`, this in esi). The
