@@ -296,7 +296,11 @@ RT_WRAP(00916cd0, cc26_first_stages)
         return;
     }
     uint32_t old = rd32(g_mem, cc + F_STAGES), arr = game_malloc(4u * STAGES);
-    if (rt_unwinding || !arr) return;
+    if (rt_unwinding) return;
+    if (!arr) {                                         /* no memory: the original's groups */
+        o_00916cd0();
+        return;
+    }
     game_free(old);
     if (rt_unwinding) return;
     wr32(g_mem, cc + F_STAGES, arr);
@@ -339,7 +343,13 @@ static int make_group(uint32_t cc, int stage, const uint32_t *teams, int n, int 
     uint32_t bytes = table ? game_malloc(8) : 0;
     uint32_t sz[1] = {0xee};                            /* as 0x9174ad */
     uint32_t obj = bytes ? call_cdecl(GAME_NEW, 1, sz) : 0;
-    if (rt_unwinding || !readable(obj)) return 0;
+    if (rt_unwinding) return 0;
+    if (!readable(obj)) {
+        game_free(table);
+        game_free(members);
+        game_free(bytes);
+        return 0;
+    }
     for (int k = 0; k < n; k++) wr32(g_mem, members + 4u * (uint32_t)k, teams[k]);
     g_mem[bytes] = 1, g_mem[bytes + 1] = 2, g_mem[bytes + 2] = 3, g_mem[bytes + 3] = 0;   /* order (0x917340) */
     g_mem[bytes + 4] = (uint8_t)through;                                                  /* places (0x91735a) */
@@ -397,29 +407,29 @@ static void second_round(uint32_t cc)
 {
     SeasonCc26Days days;
     if (!days_now(cc, &days)) return;
+    /* The pool's teams that did not play the first round (its rows +0xa7), best first, then its winners (status
+     * 1). Not the pool's top: the reputations change between the first round and the draw. */
     uint32_t pool[POOL_MAX], field[SECOND_FIELD];
     int n = pool_sorted(cc, pool, POOL_MAX), ko = (int16_t)rd16(g_mem, cc + F_ROW_COUNT), k = 0;
     uint32_t rows = rd32(g_mem, cc + F_ROWS);
-    for (int i = 0; i < n - ko && k < SECOND_FIELD; i++) field[k++] = pool[i];
+    for (int i = 0; i < n && k < SECOND_FIELD; i++) {
+        int played = 0;
+        for (int j = 0; readable(rows) && j < ko; j++) played |= rd32(g_mem, rows + 6u * (uint32_t)j) == pool[i];
+        if (!played) field[k++] = pool[i];
+    }
     for (int i = 0; readable(rows) && i < ko && k < SECOND_FIELD; i++)
         if (g_mem[rows + 6u * (uint32_t)i + 5] == 1) field[k++] = rd32(g_mem, rows + 6u * (uint32_t)i);
     if (k != SECOND_FIELD) {                            /* not expected: the ties give ko / 2 winners */
         fprintf(stderr, "recomp: season intl: wc qualifying %d: CONCACAF second round has %d teams, not %d\n",
                 year_of(cc) + 2, k, SECOND_FIELD);
-        for (int i = 0; readable(rows) && i < ko && k < SECOND_FIELD; i++) {
-            uint32_t t = rd32(g_mem, rows + 6u * (uint32_t)i);
-            int in = 0;
-            for (int j = 0; j < k; j++) in |= field[j] == t;
-            if (!in && readable(t)) field[k++] = t;
-        }
-        if (k != SECOND_FIELD) return;
+        return;
     }
     uint32_t groups[SECOND_FIELD];
     draw(field, SECOND_GROUPS, SECOND_TEAMS, groups);
     if (rt_unwinding) return;
     log_groups(cc, "second round", groups, SECOND_GROUPS, SECOND_TEAMS);
     for (int g = 0; g < SECOND_GROUPS; g++)
-        if (!make_group(cc, g, groups + g * SECOND_TEAMS, SECOND_TEAMS, 1, days.second, SEASON_CC26_SECOND, 2, 0,
+        if (!stage_at(cc, g) && !make_group(cc, g, groups + g * SECOND_TEAMS, SECOND_TEAMS, 1, days.second, SEASON_CC26_SECOND, 2, 0,
                         GROUP_NAME + (uint32_t)g))
             return;
     wr32(g_mem, cc + F_STAGE, SECOND_GROUPS - 1);
@@ -468,7 +478,7 @@ static void third_round(uint32_t cc)
     int direct = season_wcq26_concacaf_places(cc) / THIRD_GROUPS;
     if (direct < 1) direct = 1;
     for (int g = 0; g < THIRD_GROUPS; g++)
-        if (!make_group(cc, SECOND_GROUPS + g, groups + g * THIRD_TEAMS, THIRD_TEAMS, 2, days.third, SEASON_CC26_THIRD,
+        if (!stage_at(cc, SECOND_GROUPS + g) && !make_group(cc, SECOND_GROUPS + g, groups + g * THIRD_TEAMS, THIRD_TEAMS, 2, days.third, SEASON_CC26_THIRD,
                         direct, 1, GROUP_NAME + (uint32_t)g))
             return;
     wr32(g_mem, cc + F_STAGE, STAGES - 1);
@@ -515,10 +525,32 @@ RT_WRAP(00915710, cc26_staff_records)
     o_00915710();
 }
 
-/* build_fate_news_text, thiscall (team, outcome, stage, ...). */
+static int in_third(uint32_t cc, uint32_t team);
+
+/* The stage name code of argument `index` (a group of the 2026 shape: GROUP_NAME + g) as the semi-final groups'
+ * (0x40c) or the final group's (0x96), by the team's round. */
+static void map_code_arg(uint32_t cc, int index, uint32_t team)
+{
+    uint32_t at = cpu.esp + 4 + 4u * (uint32_t)index, code = rd32(g_mem, at) & 0xffffu;
+    if (code >= GROUP_NAME && code < GROUP_NAME + SECOND_GROUPS)
+        wr32(g_mem, at, (rd32(g_mem, at) & 0xffff0000u) | (in_third(cc, team) ? CODE_THIRD : CODE_SECOND));
+}
+
+/* build_fate_news_text, thiscall (team index, outcome, stage, stage name code, ...) ret 0x28: its text follows the
+ * name code (0x9159b6 0x40f, 0x915ac6 0x40c to 0x40e, 0x915bb5 0x96), its records the stage. The team index is a
+ * club's index in the club table (0xae23b4, 0x245 bytes a club, 0x915a0e). */
 RT_WRAP(009159b0, cc26_fate_news)
 {
-    if (season_cc26_on(cpu.ecx)) map_stage_arg(2);
+    uint32_t cc = cpu.ecx;
+    if (season_cc26_on(cc)) {
+        uint32_t clubs = rd32(g_mem, 0xae23b4u), team = readable(clubs) ? clubs + rt_arg(0) * 0x245u : 0;
+        map_stage_arg(2);
+        map_code_arg(cc, 3, team);
+        if (logging())                                  /* test log: each fate news of the 2026 shape */
+            fprintf(stderr, "recomp: season intl: wc qualifying %d: CONCACAF fate news of %s, outcome %d, stage %d, "
+                            "code 0x%x\n", year_of(cc) + 2, team_name(team), (int8_t)rt_arg(1), (int8_t)rt_arg(2),
+                    rt_arg(3) & 0xffffu);
+    }
     o_009159b0();
 }
 
@@ -546,11 +578,8 @@ static int in_third(uint32_t cc, uint32_t team)
 RT_WRAP(00916af0, cc26_progress_text)
 {
     uint32_t cc = cpu.ecx, code = rt_arg(2) & 0xffffu, row = rt_arg(5);
-    if (season_cc26_on(cc) && code >= GROUP_NAME && code < GROUP_NAME + SECOND_GROUPS) {
-        uint32_t team = readable(row) ? rd32(g_mem, row) : 0;
-        uint32_t at = cpu.esp + 4 + 4u * 2;
-        wr32(g_mem, at, (rd32(g_mem, at) & 0xffff0000u) | (in_third(cc, team) ? CODE_THIRD : CODE_SECOND));
-    }
+    if (season_cc26_on(cc) && code >= GROUP_NAME && code < GROUP_NAME + SECOND_GROUPS)
+        map_code_arg(cc, 2, readable(row) ? rd32(g_mem, row) : 0);
     o_00916af0();
 }
 
