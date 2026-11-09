@@ -920,17 +920,23 @@ static void update_for_date(void)
             /* Item 209: an object of a save that waits for a draw in a year with no edition now (2028 or 2032 for
              * CONCACAF) moves to the year after its last edition (stage one keeps that edition's year) that
              * holds one: after 2030-31 the 2031 edition, whose draw day becomes tomorrow if it has passed. */
-            int next = next_year(conf, readable(held0) && year_of(held0) < year ? year_of(held0) : year - 1);
+            const SeasonNlEdition *last = last_edition(conf);
+            int played = rd32(g_mem, self + F_DRAWN) && readable(held0) ? year_of(held0) : 0;
+            int next = next_year(conf, last && played >= last->year && played < year ? played : year - 1);
             const SeasonNlEdition *n = edition(conf, next);
             /* Not an edition whose first matchday has passed (a save from September 2031 waits for 2034). */
-            for (int k = 0; k < 4 && n && !rt_unwinding; k++) {
+            int found = 0;
+            for (int k = 0; k < 8 && n && !rt_unwinding; k++) {
                 int my = next + n->md[0].year, md = season_nl_day_of_year(n->md[0].day, n->md[0].month, my);
-                if (my > ty || (my == ty && md > day)) break;
+                if (my > ty || (my == ty && md > day)) {
+                    found = 1;
+                    break;
+                }
                 next = next_year(conf, next);
                 n = edition(conf, next);
             }
             if (rt_unwinding) return;
-            if (n) {
+            if (found) {
                 wr16(g_mem, self + F_YEAR, (uint32_t)next);
                 set_draw_day(self, n);
                 if (logging())
