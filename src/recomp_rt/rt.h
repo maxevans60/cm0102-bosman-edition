@@ -507,6 +507,7 @@ void rt_caf_pool(uint32_t self, uint32_t found);
 uint32_t rt_caf_first(uint32_t self, uint32_t original);
 uint32_t rt_caf_group_size(uint32_t self, uint32_t original);
 uint32_t rt_caf_band(uint32_t self, uint32_t stage, uint32_t position);
+uint32_t rt_caf_round_date(uint32_t self, int round, int which, uint32_t original);
 uint32_t rt_wcq26_asia_direct(uint32_t self, uint32_t original);
 uint32_t rt_wcq26_asia_direct_b(uint32_t self, uint32_t current);
 uint32_t rt_wcq26_asia_playoff_row(uint32_t self, int g, uint32_t original);

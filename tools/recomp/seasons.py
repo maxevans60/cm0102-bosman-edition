@@ -171,6 +171,18 @@ PATCHES = {
     0x910896: (0x34, "rt_caf_pool_cap(esi, 0x34u)"),
     0x9107ED: (0xD0, "rt_caf_pool_bytes(esi, 0xd0u)"),
     0x910FEC: (0xD0, "rt_caf_load_bytes(ebx, 0xd0u)"),
+    # The last group rounds of the template 0x90f600 (this in edi) leave July and the play-off follows them (item
+    # 211, rt_caf_round_date): the day and month pushes.
+    0x90F9E6: (0x1E, "rt_caf_round_date(edi, 7, 0, 0x1eu)"),
+    0x90F9E4: (0x5, "rt_caf_round_date(edi, 7, 1, 5u)"),
+    0x90FA18: (0xE, "rt_caf_round_date(edi, 8, 0, 0xeu)"),
+    0x90FA16: (0x6, "rt_caf_round_date(edi, 8, 1, 6u)"),
+    0x90FA52: (0x11, "rt_caf_round_date(edi, 9, 0, 0x11u)"),
+    0x90FA50: (0x6, "rt_caf_round_date(edi, 9, 1, 6u)"),
+    0x90FB42: (0x1D, "rt_caf_round_date(edi, 10, 0, 0x1du)"),  # play-off of exempt 2 and 3: first leg
+    0x90FB40: (0x8, "rt_caf_round_date(edi, 10, 1, 8u)"),
+    0x90FB59: (0x14, "rt_caf_round_date(edi, 11, 0, 0x14u)"),  # and second leg
+    0x90FB57: (0x9, "rt_caf_round_date(edi, 11, 1, 9u)"),
     0x91E076: (0x3, "rt_wcq26_oceania_stages(esi, 3u)"),            # ctor: stage count 4 (the tournament)
     0x91F002: (0xC, "(4u * rt_wcq26_oceania_stages(esi, 3u))"),     # start_new_season: malloc of the stage array
     0x91F004: (0x3, "rt_wcq26_oceania_stages(esi, 3u)"),            # start_new_season: stage count

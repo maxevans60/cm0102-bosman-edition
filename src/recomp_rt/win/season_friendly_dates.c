@@ -249,7 +249,12 @@ static int national_side(uint32_t club)
  * qualifier (fixture priority +0x3a: 10) does not move such a tie (Champions League 8, Europa League 7) when
  * add_fixture 0x5aa680 stores it, and the tie then loses its internationals (Liverpool fielded 7 at Bordeaux on
  * 6 September 2008, match_eng.cpp 652). The day lists of all types (count: the s8 at 0xb64738, key nation entries).
- * self: the fixture that moves, when it is stored on that day (it is not a match beside itself). */
+ * self: the fixture that moves, when it is stored on that day (it is not a match beside itself).
+ * The club match holds the day only when a club of it has a player of the nation of a or b (players_of): the
+ * call-up takes only those players. Up to 0.6.2 item 210 any continental club match of any confederation held
+ * it, and CONCACAF's qualifiers of day 85 of 2033 gave way to Al-Ahli SC v Khor Fakkan in the AFC Champions League
+ * Elite (i163 replay of run set game a2021s1). */
+static int players_of(uint32_t c, uint32_t n, uint32_t m);
 static char busy_why[160];              /* what side_busy found last (for the stay line) */
 
 /* 1 when the fixture of club h v club w takes a national side of club a or club b: one of them is a or b, or a
@@ -270,6 +275,7 @@ int season_fifa_fixture_takes_side(uint32_t h, uint32_t w, uint32_t a, uint32_t 
 static int side_busy(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
 {
     int busy = 0, types = (int8_t)g_mem[TYPE_COUNT];
+    uint32_t na = readable(a) ? rd32(g_mem, a + 0x53) : 0, nb = readable(b) ? rd32(g_mem, b + 0x53) : 0;
     if (types < 2 || types > 40) types = 2;
     for (int slice = 0; slice < 3 && !busy && !rt_unwinding; slice++)
         for (int type = 0; type < types && !busy && !rt_unwinding; type++) {
@@ -283,12 +289,18 @@ static int side_busy(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
                 uint32_t rec = rd32(g_mem, f + 0x14);
                 int nat = season_fifa_fixture_takes_side(h, w, a, b);
                 int cont = !nat && readable(rec) && !rd32(g_mem, rec + 0x5d) && g_mem[f + 0x3a] >= 2 &&
-                           !national_side(h) && !national_side(w);    /* a continental club match */
+                           !national_side(h) && !national_side(w) &&     /* a continental club match */
+                           ((!readable(h) && !readable(w)) ||                 /* no clubs yet: it holds */
+                            (readable(h) && players_of(h, na, nb)) || (readable(w) && players_of(w, na, nb)));
                 if (nat || cont) {
                     busy = 1;
-                    snprintf(busy_why, sizeof busy_why, "%s %.30s v %.30s (%.40s)", nat ? "national" : "club",
-                             readable(h) ? win_str(h + 4) : "-", readable(w) ? win_str(w + 4) : "-",
-                             readable(rec) ? win_str(rec + 4) : "?");
+                    int pl = nat ? 0 : (readable(h) ? players_of(h, na, nb) : 0) +
+                                       (readable(w) ? players_of(w, na, nb) : 0);
+                    int len = snprintf(busy_why, sizeof busy_why, "%s %.30s v %.30s (%.40s)",
+                                       nat ? "national" : "club", readable(h) ? win_str(h + 4) : "-",
+                                       readable(w) ? win_str(w + 4) : "-", readable(rec) ? win_str(rec + 4) : "?");
+                    if (!nat && len > 0 && len < (int)sizeof busy_why)
+                        snprintf(busy_why + len, sizeof busy_why - (size_t)len, ", %d players of the two nations", pl);
                 }
             }
         }
@@ -566,6 +578,21 @@ static int pair_free(uint32_t home, uint32_t away, int y, int c, uint32_t self)
            !duty_ties(na, nb, y, c) && !rt_unwinding;
 }
 
+/* The move text of a qualifier whose planned day is held, with what holds it (test log, RECOMP_SCREEN_LOG): the
+ * first check of pair_free that refuses the day, and for side_busy and duty_ties the match. */
+static char duty_first[160];            /* (duty_ties, below) */
+static char held_text[240] = " (stage plan: its planned day was not free)";
+
+static void held_why(uint32_t home, uint32_t away, int y, int d)
+{
+    uint32_t na = rd32(g_mem, home + 0x53), nb = rd32(g_mem, away + 0x53);
+    const char *why = finals_busy(home, away, y, d) ? "a final"
+                      : side_busy(home, away, y, d, 0) ? busy_why
+                      : side_near(home, away, y, d, 0) ? "a match of a side within 2 days"
+                      : duty_ties(na, nb, y, d) ? duty_first : "?";
+    snprintf(held_text, sizeof held_text, " (stage plan: its planned day was not free: %s)", why);
+}
+
 /* The day of a qualifier of the planned stage on day d of year y (the rule above), NO_PLAN when the stage has no plan
  * or d is no round's day. *how: the text of the move line. */
 static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int d, const char **how)
@@ -583,6 +610,7 @@ static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int
     *how = " (stage plan)";
     if (pair_free(home, away, y, (int)(p - y0), 0)) return rt_unwinding ? -1 : (int)(p - y0);
     if (rt_unwinding) return -1;
+    if (getenv("RECOMP_SCREEN_LOG")) held_why(home, away, y, (int)(p - y0));   /* test log: what holds day p */
     season_stage_window(stage_plan, stage_n, r, stage_first, stage_last_fifa, &lo, &hi);
     if (lo < y0) lo = y0;
     if (hi > y0 + days_in(y) - 1) hi = y0 + days_in(y) - 1;
@@ -595,7 +623,7 @@ static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int
                 long c = p + sign * dist;
                 if (c < lo || c > top || fifa_or_real(c, sa) == pass) continue;
                 if (pair_free(home, away, y, (int)(c - y0), 0)) {
-                    *how = " (stage plan: its planned day was not free)";
+                    *how = held_text;
                     return rt_unwinding ? -1 : (int)(c - y0);
                 }
             }

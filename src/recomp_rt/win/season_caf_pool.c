@@ -163,3 +163,28 @@ uint32_t rt_caf_band(uint32_t self, uint32_t stage, uint32_t position)
     if (stage < 5u && position == 6u && old_plan(self, &plan) && plan.group_size == 6) return 26u;
     return position;
 }
+
+/* The days of the last group rounds and of the play-off (0.6.2 item 211). The template 0x90f600 (this in edi)
+ * gives the groups the 2002 cycle's days, in the year before the World Cup (year offset 1): with 10 rounds (exempt
+ * 0, 1 or 3: African hosts and an African holder) rounds 8, 9 and 10 on 30 June (0x90f9e6, month 0x90f9e4),
+ * 14 July (0x90fa18, 0x90fa16) and 17 July (0x90fa52, 0x90fa50); with 6 rounds (exempt 2) round 6 on 14 July (the
+ * same pushes 0x90fa18 and 0x90fa16). Exempt 2 and 3 then play a two-leg play-off (stage 6 or 4) on 29 September
+ * (0x90fb42, 0x90fb40) and 20 October (0x90fb59, 0x90fb57). The rules table's last Africa Cup of Nations (2027:
+ * 19 June to 17 July) repeats every 2 years, so from the 2030 cycle the July days lie in the finals, finals_busy
+ * (season_friendly_dates.c) holds them, and the stage ends there, so the stage plan cannot move them later. Real
+ * life from the 2006 cycle: no group match of the deciding stage in July of that year; the last rounds in September
+ * to November (en.wikipedia.org "<year> FIFA World Cup qualification (CAF)": 2006 group winners on 8 October 2005;
+ * 2010 6 September, 10 October and 14 November 2009; 2018 28 August to 5 September, 2 to 10 October and 6 to
+ * 14 November 2017; 2022 September to November 2021; 2026 matchdays 7 and 8 on 3 to 9 September, 9 and 10 on 8 to
+ * 14 October 2025), and the play-off after them (2014 11 to 15 October and 16 to 19 November 2013; 2026 13 and
+ * 16 November 2025). From the 2006 cycle: the push at 0x90f9e6 takes 5 September, 0x90fa18 8 October, 0x90fa52
+ * 12 October, the play-off 12 and 16 November; the weekday codes and the year offsets stay. The World Cup's own
+ * draw and the play-off tournament (season_wcq26.c, from 1 March of the World Cup year) come after them.
+ * site: 7, 8 or 9 for the group pushes (the round of 10), 10 and 11 for the play-off legs; which: 0 the day,
+ * 1 the month (0 January). */
+uint32_t rt_caf_round_date(uint32_t self, int site, int which, uint32_t original)
+{
+    static const uint8_t day[5] = {5, 8, 12, 12, 16}, month0[5] = {8, 9, 9, 10, 10};
+    if (site < 7 || site > 11 || !caf_on(self)) return original;
+    return which ? month0[site - 7] : day[site - 7];
+}
