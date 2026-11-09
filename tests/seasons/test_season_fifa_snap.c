@@ -45,6 +45,10 @@ int season_intl_finals_busy(int conf, int y, int doy) { (void)conf, (void)y, (vo
 int season_gold_cup_busy(int y, int doy) { (void)y, (void)doy; return 0; }
 long season_abs_day(int y, int m, int d) { return (long)y * 372 + m * 31 + d; }
 int season_conmebol_real_day(long z) { (void)z; return 0; }
+void season_from_abs_day(long z, int *y, int *m, int *d)
+{
+    *y = (int)(z / 372), *m = (int)(z % 372 / 31), *d = (int)(z % 31);
+}
 
 static const int month_days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};   /* 2045, not a leap year */
 
