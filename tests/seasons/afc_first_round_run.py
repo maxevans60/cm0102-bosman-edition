@@ -18,7 +18,10 @@ One new game, Tier A, England's leagues, seed 1, changing rules on, the 3.9.68 d
 - leg 3 loads the save of leg 1 and plays to 31 March 2005 (after the group draw), a save;
 - with --cycles 2, leg 4 loads that and plays to 31 March 2009 (the 2010 cycle).
 
-The checks: every leg ends with code 0 and no message box; in each cycle Brunei plays two matches of the Asian
+Item 200: Timor (no continent in the 3.9.68 data) joins the AFC in 2005/06, so it plays the first round of the 2010
+cycle (the 2006 cycle's round is in October 2004, before it joined).
+
+The checks: every leg ends with code 0 and no message box; in each cycle Brunei (and Timor in 2010) plays two matches of the Asian
 section between 15 September of the campaign year and the group draw (25 March); the section's matches of that
 time are two-leg ties (each pair of teams meets twice). On main before item 196 Brunei plays no match: the test
 fails there.
@@ -37,6 +40,7 @@ import soak_run  # noqa: E402
 START = datetime.date(2001, 7, 1)          # 3.9.68, 2001/02: the game's first day (soak_run's leg counts from it)
 MIDDLE = datetime.date(2004, 10, 11)
 NATION = "Brunei"
+TIMOR = "Timor"                 # item 200: no continent in the 3.9.68 data, in the AFC from 2005/06
 SECTIONS = ("World Cup Asian Qualifying Section", "FIFA World Cup qualification (AFC)")   # base, rules-on name
 
 
@@ -51,24 +55,25 @@ def first_round(save, campaign):
                   if lo <= f[0] <= hi)
 
 
-def check_cycle(save, campaign):
+def check_cycle(save, campaign, nations=(NATION,)):
     fails = []
     fx = first_round(save, campaign)
     pairs = {}
     for _, h, a in fx:
         pairs[frozenset((h, a))] = pairs.get(frozenset((h, a)), 0) + 1
-    brunei = [f for f in fx if any(n.startswith(NATION) for n in f[1:])]    # "Brunei Darussalam" in 3.9.68
     days = sorted({datetime.date.fromordinal(d).isoformat() for d, _, _ in fx})
     print(f"      {campaign + 2}: {len(fx)} first-round matches, {len(pairs)} ties, days {', '.join(days)}")
-    for d, h, a in brunei:
-        print(f"      {datetime.date.fromordinal(d).isoformat()} {h} v {a}")
-    if len(brunei) != 2:
-        fails.append(f"{campaign + 2}: {NATION} plays {len(brunei)} first-round matches, not 2")
+    for nation in nations:
+        mine = [f for f in fx if any(n.startswith(nation) for n in f[1:])]    # "Brunei Darussalam" in 3.9.68
+        for d, h, a in mine:
+            print(f"      {datetime.date.fromordinal(d).isoformat()} {h} v {a}")
+        if len(mine) != 2:
+            fails.append(f"{campaign + 2}: {nation} plays {len(mine)} first-round matches, not 2")
     bad = [sorted(p) for p, n in pairs.items() if n != 2]
     if not pairs or bad:
         fails.append(f"{campaign + 2}: ties that do not meet twice: {bad}")
     if not fails:
-        print(f"ok    {campaign + 2}: {NATION} plays a two-leg first-round tie")
+        print(f"ok    {campaign + 2}: {', '.join(nations)} play a two-leg first-round tie")
     return fails
 
 
@@ -127,7 +132,7 @@ def main(argv):
             print(f"      leg 4 to {end4}: {took:.0f} s")
             fails += leg_fails("4", code, box, saved(w4))
             if not fails:
-                fails += check_cycle(saved(w4), 2008)
+                fails += check_cycle(saved(w4), 2008, (NATION, TIMOR))
     for f in fails:
         print("FAIL ", f)
     print("PASS" if not fails else f"FAILED: {len(fails)}")
