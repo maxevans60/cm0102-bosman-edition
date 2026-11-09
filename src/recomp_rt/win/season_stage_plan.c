@@ -97,7 +97,10 @@ int season_stage_plan(const long own[], int n, long first, long last, long last_
 
 void season_stage_window(const long plan[], int n, int r, long first, long last, long *lo, long *hi)
 {
-    *lo = r > 0 ? plan[r - 1] + SEASON_STAGE_GAP : first;
-    *hi = r + 1 < n ? plan[r + 1] - SEASON_STAGE_GAP : last;
+    /* The days between two planned days a < b are split: round r - 1 may go up to a + (b - a - GAP) / 2, round r
+     * from there + GAP. So a fixture of round r - 1 that cannot take its day never passes one of round r that
+     * cannot take its own, and the two stay GAP days apart (review of items 203 and 204). */
+    *lo = r > 0 ? plan[r - 1] + (plan[r] - plan[r - 1] - SEASON_STAGE_GAP) / 2 + SEASON_STAGE_GAP : first;
+    *hi = r + 1 < n ? plan[r] + (plan[r + 1] - plan[r] - SEASON_STAGE_GAP) / 2 : last;
     if (*lo < first) *lo = first;
 }

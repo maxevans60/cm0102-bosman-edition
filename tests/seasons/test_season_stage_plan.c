@@ -96,6 +96,20 @@ static void afc_third(void)
     CHECK(lo == y0 + 277 && hi == y0 + 278, "AFC third round: matchday 8 window %ld to %ld", lo - y0, hi - y0);
     season_stage_window(out, 10, 0, first, last, &lo, &hi);
     CHECK(lo == first && hi == y0 + 161, "AFC third round: matchday 1 window %ld to %ld", lo - y0, hi - y0);
+    /* Matchdays 2 (164) and 3 (244): the 80 days between are split, 2 up to 202 and 3 from 205, so a fallback of
+     * one never passes the other's (review of items 203 and 204). */
+    long hi2, lo3;
+    season_stage_window(out, 10, 1, first, last, &lo, &hi2);
+    season_stage_window(out, 10, 2, first, last, &lo3, &hi);
+    CHECK(hi2 == y0 + 202 && lo3 == y0 + 205, "AFC third round: matchday 2 window to %ld, matchday 3 from %ld",
+          hi2 - y0, lo3 - y0);
+    for (int r = 0; r + 1 < 10; r++) {
+        long a, b, c, e;
+        season_stage_window(out, 10, r, first, last, &a, &b);
+        season_stage_window(out, 10, r + 1, first, last, &c, &e);
+        CHECK(a <= out[r] && out[r] <= b && c - b >= SEASON_STAGE_GAP,
+              "AFC third round: windows of matchdays %d and %d overlap or hold no plan", r + 1, r + 2);
+    }
 }
 
 /* UEFA qualifying groups: matchdays two a window, September 2030 to November 2031, each one day after a FIFA day of

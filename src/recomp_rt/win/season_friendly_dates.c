@@ -148,7 +148,10 @@ void season_friendly_dates_day(void)
     if (!rt_unwinding && pending_count) move_pending();
 }
 
-void season_friendly_dates_reset(void) { friendly_obj = 0, moved_season = -1, pending_count = 0; }
+void season_fifa_stage_end(void);
+
+/* A new or loaded game: also the stage bound and plan, which a create_fixtures that unwound did not end. */
+void season_friendly_dates_reset(void) { friendly_obj = 0, moved_season = -1, pending_count = 0; season_fifa_stage_end(); }
 
 static void snap_rows(uint32_t self)
 {
@@ -489,7 +492,8 @@ static int fifa_target_by(uint32_t home, uint32_t away, int y, int d, int ey, in
  *
  * The rule per fixture (planned_target): its round's planned day when the pair's checks allow it (finals_busy,
  * side_busy, side_near, duty_ties, as fifa_target_by); else the nearest FIFA day with those checks between the
- * neighbours' planned days less the gap (season_stage_window), so it cannot pass a round before or after it; else the
+ * round's share of the days between its neighbours' planned days (season_stage_window: each gap split in two halves
+ * SEASON_STAGE_GAP apart), so it cannot pass, or come within the gap of, a fixture of another round; else the
  * nearest other day there with the same checks (no clash for add_fixture to move, item 204); else the planned day.
  * A fixture whose day is no round's (not from the round table) takes fifa_target_by, as before. */
 #define NO_PLAN (-2)
@@ -584,7 +588,7 @@ static int planned_target(uint32_t rec, uint32_t home, uint32_t away, int y, int
     if (hi > y0 + days_in(y) - 1) hi = y0 + days_in(y) - 1;
     int sa = south_american(home, away);
     for (int pass = 0; pass < 2; pass++) {                       /* FIFA days, then any other day */
-        long top = pass && r + 1 == stage_n && hi > stage_last ? stage_last : hi;
+        long top = pass && hi > stage_last ? stage_last : hi;  /* no other day after the stage's last */
         long reach = p - lo > top - p ? p - lo : top - p;
         for (long dist = 1; dist <= reach && !rt_unwinding; dist++)
             for (int sign = -1; sign <= 1; sign += 2) {

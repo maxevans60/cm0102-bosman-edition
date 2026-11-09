@@ -26,8 +26,9 @@ int season_stage_plan(const long own[], int n, long first, long last, long last_
                       void *ctx, long out[]);
 
 /* The days round r of plan[] (n rounds) may move a fixture to when it cannot take its planned day: from the day
- * before's plan + SEASON_STAGE_GAP (or `first`) to the next round's plan - SEASON_STAGE_GAP (or `last`), in *lo
- * and *hi. Between them it stays clear of the other rounds' planned days. */
+ * before's share of the days between their two plans (or `first`) to the end of its own share before the next
+ * round's (or `last`), in *lo and *hi. Each gap between two planned days is split in two halves SEASON_STAGE_GAP
+ * apart, so the windows of two rounds never overlap and any two days in them stay SEASON_STAGE_GAP apart. */
 void season_stage_window(const long plan[], int n, int r, long first, long last, long *lo, long *hi);
 
 #endif
