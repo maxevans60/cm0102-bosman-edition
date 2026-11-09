@@ -284,7 +284,11 @@ LAST_ROW_MOVES = (("Autumn 2013", "Croatian First Division", 2012, "NK Lokomotiv
 # of Nations", and many lack an edition before their start: October 2026 the 2025 row, October 2021 the 2021 row
 # (played in 2020/21 under Q277, in January 2022 in real life), October 2023 the 2021 and 2023 rows. The research
 # holds every edition from 2002 to 2025 (nations.tsv), so the rule holds for every database.
-GAP_FINALS = ("FIFA World Cup", "European Football Championship", "African Cup of Nations")
+# The FIFA Club World Cup (0.6.2 open item 197): a database keeps the editions to the one before it was made, so
+# October 2018 lacks 2017, October 2024 lacks 2023, and December 2025 and May 2026 lack 2025 (Chelsea / Paris
+# Saint-Germain, 13 July 2025). The research holds every edition (intl-clubs-cwc.tsv).
+GAP_FINALS = ("FIFA World Cup", "European Football Championship", "African Cup of Nations",
+              "FIFA Club World Championship")
 # The same for one database only: October 2026 holds no row of the Argentine Apertura 2026 (Belgrano, 24 May 2026,
 # before the start). This is open item 98. The years of a club competition get the club shift (comp_history), the
 # years of a nation competition the nation shift.
