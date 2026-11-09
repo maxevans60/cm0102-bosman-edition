@@ -42,13 +42,15 @@
  * 0x5ae6a0, all fixture types). A side's two matches of a
  * window so take two days. The search covers the whole year: a July matchday made after the June window has its
  * nearest free day in September (CONMEBOL on 6 July 2016 met a Champions League tie, CONCACAF on 12 July 2028 a
- * Europa League tie 71 days before the window). With no such day the fixture keeps its date (logged). Two-legged
- * qualifying ties (Cup::create_tie_fixtures) keep theirs, so a second leg never comes before its first. */
+ * Europa League tie 71 days before the window). With no such day the fixture keeps its date (logged). The legs of a
+ * two-legged qualifying tie (Cup::create_tie_fixtures) do not move one by one, so a second leg never comes before
+ * its first: the first leg plans both on the FIFA days of one window (item 207, tie_snap below). */
 #include "win.h"
 #include "season.h"
 #include "season_uefa_days.h"
 #include "season_conmebol_days.h"
 #include "season_stage_plan.h"
+#include "season_tie_legs.h"
 #include "season_names.h"
 #include "season_intl.h"
 #include "season_change.h"
@@ -839,9 +841,126 @@ int season_friendly_part_read(const uint8_t *in, uint32_t n)
     return 1;
 }
 
+/* ---- The two legs of a qualifying tie (item 207) ----
+ *
+ * Cup::create_tie_fixtures 0x51cb90 (wrapped in season_kind_cup_breaks.c) stores a two-leg tie's first leg by
+ * add_fixture at 0x51cf58 and its second at 0x51d296. The first leg's day is the round record's (+3 day, +5 year
+ * offset on the cup's year +0x40, 0x51ce6c..0x51ce80; tomorrow when that day has passed, 0x51cf13..0x51cf46), the
+ * second leg's the gap +0x22 after it (0x51d13c..0x51d175). The round table is +0xa3, 0x68 bytes a round
+ * (0x51cbd1..0x51cbdf), +0x21 the legs. In a running season of a season game, both sides national and the competition
+ * not a finals tournament, the first leg plans both legs on the FIFA days of one window, in order, before the next
+ * round's draw (season_tie_legs.c), with the pair's checks of fifa_target_by on each leg; the second leg takes its
+ * planned day. */
+#define TIE_FIRST_LEG 0x0051cf5du               /* return address of the first leg's add_fixture */
+#define TIE_SECOND_LEG 0x0051d29bu              /* of the second leg's */
+#define CUP_ROUNDS 0xa3u
+#define CUP_ROUND_SIZE 0x68u
+static uint32_t tie_cup;
+static int tie_round;
+static struct {
+    uint32_t rec, home, away;
+    int year, day;                              /* the second leg's planned day; year 0: none */
+} tie_next;
+
+void season_fifa_tie_begin(uint32_t cup, int round, uint32_t *saved_cup, int *saved_round)
+{
+    *saved_cup = tie_cup, *saved_round = tie_round;
+    tie_cup = cup, tie_round = round;
+    tie_next.year = 0;
+}
+
+void season_fifa_tie_end(uint32_t cup, int round)
+{
+    tie_cup = cup, tie_round = round;
+    tie_next.year = 0;
+}
+
+static int tie_free(long a, long b, void *ctx)
+{
+    const PlanPair *p = ctx;
+    int y, m, d;
+    season_from_abs_day(a, &y, &m, &d);
+    if (!pair_free(p->home, p->away, y, day_of_year(y, m, d), 0)) return 0;
+    season_from_abs_day(b, &y, &m, &d);
+    return pair_free(p->home, p->away, y, day_of_year(y, m, d), 0);
+}
+
+static void set_day(uint32_t fix, long z)
+{
+    int y, m, d;
+    season_from_abs_day(z, &y, &m, &d);
+    wr16(g_mem, fix + 0x28, (uint16_t)y);
+    wr16(g_mem, fix + 0x2a, (uint16_t)day_of_year(y, m, d));
+}
+
+static void tie_snap(uint32_t fix, uint32_t ret)
+{
+    uint32_t home = rd32(g_mem, fix + 0x1c), away = rd32(g_mem, fix + 0x20), rec = rd32(g_mem, fix + 0x14);
+    if (ret == TIE_SECOND_LEG) {
+        if (tie_next.year && rec == tie_next.rec && home == tie_next.away && away == tie_next.home) {
+            wr16(g_mem, fix + 0x28, (uint16_t)tie_next.year);
+            wr16(g_mem, fix + 0x2a, (uint16_t)tie_next.day);
+        }
+        tie_next.year = 0;
+        return;
+    }
+    tie_next.year = 0;
+    uint32_t rounds = readable(tie_cup) ? rd32(g_mem, tie_cup + CUP_ROUNDS) : 0;
+    int count = readable(tie_cup) ? (int16_t)rd16(g_mem, tie_cup + 0x3c) : 0;
+    if (!readable(rounds) || tie_round < 0 || tie_round >= count) return;
+    uint32_t rr = rounds + CUP_ROUND_SIZE * (uint32_t)tie_round;
+    if (g_mem[rr + 0x21] != 2) return;
+    int y = (int16_t)rd16(g_mem, fix + 0x28), d = (int16_t)rd16(g_mem, fix + 0x2a), fix_month, fix_day;
+    from_day_of_year(y, d, &fix_month, &fix_day);
+    if (keeps_original(fix_month >= 7 ? y : y - 1) || keeps_original(season_now())) return;
+    if (!national_side(home) || !national_side(away) || !readable(rec)) return;
+    Cpu saved = cpu;
+    uint32_t a[1] = {rec};
+    uint32_t finals = rt_callback(F_FINALS, 1, a) & 0xff;
+    if (rt_unwinding) return;
+    cpu = saved;
+    if (finals) return;
+    long leg1 = season_abs_day((int16_t)rd16(g_mem, tie_cup + 0x40) + (int8_t)g_mem[rr + 5], 1, 1) +
+                (int16_t)rd16(g_mem, rr + 3),
+         leg2 = leg1 + g_mem[rr + 0x22], out1, out2, draw = 0;
+    if (tie_round + 1 < count) {                /* the next round's draw: +0 day, +2 year offset (0x521ea6) */
+        uint32_t rn = rr + CUP_ROUND_SIZE;
+        draw = season_abs_day((int16_t)rd16(g_mem, tie_cup + 0x40) + (int8_t)g_mem[rn + 2], 1, 1) +
+               (int16_t)rd16(g_mem, rn);
+    }
+    int ty = (int16_t)rd16(g_mem, GAME_DATE + 2), td = (int16_t)rd16(g_mem, GAME_DATE);
+    PlanPair p = {home, away, south_american(home, away)};
+    int r = season_tie_legs(leg1, leg2, season_abs_day(ty, 1, 1) + td + 2, draw, plan_day_ok, tie_free, &p, &out1,
+                            &out2);
+    if (rt_unwinding) return;
+    if (r > 0) {
+        set_day(fix, out1);
+        int ny, nm, nd;
+        season_from_abs_day(out2, &ny, &nm, &nd);
+        tie_next.rec = rec, tie_next.home = home, tie_next.away = away;
+        tie_next.year = ny, tie_next.day = day_of_year(ny, nm, nd);
+    }
+    if (!r || !getenv("RECOMP_SCREEN_LOG")) return;
+    int ly, lm, ld;
+    season_from_abs_day(leg1, &ly, &lm, &ld);
+    long l0 = season_abs_day(ly, 1, 1);
+    if (r < 0)
+        fprintf(stderr, "recomp: intl dates: %.40s %.30s v %.30s, a two-leg tie of days %ld and %ld of %d, keeps its "
+                        "days (no FIFA window fits)\n", win_str(rec + 4), win_str(home + 4), win_str(away + 4),
+                leg1 - l0, leg2 - l0, ly);
+    else
+        fprintf(stderr, "recomp: intl dates: %.40s %.30s v %.30s, a two-leg tie of days %ld and %ld of %d, plays on "
+                        "the FIFA days %ld and %ld%s\n", win_str(rec + 4), win_str(home + 4), win_str(away + 4),
+                leg1 - l0, leg2 - l0, ly, out1 - l0, out2 - l0, r == 2 ? " (no pair of the window was free)" : "");
+}
+
 /* From the add_fixture wrap (season_kind_cup_breaks.c): ret is the return address of the add_fixture call. */
 void season_fifa_snap_fixture(uint32_t fix, uint32_t ret)
 {
+    if (ret == TIE_FIRST_LEG || ret == TIE_SECOND_LEG) {
+        if (season_game_changes() && readable(fix)) tie_snap(fix, ret);
+        return;
+    }
     static const uint32_t calls[] = {0x00683a5au, 0x00683df3u, 0x009225c6u};
     int from = 0;
     for (unsigned k = 0; k < sizeof calls / sizeof calls[0]; k++) from |= ret == calls[k];

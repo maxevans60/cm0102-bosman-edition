@@ -352,6 +352,12 @@ if(NOT WIN32)
         src/recomp_rt/win/season_fifa_days_table.c src/recomp_rt/win/season_conmebol_days.c)
     target_include_directories(season_stage_plan_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_stage_plan COMMAND season_stage_plan_test)
+    # Item 207: both legs of a qualifying tie on the FIFA days of one window, in order.
+    add_executable(season_tie_legs_test tests/seasons/test_season_tie_legs.c
+        src/recomp_rt/win/season_tie_legs.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_tie_legs_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_tie_legs COMMAND season_tie_legs_test)
     add_executable(youth_pool_test tests/seasons/test_youth_pool.c src/recomp_rt/win/youth_pool_rule.c)
     target_include_directories(youth_pool_test PRIVATE src/recomp_rt/win)
     add_test(NAME youth_pool COMMAND youth_pool_test)
@@ -408,7 +414,7 @@ if(NOT WIN32)
     # The whole season part of a save (0.6.1 items 4 and 10): its write keeps inside its size.
     add_executable(season_part_test tests/seasons/test_season_part.c
         src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_years.c
-        src/recomp_rt/win/season_stage_plan.c
+        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c
         src/recomp_rt/win/caps_wide.c src/recomp_rt/win/season_intl_marks.c)
     target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_part COMMAND season_part_test)
@@ -426,17 +432,19 @@ if(NOT WIN32)
     add_test(NAME season_nation COMMAND season_nation_test)
     # The row A18 list of the season part (0.6.1 item 4): its write keeps inside its size.
     add_executable(season_friendly_part_test tests/seasons/test_season_friendly_part.c
-        src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c)
+        src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c
+        src/recomp_rt/win/season_tie_legs.c)
     target_include_directories(season_friendly_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_friendly_part COMMAND season_friendly_part_test)
     # The days a qualifier may take (0.6.2 item 168): only a national side of its nation takes the day.
     add_executable(season_side_busy_test tests/seasons/test_season_side_busy.c
-        src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c)
+        src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c
+        src/recomp_rt/win/season_tie_legs.c)
     target_include_directories(season_side_busy_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_side_busy COMMAND season_side_busy_test)
     # The snap of a qualifier to a FIFA day (open item 79): no two matches of a side on one day.
     add_executable(season_fifa_snap_test tests/seasons/test_season_fifa_snap.c src/recomp_rt/win/season_friendly_dates.c
-        src/recomp_rt/win/season_stage_plan.c)
+        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c)
     target_include_directories(season_fifa_snap_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_fifa_snap COMMAND season_fifa_snap_test)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
