@@ -499,6 +499,14 @@ uint32_t rt_wcq26_concacaf_hosts(uint32_t self, uint32_t exempt);
 uint32_t rt_wcq26_africa_first(uint32_t self, uint32_t original);
 uint32_t rt_wcq26_africa_groups(uint32_t self, uint32_t original);
 void rt_wcq26_africa_format(uint32_t self);
+/* Every African nation in CAF World Cup qualifying (0.6.2 item 199, win/season_caf_pool.c). */
+uint32_t rt_caf_pool_cap(uint32_t self, uint32_t original);
+uint32_t rt_caf_pool_bytes(uint32_t self, uint32_t original);
+uint32_t rt_caf_load_bytes(uint32_t self, uint32_t original);
+void rt_caf_pool(uint32_t self, uint32_t found);
+uint32_t rt_caf_first(uint32_t self, uint32_t original);
+uint32_t rt_caf_group_size(uint32_t self, uint32_t original);
+uint32_t rt_caf_band(uint32_t self, uint32_t stage, uint32_t position);
 uint32_t rt_wcq26_asia_direct(uint32_t self, uint32_t original);
 uint32_t rt_wcq26_asia_direct_b(uint32_t self, uint32_t current);
 uint32_t rt_wcq26_asia_playoff_row(uint32_t self, int g, uint32_t original);

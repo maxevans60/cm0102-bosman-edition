@@ -356,9 +356,10 @@ static int africa_on(uint32_t self)
 {
     if (!season_wcq26(self)) return 0;
     int pool = (int)rd32(g_mem, self + 0xb6u);
-    if (pool >= 5 * africa_groups(self) + 2 && pool <= 52) return 1;
-    /* The pool builder takes at most 52 (0x910896; every season database from October 2021 holds 54 African
-     * nations, so the pool is 52), and below 47 no first round is left: the original's shape and its 5 places
+    if (pool >= 5 * africa_groups(self) + 2 && pool <= 10 * africa_groups(self)) return 1;
+    /* The pool holds every African nation less the hosts (item 199, season_caf_pool.c; the original's builder
+     * stopped at 52, 0x910896). A first round can take at most twice the group places, and below 47 no first
+     * round is left: the original's shape and its 5 places
      * stay, and the fill gives the World Cup's open places (Q388). Logged once a campaign (review 2). */
     static int logged;
     if (logging() && logged != year_of(self)) {
