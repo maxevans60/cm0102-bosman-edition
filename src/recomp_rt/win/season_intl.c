@@ -1677,6 +1677,38 @@ static int uefa_members(int season, int news)
     return done;
 }
 
+/* An AFC member that the data holds with no continent (season_intl_afc_from: Timor in the 3.9.68 data, item 200)
+ * gets the continent pointer of an Asian nation from the season it joined, as concacaf_members below. The
+ * pointer is the data's own, so a save keeps it. With a continent the nation enters every pool of the continent
+ * (the AFC qualifying pool 0x913f60 and season_afc_first.c, the Asian Cup qualifying, the Asian Games) where its
+ * national team exists, and the national vacancy of original_faults.c rt_national_vacancy (which leaves out a
+ * nation with no continent) treats it as a live nation. dead_records clears only old names of a rename chain, not
+ * this one. Timor has no player in the 3.9.68 data (nation +0x88 0), as Bhutan, Guam and Bangladesh, which the
+ * original's own pool takes: VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0 tops up a side with virtual players
+ * (0x90dae0 at 0x90d3bd, 0x90d3f4) unless its nation has more than 500 players (0x90dd5d), so the side fields a
+ * squad and the 15-slot check (0x90d45b..0x90d469, box virtual_staff.cpp 195 at 0x90d4bc) passes. Returns the
+ * count. news: 1 to add a sentence. */
+static int afc_members(int season, int news)
+{
+    uint32_t asia = 0, key = rd32(g_mem, CONTINENT_ASIA);
+    for (int id = 0; id < nation_count() && !asia; id++) {
+        uint32_t c = rd32(g_mem, nation_at(id) + NATION_CONTINENT);
+        if (readable(c) && rd32(g_mem, c) == key) asia = c;
+    }
+    if (!asia) return 0;
+    int done = 0;
+    for (int id = 0; id < nation_count(); id++) {
+        const char *name = win_str(nation_at(id) + NATION_NAME);
+        int from = season_intl_afc_from(name);
+        if (!from || from > season || readable(rd32(g_mem, nation_at(id) + NATION_CONTINENT))) continue;
+        wr32(g_mem, nation_at(id) + NATION_CONTINENT, asia);
+        if (logging()) fprintf(stderr, "recomp: season intl: nation %s plays in the AFC (%d)\n", name, from);
+        if (news) season_change_news("%s now plays in the AFC.", name);
+        done++;
+    }
+    return done;
+}
+
 /* A CONCACAF member that the data holds with no continent (season_intl_concacaf_from: the six members that are not
  * FIFA members, in the databases from October 2016, open item 141) gets the continent pointer of a North American nation, as a UEFA member gets
  * Europe's. It then plays the CONCACAF Nations League and the Gold Cup qualifying (season_nl_nation_can_play,
@@ -1772,6 +1804,7 @@ void season_intl_at_create(void)
     dead_records();
     uefa_members(season_start_year(), 0);
     concacaf_members(season_start_year(), 0);
+    afc_members(season_start_year(), 0);
 }
 
 /* The host news of a World Cup with more than two hosts (slice 29: 2026 and 2030), in the season of its table
@@ -1802,6 +1835,7 @@ static void intl_season(int season)
     sides_rename();
     uefa_members(season, 1);
     concacaf_members(season, 1);
+    afc_members(season, 1);
     host_news(season);
     /* The host rows of the table in a game that started in 2001/02: at its first season change, for the
      * editions from 2002/03 (host_init). The table is sorted as the constructor sorts it. */

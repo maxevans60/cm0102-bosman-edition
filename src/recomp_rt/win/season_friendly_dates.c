@@ -331,6 +331,33 @@ static int side_near(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
     return 0;
 }
 
+/* 1 when club `team` has a fixture of any kind from `days` days before day doy of year y to `days` days after it
+ * (the day lists of the store, as side_near). The AFC first round (season_afc_first.c) takes a FIFA window where
+ * none of its teams has another match: the store would move one of the two (resolve_same_day_clash 0x5ae380), and
+ * in the 2006 cycle Bhutan played its second leg on 13 October 2004 and the Asian Cup qualifying at Indonesia on the
+ * 14th. */
+int season_fifa_team_busy_near(uint32_t team, int y, int doy, int days)
+{
+    int types = (int8_t)g_mem[TYPE_COUNT];
+    if (types < 2 || types > 40) types = 2;
+    for (int off = -days; off <= days && !rt_unwinding; off++) {
+        int yy = y, dd = doy + off;
+        if (dd < 0) dd += days_in(--yy);
+        else if (dd >= days_in(yy)) dd -= days_in(yy++);
+        for (int slice = 0; slice < 3 && !rt_unwinding; slice++)
+            for (int type = 0; type < types && !rt_unwinding; type++) {
+                uint32_t list = day_list(yy, dd, slice, type);
+                if (rt_unwinding) return 1;
+                for (uint32_t node = readable(list) ? rd32(g_mem, list + 2) : 0, k = 0; readable(node) && k < 4000;
+                     node = rd32(g_mem, node + 6), k++) {
+                    uint32_t fx = rd32(g_mem, node);
+                    if (readable(fx) && (rd32(g_mem, fx + 0x1c) == team || rd32(g_mem, fx + 0x20) == team)) return 1;
+                }
+            }
+    }
+    return 0;
+}
+
 /* The last match day of the qualifying stage whose fixtures are being made (League::create_fixtures 0x6835c0, see
  * season_fifa_stage_begin), or none (end_year 0). A qualifier does not move past it: the snap's search of the whole
  * year moved the AFC first round of the 2006 cycle from May 2005 (days 121 to 146) to the FIFA days of October and

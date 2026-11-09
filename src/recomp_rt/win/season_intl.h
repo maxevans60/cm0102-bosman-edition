@@ -264,6 +264,10 @@ int season_intl_uefa_from(const char *name);
  * Saint-Martin, Sint Maarten and Bonaire in the databases from October 2016), or 0. */
 int season_intl_concacaf_from(const char *name);
 
+/* The season from which a nation is an AFC member, for a nation that a database holds with no continent (Timor in
+ * the 3.9.68 data: Timor-Leste joined the AFC in 2005, item 200 of 0.6.2), or 0. */
+int season_intl_afc_from(const char *name);
+
 /* The real draw of a finals edition whose qualifying began before the game (O259 A9): the names of its
  * finalists, ';' between nations and '/' between the names of one nation, or NULL. */
 const char *season_intl_real_draw(const char *file, int year);

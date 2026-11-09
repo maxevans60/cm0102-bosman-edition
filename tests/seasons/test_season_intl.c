@@ -441,6 +441,11 @@ int main(void)
     CHECK(!season_intl_concacaf_from("Suriname") && !season_intl_concacaf_from("Netherlands Antilles") &&
           !season_intl_concacaf_from("Curaçao") && !season_intl_concacaf_from(NULL),
           "no other nation (Suriname and Curacao are FIFA members, the Netherlands Antilles were dissolved)");
+    /* Item 200: Timor (the 3.9.68 name, no continent) plays in the AFC from 2005/06. */
+    CHECK(season_intl_afc_from("Timor") == 2005 && season_intl_afc_from("Timor-Leste") == 2005,
+          "Timor joins the AFC in 2005");
+    CHECK(!season_intl_afc_from("Australia") && !season_intl_afc_from("Brunei Darussalam") &&
+          !season_intl_afc_from(NULL), "no other nation");
     CHECK(!season_intl_uefa_from("Gibraltar") && !season_intl_uefa_from("Serbia") && !season_intl_uefa_from(NULL),
           "no other nation");
 

@@ -629,6 +629,16 @@ int season_intl_uefa_from(const char *name)
     return 0;
 }
 
+int season_intl_afc_from(const char *name)
+{
+    /* Timor-Leste: AFC member from 2005 (the-afc.com, member associations; FIFA member from 12 September 2005). The
+     * 3.9.68 data holds it as "Timor" with no continent (original_faults.c rt_national_vacancy), so it plays no
+     * match (item 200 of 0.6.2). From 2005/06 it plays in the AFC. */
+    if (!name) return 0;
+    if (!strcasecmp(name, "Timor") || !strcasecmp(name, "Timor-Leste") || !strcasecmp(name, "East Timor")) return 2005;
+    return 0;
+}
+
 int season_intl_concacaf_from(const char *name)
 {
     /* Martinique: a CONCACAF member, not a FIFA member (an overseas department of France). Associate member from
