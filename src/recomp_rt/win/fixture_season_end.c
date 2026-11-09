@@ -480,13 +480,43 @@ RT_WRAP(005ab510, fixture_new_date)
  * Either can take a match on the day before its competition's update day to that day or later. A move of one day has
  * no free day between, so the match keeps its date: the nearby move gets the old date back in its copy at the
  * remove, with no news and no clash moves at its add; the TV move gets the old date back in its date variable at the
- * first TV news, and neither TV news is sent. */
+ * first TV news, and neither TV news is sent.
+ *
+ * The nearby move never takes a match that is not in the future, or to a day that is not (item 194). In a 2002 game
+ * (run set pass 4, a2002s2, day 195 of 2054) the Conference League draw of the day added the tie of clubs 2234 and
+ * 6416: first leg day 198, second leg day 203. A clash moved the second leg to day 200, and the nearby move of that
+ * add (0x5aab27, the new fixture's year in memory) moved the first leg a day earlier, to day 197. The nearby move of
+ * that add found Scottish League Cup 2771 v 6416 on day 195, today, two days before, and moved it to day 194: its
+ * remove (0x5aec0e) freed the store's copy of today's match, and its add met a date before today (0x5aa729), went to
+ * day 200 and moved the stored second leg (0x5aaa25) to day 198. The store gave the second leg the freed block. The
+ * day's match code still held the old block and wrote today's match back into it (a trace showed the second leg's
+ * block holding the League Cup match of day 195 before the friendlies of the day were added), so the second leg left
+ * the store. On day 197 Cup::process_fixture found no second leg after the first (find_next_fixture 0x5ac920 at
+ * 0x51a610) and stopped at the box "Cup..cpp 1278" (0x51a672). The original moves only by a day and checks clashes
+ * (0x5ad780), not the date against today. So when the old date or the new date is today or before, the remove, the
+ * add and the news of that move are skipped (both branches: 0x5aec0e, 0x5aec1c, 0x5aec32 and 0x5aedc8, 0x5aedd6,
+ * 0x5aedec), and the match stays where it is. */
 static int tv_kept;
+static uint32_t nearby_skip;    /* the copy of a nearby move that is not made, from its remove to its news */
 
 void o_005abc30(void);
 RT_WRAP(005abc30, fixture_remove)
 {
     uint32_t ret = rd32(g_mem, cpu.esp), old = rt_arg(0);
+    if ((ret == 0x005aec13u || ret == 0x005aedcdu) && season_game_changes() && readable(old)) {
+        uint32_t copy = cpu.esp + 8u + 0x38u;           /* the caller's esp after the call, + 0x38 */
+        int year = (int16_t)rd16(g_mem, old + FIX_YEAR), day = (int16_t)rd16(g_mem, old + FIX_DAY);
+        int new_year = (int16_t)rd16(g_mem, copy + FIX_YEAR), new_day = (int16_t)rd16(g_mem, copy + FIX_DAY);
+        int today_year = (int16_t)rd16(g_mem, TODAY + 2u), today = (int16_t)rd16(g_mem, TODAY);
+        if (!before(today_year, today, year, day) || !before(today_year, today, new_year, new_day)) {
+            nearby_skip = copy;
+            fprintf(stderr, "recomp: fixtures: a match of %.40s stays on day %d of %d (the nearby move gave day %d "
+                            "of %d, today is day %d of %d)\n", win_str(rd32(g_mem, old + FIX_COMP) + 4), day, year,
+                    new_day, new_year, today, today_year);
+            rt_ret_stdcall(0, 1);
+            return;
+        }
+    }
     if (ret != 0x005aedcdu || !season_game_changes() || !readable(old)) {
         if (ret == 0x005abbcbu && duty_log_on()) {      /* the call-up move 0x5abb10 (0x5abbc6) */
             o_005abc30();
@@ -549,11 +579,17 @@ RT_WRAP(007861e0, fixture_tv_news)
 }
 
 /* add_fixture 0x5aa680 (its wrap is in season_kind_cup_breaks.c): the call at 0x5abbdc for a kept fixture inserts
- * it on its old date with flag 0 and the try count at 10, so the clash code does not move it again. */
+ * it on its old date with flag 0 and the try count at 10, so the clash code does not move it again. The add of a
+ * nearby move that is not made (0x5aec1c, 0x5aedd6) does nothing: the match was not removed. */
 void o_005aa680(void);
 
 void fixture_season_end_add_fixture(void)
 {
+    uint32_t ret = rd32(g_mem, cpu.esp);
+    if (nearby_skip && rt_arg(0) == nearby_skip && (ret == 0x005aec21u || ret == 0x005aeddbu)) {
+        rt_ret_stdcall(1, 2);                   /* a nearby move that is not made (item 194): the match stays */
+        return;
+    }
     if (!kept || rt_arg(0) != kept || rd32(g_mem, cpu.esp) != SITES[kept_site].add) {
         o_005aa680();
         return;
@@ -572,6 +608,12 @@ void o_005aac70(void);
 RT_WRAP(005aac70, fixture_moved_news)
 {
     if (rd32(g_mem, cpu.esp) == 0x005abbf0u) duty_log_moved(rt_arg(0), rt_arg(2));     /* the call-up move 0x5abbeb */
+    if (nearby_skip && rt_arg(0) == nearby_skip &&
+        (rd32(g_mem, cpu.esp) == 0x005aec37u || rd32(g_mem, cpu.esp) == 0x005aedf1u)) {
+        nearby_skip = 0;                        /* no news for a nearby move that is not made (item 194) */
+        rt_ret_stdcall(0, 3);
+        return;
+    }
     if (kept && rt_arg(0) == kept && rd32(g_mem, cpu.esp) == SITES[kept_site].news) {
         kept = 0;
         rt_ret_stdcall(0, 3);
