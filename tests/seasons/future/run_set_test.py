@@ -286,6 +286,9 @@ def main():
         bad.append(f"grade full-squad streak: {seen}, not {want}")
     if run_set.grade(checker, [("full-squad", "Alpha", 2010, "d")] * 1, FakeGame(0))[0] != ["accepted"]:
         bad.append("grade without a streak does not accept a full-squad fault")
+    # a late row (item 193) starts from a save: no database, whatever its start year
+    if run_set.database_of({"tier": "late", "start": 2101, "name": "late2101"}, {"databases": "/nonexistent"}) is not None:
+        bad.append("database_of: a late row has a database")
     old_read = run_set.hc.read_known
     run_set.hc.read_known = lambda path: [{"check": "duplicate", "competition": "Euro Finals", "year": "2028",
                                            "note": "source", "rules": "", "accepted": "real"}]
