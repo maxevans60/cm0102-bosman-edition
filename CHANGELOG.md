@@ -47,7 +47,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 - Spain's Champions League places go to the top four of La Liga. Before, some 2021, 2025 and 2026 starts gave them to clubs from lower in the table or from the Segunda División. A Champions League or Conference League place that no club can take stays empty, as UEFA leaves it, and the round gets a bye.
 - Each season database has its own European places file. A 2005/06 start no longer puts Leeds United, a second-tier club, in the Champions League. Season folders unpacked by 0.6.0 or 0.6.1 get the file at the next start.
 - UEFA coefficients use the real values in every season database and in our Summer 2002, Summer 2004 and Summer 2006 databases. Saves from earlier releases keep the season with no value.
-- From 2009/10 a nation has at most 4 clubs in the Champions League, 5 from 2015/16 and 7 from 2024/25. A club over the limit takes a Europa League place, as Tottenham Hotspur did in 2012/13.
+- From 2009/10 a nation has at most 4 clubs in the Champions League. From 2015/16 it can have 5, when it holds both the Champions League and the Europa League. From 2024/25 it can have 7: 4 league places, both title holders and the European Performance Spot. A club over the limit takes a Europa League place, as Tottenham Hotspur did in 2012/13.
 - UEFA Cup 2004/05 to 2008/09: the second qualifying round and the first round no longer fall on international dates. The spare cup place goes to the next club in the league. Before, it went to the losing FA Cup semi-finalists.
 - The Setanta Cup plays from its first edition in 2004/05, with the format of each season. The All-Ireland cup from 2010/11 takes the Northern Irish clubs by league place and pairs clubs from the two leagues in the first round.
 - Season news says "is played again" for a cup that comes back, such as the Setanta Sports Cup in 2010/11, and "first time" only for a new cup.
@@ -85,7 +85,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 - These boxes no longer stop the game:
   - "match_eng..cpp 612" and "match_eng..cpp 652", when a side had fewer than 11 players for a European or international match, for example after a save was loaded
   - "Cup..cpp 1278", in the Segunda División play-off final and in a Conference League tie
-  - "match_man..cpp 1225", when a player of a linked B side held many squad places (Hertha BSC Amateure, 2020)
+  - "match_man..cpp 1225", on 28 September 2020 in a 2001 game, when one player held 11 squad places of Hertha BSC Amateure
   - "Database..cpp 13471", at every 2005 start
   - "ire_prm..cpp 82", at a 2008/09 start with the 3.9.68 data and all nations
   - "ita_ser_c2a..cpp 551", at the June 2028 season change
@@ -98,6 +98,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 - Saves no longer fail at 999 parts ("unable to pack the temporary files") in long games. Season changes run after 2099, and saves after 2100 load.
 - A 0.6.0 or 0.6.1 save whose finals wait for 2200, or whose qualifying has the old shape, is put right at load and plays the next World Cup, Euros and Olympics.
 - Very long games no longer stop with "heap full" around 2222.
+- Match results no longer depend on how busy the computer is.
 - The Club History screen keeps the last 50 seasons of each club, and fixtures and results of seasons more than 50 years back are deleted. League and cup history stays whole. With this, a save of every nation stays under the 4 GB limit up to 2300. It applies in every game.
 - Game days are about 20 % faster on a Mac with Apple silicon, and faster in long games: a July 2025 save plays a day in 6.9 seconds in place of 8.9.
 - A new game is faster: 2025/26 with all nations takes 120 seconds in place of 142. The December 2025 database with four nations takes 51 seconds in place of 95.
