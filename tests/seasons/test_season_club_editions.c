@@ -169,6 +169,8 @@ int main(int argc, char **argv)
                     CHECK(0, "%s %d round %d at least 2 days after the round before", all[c]->comp, y, i);
                 end = r[i].match + gap;
             }
+            if (count && r[0].match < e.first && bad_days++ < 5)
+                CHECK(0, "%s %d round 0 not before the edition's first day", all[c]->comp, y);
         }
     /* With changing rules off a start season's edition moves to every later year (season_club_cups.c edition()). */
     for (int c = 0; c < 5; c++)

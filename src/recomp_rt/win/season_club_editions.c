@@ -341,8 +341,8 @@ int season_club_plan_rounds(const char *comp, const SeasonClubEdition *e, int n,
      * of 8 August 2011, two days before the FIFA day of 10 August, lost 3 players of 12 de Octubre to Paraguay's
      * Under 21 match with Cameroon on 9 August). season_club_meets_duty holds both. Each round
      * (both legs) takes the nearest day that meets none, at most 21 days either way, the later one first, and never
-     * before the round before it and its draw. With no such day it keeps its day. */
-    int after = -1000;
+     * before the round before it and its draw, nor before the first day. With no such day it keeps its day. */
+    int after = e->first;                       /* round 0 never before the edition's first day */
     for (int i = 0; i < count; i++) {
         int gap = season_club_second_leg(e, &r[i], count), want = r[i].match < after ? after : r[i].match, m = want;
         for (int k = 0; k <= 21; k++) {
