@@ -378,7 +378,10 @@ def greek_second(comps):
 # ---- One game ----
 
 def database_of(row, o):
-    """The --database folder of a row (None: the base data 3.9.68), as tests/seasons/gate_run.py picks it."""
+    """The --database folder of a row (None: the base data 3.9.68), as tests/seasons/gate_run.py picks it. A late
+    row loads a save of its `from` row, so it needs no database."""
+    if row["tier"] == "late":
+        return None
     if row["tier"] == "jump":
         names = sorted(n for n in os.listdir(o["databases"]) if n.startswith(JUMP_DATABASE))
         if not names:
