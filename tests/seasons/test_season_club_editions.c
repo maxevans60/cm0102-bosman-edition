@@ -24,6 +24,18 @@ static const SeasonClubCup sudamericana = {"sudamericana", 1, 0}, recopa = {"rec
                            suruga = {"suruga_bank", 1, 0}, intercontinental = {"fifa_intercontinental_cup", 0, 0},
                            acl_two = {"acl_two", 0, 1};
 
+/* 1 when day d of month m of year y meets the duty of a national side: a FIFA day or the day beside it
+ * (season_fifa_meets), or the day before that, when the linked Under 21 or 'B' match plays the day before the FIFA
+ * day (ReserveComp::add_b_or_under21_fixture 0x7e6720) and its players are on duty from the day before it (0x7757d0;
+ * open item 163). */
+static int duty(int y, int m, int d)
+{
+    static const int len[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (season_fifa_meets(y, m, d)) return 1;
+    int last = len[m - 1] + (m == 2 && season_club_is_leap(y));
+    return d < last ? season_fifa_meets(y, m, d + 1) : m < 12 ? season_fifa_meets(y, m + 1, 1) : season_fifa_meets(y + 1, 1, 1);
+}
+
 /* Day and month of a day of the year, as a number 100 * month + day. */
 static int month_day(int doy, int year)
 {
@@ -148,8 +160,8 @@ int main(int argc, char **argv)
                     int m, d;
                     season_from_day_of_year(yy, doy, &m, &d);
                     checked++;
-                    if (season_fifa_meets(yy, m, d) && bad_days++ < 5)
-                        CHECK(0, "%s %d round %d: no match on %d.%d.%d (a FIFA day or the day beside it)",
+                    if (duty(yy, m, d) && bad_days++ < 5)
+                        CHECK(0, "%s %d round %d: no match on %d.%d.%d (a FIFA day, the day beside it or two days before it)",
                               all[c]->comp, y, i, d, m, yy);
                 }
                 /* round_table draws a round on the day after the last leg before it, so its match comes 2 days on */
@@ -176,7 +188,7 @@ int main(int argc, char **argv)
                         int m, d;
                         season_from_day_of_year(yy, doy, &m, &d);
                         checked++;
-                        if (season_fifa_meets(yy, m, d) && bad_days++ < 5)
+                        if (duty(yy, m, d) && bad_days++ < 5)
                             CHECK(0, "%s of %d moved to %d, round %d: no match on %d.%d.%d", all[c]->comp, base, y, i,
                                   d, m, yy);
                     }
@@ -185,6 +197,24 @@ int main(int argc, char **argv)
         }
     if (bad_days > 5) printf("%d legs on FIFA days in all, of %d\n", bad_days, checked);
     if (bad_days) failures++;
+
+    /* Open item 163 (run set pass 4, a2001nation): the Copa Sudamericana of 2011 played a leg on 8 August 2011, two
+     * days before the FIFA day of 10 August, and Paraguay's Under 21 side played Cameroon on 9 August. No leg of 2011
+     * from 8 to 11 August. */
+    if (season_club_edition(&sudamericana, 2011, &e)) {
+        SeasonClubRound r[8];
+        int n = e.clubs > 64 ? 64 : e.clubs, count = season_club_plan_rounds("sudamericana", &e, n, r);
+        for (int i = 0; i < count; i++) {
+            int gap = season_club_second_leg(&e, &r[i], count);
+            for (int leg = 0; leg <= (gap ? 1 : 0); leg++) {
+                int doy = r[i].match + leg * gap, md = month_day(doy, 2011);
+                CHECK(md < 808 || md > 811, "sudamericana 2011 round %d leg %d: not on %d August 2011", i, leg + 1,
+                      md % 100);
+            }
+        }
+    } else {
+        CHECK(0, "sudamericana: an edition of 2011");
+    }
 
     if (failures) {
         printf("%d failures\n", failures);
