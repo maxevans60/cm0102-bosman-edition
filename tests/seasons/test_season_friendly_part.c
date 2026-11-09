@@ -17,6 +17,7 @@ uint8_t *g_mem;
 int rt_unwinding;
 uint32_t rt_callback(uint32_t target, int nargs, const uint32_t *args) { (void)target, (void)nargs, (void)args; return 0; }
 void o_005cc510(void) {}
+void o_00685640(void) {}
 int season_start_year(void) { return 2002; }
 int season_game_changes(void) { return 1; }
 int season_day_of_year(int y, int m, int d) { (void)y, (void)m; return d; }
