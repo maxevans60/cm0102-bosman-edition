@@ -728,17 +728,39 @@ static void stay_info(uint32_t rec, uint32_t home, uint32_t away, int d, int y, 
 /* Item 208: cancel the friendlies of a side of the nations of club a and club b from CLASH_DAYS before to CLASH_DAYS
  * after day doy of year y (the rule above). self: a stored qualifier that moves (not a friendly). */
 #define CANCEL_MAX 64
+
+/* 1 when fixture f is still in the store's lists of day doy of year y. A cancel can remove more than its own
+ * fixture: Friendly::cancel 0x5c6570 removes every match of a friendly tournament (0x5c8260) and 0x5cb9e0 a second
+ * fixture of the pair (0x5acbe0), so a friendly found before may be gone (review of item 208). */
+static int still_stored(uint32_t f, int y, int doy)
+{
+    int types = (int8_t)g_mem[TYPE_COUNT];
+    if (types < 2 || types > 40) types = 2;
+    for (int slice = 0; slice < 3 && !rt_unwinding; slice++)
+        for (int type = 0; type < types && !rt_unwinding; type++) {
+            uint32_t list = day_list(y, doy, slice, type);
+            if (rt_unwinding) return 0;
+            for (uint32_t node = readable(list) ? rd32(g_mem, list + 2) : 0, k = 0; readable(node) && k < 4000;
+                 node = rd32(g_mem, node + 6), k++)
+                if (rd32(g_mem, node) == f) return 1;
+        }
+    return 0;
+}
+
 static void cancel_friendlies(uint32_t a, uint32_t b, int y, int doy, uint32_t self)
 {
     uint32_t fo = rd32(g_mem, FRIENDLY_OBJ);
     if (!readable(fo)) return;
     uint32_t found[CANCEL_MAX];
+    int found_y[CANCEL_MAX], found_d[CANCEL_MAX];
     int n = 0, types = (int8_t)g_mem[TYPE_COUNT];
     if (types < 2 || types > 40) types = 2;
+    long today = season_abs_day((int16_t)rd16(g_mem, GAME_DATE + 2), 1, 1) + (int16_t)rd16(g_mem, GAME_DATE);
     for (int off = -CLASH_DAYS; off <= CLASH_DAYS && !rt_unwinding; off++) {
         int yy = y, dd = doy + off;
         if (dd < 0) dd += days_in(--yy);
         else if (dd >= days_in(yy)) dd -= days_in(yy++);
+        if (season_abs_day(yy, 1, 1) + dd <= today) continue;      /* not today's match, nor one played (review) */
         for (int slice = 0; slice < 3 && !rt_unwinding; slice++)
             for (int type = 0; type < types && !rt_unwinding; type++) {
                 uint32_t list = day_list(yy, dd, slice, type);
@@ -750,12 +772,16 @@ static void cancel_friendlies(uint32_t a, uint32_t b, int y, int doy, uint32_t s
                     if (!season_fifa_fixture_takes_side(rd32(g_mem, f + 0x1c), rd32(g_mem, f + 0x20), a, b)) continue;
                     int seen = 0;
                     for (int i = 0; i < n; i++) seen |= found[i] == f;
-                    if (!seen && n < CANCEL_MAX) found[n++] = f;
+                    if (!seen && n < CANCEL_MAX) found_y[n] = yy, found_d[n] = dd, found[n++] = f;
                 }
             }
     }
     Cpu saved = cpu;
     for (int i = 0; i < n && !rt_unwinding; i++) {
+        int stored = still_stored(found[i], found_y[i], found_d[i]);
+        if (rt_unwinding) return;
+        cpu = saved;
+        if (!stored) continue;                                  /* removed by an earlier cancel */
         uint32_t f = found[i], h = rd32(g_mem, f + 0x1c), w = rd32(g_mem, f + 0x20);
         int fy = (int16_t)rd16(g_mem, f + 0x28), fd = (int16_t)rd16(g_mem, f + 0x2a);
         if (getenv("RECOMP_SCREEN_LOG"))
@@ -841,6 +867,14 @@ static void move_pending(void)
         int y = pending[i].year, d = pending[i].day,
             c = fifa_target_by(home, away, y, d, pending[i].end_year, pending[i].end_day, f);
         if (rt_unwinding) return;
+        cancel_friendlies(home, away, y, c >= 0 ? c : d, f);                   /* item 208, also a kept day */
+        if (rt_unwinding) return;
+        f = find_pending(&pending[i]);                          /* a cancel may move the store's lists */
+        if (rt_unwinding) return;
+        if (!f) {
+            gone++;
+            continue;
+        }
         if (c == d) continue;
         if (c < 0) {
             stayed++;
@@ -850,8 +884,6 @@ static void move_pending(void)
             end_year = ey, end_day = ed;
             continue;
         }
-        cancel_friendlies(home, away, y, c, f);                                 /* item 208 */
-        if (rt_unwinding) return;
         uint32_t saved_esp = cpu.esp;
         cpu.esp -= 0x60;
         uint32_t copy = cpu.esp;

@@ -154,6 +154,7 @@ static void world(void)
     for (int i = 0; i < 4; i++) strcpy((char *)g_mem + side(i) + 4, names[i]);
     strcpy((char *)g_mem + 0x00e00004u, "FIFA World Cup qualification (UEFA)");
     wr32(g_mem, 0x00e00000u, 900);
+    wr32(g_mem, 0x00ae2378u, 2000);                    /* the competition count: ids from 1873 are friendlies (0x5c6710) */
     wr16(g_mem, GAME_DATE, 340);                       /* 7 December 2044: the groups are made */
     wr16(g_mem, GAME_DATE + 2, 2044);
     g_mem[TYPE_COUNT] = 2;
