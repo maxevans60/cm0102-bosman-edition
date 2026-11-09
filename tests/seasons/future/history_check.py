@@ -128,7 +128,9 @@ under-23 players (age from the birth date at the save date), the squads of the s
 clubs and national sides with a manager, and the club balances (lowest, highest, outside 32 bits), then one row
 per live nation. Time per game day is not in a save. Checks:
     empty-squad   a senior side with no player in its squad while 23 players or more hold the nationality, or an
-                  under-21 side with none while 11 or more of them are under 21 (Q17)
+                  under-21 side with none while 11 or more of them are under 21 (Q17). Only a side with a match in
+                  the 14 days after the save or one played in the 14 days before it: the pick runs 14 days ahead
+                  of a fixture, so a side with no fixture has no squad (open item 195)
     no-youth      a nation with 23 players or more and none under 21 or none under 23 (Q31: the under-21 and
                   Olympic squads then empty). A fault that fails a Tier B run (Q35, open item 52)
     overflow      an age field that is not the age from the birth date (more than 1 year apart), or a balance
@@ -1338,6 +1340,26 @@ SQUAD = 23                                    # a nation with this many players 
 ELEVEN = 11                                   # under-21 players that fill an under-21 side
 
 
+def side_days(game):
+    """{national side id: [day numbers (date.toordinal) of its matches]} from the fixtures parts, played and to be
+    played. A side with no fixture has no squad pick (open item 195): NationalTeams::select_squads_for_fixture
+    0x76bab0 runs only for fixtures 14 days ahead (daily_update 0x76b100)."""
+    out = collections.defaultdict(list)
+    for fx in fixtures(game).values():
+        for day, home, away in fx:
+            for t in (home, away):
+                if t in game.sides:
+                    out[t].append(day)
+    return out
+
+
+def plays_near(days, today, span=None):
+    """Does a side with these match days play within span days after the save day (today, an ordinal), or did it
+    play within span days before it? span is PICK_AHEAD (14 days) by default."""
+    span = PICK_AHEAD if span is None else span
+    return any(today - span <= d <= today + span for d in days)
+
+
 def health(game):
     """The world-health numbers of a save: (summary dict, [per nation row], faults). Squads: staff with a national
     side at +0x24 and the job Player (11) at +0x28 (database_get_job_name 0x53ad00).
@@ -1383,6 +1405,8 @@ def health(game):
     balances = [struct.unpack_from("<q", finance, k * FINANCE)[0]
                 for k in range(min(club_count, len(finance) // FINANCE))]
     live = {nid: (name, conf) for nid, (name, conf) in game.nations.items() if conf}
+    days = side_days(game)
+    today = datetime.date(year, 1, 1).toordinal() + day if 1900 < year < 3000 else 0
     rows, faults = [], []
     for nid, (name, conf) in sorted(live.items(), key=lambda x: x[1]):
         has_side = nid in side_manager
@@ -1390,10 +1414,12 @@ def health(game):
         rows.append((name, conf, players[nid], u21[nid], u23[nid], squad[ids[0]] if ids[0] is not None else "",
                      squad[ids[1]] if ids[1] is not None else "",
                      int(side_manager.get(nid, False)) if has_side else ""))
-        if ids[0] is not None and players[nid] >= SQUAD and squad[ids[0]] == 0:
+        if ids[0] is not None and players[nid] >= SQUAD and squad[ids[0]] == 0 and \
+                plays_near(days.get(ids[0], ()), today):
             faults.append(("empty-squad", name, year, f"the senior side of {name} has no player in its squad, "
                                                       f"{players[nid]} players hold the nationality"))
-        if ids[1] is not None and u21[nid] >= ELEVEN and squad[ids[1]] == 0:
+        if ids[1] is not None and u21[nid] >= ELEVEN and squad[ids[1]] == 0 and \
+                plays_near(days.get(ids[1], ()), today):
             faults.append(("empty-squad", name + " under-21", year, f"the under-21 side of {name} has no player in "
                                                                     f"its squad, {u21[nid]} players are under 21"))
         if players[nid] >= SQUAD and (u21[nid] == 0 or u23[nid] == 0):

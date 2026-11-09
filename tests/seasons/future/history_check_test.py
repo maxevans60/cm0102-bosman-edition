@@ -183,8 +183,10 @@ def fixture_part(fixtures):
 # World health: Aland has 30 players born in 2010 (none under 23 in 2040), Borduria 30 of all ages; one Borduria
 # player has a wrong age field; Carpania FC's balance has wrapped.
 # Aland's players are in its senior squad; Borduria's in no squad, so its senior and under-21 squads are empty.
+# Open item 195: an empty squad counts only for a side with a match in the 14 days around the save. Borduria's senior
+# side plays Aland on day 201, 12 days after the save: a fault. Its under-21 side has no fixture at all: no fault.
 HEALTH_FAULTS = {("no-youth", "Aland", 2040), ("empty-squad", "Borduria", 2040),
-                 ("empty-squad", "Borduria under-21", 2040), ("overflow", "age", 2040), ("overflow", "balance", 2040),
+                 ("overflow", "age", 2040), ("overflow", "balance", 2040),
                  ("full-squad", "Carpania FC", 2040), ("full-squad", "Elbonia Rovers", 2040)}
 # Full squads (open item 78). Ages by the age field: Aland's 30 players (staff 0 to 29) are 30; of Borduria's 30
 # (staff 30 to 59), 21 are 21 or under (YOUNG, staff 59 by its wrong age field 7). Abilities (player.dat): Aland 50,
@@ -984,6 +986,12 @@ def main():
         got = history_check.known_status(known, *args)
         if got != want_:
             bad.append(f"known_status{args} is {got}, not {want_}")
+    # an empty squad counts only for a side that plays in the 14 days around the save (open item 195)
+    today = 1000
+    for days, want_ in (([], False), ([today + 14], True), ([today + 15], False), ([today - 14], True),
+                        ([today - 15], False), ([today - 200, today + 200], False), ([today - 200, today - 3], True)):
+        if history_check.plays_near(days, today) is not want_:
+            bad.append(f"plays_near({days}, {today}) is not {want_}")
     # a year range accepts a fault of those years in a save of those years, and no other
     rng = [{"check": "missing", "competition": "R Cup", "year": "2003-2010", "note": "n", "rules": "", "accepted": "real"}]
     for args, want_ in ((("missing", "R Cup", 2003, None, 2005), "accepted"), (("missing", "R Cup", 2003, None, 2010), "accepted"),
