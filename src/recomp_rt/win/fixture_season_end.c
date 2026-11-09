@@ -498,6 +498,7 @@ RT_WRAP(005ab510, fixture_new_date)
  * 0x5aedec), and the match stays where it is. */
 static int tv_kept;
 static uint32_t nearby_skip;    /* the copy of a nearby move that is not made, from its remove to its news */
+static int nearby_skips;        /* the nearby moves not made, for the test of item 194 */
 
 void o_005abc30(void);
 RT_WRAP(005abc30, fixture_remove)
@@ -510,6 +511,7 @@ RT_WRAP(005abc30, fixture_remove)
         int today_year = (int16_t)rd16(g_mem, TODAY + 2u), today = (int16_t)rd16(g_mem, TODAY);
         if (!before(today_year, today, year, day) || !before(today_year, today, new_year, new_day)) {
             nearby_skip = copy;
+            nearby_skips++;
             fprintf(stderr, "recomp: fixtures: a match of %.40s stays on day %d of %d (the nearby move gave day %d "
                             "of %d, today is day %d of %d)\n", win_str(rd32(g_mem, old + FIX_COMP) + 4), day, year,
                     new_day, new_year, today, today_year);
@@ -583,9 +585,100 @@ RT_WRAP(007861e0, fixture_tv_news)
  * nearby move that is not made (0x5aec1c, 0x5aedd6) does nothing: the match was not removed. */
 void o_005aa680(void);
 
+/* The test of item 194 (RECOMP_TEST_NEARBY_TODAY=1, tests/seasons/fixture_nearby_today_run.py). At the first add
+ * of a fixture on a day with matches of today that the move acts on (not a friendly: Friendly::is_friendly_competition
+ * 0x5c6710, the check at 0x5aea25; the home side's nation in play, 0x5aea6f), it calls
+ * FIXTURE_MANAGER::move_nearby_club_fixtures 0x5ae9d0 (thiscall (Fixture *), ret 4) for a copy of such a match dated
+ * two days before today, as an add of a match on that day would. The move takes each side's match two days after
+ * the copy (found by 0x5acbe0 from 0x5aec3e), the match of today, one day later when no other match clashes
+ * there (0x5ad780): the original's remove frees the match of today while the day may still hold it. The
+ * test tries the matches of today in turn until the move acts on one (a skip of item 194, or the match moved), and
+ * the log says whether that match is still on today. It does not depend on which fixtures a save draws. */
+#define NEARBY_MOVE 0x005ae9d0u
+#define FIX_SIZE 0x4fu
+#define NEARBY_SKIPS 0x005c6710u        /* Friendly::is_friendly_competition, thiscall (comp record) */
+#define NEARBY_SKIPS_THIS 0x00ae2c74u
+#define TEST_TRIES 32
+
+/* The matches of day d of year y that the move acts on, into out (at most max); or 1 when m is among them. */
+static int matches_on(uint32_t manager, int y, int d, uint32_t m, uint32_t *out, int max)
+{
+    int types = (int8_t)g_mem[TYPE_COUNT], k = 0;
+    if (types < 2 || types > 40) types = 2;
+    for (int slice = 0; slice < 3 && !rt_unwinding; slice++)
+        for (int type = 0; type < types && !rt_unwinding; type++) {
+            uint32_t esp = cpu.esp;
+            cpu.esp -= 16;
+            uint32_t date = cpu.esp;
+            wr16(g_mem, date, (uint16_t)d);
+            wr16(g_mem, date + 2, (uint16_t)y);
+            wr32(g_mem, date + 4, 0);
+            uint32_t a[3] = {date, (uint32_t)slice, (uint32_t)type};
+            uint32_t list = call_this(DAY_LIST, manager, 3, a);
+            cpu.esp = esp;
+            if (rt_unwinding) return 0;
+            for (uint32_t node = readable(list) ? rd32(g_mem, list + 2) : 0, n = 0; readable(node) && n < 4000;
+                 node = rd32(g_mem, node + 6), n++) {
+                uint32_t f = rd32(g_mem, node);
+                if (!readable(f)) continue;
+                if (m) {
+                    if (f == m) return 1;
+                    continue;
+                }
+                uint32_t club = rd32(g_mem, f + FIX_HOME_CLUB), nation = readable(club) ? rd32(g_mem, club + 0x53u) : 0;
+                uint32_t rec = rd32(g_mem, f + FIX_COMP), arg[1] = {rec};
+                if (k < max && readable(nation) && g_mem[nation + 0x11cu] && readable(rec) &&
+                    !call_this(NEARBY_SKIPS, rd32(g_mem, NEARBY_SKIPS_THIS), 1, arg) && !rt_unwinding)
+                    out[k++] = f;
+            }
+        }
+    return m ? 0 : k;
+}
+
+static void nearby_today_test(void)
+{
+    static int state = -1;                      /* -1 not read, 0 off or done, 1 waits, 2 runs */
+    if (state < 0) {
+        const char *v = getenv("RECOMP_TEST_NEARBY_TODAY");
+        state = v && *v == '1';
+    }
+    if (state != 1) return;
+    uint32_t manager = rd32(g_mem, FIXTURES);
+    int y = (int16_t)rd16(g_mem, TODAY + 2u), d = (int16_t)rd16(g_mem, TODAY);
+    if (!readable(manager) || !year_in_memory(y) || d < 2) return;
+    state = 2;
+    uint32_t cand[TEST_TRIES];
+    int n = matches_on(manager, y, d, 0, cand, TEST_TRIES);
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        uint32_t m = cand[i];
+        if (!matches_on(manager, y, d, m, NULL, 0) || (int16_t)rd16(g_mem, m + FIX_DAY) != d) continue;
+        int skips = nearby_skips;
+        uint32_t esp = cpu.esp;
+        cpu.esp -= 0x100u;
+        uint32_t copy = cpu.esp;
+        memcpy(g_mem + copy, g_mem + m, FIX_SIZE);
+        wr16(g_mem, copy + FIX_DAY, (uint16_t)(d - 2));
+        uint32_t a[1] = {copy};
+        char name[48];
+        snprintf(name, sizeof name, "%.40s", win_str(rd32(g_mem, m + FIX_COMP) + 4));
+        call_this(NEARBY_MOVE, manager, 1, a);
+        cpu.esp = esp;
+        if (rt_unwinding) return;
+        int kept = matches_on(manager, y, d, m, NULL, 0) && (int16_t)rd16(g_mem, m + FIX_DAY) == d;
+        if (kept && nearby_skips == skips) continue;           /* the move did not act on this match */
+        fprintf(stderr, "recomp: test nearby today: a match of %s on day %d of %d, the nearby move of a copy on day "
+                        "%d (try %d)\n", name, d, y, d - 2, i + 1);
+        fprintf(stderr, "recomp: test nearby today: the match of today %s\n", kept ? "stays on today" : "is moved");
+        state = 0;
+        return;
+    }
+    state = 1;
+}
+
 void fixture_season_end_add_fixture(void)
 {
     uint32_t ret = rd32(g_mem, cpu.esp);
+    nearby_today_test();
     if (nearby_skip && rt_arg(0) == nearby_skip && (ret == 0x005aec21u || ret == 0x005aeddbu)) {
         rt_ret_stdcall(1, 2);                   /* a nearby move that is not made (item 194): the match stays */
         return;
