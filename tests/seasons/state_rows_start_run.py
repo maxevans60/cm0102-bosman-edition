@@ -3,7 +3,8 @@
 season_history_start.c).
 
 Usage:
-    python3 tests/seasons/state_rows_start_run.py <cm0102_recomp> <game folder> [--start 2001|2025] [--keep <folder>]
+    python3 tests/seasons/state_rows_start_run.py <cm0102_recomp> <game folder> [--start 2001|2025|2098]
+        [--keep <folder>]
 
 Real life: one champion and one runner-up for each edition. In this game the region records of 3.9.68 play the
 championships of Para and Ceara (season_bra_states.c), and their data rows are of other states, one a year: Alagoas
@@ -11,12 +12,15 @@ under the Paraense (ASA / CSA 2001), Amazonas under the Cearense (Atletico Rio N
 creation the game writes its own 2001 row of each (League::record_season_honours 0x684640, 0x4afce0 at 0x684771), and
 the data row of 2001 goes. Before item 189 the data row stayed (the rule of item 176 for rows of another state), so
 2001 held two rows. The database of a 2025 start holds the same kind of row: Maranhao under the Cearense (Maranhao AC /
-Imperatriz 2025) and the Federal District under the Mato-Grossense (Gama / Capital 2025).
+Imperatriz 2025) and the Federal District under the Mato-Grossense (Gama / Capital 2025). A date jump (RECOMP_DATE_JUMP=1)
+takes that database and moves its rows on to the start year, so a 2098 start holds them under 2098.
 
 --start 2001 (the default): one new game as the run-set row a2001to2300, Tier A, every nation, seed 1, changing
 rules on, the 3.9.68 database, 10 days, a save. --start 2025: as the run-set row b2025, Tier B, every nation, seed 1,
 changing rules on, the database that the run set takes for 2025 (gate_run.database: the own databases in
-/Users/max/Projects/cm0102/own-dbs, else test-fixtures/databases), 10 days, a save. The checks: the run ends with code 0 and
+/Users/max/Projects/cm0102/own-dbs, else test-fixtures/databases), 10 days, a save. --start 2098: as the run-set row
+jump2098, a date jump (RECOMP_DATE_JUMP=1, the full world), every nation, seed 1, changing rules on, the December 2025
+database (run_set.py database_of), 10 days, a save. The checks: the run ends with code 0 and
 shows no message box; each record holds one row of the start year, and it is not the data row of another state.
 """
 import os
@@ -39,7 +43,10 @@ STARTS = {
                  "Campeonato Cearense": {"Atlético Rio Negro Clube (AM)", "Nacional Futebol Clube (AM)"}}),
     2025: ("B", {"Campeonato Cearense": {"Maranhão AC", "Sociedade Imperatriz de Desportos (MA)"},
                  "Campeonato Mato-Grossense": {"Sociedade Esportiva do Gama (DF)", "Capital CF"}}),
+    2098: ("jump", {"Campeonato Cearense": {"Maranhão AC", "Sociedade Imperatriz de Desportos (MA)"},
+                    "Campeonato Mato-Grossense": {"Sociedade Esportiva do Gama (DF)", "Capital CF"}}),
 }
+JUMP_DATABASE = "December 2025"                               # run_set.py JUMP_DATABASE
 
 
 def rows_of(save, year, names):
@@ -77,13 +84,21 @@ def main(argv):
         print(f"--start: one of {', '.join(map(str, STARTS))}")
         return 2
     tier, data = STARTS[start]
-    if tier == "A":
-        os.environ["RECOMP_TIER_A"] = "1"
+    os.environ.pop("RECOMP_TIER_A", None)
+    os.environ.pop("RECOMP_DATE_JUMP", None)
+    os.environ.update({"A": {"RECOMP_TIER_A": "1"}, "jump": {"RECOMP_DATE_JUMP": "1"}}.get(tier, {}))
+    if tier == "jump":
+        names = sorted(n for n in os.listdir(DATABASES) if n.startswith(JUMP_DATABASE))
+        database = os.path.join(DATABASES, names[0]) if names else None
+        label = names[0] if names else f"no {JUMP_DATABASE} folder in {DATABASES}"
     else:
-        os.environ.pop("RECOMP_TIER_A", None)
-    args, label = gate_run.database(start, {"run": keep, "own": OWN_DBS, "databases": DATABASES})
+        args, label = gate_run.database(start, {"run": keep, "own": OWN_DBS, "databases": DATABASES})
+        database = args[1] if args else None
     print(f"      database {label}")
-    o = {"program": program, "game": game, "rules": "on", "database": args[1] if args else None, "seed": 1, "start": start, "last": 2300,
+    if tier == "jump" and not database:
+        print("FAIL  no database")
+        return 1
+    o = {"program": program, "game": game, "rules": "on", "database": database, "seed": 1, "start": start, "last": 2300,
          "nations": ["all"], "extra": [], "timeout": 5400}
     work = os.path.join(keep, "leg")
     code, took, box = soak_run.new_game_leg(o, work, DAYS)
