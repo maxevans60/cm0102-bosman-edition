@@ -933,6 +933,16 @@ def main():
     got = [(y, len(t)) for y, _, _, t in history_check.editions_of(days)]
     if got != [(2030, 12), (2030, 4)]:
         bad.append(f"editions of a cup with a final after a group day: {got}, not [(2030, 12), (2030, 4)]")
+    # Open item 201: a World Cup qualifying whose groups of 5 play March and June and whose groups of 4 join in
+    # September. One match of the last June day moved 3 days later (the Club World Cup took its FIFA day), then 106
+    # days with no match. One edition: a lone match up to 3 days after a day of more than two matches is a moved
+    # group match, not a final.
+    j = datetime.date(2033, 6, 12).toordinal()
+    days = [(j - 80, 0, 1), (j - 80, 2, 3), (j - 3, 0, 2), (j - 3, 1, 3), (j, 0, 3), (j, 1, 4), (j, 2, 5), (j + 3, 4, 5)]
+    days += [(j + 109, 6, 7), (j + 109, 8, 9), (j + 109, 0, 1), (j + 112, 6, 8)]
+    got = [(y, len(t)) for y, _, _, t in history_check.editions_of(days)]
+    if got != [(2033, 10)]:
+        bad.append(f"editions of a qualifying with one June match moved: {got}, not [(2033, 10)]")
     # Open item 45: the OFC Nations Cup of 2008, one group of 4 home and away on 17 and 21 November 2007, 14 and 21
     # June, 6 and 10 September 2008 (a pause of 206 days), then the next edition of the same 4 teams in 2012, with a
     # pairing of 2008. One edition each.
