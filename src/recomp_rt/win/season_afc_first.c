@@ -151,9 +151,11 @@ static const char *team_name(uint32_t club)
     return readable(nation) ? win_str(nation + 4u) : "none";
 }
 
-static long today_abs(void)
+/* The day of `date` (a Date: s16 day of the year, s16 year, as GAME_DATE) as an absolute day. update_for_date 0x913140
+ * compares its Date argument (0x91315f, 0x9131ad..0x9131f4), not the game date, so the wrap passes that argument. */
+static long today_abs(uint32_t date)
 {
-    return season_abs_day((int16_t)rd16(g_mem, GAME_DATE + 2), 1, 1) + (int16_t)rd16(g_mem, GAME_DATE);
+    return season_abs_day((int16_t)rd16(g_mem, date + 2), 1, 1) + (int16_t)rd16(g_mem, date);
 }
 
 static int on(uint32_t self)
@@ -287,11 +289,11 @@ static int window_free(long leg1, long leg2, void *ctx)
 }
 
 /* Makes the round of the cycle (head comment). Returns 1 when slot 0 holds the ties. */
-static int build(uint32_t self)
+static int build(uint32_t self, uint32_t date)
 {
     static int logged_year;
     int c = year_of(self), places = group_places(self);
-    long today = today_abs(), draw, leg1, leg2;
+    long today = today_abs(date), draw, leg1, leg2;
     uint32_t pool[AFC_FIRST_MAX_POOL];
     SeasonAfcFirstPlan plan;
     if (places <= 0) return 0;
@@ -437,10 +439,10 @@ static void finish(uint32_t self)
     wr32(g_mem, self + F_STAGE, 0xffffffffu);
 }
 
-static int draw_day(uint32_t self)
+static int draw_day(uint32_t self, uint32_t date)
 {
-    return (int16_t)rd16(g_mem, GAME_DATE) == (int16_t)rd16(g_mem, self + F_DRAW_DAY) &&
-           (int16_t)rd16(g_mem, GAME_DATE + 2) == year_of(self) + (int16_t)rd16(g_mem, self + F_DRAW_YEAR);
+    return (int16_t)rd16(g_mem, date) == (int16_t)rd16(g_mem, self + F_DRAW_DAY) &&
+           (int16_t)rd16(g_mem, date + 2) == year_of(self) + (int16_t)rd16(g_mem, self + F_DRAW_YEAR);
 }
 
 void o_00913140(void);
@@ -450,14 +452,14 @@ RT_WRAP(00913140, afc_first_update)
 {
     uint32_t self = cpu.ecx, today = rt_arg(0), full = rt_arg(1);
     if (on(self) && rd32(g_mem, self + F_DRAWN) == 0) {
-        long now = today_abs();
+        long now = today_abs(today);
         if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && now >= season_afc_first_build_day(year_of(self)) &&
             now < groups_draw_day(self)) {
-            build(self);
+            build(self, today);
             if (rt_unwinding) return;
         }
         if (ties_live(self)) {
-            if (full && draw_day(self)) {
+            if (full && draw_day(self, today)) {
                 finish(self);
             } else {
                 uint32_t cup = slot0(self), a[2] = {today, full};
