@@ -16,7 +16,9 @@ One new game, Tier A, England's leagues, seed 1, changing rules on, the 3.9.68 d
 - leg 2 loads it and saves one day later: the Asian section's part of the save is the same (save and load in the
   middle of the first round give the same game);
 - leg 3 loads the save of leg 1 and plays to 31 March 2005 (after the group draw), a save;
-- with --cycles 2, leg 4 loads that and plays to 31 March 2009 (the 2010 cycle).
+- with --cycles 2, leg 4 loads that and plays to 31 March 2009 (the 2010 cycle);
+- leg 5, not Tier A, a 2008/09 start to 20 October 2008: Timor (no player in the data) plays both legs of its tie
+  (--no-full leaves it out).
 
 Item 200: Timor (no continent in the 3.9.68 data) joins the AFC in 2005/06, so it plays the first round of the 2010
 cycle (the 2006 cycle's round is in October 2004, before it joined).
@@ -28,6 +30,7 @@ fails there.
 """
 import datetime
 import os
+import struct
 import sys
 import tempfile
 
@@ -75,6 +78,30 @@ def check_cycle(save, campaign, nations=(NATION,)):
     if not fails:
         print(f"ok    {campaign + 2}: {', '.join(nations)} play a two-leg first-round tie")
     return fails
+
+
+def played(save, nation, campaign):
+    """[(day, home, away, home goals, away goals)] of the nation's first-round matches (fixtures_<year>.tmp records
+    of 0x4f bytes: clubs +0xc and +0x10, year +0x28, day +0x2a, goals +0x43 and +0x44, -1 when not played;
+    tests/seasons/match_day_place_run.py)."""
+    game = history_check.Game(save)
+    ids = {cid for cid, c in game.comps.items() if c["name"] in SECTIONS}
+    name = lambda t: game.club(t)[1] or game.club(t)[0]     # noqa: E731
+    lo, hi = datetime.date(campaign, 9, 15), datetime.date(campaign + 1, 3, 24)
+    out = []
+    for part in game.fixture_parts:
+        b = game.sav.read(part)
+        count = struct.unpack_from("<i", b, 0)[0] if len(b) >= 4 else 0
+        for i in range(count if 4 + count * 0x4f == len(b) else 0):
+            o = 4 + i * 0x4f
+            if struct.unpack_from("<i", b, o)[0] not in ids:
+                continue
+            h, a = struct.unpack_from("<ii", b, o + 0xc)
+            y, d = struct.unpack_from("<hh", b, o + 0x28)
+            day = datetime.date(y, 1, 1) + datetime.timedelta(d)
+            if lo <= day <= hi and any(name(t).startswith(nation) for t in (h, a)):
+                out.append((day, name(h), name(a)) + struct.unpack_from("<bb", b, o + 0x43))
+    return sorted(out)
 
 
 def section_parts(save):
@@ -133,6 +160,24 @@ def main(argv):
             fails += leg_fails("4", code, box, saved(w4))
             if not fails:
                 fails += check_cycle(saved(w4), 2008, (NATION, TIMOR))
+    if not fails and "--no-full" not in argv:
+        # Not Tier A: a 2008/09 start (3.9.68 data) plays the 2010 cycle's round in full. Timor has no player in the
+        # data (nation +0x88 0); the original tops up a side of a nation with at most 500 players with virtual
+        # players (0x90dae0, test at 0x90dd5d), so it fields a squad and both legs are played with no box.
+        os.environ.pop("RECOMP_TIER_A", None)
+        w5 = os.path.join(keep, "leg5-full")
+        o5 = dict(o, start=2008)
+        code, took, box = soak_run.new_game_leg(o5, w5, (datetime.date(2008, 10, 20) - datetime.date(2008, 7, 1)).days)
+        print(f"      leg 5 (full, 2008 start) to 2008-10-20: {took:.0f} s")
+        fails += leg_fails("5", code, box, saved(w5))
+        if not fails:
+            games = played(saved(w5), TIMOR, 2008)
+            for g in games:
+                print(f"      {g[0]} {g[1]} {g[3]}-{g[4]} {g[2]}")
+            if len(games) != 2 or any(g[3] < 0 or g[4] < 0 for g in games):
+                fails.append(f"full game: {TIMOR} first-round matches not both played: {games}")
+            else:
+                print(f"ok    full game: {TIMOR} plays both legs with virtual players")
     for f in fails:
         print("FAIL ", f)
     print("PASS" if not fails else f"FAILED: {len(fails)}")

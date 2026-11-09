@@ -1683,7 +1683,11 @@ static int uefa_members(int season, int news)
  * (the AFC qualifying pool 0x913f60 and season_afc_first.c, the Asian Cup qualifying, the Asian Games) where its
  * national team exists, and the national vacancy of original_faults.c rt_national_vacancy (which leaves out a
  * nation with no continent) treats it as a live nation. dead_records clears only old names of a rename chain, not
- * this one. Returns the count. news: 1 to add a sentence. */
+ * this one. Timor has no player in the 3.9.68 data (nation +0x88 0), as Bhutan, Guam and Bangladesh, which the
+ * original's own pool takes: VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0 tops up a side with virtual players
+ * (0x90dae0 at 0x90d3bd, 0x90d3f4) unless its nation has more than 500 players (0x90dd5d), so the side fields a
+ * squad and the 15-slot check (0x90d45b..0x90d469, box virtual_staff.cpp 195 at 0x90d4bc) passes. Returns the
+ * count. news: 1 to add a sentence. */
 static int afc_members(int season, int news)
 {
     uint32_t asia = 0, key = rd32(g_mem, CONTINENT_ASIA);
