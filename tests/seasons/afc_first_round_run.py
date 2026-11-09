@@ -12,7 +12,7 @@ rules on, every Asian nation enters, and the weakest 2 x (nations - 40) play two
 campaign year; the winners take the last places of the group draw (25 March of the next year).
 
 One new game, Tier A, England's leagues, seed 1, changing rules on, the 3.9.68 database, a 2001/02 start:
-- leg 1 to 15 November 2004 (the 2006 cycle's first round is under way), a save;
+- leg 1 to 11 October 2004 (the 2006 cycle's first round is under way), a save;
 - leg 2 loads it and saves one day later: the Asian section's part of the save is the same (save and load in the
   middle of the first round give the same game);
 - leg 3 loads the save of leg 1 and plays to 31 March 2005 (after the group draw), a save;
@@ -35,7 +35,7 @@ import history_check  # noqa: E402
 import soak_run  # noqa: E402
 
 START = datetime.date(2001, 7, 1)          # 3.9.68, 2001/02: the game's first day (soak_run's leg counts from it)
-MIDDLE = datetime.date(2004, 11, 15)
+MIDDLE = datetime.date(2004, 10, 11)
 NATION = "Brunei"
 SECTION = "World Cup Asian Qualifying Section"
 

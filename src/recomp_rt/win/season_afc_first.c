@@ -12,8 +12,10 @@
  * itself is group A (0x912ad0) and stages 0 to 8 the others (0x913540 writes slot +0xc[g], +0x30 = g); then +0x45 =
  * 1. Before it League::update_for_date 0x6847c0 does nothing (+0x45 0, 0x684811).
  *
- * The change. From 15 September of the campaign year c (+0x40), on the first update day, while +0x45 is 0, +0x30 is
- * -1 and slot 0 is empty (the pool of the cycle is made, no round yet): every Asian nation whose national team names
+ * The change. From 15 September of the campaign year c (+0x40) to the draw day, on the first update day while +0x45
+ * is 0 and +0x30 is -1 (the pool of the cycle is made, no round yet; the slots themselves tell nothing: the ctor's
+ * stage array comes from malloc uncleared, 0x911d00, and start_new_season frees the stages but keeps their
+ * pointers, 0x9133ab..0x9133c1): every Asian nation whose national team names
  * it, less the hosts of the campaign's World Cup (season_intl_host_ids, as the pool wraps of season_wcq26.c; the
  * holder is off in a season game, rt_intl_wc_holder), sorted by the original's compare. P of them, G group places
  * (40 less +0xee, the group sizes of 0x912db0), W = P - G. When W > 0 the bottom 2W play W two-leg ties
@@ -383,9 +385,9 @@ RT_WRAP(00913140, afc_first_update)
 {
     uint32_t self = cpu.ecx, today = rt_arg(0), full = rt_arg(1);
     if (on(self) && rd32(g_mem, self + F_DRAWN) == 0) {
-        if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && !slot0(self) &&
-            today_abs() >= season_afc_first_build_day(year_of(self)) && today_abs() < season_abs_day(year_of(self) + 1,
-                                                                                                    3, 25)) {
+        long now = today_abs();
+        if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && now >= season_afc_first_build_day(year_of(self)) &&
+            now < season_abs_day(year_of(self) + 1, 3, 25)) {
             /* Once a cycle: a cycle with no round (no window) meets this every day, so it is kept by year. */
             static int tried_year, tried_self;
             if (tried_year != year_of(self) || tried_self != (int)self) {
