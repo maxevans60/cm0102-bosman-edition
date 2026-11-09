@@ -640,8 +640,10 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 f.write(f"database = folder:{os.path.basename(CUSTOM_DB)}\n")
             elif "database" not in options:
                 f.write("database = 3.9.68\n")     # the base game (Q152); the default is 3.9.60 since 0.6.1
+        # RECOMP_SCREEN_LOG=1 prints the text and the stack of a game box (0x5e8290, waits.c); RECOMP_NO_BOX logs only
+        # the system box. It only writes the log (item 202).
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
-                   RECOMP_USER_DIR=user,
+                   RECOMP_SCREEN_LOG="1", RECOMP_USER_DIR=user,
                    RECOMP_FIXED_CLOCK="1", RECOMP_SAVE_AFTER_DAYS=str(days), RECOMP_IDLE_COUNT="1",
                    RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots, steps_of_run)), **extra_env)
         start = time.time()
@@ -681,6 +683,8 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
                 r, path, took = job.result()
                 if r.returncode != 0 or not os.path.exists(path):
                     print(r.stderr[-2000:])
+                    for line in re.findall(r"^recomp: message box (?:from|stack).*$", r.stderr, re.M):
+                        print(f"box   {name}: {line}")       # the game box of the run, if any (item 202)
                     print(f"FAIL  {name}: no saved game (code {r.returncode}) after {took:.0f} s")
                     failed_runs += 1
                     continue
@@ -1189,7 +1193,7 @@ def main(argv):
             # The base game (Q152) without --database: the option's default is 3.9.60 since 0.6.1.
             f.write(f"database = {database or '3.9.68'}\n")
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
-                   RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots)))
+                   RECOMP_SCREEN_LOG="1", RECOMP_SCRIPT="; ".join(scaled_steps(mode, shots)))    # item 202
         env["RECOMP_USER_DIR"] = user
         # The season tables (names, rules) of the build, as the season checks read them
         # (rules_report_check.py). Without them the game reads <game folder>/Seasons: a download has it, the
