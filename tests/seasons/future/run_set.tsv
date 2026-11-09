@@ -39,8 +39,10 @@ a2001to2300	A	2001	on	all	1	2300	10	nightly	run	Q22: one Tier A run to 2300 each
 jump2098	jump	2098	on	all	1	2100	1	release	run	Q21: a date jump through the season change of 2100/01
 jump2198	jump	2198	on	all	1	2200	1	release	run	Q21: through 2200/01
 jump2298	jump	2298	on	all	1	2300	1	release	run	Q21: through 2300/01
-b2001	B	2001	on	all	1	2300	1	release	run	Tier B: the full world to 2300
-b2025	B	2025	on	all	1	2300	1	release	run	Tier B: a 2025 start to 2300
+b2001	B	2001	on	all	1	2010	1	release	run	Tier B gate: the full world to 2010/11, past the 2010 World Cup and Euro 2008
+b2025	B	2025	on	all	1	2028	1	release	run	Tier B gate: a 2025 start to 2028/29, past the 2026 World Cup and Euro 2028
+b2001long	B	2001	on	all	1	2300	1	background	run	Tier B in the background: the full world to 2300, no release gate (Max, 9 Nov 2026)
+b2025long	B	2025	on	all	1	2300	1	background	run	Tier B in the background: a 2025 start to 2300, no release gate (Max, 9 Nov 2026)
 late2101	late	2101	on	all	1	2110	1	release	run	item 193: the full world from the 2101 save of a2001to2300, ten seasons	a2001to2300
 late2201	late	2201	on	all	1	2210	1	release	run	item 193: the full world from the 2201 save of a2001to2300, ten seasons	a2001to2300
 late2291	late	2291	on	all	1	2300	1	release	run	item 193: the full world from the 2291 save of a2001to2300, ten seasons	a2001to2300

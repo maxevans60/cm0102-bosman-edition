@@ -8,8 +8,9 @@ Usage:
         [--only <name,...>] [--jobs 2] [--machine 12] [--floor-gb 100] [--databases <folder>] [--own-dbs <folder>]
     python3 tests/seasons/future/run_set.py --verify <folder> [--set release]
 
---set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script) or
-all. --only: these rows of the set. A game whose folder holds result.tsv is done and is not played again; delete
+--set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script),
+background (b2001long and b2025long: the Tier B games to 2300, which play on after the release gate and are no gate
+of --verify) or all. --only: these rows of the set. A game whose folder holds result.tsv is done and is not played again; delete
 its folder to play it again.
 
 A game: legs of leg_years seasons, each played with tests/seasons/soak_run.py's new_game_leg or load_leg (the season
@@ -95,7 +96,7 @@ TIERS = {"A", "B", "jump", "normal", "late"}
 # the save, so the game plays the seasons start to last in the full world on top of a long Tier A history.
 OPTIONAL = ["from"]
 SETS = {"release": {"release", "nightly"}, "nightly": {"nightly"}, "quick": {"quick"},
-        "all": {"release", "nightly", "quick"}}
+        "background": {"background"}, "all": {"release", "nightly", "quick", "background"}}
 # What makes the game: its code, the recompiler, and the tables and their sources that the build and the release turn
 # into the game's season data (tools/seasons, docs/research/rules-0.6.0).
 GAME_CODE = ["src", "tools/recomp", "tools/seasons", "docs/research/rules-0.6.0"]
