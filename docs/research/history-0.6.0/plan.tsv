@@ -34327,6 +34327,7 @@ add	April 2017	2016	African Cup of Nations	2002		add	Cameroon		Senegal		Nigeria	
 add	October 2016	2016	African Cup of Nations	2002		add	Cameroon		Senegal		Nigeria		Mali	
 add	October 2017	2017	African Cup of Nations	2002		add	Cameroon		Senegal		Nigeria		Mali	
 add	October 2017	2017	African Cup of Nations	2017		add	Cameroon		Egypt		Burkina Faso		Gabon	
+add	October 2018	2018	FIFA Club World Championship	2017		add	Real Madrid C.F.	Spain	Grêmio Foot-Ball Porto-Alegrense	Brazil				
 add	March 2020	2019	African Cup of Nations	2019		add	Algeria		Senegal		Nigeria		Egypt	
 add	October 2019	2019	African Cup of Nations	2019		add	Algeria		Senegal		Nigeria		Egypt	
 clear	April 2021	2020	US Open Cup	2019										
@@ -34355,10 +34356,13 @@ add	October 2023	2023	African Cup of Nations	2021		add	Senegal		Egypt		Cameroon	
 add	October 2023	2023	African Cup of Nations	2023		add	Ivory Coast		Nigeria		South Africa		Ivory Coast	
 clear	October 2024	2024	US Open Cup	2019										
 add	October 2024	2024	US Open Cup	2019		differ	Atlanta United FC	United States	Minnesota United FC	United States				
+add	October 2024	2024	FIFA Club World Championship	2023		add	Manchester City	England	Fluminense Football Club	Brazil				
 clear	December 2025	2025	US Open Cup	2019										
 add	December 2025	2025	US Open Cup	2019		differ	Atlanta United FC	United States	Minnesota United FC	United States				
+add	December 2025	2025	FIFA Club World Championship	2025		add	Chelsea	England	Paris Saint-Germain	France				
 clear	May 2026	2025	US Open Cup	2019										
 add	May 2026	2025	US Open Cup	2019		differ	Atlanta United FC	United States	Minnesota United FC	United States				
+add	May 2026	2025	FIFA Club World Championship	2025		add	Chelsea	England	Paris Saint-Germain	France				
 clear	October 2026	2026	US Open Cup	2019										
 add	October 2026	2026	US Open Cup	2019		differ	Atlanta United FC	United States	Minnesota United FC	United States				
 add	October 2026	2026	FIFA World Cup	2026		add	Spain		Argentina		England		Canada	
