@@ -34,6 +34,20 @@ def main():
     for want in ("a2001s1", "a2001offs3", "a2025s3", "a2026s1", "a2026s2", "a2026s3", "a2001esb", "a2001nation", "a2001to2300", "jump2298", "b2001"):
         if want not in names:
             bad.append(f"run set: {want} is not in the release set")
+    # The Tier B gate (Max, 9 November 2026): the release rows end after the World Cup and the Euro; the full games to
+    # 2300 are background rows that no release check asks for.
+    gate = {r["name"]: r["last"] for r in release if r["tier"] == "B"}
+    if gate != {"b2001": 2010, "b2025": 2028}:
+        bad.append(f"run set: the Tier B release rows and their last seasons are {gate}, not b2001 2010 and b2025 2028")
+    background = {r["name"]: (r["tier"], r["start"], r["last"]) for r in run_set.chosen(rows, "background")
+                  if r["tier"] == "B"}    # the weekly rows of item 193 are checked under weekly below
+    if background != {"b2001long": ("B", 2001, 2300), "b2025long": ("B", 2025, 2300)}:
+        bad.append(f"run set: the Tier B background rows are {background}")
+    if {r["name"] for r in run_set.chosen(rows, "all")} - {r["name"] for r in rows} or \
+            not {"b2001long", "b2025long"} <= {r["name"] for r in run_set.chosen(rows, "all")}:
+        bad.append("run set: set all does not hold the background rows")
+    if names & {"b2001long", "b2025long"}:
+        bad.append("run set: a background row is in the release set")
     if any(r["set"] == "quick" for r in release):
         bad.append("run set: a quick game is in the release set")
     if len([r for r in release if r["tier"] == "A" and r["last"] == 2100 and r["nations"] == "all"]) != 25:

@@ -9,8 +9,9 @@ Usage:
     python3 tests/seasons/future/run_set.py --verify <folder> [--set release]
 
 --set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script),
-background (games that play on after the release, not in --verify; open item 193) or
-all. --only: these rows of the set. A game whose folder holds result.tsv is done and is not played again; delete
+background (b2001long and b2025long: the Tier B games to 2300, which play on after the release gate, and
+bw2001 and bw2025, open item 193; no gate of --verify) or all. --only: these rows of the set. A game whose folder holds
+result.tsv is done and is not played again; delete
 its folder to play it again.
 
 A game: legs of leg_years seasons, each played with tests/seasons/soak_run.py's new_game_leg or load_leg (the season
