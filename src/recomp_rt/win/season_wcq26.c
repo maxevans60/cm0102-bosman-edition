@@ -30,6 +30,7 @@
 #include "season_intl.h"
 #include "season_nl.h"
 #include "season_wcq26.h"
+#include "season_ofc_first.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -482,7 +483,12 @@ RT_WRAP(00913f60, wcq26_asia_pool)
 
 RT_WRAP(0091fa80, wcq26_oceania_pool)
 {
-    pool_build(cpu.ecx, CONTINENT_OCEANIA, WCQ_OFC, o_0091fa80);
+    uint32_t self = cpu.ecx;
+    pool_build(self, CONTINENT_OCEANIA, WCQ_OFC, o_0091fa80);
+    if (rt_unwinding) return;
+    uint32_t eax = cpu.eax;
+    season_ofc_first_pool(self);            /* item 198: every Oceania nation (season_ofc_first.c) */
+    if (!rt_unwinding) cpu.eax = eax;
 }
 
 /* 0x9140b2 (Asia) and 0x91fbd3 (Oceania), this in esi: the count that the pool size takes off, +0xee. In the
@@ -1381,6 +1387,10 @@ RT_WRAP(0091f0d0, wcq26_oceania_advance)
 {
     uint32_t self = cpu.ecx;
     int now = readable(self) ? (int)rd32(g_mem, self + F_STAGE) : -1;
+    if (season_ofc_first_waiting(self)) {                       /* item 198: the preliminary ties in slot 0 */
+        rt_ret_stdcall(0, 0);
+        return;
+    }
     if (!oceania_on(self) || (now != 1 && now != 2)) {
         if (season_intl_oceania_wait(self)) {                  /* O259 A16: a CONCACAF partner not decided */
             rt_ret_stdcall(0, 0);

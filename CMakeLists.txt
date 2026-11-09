@@ -349,6 +349,12 @@ if(NOT WIN32)
     add_executable(youth_pool_test tests/seasons/test_youth_pool.c src/recomp_rt/win/youth_pool_rule.c)
     target_include_directories(youth_pool_test PRIVATE src/recomp_rt/win)
     add_test(NAME youth_pool COMMAND youth_pool_test)
+    # Item 198: the OFC World Cup qualifying preliminary round (who plays and the days), 2005 to 2302.
+    add_executable(season_ofc_first_test tests/seasons/test_season_ofc_first.c
+        src/recomp_rt/win/season_ofc_first_plan.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_ofc_first_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_ofc_first COMMAND season_ofc_first_test)
     # The UEFA league phase draw (0.6.0 slice 25): pots, opponents, nation rules and match days.
     add_executable(season_uefa_league_test tests/seasons/test_season_uefa_league.c
         src/recomp_rt/win/season_uefa_league_draw.c)
