@@ -25,6 +25,7 @@ int rt_unwinding;
 uint32_t rt_callback(uint32_t target, int nargs, const uint32_t *args) { (void)target, (void)nargs, (void)args; return 0; }
 uint32_t win_static_alloc(uint32_t size) { (void)size; return 0; }
 void o_005cc510(void) {}
+void o_00685640(void) {}
 void o_005d5ae0(void) {}
 void o_0060efd0(void) {}
 void o_0077bc80(void) {}

@@ -758,3 +758,64 @@ void season_fifa_stage_begin(uint32_t league)
 }
 
 void season_fifa_stage_end(void) { end_year = end_day = 0; }
+
+/* ---- No TV move for qualifiers on FIFA days (0.6.2 item 205) ----
+ *
+ * League::move_fixtures_for_tv 0x685640, thiscall (League *, Date *) ret 4, is called by League::create_fixtures
+ * (0x683eab, for each round) and by League::update_for_date 0x6847c0 (0x684b0d, each day). It finds the round of
+ * the date in the round table (+0xba, +0xa9 records of 0x41 bytes), and for each TV slot of the round (+5, stride 7,
+ * +0xb not 0xff, kind +0xa 0 to 2) it moves the league's fixtures still on that date to the slot's weekday (+9),
+ * with a remove and a new add_fixture (0x685c7e). Its callers do not read eax (0x683eab, 0x684b0d), and it destroys
+ * no argument (the epilogue 0x685cc7..0x685cdf: ret 4).
+ *
+ * In a running season the snap above places each qualifier of two national sides on a FIFA day, or keeps the
+ * template day when the window is full. The TV move then took the fixtures that the snap left on their template
+ * day and put them one day from the next round, and add_fixture 0x5aa680 moved them again for the clash (severity
+ * 10, 0x5ab510 at 0x5aa96e): the OFC groups of 2033 played on 13, 20 and 26 April in place of 13, 16 and 18 April
+ * (run-logs/0.6.2-s205/rep-jan). National teams play qualifiers on the dates of the draw, not on dates moved for
+ * television. So a league the snap acts on gets no TV move: a running season of a game with changing rules, a
+ * competition record (League +4, whose +0 is the id: the TV move's own news reads it at 0x68576e..0x68577b, and
+ * League_Stage sets it at 0x68b173; +0x24 is the host stadium id, 0x685c4d) that is not a finals competition
+ * (national_teams_is_finals_comp 0x76d940, as the snap), and a table (+0xb1 rows of 0x3b bytes, the club at +0,
+ * the count at +0x3e) of national sides only. The start season of a 2001 start keeps the original
+ * (keeps_original, the same-save new-game set). The skip also leaves out the TV move's news item and its two
+ * utils_random calls (0x6859f7, 0x685a09), in running seasons only. */
+#define LEAGUE_COMP 0x04u
+#define LEAGUE_CLUBS 0x3eu
+#define LEAGUE_TABLE 0xb1u
+#define TABLE_ROW 0x3bu
+
+void o_00685640(void);
+
+static int snapped_league(uint32_t league)
+{
+    if (!season_game_changes() || !readable(league) || keeps_original(season_now())) return 0;
+    int n = (int16_t)rd16(g_mem, league + LEAGUE_CLUBS);
+    uint32_t table = rd32(g_mem, league + LEAGUE_TABLE), rec = rd32(g_mem, league + LEAGUE_COMP);
+    if (n < 2 || n > 64 || !readable(table) || !readable(rec)) return 0;
+    for (int r = 0; r < n; r++)
+        if (!national_side(rd32(g_mem, table + TABLE_ROW * (uint32_t)r))) return 0;
+    Cpu saved = cpu;
+    uint32_t a[1] = {rec};
+    uint32_t finals = rt_callback(F_FINALS, 1, a) & 0xff;
+    if (rt_unwinding) return 0;
+    cpu = saved;
+    return !finals;
+}
+
+RT_WRAP(00685640, league_move_fixtures_for_tv)
+{
+    uint32_t league = cpu.ecx;
+    int skip = snapped_league(league);
+    if (rt_unwinding) return;
+    if (!skip) {
+        o_00685640();
+        return;
+    }
+    if (getenv("RECOMP_SEASON_INTL_LOG") && rd32(g_mem, cpu.esp) == 0x00683eabu) {    /* at create, not each day */
+        uint32_t date = rd32(g_mem, cpu.esp + 4), rec = rd32(g_mem, league + LEAGUE_COMP);
+        fprintf(stderr, "recomp: intl dates: no TV move of %.40s on day %d of %d\n", win_str(rec + 4),
+                readable(date) ? (int16_t)rd16(g_mem, date) : -1, readable(date) ? (int16_t)rd16(g_mem, date + 2) : -1);
+    }
+    cpu.esp += 8;                                       /* ret 4: the return address and the Date */
+}
