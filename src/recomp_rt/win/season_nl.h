@@ -111,7 +111,10 @@ int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int))
  * The real CONCACAF draws lie 16 to 23 weeks before the first matchday (27 March 2019, 16 May 2023, 6 May 2024),
  * except in a World Cup year (23 July 2026: the finals were in North America). So for CONCACAF the draw of the
  * latest table edition of the same kind of year (wc(year) the same); for UEFA, and when no such edition exists,
- * the last edition (NULL when the confederation has none). */
+ * the last edition (NULL when the confederation has none). A World Cup year keeps 23 July: the North American rows
+ * of the friendly date table for that year (0x5ca4f0, offset 0) are 25 August, 18 November and 15 December, so no
+ * friendly row falls in the September and October windows, and the November row is arranged in late August,
+ * after the draw (docs/research/2026-10-18-national-team-comps.md, section 7.1). */
 const SeasonNlEdition *season_nl_draw_of(const char *confed, int year, int (*wc)(int));
 
 /* The result of one nation in one edition. The rules rank and move these rows; the nation is the game's id. */
