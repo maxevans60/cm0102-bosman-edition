@@ -25,9 +25,11 @@ int season_ofc_first_plan(int pool, int places, SeasonOfcFirstPlan *plan);
 
 /* The days of the round, as days from 1 January 1970, for a section whose groups are drawn on `group_draw`: both
  * legs on FIFA days (season_fifa_year_days) of one FIFA window, 3 to 6 days apart, the first leg on or after
- * group_draw - OFC_FIRST_LEAD and at least 8 days after today, the second leg at least 8 days before group_draw.
+ * group_draw - OFC_FIRST_LEAD and at least 8 days after today, the second leg OFC_FIRST_MARGIN days or more before
+ * group_draw (room for a leg that a clash moves: the ties must be decided on the draw day).
  * The round is drawn 7 days before the first leg, not before tomorrow. Returns 1, or 0 when no window fits. */
 #define OFC_FIRST_LEAD 150
+#define OFC_FIRST_MARGIN 30
 int season_ofc_first_days(long group_draw, long today, long *draw, long *leg1, long *leg2);
 
 /* The game side (season_ofc_first.c), called from the Oceania wraps of season_wcq26.c: after the pool builder

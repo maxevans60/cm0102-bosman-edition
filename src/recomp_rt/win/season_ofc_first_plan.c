@@ -50,7 +50,7 @@ int season_ofc_first_days(long group_draw, long today, long *draw, long *leg1, l
         for (int i = 0; i < k; i++) days[n++] = base + doys[i];
     }
     qsort(days, (size_t)n, sizeof days[0], cmp_long);
-    long from = group_draw - OFC_FIRST_LEAD, last = group_draw - 8;
+    long from = group_draw - OFC_FIRST_LEAD, last = group_draw - OFC_FIRST_MARGIN;
     if (from < today + 8) from = today + 8;
     for (int i = 0; i < n; i++) {
         if (days[i] < from) continue;

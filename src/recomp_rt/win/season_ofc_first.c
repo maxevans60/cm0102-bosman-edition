@@ -87,6 +87,8 @@
 #define F_LIST 0xefu
 #define F_LIST_COUNT 0xf3u
 #define F_CUP_ROWS 0xa7u
+#define F_TABLE 0xb1u                   /* group A's table rows (0x91ec1c) */
+#define ROW_SIZE 0x3bu                  /* a table row (0x6874f4..0x68751b) */
 #define ROUND_SIZE 0x68u
 #define ROUND_CODE 0xau                 /* a first round (season_afc_first.c) */
 
@@ -141,9 +143,14 @@ static const char *team_name(uint32_t club)
     return readable(nation) ? win_str(nation + 4u) : "none";
 }
 
+/* The day being updated: the Date argument of update_for_date (s16 day of the year, s16 year: the words that the
+ * original compares at 0x91f42d..0x91f484), else the game date. */
+static uint32_t update_date;
+
 static long today_abs(void)
 {
-    return season_abs_day((int16_t)rd16(g_mem, GAME_DATE + 2), 1, 1) + (int16_t)rd16(g_mem, GAME_DATE);
+    uint32_t d = update_date && readable(update_date) ? update_date : GAME_DATE;
+    return season_abs_day((int16_t)rd16(g_mem, d + 2), 1, 1) + (int16_t)rd16(g_mem, d);
 }
 
 static int on(uint32_t self)
@@ -401,8 +408,14 @@ static void finish(uint32_t self)
         if (rd32(g_mem, list + 4u * (uint32_t)at) == win) continue;
         wr32(g_mem, list + 4u * (uint32_t)at, win);
         if (at % 2 == 0 && at / 2 < group_a) {
+            /* init_table_row mallocs the row's array +9 again (0x687570..0x687582): the old one is freed. */
+            uint32_t table = rd32(g_mem, self + F_TABLE), old = 0;
+            if (readable(table)) old = rd32(g_mem, table + (uint32_t)(at / 2) * ROW_SIZE + 9u);
             uint32_t ra[4] = {(uint32_t)(at / 2), win, 0, 0};
             call_this(INIT_TABLE_ROW, self, 4, ra);
+            if (rt_unwinding) return;
+            if (readable(old) && readable(table) && rd32(g_mem, table + (uint32_t)(at / 2) * ROW_SIZE + 9u) != old)
+                game_free(old);
             if (rt_unwinding) return;
         }
     }
@@ -422,15 +435,15 @@ RT_WRAP(0091f3d0, ofc_first_update)
 {
     uint32_t self = cpu.ecx, today = rt_arg(0), full = rt_arg(1);
     if (on(self) && rd32(g_mem, self + F_DRAWN) == 0) {
+        update_date = today;
         long now = today_abs(), gd = group_draw_abs(self);
+        /* Each day of the window while slot 0 holds no ties: a day with no FIFA window left or no nation outside
+         * the list builds nothing (season_ofc_first_days, the pool), and the next day asks again. */
         if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && now >= gd - OFC_FIRST_LEAD - 30 && now < gd) {
-            /* Once a cycle: a cycle with no round meets this every day, so it is kept by year. */
-            static int tried_year, tried_self;
-            if (tried_year != year_of(self) || tried_self != (int)self) {
-                tried_year = year_of(self);
-                tried_self = (int)self;
-                build(self);
-                if (rt_unwinding) return;
+            build(self);
+            if (rt_unwinding) {
+                update_date = 0;
+                return;
             }
         }
         if (ties_live(self)) {
@@ -440,9 +453,13 @@ RT_WRAP(0091f3d0, ofc_first_update)
                 uint32_t cup = slot0(self), a[2] = {today, full};
                 call_this(rd32(g_mem, rd32(g_mem, cup) + 0x14u), cup, 2, a);
             }
-            if (rt_unwinding) return;
+            if (rt_unwinding) {
+                update_date = 0;
+                return;
+            }
             cpu.ecx = self;
         }
+        update_date = 0;
     }
     o_0091f3d0();
 }

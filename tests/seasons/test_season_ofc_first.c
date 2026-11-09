@@ -1,7 +1,7 @@
 /* ctest season_ofc_first (item 198): the plan of the OFC preliminary round and its days (season_ofc_first_plan.c).
  * The plan: pools of 9 to 25 for 9 and 10 places. The days: a group draw on 15 January of every year from 2005 to
  * 2302, from a day 200 days before it (both legs on FIFA days of one window, 3 to 6 days apart, after the lead day
- * and 8 days or more before the draw), and none from 5 days before the draw. */
+ * and OFC_FIRST_MARGIN days or more before the draw), and none from 5 days before the draw. */
 #include "season_ofc_first.h"
 #include "season_uefa_days.h"
 
@@ -49,7 +49,7 @@ int main(void)
         if (!ok) continue;
         CHECK(fifa_day(l1) && fifa_day(l2), "%d: legs not on FIFA days", y);
         CHECK(l2 - l1 >= 3 && l2 - l1 <= 6, "%d: legs %ld days apart", y, l2 - l1);
-        CHECK(l1 >= gd - OFC_FIRST_LEAD && l2 <= gd - 8, "%d: legs outside the window", y);
+        CHECK(l1 >= gd - OFC_FIRST_LEAD && l2 <= gd - OFC_FIRST_MARGIN, "%d: legs outside the window", y);
         CHECK(draw > gd - 200 && draw < l1, "%d: draw day", y);
         years++;
         long d2, a, b;
