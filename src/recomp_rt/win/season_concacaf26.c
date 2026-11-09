@@ -609,6 +609,20 @@ int season_cc26_tournament(uint32_t cc, uint32_t out[2])
     int n = after_direct(cc, next, THIRD_GROUPS * THIRD_TEAMS);
     out[0] = extra < n ? next[extra] : 0;
     out[1] = extra + 1 < n ? next[extra + 1] : 0;
+    if (logging()) {                                    /* test log: the third round's groups and the order */
+        fprintf(stderr, "recomp: season intl: wc play-off %d: CONCACAF third round:", year_of(cc) + 2);
+        for (int g = 0; g < THIRD_GROUPS; g++) {
+            uint32_t st = stage_at(cc, SECOND_GROUPS + g), table = st ? rd32(g_mem, st + F_TABLE) : 0;
+            int k = st ? (int16_t)rd16(g_mem, st + F_TEAMS) : 0;
+            fprintf(stderr, " %c:", 'A' + g);
+            for (int i = 0; readable(table) && i < k && i < 8; i++) {
+                uint32_t r = table + (uint32_t)i * ROW_SIZE;
+                fprintf(stderr, "%s%s %d %+d", i ? "," : " ", team_name(rd32(g_mem, r)), (int16_t)rd16(g_mem, r + ROW_POINTS),
+                        (int16_t)rd16(g_mem, r + ROW_FOR) - (int16_t)rd16(g_mem, r + ROW_AGAINST));
+            }
+        }
+        fprintf(stderr, "; to the tournament: %s, %s\n", team_name(out[0]), team_name(out[1]));
+    }
     return 1;
 }
 

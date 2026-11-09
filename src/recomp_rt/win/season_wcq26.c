@@ -1299,7 +1299,7 @@ static int tournament_six(uint32_t self, uint32_t six[6])
     t[4] = africa_runner_up();
     if (rt_unwinding) return 0;
     t[5] = cup_row(stage_of(comp_of(KEY_ASIA), 11), 1);                      /* the AFC play-off winner */
-    if (logging()) {                                    /* test log: the CONCACAF final group and its statuses */
+    if (logging() && !season_cc26_on(comp_of(KEY_CONCACAF))) {  /* test log: the CONCACAF final group, statuses */
         uint32_t fg = stage_of(comp_of(KEY_CONCACAF), 6), rows = readable(fg) ? rd32(g_mem, fg + F_TABLE) : 0;
         int n = readable(fg) ? (int16_t)rd16(g_mem, fg + F_TEAMS) : 0;
         fprintf(stderr, "recomp: season intl: wc play-off %d: CONCACAF final group of %d:", year_of(self) + 2, n);
