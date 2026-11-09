@@ -37,13 +37,13 @@ import soak_run  # noqa: E402
 START = datetime.date(2001, 7, 1)          # 3.9.68, 2001/02: the game's first day (soak_run's leg counts from it)
 MIDDLE = datetime.date(2004, 10, 11)
 NATION = "Brunei"
-SECTION = "World Cup Asian Qualifying Section"
+SECTIONS = ("World Cup Asian Qualifying Section", "FIFA World Cup qualification (AFC)")   # base, rules-on name
 
 
 def first_round(save, campaign):
     """[(day, home name, away name)] of the Asian section from 15 September of campaign to 24 March after it."""
     game = history_check.Game(save)
-    ids = {cid for cid, c in game.comps.items() if c["name"] == SECTION}
+    ids = {cid for cid, c in game.comps.items() if c["name"] in SECTIONS}
     lo = datetime.date(campaign, 9, 15).toordinal()
     hi = datetime.date(campaign + 1, 3, 24).toordinal()
     name = lambda t: game.club(t)[1] or game.club(t)[0]     # noqa: E731
@@ -57,7 +57,7 @@ def check_cycle(save, campaign):
     pairs = {}
     for _, h, a in fx:
         pairs[frozenset((h, a))] = pairs.get(frozenset((h, a)), 0) + 1
-    brunei = [f for f in fx if NATION in f[1:]]
+    brunei = [f for f in fx if any(n.startswith(NATION) for n in f[1:])]    # "Brunei Darussalam" in 3.9.68
     days = sorted({datetime.date.fromordinal(d).isoformat() for d, _, _ in fx})
     print(f"      {campaign + 2}: {len(fx)} first-round matches, {len(pairs)} ties, days {', '.join(days)}")
     for d, h, a in brunei:
@@ -74,7 +74,7 @@ def check_cycle(save, campaign):
 
 def section_parts(save):
     sav = history_check.LazySav(save)
-    return {n: sav.read(n) for n in sav.names() if n.startswith(SECTION)}
+    return {n: sav.read(n) for n in sav.names() if n.startswith(SECTIONS)}
 
 
 def leg_fails(name, code, box, save):
