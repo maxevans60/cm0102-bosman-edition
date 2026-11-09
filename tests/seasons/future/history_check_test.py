@@ -563,6 +563,35 @@ def not_held_rule():
     return bad
 
 
+def euro_holders_rule():
+    """euro-place (open item 206): a title holder's league phase place counts above the European Performance Spot.
+    The 2030/31 Premier League of pass 4b (a2021s1, July 2031): 1st to 4th by the list, 5th Birmingham City (Europa
+    League holder) and 6th Leicester City (Champions League holder) by Art. 3.03, and 7th Port Vale by the spot of
+    Art. 3.08 (the highest club of those that do not qualify for the league phase): no fault. The pass 2b case
+    (ec04eb89: 5th and 6th with Europa and Conference League places, 8th with a Champions League place) stays a
+    fault."""
+    import types
+    sys.path.insert(0, HERE)
+    import history_check as hc
+    rules = types.SimpleNamespace(key=lambda n: {"CL": "uefa_cl", "EL": "uefa_el"}.get(n))
+    comps = {1: {"kind": "club", "name": "League", "nation": 0, "level": 20},
+             2: {"kind": "club", "name": "CL", "nation": -1, "level": 0},
+             3: {"kind": "club", "name": "EL", "nation": -1, "level": 0}}
+
+    def game(marks, rows):
+        return types.SimpleNamespace(date=(2031, 205), comps=comps, rows=rows, nations={0: ("England", "UEFA")},
+                                     clubs={c: (f"Club {c}", 0) for c in marks},
+                                     divisions={c: (1, 1, m, p) for c, (m, p) in marks.items()})
+    bad = []
+    real = game({c: (2, c) for c in range(1, 8)} | {8: (3, 8)}, [(2, 2031, 6, 9), (3, 2031, 5, 10)])
+    if hc.euro_places(real, rules):
+        bad.append(f"euro-place: 7th behind two title holders is a fault: {hc.euro_places(real, rules)}")
+    old = game({1: (2, 1), 2: (2, 2), 3: (2, 3), 4: (2, 4), 5: (3, 5), 6: (3, 6), 8: (2, 8)}, [])
+    if [f[3] for f in hc.euro_places(old, rules)] != ["Club 8 (England): a place from position 8 of League"]:
+        bad.append(f"euro-place: 8th behind clubs of the Europa League is no fault: {hc.euro_places(old, rules)}")
+    return bad
+
+
 def olympics_rule():
     """duty-clash and the Olympics (open item 107): an Olympic match of the under-21 sides is a fault only when a club
     with a player in it keeps fewer than 11 players it can field (not on duty, at the club, not injured), counted
@@ -1028,6 +1057,7 @@ def main():
     bad += duty_dates_rule()
     bad += start_season_rule()
     bad += not_held_rule()
+    bad += euro_holders_rule()
 
     for b in bad:
         print("FAIL  " + b)

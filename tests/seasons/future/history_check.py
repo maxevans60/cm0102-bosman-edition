@@ -652,7 +652,11 @@ def check(game, rules=None, changes=()):
 
 
 EURO_PLACE_MAX = 6      # the lowest league place with a Champions League place (5 in England 2025/26, one more for a
-                        # European Performance Spot); a title holder's place is not counted
+                        # European Performance Spot); a title holder's place is not counted, and each title holder
+                        # placed above a club in its division moves the limit down one place (open item 206): the
+                        # holders enter the league phase (UEFA Champions League regulations 2026/27, Art. 3.03) and
+                        # the spot goes to the highest club of those that do not (Art. 3.08). In 2030/31 of pass 4b
+                        # the Premier League's 5th and 6th held the Europa and Champions League titles, so 7th got it.
 
 
 def euro_places(game, rules=None):
@@ -685,7 +689,8 @@ def euro_places(game, rules=None):
             faults.append(("euro-place", game.comps[mark]["name"], year,
                            f"{name} ({nname}): a place from the last division {c['name']}, not the nation's top "
                            f"division"))
-        elif place > EURO_PLACE_MAX:
+        elif place - sum(1 for h in holders if h in game.divisions and game.divisions[h][1] == last and
+                         game.divisions[h][3] < place) > EURO_PLACE_MAX:
             faults.append(("euro-place", game.comps[mark]["name"], year,
                            f"{name} ({nname}): a place from position {place} of {c['name']}"))
     return faults
