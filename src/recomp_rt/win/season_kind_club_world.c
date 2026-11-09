@@ -930,6 +930,39 @@ static int pick_groups(uint32_t obj)
     return 1;
 }
 
+/* The days of a group's 3 rounds in a create_schedule table (rows of 0x41: +0 day, +2 years after +0x40, as
+ * League reads them at 0x68a1a5 and 0x68a1ac): the edition's first day, 4 and 9 days later. */
+static const int group_day[3] = {0, 4, 9};
+
+static void group_days(uint32_t table, const KnockoutDates *kd)
+{
+    for (uint32_t i = 0; i < 3; i++) {
+        wr16(g_mem, table + i * 0x41u, (uint16_t)(kd->first + group_day[i]));
+        wr16(g_mem, table + i * 0x41u + 2, (uint16_t)kd->offset);
+    }
+}
+
+/* Group A's template: set_up_rules 0x929bb0 makes it once (create_schedule stage -1 at 0x929c29, its round count at
+ * +0xa9) and keeps it at +0xba (0x929c2c); League::create_fixtures 0x6835c0 reads it for the parent. No later
+ * edition makes it again, so group A kept the days of the edition of the set_up_rules call while groups B to H took
+ * their edition's days at the draw (create_schedule stages 0 to 6, the wrap below): in a 2021 start (pass 4
+ * a2021s1, replay of 2031 to July 2033, open item 201) group A was dated 14, 18 and 23 June 2033, the others 18, 22
+ * and 27 June, and group A's ties moved a CONMEBOL and a CONCACAF qualifier off their FIFA day of 12 June
+ * (add_fixture 0x5aa680 moves the weaker stored fixture, 0x5aaa25). The draw now gives the template its edition's
+ * days, as the wrap gives groups B to H theirs. */
+#define CWC_GROUP_A_ROUNDS 0xbau        /* group A's template (0x929c2c) */
+#define CWC_GROUP_A_COUNT 0xa9u         /* s16, its round count */
+
+static void group_a_days(uint32_t obj)
+{
+    uint32_t table = rd32(g_mem, obj + CWC_GROUP_A_ROUNDS);
+    KnockoutDates kd;
+    if (table < 0x10000u || table >= 0xfff00000u || (int16_t)rd16(g_mem, obj + CWC_GROUP_A_COUNT) != 3 ||
+        !edition_dates((int16_t)rd16(g_mem, obj + YEAR_AT), &kd))
+        return;
+    group_days(table, &kd);
+}
+
 /* The groups on the start date, in the order of the Libertadores update 0x4c447d..0x4c45e7: group A (the parent,
  * 0x4c37a0), its fixtures (League::create_fixtures 0x6835c0), its table sort (0x6827d0 with 0), groups B to H
  * (0x4c3b10 with 0 to 6). No set_predicted_positions (vtable +0x5c, 0x92aba0): it reads 12 entrants and shuffles
@@ -939,6 +972,7 @@ static int build_groups(uint32_t obj)
     if (!stage_array(obj, GROUP_STAGES)) return 0;
     g_mem[obj + CWC_ADVANCE_TO] = 2;
     if (!pick_groups(obj)) return 0;
+    group_a_days(obj);
     if (!call_this(0x4c37a0u, obj, 0, NULL) || rt_unwinding) return 0;
     call_this(0x6835c0u, obj, 0, NULL);
     if (rt_unwinding) return 0;
@@ -992,11 +1026,7 @@ RT_WRAP(00929390, world_club_champ_schedule)
         o_00929390();
         uint32_t table = cpu.eax;
         if (rt_unwinding || !table) return;
-        static const int day[3] = {0, 4, 9};
-        for (uint32_t i = 0; i < 3; i++) {
-            wr16(g_mem, table + i * 0x41u, (uint16_t)(kd.first + day[i]));   /* League round: +0 day, +2 year */
-            wr16(g_mem, table + i * 0x41u + 2, (uint16_t)kd.offset);         /* offset (0x68a1a5, 0x68a1ac) */
-        }
+        group_days(table, &kd);
         wr16(g_mem, code_at, (uint16_t)(0x3e9 + stage));
         return;
     }
