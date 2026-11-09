@@ -371,6 +371,10 @@ INSNS = {
     0x91785C: ("sub al, cl", "t0 = (eax & 0xffu); t1 = rt_wcq26_concacaf_hosts(esi, ecx & 0xffu) & 0xffu; t2 = ((t0 - t1) & 0xffu); SETF(K_SUB | SZ1, t0, t1, t2, 0); eax = (eax & 0xffffff00u) | t2;"),
     0x910A4A: ("mov byte ptr [esp + 0x13], al", "W8(esp + 0x13u, rt_wcq26_africa_groups(esi, eax & 0xffu));"),
     0x910A4E: ("mov dword ptr [esp + 0x18], eax", "W32(esp + 0x18u, rt_caf_group_size(esi, eax));"),  # item 199
+    # item 199: set_club_progress 0x9115a0 (this in esi), group position 6 of a group of 6 (season_caf_pool.c)
+    0x911600: ("mov bl, byte ptr [esp + 0x18]", "ebx = (ebx & 0xffffff00u) | (rt_caf_band(esi, R8(esp + 0x10u), R8(esp + 0x18u)) & 0xffu);"),
+    0x911631: ("mov dl, byte ptr [esp + 0x1c]", "edx = (edx & 0xffffff00u) | (rt_caf_band(esi, R8(esp + 0x10u), R8(esp + 0x1cu)) & 0xffu);"),
+    0x911A64: ("mov cl, byte ptr [esp + 0x14]", "ecx = (ecx & 0xffffff00u) | (rt_caf_band(esi, R8(esp + 0x10u), R8(esp + 0x14u)) & 0xffu);"),
 
     # World Cup of 48 teams (0.6.0 slice 29, win/season_wc48.c). start_new_season 0x92d330 keeps the stage array
     # and the slot array of the ctor (+0xc, count +0x2c; +0x14, room +0x38). After the step (0x92d409) an edition

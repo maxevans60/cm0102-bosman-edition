@@ -2,7 +2,7 @@
 """Every African nation plays CAF World Cup qualifying (0.6.2 item 199, src/recomp_rt/win/season_caf_pool.c).
 
 Usage:
-    python3 tests/seasons/caf_all_nations_run.py <cm0102_recomp> <game folder> [--keep <folder>] [--part a|b]
+    python3 tests/seasons/caf_all_nations_run.py <cm0102_recomp> <game folder> [--keep <folder>] [--part a|b|c]
 
 Real life: every CAF member that enters plays, the weakest in a two-leg first round (2006: 51 entered, 42 in the
 first round; 2026: 54; en.wikipedia.org "<year> FIFA World Cup qualification (CAF)"). The original's pool builder
@@ -15,11 +15,15 @@ Part a: a new game, Tier A, England's leagues, seed 1, changing rules on, the 3.
 Leg 1 plays to 31 July 2004 (the 2006 cycle's first round in April, two group matchdays from June), a save; leg 2
 loads it and plays 7 days (a save of groups of 6 loads). Part b: the save of 17 July 2021 of run set game
 a2001to2300 (test-fixtures/caf-all-2021.sav, or RECOMP_CAF_ALL_SAVE) plays to 31 July 2024 (the 2026 cycle).
+Part c: a new game of the December 2025 database (54 African nations, a 2025/26 start, changing rules on, Tier A,
+seed 1) saves after 7 days, and a leg loads that save and plays 7 days: a pool of more than the original's 52
+slots saves and loads (load_extra_data 0x910f00).
 
 The checks: each leg ends with code 0 and no message box; in each cycle every African nation of the save plays a
-match of the section from 1 January to 31 July of the campaign year, Somalia plays one two-leg first-round tie, and
-the first round has the plan's ties (22 in 2006, 7 in 2026). On main before item 199, 50 nations play and Somalia
-none: the test fails there.
+match of the section from 1 January to 31 July of the campaign year, Somalia plays one two-leg first-round tie, the
+first round has the plan's ties (22 in 2006, 7 in 2026), and the groups (the teams that meet from 1 June) are 5 of
+6 (2006) or 9 of 5 (2026); part c's log names a pool of more than 52. On main before item 199, 50 nations play and
+Somalia none: the test fails there.
 """
 import datetime
 import os
@@ -37,6 +41,28 @@ FIXTURES = "/Users/max/Projects/cm0102/test-fixtures"
 SECTIONS = ("World Cup African Qualifying Section", "FIFA World Cup qualification (CAF)")   # base, rules-on name
 NATION = "Somalia"
 TIES = {2004: 22, 2024: 7}                 # 52 nations: 2 x (52 - 30) / 2 and 2 x (52 - 45) / 2
+GROUPS = {2004: [6] * 5, 2024: [5] * 9}
+
+
+def groups(save, campaign):
+    """The sizes of the sets of teams that meet in the section from 1 June of campaign (the groups)."""
+    game = history_check.Game(save)
+    ids = {cid for cid, c in game.comps.items() if c["name"] in SECTIONS}
+    lo = datetime.date(campaign, 6, 1).toordinal()
+    parent = {}
+
+    def root(t):
+        while parent.setdefault(t, t) != t:
+            t = parent[t]
+        return t
+    for cid in ids:
+        for d, h, a in history_check.fixtures(game).get(cid, []):
+            if d >= lo:
+                parent[root(h)] = root(a)
+    sizes = {}
+    for t in parent:
+        sizes[root(t)] = sizes.get(root(t), 0) + 1
+    return sorted(sizes.values(), reverse=True)
 
 
 def section(save, campaign):
@@ -70,8 +96,13 @@ def check_cycle(save, campaign):
     bad = [sorted(nation(t) for t in p) for p, n in pairs.items() if n != 2]
     if bad or len(pairs) != TIES[campaign]:
         fails.append(f"{campaign + 2}: {len(pairs)} first-round ties, not {TIES[campaign]}; not two legs: {bad}")
+    sizes = groups(save, campaign)
+    print(f"      {campaign + 2}: groups of {sizes}")
+    if sizes != GROUPS[campaign]:
+        fails.append(f"{campaign + 2}: groups of {sizes}, not {GROUPS[campaign]}")
     if not fails:
-        print(f"ok    {campaign + 2}: every African nation plays, {NATION} in a two-leg first-round tie")
+        print(f"ok    {campaign + 2}: every African nation plays, {NATION} in a two-leg first-round tie, groups of "
+              f"{GROUPS[campaign][0]}")
     return fails
 
 
@@ -90,7 +121,7 @@ def main(argv):
         return 2
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
     keep = argv[argv.index("--keep") + 1] if "--keep" in argv else tempfile.mkdtemp(prefix="cm0102-caf-")
-    parts = argv[argv.index("--part") + 1] if "--part" in argv else "ab"
+    parts = argv[argv.index("--part") + 1] if "--part" in argv else "abc"
     os.environ["RECOMP_TIER_A"] = "1"
     os.environ["RECOMP_SEASON_INTL_LOG"] = "1"
     o = {"program": program, "game": game, "rules": "on", "database": None, "seed": 1, "start": 2001, "last": 2030,
@@ -121,6 +152,26 @@ def main(argv):
             fails += leg_fails("b1", code, box, saved(wb))
             if not fails:
                 fails += check_cycle(saved(wb), 2024)
+    if "c" in parts:
+        import gate_run
+        args, _ = gate_run.database(2025, {"run": keep, "own": None, "databases": os.path.join(FIXTURES, "databases")})
+        oc = dict(o, database=args[1], start=2025, last=2027)
+        w1 = os.path.join(keep, "c1")
+        code, took, box = soak_run.new_game_leg(oc, w1, 7)
+        print(f"      leg c1, a 2025 game, 7 days: {took:.0f} s")
+        fails += leg_fails("c1", code, box, saved(w1))
+        log = open(os.path.join(w1, "stderr.txt"), encoding="latin-1").read()
+        pools = [int(x.split(" of ")[1].split()[0]) for x in log.splitlines() if "Africa takes" in x]
+        print(f"      pools: {pools}")
+        if not pools or max(pools) <= 52:
+            fails.append(f"leg c1: no pool of more than 52 ({pools})")
+        if not fails:
+            w2 = os.path.join(keep, "c2")
+            code, took, box = soak_run.load_leg(oc, w2, saved(w1), 7)
+            print(f"      leg c2 loads it, 7 days: {took:.0f} s")
+            fails += leg_fails("c2", code, box, saved(w2))
+            if not fails:
+                print(f"ok    a pool of {max(pools)} saves and loads")
     for f in fails:
         print("FAIL ", f)
     print("PASS" if not fails else f"FAILED: {len(fails)}")

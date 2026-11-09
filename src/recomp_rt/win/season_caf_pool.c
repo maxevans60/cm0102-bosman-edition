@@ -36,7 +36,14 @@
  *   nation): 53 nations give 46 in the first round and 7 byes, as the 42 and 9 of 2006. The group builder's size
  *   comes from +0xb6 (above 50 with no exempt nation), so a loaded save gives the same groups.
  * Load allocates the larger of 52 slots and +0xb6, so a save of such a campaign loads; the base game's +0xb6 is
- * at most 50, so its load does not change. */
+ * at most 50, so its load does not change.
+ *
+ * set_club_progress 0x9115a0 writes each team's group positions (+0x73, +0x74 and +0x75 of its Comp_Stats entry,
+ * from 0x4a4850) as a band of the whole field: with no exempt nation, group position p of stages 0 to 4 becomes
+ * 5 x (p - 1) + 1 (the jump tables at 0x911a78, 0x911a8c and 0x911aa0: 1, 6, 11, 16, 21), and a position the
+ * tables do not hold is written as it is (0x911600, 0x911631, 0x911a64). With one exempt nation (4 groups of 6)
+ * position 6 has its band, 21 (0x911707). So in a group of 6 the last team got 6, a runner-up's band. In the old
+ * shape with groups of 6, position 6 gets 5 x 5 + 1 = 26. */
 #include "win.h"
 #include "season.h"
 #include "season_intl.h"
@@ -145,4 +152,14 @@ uint32_t rt_caf_group_size(uint32_t self, uint32_t original)
 {
     SeasonCafPlan plan;
     return old_plan(self, &plan) ? (uint32_t)plan.group_size : original;
+}
+
+/* 0x911600, 0x911631 and 0x911a64 (this in esi, the stage at [esp + 0x10]): a group position the original's
+ * tables do not hold (only 1 to 5, for stages 0 to 4 with no exempt nation). In groups of 6, position 6 gets the
+ * band 26. 0x911a64 is also the end of stages 5 and up, which keep the position. */
+uint32_t rt_caf_band(uint32_t self, uint32_t stage, uint32_t position)
+{
+    SeasonCafPlan plan;
+    if (stage < 5u && position == 6u && old_plan(self, &plan) && plan.group_size == 6) return 26u;
+    return position;
 }
