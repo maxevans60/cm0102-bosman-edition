@@ -332,6 +332,12 @@ if(NOT WIN32)
         src/recomp_rt/win/season_fifa_days_table.c)
     target_include_directories(season_conmebol_days_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_conmebol_days COMMAND season_conmebol_days_test)
+    # Item 196: the AFC World Cup qualifying first round (who plays and the days), pools of 38 to 50, 2006 to 2302.
+    add_executable(season_afc_first_test tests/seasons/test_season_afc_first.c
+        src/recomp_rt/win/season_afc_first_plan.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_afc_first_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_afc_first COMMAND season_afc_first_test)
     add_executable(youth_pool_test tests/seasons/test_youth_pool.c src/recomp_rt/win/youth_pool_rule.c)
     target_include_directories(youth_pool_test PRIVATE src/recomp_rt/win)
     add_test(NAME youth_pool COMMAND youth_pool_test)
