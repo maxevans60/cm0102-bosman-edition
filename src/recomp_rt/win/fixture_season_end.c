@@ -351,9 +351,46 @@ static int other_leg(uint32_t fix, int y, int d, int forward, int *ld)
 
 void o_005ab510(void);
 
+/* A match that a shared stadium moves to another weekday keeps that day when only weaker matches clash there
+ * (item 218). find_fixture_clashes 0x5ad780 gives severity 20 when two clubs that share a stadium play at home on one
+ * day, and add_fixture 0x5aa680 then calls resolve_same_day_clash 0x5ae380 (0x5aa8c5). That function moves the
+ * weaker club's match to another weekday of the same week (0x5ae43d..0x5ae47b: Wednesday to Tuesday), then checks
+ * the new day (0x5ad780 at 0x5ae52e, 0x5ae5ab) and, on any clash, moves the match again with find_new_fixture_date
+ * 0x5ab510 (0x5ae55c, 0x5ae5d8). It does not compare the clash with the match's priority, as add_fixture does
+ * (0x5aa939: the new match moves only when the top severity is at least its priority +0x3a, else the weaker stored
+ * match moves, 0x5aaa25). In a 2025 start (run set pass 5, a2025s1, leg 1) the league phase draw put AC Milan v
+ * VfL Wolfsburg and Internazionale v 1.FC Heidenheim 1846 on 7 September 2039 (day 249). Milan v Wolfsburg went to
+ * Tuesday 6 September, met Hoffenheim v Wolfsburg (Bundesliga, priority 2) the next day, and 0x5ab510 took it to
+ * 31 August (day 242), the day before UEFA's second registration (process_euro_registration 0x85a9b0, 1 September).
+ * Wolfsburg had registered no player, the eligibility check gave code 8 to 41 of 50 (0x5832e0, 0x5833e1), and the
+ * match stopped at "match_eng..cpp 652" (init_match 0x6b8aca) with 9 players.
+ * So at those two calls, when the top severity of the new day (the caller's [esp+0x10]) is below the match's
+ * priority, the match stays on its new day; add_fixture (0x5ae56a, 0x5ae5e6) then inserts it and moves the weaker
+ * match by its own rule. Real life: UEFA solves league phase stadium and city clashes in the match calendar, within
+ * the competition's match week, Tuesday and Wednesday for the Champions League (Principles set by the UEFA Club
+ * Competitions Committee for the 2025/26 season, Stadium and city clashes, sections 1 and 3, editorial.uefa.com,
+ * read 10 November 2026). Season games only, as the other covered moves. */
+static int same_day_keeps(uint32_t fix, uint32_t ret)
+{
+    if ((ret != 0x005ae561u && ret != 0x005ae5ddu) || !readable(fix) || !season_game_changes()) return 0;
+    int top = (int32_t)rd32(g_mem, cpu.esp + 8u + 0x10u);      /* local_2d0: ret address, the pushed fixture */
+    int priority = (int8_t)g_mem[fix + FIX_PRIORITY];
+    if (top >= priority) return 0;
+    uint32_t rec = rd32(g_mem, fix + FIX_COMP);
+    fprintf(stderr, "recomp: fixtures: a same-day clash move of %.40s keeps day %d of %d (clash severity %d, "
+                    "priority %d)\n", readable(rec) ? win_str(rec + 4) : "?", (int16_t)rd16(g_mem, fix + FIX_DAY),
+            (int16_t)rd16(g_mem, fix + FIX_YEAR), top, priority);
+    return 1;
+}
+
 RT_WRAP(005ab510, fixture_new_date)
 {
     uint32_t fix = rt_arg(0), manager = cpu.ecx, ret = rd32(g_mem, cpu.esp);
+    if (same_day_keeps(fix, ret)) {
+        kept = 0;
+        cpu.esp += 8;                                   /* ret 4: the return address and the fixture */
+        return;
+    }
     int site = 0;
     while (site < SITE_COUNT && SITES[site].new_date != ret) site++;
     if (site == SITE_COUNT || !season_game_changes() || !readable(fix)) {
