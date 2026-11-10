@@ -244,7 +244,7 @@ def finance():
     return bytes(out)
 
 
-def records(changing=1):
+def records(changing=1, truncated=False):
     def pad(b, n):
         return b + bytes(n - len(b))
 
@@ -314,7 +314,10 @@ def records(changing=1):
                ("player.dat", players()), ("finance.dat", finance())]
     # Two files in a merged part (0.6.2 slice 13, savfile.merge): the World Finals class waiting on 2200 and the
     # fixtures of 2039 give planted faults only when the checker reads them from it.
-    merged = [m for m in members if m[0] in ("World Finals_10.tmp", "fixtures_2039.tmp")]
+    if truncated:       # a save that keeps no fixtures of 2038 and 2039: its oldest part is 2040 (open item 70)
+        members = [m for m in members if m[0] not in ("fixtures_2038.tmp", "fixtures_2039.tmp")]
+    merged = [m for m in members if m[0] in (("World Finals_10.tmp",) if truncated else
+                                             ("World Finals_10.tmp", "fixtures_2039.tmp"))]
     members = [m for m in members if m not in merged] + [("x#.tmp.parts", savfile.merge(merged))]
     return members, want
 
@@ -861,6 +864,18 @@ def main():
 
     off = os.path.join(work, "off.sav")
     write_sav(off, records(changing=0)[0])
+    # The title holder of an edition whose first matches are in a fixtures part that the save no longer holds: the save
+    # keeps 50 years of fixtures, so the oldest edition is cut to its knockout matches and the holder (out in the
+    # group stage) seems missing (pass 5: a2013s1 F.C. Barcelona 2023, a2001nation Chemnitzer FC 2021). The same
+    # edition in a save with the older parts has no fault; with the oldest part 2040 the edition of 2040 is not judged.
+    trunc = os.path.join(work, "trunc.sav")
+    write_sav(trunc, records(truncated=True)[0])
+    for label, save, want_holder in (("holder-full", sav, True), ("holder-cut", trunc, False)):
+        run([save, "--out", work, "--label", label, "--known", empty, "--nations", nations, "--rules", rules,
+             "--names", names, "--table", table, "--access", access])
+        got = ("entrant-holder", "Euro Super Cup", 2040) in faults(work, label)
+        if got != want_holder:
+            bad.append(f"entrant-holder Euro Super Cup 2040 in {label}: {got}, not {want_holder}")
     # The association limit of the season rules: a fault with changing rules on, none in the base game (lead, 1 Nov).
     for label, save, want_limit in (("limit-on", sav, True), ("limit-off", off, False)):
         run([save, "--out", work, "--label", label, "--known", empty, "--nations", nations, "--rules", rules,

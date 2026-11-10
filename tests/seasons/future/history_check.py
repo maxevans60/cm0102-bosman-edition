@@ -980,6 +980,11 @@ def entrants(game, rules, access, changes=()):
             if t >= 0:
                 held[t].append((year, name, place))
     hosts = {(cid, year): h for cid, year, a, b, c, h in game.rows if h >= 0}
+    # The save keeps 50 years of fixtures: an edition (labelled by the year it ends) whose year is that of the oldest
+    # fixtures part has lost the matches of the year before, so its entrants are only the knockout teams and its title
+    # holder, out in the group stage, seems missing (open item 70; pass 5: a2013s1 F.C. Barcelona 2023, a2001nation
+    # Chemnitzer FC 2021). Such an edition is not judged for the holder.
+    oldest_part = min((int(m.group(1)) for n in game.fixture_parts for m in [re.search(r"(\d{4})", n)] if m), default=0)
     route_nation = {}                                         # key of a national competition: its nation's name
     for comp in game.comps.values():
         key = rules.key(comp["name"])
@@ -1098,7 +1103,7 @@ def entrants(game, rules, access, changes=()):
             if dead:
                 faults.append(("entrant-dead", name, year, f"{len(dead)} entrants of a nation under an old name: "
                                                            f"{', '.join(dead[:6])}"))
-            if holder and done and year > game.start and prev and prev[0] not in teams and \
+            if holder and done and year > game.start and year > oldest_part and prev and prev[0] not in teams and \
                     year - max(y for y, w in by_key[key] if y < year) <= (rule.get("cycle") or 1) + 1:
                 faults.append(("entrant-holder", name, year, f"the title holder {game.club(prev[0])[0]} is not an "
                                                              f"entrant"))
