@@ -13,7 +13,8 @@ places the player.
 
 Checks, for each joiner display:
     1 every game ends with code 0
-    2 the pitch after the drag differs from the pitch before it (the player moved)
+    2 the player moved to the drop: the pitch changed both around the start (575, 340) and around the drop (575, 270),
+      each in the joiner's own pixels (the boxes of SPOT)
     3 the pitch after the drag, and on the Tactics opened again (the host's data), is the same under a classic host and
       under a widescreen host
 Before the fix a widescreen joiner's drag on a classic host left the player at MC, and any drag on a widescreen host
@@ -30,6 +31,13 @@ import smoke_run  # noqa: E402
 
 PITCH = {"classic": (452, 152, 778, 543), "widescreen": (724, 203, 1244, 724)}
 DRAG = (575, 340, 575, 270)
+SPOT = 10                  # half the side of the box around the start and the drop, in classic pixels (a shirt is 26)
+
+
+def box_at(x, y, display):
+    """The box of SPOT around a classic point, on the screen of the display (1280x800 in Widescreen mode)."""
+    kx, ky = (1.6, 4 / 3) if display == "widescreen" else (1, 1)
+    return (int((x - SPOT) * kx), int((y - SPOT) * ky), int((x + SPOT) * kx), int((y + SPOT) * ky))
 
 
 def steps():
@@ -68,9 +76,9 @@ def play(program, game, shots, host_display, join_display, slow):
     return codes
 
 
-def pitch_share(a, b, display):
+def pitch_share(a, b, display, box=None):
     from PIL import Image, ImageChops
-    box = PITCH[display]
+    box = box or PITCH[display]
     x, y = Image.open(a).convert("RGB").crop(box), Image.open(b).convert("RGB").crop(box)
     diff = ImageChops.difference(x, y)
     data = diff.get_flattened_data() if hasattr(diff, "get_flattened_data") else diff.getdata()
@@ -106,9 +114,12 @@ def main(argv):
             check(False, f"joiner {join_display}: a dump is missing")
             continue
         for folder, host_display in ((a, "classic"), (b, "widescreen")):
-            moved = pitch_share(dump(folder, "c-tactics"), dump(folder, "d-dragged"), join_display)
-            check(moved > 0, f"joiner {join_display}, host {host_display}: the drag moved a player "
-                             f"({moved:.2%} of the pitch changed)")
+            left = pitch_share(dump(folder, "c-tactics"), dump(folder, "d-dragged"), join_display,
+                               box_at(DRAG[0], DRAG[1], join_display))
+            came = pitch_share(dump(folder, "c-tactics"), dump(folder, "d-dragged"), join_display,
+                               box_at(DRAG[2], DRAG[3], join_display))
+            check(left > 0.2 and came > 0.2, f"joiner {join_display}, host {host_display}: the player left the start "
+                                             f"({left:.0%} of its box changed) and came to the drop ({came:.0%})")
         for name in ("d-dragged", "f-again"):
             share = pitch_share(dump(a, name), dump(b, name), join_display)
             check(share == 0, f"joiner {join_display}, {name}: the pitch is the same under a classic and a widescreen "

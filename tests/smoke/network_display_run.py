@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Network screens in both display modes (0.7.0 item 212): the four two-game runs of tests/smoke/network_run.py with
-the host and the joiner in classic or widescreen display, Online play off (LAN, no lobby).
+"""Network screens in both modes (0.7.0 item 212): the four two-game runs of tests/smoke/network_run.py with the host
+and the joiner each in Classic mode or Widescreen mode, Online play off (LAN, no lobby).
 
 Usage:
     python3 tests/smoke/network_display_run.py <cm0102_recomp> <game folder> --out <folder> [--slow k]
 
-A host in widescreen mode sent its widened coordinates and the joiner widened them again (net_scale.c). The runs:
+A host in Widescreen mode sent its widened coordinates and the joiner widened them again (net_scale.c). The runs:
     widescreen,widescreen  the joiner's screens equal the host's (checks 2, 3 and 5 of network_run.py)
     classic,classic        the same
     classic,widescreen     the widescreen joiner's screens equal those of the widescreen,widescreen run

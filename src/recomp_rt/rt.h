@@ -493,6 +493,15 @@ uint32_t rt_groups_cells(uint32_t esp);
 uint32_t rt_groups_table(void);
 uint32_t rt_groups_count(void);
 
+/* Network screens in Widescreen mode (0.7.0 item 212, win/net_scale.c, tools/recomp/net_scale.py): a coordinate of
+ * this screen as a classic one and back, and the four words of a widget move, at these addresses, widened to this
+ * screen. */
+uint32_t rt_net_classic_x(uint32_t v, int far_edge);
+uint32_t rt_net_classic_y(uint32_t v, int far_edge);
+uint32_t rt_net_screen_x(uint32_t v, int far_edge);
+uint32_t rt_net_screen_y(uint32_t v, int far_edge);
+void rt_net_rect_in16(uint32_t x1_at, uint32_t y1_at, uint32_t x2_at, uint32_t y2_at);
+
 /* Arguments and return for replacements: esp points at the return address. */
 static inline uint32_t rt_arg(int i) { return rd32(g_mem, cpu.esp + 4 + 4 * (uint32_t)i); }
 static inline void rt_ret_cdecl(uint32_t v) { cpu.eax = v; cpu.esp += 4; }
@@ -502,13 +511,5 @@ static inline void rt_ret_stdcall(uint32_t v, int nargs) { cpu.eax = v; cpu.esp 
 typedef struct { uint32_t addr; RtFn fn; const char *name; uint32_t flags; } RtEntry;
 extern const RtEntry rt_table[];
 extern const uint32_t rt_table_size;
-
-/* Network screens in widescreen mode (0.7.0 item 212, win/net_scale.c, tools/recomp/net_scale.py): the classic value of a
- * coordinate on this screen, and the four words of a widget move widened to this screen. */
-uint32_t rt_net_classic_x(uint32_t v, int far_edge);
-uint32_t rt_net_classic_y(uint32_t v, int far_edge);
-uint32_t rt_net_screen_x(uint32_t v, int far_edge);
-uint32_t rt_net_screen_y(uint32_t v, int far_edge);
-void rt_net_rect_in16(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2);
 
 #endif

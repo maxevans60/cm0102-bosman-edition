@@ -1,9 +1,9 @@
-/* Network screens in widescreen mode (0.7.0 item 212). Every coordinate on the network is a classic one, as in the
- * original: a game in widescreen mode sends classic values and widens what it gets.
+/* Network screens in Widescreen mode (0.7.0 item 212). Every coordinate on the network is a classic one, as in the
+ * original: a game in Widescreen mode sends classic values and widens what it gets.
  *
  * The fault. display.c widens each area and widget from 800x600 to the screen when the game creates it (the wraps of
  * area create 0x55fba0 and widget create 0x55f990). The host builds a joiner's screen with the same functions, so
- * a host in widescreen mode stored and sent widened values, and the joiner widened them again when its packet applier
+ * a host in Widescreen mode stored and sent widened values, and the joiner widened them again when its packet applier
  * Display::process_command_packet 0x564080 created them (areas at 0x564c31, widgets at 0x565c11). A widescreen joiner
  * drew the screen 1.6 times too far right, a classic joiner drew 1280-wide values on 800x600. With a classic host
  * both worked, except the joiner's red title bar (widget changes on the joiner, below).
@@ -12,12 +12,12 @@
  * back, ds_screen and ds_classic are the identity at 800x600):
  * - Areas. Area create 0x55fba0 writes each area into the command block at 0xae2908 (x1, y1, x2, y2 at 0x55fc29,
  *   0x55fcb7, 0x55fd45, 0x55fdd3, from its arguments, which display.c has widened) before it builds it (Area::init
- *   0x402ac0 at 0x560109). Display::send_screen_section 0x562370 copies that block into the joiner's packet
- *   (0x562464). tools/recomp/net_scale.py writes the classic values in the block (rt_net_classic_x/y).
+ *   0x402ac0 at 0x560109). Display::send_screen_section 0x562370 sends that block as section 2 (0x5627d4..0x5627e9).
+ *   tools/recomp/net_scale.py writes the classic values in the block (rt_net_classic_x/y).
  * - Widgets. send_screen_section sends the fields of each widget that differ from the copy it sent last
  *   (Guio::get_fields 0x5ee4a0 at 0x5628e8 on the widget, at 0x5629e0 on the copy; the copy is a raw copy of the
- *   host's widget table, 0x563c7e). Both calls give classic rectangles here (outputs 2 to 5: x1, y1, x2, y2 from the
- *   widget's +0x10..+0x1c).
+ *   host's widget table, 0x563c7e). Both calls give classic rectangles here (stack arguments 2 to 5, counted from 1:
+ *   the out pointers of x1, y1, x2, y2, the widget's +0x10..+0x1c).
  * - Widget moves. ScreenManager::set_widget_rect 0x800890 writes opcode 8 sub-op 1 with x1, y1, x2, y2 (0x800a9c,
  *   0x800b1d, 0x800b9e, 0x800c1f) and applies it through 0x564080 on this computer (0x800c5f, 0x800c8e) or sends it
  *   (0x800cb1). net_scale.py writes classic values, and the applier's sub-op 1 (0x567127: the four values at
@@ -27,13 +27,15 @@
  *   (get_fields at 0x568713), and of a second widget when there is one (get_fields at 0x569226): a shirt dropped on
  *   the pitch of the tactics screen sends the pitch. The joiner sends classic values, and the host's opcode 6 case
  *   widens them when it builds the widgets again (Guio::init 0x5ee150 at 0x5669be and 0x566fab; x1, y1, x2, y2 are
- *   its arguments 4 to 7).
+ *   its stack arguments 5 to 8, counted from 1).
  * - Drags. Between the two widgets the click sends the Display's drag: the dragged widget (+0xba9dc) and where it was
  *   let go, x1, y1, x2, y2 at +0xba9be (0x569114..0x56918b). net_scale.py loads them as classic values
  *   (0x569146..0x56914e), and the host's opcode 6 case widens them where it stores them (0x566d33..0x566d42). The
  *   tactics input measures the drop from it and from the pitch (0x89f710: the drag at 0x8a2099, the target at
  *   0x8a20bb). Without it a widescreen joiner's drag on a classic host left the player where he was, and any joiner's
  *   drag on a widescreen host made him FL (run-logs/i212/drag-*).
+ * A host value in Widescreen mode that ds_screen did not make (a widget placed from the width of its text, comp_text
+ * 0x4aeaf0) goes over the network rounded to a classic value, so a joiner may draw it up to 2 pixels off.
  * - Widget changes on the joiner. Opcode 1 sends only the fields that changed. The joiner takes the others from its
  *   own widget ([0xae2918] + index * 0x18c, get_fields at 0x564ef8), whose rectangle it has widened, and builds the
  *   widget again with widget create (0x565c11), which widens it once more. That get_fields gives classic values too.
@@ -59,12 +61,12 @@ static void widen16(uint32_t at, int y, int far_edge)
 }
 
 /* 0x567157, opcode 8 sub-op 1: the four words of the move, classic on the network. */
-void rt_net_rect_in16(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2)
+void rt_net_rect_in16(uint32_t x1_at, uint32_t y1_at, uint32_t x2_at, uint32_t y2_at)
 {
-    widen16(x1, 0, 0);
-    widen16(y1, 1, 0);
-    widen16(x2, 0, 1);
-    widen16(y2, 1, 1);
+    widen16(x1_at, 0, 0);
+    widen16(y1_at, 1, 0);
+    widen16(x2_at, 0, 1);
+    widen16(y2_at, 1, 1);
 }
 
 void o_005ee4a0(void);

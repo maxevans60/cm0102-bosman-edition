@@ -60,10 +60,10 @@ checks 7 and 10 and:
    11  each joiner joined through the relay and the host held one relay connection; the relay lines of the
        host's log give the frames that it sent (batches of about 50 ms)
 
---display H,J (0.7.0 item 212) gives the host display H and every joiner display J (classic or widescreen; default
-classic,classic). When they differ, checks 2, 3 and 5 compare each joiner's dumps with those of an earlier run whose
-host had the joiners' display (--same-as <its --shots folder>): the host's display must not change what a joiner
-sees. --online-off turns Online play off in every game of a LAN run, so no game talks to the lobby.
+--display H,J (0.7.0 item 212) puts the host in mode H and every joiner in mode J (classic or widescreen: Classic mode,
+Widescreen mode; default classic,classic). When they differ, checks 2, 3 and 5 compare each joiner's dumps with those
+of an earlier run whose host had the joiners' mode (--same-as <its --shots folder>): the host's mode must not change
+what a joiner sees. --online-off turns Online play off in every game of a LAN run, so no game talks to the lobby.
 tests/smoke/network_display_run.py runs the four combinations.
 
 --game-name <word> names the host's game (default Bosman). --remote n (with --relay and --lobby-url) runs the host only and waits --remote-wait seconds (default 1800) at
@@ -279,7 +279,7 @@ DISPLAYS = {"host": "classic", "join": "classic"}   # --display: the host's disp
 def start(program, game, work, name, steps, shots, slow=1, env_extra=None, online=True, args=()):
     user = os.path.join(work, name)
     os.makedirs(user)
-    display = DISPLAYS["host" if name == "host" else "join"]
+    display = DISPLAYS["host" if name == "host" or name.endswith("-host") else "join"]   # errors_run.py: "lost-host"
     with open(os.path.join(user, "settings.txt"), "w") as f:
         f.write(f"display = {display}\n")
         if not online:
@@ -386,6 +386,9 @@ def main(argv):
         else:
             print(__doc__)
             return 2
+    if online_off and (lobby or relay or remote):
+        print("--online-off is for a LAN run, not with --lobby, --relay or --remote")
+        return 2
     failed = []
 
     def check(ok, text):
@@ -492,13 +495,15 @@ def main(argv):
                     # The host's screen has another size: the joiner's must equal that of a run whose host had the
                     # joiner's display (--same-as), so the host's display does not change what a joiner sees.
                     ref = os.path.join(same_as, join_shot) if same_as else None
-                    if ref and os.path.exists(ref) and os.path.exists(dump(join_shot)):
+                    missing = [f for f in ([ref] if ref else []) + [dump(join_shot)] if not os.path.exists(f)]
+                    if ref and not missing:
                         share = smoke_run.differing_share(ref, dump(join_shot))
                         check(share <= 0.01, f"{name}'s {what} ({DISPLAYS['join']}, host {DISPLAYS['host']}) equals "
                                              f"the same joiner's under a {DISPLAYS['join']} host: {share:.2%} of pixels "
                                              f"differ")
                     else:
-                        check(False, f"{name}'s {what}: no dump of --same-as to compare with")
+                        check(False, f"{name}'s {what}: " + (f"missing {', '.join(missing)}" if ref else
+                                                             "no --same-as run to compare with"))
                 elif os.path.exists(dump(host_shot)) and os.path.exists(dump(join_shot)):
                     share = smoke_run.differing_share(dump(host_shot), dump(join_shot))
                     check(share <= 0.01, f"{name}'s {what} equals the host's: {share:.2%} of pixels differ")

@@ -12,7 +12,7 @@ int main(void)
     const uint32_t sizes[][2] = {{1280, 800}, {800, 600}};
     for (int axis = 0; axis < 2; axis++)
         for (int far = 0; far < 2; far++) {
-            uint32_t screen = axis ? 800 : 1280, classic = sizes[axis][1];
+            uint32_t screen = sizes[axis][0], classic = sizes[axis][1];
             for (int v = -3; v <= (int)classic; v++, n++) {
                 uint32_t w = ds_screen((uint32_t)v, screen, classic, far);
                 if (ds_classic(w, screen, classic, far) != (uint32_t)v) {
@@ -24,7 +24,7 @@ int main(void)
                     if (bad++ < 5) printf("FAIL  classic mode changes %d\n", v);
                 }
             }
-            /* Every screen value maps to a classic value whose own screen value is at most one step away. */
+            /* Every screen value maps to a classic value whose own screen value is at most 2 pixels away. */
             for (int w = 1; w < (int)screen; w++) {
                 uint32_t c = ds_classic((uint32_t)w, screen, classic, far), back = ds_screen(c, screen, classic, far);
                 int d = (int)back - w;
