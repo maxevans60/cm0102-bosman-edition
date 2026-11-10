@@ -25,6 +25,21 @@ async function relayKeys(code: string): Promise<string[]> {
   return runInDurableObject(relayStub(code), async (_inst: Relay, state) => [...(await state.storage.list()).keys()]);
 }
 
+/** 1 when the lobby's list holds the game. */
+async function listed(code: string): Promise<boolean> {
+  const data = await json(await call("/v1/games"));
+  return data.games.some((g: { code: string }) => g.code === code);
+}
+
+/** Polls test() for up to 3 s: the relay's close events and its call to the lobby come after the client's close. */
+async function waitFor(test: () => Promise<boolean>): Promise<boolean> {
+  for (let i = 0; i < 60; i++) {
+    if (await test()) return true;
+    await new Promise((r) => setTimeout(r, 50));
+  }
+  return false;
+}
+
 async function gameWithHost() {
   const g = await register();
   const host = await hostSocket(g.code, g.hostToken);
@@ -235,6 +250,30 @@ describe("relay", () => {
     const keys = await runInDurableObject(relayStub(code), async (_inst: Relay, state) => [...(await state.storage.list()).keys()]);
     expect(keys).toEqual([]);
     expect((await openRelay(code, `role=host&token=${encodeURIComponent(hostToken)}`)).res.status).toBe(404);
+  });
+
+  it("drops the game from the list at once when its host quits with a normal close, and closes the relay (item 216)", async () => {
+    const { code, hostToken, host } = await gameWithHost();
+    const a = await addManager(code, host);
+    expect(await listed(code)).toBe(true);
+    host.ws.close(1000, "quit");
+    expect(await a.socket.waitClosed()).toEqual({ code: 4000, reason: "host_left" });
+    expect(await waitFor(async () => !(await listed(code)))).toBe(true);
+    expect(await waitFor(async () => (await relayKeys(code)).length === 0)).toBe(true);
+    expect((await openRelay(code, `role=host&token=${encodeURIComponent(hostToken)}`)).res.status).toBe(404);
+  });
+
+  it("keeps the game and the relay when the host's connection drops, so the host can connect again (item 216)", async () => {
+    const { code, hostToken, host } = await gameWithHost();
+    host.ws.close(3000, "drop");
+    await host.waitClosed();
+    await new Promise((r) => setTimeout(r, 300));
+    expect(await listed(code)).toBe(true);
+    expect(await relayKeys(code)).toContain("key");
+    const again = await hostSocket(code, hostToken);
+    const b = await addManager(code, again);
+    b.socket.send([7]);
+    expect(await again.nextBytes()).toEqual([b.ch, 7]);
   });
 
   it("closes the relay when the lobby drops the game for no heartbeat", async () => {
