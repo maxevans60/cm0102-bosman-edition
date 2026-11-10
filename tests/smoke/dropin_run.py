@@ -3,7 +3,10 @@
 
 Usage:
     python3 tests/smoke/dropin_run.py <cm0102_recomp> <game folder> [--shots <folder>] [--slow k] [--kick]
-        [--lobby-url URL] [--relay]
+        [--lobby-url URL] [--relay] [--display H,J]
+
+--display H,J (0.7.0 item 212) puts the host in mode H and the joiners in mode J (classic or widescreen; default
+classic,classic), as tests/smoke/network_run.py --display does.
 
 It uses the timed clicks of tests/smoke/network_run.py and a local copy of the lobby (server/, `npx wrangler dev`),
 or --lobby-url.
@@ -246,6 +249,9 @@ def main(argv):
             slow = float(v)
         elif k == "--lobby-url":
             lobby_url = v
+        elif k == "--display" and v in ("classic,classic", "classic,widescreen", "widescreen,classic",
+                                         "widescreen,widescreen"):
+            nr.DISPLAYS["host"], nr.DISPLAYS["join"] = v.split(",")      # item 212: the mode of the host, of joiners
         else:
             print(__doc__)
             return 2
