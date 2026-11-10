@@ -263,6 +263,7 @@ def main(argv):
             failed.append(what)
 
     address = nr.lan_address()
+    watch = nr.AddressWatch(address)        # item 216: the network must keep the run's address
     lobby_proc = None
     if not lobby_url:
         port = 8890 + os.getpid() % 100
@@ -384,6 +385,7 @@ def main(argv):
             if f.endswith(".bmp"):
                 subprocess.run(["sips", "-s", "format", "png", os.path.join(shots, f), "--out",
                                 os.path.join(shots, f[:-4] + ".png")], capture_output=True)
+    nr.check_address(check, watch)
     print("dropin run: " + ("PASS" if not failed else f"FAIL ({len(failed)})"))
     return 1 if failed else 0
 

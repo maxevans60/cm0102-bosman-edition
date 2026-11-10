@@ -276,6 +276,49 @@ def lan_address():
 DISPLAYS = {"host": "classic", "join": "classic"}   # --display: the host's display and the joiners' (item 212)
 
 
+def is_local(address):
+    """1 when address is an address of this computer: a socket can bind to it."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.bind((address, 0))
+        return True
+    except OSError:
+        return False
+    finally:
+        s.close()
+
+
+class AddressWatch:
+    """Item 216: the games of a run meet on this computer's LAN address (Q32). When the network drops (Wi-Fi off for
+    a moment, a new DHCP lease), the system removes that address and both games lose their connection, a failure
+    of the machine and not of the game (10 November 2026: "en0 link INACTIVE", "DHCP en0: removing 192.168.0.82" at
+    02:49:18, run-logs/i212/main-checks/drag). The watch tests every half second that the address is still this
+    computer's, so a drop that brings the same address back is seen too. end() gives the reason, or "" ."""
+
+    def __init__(self, address):
+        self.address, self.lost, self.stop = address, None, threading.Event()
+        threading.Thread(target=self.watch, daemon=True).start()
+
+    def watch(self):
+        while not self.stop.wait(0.5):
+            if self.lost is None and not is_local(self.address):
+                self.lost = time.strftime("%H:%M:%S")
+
+    def end(self):
+        self.stop.set()
+        if self.lost is None and not is_local(self.address):
+            self.lost = time.strftime("%H:%M:%S")
+        if self.lost is None:
+            return ""
+        return f"the test address {self.address} went away during the run (at {self.lost}): the network changed, not the game; run again"
+
+
+def check_address(check, watch):
+    """The run's last check: the address stayed (see AddressWatch)."""
+    lost = watch.end()
+    check(not lost, lost or f"the test address {watch.address} stayed for the whole run")
+
+
 def start(program, game, work, name, steps, shots, slow=1, env_extra=None, online=True, args=()):
     user = os.path.join(work, name)
     os.makedirs(user)
@@ -396,6 +439,7 @@ def main(argv):
         if not ok:
             failed.append(text)
 
+    watch = AddressWatch(address)           # item 216: the network must keep the run's address
     # The joiners: (name, steps, environment, online play, plays the whole join).
     lobby_proc, quiet, full = None, None, None
     if lobby:
@@ -576,6 +620,7 @@ def main(argv):
             if f.endswith(".bmp"):
                 subprocess.run(["sips", "-s", "format", "png", dump(f), "--out", dump(f[:-4] + ".png")],
                                capture_output=True)
+    check_address(check, watch)
     print("network run: " + ("PASS" if not failed else f"FAIL ({len(failed)})"))
     return 1 if failed else 0
 

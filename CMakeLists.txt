@@ -480,6 +480,8 @@ if(NOT WIN32)
     add_test(NAME future_competitions COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/competitions_check.py")
     # The run set and its release check (0.6.2 slice 15), without a game: tests/seasons/future/run_set_test.py.
     add_test(NAME future_run_set COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/run_set_test.py")
+    # The network scripts watch the address their games meet on (item 216): tests/smoke/address_watch_test.py.
+    add_test(NAME address_watch COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/smoke/address_watch_test.py")
     # A rules report run with --year and no --database plays the season database of its expected files (item 129).
     add_test(NAME rules_report_database COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/rules_report_database_check.py")
     # The club_list check of the rules report prints its lines (0.6.2 open item 142).
