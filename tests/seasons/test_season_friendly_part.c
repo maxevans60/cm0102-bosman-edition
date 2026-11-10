@@ -20,6 +20,7 @@ void o_005cc510(void) {}
 void o_00685640(void) {}
 int season_start_year(void) { return 2002; }
 int season_game_changes(void) { return 1; }
+int season_changing_rules(void) { return 1; }
 int season_day_of_year(int y, int m, int d) { (void)y, (void)m; return d; }
 void season_from_day_of_year(int y, int doy, int *m, int *d) { (void)y; *m = 1, *d = doy; }
 int season_fifa_day(int y, int m, int want) { (void)y, (void)m; return want; }

@@ -117,6 +117,20 @@ int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int))
  * after the draw (docs/research/2026-10-18-national-team-comps.md, section 7.1). */
 const SeasonNlEdition *season_nl_draw_of(const char *confed, int year, int (*wc)(int));
 
+/* Item 215: 1 when a friendly of confederation `confed` on day d.m.y would meet a league-phase matchday (within
+ * NL_FRIENDLY_NEAR days, the guard of arrange_international_friendlies 0x5cbdf0) of a table edition that is drawn
+ * on or after the day the friendly is arranged (NL_FRIENDLY_AHEAD days before it, 0x5cbb00). The game holds one
+ * edition at a time (season_nl.c next_edition), so it draws an edition no earlier than the day after the final of
+ * the edition before. Real life drew the 2023-24 edition on 16 May 2023, before the 2022-23 finals of 15 and
+ * 18 June 2023, and the September to November 2023 windows were the confederation's. In the game the draw came on
+ * 19 June 2023, the friendlies of 5 September 2023 were made on 13 June, and 11 matches of the first matchday
+ * (7 September) moved off the FIFA days. The table gives 1 also near the June 2022 matchdays of CONCACAF 2022-23
+ * (draw 4 April 2022) and the September 2026 ones of 2026-27 (draw 23 July 2026), but the North American rows of
+ * the friendly date table (0x5ca4f0) hold no day there, so only the 2023 row changes. */
+#define NL_FRIENDLY_AHEAD 84
+#define NL_FRIENDLY_NEAR 4
+int season_nl_late_window(const char *confed, int y, int m, int d);
+
 /* The result of one nation in one edition. The rules rank and move these rows; the nation is the game's id. */
 typedef struct {
     int nation;                 /* the game's nation id (or a test id) */

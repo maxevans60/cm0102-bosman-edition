@@ -41,6 +41,7 @@ static int tv_moves;                               /* calls of the original TV m
 void o_00685640(void) { tv_moves++; cpu.esp += 8; }
 int season_start_year(void) { return 2025; }
 int season_game_changes(void) { return 1; }
+int season_changing_rules(void) { return 1; }
 int season_intl_finals_busy(int conf, int y, int doy) { (void)conf, (void)y, (void)doy; return 0; }
 int season_gold_cup_busy(int y, int doy) { (void)y, (void)doy; return 0; }
 long season_abs_day(int y, int m, int d) { return (long)y * 372 + m * 31 + d; }

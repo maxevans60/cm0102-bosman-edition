@@ -424,7 +424,8 @@ if(NOT WIN32)
     add_executable(season_part_test tests/seasons/test_season_part.c
         src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_years.c
         src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c
-        src/recomp_rt/win/caps_wide.c src/recomp_rt/win/season_intl_marks.c)
+        src/recomp_rt/win/caps_wide.c src/recomp_rt/win/season_intl_marks.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_part COMMAND season_part_test)
     # The key competition check of a load (0.6.1 item 10): the names of the player's cm0102.exe and its Data.
@@ -442,18 +443,21 @@ if(NOT WIN32)
     # The row A18 list of the season part (0.6.1 item 4): its write keeps inside its size.
     add_executable(season_friendly_part_test tests/seasons/test_season_friendly_part.c
         src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c
-        src/recomp_rt/win/season_tie_legs.c)
+        src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_friendly_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_friendly_part COMMAND season_friendly_part_test)
     # The days a qualifier may take (0.6.2 item 168): only a national side of its nation takes the day.
     add_executable(season_side_busy_test tests/seasons/test_season_side_busy.c
         src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c
-        src/recomp_rt/win/season_tie_legs.c)
+        src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_side_busy_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_side_busy COMMAND season_side_busy_test)
     # The snap of a qualifier to a FIFA day (open item 79): no two matches of a side on one day.
     add_executable(season_fifa_snap_test tests/seasons/test_season_fifa_snap.c src/recomp_rt/win/season_friendly_dates.c
-        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c)
+        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_fifa_snap_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_fifa_snap COMMAND season_fifa_snap_test)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
