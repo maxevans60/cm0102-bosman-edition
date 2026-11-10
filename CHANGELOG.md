@@ -19,6 +19,8 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 - Kick: while you host, the Network tab lists the human managers online with their club and ping, and a Kick button for each. Their club goes on holiday.
 - Drop in and drop out: when a human manager leaves or loses the connection, they show as Away, and their club goes on holiday as in the original. They join again and take their club back with their manager password.
 - When the host quits, the host's game saves, and each human manager sees "The host left the game." and goes back to the start screen.
+- A host that quits leaves the online game list at once.
+- A host in widescreen, the default, no longer breaks the screens of every human manager who joins. The game sends every network screen position at the original's 800x600 size, so any mix of classic and widescreen works, with the drag on the tactics screen too.
 - Always-on games: a host can leave a game open for a long time. It moves forward only when a human manager clicks Continue.
 - Clear errors: each failure says what went wrong and what to do next, in place of "The network game could not be created" or a wait at "Contacting Server". A player on another version sees the host's version.
 - Connection test: a Test button on the Network tab checks the lobby and the relay, and says that online play works or what is wrong.
