@@ -99,6 +99,7 @@ def main(argv):
         if not ok:
             failed.append(text)
 
+    watch = nr.AddressWatch(nr.lan_address())   # item 216: the network must keep the run's address
     folders = {}
     for host_display in ("classic", "widescreen"):
         for join_display in ("classic", "widescreen"):
@@ -124,6 +125,7 @@ def main(argv):
             share = pitch_share(dump(a, name), dump(b, name), join_display)
             check(share == 0, f"joiner {join_display}, {name}: the pitch is the same under a classic and a widescreen "
                               f"host ({share:.2%} differs)")
+    nr.check_address(check, watch)
     print(f"network drag run: {'PASS' if not failed else 'FAIL (' + str(len(failed)) + ')'}")
     return 1 if failed else 0
 
