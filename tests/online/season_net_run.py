@@ -563,6 +563,7 @@ def main(argv):
         if not ok:
             failed.append(what)
 
+    watch = nr.AddressWatch(o["address"])   # item 216: the network must keep the run's address
     lobby_proc, stop = None, threading.Event()
     o["lobby"] = arg(argv, "--lobby-url")
     if not o["lobby"]:
@@ -642,6 +643,7 @@ def main(argv):
     print(f"     international log lines on the World Cup and the Euros: {len(intl)}")
     for line in intl[:6]:
         print("     " + line[:160])
+    nr.check_address(check, watch)
     verdict = "FAIL" if failed else "PASS" if o["host_left"] and end and o["via"] == "relay" else "STAGE"
     print(f"run: {(time.time() - o['t0']) / 60:.0f} min, folder {o['keep']}")
     print(f"season run: {verdict}" + (f" ({len(failed)})" if failed else ""))

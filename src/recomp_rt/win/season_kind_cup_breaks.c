@@ -352,6 +352,21 @@ RT_WRAP(005aa680, cup_breaks_add_fixture)
     fixture_season_end_add_fixture();
 }
 
+/* Cup::create_tie_fixtures 0x51cb90, thiscall (round, tie or -1, defer) ret 0xc: the snap reads the round record
+ * of the legs it stores (item 207, season_fifa_tie_begin). It does not call itself, but a nested call keeps the
+ * outer cup and round. */
+void season_fifa_tie_begin(uint32_t cup, int round, uint32_t *saved_cup, int *saved_round);
+void season_fifa_tie_end(uint32_t cup, int round);
+void o_0051cb90(void);
+RT_WRAP(0051cb90, cup_create_tie_fixtures)
+{
+    uint32_t outer_cup;
+    int outer_round;
+    season_fifa_tie_begin(cpu.ecx, (int16_t)rt_arg(0), &outer_cup, &outer_round);
+    o_0051cb90();
+    season_fifa_tie_end(outer_cup, outer_round);
+}
+
 static void breaks_new_game(int start_year)
 {
     (void)start_year;

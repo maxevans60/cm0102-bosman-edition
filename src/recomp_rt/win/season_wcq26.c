@@ -31,6 +31,7 @@
 #include "season_nl.h"
 #include "season_wcq26.h"
 #include "season_ofc_first.h"
+#include "season_concacaf26.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -259,6 +260,9 @@ static int places_of(uint32_t self, int conf, int *hosts_out)
     }
     return direct[conf];
 }
+
+/* The direct places of CONCACAF for the 2026 shape (season_concacaf26.c, item 214). */
+int season_wcq26_concacaf_places(uint32_t self) { return places_of(self, WCQ_CONCACAF, NULL); }
 
 /* ---- South America ---- */
 
@@ -1282,7 +1286,9 @@ static int tournament_six(uint32_t self, uint32_t six[6])
     /* CONCACAF with no host (2030, after the table): all six of the final group qualify, its two places go to
      * the best thirds of the semi-final groups. With one host the sixth and the best third. */
     int cc_hosts = conf_hosts(self, CONTINENT_NORTH_AMERICA);
-    if (cc_hosts == 0) {
+    if (season_cc26_tournament(comp_of(KEY_CONCACAF), t + 2)) {
+        /* item 214: the 2026 shape, the best two after the direct places of the third round */
+    } else if (cc_hosts == 0) {
         concacaf_thirds(t + 2);
     } else if (cc_hosts == 1) {
         uint32_t thirds[2];
@@ -1293,7 +1299,7 @@ static int tournament_six(uint32_t self, uint32_t six[6])
     t[4] = africa_runner_up();
     if (rt_unwinding) return 0;
     t[5] = cup_row(stage_of(comp_of(KEY_ASIA), 11), 1);                      /* the AFC play-off winner */
-    if (logging()) {                                    /* test log: the CONCACAF final group and its statuses */
+    if (logging() && !season_cc26_on(comp_of(KEY_CONCACAF))) {  /* test log: the CONCACAF final group, statuses */
         uint32_t fg = stage_of(comp_of(KEY_CONCACAF), 6), rows = readable(fg) ? rd32(g_mem, fg + F_TABLE) : 0;
         int n = readable(fg) ? (int16_t)rd16(g_mem, fg + F_TEAMS) : 0;
         fprintf(stderr, "recomp: season intl: wc play-off %d: CONCACAF final group of %d:", year_of(self) + 2, n);

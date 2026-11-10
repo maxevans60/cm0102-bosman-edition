@@ -60,6 +60,12 @@ checks 7 and 10 and:
    11  each joiner joined through the relay and the host held one relay connection; the relay lines of the
        host's log give the frames that it sent (batches of about 50 ms)
 
+--display H,J (0.7.0 item 212) puts the host in mode H and every joiner in mode J (classic or widescreen: Classic mode,
+Widescreen mode; default classic,classic). When they differ, checks 2, 3 and 5 compare each joiner's dumps with those
+of an earlier run whose host had the joiners' mode (--same-as <its --shots folder>): the host's mode must not change
+what a joiner sees. --online-off turns Online play off in every game of a LAN run, so no game talks to the lobby.
+tests/smoke/network_display_run.py runs the four combinations.
+
 --game-name <word> names the host's game (default Bosman). --remote n (with --relay and --lobby-url) runs the host only and waits --remote-wait seconds (default 1800) at
 its Enter Name for n joiners on other computers, for example the GitHub machines of
 .github/workflows/online-join.yml (tests/smoke/relay_join_remote.py). The checks are 1, 4 (the host's side, n
@@ -267,14 +273,61 @@ def lan_address():
         s.close()
 
 
+DISPLAYS = {"host": "classic", "join": "classic"}   # --display: the host's display and the joiners' (item 212)
+
+
+def is_local(address):
+    """1 when address is an address of this computer: a socket can bind to it."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.bind((address, 0))
+        return True
+    except OSError:
+        return False
+    finally:
+        s.close()
+
+
+class AddressWatch:
+    """Item 216: the games of a run meet on this computer's LAN address (Q32). When the network drops (Wi-Fi off for
+    a moment, a new DHCP lease), the system removes that address and both games lose their connection, a failure
+    of the machine and not of the game (10 November 2026: "en0 link INACTIVE", "DHCP en0: removing 192.168.0.82" at
+    02:49:18, run-logs/i212/main-checks/drag). The watch tests every half second that the address is still this
+    computer's, so a drop that brings the same address back is seen too. end() gives the reason, or "" ."""
+
+    def __init__(self, address):
+        self.address, self.lost, self.stop = address, None, threading.Event()
+        threading.Thread(target=self.watch, daemon=True).start()
+
+    def watch(self):
+        while not self.stop.wait(0.5):
+            if self.lost is None and not is_local(self.address):
+                self.lost = time.strftime("%H:%M:%S")
+
+    def end(self):
+        self.stop.set()
+        if self.lost is None and not is_local(self.address):
+            self.lost = time.strftime("%H:%M:%S")
+        if self.lost is None:
+            return ""
+        return f"the test address {self.address} went away during the run (at {self.lost}): the network changed, not the game; run again"
+
+
+def check_address(check, watch):
+    """The run's last check: the address stayed (see AddressWatch)."""
+    lost = watch.end()
+    check(not lost, lost or f"the test address {watch.address} stayed for the whole run")
+
+
 def start(program, game, work, name, steps, shots, slow=1, env_extra=None, online=True, args=()):
     user = os.path.join(work, name)
     os.makedirs(user)
+    display = DISPLAYS["host" if name == "host" or name.endswith("-host") else "join"]   # errors_run.py: "lost-host"
     with open(os.path.join(user, "settings.txt"), "w") as f:
-        f.write("display = classic\n")
+        f.write(f"display = {display}\n")
         if not online:
             f.write("online_play = off\n")
-    steps = smoke_run.scaled_steps("classic", shots, steps)
+    steps = smoke_run.scaled_steps(display, shots, steps)
     if slow != 1:   # --slow: every step time and wait limit (120 s by default) times this factor
         steps = [f"{s} {int(120000 * slow)}" if s.startswith("wait") else
                  " ".join([str(int(int(s.split()[0]) * slow))] + s.split()[1:]) for s in steps]
@@ -339,11 +392,15 @@ def main(argv):
     program, game = os.path.abspath(args[0]), os.path.abspath(args[1])
     address, shots, joiners, slow, lobby, lobby_url, relay = lan_address(), None, 1, 1.0, False, None, False
     remote, remote_wait = 0, 1800
+    same_as, online_off = None, False
     rest = args[2:]
     while rest:
         k = rest.pop(0)
         if k in ("--lobby", "--relay"):
             lobby, relay = True, relay or k == "--relay"
+            continue
+        if k == "--online-off":
+            online_off = True
             continue
         if not rest:
             print(__doc__)
@@ -365,9 +422,16 @@ def main(argv):
             remote_wait = int(v)
         elif k == "--game-name" and re.match(r"[A-Za-z0-9]{1,20}$", v):
             GAME_NAME = v
+        elif k == "--display" and re.match(r"(classic|widescreen),(classic|widescreen)$", v):
+            DISPLAYS["host"], DISPLAYS["join"] = v.split(",")
+        elif k == "--same-as":
+            same_as = os.path.abspath(v)
         else:
             print(__doc__)
             return 2
+    if online_off and (lobby or relay or remote):
+        print("--online-off is for a LAN run, not with --lobby, --relay or --remote")
+        return 2
     failed = []
 
     def check(ok, text):
@@ -375,6 +439,7 @@ def main(argv):
         if not ok:
             failed.append(text)
 
+    watch = AddressWatch(address)           # item 216: the network must keep the run's address
     # The joiners: (name, steps, environment, online play, plays the whole join).
     lobby_proc, quiet, full = None, None, None
     if lobby:
@@ -406,7 +471,7 @@ def main(argv):
                   True, False)]
         host_env = {"RECOMP_LOBBY_URL": lobby_url}
     else:
-        specs = [(f"join{n}", joiner_steps(address, n), {}, True, True) for n in range(1, joiners + 1)]
+        specs = [(f"join{n}", joiner_steps(address, n), {}, not online_off, True) for n in range(1, joiners + 1)]
         host_env = {}
     players = [x for x in specs if x[4]]
     listed = []
@@ -419,7 +484,7 @@ def main(argv):
         if lobby:
             threading.Thread(target=keep_awake, args=(lobby_url, stop), daemon=True).start()
         steps = host_steps(remote, remote_wait * 1000) if remote else host_steps(len(specs))
-        host, host_err = start(program, game, work, "host", steps, shots, slow, host_env)
+        host, host_err = start(program, game, work, "host", steps, shots, slow, host_env, not online_off)
         ready = wait_for(os.path.join(shots, "host-stderr.txt"), f"screen {NAME_BUILD}", host, 240 * slow)
         check(ready, "the host reaches its Enter Name screen with the network game made")
         procs = []
@@ -470,7 +535,20 @@ def main(argv):
             for host_shot, join_shot, what in (("host-1-name.bmp", f"{name}-1-name.bmp", "Enter Name"),
                                                 ("host-2-typed.bmp", f"{name}-2-typed.bmp", "Enter Name with the typed names"),
                                                 ("host-3-nation.bmp", f"{name}-3-nation.bmp", "Select Nationality after Next")):
-                if os.path.exists(dump(host_shot)) and os.path.exists(dump(join_shot)):
+                if DISPLAYS["host"] != DISPLAYS["join"]:
+                    # The host's screen has another size: the joiner's must equal that of a run whose host had the
+                    # joiner's display (--same-as), so the host's display does not change what a joiner sees.
+                    ref = os.path.join(same_as, join_shot) if same_as else None
+                    missing = [f for f in ([ref] if ref else []) + [dump(join_shot)] if not os.path.exists(f)]
+                    if ref and not missing:
+                        share = smoke_run.differing_share(ref, dump(join_shot))
+                        check(share <= 0.01, f"{name}'s {what} ({DISPLAYS['join']}, host {DISPLAYS['host']}) equals "
+                                             f"the same joiner's under a {DISPLAYS['join']} host: {share:.2%} of pixels "
+                                             f"differ")
+                    else:
+                        check(False, f"{name}'s {what}: " + (f"missing {', '.join(missing)}" if ref else
+                                                             "no --same-as run to compare with"))
+                elif os.path.exists(dump(host_shot)) and os.path.exists(dump(join_shot)):
                     share = smoke_run.differing_share(dump(host_shot), dump(join_shot))
                     check(share <= 0.01, f"{name}'s {what} equals the host's: {share:.2%} of pixels differ")
                 else:
@@ -542,6 +620,7 @@ def main(argv):
             if f.endswith(".bmp"):
                 subprocess.run(["sips", "-s", "format", "png", dump(f), "--out", dump(f[:-4] + ".png")],
                                capture_output=True)
+    check_address(check, watch)
     print("network run: " + ("PASS" if not failed else f"FAIL ({len(failed)})"))
     return 1 if failed else 0
 

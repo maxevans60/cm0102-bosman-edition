@@ -30,18 +30,26 @@
 #define TYPE_COUNT 0xb64738u
 #define CLUB_SIZE 0x245u
 #define F_DAY_LIST 0x005ae6a0u
+#define F_FINALS 0x0076d940u
 #define CREATE_CALL 0x00683a5au           /* the return address of League::create_fixtures' add_fixture call */
 
 Cpu cpu;
 uint8_t *g_mem;
 int rt_unwinding;
 void o_005cc510(void) {}
+static int tv_moves;                               /* calls of the original TV move */
+void o_00685640(void) { tv_moves++; cpu.esp += 8; }
 int season_start_year(void) { return 2025; }
 int season_game_changes(void) { return 1; }
+int season_changing_rules(void) { return 1; }
 int season_intl_finals_busy(int conf, int y, int doy) { (void)conf, (void)y, (void)doy; return 0; }
 int season_gold_cup_busy(int y, int doy) { (void)y, (void)doy; return 0; }
 long season_abs_day(int y, int m, int d) { return (long)y * 372 + m * 31 + d; }
 int season_conmebol_real_day(long z) { (void)z; return 0; }
+void season_from_abs_day(long z, int *y, int *m, int *d)
+{
+    *y = (int)(z / 372), *m = (int)(z % 372 / 31), *d = (int)(z % 31);
+}
 
 static const int month_days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};   /* 2045, not a leap year */
 
@@ -93,9 +101,12 @@ static void store(uint32_t fix, int doy)
     wr32(g_mem, last, node);
 }
 
+static int finals;                                 /* what national_teams_is_finals_comp answers */
+
 uint32_t rt_callback(uint32_t target, int nargs, const uint32_t *args)
 {
     (void)nargs;
+    if (target == F_FINALS) return rd32(g_mem, args[0]) == 900 ? (uint32_t)finals : 0xdead;
     if (target != F_DAY_LIST || args[1] || args[2]) return 0;
     int doy = (int16_t)rd16(g_mem, args[0]), y = (int16_t)rd16(g_mem, args[0] + 2);
     for (int i = 0; i < list_n && y == 2045; i++)
@@ -104,6 +115,7 @@ uint32_t rt_callback(uint32_t target, int nargs, const uint32_t *args)
 }
 
 void season_fifa_snap_fixture(uint32_t fix, uint32_t ret);
+void f_00685640(void);
 
 static int failures;
 
@@ -143,6 +155,7 @@ static void world(void)
     for (int i = 0; i < 4; i++) strcpy((char *)g_mem + side(i) + 4, names[i]);
     strcpy((char *)g_mem + 0x00e00004u, "FIFA World Cup qualification (UEFA)");
     wr32(g_mem, 0x00e00000u, 900);
+    wr32(g_mem, 0x00ae2378u, 2000);                    /* the competition count: ids from 1873 are friendlies (0x5c6710) */
     wr16(g_mem, GAME_DATE, 340);                       /* 7 December 2044: the groups are made */
     wr16(g_mem, GAME_DATE + 2, 2044);
     g_mem[TYPE_COUNT] = 2;
@@ -182,6 +195,37 @@ int main(void)
     d = (int16_t)rd16(g_mem, f + 0x2a);
     snprintf(text, sizeof text, "Albania v Turkiye made for day 319 beside England v Luxembourg: day %d (kept)", d);
     check(d == 319, text);
+
+    /* Item 205: League::move_fixtures_for_tv 0x685640 moves no fixture of a league of national sides that is not a
+     * finals competition (the OFC groups of 2033 lost their April days to it). The league: the competition record
+     * 0x00e00000 (id 900) at +4, a host stadium id at +0x24 (not read), and a table (+0xb1, count +0x3e) of the
+     * four sides. A finals competition, a table with a club side, or the start season keeps the original's move. */
+    static const struct { int nations, finals, year, moves; const char *what; } tv[] = {
+        {2, 0, 2044, 0, "a qualifying group of four national sides: no TV move"},
+        {2, 1, 2044, 1, "a finals competition of four national sides: the TV move"},
+        {1, 0, 2044, 1, "a table with club sides (only the last two clubs are national sides): the TV move"},
+        {2, 0, 2024, 1, "a qualifying group in a season before the start (keeps_original): the TV move"},
+    };
+    for (unsigned k = 0; k < sizeof tv / sizeof tv[0]; k++) {
+        world();
+        wr32(g_mem, NATION_COUNT, (uint32_t)tv[k].nations);
+        wr16(g_mem, GAME_DATE + 2, (uint16_t)tv[k].year);
+        finals = tv[k].finals;
+        uint32_t league = 0x00e30000u, table = 0x00e31000u;
+        wr32(g_mem, league + 4, 0x00e00000u);
+        wr32(g_mem, league + 0x24, 7);
+        wr16(g_mem, league + 0x3e, 4);
+        wr32(g_mem, league + 0xb1, table);
+        for (int i = 0; i < 4; i++) wr32(g_mem, table + 0x3bu * (uint32_t)i, side(i));
+        tv_moves = 0;
+        cpu.ecx = league;
+        cpu.esp -= 8;                                  /* the return address and the Date * */
+        uint32_t esp = cpu.esp;
+        f_00685640();
+        snprintf(text, sizeof text, "%s (%d calls of the original, esp +%d)", tv[k].what, tv_moves,
+                 (int)(cpu.esp - esp));
+        check(tv_moves == tv[k].moves && cpu.esp == esp + 8, text);
+    }
 
     free(g_mem);
     printf("%s\n", failures ? "FAIL" : "PASS");

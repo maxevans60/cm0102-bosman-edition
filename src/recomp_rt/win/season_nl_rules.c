@@ -23,6 +23,65 @@ const SeasonNlEdition *season_nl_first(const char *confed, int s)
     return NULL;
 }
 
+/* Item 209 (season_nl.h). */
+int season_nl_held_after(const char *confed, int last, int year, int (*wc)(int))
+{
+    if (!confed || year <= last) return 0;
+    if (!strcmp(confed, "CONCACAF") && wc) return !wc(year + 1) && !wc(year + 2);
+    return (year - last) % 2 == 0;
+}
+
+int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int))
+{
+    for (int y = (year < last ? last : year) + 1; y <= year + 8; y++)
+        if (season_nl_held_after(confed, last, y, wc)) return y;
+    return 0;
+}
+
+const SeasonNlEdition *season_nl_draw_of(const char *confed, int year, int (*wc)(int))
+{
+    const SeasonNlEdition *last = NULL, *same = NULL;
+    for (int i = 0; confed && i < season_nl_edition_count; i++) {
+        const SeasonNlEdition *e = &season_nl_editions[i];
+        if (strcmp(e->confed, confed)) continue;
+        last = e;
+        if (wc && !wc(e->year) == !wc(year)) same = e;
+    }
+    return confed && !strcmp(confed, "CONCACAF") && same ? same : last;
+}
+
+/* Days from 1 January 1970 of a date (the civil calendar), for the gaps below. */
+static long nl_days(int y, int m, int d)
+{
+    y -= m <= 2;
+    long era = (y >= 0 ? y : y - 399) / 400;
+    long yoe = y - era * 400, doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1;
+    return era * 146097 + yoe * 365 + yoe / 4 - yoe / 100 + doy - 719468;
+}
+
+/* Item 215 (season_nl.h). */
+int season_nl_late_window(const char *confed, int y, int m, int d)
+{
+    const SeasonNlEdition *prev = NULL;
+    long day = nl_days(y, m, d);
+    for (int i = 0; confed && i < season_nl_edition_count; i++) {
+        const SeasonNlEdition *e = &season_nl_editions[i];
+        if (strcmp(e->confed, confed)) continue;
+        long draw = nl_days(e->year + e->draw.year, e->draw.month, e->draw.day);
+        if (prev) {
+            long after = nl_days(prev->year + prev->final.year, prev->final.month, prev->final.day) + 1;
+            if (after > draw) draw = after;
+        }
+        prev = e;
+        if (draw < day - NL_FRIENDLY_AHEAD) continue;
+        for (int k = 0; k < 6; k++) {
+            long md = nl_days(e->year + e->md[k].year, e->md[k].month, e->md[k].day);
+            if (e->md[k].month && labs(md - day) <= NL_FRIENDLY_NEAR) return 1;
+        }
+    }
+    return 0;
+}
+
 /* The table is sorted by confederation, then season (make_nl.py). */
 const SeasonNlEdition *season_nl_after(const SeasonNlEdition *e)
 {

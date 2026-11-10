@@ -25,6 +25,7 @@ int rt_unwinding;
 uint32_t rt_callback(uint32_t target, int nargs, const uint32_t *args) { (void)target, (void)nargs, (void)args; return 0; }
 uint32_t win_static_alloc(uint32_t size) { (void)size; return 0; }
 void o_005cc510(void) {}
+void o_00685640(void) {}
 void o_005d5ae0(void) {}
 void o_0060efd0(void) {}
 void o_0077bc80(void) {}
@@ -41,6 +42,10 @@ int season_fifa_day(int y, int m, int want) { (void)y, (void)m; return want; }
 int season_intl_finals_busy(int conf, int y, int doy) { (void)conf, (void)y, (void)doy; return 0; }
 long season_abs_day(int y, int m, int d) { return (long)y * 372 + m * 31 + d; }
 int season_conmebol_real_day(long z) { (void)z; return 0; }
+void season_from_abs_day(long z, int *y, int *m, int *d)
+{
+    *y = (int)(z / 372), *m = (int)(z % 372 / 31), *d = (int)(z % 31);
+}
 int season_gold_cup_busy(int y, int doy) { (void)y, (void)doy; return 0; }
 const SeasonCompClass season_comp_classes[1];
 const int season_comp_class_count = 0;

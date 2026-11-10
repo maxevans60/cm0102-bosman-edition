@@ -64,6 +64,7 @@
 #include "season_wcq26.h"
 #include "season_uefa_days.h"
 #include "season_conmebol_days.h"
+#include "season_concacaf26.h"
 #include "season.h"
 
 #include <stdio.h>
@@ -596,12 +597,19 @@ RT_WRAP(00920590, wcq_conmebol_schedule)
 }
 
 /* WcConcacafCup::create_round_table, thiscall (stage, short *round_count, short *, int *) ret 0x10: the final
- * group, stage 6. */
+ * group, stage 6; the first round of the 2026 shape for stage -1 (season_concacaf26.c). */
 RT_WRAP(00914de0, wcq_concacaf_rounds)
 {
     uint32_t self = cpu.ecx, stage = rt_arg(0) & 0xffu, count = rt_arg(1);
     o_00914de0();
-    if (rt_unwinding || stage != 6u || !readable(count)) return;
+    if (rt_unwinding) return;
+    if (stage == 0xffu) {                                /* item 214: the first round of the 2026 shape */
+        uint32_t eax = cpu.eax;
+        season_cc26_round_table(self, -1, eax, count);
+        if (!rt_unwinding) cpu.eax = eax;
+        return;
+    }
+    if (stage != 6u || !readable(count)) return;
     uint32_t eax = cpu.eax;
     end_by_october(self, eax, (int16_t)rd16(g_mem, count), "the CONCACAF final group");
     cpu.eax = eax;

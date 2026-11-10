@@ -1355,6 +1355,16 @@ int win_list_files(const char *folder, const char *mask, void (*each)(const char
     return n;
 }
 
+/* Open item 192 (history_trim.c): deletes the user-folder file of a Windows path, as DeleteFileA does for a file that
+ * is not a save. 1 when a file was deleted. */
+int win_delete_file(const char *winpath)
+{
+    char h[2048], u[2048];
+    if (!win_paths(winpath, h, u, sizeof h) || !exists(u)) return 0;
+    keep_drop(NULL);                                /* item 151: a kept name may now give another file */
+    return host_unlink(u) == 0;
+}
+
 int win_create_file(const char *winpath)
 {
     char h[2048], u[2048];

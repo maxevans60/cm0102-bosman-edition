@@ -507,6 +507,7 @@ void rt_caf_pool(uint32_t self, uint32_t found);
 uint32_t rt_caf_first(uint32_t self, uint32_t original);
 uint32_t rt_caf_group_size(uint32_t self, uint32_t original);
 uint32_t rt_caf_band(uint32_t self, uint32_t stage, uint32_t position);
+uint32_t rt_caf_round_date(uint32_t self, int round, int which, uint32_t original);
 uint32_t rt_wcq26_asia_direct(uint32_t self, uint32_t original);
 uint32_t rt_wcq26_asia_direct_b(uint32_t self, uint32_t current);
 uint32_t rt_wcq26_asia_playoff_row(uint32_t self, int g, uint32_t original);
@@ -594,6 +595,15 @@ uint32_t rt_full_player_search_shown(uint32_t passed);
 uint32_t rt_groups_cells(uint32_t esp);
 uint32_t rt_groups_table(void);
 uint32_t rt_groups_count(void);
+
+/* Network screens in Widescreen mode (0.7.0 item 212, win/net_scale.c, tools/recomp/net_scale.py): a coordinate of
+ * this screen as a classic one and back, and the four words of a widget move, at these addresses, widened to this
+ * screen. */
+uint32_t rt_net_classic_x(uint32_t v, int far_edge);
+uint32_t rt_net_classic_y(uint32_t v, int far_edge);
+uint32_t rt_net_screen_x(uint32_t v, int far_edge);
+uint32_t rt_net_screen_y(uint32_t v, int far_edge);
+void rt_net_rect_in16(uint32_t x1_at, uint32_t y1_at, uint32_t x2_at, uint32_t y2_at);
 
 /* Arguments and return for replacements: esp points at the return address. */
 static inline uint32_t rt_arg(int i) { return rd32(g_mem, cpu.esp + 4 + 4 * (uint32_t)i); }

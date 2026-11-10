@@ -154,6 +154,10 @@ if(NOT WIN32)
         src/recomp_rt/host/net_posix.c)
     target_include_directories(net_core_test PRIVATE src/recomp_rt src/recomp_rt/win)
     add_test(NAME net_core COMMAND net_core_test)
+    # Network screens in widescreen mode (0.7.0 item 212): the inverse of the widescreen scale is exact.
+    add_executable(net_scale_test tests/net/test_net_scale.c src/recomp_rt/win/display_scale.c)
+    target_include_directories(net_scale_test PRIVATE src/recomp_rt/win)
+    add_test(NAME net_scale COMMAND net_scale_test)
     # Online games in the game list (0.7.0 slice 4): lobby HTTP rules, JSON, game list rows, join check.
     find_package(Threads REQUIRED)
     add_executable(lobby_test tests/net/test_lobby.c src/recomp_rt/win/lobby_http.c src/recomp_rt/win/lobby.c
@@ -346,6 +350,23 @@ if(NOT WIN32)
         src/recomp_rt/win/season_fifa_days_table.c)
     target_include_directories(season_afc_first_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_afc_first COMMAND season_afc_first_test)
+    # Items 203 and 204: a qualifying stage's days planned in round order on the FIFA days.
+    add_executable(season_stage_plan_test tests/seasons/test_season_stage_plan.c
+        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c src/recomp_rt/win/season_conmebol_days.c)
+    target_include_directories(season_stage_plan_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_stage_plan COMMAND season_stage_plan_test)
+    # Item 207: both legs of a qualifying tie on the FIFA days of one window, in order.
+    add_executable(season_tie_legs_test tests/seasons/test_season_tie_legs.c
+        src/recomp_rt/win/season_tie_legs.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_tie_legs_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_tie_legs COMMAND season_tie_legs_test)
+    add_executable(season_concacaf26_days_test tests/seasons/test_season_concacaf26_days.c
+        src/recomp_rt/win/season_concacaf26_days.c src/recomp_rt/win/season_uefa_days.c
+        src/recomp_rt/win/season_fifa_days_table.c)
+    target_include_directories(season_concacaf26_days_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_concacaf26_days COMMAND season_concacaf26_days_test)
     add_executable(youth_pool_test tests/seasons/test_youth_pool.c src/recomp_rt/win/youth_pool_rule.c)
     target_include_directories(youth_pool_test PRIVATE src/recomp_rt/win)
     add_test(NAME youth_pool COMMAND youth_pool_test)
@@ -402,7 +423,9 @@ if(NOT WIN32)
     # The whole season part of a save (0.6.1 items 4 and 10): its write keeps inside its size.
     add_executable(season_part_test tests/seasons/test_season_part.c
         src/recomp_rt/win/season_change.c src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_years.c
-        src/recomp_rt/win/caps_wide.c src/recomp_rt/win/season_intl_marks.c)
+        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/caps_wide.c src/recomp_rt/win/season_intl_marks.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_part COMMAND season_part_test)
     # The key competition check of a load (0.6.1 item 10): the names of the player's cm0102.exe and its Data.
@@ -419,16 +442,22 @@ if(NOT WIN32)
     add_test(NAME season_nation COMMAND season_nation_test)
     # The row A18 list of the season part (0.6.1 item 4): its write keeps inside its size.
     add_executable(season_friendly_part_test tests/seasons/test_season_friendly_part.c
-        src/recomp_rt/win/season_friendly_dates.c)
+        src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c
+        src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_friendly_part_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_friendly_part COMMAND season_friendly_part_test)
     # The days a qualifier may take (0.6.2 item 168): only a national side of its nation takes the day.
     add_executable(season_side_busy_test tests/seasons/test_season_side_busy.c
-        src/recomp_rt/win/season_friendly_dates.c)
+        src/recomp_rt/win/season_friendly_dates.c src/recomp_rt/win/season_stage_plan.c
+        src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_side_busy_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_side_busy COMMAND season_side_busy_test)
     # The snap of a qualifier to a FIFA day (open item 79): no two matches of a side on one day.
-    add_executable(season_fifa_snap_test tests/seasons/test_season_fifa_snap.c src/recomp_rt/win/season_friendly_dates.c)
+    add_executable(season_fifa_snap_test tests/seasons/test_season_fifa_snap.c src/recomp_rt/win/season_friendly_dates.c
+        src/recomp_rt/win/season_stage_plan.c src/recomp_rt/win/season_tie_legs.c
+        src/recomp_rt/win/season_nl_rules.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_fifa_snap_test PRIVATE src/recomp_rt/win src/recomp_rt)
     add_test(NAME season_fifa_snap COMMAND season_fifa_snap_test)
     add_test(NAME season_encode_rules COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/test_encode_rules.py")
@@ -451,6 +480,8 @@ if(NOT WIN32)
     add_test(NAME future_competitions COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/competitions_check.py")
     # The run set and its release check (0.6.2 slice 15), without a game: tests/seasons/future/run_set_test.py.
     add_test(NAME future_run_set COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/run_set_test.py")
+    # The network scripts watch the address their games meet on (item 216): tests/smoke/address_watch_test.py.
+    add_test(NAME address_watch COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/smoke/address_watch_test.py")
     # A rules report run with --year and no --database plays the season database of its expected files (item 129).
     add_test(NAME rules_report_database COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/rules_report_database_check.py")
     # The club_list check of the rules report prints its lines (0.6.2 open item 142).

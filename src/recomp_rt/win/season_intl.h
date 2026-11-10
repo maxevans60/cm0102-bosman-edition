@@ -140,6 +140,8 @@ int season_intl_shift_now(void);               /* the shift that the template's 
 /* Inside the template of a knockout (season_intl_cups.c): the whole weeks by which the knockout must move so that
  * its first date (day, month from 0, weekday flag of Date::Date) comes 3 or more days after today. */
 int season_intl_rest_delay(const char *file, int year, int day, int month0, int weekday);
+/* The venue flags of a group that takes another group's template (season_intl_cups.c, 0.6.2 item 217). */
+void season_intl_twin_venues(uint32_t rec, uint32_t rounds_out);
 
 /* Moves a date (day 1 to 31, month from 0, year) by shift days. */
 void season_intl_shift_date(int shift, int *day, int *month0, int *year);

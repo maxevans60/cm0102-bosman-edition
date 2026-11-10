@@ -216,6 +216,7 @@ uint32_t season_intl_copa_template(void (*original)(void))
     season_intl_shift_more(-delay);
     if (rt_unwinding) return cpu.eax;
     if (idx < KO && mapped != idx && readable(out_id)) wr16(g_mem, out_id, (uint32_t)(idx + 0x420));
+    if (idx < KO && mapped != idx) season_intl_twin_venues(cpu.eax, rd32(g_mem, sp + 8u));
     return cpu.eax;
 }
 

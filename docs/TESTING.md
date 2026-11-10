@@ -95,6 +95,8 @@ Saves can now be up to 4 GB. A save that would be larger stops with a clear mess
 
 A save holds at most 999 parts. The game keeps a temporary file for each season, so the temporary files of one type go into one merged part. `tests/seasons/save_parts_run.py fill` adds temporary files until a save holds 990 and 999 parts, then saves and loads twice. Each save must hold at most 200 parts and every added file. `tests/seasons/save_parts_run.py old` loads a save of 0.6.0, 0.6.1 or an earlier 0.6.2 build, saves and loads twice, and checks that every temporary file of the old save is still there. These checks run at the merge of a save change.
 
+Every game keeps the club records history and the fixtures of the last 50 seasons (open item 192), so a game with all nations stays below 4 GB to 2300. `tests/seasons/history_trim_run.py` loads a Tier A save of July 2061 and plays one season. Each club's list must then hold at most 50 seasons in order, the history file may grow only for clubs with fewer than 50, the Club History list of every club must build, and the save must hold the fixtures of the last 50 years and no older ones. The check runs at the merge of a change to these files. The same-save run `history-keep-all` turns the trim off.
+
 ## Screen sweeps and smoke screenshots
 
 The screen sweep opens the tables, results, fixtures, schedule and history of every competition, once each season. The data sweep reads each competition from memory at the start and end of each season. It looks for dates outside the season and for empty tables where the rules give clubs. The scripts are `tests/seasons/screen_sweep_run.py` and `tests/seasons/data_sweep_run.py`. They run at each release.
@@ -104,6 +106,10 @@ The smoke test plays a fixed set of clicks through the main screens in the class
 ## Online play
 
 Network games (0.7.0) have their own tests. The two-game run (`tests/smoke/network_run.py`) starts a host game and joining games on this Mac with timed clicks, and compares the joiners' screens with the host's. It runs at each change of the network code, also under wine with the Windows build. The server tests in `server/` run against a local copy of the lobby and relay.
+
+Every coordinate on the network is a classic one (item 212), so a host and a joiner may use different modes. `tests/smoke/network_display_run.py` plays the two-game run four times, with the host and the joiner each in Classic mode or Widescreen mode. When both use the same mode, the joiner's screens must equal the host's. When they differ, the joiner's screens must equal those of the run whose host used the joiner's mode. `tests/smoke/network_drag_run.py` plays four games of its own in the same four pairs of modes, to the first news. The joiner drags a player on its tactics screen. The player must move to the place of the drop, and the pitch after the drag must be the same under a host in either mode. Both run at each change of the network or display code.
+
+The games of a network run meet on this Mac's LAN address. When the network drops, the system removes that address and both games lose their connection. The scripts check every half second that the address is still there, and a run in which it went away fails with "the test address went away during the run", so it is not taken for a fault of the game. ctest `address_watch` tests the check.
 
 Before the release, four release tests run (spec Q29). Their scripts are in `tests/online/`. Each script waits for room on the machine, and for any network run of another worktree to end, because two network runs on one Mac collide on port 6667. Each one adds a line to `run-logs/s9-tests/results.tsv`. While several sessions test network play, each run that hosts a network game goes through `the maintainer's notes`, which lets one host at a time use port 6667.
 

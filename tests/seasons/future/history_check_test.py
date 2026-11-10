@@ -563,6 +563,35 @@ def not_held_rule():
     return bad
 
 
+def euro_holders_rule():
+    """euro-place (open item 206): a title holder's league phase place counts above the European Performance Spot.
+    The 2030/31 Premier League of pass 4b (a2021s1, July 2031): 1st to 4th by the list, 5th Birmingham City (Europa
+    League holder) and 6th Leicester City (Champions League holder) by Art. 3.03, and 7th Port Vale by the spot of
+    Art. 3.08 (the highest club of those that do not qualify for the league phase): no fault. The pass 2b case
+    (ec04eb89: 5th and 6th with Europa and Conference League places, 8th with a Champions League place) stays a
+    fault."""
+    import types
+    sys.path.insert(0, HERE)
+    import history_check as hc
+    rules = types.SimpleNamespace(key=lambda n: {"CL": "uefa_cl", "EL": "uefa_el"}.get(n))
+    comps = {1: {"kind": "club", "name": "League", "nation": 0, "level": 20},
+             2: {"kind": "club", "name": "CL", "nation": -1, "level": 0},
+             3: {"kind": "club", "name": "EL", "nation": -1, "level": 0}}
+
+    def game(marks, rows):
+        return types.SimpleNamespace(date=(2031, 205), comps=comps, rows=rows, nations={0: ("England", "UEFA")},
+                                     clubs={c: (f"Club {c}", 0) for c in marks},
+                                     divisions={c: (1, 1, m, p) for c, (m, p) in marks.items()})
+    bad = []
+    real = game({c: (2, c) for c in range(1, 8)} | {8: (3, 8)}, [(2, 2031, 6, 9), (3, 2031, 5, 10)])
+    if hc.euro_places(real, rules):
+        bad.append(f"euro-place: 7th behind two title holders is a fault: {hc.euro_places(real, rules)}")
+    old = game({1: (2, 1), 2: (2, 2), 3: (2, 3), 4: (2, 4), 5: (3, 5), 6: (3, 6), 8: (2, 8)}, [])
+    if [f[3] for f in hc.euro_places(old, rules)] != ["Club 8 (England): a place from position 8 of League"]:
+        bad.append(f"euro-place: 8th behind clubs of the Europa League is no fault: {hc.euro_places(old, rules)}")
+    return bad
+
+
 def olympics_rule():
     """duty-clash and the Olympics (open item 107): an Olympic match of the under-21 sides is a fault only when a club
     with a player in it keeps fewer than 11 players it can field (not on duty, at the club, not injured), counted
@@ -933,6 +962,16 @@ def main():
     got = [(y, len(t)) for y, _, _, t in history_check.editions_of(days)]
     if got != [(2030, 12), (2030, 4)]:
         bad.append(f"editions of a cup with a final after a group day: {got}, not [(2030, 12), (2030, 4)]")
+    # Open item 201: a World Cup qualifying whose groups of 5 play March and June and whose groups of 4 join in
+    # September. One match of the last June day moved 3 days later (the Club World Cup took its FIFA day), then 106
+    # days with no match. One edition: a lone match up to 3 days after a day of more than two matches is a moved
+    # group match, not a final.
+    j = datetime.date(2033, 6, 12).toordinal()
+    days = [(j - 80, 0, 1), (j - 80, 2, 3), (j - 3, 0, 2), (j - 3, 1, 3), (j, 0, 3), (j, 1, 4), (j, 2, 5), (j + 3, 4, 5)]
+    days += [(j + 109, 6, 7), (j + 109, 8, 9), (j + 109, 0, 1), (j + 112, 6, 8)]
+    got = [(y, len(t)) for y, _, _, t in history_check.editions_of(days)]
+    if got != [(2033, 10)]:
+        bad.append(f"editions of a qualifying with one June match moved: {got}, not [(2033, 10)]")
     # Open item 45: the OFC Nations Cup of 2008, one group of 4 home and away on 17 and 21 November 2007, 14 and 21
     # June, 6 and 10 September 2008 (a pause of 206 days), then the next edition of the same 4 teams in 2012, with a
     # pairing of 2008. One edition each.
@@ -1018,6 +1057,7 @@ def main():
     bad += duty_dates_rule()
     bad += start_season_rule()
     bad += not_held_rule()
+    bad += euro_holders_rule()
 
     for b in bad:
         print("FAIL  " + b)

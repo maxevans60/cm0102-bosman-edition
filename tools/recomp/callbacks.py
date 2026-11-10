@@ -23,6 +23,10 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # Open item 192 (history_trim.c, not in CALLBACK_FILES: it compares return addresses of the calls of add_node
+    # 0x58e340 and set_year 0x5aa2d0): the test of the Club History lists.
+    0x450D50: ("81ec08020000538b", "Club_Records::build_history_list (this, club, &count), ret 8: the test of the list"),
+    0x9452CA: ("558bec51568b7508", "free (block), cdecl"),
     # O288 (fixture_season_end.c, not in CALLBACK_FILES: it compares return addresses of 0x5abb10's calls): the free
     # day before a season change for a match moved for a call-up.
     0x549EF0: ("668b442404568b74", "Date::Date (day of the year, year), ret 8"),
