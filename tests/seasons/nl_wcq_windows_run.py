@@ -20,7 +20,10 @@ matches (September to November) in 2027, 2030 and 2031 and none in 2028, 2029 an
 September to November holds matches of both the Nations League and the World Cup qualifying (CONCACAF), and no
 Nations League match (the March finals too) is within 3 days of a qualifier of the same side; and from 2027 on the
 snap moves no Nations League match to a day that is not a FIFA day (a draw less than 12 weeks before the first
-matchday met the friendlies of the window, 0x5cbb00: 29 such moves in 2031 before the draw fix). On the
+matchday met the friendlies of the window, 0x5cbb00: 29 such moves in 2031 before the draw fix), nor from 2022 on (item 215: in 2023 the game draws 2023-24 on 19 June, after the
+2022-23 final, and the friendlies of 5 September were made on 13 June, so 11 matches of 7 September moved; real
+draw 16 May 2023, before the finals of 15 and 18 June); and the record takes the names "2023-24" and "2024-25"
+before 1 September of those years. On the
 code before item 209 the 2028 and 2032 editions are played and share the autumn of 2032 with the qualifying: the
 test fails there.
 
@@ -44,6 +47,7 @@ DATABASES = "/Users/max/Projects/cm0102/test-fixtures/databases"
 START = datetime.date(2021, 7, 1)
 END = datetime.date(2032, 11, 30)
 FROM = 2027                    # the first year after the table (last edition 2026-27)
+OFF_FROM = 2022                # item 215: the off-FIFA moves from the first edition in the leg (2022-23) on
 HELD = (2027, 2030, 2031)
 NOT_HELD = (2028, 2029, 2032)
 NL = "CONCACAF Nations League"
@@ -111,21 +115,49 @@ def check(save):
 
 
 def off_fifa(stderr):
-    """Nations League matches from FROM on that the snap moves to a day that is not a FIFA day. Friendlies are made
-    12 weeks ahead (0x5cbb00): an edition drawn later than that meets them and moves off the window."""
+    """Nations League matches from OFF_FROM on that the snap moves to a day that is not a FIFA day. Friendlies are
+    made 12 weeks ahead (0x5cbb00): an edition drawn later than that meets them and moves off the window. The log
+    line names the competition by its name of that day, which before the season's change on its entry day can
+    still be the edition before ("2022-23 CONCACAF Nations League" at the 2023-24 draw of 19 June 2023)."""
     moves = collections.Counter()
     try:
         with open(stderr, encoding="latin-1") as f:
             for line in f:
-                if "intl dates: " + NL in line and "(not a FIFA day" in line:
+                if NL + " " in line and "intl dates: " in line and "(not a FIFA day" in line:
                     y = int(line.split(" of ")[-1].split()[0])
-                    if y >= FROM:
+                    if y >= OFF_FROM:
                         moves[y] += 1
     except OSError:
         return ["no stderr.txt"]
     print("      Nations League moves off the FIFA days: " + (", ".join(f"{y} {n}" for y, n in sorted(moves.items()))
                                                           or "none"))
     return [f"Nations League matches moved off the FIFA days: {sum(moves.values())}"] if moves else []
+
+
+def renamed(stderr):
+    """Item 215: the record takes the name of each table edition (2023-24 and 2024-25) before the first matchday
+    of its league phase (7 and 5 September): the rename news of the entry's season change (season_comps.c
+    comps_after) on a day of the edition's year before 1 September."""
+    want = {f"{y}-{(y + 1) % 100:02d} {NL}": y for y in (2023, 2024)}
+    day, seen, fails = None, {}, []
+    try:
+        with open(stderr, encoding="latin-1") as f:
+            for line in f:
+                if "season change: entry " in line and " on day " in line:
+                    w = line.split(" on day ")[1].split()
+                    day = (int(w[2]), int(w[0]))
+                elif "season change: news " in line and "is now called" in line:
+                    for name in want:
+                        if line.rstrip().endswith("is now called " + name + ".") and name not in seen:
+                            seen[name] = day
+    except OSError:
+        return ["no stderr.txt"]
+    for name, y in want.items():
+        d = seen.get(name)
+        print(f"      {name}: named on " + (f"day {d[1]} of {d[0]}" if d else "no day"))
+        if not d or d[0] != y or d[1] >= 243:
+            fails.append(f"{name} not named before 1 September {y}")
+    return fails
 
 
 def main(argv):
@@ -137,6 +169,7 @@ def main(argv):
     os.environ["RECOMP_TIER_A"] = "1"
     os.environ["RECOMP_SEASON_NL_LOG"] = "1"
     os.environ["RECOMP_SCREEN_LOG"] = "1"      # the move lines of the snap (season_friendly_dates.c log_move)
+    os.environ["RECOMP_SEASON_CHANGE_LOG"] = "1"   # the entry days and the rename news (renamed)
     o = {"program": program, "game": game, "rules": "on", "seed": 1, "start": 2021, "last": 2033,
          "database": os.path.join(DATABASES, "October 2021"), "nations": ["England"], "extra": [], "timeout": 7200}
     w = os.path.join(keep, "leg")
@@ -151,6 +184,7 @@ def main(argv):
     else:
         fails += check(save)
         fails += off_fifa(os.path.join(w, "stderr.txt"))
+        fails += renamed(os.path.join(w, "stderr.txt"))
     for f in fails:
         print("FAIL ", f)
     print("PASS" if not fails else f"FAILED: {len(fails)}")

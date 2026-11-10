@@ -376,6 +376,20 @@ int main(void)
         CHECK(d30 && !strcmp(d30->edition, "2026-27"), "the draw of the CONCACAF 2030 edition: that of 2026-27");
         CHECK(u28 && !strcmp(u28->edition, "2026-27"), "the draw of the UEFA 2028 edition: that of 2026-27");
     }
+    /* Item 215: the game draws CONCACAF 2023-24 on 19 June 2023, the day after the 2022-23 final (real: 16 May,
+     * before the finals of 15 and 18 June). A friendly of 5 September 2023 is arranged on 13 June, before it, and
+     * meets the first matchday (7 September); one of 14 September is arranged after the draw. */
+    CHECK(season_nl_late_window("CONCACAF", 2023, 9, 5) && season_nl_late_window("CONCACAF", 2023, 9, 10),
+          "a CONCACAF friendly of 5 or 10 September 2023 meets the late 2023-24 draw");
+    CHECK(!season_nl_late_window("CONCACAF", 2023, 9, 15) && !season_nl_late_window("CONCACAF", 2023, 10, 12) &&
+          !season_nl_late_window("CONCACAF", 2023, 11, 16),
+          "the friendlies of 15 September, 12 October and 16 November 2023 are arranged after the draw");
+    CHECK(!season_nl_late_window("CONCACAF", 2024, 9, 5) && !season_nl_late_window("CONCACAF", 2019, 9, 5),
+          "2024-25 (6 May) and 2019-20 (27 March) are drawn before their friendlies");
+    CHECK(!season_nl_late_window("UEFA", 2024, 9, 5) && !season_nl_late_window("UEFA", 2022, 6, 2) &&
+          !season_nl_late_window("UEFA", 2026, 9, 24), "UEFA draws before its friendlies");
+    CHECK(!season_nl_late_window("CONCACAF", 2031, 9, 24) && !season_nl_late_window(NULL, 2023, 9, 5),
+          "no edition after the table, no confederation");
     CHECK(season_nl_weekday(6, 9, 2018) == 3, "6 September 2018 is a Thursday");
     CHECK(season_nl_weekday(18, 10, 2026) == 6, "18 October 2026 is a Sunday");
     CHECK(season_nl_weekday(29, 2, 2020) == 5, "29 February 2020 is a Saturday");

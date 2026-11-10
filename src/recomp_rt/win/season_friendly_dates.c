@@ -54,6 +54,7 @@
 #include "season_names.h"
 #include "season_intl.h"
 #include "season_change.h"
+#include "season_nl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,10 +156,19 @@ void season_fifa_stage_end(void);
 /* A new or loaded game: also the stage bound and plan, which a create_fixtures that unwound did not end. */
 void season_friendly_dates_reset(void) { friendly_obj = 0, moved_season = -1, pending_count = 0; season_fifa_stage_end(); }
 
+/* Item 215: the confederation of the Nations League whose nations a row of continent `cont` pairs, else NULL
+ * (the key continents of 0x5ca4f0: Europe 0x9cfa10, North America 0x9cfa14). */
+static const char *nl_confed(uint32_t cont)
+{
+    if (cont == rd32(g_mem, 0x9cfa10u)) return "UEFA";
+    if (cont == rd32(g_mem, 0x9cfa14u)) return "CONCACAF";
+    return NULL;
+}
+
 static void snap_rows(uint32_t self)
 {
     uint32_t rows = rd32(g_mem, self + ROWS);
-    int count = (int32_t)rd32(g_mem, self + ROW_COUNT), moved = 0, kept = 0, dropped = 0;
+    int count = (int32_t)rd32(g_mem, self + ROW_COUNT), moved = 0, kept = 0, dropped = 0, kept_free = 0;
     if (!readable(rows) || count <= 0 || count > 400) return;
     Cpu saved = cpu;
     for (int i = 0; i < count && !rt_unwinding; i++) {
@@ -170,6 +180,20 @@ static void snap_rows(uint32_t self)
             wr32(g_mem, row + 0xc, NO_CONTINENT);
             dropped++;
             continue;
+        }
+        /* Item 215: a day that a Nations League keeps for a league phase drawn after the day its friendlies are
+         * arranged (season_nl_late_window). The arranger's guard reads only the stored fixtures, so before the
+         * draw it paired the nations, and the matchday met the friendlies: in 2023 the North American row of
+         * 7 September (offset 1, on the FIFA day 5 September) and the first matchday of CONCACAF 2023-24
+         * (7 September; the game draws on 19 June, after the 2022-23 final). The confederation keeps those
+         * windows, so the row pairs no one. Changing rules on only: the table's editions are those years'. */
+        const char *confed = season_changing_rules() ? nl_confed(rd32(g_mem, row + 0xc)) : NULL;
+        if (confed && season_nl_late_window(confed, year, month, day)) {
+            wr32(g_mem, row + 0xc, NO_CONTINENT);
+            kept_free++;
+            if (getenv("RECOMP_SCREEN_LOG"))
+                fprintf(stderr, "recomp: friendlies: the %s row of %d.%d.%d pairs no one (a %s Nations League "
+                                "matchday drawn later)\n", confed, day, month, year, confed);
         }
         if (day == g_mem[row + 1] && (int16_t)rd16(g_mem, row + 3) == day_of_year(year, month, day)) {
             kept++;
@@ -189,7 +213,7 @@ static void snap_rows(uint32_t self)
     cpu = saved;
     if (getenv("RECOMP_SCREEN_LOG"))
         fprintf(stderr, "recomp: friendlies: %d rows on the real FIFA day of their month, %d already on it, %d not "
-                        "used (no FIFA day that month)\n", moved, kept, dropped);
+                        "used (no FIFA day that month), %d kept for a Nations League\n", moved, kept, dropped, kept_free);
 }
 
 /* ---- The qualifying matches ---- */
