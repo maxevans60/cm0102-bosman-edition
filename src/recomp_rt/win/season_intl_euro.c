@@ -283,6 +283,7 @@ uint32_t season_intl_euro_template(void (*original)(void))
         original();
         if (rt_unwinding) return cpu.eax;
         if (mapped != idx && readable(out_id)) wr16(g_mem, out_id, (uint32_t)(idx + 0x3e9));
+        if (mapped != idx) season_intl_twin_venues(cpu.eax, rd32(g_mem, sp + 8u));
         return cpu.eax;
     }
     uint32_t rec = knockout_template(self, rd32(g_mem, sp + 8u), rd32(g_mem, sp + 0xcu), rd32(g_mem, sp + 0x10u));

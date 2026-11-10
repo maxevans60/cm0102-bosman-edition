@@ -556,6 +556,69 @@ static uint32_t knockout_template(int c, uint32_t self, uint32_t out_rounds, uin
     return rec;
 }
 
+/* The venues of a group that takes another group's template (0.6.2 item 217). League_Stage's slot setter 0x68a1c0
+ * stores the venue flags of round r, slot k at rec + r * 0x41 + k * 7 + 5. The original gives each group its own
+ * weekdays, so two groups never share a day's venues; a group that takes another's template (the ACN and Asian Cup
+ * of 24 here, the Asian Cup of 16, the Euro of 24 season_intl_euro.c, the Copa
+ * America and Gold Cup of 16 season_intl_copa.c) plays on that group's days with its flags. (The World Cup of 48
+ * plays its later groups on days of their own, season_wc48.c, so it keeps its flags.) Stadium::set_fixture_
+ * venue 0x85c260 gives flag 4 the host's national stadium (nation +0x80) with no check that it is free. A rank
+ * flag 0x40 << k gives the host's stadium k, k + 9, k + 18 or k + 27 (0x85c800 counts the nation's stadiums,
+ * index % 9 == k) only when it is free that day
+ * (0x85ddb0), else no venue; with two hosts 0x40 becomes flag 4 of the first host and 0x80 << k rank k of the
+ * second (0x85c260 after find_hosts 0x5fa730 gives 2). So the twin's flag-4 match and its group's met at the
+ * national stadium, find_fixture_clashes 0x5ad780 gave severity 20 for the same venue on the same day (0x5adba0,
+ * the venue at +0x18) and add_fixture 0x5aa680 moved one by a week or more: the ACN 2033 of round AG (Ivory Coast
+ * v Tunisia, group F, to 2 July; Ghana v South Africa, group B, to 6 July; the knockout 14 days late,
+ * run-logs/merge-062ag/lane44/iwcq-2033). The twin's venue flags (4 and the ranks) therefore take ranks from 0x80
+ * up that its group's template does not use, in the order of first use: each a stadium of the host that the
+ * group does not play in, checked as free, else no venue, never a moved match. Real life: each edition plays in
+ * its own stadiums (2019 ACN 6, 2023 ACN 6, 2025 ACN 9, 2019 Asian Cup 8, 2023 Asian Cup 9, Euro 2016 10, Euro 2020
+ * 11, Euro 2024 10; en.wikipedia.org, the edition's article, "Venues"). */
+void season_intl_twin_venues(uint32_t rec, uint32_t rounds_out)
+{
+    enum { RANKS = 9, SLOTS = 8 };
+    int rounds = readable(rounds_out) ? (int16_t)rd16(g_mem, rounds_out) : 0;
+    if (!readable(rec) || rounds < 1 || rounds > 8) return;
+    /* The slots of a round in use: from slot 0 to the first whose weekday (+9) is not 0 to 6. Each group template
+     * writes slots 0 and 1 and ends with slot 2 at weekday -1 (ACN 0x401395, 0x4013c1, 0x4013ec); the record is
+     * malloc(0xc3) (0x40132b), so the slots after it hold whatever the heap held. */
+    int slots[8];
+    for (int r = 0; r < rounds; r++) {
+        slots[r] = 0;
+        while (slots[r] < SLOTS && (int8_t)rd8(g_mem, rec + (uint32_t)(r * 0x41 + slots[r] * 7 + 9)) >= 0 &&
+               (int8_t)rd8(g_mem, rec + (uint32_t)(r * 0x41 + slots[r] * 7 + 9)) <= 6)
+            slots[r]++;
+    }
+    uint32_t used = 0, from[RANKS + 1], to[RANKS + 1];
+    int n = 0;
+    for (int r = 0; r < rounds; r++)
+        for (int k = 0; k < slots[r]; k++) used |= rd32(g_mem, rec + (uint32_t)(r * 0x41 + k * 7 + 5)) & 0x7fc0u;
+    /* Flag 4 first: it is the one that is never checked, so it takes a rank while any is left (the World Cup's
+     * group B template uses 4 and five ranks, 0x92c4a4). Then each rank flag in the order of first use. */
+    for (int pass = 0; pass < 2; pass++)
+        for (int r = 0; r < rounds; r++)
+            for (int k = 0; k < slots[r]; k++) {
+                uint32_t at = rec + (uint32_t)(r * 0x41 + k * 7 + 5), f = rd32(g_mem, at);
+                if (pass == 0 ? f != 4u : (f & ~0x7fc0u || !f || (f & (f - 1u)))) continue;
+                int i = 0;
+                while (i < n && from[i] != f) i++;
+                if (i == n) {
+                    uint32_t pick = 0;
+                    for (int b = 1; b < RANKS && !pick; b++) {
+                        uint32_t c = 0x40u << b;
+                        int taken = (used & c) != 0;
+                        for (int j = 0; j < n; j++) taken |= to[j] == c;
+                        if (!taken) pick = c;
+                    }
+                    if (!pick) continue;                /* no rank left: the flag stays (checked if a rank) */
+                    from[n] = f;
+                    to[n++] = pick;
+                }
+                if (to[i] != f) wr32(g_mem, at, to[i]);
+            }
+}
+
 /* The template function of a class, thiscall (index as a byte, short *rounds, short *id, int *flag), ret 0x10.
  * Called by the wraps of 0x4012e0 and 0x40eb00 in season_intl.c inside their date shift, at the entry state
  * (cpu.esp at the return address, this in cpu.ecx). It always completes the call and gives the result.
@@ -585,6 +648,7 @@ uint32_t season_intl_cup_template(uint32_t cls, void (*original)(void))
         season_intl_shift_more(-delay);
         if (rt_unwinding) return cpu.eax;
         if (idx < KO16 && mapped != idx && readable(out_id)) wr16(g_mem, out_id, (uint32_t)(idx + cups[ASIAN].id_base));
+        if (idx < KO16 && mapped != idx) season_intl_twin_venues(cpu.eax, rd32(g_mem, sp + 8u));
         return cpu.eax;
     }
     if (c < 0 || cups[c].cls != cls || idx < -1 || idx > KO) {
@@ -598,6 +662,7 @@ uint32_t season_intl_cup_template(uint32_t cls, void (*original)(void))
         original();
         if (rt_unwinding) return cpu.eax;
         if (mapped != idx && readable(out_id)) wr16(g_mem, out_id, (uint32_t)(idx + cups[c].id_base));
+        if (mapped != idx) season_intl_twin_venues(cpu.eax, rd32(g_mem, sp + 8u));
         return cpu.eax;
     }
     uint32_t rec = knockout_template(c, self, rd32(g_mem, sp + 8u), rd32(g_mem, sp + 0xcu), rd32(g_mem, sp + 0x10u));
