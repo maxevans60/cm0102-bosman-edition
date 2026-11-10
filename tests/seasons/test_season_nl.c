@@ -327,8 +327,55 @@ static void check_concacaf(void)
               season_nl_gold_cups[i].start.day, season_nl_gold_cups[i].start.month);
 }
 
+/* The day of the year from 0 (season_nl.c season_nl_day_of_year reads no table but is not in season_nl_rules.c). */
+static int season_nl_day_of_year_test(int day, int month, int year)
+{
+    static const int before[12] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+    int leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+    return before[month - 1] + day - 1 + (month > 2 && leap);
+}
+
+/* World Cups in 2026, 2030, 2034 and every 4 years after. */
+static int wc_years(int y) { return y >= 2026 && (y - 2026) % 4 == 0; }
+
 int main(void)
 {
+    /* Item 209: the CONCACAF Nations League after its table (last edition 2026) takes the autumns that the World
+     * Cup qualifying (W - 2 and W - 1) leaves free; UEFA keeps every second year. */
+    {
+        static const int held[] = {2027, 2030, 2031, 2034, 2035};
+        static const int not_held[] = {2026, 2028, 2029, 2032, 2033, 2036};
+        int ok = 1;
+        for (unsigned i = 0; i < sizeof held / sizeof held[0]; i++)
+            ok &= season_nl_held_after("CONCACAF", 2026, held[i], wc_years);
+        for (unsigned i = 0; i < sizeof not_held / sizeof not_held[0]; i++)
+            ok &= !season_nl_held_after("CONCACAF", 2026, not_held[i], wc_years);
+        CHECK(ok, "CONCACAF editions after 2026-27: 2027, 2030, 2031, 2034, 2035, none in 2028, 2029, 2032, 2033");
+        CHECK(season_nl_next_after("CONCACAF", 2026, 2026, wc_years) == 2027 &&
+              season_nl_next_after("CONCACAF", 2026, 2027, wc_years) == 2030 &&
+              season_nl_next_after("CONCACAF", 2026, 2028, wc_years) == 2030 &&
+              season_nl_next_after("CONCACAF", 2026, 2031, wc_years) == 2034,
+              "the next CONCACAF edition: 2027 after 2026, 2030 after 2027 and 2028, 2034 after 2031");
+        CHECK(season_nl_held_after("UEFA", 2026, 2028, wc_years) && season_nl_held_after("UEFA", 2026, 2032, wc_years) &&
+              !season_nl_held_after("UEFA", 2026, 2027, wc_years) &&
+              season_nl_next_after("UEFA", 2026, 2026, wc_years) == 2028,
+              "UEFA after its table: every second year (2028, 2032), not 2027");
+        /* The draw of an edition after the table: a CONCACAF edition in a year with no World Cup takes the spring
+         * draw of 2024-25 (6 May), more than 12 weeks before its first matchday (the friendlies, 0x5cbb00); one in
+         * a World Cup year the draw of 2026-27 (23 July); UEFA its last edition's. */
+        const SeasonNlEdition *d27 = season_nl_draw_of("CONCACAF", 2027, wc_years),
+                              *d30 = season_nl_draw_of("CONCACAF", 2030, wc_years),
+                              *d31 = season_nl_draw_of("CONCACAF", 2031, wc_years),
+                              *u28 = season_nl_draw_of("UEFA", 2028, wc_years);
+        CHECK(d27 && d31 && !strcmp(d27->edition, "2024-25") && d27 == d31 && d31->draw.day == 6 &&
+              d31->draw.month == 5 && d31->draw.year == 0,
+              "the draw of the CONCACAF 2027 and 2031 editions: that of 2024-25 (6 May)");
+        CHECK(d31 && 7 * 12 <= season_nl_day_of_year_test(24, 9, 2031) - season_nl_day_of_year_test(d31->draw.day,
+                                                                                                    d31->draw.month, 2031),
+              "the 2031 draw lies 12 weeks or more before the first matchday (24 September)");
+        CHECK(d30 && !strcmp(d30->edition, "2026-27"), "the draw of the CONCACAF 2030 edition: that of 2026-27");
+        CHECK(u28 && !strcmp(u28->edition, "2026-27"), "the draw of the UEFA 2028 edition: that of 2026-27");
+    }
     CHECK(season_nl_weekday(6, 9, 2018) == 3, "6 September 2018 is a Thursday");
     CHECK(season_nl_weekday(18, 10, 2026) == 6, "18 October 2026 is a Sunday");
     CHECK(season_nl_weekday(29, 2, 2020) == 5, "29 February 2020 is a Saturday");

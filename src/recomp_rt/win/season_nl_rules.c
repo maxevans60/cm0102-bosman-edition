@@ -23,6 +23,33 @@ const SeasonNlEdition *season_nl_first(const char *confed, int s)
     return NULL;
 }
 
+/* Item 209 (season_nl.h). */
+int season_nl_held_after(const char *confed, int last, int year, int (*wc)(int))
+{
+    if (!confed || year <= last) return 0;
+    if (!strcmp(confed, "CONCACAF") && wc) return !wc(year + 1) && !wc(year + 2);
+    return (year - last) % 2 == 0;
+}
+
+int season_nl_next_after(const char *confed, int last, int year, int (*wc)(int))
+{
+    for (int y = (year < last ? last : year) + 1; y <= year + 8; y++)
+        if (season_nl_held_after(confed, last, y, wc)) return y;
+    return 0;
+}
+
+const SeasonNlEdition *season_nl_draw_of(const char *confed, int year, int (*wc)(int))
+{
+    const SeasonNlEdition *last = NULL, *same = NULL;
+    for (int i = 0; confed && i < season_nl_edition_count; i++) {
+        const SeasonNlEdition *e = &season_nl_editions[i];
+        if (strcmp(e->confed, confed)) continue;
+        last = e;
+        if (wc && !wc(e->year) == !wc(year)) same = e;
+    }
+    return confed && !strcmp(confed, "CONCACAF") && same ? same : last;
+}
+
 /* The table is sorted by confederation, then season (make_nl.py). */
 const SeasonNlEdition *season_nl_after(const SeasonNlEdition *e)
 {
