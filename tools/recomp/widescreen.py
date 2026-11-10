@@ -240,3 +240,9 @@ from market_weekly import INSNS as MARKET_WEEKLY_INSNS  # noqa: E402
 
 assert not set(MARKET_WEEKLY_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(MARKET_WEEKLY_INSNS)
+
+# Network screens in widescreen mode: classic coordinates on the network (0.7.0 item 212).
+from net_scale import INSNS as NET_SCALE_INSNS  # noqa: E402
+
+assert not set(NET_SCALE_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(NET_SCALE_INSNS)

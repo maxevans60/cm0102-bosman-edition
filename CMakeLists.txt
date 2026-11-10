@@ -154,6 +154,10 @@ if(NOT WIN32)
         src/recomp_rt/host/net_posix.c)
     target_include_directories(net_core_test PRIVATE src/recomp_rt src/recomp_rt/win)
     add_test(NAME net_core COMMAND net_core_test)
+    # Network screens in widescreen mode (0.7.0 item 212): the inverse of the widescreen scale is exact.
+    add_executable(net_scale_test tests/net/test_net_scale.c src/recomp_rt/win/display_scale.c)
+    target_include_directories(net_scale_test PRIVATE src/recomp_rt/win)
+    add_test(NAME net_scale COMMAND net_scale_test)
     # Online games in the game list (0.7.0 slice 4): lobby HTTP rules, JSON, game list rows, join check.
     find_package(Threads REQUIRED)
     add_executable(lobby_test tests/net/test_lobby.c src/recomp_rt/win/lobby_http.c src/recomp_rt/win/lobby.c

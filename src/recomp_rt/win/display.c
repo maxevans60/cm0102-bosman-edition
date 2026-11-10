@@ -13,6 +13,7 @@
 #include "win.h"
 #include "host.h"
 #include "options.h"
+#include "display_scale.h"
 
 #include <SDL.h>
 #include <ctype.h>
@@ -46,10 +47,7 @@ void win_read_settings(void)
  * negative values keep their meaning ("none" or "from the owner"). */
 static uint32_t scale(uint32_t v, uint32_t screen, uint32_t classic, int far_edge)
 {
-    int32_t x = (int32_t)v;
-    if (screen == classic || x <= 0) return v;
-    if (far_edge) return (uint32_t)((int64_t)(x + 1) * screen / classic - 1);
-    return (uint32_t)((int64_t)x * screen / classic);
+    return ds_screen(v, screen, classic, far_edge);      /* display_scale.c, with its inverse (item 212) */
 }
 
 /* Scales the rectangle x1, y1, x2, y2 in the four stack arguments from argument `first`. */
