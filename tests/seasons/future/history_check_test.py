@@ -1042,6 +1042,21 @@ def main():
         got = history_check.known_status(known, *args)
         if got != want_:
             bad.append(f"known_status{args} is {got}, not {want_}")
+    # the edition that the oldest fixtures part cuts (pass 5: Africa Cup of Nations 2026, Champions League holders)
+    d = datetime.date
+    o = lambda y, m, day: d(y, m, day).toordinal()               # noqa: E731
+    cl = [(2023, o(2023, 2, 14), o(2023, 5, 31), list(range(16))), (2024, o(2023, 6, 27), o(2024, 5, 31), list(range(76))),
+          (2025, o(2024, 6, 25), o(2025, 5, 31), list(range(76)))]
+    afcon = [(2026, o(2026, 1, 10), o(2026, 1, 31), list(range(16))), (2027, o(2027, 6, 19), o(2027, 7, 31), list(range(24)))]
+    small = [(2023, o(2023, 6, 1), o(2023, 7, 1), list(range(16))), (2024, o(2024, 6, 1), o(2024, 7, 1), list(range(24)))]
+    whole = [(2023, o(2023, 1, 5), o(2023, 2, 1), list(range(24))), (2025, o(2025, 1, 5), o(2025, 2, 1), list(range(24)))]
+    for args, want_ in (((2013, 2023, cl, 2023), True), ((2013, 2023, cl, 2024), False), ((2013, 2026, afcon, 2026), True), ((2013, 2026, afcon, 2027), False),
+                        ((2013, 2023, small, 2023), False),       # it starts in June: whole
+                        ((2013, 2023, whole, 2023), False),       # as many teams as the next edition: whole
+                        ((2013, 2023, cl[:1], 2023), False),      # no later edition to compare with
+                        ((2013, 2013, cl, 2023), False), ((2023, 2013, cl, 2023), False)):    # a young save
+        if history_check.cut_by_oldest_part(*args) is not want_:
+            bad.append(f"cut_by_oldest_part{args[:2]} edition {args[3]} is not {want_}")
     # an empty squad counts only for a side that plays in the 14 days around the save (open item 195)
     today = 1000
     for days, want_ in (([], False), ([today + 14], True), ([today + 15], False), ([today - 14], True),

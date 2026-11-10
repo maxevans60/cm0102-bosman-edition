@@ -964,6 +964,19 @@ class Access:
         return None, [], []
 
 
+def cut_by_oldest_part(start, oldest, eds, year):
+    """Is the edition `year` the one that the oldest fixtures part cuts? A save keeps 50 years of fixtures, so an edition
+    that began in the year before the oldest part has lost its first matches: it shows only its knockout teams, from
+    the first weeks of the oldest year, fewer than the next edition (pass 5: the Africa Cup of Nations 2026 with 16 of
+    24 entrants from 10 January, the Champions League holders of 2021 and 2023, Grasshopper Club Zurich 2032 and
+    2041). Only in an aged save (oldest part later than the start). eds: [(year, first day, last day, teams)] of the
+    competition."""
+    here = next((e for e in eds if e[0] == year), None)
+    return bool(here) and oldest > start and year <= oldest and \
+        here[1] < datetime.date(oldest, 3, 1).toordinal() and \
+        any(len(t) > len(here[3]) for y, f, l, t in eds if y > oldest)
+
+
 def entrants(game, rules, access, changes=()):
     """[(competition id, name, year, first day, last day, team id, team, nation, confederation, route)] and the
     faults of the entrant checks."""
@@ -985,6 +998,7 @@ def entrants(game, rules, access, changes=()):
     # holder, out in the group stage, seems missing (open item 70; pass 5: a2013s1 F.C. Barcelona 2023, a2001nation
     # Chemnitzer FC 2021). Such an edition is not judged for the holder.
     oldest_part = min((int(m.group(1)) for n in game.fixture_parts for m in [re.search(r"(\d{4})", n)] if m), default=0)
+    cut_editions = set()                                      # (competition name, year) cut by the oldest part
     route_nation = {}                                         # key of a national competition: its nation's name
     for comp in game.comps.values():
         key = rules.key(comp["name"])
@@ -1042,6 +1056,9 @@ def entrants(game, rules, access, changes=()):
         if short and short.get("key") != key and short.get("confs"):
             confs.append((comp["short"], short["confs"]))
         eds = editions_of(fx)
+        for y_, f_, l_, t_ in eds:
+            if cut_by_oldest_part(game.start, oldest_part, eds, y_):
+                cut_editions.add((name, y_))
         for n, (year, first, last, teams) in enumerate(eds):
             # the last edition with a match fewer than RUNNING days before the save date may still run: the July
             # qualifying of a Champions League, which the title holder enters later in the group stage (open item
@@ -1145,6 +1162,7 @@ def entrants(game, rules, access, changes=()):
                     faults.append(("entrant-missing", name, year, f"{len(missing)} live UEFA nations do not play: "
                                                                   f"{', '.join(missing[:6])}"
                                                                   f"{' ...' if len(missing) > 6 else ''}"))
+    faults = [f for f in faults if not (f[0].startswith("entrant-") and (f[1], f[2]) in cut_editions)]
     return listing, faults + duty_clashes(game)
 
 
