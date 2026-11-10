@@ -155,7 +155,7 @@ def renamed(stderr):
     for name, y in want.items():
         d = seen.get(name)
         print(f"      {name}: named on " + (f"day {d[1]} of {d[0]}" if d else "no day"))
-        if not d or d[0] != y or d[1] >= 243:
+        if not d or d[0] != y or d[1] >= datetime.date(y, 9, 1).timetuple().tm_yday - 1:   # days from 0
             fails.append(f"{name} not named before 1 September {y}")
     return fails
 
