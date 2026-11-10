@@ -343,6 +343,17 @@ export class Lobby extends DurableObject<Env> {
     return g === undefined ? err("unknown_game") : { ok: true, body: { game: this.view(g) } };
   }
 
+  /**
+   * The relay's call when the game's host closed its connection with a normal close (1000), as the game does when it
+   * stops hosting (relay.c, ws_close 1000): the game ended, so the list drops it now, not after EXPIRE_SECONDS
+   * (item 216: the game's own DELETE may not finish before the program ends). The relay closes itself.
+   */
+  async hostLeft(code: string): Promise<void> {
+    await this.prune();
+    const g = this.games.get(code);
+    if (g !== undefined) await this.remove(g);
+  }
+
   async isOpen(code: string): Promise<boolean> {
     await this.prune();
     return this.games.has(code);

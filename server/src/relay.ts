@@ -8,6 +8,10 @@
 // Manager socket: binary frame = payload only. The relay adds the channel byte for the host.
 // Both:           the text frame "ping" gets "pong" without waking the object.
 //
+// When the current host connection closes with a normal close (1000), the game stopped hosting: the relay asks the
+// lobby to drop the game and closes itself (item 216). Any other close (a dropped line, 1006) keeps both, so the host
+// can connect again.
+//
 // Stored: the game code, the relay key, the id of the current host connection and used ticket ids.
 // No game data and no internet address. An hourly alarm removes them when the lobby no longer
 // lists the game and no host is connected, so a relay that the lobby forgot does not stay for good.
@@ -243,15 +247,16 @@ export class Relay extends DurableObject<Env> {
 
   async webSocketClose(ws: WebSocket, code: number, reason: string): Promise<void> {
     safeClose(ws, 1000, "");
-    await this.left(ws);
+    await this.left(ws, code === 1000);
   }
 
   async webSocketError(ws: WebSocket): Promise<void> {
     safeClose(ws, 1011, "error");
-    await this.left(ws);
+    await this.left(ws, false);
   }
 
-  private async left(ws: WebSocket) {
+  /** A connection closed. ended: a normal close (1000), which a host sends only when its game stops hosting. */
+  private async left(ws: WebSocket, ended: boolean) {
     const a = ws.deserializeAttachment() as Attachment | null;
     if (a === null) return;
     if (a.r === "h") {
@@ -259,6 +264,17 @@ export class Relay extends DurableObject<Env> {
       await this.ctx.storage.delete("hostConn");
       this.hostConn = null;
       for (const m of this.ctx.getWebSockets("m")) safeClose(m, CLOSE_HOST_LEFT, "host_left");
+      if (ended) {
+        const code = await this.ctx.storage.get<string>("code");
+        if (code !== undefined) {
+          try {
+            await this.env.LOBBY.get(this.env.LOBBY.idFromName("lobby")).hostLeft(code);
+          } catch {
+            // The lobby is not available: it drops the game when its heartbeats stop, as before.
+          }
+        }
+        await this.teardown();
+      }
       return;
     }
     const host = await this.currentHost();
