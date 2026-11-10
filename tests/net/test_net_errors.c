@@ -377,7 +377,8 @@ static void test_rows(void)
 
 /* ---- the connection test ---- */
 
-enum { LOBBY_WORKS, LOBBY_LIST_FAILS, LOBBY_FULL, RELAY_FAILS, RELAY_STRIPPED, RELAY_ANSWERS_101 };
+enum { LOBBY_WORKS, LOBBY_LIST_FAILS, LOBBY_FULL, RELAY_FAILS, RELAY_STRIPPED, RELAY_ANSWERS_101, LOBBY_LIST_SLOW };
+#define SLOW_LIST_S 7     /* item 213: a step slower than the old 6 s of the test, faster than LH_TIMEOUT_MS (10 s) */
 
 static const char *reply(const char *code, int status)
 {
@@ -414,7 +415,10 @@ static pid_t fake_lobby(uint16_t port, int mode, int upgrade_seen)
         static const char ok[] = "HTTP/1.1 200 OK\r\nX-Bosman-Api: 1\r\nContent-Length: 11\r\n\r\n{\"ok\":true}";
         static const char list[] = "HTTP/1.1 200 OK\r\nX-Bosman-Api: 1\r\nContent-Length: 12\r\n\r\n{\"games\":[]}";
         if (!strcmp(path, "/v1/health")) r = mode == LOBBY_FULL ? reply("full_today", 503) : ok;
-        else if (!strcmp(path, "/v1/games")) r = mode == LOBBY_LIST_FAILS ? reply("unavailable", 503) : list;
+        else if (!strcmp(path, "/v1/games")) {
+            if (mode == LOBBY_LIST_SLOW) sleep(SLOW_LIST_S);     /* a slow line: the answer comes late */
+            r = mode == LOBBY_LIST_FAILS ? reply("unavailable", 503) : list;
+        }
         else if (strstr(path, "/relay?")) {
             if (strstr(req, "Upgrade: websocket\r\n") && strstr(req, "Connection: Upgrade\r\n") && upgrade_seen >= 0)
                 if (write(upgrade_seen, "u", 1) != 1) _exit(3);
@@ -452,6 +456,9 @@ static void test_connection_test(void)
         {RELAY_FAILS, NT_RELAY_DOWN, "the relay fails"},
         {RELAY_STRIPPED, NT_RELAY_BLOCKED, "a proxy takes the Upgrade header off"},
         {RELAY_ANSWERS_101, NT_RELAY_DOWN, "an answer that is not the relay's"},
+        /* Item 213: each step may take as long as the game's own lobby calls (LH_TIMEOUT_MS), so a list that
+         * answers after 7 s on a slow line passes, as it does in play. */
+        {LOBBY_LIST_SLOW, NT_WORKS, "the lobby's list answers after 7 s"},
     };
     for (unsigned i = 0; i < sizeof cases / sizeof cases[0]; i++) {
         int seen[2];

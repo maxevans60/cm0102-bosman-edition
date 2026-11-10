@@ -17,7 +17,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TEST_MS 6000                    /* each step */
+/* Each step may take as long as the game's own lobby calls (LH_TIMEOUT_MS, lobby_http.h), so that the test does not
+ * fail where play goes on (item 213: one try on a 4G line failed its second step at 6 s, after a stall). */
+#define TEST_MS LH_TIMEOUT_MS
 #define PROBE_PATH "/v1/games/22222222/relay?role=manager&ticket=connection-test"
 
 static struct {
