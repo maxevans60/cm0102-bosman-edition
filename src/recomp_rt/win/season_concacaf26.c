@@ -15,8 +15,9 @@
  * runners-up in three groups of four that meet twice (third round, September to November 2025); the three group
  * winners qualify, the two best runners-up go to the play-off tournament. The days: season_concacaf26_days.c.
  *
- * The game plays that shape in the wcq26 gate (season_wcq26: a World Cup of 48 teams, changing rules on) when the
- * pool (+0xb2, the 35 CONCACAF nations less the hosts, select_entrants 0x916250) holds 31 to 36 teams:
+ * The game plays that shape in the wcq26 gate (season_wcq26: a World Cup of 48 teams, season_intl_on: changing
+ * rules on, or any start after 2001) when the pool (+0xb2, the 35 CONCACAF nations less the hosts, select_entrants
+ * 0x916250) holds 31 to 36 teams:
  * - build_team_table 0x915d40: the knockout entry table +0xa7 (+0x3e rows) holds the 2 x (pool - 30) teams of the
  *   lowest nation reputation (+0x80 of the national team, as the pool's sort 0x4b0810; the real ranking was FIFA's,
  *   inference), so 30 teams reach the second round;
