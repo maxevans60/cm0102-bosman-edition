@@ -503,4 +503,12 @@ typedef struct { uint32_t addr; RtFn fn; const char *name; uint32_t flags; } RtE
 extern const RtEntry rt_table[];
 extern const uint32_t rt_table_size;
 
+/* Network screens in widescreen mode (0.7.0 item 212, win/net_scale.c, tools/recomp/net_scale.py): the classic value of a
+ * coordinate on this screen, and the four words of a widget move widened to this screen. */
+uint32_t rt_net_classic_x(uint32_t v, int far_edge);
+uint32_t rt_net_classic_y(uint32_t v, int far_edge);
+uint32_t rt_net_screen_x(uint32_t v, int far_edge);
+uint32_t rt_net_screen_y(uint32_t v, int far_edge);
+void rt_net_rect_in16(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2);
+
 #endif

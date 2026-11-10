@@ -200,3 +200,9 @@ from save_size import INSNS as SAVE_SIZE_INSNS  # noqa: E402
 
 assert not set(SAVE_SIZE_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(SAVE_SIZE_INSNS)
+
+# Network screens in widescreen mode: classic coordinates on the network (0.7.0 item 212).
+from net_scale import INSNS as NET_SCALE_INSNS  # noqa: E402
+
+assert not set(NET_SCALE_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(NET_SCALE_INSNS)
