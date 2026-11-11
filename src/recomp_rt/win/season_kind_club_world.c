@@ -35,6 +35,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_club_editions.h"
+#include "season_liber_guest.h"
 #include "season_comps.h"
 #include "season_rules.h"
 #include "season_uefa_days.h"
@@ -524,6 +525,61 @@ static uint32_t history_place(uint32_t rec, int place)
     uint32_t a[2] = {rec, (uint32_t)place};
     uint32_t club = call_cdecl(0x4afd80u, 2, a);
     return rt_unwinding || !in_game(club) ? 0 : club;
+}
+
+/* Item 219 (season_liber_guest.h): CONMEBOL's place does not go to a Libertadores winner from outside CONMEBOL.
+ * pick_entrant 0x92ae60 is thiscall (continent, nation, Club **picked, short count, record), ret 0x14. For South
+ * America it takes place 0 of the latest history row of the record (0x92af59) when 0x6699d0 accepts the continent
+ * or +0x40 is 2001 (0x92af42..0x92af54), and place 1 when place 0 is in the picked list (0x92af6c..0x92af80); when
+ * place 1 is in the list too it draws from the top reputations (0x92afb1..), and when the row has no place 1 it
+ * returns 0 (0x92af88..0x92afac). When place 0 is a guest, the original runs with a copy of the picked list that
+ * also holds the guest (and place 1 when that is a guest too), so its own steps give the runner-up, else a drawn
+ * club. A 0 (no place 1) becomes the South American club of the highest reputation not yet picked. The caller's
+ * list does not change. The history is read with no sort (season_liber_latest). pick_entrants 0x92a8b0 picks South
+ * America twice (places 9 and 10), so the log line comes once an edition. */
+void o_0092ae60(void);
+
+RT_WRAP(0092ae60, pick_entrant_liber_guest)
+{
+    int32_t continent = (int32_t)rt_arg(0), record = (int32_t)rt_arg(4);
+    uint32_t obj = cpu.ecx, picked = rt_arg(2);
+    int count = (int16_t)rt_arg(3);
+    if (!season_liber_rule_on() || continent != (int32_t)rd32(g_mem, 0x9cfa1cu) || count < 0 || count > 12 ||
+        (count && !in_game(picked))) {
+        o_0092ae60();
+        return;
+    }
+    Cpu saved = cpu;
+    uint32_t rec = continent_record(continent, record), nations = rd32(g_mem, 0xae23a4u);
+    uint32_t a[1] = {nations + (uint32_t)continent * 0xc6u};
+    int live = in_game(nations) && call_cdecl(0x6699d0u, 1, a);
+    if (rt_unwinding) return;
+    cpu = saved;
+    int year = (int16_t)rd16(g_mem, obj + YEAR_AT);
+    uint32_t guest = rec && (live || year == 2001) ? season_liber_latest(rec, 0) : 0;
+    if (!guest || !season_liber_guest(guest)) {
+        o_0092ae60();
+        return;
+    }
+    uint32_t second = season_liber_latest(rec, 1);
+    static uint32_t list;
+    if (!list) list = win_static_alloc(4u * 16u);
+    uint32_t skip[16];
+    int n = 0;
+    for (int i = 0; i < count; i++) skip[n++] = rd32(g_mem, picked + 4u * (uint32_t)i);
+    skip[n++] = guest;
+    if (second && season_liber_guest(second)) skip[n++] = second;
+    for (int i = 0; i < n; i++) wr32(g_mem, list + 4u * (uint32_t)i, skip[i]);
+    wr32(g_mem, cpu.esp + 12u, list);
+    wr32(g_mem, cpu.esp + 16u, (uint32_t)n);
+    o_0092ae60();
+    if (rt_unwinding) return;
+    if (!in_game(cpu.eax)) cpu.eax = season_comps_top_club(0x9cfa1cu, skip, n);
+    static uint32_t logged_obj, logged_guest;
+    static int logged_year;
+    if (logged_obj == obj && logged_guest == guest && logged_year == year) return;
+    logged_obj = obj, logged_guest = guest, logged_year = year;
+    season_liber_guest_log("FIFA Club World Championship", year, guest, in_game(cpu.eax) ? cpu.eax : 0);
 }
 
 /* The knockout's host place when a continent's winner is a club of the host: that continent's runner-up, place 1

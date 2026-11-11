@@ -37,6 +37,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_club_editions.h"
+#include "season_liber_guest.h"
 #include "season_comps.h"
 #include "season_rules.h"
 
@@ -346,10 +347,14 @@ static uint32_t drawn_club(uint32_t continent_key, uint32_t nation, const uint32
  * (the competition does not run: its nation or continent is not selected) a drawn club of the nation of rec, else
  * of the continent. Faults 5, 22 and 50: the latest row up to y, with no lower year, gave the data's last winners
  * (the Copa CONMEBOL of 1999, an old J.League Cup, the Libertadores of 2002) every year. */
-static int add_winner_of_year(uint32_t *out, int n, uint32_t rec, int lo, int y, uint32_t continent)
+static int add_winner_of_year(uint32_t *out, int n, uint32_t rec, int lo, int y, uint32_t continent, const char *cup,
+                              int edition)
 {
-    uint32_t c = history_club(rec, lo, y, 0);
+    uint32_t c = history_club(rec, lo, y, 0), guest = 0;
+    int liber = rec && rec == record_of_key(KEY_LIBERTADORES);
+    if (liber && season_liber_guest(c)) guest = c, c = 0;      /* item 219: season_liber_guest.c */
     if (!c || listed(out, n, c)) c = history_club(rec, lo, y, 1);
+    if (liber && season_liber_guest(c)) c = 0;
     uint32_t nation = rec ? rd32(g_mem, rec + 0x5d) : 0;
     if (!c || listed(out, n, c)) c = nation ? drawn_club(continent, nation, out, n) : 0;
     if (rt_unwinding) return n;
@@ -357,6 +362,7 @@ static int add_winner_of_year(uint32_t *out, int n, uint32_t rec, int lo, int y,
     if (rt_unwinding) return n;
     if (!c || listed(out, n, c)) c = season_comps_top_club(continent, out, n);
     if (c && !listed(out, n, c)) out[n++] = c;
+    if (guest) season_liber_guest_log(cup, edition, guest, n && out[n - 1] == c ? c : 0);
     return n;
 }
 
@@ -367,11 +373,12 @@ static int pick_recopa(const ClubCup *k, uint32_t obj, int year, uint32_t *out, 
     (void)k;
     (void)obj;
     int m = 0;
-    m = add_winner_of_year(out, m, record_of_key(KEY_LIBERTADORES), year - 1, year - 1, CONT_SOUTH_AMERICA);
+    m = add_winner_of_year(out, m, record_of_key(KEY_LIBERTADORES), year - 1, year - 1, CONT_SOUTH_AMERICA,
+                           "Recopa Sudamericana", year);
     if (rt_unwinding) return m;
     if (m < n)
         m = add_winner_of_year(out, m, season_comps_record(cups[0].def->record), year - 1, year - 1,
-                               CONT_SOUTH_AMERICA);
+                               CONT_SOUTH_AMERICA, "Recopa Sudamericana", year);
     return m;
 }
 
@@ -383,10 +390,10 @@ static int pick_suruga(const ClubCup *k, uint32_t obj, int year, uint32_t *out, 
     (void)k;
     (void)obj;
     int m = 0;
-    m = add_winner_of_year(out, m, record_of_key(KEY_JAPAN_CUP), year - 1, year - 1, CONT_ASIA);
+    m = add_winner_of_year(out, m, record_of_key(KEY_JAPAN_CUP), year - 1, year - 1, CONT_ASIA, "Suruga Bank", year);
     if (rt_unwinding) return m;
     if (m < n) m = add_winner_of_year(out, m, season_comps_record(cups[0].def->record), year - 1, year - 1,
-                                                CONT_SOUTH_AMERICA);
+                                                CONT_SOUTH_AMERICA, "Suruga Bank", year);
     return m;
 }
 
@@ -404,7 +411,8 @@ static int pick_intercontinental(const ClubCup *k, uint32_t obj, int year, uint3
     int m = 0;
     for (int i = 0; i < 6 && m < n; i++) {
         int before = m;
-        m = add_winner_of_year(out, m, from[i].key ? record_of_key(from[i].key) : 0, year - 1, year, from[i].continent);
+        m = add_winner_of_year(out, m, from[i].key ? record_of_key(from[i].key) : 0, year - 1, year, from[i].continent,
+                              "FIFA Intercontinental Cup", year);
         if (rt_unwinding || m == before) return m;             /* keep the order: stop at a gap */
     }
     return m;
@@ -494,11 +502,35 @@ static int fill_clubs(const ClubCup *k, uint32_t obj, int again)
 void o_0092b8b0(void);
 void o_0092b770(void);
 
+/* Item 219 (season_liber_guest.c): in the original's Intercontinental Cup ([0xadadfc] entry [0x9cf6e4]),
+ * pick_qualifiers puts place 0 of the latest Libertadores row into place 1 of the club list (0x92bba4, 0x92bc8f).
+ * When that club is a guest, place 1 of the row takes it if it is a CONMEBOL club and not the UEFA side, else the
+ * South American club of the highest reputation. */
+static void liber_guest_qualifier(uint32_t obj)
+{
+    uint32_t objects = rd32(g_mem, 0xadadfcu);
+    int32_t id = (int32_t)rd32(g_mem, 0x9cf6e4u);
+    if (!season_liber_rule_on() || !objects || id < 0 || rd32(g_mem, objects + 4u * (uint32_t)id) != obj) return;
+    uint32_t list = rd32(g_mem, obj + CLUB_LIST_AT), rec = record_of_key(KEY_LIBERTADORES);
+    if (!list || (int16_t)rd16(g_mem, obj + CLUB_COUNT_AT) < 2) return;
+    uint32_t guest = rd32(g_mem, list + 6u), uefa = rd32(g_mem, list);
+    if (!season_liber_guest(guest) || guest != season_liber_latest(rec, 0)) return;
+    uint32_t c = season_liber_latest(rec, 1);
+    if (!season_liber_conmebol(c) || c == uefa) c = season_comps_top_club(CONT_SOUTH_AMERICA, &uefa, 1);
+    if (c) wr32(g_mem, list + 6u, c);
+    season_liber_guest_log("Intercontinental Cup", (int16_t)rd16(g_mem, obj + YEAR_AT), guest, c);
+}
+
 /* World_Club_Cup::pick_clubs (this), returns >= 0 on success (0x92b543). */
 RT_WRAP(0092b8b0, world_club_cup_pick)
 {
     const ClubCup *k = cup_of_object(cpu.ecx);
-    if (!k) { o_0092b8b0(); return; }
+    if (!k) {
+        uint32_t obj = cpu.ecx;
+        o_0092b8b0();
+        if (!rt_unwinding) liber_guest_qualifier(obj);
+        return;
+    }
     uint32_t obj = cpu.ecx;
     int ok = fill_clubs(k, obj, 0);
     if (rt_unwinding) return;
