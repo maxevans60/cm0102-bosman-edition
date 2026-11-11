@@ -964,6 +964,14 @@ class Access:
         return None, [], []
 
 
+def runner_up_places(editions, confed_of, home="CONMEBOL"):
+    """[(year, club)]: the runner-up that takes the place of a Libertadores winner from outside CONMEBOL (a Mexican
+    guest, open item 219: the best CONMEBOL club takes the place in the Intercontinental Cup, the Recopa and the other
+    cups of the Libertadores route, as in real life). editions: [(year, winner, runner-up)]; confed_of(club) names the
+    confederation. In a game without the fix the guest keeps the place: both clubs count as route holders."""
+    return [(y, ru) for y, w, ru in editions if w >= 0 and ru >= 0 and confed_of(w) != home and confed_of(ru) == home]
+
+
 def cut_by_oldest_part(start, oldest, eds, year):
     """Is the edition `year` the one that the oldest fixtures part cuts? A save keeps 50 years of fixtures, so an edition
     that began in the year before the oldest part has lost its first matches: it shows only its knockout teams, from
@@ -993,6 +1001,10 @@ def entrants(game, rules, access, changes=()):
             if t >= 0:
                 held[t].append((year, name, place))
     hosts = {(cid, year): h for cid, year, a, b, c, h in game.rows if h >= 0}
+    # Item 219: the Libertadores winner outside CONMEBOL gives its place to the runner-up (pass 6b: Sporting Cristal in
+    # the Intercontinental Cup 2004 and the Recopa 2005 after the América of 2004).
+    lib = [(year, a, b) for cid, year, a, b, c, h in game.rows if rules.key(game.comps[cid]["name"]) == "libertadores"]
+    by_key["libertadores"] += runner_up_places(lib, lambda t: game.club(t)[2])
     # The save keeps 50 years of fixtures: an edition (labelled by the year it ends) whose year is that of the oldest
     # fixtures part has lost the matches of the year before, so its entrants are only the knockout teams and its title
     # holder, out in the group stage, seems missing (open item 70; pass 5: a2013s1 F.C. Barcelona 2023, a2001nation

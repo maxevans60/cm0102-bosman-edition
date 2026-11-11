@@ -1042,6 +1042,12 @@ def main():
         got = history_check.known_status(known, *args)
         if got != want_:
             bad.append(f"known_status{args} is {got}, not {want_}")
+    # a Libertadores winner from outside CONMEBOL gives its place to the runner-up (item 219)
+    conf = {1: "CONCACAF", 2: "CONMEBOL", 3: "CONMEBOL", 4: "CONCACAF"}
+    got = history_check.runner_up_places([(2004, 1, 2), (2005, 3, 2), (2006, 3, 1), (2007, 1, 4), (2008, 1, -1)],
+                                         lambda t: conf[t])
+    if got != [(2004, 2)]:
+        bad.append(f"runner_up_places: {got}, not [(2004, 2)]")
     # the edition that the oldest fixtures part cuts (pass 5: Africa Cup of Nations 2026, Champions League holders)
     d = datetime.date
     o = lambda y, m, day: d(y, m, day).toordinal()               # noqa: E731
