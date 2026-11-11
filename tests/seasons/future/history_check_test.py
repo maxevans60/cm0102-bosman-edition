@@ -244,7 +244,7 @@ def finance():
     return bytes(out)
 
 
-def records(changing=1):
+def records(changing=1, truncated=False):
     def pad(b, n):
         return b + bytes(n - len(b))
 
@@ -314,7 +314,10 @@ def records(changing=1):
                ("player.dat", players()), ("finance.dat", finance())]
     # Two files in a merged part (0.6.2 slice 13, savfile.merge): the World Finals class waiting on 2200 and the
     # fixtures of 2039 give planted faults only when the checker reads them from it.
-    merged = [m for m in members if m[0] in ("World Finals_10.tmp", "fixtures_2039.tmp")]
+    if truncated:       # a save that keeps no fixtures of 2038 and 2039: its oldest part is 2040 (open item 70)
+        members = [m for m in members if m[0] not in ("fixtures_2038.tmp", "fixtures_2039.tmp")]
+    merged = [m for m in members if m[0] in (("World Finals_10.tmp",) if truncated else
+                                             ("World Finals_10.tmp", "fixtures_2039.tmp"))]
     members = [m for m in members if m not in merged] + [("x#.tmp.parts", savfile.merge(merged))]
     return members, want
 
@@ -861,6 +864,18 @@ def main():
 
     off = os.path.join(work, "off.sav")
     write_sav(off, records(changing=0)[0])
+    # The title holder of an edition whose first matches are in a fixtures part that the save no longer holds: the save
+    # keeps 50 years of fixtures, so the oldest edition is cut to its knockout matches and the holder (out in the
+    # group stage) seems missing (pass 5: a2013s1 F.C. Barcelona 2023, a2001nation Chemnitzer FC 2021). The same
+    # edition in a save with the older parts has no fault; with the oldest part 2040 the edition of 2040 is not judged.
+    trunc = os.path.join(work, "trunc.sav")
+    write_sav(trunc, records(truncated=True)[0])
+    for label, save, want_holder in (("holder-full", sav, True), ("holder-cut", trunc, False)):
+        run([save, "--out", work, "--label", label, "--known", empty, "--nations", nations, "--rules", rules,
+             "--names", names, "--table", table, "--access", access])
+        got = ("entrant-holder", "Euro Super Cup", 2040) in faults(work, label)
+        if got != want_holder:
+            bad.append(f"entrant-holder Euro Super Cup 2040 in {label}: {got}, not {want_holder}")
     # The association limit of the season rules: a fault with changing rules on, none in the base game (lead, 1 Nov).
     for label, save, want_limit in (("limit-on", sav, True), ("limit-off", off, False)):
         run([save, "--out", work, "--label", label, "--known", empty, "--nations", nations, "--rules", rules,
@@ -1027,6 +1042,21 @@ def main():
         got = history_check.known_status(known, *args)
         if got != want_:
             bad.append(f"known_status{args} is {got}, not {want_}")
+    # the edition that the oldest fixtures part cuts (pass 5: Africa Cup of Nations 2026, Champions League holders)
+    d = datetime.date
+    o = lambda y, m, day: d(y, m, day).toordinal()               # noqa: E731
+    cl = [(2023, o(2023, 2, 14), o(2023, 5, 31), list(range(16))), (2024, o(2023, 6, 27), o(2024, 5, 31), list(range(76))),
+          (2025, o(2024, 6, 25), o(2025, 5, 31), list(range(76)))]
+    afcon = [(2026, o(2026, 1, 10), o(2026, 1, 31), list(range(16))), (2027, o(2027, 6, 19), o(2027, 7, 31), list(range(24)))]
+    small = [(2023, o(2023, 6, 1), o(2023, 7, 1), list(range(16))), (2024, o(2024, 6, 1), o(2024, 7, 1), list(range(24)))]
+    whole = [(2023, o(2023, 1, 5), o(2023, 2, 1), list(range(24))), (2025, o(2025, 1, 5), o(2025, 2, 1), list(range(24)))]
+    for args, want_ in (((2013, 2023, cl, 2023), True), ((2013, 2023, cl, 2024), False), ((2013, 2026, afcon, 2026), True), ((2013, 2026, afcon, 2027), False),
+                        ((2013, 2023, small, 2023), False),       # it starts in June: whole
+                        ((2013, 2023, whole, 2023), False),       # as many teams as the next edition: whole
+                        ((2013, 2023, cl[:1], 2023), False),      # no later edition to compare with
+                        ((2013, 2013, cl, 2023), False), ((2023, 2013, cl, 2023), False)):    # a young save
+        if history_check.cut_by_oldest_part(*args) is not want_:
+            bad.append(f"cut_by_oldest_part{args[:2]} edition {args[3]} is not {want_}")
     # an empty squad counts only for a side that plays in the 14 days around the save (open item 195)
     today = 1000
     for days, want_ in (([], False), ([today + 14], True), ([today + 15], False), ([today - 14], True),

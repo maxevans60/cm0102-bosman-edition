@@ -351,9 +351,73 @@ static int other_leg(uint32_t fix, int y, int d, int forward, int *ld)
 
 void o_005ab510(void);
 
+/* A match that a shared stadium moves to another weekday keeps that day when only weaker matches clash there
+ * (item 218). find_fixture_clashes 0x5ad780 gives severity 20 when two clubs that share a stadium play at home on one
+ * day, and add_fixture 0x5aa680 then calls resolve_same_day_clash 0x5ae380 (0x5aa8c5). That function moves the
+ * weaker club's match to another weekday of the same week (0x5ae43d..0x5ae47b: Wednesday to Tuesday), then checks
+ * the new day (0x5ad780 at 0x5ae52e, 0x5ae5ab) and, on any clash, moves the match again with find_new_fixture_date
+ * 0x5ab510 (0x5ae55c, 0x5ae5d8). It does not compare the clash with the match's priority, as add_fixture does
+ * (0x5aa939: the new match moves only when the top severity is at least its priority +0x3a, else the weaker stored
+ * match moves, 0x5aaa25). In a 2025 start (run set pass 5, a2025s1, leg 1) the league phase draw put AC Milan v
+ * VfL Wolfsburg and Internazionale v 1.FC Heidenheim 1846 on 7 September 2039 (day 249). Milan v Wolfsburg went to
+ * Tuesday 6 September, met Hoffenheim v Wolfsburg (Bundesliga, priority 2) the next day, and 0x5ab510 took it to
+ * 31 August (day 242), the day before UEFA's second registration (process_euro_registration 0x85a9b0, 1 September).
+ * Wolfsburg had registered no player, the eligibility check gave code 8 to 41 of 50 (0x5832e0, 0x5833e1), and the
+ * match stopped at "match_eng..cpp 652" (init_match 0x6b8aca) with 9 players.
+ * So at those two calls, when the top severity of the new day (the caller's [esp+0x10]) is below the match's
+ * priority, the match stays on its new day; add_fixture (0x5ae56a, 0x5ae5e6) then inserts it and deals with each
+ * listed match by its own rule (the loop from 0x5aa9b4): a friendly is cancelled (0x5c6570), a priority 9 match
+ * removed (0x5aa9e0), any other moved (0x5aaa25). The match keeps the original's move when add_fixture would not
+ * insert it: a match of the six minor competitions of 0x7e6f20 (add_fixture returns 0 at 0x5aa9f8 on a stored clash,
+ * and 0x5ae380 drops its result, so the copy on its stack would be lost), a priority 9 match (the check at
+ * 0x5aa8ee..0x5aa92c may drop it), or a try count 0xae2a40 at 10 (add_fixture skips its clash code, 0x5aa882, and
+ * the clash would stay). It keeps the move too when the new day is before today + 2 (0x5ab510's own bound,
+ * 0x5ab92d), and, for a day after the old one, when the match is a leg (item 90) or the day reaches the
+ * competition's update day (the season-end rule above). Both clashing matches were on the old day, so the old day
+ * is that of the match add_fixture was given (0x5ae380's first argument, the caller's [esp+0x2e4]). Real life: UEFA
+ * solves league phase stadium and city clashes in the match calendar, within the competition's match week, Tuesday
+ * and Wednesday for the Champions League (Principles set by the UEFA Club Competitions Committee for the 2025/26
+ * season, Stadium and city clashes, sections 1 and 3, editorial.uefa.com, read 10 November 2026). Season games only,
+ * as the other covered moves. */
+static const uint32_t MINOR_COMPS[] = {0x009cf794u, 0x009cf684u, 0x009cf798u, 0x009cf6b0u, 0x009cf5d8u, 0x009cf548u};
+static uint32_t kept_home, kept_away;   /* the clubs of the last match that keeps its day, for the log below */
+
+static int same_day_keeps(uint32_t fix, uint32_t ret)
+{
+    if ((ret != 0x005ae561u && ret != 0x005ae5ddu) || !readable(fix) || !season_game_changes()) return 0;
+    uint32_t caller = cpu.esp + 8u;                             /* 0x5ae380's esp: the return address, the fixture */
+    int top = (int32_t)rd32(g_mem, caller + 0x10u);             /* the top severity of the new day */
+    int priority = (int8_t)g_mem[fix + FIX_PRIORITY];
+    uint32_t rec = rd32(g_mem, fix + FIX_COMP), given = rd32(g_mem, caller + 0x2e4u);
+    if (top >= priority || priority == 9 || (int16_t)rd16(g_mem, ADD_TRIES) >= 10 || !readable(rec) ||
+        !readable(given))
+        return 0;
+    for (int i = 0; i < (int)(sizeof MINOR_COMPS / sizeof MINOR_COMPS[0]); i++)
+        if (rd32(g_mem, rec) == rd32(g_mem, MINOR_COMPS[i])) return 0;
+    int year = (int16_t)rd16(g_mem, fix + FIX_YEAR), day = (int16_t)rd16(g_mem, fix + FIX_DAY);
+    int old_year = (int16_t)rd16(g_mem, given + FIX_YEAR), old_day = (int16_t)rd16(g_mem, given + FIX_DAY);
+    int today_year = (int16_t)rd16(g_mem, TODAY + 2u), today = (int16_t)rd16(g_mem, TODAY);
+    int min_year = today_year, min_day = today + 2;
+    if (min_day >= days_in(min_year)) min_day -= days_in(min_year), min_year++;
+    if (before(year, day, min_year, min_day)) return 0;
+    if (before(old_year, old_day, year, day)) {
+        int last = update_day(rec), v = leg_variant(fix);
+        if (v == 3 || v == 4 || year != old_year || (last >= 0 && old_day < last && day >= last)) return 0;
+    }
+    kept_home = rd32(g_mem, fix + FIX_HOME), kept_away = rd32(g_mem, fix + FIX_AWAY);
+    fprintf(stderr, "recomp: fixtures: a same-day clash move of %.40s keeps day %d of %d (clash severity %d, "
+                    "priority %d)\n", win_str(rec + 4), day, year, top, priority);
+    return 1;
+}
+
 RT_WRAP(005ab510, fixture_new_date)
 {
     uint32_t fix = rt_arg(0), manager = cpu.ecx, ret = rd32(g_mem, cpu.esp);
+    if (same_day_keeps(fix, ret)) {
+        kept = 0;
+        cpu.esp += 8;                                   /* ret 4: the return address and the fixture */
+        return;
+    }
     int site = 0;
     while (site < SITE_COUNT && SITES[site].new_date != ret) site++;
     if (site == SITE_COUNT || !season_game_changes() || !readable(fix)) {
@@ -373,6 +437,12 @@ RT_WRAP(005ab510, fixture_new_date)
     uint32_t rec = rd32(g_mem, fix + FIX_COMP);
     int last = update_day(rec);
     int new_year = (int16_t)rd16(g_mem, fix + FIX_YEAR), new_day = (int16_t)rd16(g_mem, fix + FIX_DAY);
+    /* The weaker match that add_fixture moves after a kept same-day move (0x5aaa25): one of its clubs is a club
+     * of the kept match. */
+    uint32_t mh = rd32(g_mem, fix + FIX_HOME), mw = rd32(g_mem, fix + FIX_AWAY);
+    if (ret == 0x005aaa2au && kept_home && (mh == kept_home || mh == kept_away || mw == kept_home || mw == kept_away))
+        fprintf(stderr, "recomp: fixtures: after a kept same-day move, a match of %.40s moves from day %d of %d to "
+                        "day %d of %d\n", win_str(rec + 4), day, year, new_day, new_year);
     if (test_mode())
         fprintf(stderr, "recomp: fixtures: test: a %s move of %.40s from day %d of %d to day %d of %d (update "
                         "day %d)\n", SITES[site].what, win_str(rec + 4), day, year, new_day, new_year, last);
