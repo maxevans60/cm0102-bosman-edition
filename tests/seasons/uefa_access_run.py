@@ -239,7 +239,8 @@ def run_2025(program, game, work):
         return [f"2025tur: the history checker wrote no entrants ({work})"]
     with open(entrants, encoding="utf-8") as f:
         rows = [line.rstrip("\n").split("\t") for line in f][1:]
-    tur = [r for r in rows if len(r) > 7 and r[7] in ("T\u00fcrkiye", "Turkey")]
+    # The editions of 2025/26: their first match day is in the summer of 2025 (column first).
+    tur = [r for r in rows if len(r) > 7 and r[7] in ("T\u00fcrkiye", "Turkey") and r[3] >= "2025-06"]
     got = {cup: {r[6] for r in tur if re.search(pat, r[1])}
            for cup, pat in (("CL", r"Champions League"), ("EL", r"Europa League"), ("ECL", r"Conference League"))}
     want = {"CL": {"Galatasaray SK", "Fenerbah\u00e7e SK"}, "EL": {"Samsunspor", "Besiktas JK"}, "ECL": {"Basaksehir FK"}}
@@ -247,11 +248,12 @@ def run_2025(program, game, work):
     for cup in ("CL", "EL"):
         if not want[cup] <= got[cup]:
             fails.append(f"2025tur: Turkey's {cup} entrants {sorted(got[cup])}, want {sorted(want[cup])}")
-    for club in ("Sivasspor", "Trabzonspor"):
-        if club in got["CL"] | got["EL"]:
-            fails.append(f"2025tur: {club} has a Champions League or Europa League place")
-    if not want["ECL"] <= got["ECL"] | got["EL"] | got["CL"]:
-        fails.append(f"2025tur: Basaksehir FK has no place ({got})")
+    if "Sivasspor" in got["CL"] | got["EL"] | got["ECL"]:
+        fails.append("2025tur: Sivasspor has a European place (it was not in the top five of 2024/25)")
+    if "Trabzonspor" in got["CL"] | got["EL"]:
+        fails.append("2025tur: Trabzonspor, the cup runner-up, has a Champions League or Europa League place")
+    if not want["ECL"] <= got["ECL"]:
+        fails.append(f"2025tur: Turkey's ECL entrants {sorted(got['ECL'])}, want {sorted(want['ECL'])}")
     return fails
 
 

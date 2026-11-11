@@ -548,8 +548,11 @@ uint32_t rt_euro_cfg_year(void)
  * "*Yugoslavia" in the databases of test-fixtures), but a season game renames the nations of its start season
  * before the first seeding (season_intl.c nations_rename at season_intl_at_create: Turkey is T\xfcrkiye from 2022,
  * Czech Republic is Czechia from 2016). So in a 2025/26 start Turkey's block found no nation, and Basaksehir and
- * Sivasspor took Galatasaray's and Fenerbahce's places. The line also matches the nation when it names an earlier
- * name of the nation in the rename table, as the data it came with did. */
+ * Sivasspor took Galatasaray's and Fenerbahce's places. The line also matches the nation when the game renamed it
+ * from the line's name, as the data it came with named it. A database that has its own record of the later name
+ * (Serbia beside a dead Yugoslavia, 0.6.2 item 200) keeps the original's match: no nation was renamed there. The
+ * match stays whole-name after "*" (the original's strstr also takes a longer line; no euro.cfg of the 49
+ * databases of test-fixtures has one). */
 void o_00945a60(void);
 
 RT_WRAP(00945a60, euro_cfg_nation)
@@ -562,9 +565,9 @@ RT_WRAP(00945a60, euro_cfg_nation)
     snprintf(head, sizeof head, "%s", win_str(line));
     size_t n = strlen(head);
     while (n && (head[n - 1] == '\r' || head[n - 1] == '\n' || head[n - 1] == ' ')) head[--n] = 0;
-    if (head[0] != '*' || !season_intl_earlier_name(head + 1, win_str(name))) return;
+    if (head[0] != '*' || !season_intl_renamed_from(head + 1, win_str(name))) return;
     cpu.eax = line;
-    fprintf(stderr, "recomp: uefa: euro.cfg: the line %s is the nation %s (an earlier name)\n", head, win_str(name));
+    fprintf(stderr, "recomp: uefa: euro.cfg: the line %s is the nation %s (renamed)\n", head, win_str(name));
 }
 
 void o_00904210(void);
