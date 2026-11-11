@@ -28,8 +28,8 @@ season's rules). The runs:
     2005own September 2005 with its own euro.cfg: England's Champions League entrants are the first four of the
             file (Chelsea, Arsenal, Manchester United, Liverpool: the original's format of 2005/06 gives England
             four places; without the file Newcastle United, third in the database's last table, takes one)
-    2025tur December 2025 (0.6.2 open item 222, GitHub issue 94): the game saves 50 days after the start (September
-            2025). Turkey's entrants follow its euro.cfg block "*Turkey" though the season game names the nation
+    2025tur December 2025, Select All (0.6.2 open item 222, GitHub issue 94): the game saves 50 days after the start
+            (September 2025). Turkey's entrants follow its euro.cfg block "*Turkey" though the season game names the nation
             T\u00fcrkiye: Galatasaray and Fenerbah\u00e7e in the Champions League, Samsunspor and Be\u015fikta\u015f in the Europa
             League (Galatasaray won the cup as well, so from 2015/16 the cup place goes to the best league club with
             no place, not to the cup runner-up Trabzonspor), Ba\u015fak\u015fehir in the Conference League (the real places
@@ -226,7 +226,8 @@ def run_2025(program, game, work):
     """Open item 222: the euro.cfg block of a renamed nation (Turkey, T\u00fcrkiye from 2022) and the cup place of a cup
     winner with a league place (from 2015/16 the best league club with no place)."""
     import smoke_run
-    code, _ = rrc.run(program, game, 2025, 2025, os.path.join(DB, "December 2025"), ["England"], [], work, 7200, None,
+    # Select All: with England alone the Turkish league is not loaded, and the seeding takes other Turkish clubs.
+    code, _ = rrc.run(program, game, 2025, 2025, os.path.join(DB, "December 2025"), ["all"], [], work, 7200, None,
                       {"RECOMP_SAVE_AFTER_DAYS": "50"})
     save = os.path.join(work, "user", smoke_run.SAVE_NAME)
     if code != 0 or not os.path.exists(save):
