@@ -252,6 +252,10 @@ typedef struct {
 extern const SeasonIntlRename season_intl_renames[];
 extern const int season_intl_rename_count;
 
+/* 1 when old is an earlier name of now in a chain of the rename table (Turkey for T\xfcrkiye, Yugoslavia for
+ * Serbia), without case. */
+int season_intl_earlier_name(const char *old, const char *now);
+
 /* 1 when the data holds a later name of the chain of rename row i (Serbia for Yugoslavia), by held(name, ctx),
  * which compares names without case (the databases from 2019 write "eSwatini"). The record of the old name is
  * then a dead record beside the live one. */

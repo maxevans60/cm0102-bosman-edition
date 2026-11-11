@@ -1599,6 +1599,8 @@ static int earlier_name(const char *old, const char *now)
     return 0;
 }
 
+int season_intl_earlier_name(const char *old, const char *now) { return old && now && earlier_name(old, now); }
+
 /* The national sides of a renamed nation (open item 42 of 0.6.2): the senior and under-21 sides (the rows from
  * clubs - 2 * nations, 0x53b4c2) keep their own name at club +4 (51 bytes) and short name at +0x38 (26 bytes),
  * which the fixtures, results and history screens show. A side whose name is an earlier name of its nation's name
