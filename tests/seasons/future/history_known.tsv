@@ -65,6 +65,7 @@ same-final	OFC Nations Cup final	*	real history before the start (2000 to 2002, 
 confederation	Oceania Champions Cup	*	real history: a guest nation or club, or Australia in OFC before 2006
 same-final	Oceania Champions Cup	*	real history before the start (2000 to 2002, 2015 to 2017)
 gap	Polish Super Cup	2004	real calendar: no Super Cup in 2002 (cancelled for financial reasons) and 2003 (rules rows gre-pol-cro-272 and -273 not held; en.wikipedia.org "Polish Super Cup", read 7 November 2026)		real
+missing	Polish Super Cup	2002-2004	real calendar: no Super Cup in 2002 (cancelled for financial reasons) and 2003, held again in 2004 (rules rows gre-pol-cro-272 and -273 not held; en.wikipedia.org "Polish Super Cup", read 7 November 2026); the fault shows while a save of 2002 to 2004 holds no later edition		real
 duplicate	Portuguese Second Division B Central	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
 duplicate	Portuguese Second Division B North	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
 duplicate	Portuguese Second Division B South	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
