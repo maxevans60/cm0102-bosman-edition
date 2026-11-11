@@ -59,6 +59,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 - The Club World Cup host place goes to the continent's runner-up when the host's own club wins its continent, as in 2007 and 2008. A 2025 start has the 2025 Club World Cup in its history.
 - The Suruga Bank Championship from 2008 to 2019 is the J.League Cup winner against the Copa Sudamericana winner of the year before. Before, every final was Kashima Antlers against Talleres.
 - The Intercontinental Cup, the Recopa Sudamericana and the FIFA Intercontinental Cup of 2024 to 2026 take the real continental champions. Australian clubs no longer play the OFC club competition after Australia moved to Asia in 2006.
+- With changing rules on, a Mexican guest club that wins the Copa Libertadores no longer plays the Intercontinental Cup, the Club World Cup, the Recopa Sudamericana or the FIFA Intercontinental Cup for South America. The losing finalist takes the place.
 - The AFC Champions League, the OFC Champions League and the Oceania Champions Cup no longer stop after a final or after a load.
 - South American and Asian club cups no longer play on a FIFA day or within two days before one.
 
@@ -88,6 +89,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 
 - These boxes no longer stop the game:
   - "match_eng..cpp 612" and "match_eng..cpp 652", when a side had fewer than 11 players for a European or international match, for example after a save was loaded
+  - "match_eng..cpp 652" in a long season game, when a stadium clash moved a Champions League match before the squad deadline of 1 September. The match now keeps its day, and the weaker match moves.
   - "Cup..cpp 1278", in the Segunda División play-off final and in a Conference League tie
   - "match_man..cpp 1225", on 28 September 2020 in a 2001 game, when one player held 11 squad places of Hertha BSC Amateure
   - "Database..cpp 13471", at every 2005 start
