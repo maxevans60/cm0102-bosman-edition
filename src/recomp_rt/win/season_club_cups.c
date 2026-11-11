@@ -512,7 +512,8 @@ static void liber_guest_qualifier(uint32_t obj)
     int32_t id = (int32_t)rd32(g_mem, 0x9cf6e4u);
     if (!season_liber_rule_on() || !objects || id < 0 || rd32(g_mem, objects + 4u * (uint32_t)id) != obj) return;
     uint32_t list = rd32(g_mem, obj + CLUB_LIST_AT), rec = record_of_key(KEY_LIBERTADORES);
-    if (!list || (int16_t)rd16(g_mem, obj + CLUB_COUNT_AT) < 2) return;
+    if (!list || (int16_t)rd16(g_mem, obj + CLUB_COUNT_AT) < 2 || (int16_t)rd16(g_mem, obj + YEAR_AT) >= NEVER)
+        return;                                                 /* no edition: the cup waits (season_kind_club_world.c) */
     uint32_t guest = rd32(g_mem, list + 6u), uefa = rd32(g_mem, list);
     if (!season_liber_guest(guest) || guest != season_liber_latest(rec, 0)) return;
     uint32_t c = season_liber_latest(rec, 1);

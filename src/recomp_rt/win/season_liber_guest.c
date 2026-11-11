@@ -74,6 +74,14 @@ uint32_t season_liber_latest(uint32_t rec, int place)
 
 void season_liber_guest_log(const char *cup, int year, uint32_t guest, uint32_t club)
 {
+    /* A picker can run more than once for an edition (season_club_cups.c, the day before the first draw): one line
+     * for each cup, year, guest and club. */
+    static struct { const char *cup; int year; uint32_t guest, club; } seen[16];
+    static int next;
+    for (int i = 0; i < 16; i++)
+        if (seen[i].cup == cup && seen[i].year == year && seen[i].guest == guest && seen[i].club == club) return;
+    seen[next].cup = cup, seen[next].year = year, seen[next].guest = guest, seen[next].club = club;
+    next = (next + 1) % 16;
     uint32_t nat = rd32(g_mem, guest + CLUB_NATION);
     fprintf(stderr, "recomp: libertadores guest: %s %d: the winner %.40s (%.30s) is not a CONMEBOL club, so %.40s "
                     "takes CONMEBOL's place\n", cup, year, win_str(guest + 4u), in_game(nat) ? win_str(nat + 4u) : "?",
