@@ -183,6 +183,12 @@ assert not set(TUR_INSNS) & (set(INSNS) | set(PATCHES)) and not set(TUR_PATCHES)
 INSNS.update(TUR_INSNS)
 PATCHES.update(TUR_PATCHES)
 
+# The Ekstraklasa in one table (pol_first.py, GitHub issue 92): the club slot counts of PolFirst.
+from pol_first import PATCHES as POL_PATCHES  # noqa: E402
+
+assert not set(POL_PATCHES) & (set(PATCHES) | set(INSNS))
+PATCHES.update(POL_PATCHES)
+
 # A fix for the error box league_stage.cpp 533 of a league load (league_load.py): a row array of 0 bytes.
 from league_load import INSNS as LOAD_INSNS  # noqa: E402
 

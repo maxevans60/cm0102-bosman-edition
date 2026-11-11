@@ -403,6 +403,9 @@ uint32_t rt_tur_table_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_tur_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_tur_stage_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_tur_stage_bytes(uint32_t obj, uint32_t original);
+/* The Ekstraklasa in one table (win/season_pol_first.c, GitHub issue 92): the 16 club slots of the constructor's
+ * predicted positions (0x7c8ce5, 0x7c8d09) and of set_predicted_positions (0x7ca264, 0x7ca288), tools/recomp/pol_first.py. */
+uint32_t rt_pol_first_slots(uint32_t obj, uint32_t original);
 /* 1 when the Portuguese Cup takes a club with no division (0x7ce37d): a Portuguese club in a game with Liga 3. */
 uint32_t rt_por_cup_none(uint32_t club);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
