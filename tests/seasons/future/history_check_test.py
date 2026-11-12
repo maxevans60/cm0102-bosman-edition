@@ -1063,6 +1063,17 @@ def main():
                         ((2013, 2013, cl, 2023), False), ((2023, 2013, cl, 2023), False)):    # a young save
         if history_check.cut_by_oldest_part(*args) is not want_:
             bad.append(f"cut_by_oldest_part{args[:2]} edition {args[3]} is not {want_}")
+    # rules off keeps the original's international finals (Max's rule of 0.6.0): accepted design rows for rules off
+    # only, never for a game with changing rules on
+    real = history_check.read_known(os.path.join(os.path.dirname(os.path.abspath(__file__)), "history_known.tsv"))
+    for check, comp in (("no-host", "African Cup of Nations"), ("no-host", "Asian Cup"), ("no-host", "Confederations Cup"),
+                        ("no-host", "Copa America"), ("no-host", "Oceania Nations Cup"), ("entrant-count", "Asian Cup"),
+                        ("entrant-host", "Asian Cup"), ("entrant-host", "Confederations Cup"),
+                        ("entrant-host", "Olympic Games")):
+        for rules, want_ in (("off", "accepted"), ("on", None)):
+            got = history_check.known_status(real, check, comp, 2004, rules)
+            if got != want_:
+                bad.append(f"rules {rules}: {check} {comp} 2004 is {got}, not {want_}")
     # an empty squad counts only for a side that plays in the 14 days around the save (open item 195)
     today = 1000
     for days, want_ in (([], False), ([today + 14], True), ([today + 15], False), ([today - 14], True),
