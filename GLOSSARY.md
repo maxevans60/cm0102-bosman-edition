@@ -137,8 +137,28 @@ A test start of a new game in a far year (2098, 2198 or 2298), with every date o
 _Avoid_: time jump, far start
 
 **Run set**:
-The fixed list of Tier A, Tier B and date jump games that a release must pass: start seasons, databases, nations, seeds and end years.
+The list of test games in `run_set.tsv`, in three sets: the release set, the background soak and the quick games that test the script.
 _Avoid_: matrix, test grid
+
+**Release set**:
+The fixed games of the run set that a release must pass, from 0.7.1 on. Ten games on the Mac finish it in about 12 hours.
+_Avoid_: release run set, gate set
+
+**Spine soak**:
+A full-world game of the release set from one of eight starts, played to its World Cup and Euro end point. Together the eight play every season from 2001/02 to 2029/30 once.
+_Avoid_: era soak, long soak
+
+**Tile row**:
+A full-world game of the release set for one start season tile, with Select All and every extra division, played through the first season change to 1 September.
+_Avoid_: short soak, start check
+
+**Background soak**:
+The run set games that play only while the Mac is idle and hold no release: Tier A to 2300 and the full world from 2025 to 2100.
+_Avoid_: nightly run, long run
+
+**Extra division**:
+A lower division that the player adds on the Select League(s) screen: the English Conference, the German Regionalliga, Serie C2, the Spanish Segunda B, the Portuguese Second Division B or the Swedish Second Division. Select All sets none of them.
+_Avoid_: sub league, optional league, lower league
 
 **Checkpoint save**:
 A save that a Tier A or Tier B run keeps at a set year, so a later test can start there.
