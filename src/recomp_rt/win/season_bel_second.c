@@ -423,25 +423,95 @@ RT_WRAP(00420680, bel_second_status)
     o_00420680();
 }
 
-/* A barred U23 side (0xfc) in a place of the relegation play-off: 0x684cd0 gives 2 only to a row of 0xff or 0xfe
+/* The row index of each zone at the bottom of a table, as League::update_positions_and_status 0x684cd0 lays them out
+ * (0x684e7d..0x684ef5): from the last row up, +0xc1 rows of the direct relegation, then +0xc0 rows of the relegation
+ * play-off, and a row of status 0, 1 or 5 (title, promotion, a period winner) holds no zone and is skipped
+ * (0x684ec2..0x684ece). 0x685225 then gives each row the zone at its place +0x39 (zone[place - 1]), so rows that
+ * tie at one place (all of them at the start of a season) share its zone. zone[i] is 3, 2 or 0. */
+static void bottom_zones(uint32_t table, int n, int down, int playoff, uint8_t *zone)
+{
+    memset(zone, 0, (size_t)n);
+    int want = down, z = ST_DOWN;
+    for (int i = n - 1; i >= 0 && z >= ST_DOWN_PLAYOFF; i--) {
+        while (!want && z >= ST_DOWN_PLAYOFF) want = --z == ST_DOWN_PLAYOFF ? playoff : 0;
+        if (z < ST_DOWN_PLAYOFF) break;
+        int s = g_mem[row_at(table, i) + ROW_STATUS];
+        if (s == ST_UP || s == ST_PLAYOFF || s == ST_TITLE) continue;
+        zone[i] = (uint8_t)z;
+        want--;
+    }
+}
+
+/* A barred U23 side (0xfc) in the zone of the relegation play-off: 0x684cd0 gives 2 only to a row of 0xff or 0xfe
  * (0x685274..0x68527f), so the group would have no row of 2 and BelThird::create_relegation_playoff_stage 0x423ba0
  * stops with an error box (bel_third.cpp 1642, 0x423d68..0x423da5: it needs a row of 2 in each group). The side
- * plays the relegation play-off: it gets 2. The places are the positions (row +0x39, as 0x685225 reads them) above
- * the relegation places (+0xc1), as many as +0xc0. It runs with the rule off too (a save made with it on). */
+ * plays the relegation play-off: it gets 2. The zone is the original's (bottom_zones): a period winner (1) in the
+ * place of the play-off moves the zone one row up (open item 223: pass 6, a2026s2, May 2070, SK Beveren won a
+ * period of group A and ended 14th, and Union Saint-Gilloise U23 (0xfc) 13th held the zone; item 115 looked at the
+ * place only and the box came). It runs with the rule off too (a save made with it on); a row of 0xfc exists only
+ * in a season game. A side that holds the zone above its place logs one line always (item 223). */
 static void playoff_place(uint32_t league)
 {
     int n;
     uint32_t table = table_of(league, &n);
     int down = (int8_t)g_mem[league + DOWN_PLACES], playoff = (int8_t)g_mem[league + DOWN_PLAYOFF];
     if (!table || down < 0 || playoff <= 0) return;
+    uint8_t zone[64];
+    bottom_zones(table, n, down, playoff, zone);
     for (int i = 0; i < n; i++) {
         uint32_t row = row_at(table, i);
         int pos = (int8_t)g_mem[row + ROW_POS];
-        if (pos <= n - down - playoff || pos > n - down || g_mem[row + ROW_STATUS] != ST_BARRED) continue;
+        if (pos < 1 || pos > n || zone[pos - 1] != ST_DOWN_PLAYOFF || g_mem[row + ROW_STATUS] != ST_BARRED) continue;
         g_mem[row + ROW_STATUS] = ST_DOWN_PLAYOFF;
-        if (log_on())
-            fprintf(stderr, "recomp: bel second: %.51s (place %d) plays the relegation play-off of level 3\n",
-                    name_of(rd32(g_mem, row)), pos);
+        int moved = pos <= n - down - playoff;
+        if (log_on() || moved)
+            fprintf(stderr, "recomp: bel second: %.51s (place %d) plays the relegation play-off of level 3%s\n",
+                    name_of(rd32(g_mem, row)), pos, moved ? " (the zone moved up past a period winner, item 223)" : "");
+    }
+}
+
+/* Open item 223, the real rule: a Third Division period winner that ends in a place of relegation. BelThird::
+ * update_positions_and_status 0x422f70 gives 1 to the winner of each period when its row has 0xff (0x423036..
+ * 0x42303c), and the row keeps 1: 0x684cd0 skips it when it lays out the zones of relegation (bottom_zones), so the
+ * next row up takes its place in the relegation play-off or the direct relegation, and the period winner plays the
+ * promotion play-off. Real life (fr.wikipedia "Championnat de Belgique de football de troisieme division", section
+ * on the periods, read 12 November 2026): a club that ends in a place of direct relegation or as "barragiste" may
+ * not play the Tour final, and the next club of the final table takes its place. In a season game, at the call of
+ * BelThird::create_promotion_playoff_stage 0x423880 (the tables are final: the stage chain 0x423640 calls it at
+ * 0x4236f1, before 0x423ba0 at 0x4236f8), when a row of 1 holds a place of relegation, the bottom of the group goes
+ * by place: the places of direct relegation (+0xc1) get 3, the places of the play-off (+0xc0) get 2, and a row above
+ * them that the move gave 2 or 3 gets back 0xff (0xfc for a barred U23 side, as mark gives it). The original's top-up
+ * of 0x423880 (group A 0x4238bd..0x42393c, group B 0x42395a..0x4239d9: the rows of 1 count, then rows of 0xff from
+ * the top) gives the free promotion
+ * play-off place to the next club. A game with the rules off (or RECOMP_BEL_SECOND=off) keeps the original. Each
+ * change logs one line. Ties: BelThird gives tied rows their own places (2067 and 2070 dumps: equal points at
+ * places 13, 14 and 15), so each place holds one row. The
+ * Second Division has the same way (0x420680 gives 1 at 0x42070e) and no source for its rule: not changed. */
+static void period_winner_down(uint32_t league, const char *division)
+{
+    int n;
+    uint32_t table = table_of(league, &n);
+    int down = (int8_t)g_mem[league + DOWN_PLACES], playoff = (int8_t)g_mem[league + DOWN_PLAYOFF];
+    if (!table || down < 0 || playoff < 0 || down + playoff > n) return;
+    int bottom = n - down - playoff, hit = 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t row = row_at(table, i);
+        hit |= (int8_t)g_mem[row + ROW_POS] > bottom && g_mem[row + ROW_STATUS] == ST_PLAYOFF;
+    }
+    if (!hit) return;
+    for (int i = 0; i < n; i++) {
+        uint32_t row = row_at(table, i), club = rd32(g_mem, row);
+        int s = g_mem[row + ROW_STATUS], to = s, pos = (int8_t)g_mem[row + ROW_POS];
+        if (pos > n - down) to = ST_DOWN;
+        else if (pos > bottom) to = ST_DOWN_PLAYOFF;
+        else if (s == ST_DOWN || s == ST_DOWN_PLAYOFF)
+            to = rule_on() && season_now() >= BAR_FROM && barred_up(club, 3) ? ST_BARRED : ST_NONE;
+        if (to == s) continue;
+        g_mem[row + ROW_STATUS] = (uint8_t)to;
+        fprintf(stderr, "recomp: bel second: %.51s, %d of %d in the %s: status %d -> %d (%s; item 223)\n",
+                name_of(club), pos, n, division, s, to,
+                s == ST_PLAYOFF ? "a period winner in a place of relegation, the next club takes its play-off place"
+                                : to == ST_NONE || to == ST_BARRED ? "its place is above the relegation" : "its place");
     }
 }
 
@@ -499,6 +569,10 @@ RT_WRAP(00423880, bel_third_playoff)
 {
     uint32_t self = cpu.ecx, second = league_of(KEY_SECOND), b = group_b(self);
     int season = season_now();
+    if (self && self == league_of(KEY_THIRD) && rule_on()) {
+        period_winner_down(self, "Third Division group A");
+        if (b) period_winner_down(b, "Third Division group B");
+    }
     if (self != league_of(KEY_THIRD) || !season_game_changes() || !b || !second) {
         o_00423880();
         return;
