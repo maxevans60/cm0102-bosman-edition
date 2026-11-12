@@ -1317,6 +1317,7 @@ void season_divisions_test_extra(void)
     const char *want = getenv("RECOMP_TEST_EXTRA");
     static const struct { const char *name; uint32_t key; } nations[] = {
         {"germany", KEY_GERMANY}, {"italy", 0x009cf360u}, {"spain", 0x009cf488u}, {"portugal", 0x009cf434u},
+        {"sweden", 0x009cf4a8u},
     };
     uint32_t table = rd32(g_mem, NATIONS);
     if (!want || !*want || !readable(table)) return;
