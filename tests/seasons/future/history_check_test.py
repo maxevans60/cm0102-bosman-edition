@@ -1075,6 +1075,20 @@ def main():
             got = history_check.known_status(real, check, comp, 2004, rules)
             if got != want_:
                 bad.append(f"rules {rules}: {check} {comp} 2004 is {got}, not {want_}")
+    # the OFC Nations Cup finals of 1998, 2000 and 2002 all had Australia and New Zealand: accepted real, any rules
+    for comp in ("OFC Nations Cup", "OFC Nations Cup final"):
+        for rules in ("on", "off"):
+            got = history_check.known_status(real, "same-final", comp, 2002, rules)
+            if got != "accepted":
+                bad.append(f"rules {rules}: same-final {comp} 2002 is {got}, not accepted")
+    # rules off keeps the original's entrant counts and hosts of the finals (pass 6: a2001offs1 to 3 after 2025)
+    for check, comp in (("entrant-count", "African Cup of Nations"), ("entrant-count", "Copa America"),
+                        ("entrant-count", "Confederations Cup"), ("entrant-count", "FIFA World Cup"),
+                        ("entrant-host", "FIFA World Cup")):
+        for rules, want_ in (("off", "accepted"), ("on", None)):
+            got = history_check.known_status(real, check, comp, 2026, rules)
+            if got != want_:
+                bad.append(f"rules {rules}: {check} {comp} 2026 is {got}, not {want_}")
     # item 219: a Mexican guest as the Libertadores side of the Intercontinental Cup is the original's design with
     # changing rules off; the fix acts only with changing rules on, so a rules-on fault stays one
     for check in ("confederation", "entrant-confed"):
