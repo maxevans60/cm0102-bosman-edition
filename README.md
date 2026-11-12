@@ -59,7 +59,7 @@ Saves are in `~/Library/Application Support/cm0102` (Mac), `%APPDATA%\cm0102` (W
 
 ## Roadmap
 
-The current release is 0.6.1. Next is 0.7.0, which adds online play with friends on any platform, with no patch, VPN or router setting, and a large set of season and competition fixes. Before it ships, test games play every competition through to 2300. The [changelog](CHANGELOG.md) lists what is in it so far, and the [milestones](https://github.com/maxevans60/cm0102-bosman-edition/milestones) show what comes after.
+The current release is 0.7.0. Next is 0.7.1, with rule fixes found after 0.7.0. Then 0.8.0 brings the features players asked for most, with a Rules tab of options, and 0.9.0 brings Android. The [changelog](CHANGELOG.md) lists every release, and the [milestones](https://github.com/maxevans60/cm0102-bosman-edition/milestones) show what each version holds.
 
 ## How it works
 

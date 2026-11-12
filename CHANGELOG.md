@@ -4,7 +4,11 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 
 ## 0.7.0 (pre-release)
 
-Play network games with friends online, on a Mac, Windows or Linux, with no patch, no VPN and no router setting. New lines in `settings.txt`: `online_play` and `game_password`.
+Play network games with friends online, on a Mac, Windows or Linux, with no patch, no VPN and no router setting. This release also fixes many faults in seasons and competitions that long test games to 2300 found. New lines in `settings.txt`: `online_play` and `game_password`. The `season` line can also be `2026/27`.
+
+A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cup..cpp 5246". Saves from 0.6.0 and 0.6.1 load in 0.7.0.
+
+### Online play
 
 - Network Play works again. Bosman Edition answered every network call with "no network" before. The original's own screens run: Network Play, Start Network Game, Join Network Game and Select Network Game.
 - The game list (Select Network Game) shows the games online and the games on your own network in one list, up to 50 games with the original's scrollbar. Each online row shows the season, the game date and the managers online. The original showed at most 9 games.
@@ -15,6 +19,8 @@ Play network games with friends online, on a Mac, Windows or Linux, with no patc
 - Kick: while you host, the Network tab lists the human managers online with their club and ping, and a Kick button for each. Their club goes on holiday.
 - Drop in and drop out: when a human manager leaves or loses the connection, they show as Away, and their club goes on holiday as in the original. They join again and take their club back with their manager password.
 - When the host quits, the host's game saves, and each human manager sees "The host left the game." and goes back to the start screen.
+- A host that quits leaves the online game list at once.
+- A host in widescreen, the default, no longer breaks the screens of every human manager who joins. The game sends every network screen position at the original's 800x600 size, so any mix of classic and widescreen works, with the drag on the tactics screen too.
 - Always-on games: a host can leave a game open for a long time. It moves forward only when a human manager clicks Continue.
 - Clear errors: each failure says what went wrong and what to do next, in place of "The network game could not be created" or a wait at "Contacting Server". A player on another version sees the host's version.
 - Connection test: a Test button on the Network tab checks the lobby and the relay, and says that online play works or what is wrong.
@@ -23,6 +29,87 @@ Play network games with friends online, on a Mac, Windows or Linux, with no patc
 - The online service is free and has a daily limit. When it is used up, the game list says "Online games are full today, try again later" until 00:00 UTC. Games on your own network or over a VPN still work.
 - Privacy: the lobby keeps internet addresses in memory only while a game is open, and writes them to no log. It has no accounts.
 - The secure connection to the lobby and the relay uses mbedTLS. Its licence is in each download.
+
+### Seasons, leagues and cups
+
+- Choose Season has a 2026/27 tile with the Update Team's October 2026 database. A 2026/27 game starts on 11 July 2026, with the 2026 World Cup and the 2025 Africa Cup of Nations in its history. The 2026/27 rules of every league were checked against the new database. A long game with changing rules on takes them in July 2026.
+- Reserve and B teams follow the real rules of their nation in every season game: Norway, the Netherlands from 2013/14, Belgium from 2020/21, France, Italy, Finland, Denmark from 2005/06, Russia from 2015/16, Spain, and Portugal from 2012/13. A second team cannot go up into the division of its first team, and goes down when its first team comes down to it. The place goes to the next club in the table. A save from an earlier release is put right at the next season change.
+- Each nation keeps the last rule of its league sizes, promotion, relegation, play-offs and foreign player limits after the rules table ends. Cup formats, super cups and substitutes no longer go back to the start season after 2099.
+- Australia: the NSL plays its finals series and Grand Final every season. Before, every later season repeated the first Grand Final. This is a fault of the original game too.
+- Belgium: the Second Division's 16th goes down directly from 2015/16, and no longer plays the third-tier promotion play-off. The three divisions of a 2025 start no longer stop at the 2026 season change.
+- Brazil: Série A no longer loses 2 clubs every season from 2025/26, and Série B sends 4 clubs up. The state championships keep their rules after 2057, and the Campeonato Paraense plays every year.
+- Ireland: the Premier Division holds 12 clubs and the First Division 10. The Irish Super Cup no longer stops after some decades, and a save where it stopped starts it again at the next season change. This is a fault of the original game too.
+- Italy: a 2006/07 start plays the Supercoppa Italiana as Internazionale against AS Roma. Before, Juventus played it from Serie B. Serie C group winners go up to Serie B before the play-off winners.
+- England: the Conference League Cup plays only in the seasons it really ran.
+- Finland and Poland: the Veikkausliiga, Ykkösliiga, Ekstraklasa and I liga no longer stop in very long games.
+- Japan and Argentina: a 2026 start plays the Emperor's Cup and the J.League Cup, and the Argentine history has the 2026 Apertura.
+
+### European cups
+
+- Spain's Champions League places go to the top four of La Liga. Before, some 2021, 2025 and 2026 starts gave them to clubs from lower in the table or from the Segunda División. A Champions League or Conference League place that no club can take stays empty, as UEFA leaves it, and the round gets a bye.
+- Each season database has its own European places file. A 2005/06 start no longer puts Leeds United, a second-tier club, in the Champions League. Season folders unpacked by 0.6.0 or 0.6.1 get the file at the next start.
+- UEFA coefficients use the real values in every season database and in our Summer 2002, Summer 2004 and Summer 2006 databases. Saves from earlier releases keep the season with no value.
+- From 2009/10 a nation has at most 4 clubs in the Champions League. From 2015/16 it can have 5, when it holds both the Champions League and the Europa League. From 2024/25 it can have 7: 4 league places, both title holders and the European Performance Spot. A club over the limit takes a Europa League place, as Tottenham Hotspur did in 2012/13.
+- UEFA Cup 2004/05 to 2008/09: the second qualifying round and the first round no longer fall on international dates. The spare cup place goes to the next club in the league. Before, it went to the losing FA Cup semi-finalists.
+- The Setanta Cup plays from its first edition in 2004/05, with the format of each season. The All-Ireland cup from 2010/11 takes the Northern Irish clubs by league place and pairs clubs from the two leagues in the first round.
+- Season news says "is played again" for a cup that comes back, such as the Setanta Sports Cup in 2010/11, and "first time" only for a new cup.
+
+### Club cups outside Europe
+
+- The Club World Cup host place goes to the continent's runner-up when the host's own club wins its continent, as in 2007 and 2008. A 2025 start has the 2025 Club World Cup in its history.
+- The Suruga Bank Championship from 2008 to 2019 is the J.League Cup winner against the Copa Sudamericana winner of the year before. Before, every final was Kashima Antlers against Talleres.
+- The Intercontinental Cup, the Recopa Sudamericana and the FIFA Intercontinental Cup of 2024 to 2026 take the real continental champions. Australian clubs no longer play the OFC club competition after Australia moved to Asia in 2006.
+- With changing rules on, a Mexican guest club that wins the Copa Libertadores no longer plays the Intercontinental Cup, the Club World Cup, the Recopa Sudamericana or the FIFA Intercontinental Cup for South America. The losing finalist takes the place.
+- The AFC Champions League, the OFC Champions League and the Oceania Champions Cup no longer stop after a final or after a load.
+- South American and Asian club cups no longer play on a FIFA day or within two days before one.
+
+### International football
+
+- Every finals goes on after its last known edition (the World Cup 2030, Euro 2028 and the Olympics 2024), with its qualifying. The Africa Cup of Nations, Copa América, Asian Cup and OFC Nations Cup no longer stop early, and draw screens no longer show dates in 2199 or 2200.
+- Announced hosts play: the World Cup 2034 in Saudi Arabia, Euro 2032 in Italy and Türkiye, the Olympics 2028 in the USA and 2032 in Australia, the Africa Cup of Nations 2027 in Uganda, and Mali in 2002 with changing rules on. Every finals in the history names its host.
+- Competition history has no year twice, World Cup and Euro years sit in the right year with every Update Team database, and the missing editions of late starts are in. Starts from 2003 on the 3.9.60, 3.9.65 and 3.9.68 data show the real past editions.
+- National sides take their nation's new name, such as Serbia, Czechia and Türkiye, in saves from earlier releases too. Kazakhstan moves from Asia to UEFA at the 2002/03 season change, with a news item.
+- The "Asian Cup Quals" with European winners is now the UEFA Nations League.
+- The OFC Nations Cup plays its real formats: 8 nations in 2 groups of 4 in 2002, 2012, 2016 and 2024, one group of 6 and a two-leg final in October 2004, and one group of 4 home and away in 2008. The hosts play. Where the data lacks the real entrants, the strongest nations of Oceania fill the places. The Asian Cup from 2004 to 2015 has 16 nations.
+- World Cup qualifying takes every nation: all of UEFA from 2006, a first round of two-leg ties in Asia so that Brunei, Bhutan and other small nations play, every Oceania nation from 2006, and all 52 African nations. Timor-Leste joins the AFC from 2005/06.
+- Qualifying stages play their matchdays in order on FIFA days, with both legs of a tie in one window. A friendly of the same nations within two days of a qualifier is cancelled, with a news item. South America plays on the real days of the 2006 to 2026 cycles, and CONCACAF on the real days of its 2026 qualifying. African groups end in the autumn of the year before the finals.
+- The CONCACAF Nations League takes Martinique, Guadeloupe, French Guiana, Saint-Martin, Sint Maarten and Bonaire, as in real life. They play no World Cup, Olympics or Gold Cup. It no longer shares autumn windows with World Cup qualifying, and no longer stops after 2035 in a save from 0.6.
+- The 2023-24 CONCACAF Nations League plays its first matchday on 7 September 2023, as in real life. Before, North American friendlies took the window and moved 11 of its matches off the FIFA days.
+- In the Euros, Asian Cups and Africa Cups of Nations of 24 nations, and in the Asian Cups, Copa Américas and Gold Cups of 16, two groups no longer meet at one stadium on one day. Every group match plays before the knockout rounds, which start on time.
+- With changing rules off, the Confederations Cup starts in mid June and lasts 11 days. Before, it played from 29 July on club and qualifier days, so clubs lost players to it. This is a fault of the original game too.
+- Every senior national team gets a new manager when its manager leaves. West African nations no longer have nearly empty senior squads, and under-21 and under-23 sides no longer run out of players. These are faults of the original game too.
+
+### Fixes from your reports
+
+- A new game on the default 2001/02 data with Sweden's extra division no longer stops with the box "swe_second..cpp 656". The data has 11 clubs in one 2001 group, East Svealand, as in real life, and the game now plays that group with 11. On the 3.9.65 data, Katrineholms SK now plays Division 3, as in real life, so a new game no longer stops with the box "swe_second..cpp 643".
+- Holiday: "Reject all offers below asking price" now turns down bids below the price, and loan requests follow the holiday settings. These are faults of the original game too.
+- A game no longer hangs on the evening of 27 December 2001 at the 2002 World Cup draw. Saves made before it are mended at load. This is a fault of the original game too.
+- Club info shows balances above £2,147,483,647 and the right debt, budget and finance news amounts. A very rich computer club keeps a sane transfer budget. International caps and goals no longer start again at 256. These are faults of the original game too.
+
+### Error boxes
+
+- These boxes no longer stop the game:
+  - "match_eng..cpp 612" and "match_eng..cpp 652", when a side had fewer than 11 players for a European or international match, for example after a save was loaded
+  - "match_eng..cpp 652" in a long season game, when a stadium clash moved a Champions League match before the squad deadline of 1 September. The match now keeps its day, and the weaker match moves.
+  - "Cup..cpp 1278", in the Segunda División play-off final and in a Conference League tie
+  - "match_man..cpp 1225", on 28 September 2020 in a 2001 game, when one player held 11 squad places of Hertha BSC Amateure
+  - "Database..cpp 13471", at every 2005 start
+  - "ire_prm..cpp 82", at a 2008/09 start with the 3.9.68 data and all nations
+  - "ita_ser_c2a..cpp 551", at the June 2028 season change
+  - "conmebol_liber..cpp 663", after you open a long "New rules" news item
+  - "Date..cpp 52", in the Conference League Cup of 2024
+  - "bel_third..cpp 1642", in a 2070 game, when a period winner of the Belgian Third Division finished in a relegation place. With changing rules on, the real rule now applies: that club loses its play-off place to the next club.
+- A long penalty shoot-out with a side down to fewer players no longer reads an empty place. The best player left takes the kick.
+
+### Saves, memory and speed
+
+- Saves no longer fail at 999 parts ("unable to pack the temporary files") in long games. Season changes run after 2099, and saves after 2100 load.
+- A 0.6.0 or 0.6.1 save whose finals wait for 2200, or whose qualifying has the old shape, is put right at load and plays the next World Cup, Euros and Olympics.
+- Very long games no longer stop with "heap full" around 2222.
+- Match results no longer depend on how busy the computer is.
+- The Club History screen keeps the last 50 seasons of each club, and fixtures and results of seasons more than 50 years back are deleted. League and cup history stays whole. With this, a save of every nation stays under the 4 GB limit up to 2300. It applies in every game.
+- Game days are about 20 % faster on a Mac with Apple silicon, and faster in long games: a July 2025 save plays a day in 6.9 seconds in place of 8.9.
+- A new game is faster: 2025/26 with all nations takes 120 seconds in place of 142. The December 2025 database with four nations takes 51 seconds in place of 95.
 
 ## 0.6.1 (pre-release)
 
