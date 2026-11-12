@@ -74,4 +74,8 @@ void net_test_text(char *out, size_t room, NetTest t, int ms);
  * refusal the lobby's error code when refused. NULL when there is nothing to say. */
 const char *net_host_text(char *out, size_t room, int state, const char *code, const char *refusal);
 
+/* The invite link of a game (0.7.1, #137): the lobby address, "/join/" and the game code. A "/" at the end of the
+ * address goes. NULL when the code or the address is empty, or the text does not fit. */
+const char *net_invite_link(char *out, size_t room, const char *lobby_address, const char *code);
+
 #endif

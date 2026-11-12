@@ -312,6 +312,14 @@ static void test_texts(void)
     net_host_text(t, sizeof t, 2, "K7M2Q9RT", "");
     CHECK(strstr(t, "K7M2Q9RT"), "the open host line shows the game code: %s", t);
     CHECK(!net_host_text(t, sizeof t, 0, "", "") && !net_host_text(t, sizeof t, 6, "", ""), "no line when closed");
+    /* The invite link (#137): the page that server/src/join.ts serves. */
+    CHECK(net_invite_link(t, sizeof t, "https://online.cm0102bosman.co.uk", "K7M2Q9RT") &&
+              !strcmp(t, "https://online.cm0102bosman.co.uk/join/K7M2Q9RT"), "invite link: %s", t);
+    CHECK(net_invite_link(t, sizeof t, "http://127.0.0.1:8787//", "K7M2Q9RT") &&
+              !strcmp(t, "http://127.0.0.1:8787/join/K7M2Q9RT"), "a / at the end of the address goes: %s", t);
+    CHECK(!net_invite_link(t, sizeof t, "https://x.test", "") && !net_invite_link(t, sizeof t, "", "K7M2Q9RT") &&
+              !net_invite_link(t, sizeof t, NULL, "K7M2Q9RT") && !net_invite_link(t, 10, "https://x.test", "K7M2Q9RT"),
+          "no link with no code, no address or no room");
 }
 
 /* ---- game list rows and JSON ---- */

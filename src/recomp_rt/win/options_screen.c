@@ -82,6 +82,8 @@
 #include "season.h"
 #include "../host.h"
 
+#include <SDL.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -133,6 +135,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 #define PASSWORD_ID 0x7d60u         /* the game password field */
 #define KICK_ID 0x7d61u             /* data: the player slot */
 #define TEST_ID 0x7d62u             /* the Test button of the connection test */
+#define COPY_ID 0x7d63u             /* the Copy link button of the invite link (0.7.1, #137) */
 #define KICK_CODE 0x7d              /* the confirm's code; the original's codes are below 0x40 */
 #define CONFIRM_PUSH 0x591840u      /* cdecl (title, heading, text, 1, colour, colour, code) */
 #define GAME_TITLE 0x839570u        /* cdecl (): the title text (0x7643a0) */
@@ -187,6 +190,8 @@ static uint32_t password_field;     /* the buffer of the game password field */
 static int kick_slot;               /* the player slot of the open Kick confirm, 0 with none */
 static int test_asked;              /* the connection test started while this box is open */
 static int test_built;              /* the box was built while the test ran */
+static int invite_built;            /* the box was built with the invite link row (the game was in the lobby) */
+static int copy_done;               /* the link was copied since the box opened */
 static char kick_name[64];
 static int failed_row = -1;         /* the row whose last value could not be written to settings.txt */
 static int open_failed;             /* the last Open folder of the box could not start the file manager */
@@ -426,6 +431,34 @@ static void test_row(int y, uint32_t green, uint32_t light)
     two_lines(column_x(weights_two, 4, 2) + 4, y, ROW_X2, y + 32, line, light);
 }
 
+/* The invite link row (0.7.1, #137): while this host's game is in the online list, its game code and link, and a
+ * Copy link button. Returns the height used. */
+static int invite_row(int y, uint32_t green, uint32_t light)
+{
+    char code[9], link[200], line[260];
+    invite_built = net_lobby_invite(code, sizeof code, link, sizeof link);
+    if (!invite_built) {
+        copy_done = 0;
+        return 0;
+    }
+    int a = area(ROW_X1, y, ROW_X2, y + 32, 4, weights_two, 1, 0);
+    plain(a, 0, "Invite link", 3, light);
+    if (copy_done) current(a, 1, "Copied");
+    else choice(a, 1, "Copy link", COPY_ID, 0, green);
+    snprintf(line, sizeof line, "Game code %s  %s", code, link);
+    two_lines(column_x(weights_two, 4, 2) + 4, y, ROW_X2, y + 32, line, light);
+    return 35;
+}
+
+/* The Copy link button: the link goes to the clipboard. */
+static void copy_link(void)
+{
+    char code[9], link[200];
+    if (!net_lobby_invite(code, sizeof code, link, sizeof link)) return;
+    copy_done = !SDL_SetClipboardText(link);
+    fprintf(stderr, "recomp: options box: Copy link %s %s\n", link, copy_done ? "copied" : "failed");
+}
+
 /* The Network tab below its switch rows (see the head of this file). */
 static void network_rows(int y, uint32_t green, uint32_t light)
 {
@@ -433,9 +466,11 @@ static void network_rows(int y, uint32_t green, uint32_t light)
      * layout and with it later days (Q152, smoke_run.py --same-save --options, run options-network, 2026-10-28; with
      * the field alone left out the run still failed). The Connection test row is one of them (slice 7): the start
      * screen's box and a host's box show it. */
+    invite_built = 0;
     if (season_game_on() && !net_session_hosting()) return;
     test_row(y, green, light);
     y += 35;
+    y += invite_row(y, green, light);
     if (!password_field) password_field = win_static_alloc(PASSWORD_MAX + 8);   /* not the game heap (Q152) */
     snprintf((char *)g_mem + password_field, PASSWORD_MAX + 1, "%s", options_string(OPT_GAME_PASSWORD));
     int a = area(ROW_X1, y, ROW_X2, y + 32, 4, weights_two, 1, 0);
@@ -658,6 +693,13 @@ static void options_input(void)
         rt_ret_cdecl(REBUILD);
         return;
     }
+    if (w < 0 && node_slot(0) == 3) {
+        char c[9], l[200];
+        if (net_lobby_invite(c, sizeof c, l, sizeof l) != invite_built) {   /* the game went into the lobby, or out */
+            rt_ret_cdecl(REBUILD);
+            return;
+        }
+    }
     if (w < 0 && test_built && net_test_state(NULL) != NT_RUNNING) {
         rt_ret_cdecl(REBUILD);                      /* the connection test ended: show its result */
         return;
@@ -676,6 +718,9 @@ static void options_input(void)
         if (id == TEST_ID) {
             test_asked = 1;
             net_lobby_test_start();
+            r = REBUILD;
+        } else if (id == COPY_ID) {
+            copy_link();
             r = REBUILD;
         } else if (id == KICK_ID) {
             ask_kick((int)data);
