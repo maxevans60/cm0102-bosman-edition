@@ -1075,6 +1075,13 @@ def main():
             got = history_check.known_status(real, check, comp, 2004, rules)
             if got != want_:
                 bad.append(f"rules {rules}: {check} {comp} 2004 is {got}, not {want_}")
+    # item 219: a Mexican guest as the Libertadores side of the Intercontinental Cup is the original's design with
+    # changing rules off; the fix acts only with changing rules on, so a rules-on fault stays one
+    for check in ("confederation", "entrant-confed"):
+        for rules, want_ in (("off", "accepted"), ("on", None)):
+            got = history_check.known_status(real, check, "Intercontinental Cup", 2017, rules)
+            if got != want_:
+                bad.append(f"rules {rules}: {check} Intercontinental Cup 2017 is {got}, not {want_}")
     # an empty squad counts only for a side that plays in the 14 days around the save (open item 195)
     today = 1000
     for days, want_ in (([], False), ([today + 14], True), ([today + 15], False), ([today - 14], True),
