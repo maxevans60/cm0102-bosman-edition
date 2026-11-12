@@ -168,9 +168,10 @@ static int halved(int year)
  * promotion places (up), its relegation places (ps_down), and its play-off: against the Ekstraklasa (vs, as many pairs
  * as the Ekstraklasa's play-off places: 2 in 2002/03, 1 from 2003/04 to 2008/09) or its own (own: 3rd to 6th for one
  * place from 2019/20, the encoded 4 promotion play-off places from the place after the direct ones). 2008/09 keeps
- * its play-off of 1 pair: the Polish FA cancelled the matches of Arka Gdynia (14th) and Korona Kielce (3rd) over the
- * licence appeals of LKS Lodz and Widzew Lodz (en.wikipedia.org, 2008-09 Ekstraklasa, read 11 November 2026), an
- * event the game has no means to model. The I liga's relegation play-offs against the third tier (2003/04 to 2006/07,
+ * its play-off of 1 pair: the matches of Cracovia (14th) and Korona Kielce (3rd), 13 and 17 June 2009, were put off
+ * over a protest of LKS Lodz and then cancelled after the punishment of Widzew Lodz (rsssf.org/tablesp/pol09.html,
+ * read 12 November 2026; the PZPN decision of 12 June 2009, sportowefakty.wp.pl/pilka-nozna/81500/baraze-odwolane),
+ * an event the game has no means to model. The I liga's relegation play-offs against the third tier (2003/04 to 2006/07,
  * 2008/09, 2014/15 to 2017/18) have no opponent in the game, whose third tier is a pool of clubs: those places stay up.
  * Returns 0 when a row is missing or holds no count. */
 typedef struct { int down, po, up, vs, own, ps_down; } Exchange;
@@ -252,6 +253,8 @@ static int club_count(uint32_t obj)
 /* The rounds of the first phase: 2 (n - 1) for an even n, a round more for an odd n (a club rests). The split adds
  * the rounds of its top group, each pair once. */
 static int first_rounds(int n) { return 2 * (n + (n & 1) - 1); }
+/* The matches of a club in the first phase: 2 (n - 1). With an odd n a club rests one of the 2n dates of each meeting. */
+static int first_matches(int n) { return 2 * (n - 1); }
 static int split_rounds(void) { return SPLIT_TOP - 1; }
 
 /* ---- the date template ---- */
@@ -785,7 +788,7 @@ uint32_t rt_pol_history_index(uint32_t t, uint32_t original)
     if (match && logging() && logged != year) {
         logged = year;
         fprintf(stderr, "recomp: pol first: %d/%02d: club history of the final table, %d clubs, %d matches before it\n",
-                year, (year + 1) % 100, (int16_t)rd16(g_mem, t + OBJ_CLUBS), one ? 0 : first_rounds((int16_t)rd16(g_mem, obj + OBJ_CLUBS)));
+                year, (year + 1) % 100, (int16_t)rd16(g_mem, t + OBJ_CLUBS), one ? 0 : first_matches((int16_t)rd16(g_mem, obj + OBJ_CLUBS)));
     }
     return index_match(t, match);
 }
@@ -807,7 +810,7 @@ uint32_t rt_pol_played_before(uint32_t t, uint32_t original)
     if (!obj || !readable(t)) return original;
     if (t == obj) return 0;
     if (t != split_stage(obj)) return original;
-    uint32_t before = (uint32_t)first_rounds((int16_t)rd16(g_mem, obj + OBJ_CLUBS));
+    uint32_t before = (uint32_t)first_matches((int16_t)rd16(g_mem, obj + OBJ_CLUBS));
     return original == 7u ? before / 2u : before;
 }
 
