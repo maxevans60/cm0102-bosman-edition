@@ -220,6 +220,14 @@ _Avoid_: period, generation
 The rules and league structures of one season: club counts, promotion and play-off places, cup formats, substitutes, foreign player rules, transfer windows and names.
 _Avoid_: restructure, year patch
 
+**Rule option**:
+An option that changes how the game plays, for example no foreign player limits. It is off by default, is set for each new game and stays fixed for the whole game. It is never a season rule.
+_Avoid_: rule (alone), cheat, patch
+
+**Rules tab**:
+The third tab of the Options box, beside Graphics and Game, with one row per rule option. It sets the default for a new game. The Rules button of Setup Game opens it for that game.
+_Avoid_: rules screen, settings
+
 **Rules table**:
 The researched season rules of every league and competition, one row per season, each fact with its source.
 _Avoid_: fact sheet
