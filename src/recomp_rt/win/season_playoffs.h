@@ -7,6 +7,8 @@
 /* The wrap of the empty function 0x5a8f60 (advance_stage, season_uefa_cup.c) calls it first: 1 when obj is a
  * league of this kind whose table is complete and the play-off stage is built now (the wrap then returns). */
 int season_playoffs_advance(uint32_t obj);
+/* The same play-off for a league whose class has its own play-off code (the I liga's own play-off, season_pol_first.c). */
+int season_playoffs_build_for(uint32_t obj);
 
 /* 1 when the rules row of file and season gives a play-off that this kind plays (4 places in a row just below
  * the direct places); *direct (may be NULL) gets the direct promotion places. */

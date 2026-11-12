@@ -37,6 +37,7 @@
 #include "win.h"
 #include "season_names.h"
 #include "season_pol_playoff.h"
+#include "season_pol_first.h"
 
 #include <stdlib.h>
 
@@ -219,6 +220,7 @@ RT_WRAP(007cb4a0, pol_second_schedule)
     uint32_t self = cpu.ecx, ret = rd32(g_mem, cpu.esp);
     int stage = (int8_t)g_mem[cpu.esp + 4u];
     o_007cb4a0();
+    if (!rt_unwinding && ret == MAKE_PLAYOFF_RET && stage == 0) season_pol_first_playoff_round(self, cpu.eax);
     if (!rt_unwinding && ret == MAKE_PLAYOFF_RET && stage == 0 && season_game_changes())
         dates_from_today(self, cpu.eax);
 }

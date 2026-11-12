@@ -42,6 +42,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_pol_first.h"
+#include "season_playoffs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -158,6 +159,49 @@ static int halved(int year)
     }
     return 0;
 }
+
+/* ---- the exchange with the I liga ---- */
+
+/* The exchange of a season with the I liga (pol_second), from the rules table rows of both (docs/research/rules-0.6.0/
+ * gre-pol-cro.tsv, each row with its sources): the Ekstraklasa's direct relegation places (down) and its play-off
+ * places against the I liga (po, the encoded relegation play-off count of season_league_table.c); the I liga's direct
+ * promotion places (up), its relegation places (ps_down), and its play-off: against the Ekstraklasa (vs, as many pairs
+ * as the Ekstraklasa's play-off places: 2 in 2002/03, 1 from 2003/04 to 2008/09) or its own (own: 3rd to 6th for one
+ * place from 2019/20, the encoded 4 promotion play-off places from the place after the direct ones). 2008/09 keeps
+ * its play-off of 1 pair: the Polish FA cancelled the matches of Arka Gdynia (14th) and Korona Kielce (3rd) over the
+ * licence appeals of LKS Lodz and Widzew Lodz (en.wikipedia.org, 2008-09 Ekstraklasa, read 11 November 2026), an
+ * event the game has no means to model. The I liga's relegation play-offs against the third tier (2003/04 to 2006/07,
+ * 2008/09, 2014/15 to 2017/18) have no opponent in the game, whose third tier is a pool of clubs: those places stay up.
+ * Returns 0 when a row is missing or holds no count. */
+typedef struct { int down, po, up, vs, own, ps_down; } Exchange;
+
+static const SeasonLeagueRule *league_rule(const char *file, int season)
+{
+    for (int i = 0; i < season_league_rule_count; i++)
+        if (season_league_rules[i].season == season && !strcmp(season_league_rules[i].file, file))
+            return &season_league_rules[i];
+    return NULL;
+}
+
+static int exchange_of(int year, Exchange *x)
+{
+    int s1 = season_rules_last_season(year, "pol_first"), s2 = season_rules_last_season(year, "pol_second");
+    const SeasonRule *rf = s1 ? season_rules_find(s1, "pol_first", 0) : NULL;
+    const SeasonRule *rs = s2 ? season_rules_find(s2, "pol_second", 0) : NULL;
+    const SeasonLeagueRule *lf = league_rule("pol_first", s1), *ls = league_rule("pol_second", s2);
+    if (!rf || !rs || !lf || !ls || rf->down < 0 || rs->up < 0 || rs->down < 0) return 0;
+    x->down = rf->down;
+    x->po = lf->po_down;
+    x->up = rs->up;
+    x->ps_down = rs->down;
+    x->vs = x->po;
+    x->own = x->po == 0 && ls->po_up == 4 && ls->po_up_first == rs->up + 1;
+    return x->down + x->po <= 6 && x->up + x->vs <= 6;
+}
+
+/* The I liga clubs that the season sends up: direct, and one more after its own play-off (the play-off pairs with
+ * the Ekstraklasa swap clubs and change no size). */
+static int sent_up(const Exchange *x) { return x->up + x->own; }
 
 static int switched_on(void)
 {
@@ -338,12 +382,19 @@ RT_WRAP(007c9450, pol_first_table)
     wr32(g_mem, self + OBJ_SLOTS, slots);
     wr16(g_mem, self + OBJ_CLUBS, (uint16_t)n);
     wr16(g_mem, self + OBJ_MATCHES, 0xffffu);     /* check_complete counts (n - 1) x meetings again */
-    /* The places of the original's final table (0, 0, 2, 2 at 0x7c9b85..0x7c9b92): set_up_rules gives the object 4
-     * up for its group (+0xbe at 0x7c96d9) and 0 for the others (0x7c96e1..0x7c96ed), and the season code sets none
-     * for pol_first (the I liga has a floor, season_sizes.c). PolSecond::create_play_off_stage 0x7cc290 takes the 2
-     * rows of status 2 (0x7cc34f) into its play-off of 4, so the exchange stays the original's: 2 down and 2 to the
-     * play-off. */
-    g_mem[self + 0xbe] = 0, g_mem[self + 0xbf] = 0, g_mem[self + 0xc0] = 2, g_mem[self + 0xc1] = 2;
+    /* The places of the season's exchange (the original's final table has 0, 0, 2, 2 at 0x7c9b85..0x7c9b92):
+     * set_up_rules gives the object 4 up for its group (+0xbe at 0x7c96d9) and 0 for the others (0x7c96e1..0x7c96ed),
+     * and the season code sets none for pol_first (the I liga has a floor, season_sizes.c). The play-off rows (status
+     * 2) go to PolSecond::create_play_off_stage 0x7cc290 (0x7cc34f). Without a row the original's 2 and 2 stay. */
+    Exchange x;
+    int year = (int16_t)rd16(g_mem, self + OBJ_YEAR), real = exchange_of(year, &x);
+    g_mem[self + 0xbe] = 0, g_mem[self + 0xbf] = 0;
+    g_mem[self + 0xc0] = (uint8_t)(real ? x.po : 2), g_mem[self + 0xc1] = (uint8_t)(real ? x.down : 2);
+    if (logging() && real)
+        fprintf(stderr, "recomp: pol first: %d/%02d: %d down, %d to the play-off; I liga %d up, %s, %d down\n", year,
+                (year + 1) % 100, x.down, x.po, x.up,
+                x.vs ? (x.vs == 1 ? "1 play-off pair with the Ekstraklasa" : "2 play-off pairs with the Ekstraklasa")
+                     : x.own ? "its own play-off of 3rd to 6th for one place" : "no play-off", x.ps_down);
     for (int i = 0; i < n; i++) {
         wr32(g_mem, slots + 4u * (uint32_t)i, list[i]);
         uint32_t a[4] = {(uint32_t)i, list[i], 0, 0};
@@ -394,8 +445,11 @@ RT_WRAP(007c9900, pol_first_group_b)
 
 /* One League_Stage of the clubs of list, with the arguments of create_final_stage (0x7c9d41..0x7c9d90 and
  * 0x7c9f00..0x7c9f4e): parent, clubs, list, meetings, record, round table, match days, +0xc2, +0xc3, +0xc4, order
- * +0xc5, places, year, stage 1, 0, 0x14, 1, 0, 3, the matches of a club, then the prize fund and 1 (the 16) or
- * 0 and 2 (the groups). */
+ * +0xc5, places, year, stage index, 0, 0x14, 1, 0, 3, the matches of a club, then the prize fund and 1 (the 16) or
+ * 0 and 2 (the groups). The stage index goes to the fixtures (+0x42), and League code finds a fixture's stage by it
+ * in the slots 0 to +0x30 (0x685ddb..0x685dfa, box "league.cpp 3214" at 0x685e5e when it is above +0x30). The original
+ * passes 1 for its final stage in slot 1. In this module's form the split stage is in slot 0 with +0x30 0, so its index
+ * is 0 (an index of 1 gave the box in a 2013/14 game, day 101 of 2014). */
 static uint32_t make_stage(uint32_t self, int n, uint32_t list, int meetings, uint32_t dates, int days,
                            uint32_t places, uint32_t matches, uint32_t a20, uint32_t a21)
 {
@@ -404,7 +458,7 @@ static uint32_t make_stage(uint32_t self, int n, uint32_t list, int meetings, ui
     if (rt_unwinding || !readable(obj)) return 0;
     uint32_t a[22] = {self, (uint32_t)n, list, (uint32_t)meetings, rd32(g_mem, self + OBJ_RECORD), dates,
                       (uint32_t)days, g_mem[self + 0xc2], g_mem[self + 0xc3], g_mem[self + 0xc4], self + 0xc5, places,
-                      (uint32_t)(int16_t)rd16(g_mem, self + OBJ_YEAR), 1, 0, 0x14, 1, 0, 3, matches, a20, a21};
+                      (uint32_t)(int16_t)rd16(g_mem, self + OBJ_YEAR), 0, 0, 0x14, 1, 0, 3, matches, a20, a21};
     call_this(F_LEAGUE_STAGE, obj, 22, a);
     return rt_unwinding ? 0 : obj;
 }
@@ -530,10 +584,13 @@ RT_WRAP(007c8a80, pol_first_ctor)
     if (!rt_unwinding) cpu.eax = keep;
 }
 
-/* The status functions with a stage argument: stage -1 of one table is the final table (stage 1). */
+/* The status functions with a stage argument treat a stage below 1 as the original's groups: stage -1 of one table
+ * is the final table (stage 1), and so is stage 0 of the split (its stage index, make_stage). */
 static void stage_one(int index)
 {
-    if (ours(cpu.ecx) && rd32(g_mem, cpu.ecx + OBJ_STAGE_COUNT) == 0 && (rt_arg(index) & 0xff) == 0xff)
+    if (!ours(cpu.ecx)) return;
+    int count = (int)rd32(g_mem, cpu.ecx + OBJ_STAGE_COUNT), stage = (int8_t)(rt_arg(index) & 0xff);
+    if ((count == 0 && stage == -1) || (count == 1 && stage == 0))
         g_mem[cpu.esp + 4 + 4 * (uint32_t)index] = 1;
 }
 
@@ -577,3 +634,191 @@ int season_pol_first_clubs(int season)
     return r && r->clubs >= MIN_CLUBS && r->clubs <= MAX_CLUBS ? r->clubs : -1;
 }
 
+/* ---- the I liga side of the exchange ---- */
+
+#define POL_SECOND_VTABLE 0x96e4b4u /* PolSecond (season_pol_playoff.c) */
+#define F_ENG_RESULT 0x00576c50u    /* EngFirst +0x44: the final's winner gets status 0 (0x576d9e) */
+
+/* The exchange of the season of an I liga object, 0 when its Ekstraklasa season is the original's. */
+static int second_exchange(uint32_t obj, Exchange *x)
+{
+    if (!switched_on() || !readable(obj) || rd32(g_mem, obj) != POL_SECOND_VTABLE) return 0;
+    int year = (int16_t)rd16(g_mem, obj + OBJ_YEAR);
+    return format_of(year) != ORIGINAL && exchange_of(year, x);
+}
+
+/* PolSecond::create_table 0x7cbdf0 (thiscall, returns 1, ret 0), after set_up_rules 0x7cbf40 (2 up, 2 to the
+ * play-off, 4 down at 0x7cbf92..0x7cbfaf; 6 in 2001): the season's places. The play-off stage (+0x2c 1 from the
+ * constructor, 0x7cb23d) stays when a play-off is played, else no stage, as the 3. Liga (season_divisions.c). */
+void o_007cbdf0(void);
+RT_WRAP(007cbdf0, pol_second_table)
+{
+    uint32_t self = cpu.ecx;
+    o_007cbdf0();
+    Exchange x;
+    if (rt_unwinding || !second_exchange(self, &x)) return;
+    uint32_t keep = cpu.eax;
+    g_mem[self + 0xbe] = (uint8_t)x.up;
+    g_mem[self + 0xbf] = (uint8_t)(x.vs ? x.vs : x.own ? 4 : 0);
+    g_mem[self + 0xc0] = 0;
+    g_mem[self + 0xc1] = (uint8_t)x.ps_down;
+    int stages = x.vs || x.own;
+    if (stages && !readable(rd32(g_mem, self + OBJ_STAGES))) {
+        uint32_t slot = game_malloc(4);
+        if (!slot) return;
+        wr32(g_mem, self + OBJ_STAGES, slot);
+    }
+    wr32(g_mem, self + OBJ_STAGE_COUNT, (uint32_t)stages);
+    wr32(g_mem, self + OBJ_STAGE_NOW, 0xffffffffu);
+    cpu.eax = keep;
+}
+
+/* PolSecond::create_play_off_stage 0x7cc290 (thiscall, ret 0). Its own play-off (3rd to 6th for one place) is the
+ * play-off of slice 19 (season_playoffs.c: two-leg semi-finals 6th v 3rd and 5th v 4th, then the final). The play-off
+ * against the Ekstraklasa is the original's, with 2 clubs when 1 pair plays (tools/recomp/pol_first.py). */
+void o_007cc290(void);
+RT_WRAP(007cc290, pol_second_playoff)
+{
+    uint32_t self = cpu.ecx;
+    Exchange x;
+    if (second_exchange(self, &x) && x.own) {
+        season_playoffs_build_for(self);
+        if (!rt_unwinding) rt_ret_stdcall(0, 0);
+        return;
+    }
+    o_007cc290();
+}
+
+/* PolSecond +0x44, the result handler 0x7cc490 (club, code, stage, ...; ret 0x18): a result of its own play-off goes
+ * to the English handler, as season_playoffs.c does, so only the final's winner goes up (0x7cc490 gives status 0 to
+ * each winner of the I liga, 0x7cc5bc). */
+void o_007cc490(void);
+RT_WRAP(007cc490, pol_second_result)
+{
+    Exchange x;
+    if (g_mem[cpu.esp + 0xc] != 0xff && second_exchange(cpu.ecx, &x) && x.own) {
+        rt_jump(F_ENG_RESULT);
+        return;
+    }
+    o_007cc490();
+}
+
+/* The clubs of the play-off against the Ekstraklasa (push 4 at 0x7cc3d1, the object in esi): 2 for 1 pair. */
+uint32_t rt_pol_playoff_clubs(uint32_t obj, uint32_t original)
+{
+    Exchange x;
+    return second_exchange(obj, &x) && x.vs == 1 ? 2u : original;
+}
+
+/* The round table of the play-off against the Ekstraklasa (PolSecond::create_schedule 0x7cb4a0, stage 0, for
+ * create_play_off_stage at 0x7cc390): 4 teams (+0x18, 0x7cbdc1), 2 ties (+0x1a, 0x7cbdc5) and 4 new teams (+0x1c,
+ * 0x7cbdcb). With 1 pair the stage holds 2 clubs, and Cup::draw_round 0x51c410 moves the draw on each day while a
+ * team slot of the round is empty (0x51c47c..0x51c549): the play-off of 2003/04 was never drawn, the I liga never
+ * ended and the Polish season change failed from 2004 (a 2002 game, day 230 of 2004). 1 pair: 2 teams, 1 tie. */
+void season_pol_first_playoff_round(uint32_t obj, uint32_t t)
+{
+    Exchange x;
+    if (!readable(t) || !second_exchange(obj, &x) || x.vs != 1) return;
+    wr16(g_mem, t + 0x18, 2);
+    wr16(g_mem, t + 0x1a, 1);
+    wr16(g_mem, t + 0x1c, 2);
+}
+
+/* The chain 0x7ca490 moves the clubs in pairs (push 1 at 0x7ca4cc, the object in esi): in this module's form each club
+ * moves on its own, so the division takes the size of the season (16 to 14 in 2003/04, 18 from 2021/22). */
+uint32_t rt_pol_first_pairwise(uint32_t obj, uint32_t original)
+{
+    return ours(obj) ? 0u : original;
+}
+
+int season_pol_first_moves_alone(uint32_t upper)
+{
+    return ours(upper);
+}
+
+/* 0x7ca030 (start_new_season, the object in ebx) takes 4 clubs of the Polish third tier, a pool (cmp si, 4 at 0x7ca132,
+ * push 4 at 0x7ca13c, mov edi, 4 at 0x7ca14a) and sends the I liga's relegation places down. In this module's form it
+ * takes as many as keep the I liga at its size: its relegation places, plus the clubs it sent up, less the clubs the
+ * Ekstraklasa sent down (the season that ends: +0x40 before start_new_season adds 1 at 0x7c9791). */
+uint32_t rt_pol_lower_intake(uint32_t obj, uint32_t original)
+{
+    Exchange x;
+    if (!ours(obj) || !exchange_of((int16_t)rd16(g_mem, obj + OBJ_YEAR), &x)) return original;
+    int k = x.ps_down + sent_up(&x) - x.down;
+    return k >= 1 && k <= 8 ? (uint32_t)k : original;
+}
+
+/* ---- the final table in the club history and on the table screen ---- */
+
+#define COMP_OBJECTS 0x00adadfcu    /* g_comp_object_table (season_pol_playoff.c) */
+#define COMP_SLOTS 0x00adadf8u
+
+/* The Ekstraklasa object in this module's form, or 0. */
+static uint32_t pol_object(void)
+{
+    uint32_t table = rd32(g_mem, COMP_OBJECTS), id = rd32(g_mem, KEY_POL_FIRST);
+    uint32_t obj = readable(table) && id < rd32(g_mem, COMP_SLOTS) ? rd32(g_mem, table + 4u * id) : 0;
+    return ours(obj) ? obj : 0;
+}
+
+/* The split stage (slot 0 after 30 rounds) of the object, or 0. */
+static uint32_t split_stage(uint32_t obj)
+{
+    if (!obj || rd32(g_mem, obj + OBJ_STAGE_COUNT) != 1 || (int32_t)rd32(g_mem, obj + OBJ_STAGE_NOW) != 0) return 0;
+    uint32_t slots = rd32(g_mem, obj + OBJ_STAGES);
+    return readable(slots) ? rd32(g_mem, slots) : 0;
+}
+
+/* A value for cmp byte [t+0x44], imm that matches only when t is the final table (or does not). */
+static uint32_t index_match(uint32_t t, int match) { return match ? g_mem[t + 0x44] : (g_mem[t + 0x44] + 1u) & 0xffu; }
+
+/* Club_History::record_comp_season 0x442e80 (cmp at 0x442f95): the final table is recorded, the object in one table,
+ * the split stage in the split. Without these the history of the clubs had no Ekstraklasa season (the review of
+ * 12 November 2026: the object's +0x44 is 0xff, the split stage's 0). */
+uint32_t rt_pol_history_index(uint32_t t, uint32_t original)
+{
+    uint32_t obj = pol_object();
+    if (!obj || !readable(t)) return original;
+    int one = rd32(g_mem, obj + OBJ_STAGE_COUNT) == 0, match = one ? t == obj : t == split_stage(obj);
+    static int logged = -1;
+    int year = (int16_t)rd16(g_mem, obj + OBJ_YEAR);
+    if (match && logging() && logged != year) {
+        logged = year;
+        fprintf(stderr, "recomp: pol first: %d/%02d: club history of the final table, %d clubs, %d matches before it\n",
+                year, (year + 1) % 100, (int16_t)rd16(g_mem, t + OBJ_CLUBS), one ? 0 : first_rounds((int16_t)rd16(g_mem, obj + OBJ_CLUBS)));
+    }
+    return index_match(t, match);
+}
+
+/* The table screen (cmp at 0x49215b): only the split stage has matches before it. */
+uint32_t rt_pol_split_index(uint32_t t, uint32_t original)
+{
+    uint32_t obj = pol_object();
+    if (!obj || !readable(t)) return original;
+    return index_match(t, t == split_stage(obj));
+}
+
+/* The matches of a club before the final table (0x44301e, 0x49216d, and half of them at 0x49217c for the home and
+ * away views): none in one table, the 30 rounds (2 (n - 1)) before the split. The split stage's rows count only its
+ * own 7 matches, as League::check_complete 0x689ad0 tests them against +0xa7. */
+uint32_t rt_pol_played_before(uint32_t t, uint32_t original)
+{
+    uint32_t obj = pol_object();
+    if (!obj || !readable(t)) return original;
+    if (t == obj) return 0;
+    if (t != split_stage(obj)) return original;
+    uint32_t before = (uint32_t)first_rounds((int16_t)rd16(g_mem, obj + OBJ_CLUBS));
+    return original == 7u ? before / 2u : before;
+}
+
+/* The honours of the season (vtable +0x30 0x595160, a jump to slot +0x30 of stage 1 at 0x595168): in one table slot 1
+ * is the object itself, so the jump came back to 0x595160 until the stack ran out (a 2025/26 game, day 135 of 2026,
+ * from League::update_for_date 0x6847c0 at the season's end). One table takes League::record_season_honours 0x684640,
+ * as a league with no stage. */
+#define F_HONOURS 0x00684640u
+int season_pol_first_honours(uint32_t obj)
+{
+    if (!ours(obj) || rd32(g_mem, obj + OBJ_STAGE_COUNT) != 0) return 0;
+    rt_jump(F_HONOURS);
+    return 1;
+}

@@ -8,6 +8,7 @@
 #include "season_playoffs.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
+#include "season_pol_first.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -472,7 +473,8 @@ RT_WRAP(00689c80, promote_relegate)
     int exp_up = (int8_t)(rt_arg(4) & 0xff), exp_down = (int8_t)(rt_arg(5) & 0xff);
     /* Only a pair of two size-table classes: only there can the places of this slice differ. Any other pair keeps
      * the original's call. */
-    int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
+    int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower)) &&
+               !season_pol_first_moves_alone(upper);     /* issue 92: the Ekstraklasa's exchange of the season */
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
     /* When the places of the two divisions differ, the clubs move on their own only with changing rules on, between
      * two classes of the size table, and when both divisions hold counts within their floor and cap after the moves:
