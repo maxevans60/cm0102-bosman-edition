@@ -81,6 +81,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 
 ### Fixes from your reports
 
+- A new game on the default 2001/02 data with Sweden's extra division no longer stops with the box "swe_second..cpp 656". The data has 11 clubs in one 2001 group, East Svealand, as in real life, and the game now plays that group with 11.
 - Holiday: "Reject all offers below asking price" now turns down bids below the price, and loan requests follow the holiday settings. These are faults of the original game too.
 - A game no longer hangs on the evening of 27 December 2001 at the 2002 World Cup draw. Saves made before it are mended at load. This is a fault of the original game too.
 - Club info shows balances above £2,147,483,647 and the right debt, budget and finance news amounts. A very rich computer club keeps a sane transfer budget. International caps and goals no longer start again at 256. These are faults of the original game too.
@@ -97,6 +98,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
   - "ita_ser_c2a..cpp 551", at the June 2028 season change
   - "conmebol_liber..cpp 663", after you open a long "New rules" news item
   - "Date..cpp 52", in the Conference League Cup of 2024
+  - "bel_third..cpp 1642", in a 2070 game, when a period winner of the Belgian Third Division finished in a relegation place. With changing rules on, the real rule now applies: that club loses its play-off place to the next club.
 - A long penalty shoot-out with a side down to fewer players no longer reads an empty place. The best player left takes the kick.
 
 ### Saves, memory and speed
