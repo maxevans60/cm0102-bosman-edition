@@ -3,7 +3,7 @@
 
 Usage:
     python3 tests/seasons/swe_second_run.py <cm0102_recomp> <game folder> [--only d3960,d3968] [--jobs n]
-        [--keep <folder>] [--data-3960 <folder>]
+        [--keep <folder>] [--data-3960 <folder>] [--data-3965 <folder>]
 
 Each run is a season jump of tests/seasons/rules_report_check.py: a new 2001/02 game with Sweden alone and its extra
 division (the test switch RECOMP_TEST_EXTRA=sweden sets the flag that the player sets on Select League(s)), changing
@@ -12,10 +12,11 @@ the Swedish season of 2001 to its end and starts the season of 2002. The runs:
     d3960  the 3.9.60 data (the default 2001/02 data since 0.6.1): East Svealand holds 11 clubs, as the real 2001
            Division 2 Östra Svealand. Before the fix the game stopped at "swe_second..cpp 656". The log names the group
            and its 11 clubs
+    d3965  the 3.9.65 data: East Svealand holds 13 clubs with Katrineholms SK, who played the real 2002 Division 3.
+           Before the fix the game stopped at "swe_second..cpp 643". The log names the move of Katrineholms SK, and
+           every group then holds 12
     d3968  the 3.9.68 data: every group holds 12, so the groups take the class count and the log names none
-The 3.9.65 data holds 13 clubs in East Svealand and still stops at "swe_second..cpp 643" (a group over the class count
-does not fit the class's tables; open item 224), so it has no run here.
-The 3.9.60 data comes from <game folder>/Data-3.9.60, or from --data-3960.
+The 3.9.60 and 3.9.65 data come from <game folder>/Data-3.9.60 and Data-3.9.65, or from --data-3960 and --data-3965.
 All runs end with code 0 and show no message box of the game.
 """
 import concurrent.futures
@@ -29,13 +30,16 @@ sys.path.insert(0, HERE)
 import rules_report_check as rrc  # noqa: E402
 import uefa_formats_run as ufr  # noqa: E402
 
+MOVE = re.compile(r"recomp: swe_second: (.*) plays the (.*) \(real life\), the group holds (\d+) clubs, not (\d+)")
+MOVES = {"d3960": [], "d3965": [("Katrineholms SK", "Swedish Third Division East Svealand", "12", "13")], "d3968": []}
 GROUP = re.compile(r"recomp: swe_second: (.*) holds (\d+) clubs in the data, the class takes (\d+): the group takes")
 WANT = {"d3960": {"Swedish Second Division East Svealand": 11},
+        "d3965": {},
         "d3968": {}}
 
 
 def run(name, program, game, work, data):
-    options = {"changing_rules": "off", "database": "3.9.60" if name == "d3960" else "3.9.68"}
+    options = {"changing_rules": "off", "database": {"d3960": "3.9.60", "d3965": "3.9.65"}.get(name, "3.9.68")}
     env = {"RECOMP_TEST_EXTRA": "sweden"}
     if data:
         env["RECOMP_DATA_DIR"] = data
@@ -56,6 +60,10 @@ def run(name, program, game, work, data):
     print(f"{name}: groups with their own count at the new game: {got or 'none'} ({lines} log lines)")
     if any(got.get(g) != n for g, n in WANT[name].items()) or (not WANT[name] and got):
         fails.append(f"{name}: groups with their own count {got}, want {WANT[name]}")
+    moves = [m.groups() for m in MOVE.finditer(log)]
+    print(f"{name}: clubs moved to their real division: {moves or 'none'}")
+    if moves != MOVES[name]:
+        fails.append(f"{name}: moves {moves}, want {MOVES[name]}")
     return fails
 
 
@@ -68,10 +76,11 @@ def main():
     def opt(flag, default=None):
         return args[args.index(flag) + 1] if flag in args else default
 
-    only = opt("--only", "d3960,d3968").split(",")
+    only = opt("--only", "d3960,d3965,d3968").split(",")
     jobs = int(opt("--jobs", "1"))
     keep = opt("--keep")
-    data = {"d3960": opt("--data-3960", os.path.join(game, "Data-3.9.60")), "d3968": None}
+    data = {"d3960": opt("--data-3960", os.path.join(game, "Data-3.9.60")),
+            "d3965": opt("--data-3965", os.path.join(game, "Data-3.9.65")), "d3968": None}
     base = keep or tempfile.mkdtemp(prefix="cm0102-swe-second-")
     fails = []
     for name in only:
