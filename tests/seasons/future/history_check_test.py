@@ -1042,6 +1042,12 @@ def main():
         got = history_check.known_status(known, *args)
         if got != want_:
             bad.append(f"known_status{args} is {got}, not {want_}")
+    # a Libertadores winner from outside CONMEBOL gives its place to the runner-up (item 219)
+    conf = {1: "CONCACAF", 2: "CONMEBOL", 3: "CONMEBOL", 4: "CONCACAF"}
+    got = history_check.runner_up_places([(2004, 1, 2), (2005, 3, 2), (2006, 3, 1), (2007, 1, 4), (2008, 1, -1)],
+                                         lambda t: conf[t])
+    if got != [(2004, 2)]:
+        bad.append(f"runner_up_places: {got}, not [(2004, 2)]")
     # the edition that the oldest fixtures part cuts (pass 5: Africa Cup of Nations 2026, Champions League holders)
     d = datetime.date
     o = lambda y, m, day: d(y, m, day).toordinal()               # noqa: E731
@@ -1057,6 +1063,25 @@ def main():
                         ((2013, 2013, cl, 2023), False), ((2023, 2013, cl, 2023), False)):    # a young save
         if history_check.cut_by_oldest_part(*args) is not want_:
             bad.append(f"cut_by_oldest_part{args[:2]} edition {args[3]} is not {want_}")
+    # rules off keeps the original's international finals (Max's rule of 0.6.0): accepted design rows for rules off
+    # only, never for a game with changing rules on
+    real = history_check.read_known(os.path.join(os.path.dirname(os.path.abspath(__file__)), "history_known.tsv"))
+    for check, comp in (("no-host", "African Cup of Nations"), ("no-host", "Asian Cup"), ("no-host", "Confederations Cup"),
+                        ("no-host", "Copa America"), ("no-host", "Oceania Nations Cup"), ("entrant-count", "Asian Cup"),
+                        ("entrant-host", "Asian Cup"), ("entrant-host", "Confederations Cup"),
+                        ("entrant-host", "Olympic Games"), ("entrant-host", "African Cup of Nations"),
+                        ("entrant-host", "Oceania Nations Cup")):
+        for rules, want_ in (("off", "accepted"), ("on", None)):
+            got = history_check.known_status(real, check, comp, 2004, rules)
+            if got != want_:
+                bad.append(f"rules {rules}: {check} {comp} 2004 is {got}, not {want_}")
+    # item 219: a Mexican guest as the Libertadores side of the Intercontinental Cup is the original's design with
+    # changing rules off; the fix acts only with changing rules on, so a rules-on fault stays one
+    for check in ("confederation", "entrant-confed"):
+        for rules, want_ in (("off", "accepted"), ("on", None)):
+            got = history_check.known_status(real, check, "Intercontinental Cup", 2017, rules)
+            if got != want_:
+                bad.append(f"rules {rules}: {check} Intercontinental Cup 2017 is {got}, not {want_}")
     # an empty squad counts only for a side that plays in the 14 days around the save (open item 195)
     today = 1000
     for days, want_ in (([], False), ([today + 14], True), ([today + 15], False), ([today - 14], True),
