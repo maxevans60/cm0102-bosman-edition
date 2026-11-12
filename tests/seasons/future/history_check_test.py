@@ -1069,7 +1069,8 @@ def main():
     for check, comp in (("no-host", "African Cup of Nations"), ("no-host", "Asian Cup"), ("no-host", "Confederations Cup"),
                         ("no-host", "Copa America"), ("no-host", "Oceania Nations Cup"), ("entrant-count", "Asian Cup"),
                         ("entrant-host", "Asian Cup"), ("entrant-host", "Confederations Cup"),
-                        ("entrant-host", "Olympic Games")):
+                        ("entrant-host", "Olympic Games"), ("entrant-host", "African Cup of Nations"),
+                        ("entrant-host", "Oceania Nations Cup")):
         for rules, want_ in (("off", "accepted"), ("on", None)):
             got = history_check.known_status(real, check, comp, 2004, rules)
             if got != want_:
