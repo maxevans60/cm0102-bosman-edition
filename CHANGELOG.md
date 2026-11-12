@@ -81,7 +81,7 @@ A save made by 0.7.0 does not load in 0.6.0 or 0.6.1: they stop with the box "Cu
 
 ### Fixes from your reports
 
-- A new game on the default 2001/02 data with Sweden's extra division no longer stops with the box "swe_second..cpp 656". The data has 11 clubs in one 2001 group, East Svealand, as in real life, and the game now plays that group with 11.
+- A new game on the default 2001/02 data with Sweden's extra division no longer stops with the box "swe_second..cpp 656". The data has 11 clubs in one 2001 group, East Svealand, as in real life, and the game now plays that group with 11. On the 3.9.65 data, Katrineholms SK now plays Division 3, as in real life, so a new game no longer stops with the box "swe_second..cpp 643".
 - Holiday: "Reject all offers below asking price" now turns down bids below the price, and loan requests follow the holiday settings. These are faults of the original game too.
 - A game no longer hangs on the evening of 27 December 2001 at the 2002 World Cup draw. Saves made before it are mended at load. This is a fault of the original game too.
 - Club info shows balances above £2,147,483,647 and the right debt, budget and finance news amounts. A very rich computer club keeps a sane transfer budget. International caps and goals no longer start again at 256. These are faults of the original game too.
