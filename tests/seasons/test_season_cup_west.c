@@ -16,6 +16,8 @@
  *   National with 15 players takes it, first in the list, and the cup returns 1;
  * - Danish Cup with too few clubs of 15 players: the clubs with the most players fill the rest;
  * - CFA: 66 of 72 places: French clubs from below the National fill the array, a lower division first;
+ * - French Lower Division: a National of 17 and 20 lower clubs: 3 French lower clubs with no zone fill it to 40,
+ *   before a club of the CFA zone;
  * - French Cup: a list left short takes French clubs with 15 players or more before Ligue 2 and Ligue 1, and the
  *   cup returns 1.
  * ctest season_cup_west. */
@@ -42,6 +44,7 @@ uint32_t rt_bel_cup_place(uint32_t original, uint32_t taken);
 uint32_t rt_hol_cup_lower(uint32_t original, uint32_t esp);
 uint32_t rt_ita_c_cup_fill(uint32_t original, uint32_t cup, uint32_t placed);
 uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);
+uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count);
 void f_00551240(void);
 void f_005baa50(void);
 
@@ -350,6 +353,25 @@ static void cfa(void)
     CHECK(rt_fra_cfa_fill(array, 66u) == 66u, "CFA: the base game keeps the count");
 }
 
+static void french_lower(void)
+{
+    reset();
+    uint32_t fra = nation(0x9cf300u, 8), nat = division(0x9cf5d4u, 63, 8), low = division(LOWER, 62, 2);
+    uint32_t cfa = 0xd0000u;
+    wr32(g_mem, cfa, 77);
+    wr32(g_mem, 0x9cf5d8u, 77);
+    uint32_t array = 0xc0000u;
+    int n = 0;
+    for (int i = 0; i < 17; i++) wr32(g_mem, array + 4u * (uint32_t)n++, club(fra, nat, 50, 20));
+    for (int i = 0; i < 20; i++) wr32(g_mem, array + 4u * (uint32_t)n++, club(fra, low, 20, 20));
+    uint32_t zoned = club(fra, low, 90, 20);
+    wr32(g_mem, zoned + 0x60, cfa);
+    uint32_t plain[3] = {club(fra, low, 30, 20), club(fra, low, 25, 20), club(fra, low, 22, 20)};
+    CHECK(rt_fra_lower_fill(array, (uint32_t)n) == 40u, "French Lower Division: 40 for the shuffle");
+    for (int i = 0; i < 3; i++)
+        CHECK(rd32(g_mem, array + 4u * (uint32_t)(37 + i)) == plain[i], "French Lower Division: place %d", 37 + i);
+}
+
 int main(void)
 {
     g_mem = calloc(1, MEM);
@@ -363,6 +385,7 @@ int main(void)
     france_league_cup();
     denmark_few();
     cfa();
+    french_lower();
     printf("%s season_cup_west\n", failures ? "FAIL" : "PASS");
     return failures ? 1 : 0;
 }

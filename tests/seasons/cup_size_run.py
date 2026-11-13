@@ -52,7 +52,7 @@ SIZES = {
 FIRES = {
     "bel2016": ["recomp: cup sizes: Belgian Cup: "],
     "den2020": ["recomp: cup sizes: Danish Cup: "],
-    "fra2024": ["recomp: cup sizes: French League Cup: "],
+    "fra2024": ["recomp: cup sizes: French League Cup: ", "recomp: cup sizes: French Lower Division: "],
     "ita2018": [],
     "hol2005": [],
 }

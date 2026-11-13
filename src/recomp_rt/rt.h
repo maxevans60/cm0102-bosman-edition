@@ -428,6 +428,7 @@ uint32_t rt_bel_cup_place(uint32_t original, uint32_t taken);               /* B
 uint32_t rt_hol_cup_lower(uint32_t original, uint32_t esp);                 /* HolCup pool clubs (0x5f49e1) */
 uint32_t rt_ita_c_cup_fill(uint32_t original, uint32_t cup, uint32_t placed);  /* ItaCCup fill (0x63e109) */
 uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);   /* FraCfa empty places (0x5b9320) */
+uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count); /* French Lower Division places (0x5bd752) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */

@@ -417,29 +417,67 @@ int season_cup_sizes_fra_lge(uint32_t cup)
     return fill_short(cup, 54, 0x9cf300u, keys, 3, 0, "French League Cup");
 }
 
-/* ---- French CFA ---- */
+/* ---- French background leagues: the CFA and the French Lower Division ---- */
 
 #define CFA_PLACES 0x48
+#define LOWER_PLACES 0x28
+#define CLUB_ZONE 0x60u
+#define CFA_ZONE 0x9cf5d8u
+
+struct zoned { struct list4 l; int want_zone; uint32_t zone; };
+
+/* Taken: in the array, or (in the first pass) not in the zone that the league's own loop takes. */
+static int not_zoned(uint32_t club, void *ctx)
+{
+    struct zoned *z = ctx;
+    if (in_list4(club, &z->l)) return 1;
+    if (!z->want_zone) return 0;
+    uint32_t r = rd32(g_mem, club + CLUB_ZONE);
+    return z->zone ? !(readable(r) && rd32(g_mem, r) == rd32(g_mem, z->zone)) : r != 0;
+}
+
+/* Fills a league's club array (4 bytes a club, `count` placed) to `places` with French clubs from below the National:
+ * first the clubs of the zone that the league's loop takes (zone_key, or no zone for 0), then any. Returns the new
+ * count, the high half of count kept. */
+static uint32_t fill_french_league(uint32_t array, uint32_t count, int places, uint32_t zone_key, const char *name)
+{
+    int n = (int16_t)(count & 0xffffu), from = n;
+    if (!sizes_on() || n >= places || n < 0) return count;
+    static const uint32_t skip[] = {0x9cf5d4u, 0x9cf5d0u, 0x9cf5ccu};
+    struct zoned z = {{array, n}, 1, zone_key};
+    uint32_t nation = nation_of_key(0x9cf300u);
+    for (int pass = 0; pass < 2 && n < places; pass++) {
+        z.want_zone = pass == 0;
+        while (n < places) {
+            uint32_t c = best_club(nation, skip, 3, 0, not_zoned, &z);
+            if (!c) break;
+            wr32(g_mem, array + 4u * (uint32_t)n++, c);
+            z.l.n = n;
+        }
+    }
+    fprintf(stderr, "recomp: cup sizes: %s: %d clubs, %d more from below the National%s\n", name, from, n - from,
+            n < places ? " (still short)" : "");
+    return (count & 0xffff0000u) | (uint32_t)n;
+}
 
 /* FraCfa::FraCfa 0x5b91c0, at `lea eax, [esp + 0x21c]` (0x5b9320) after its loop: the array at esp + 0x21c holds
  * edi clubs, every club of Ligue 1 and Ligue 2 and the A Lower Division clubs of the CFA zone up to the cap of
  * rt_fra_cfa_lower_cap (0x5b92e8). The four groups of 18 read 72 places of an array that is never cleared
- * (0x5b933b..0x5b9362). When the zone holds fewer clubs, the empty places take French clubs from below the National
- * that the array does not hold, so no group takes a stack value. Returns the count for the shuffle (0x5b9327). */
+ * (0x5b933b..0x5b9362). When the zone holds fewer clubs, the empty places take French clubs from below the
+ * National, of the CFA zone first, so no group takes a stack value. Returns the count for the shuffle (0x5b9327). */
 uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count)
 {
-    int n = (int16_t)(count & 0xffffu), from = n;
-    if (!sizes_on() || n >= CFA_PLACES || n < 0) return count;
-    static const uint32_t skip[] = {0x9cf5d4u, 0x9cf5d0u, 0x9cf5ccu};
-    struct list4 l = {array, n};
-    uint32_t nation = nation_of_key(0x9cf300u);
-    while (n < CFA_PLACES) {
-        uint32_t c = best_club(nation, skip, 3, 0, in_list4, &l);
-        if (!c) break;
-        wr32(g_mem, array + 4u * (uint32_t)n++, c);
-        l.n = n;
-    }
-    fprintf(stderr, "recomp: cup sizes: CFA: %d clubs, %d more from below the National%s\n", from, n - from,
-            n < CFA_PLACES ? " (still short)" : "");
-    return (count & 0xffff0000u) | (uint32_t)n;
+    return fill_french_league(array, count, CFA_PLACES, CFA_ZONE, "CFA");
+}
+
+/* The constructor of the French Lower Division 0x5bd600 (vtable 0x96ab78), at `lea edx, [esp + 0x1c]` (0x5bd752)
+ * after its loop: the array at esp + 0x1c holds edi clubs, every National club ([0x9cf5d4], 0x5bd6dd) and up to 20
+ * French A Lower Division clubs with no zone (+0x60 == 0, `cmp word ptr [esp + 0x10], 0x14` at 0x5bd71d), at most
+ * 40 (0x5bd6e9). FraLower::create_table 0x5be230 then reads two groups of 20 (0x14 at 0x5be242; 0x5bd766..0x5bd78c)
+ * of an array that is never cleared. A National of 17 (2024/25) left 3 places with stack values: 156 fixtures of the
+ * division named no club, and a Coupe de France match on 28 December 2024 stopped at match_eng..cpp 652. The empty
+ * places take French clubs from below the National, with no zone first. Returns the count for the shuffle. */
+uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count)
+{
+    return fill_french_league(array, count, LOWER_PLACES, 0, "French Lower Division");
 }

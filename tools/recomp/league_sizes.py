@@ -372,4 +372,6 @@ INSNS[0x5B92E8] = ("cmp word ptr [esp + 0x10], 0x22",
 # Slice 5 (season_cup_sizes_west.c, rt_fra_cfa_fill): after the loop, the places that the CFA zone cannot fill take
 # French clubs from below the National; edi is the count for the shuffle and the groups.
 INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu, edi); eax = esp + 0x21cu;")
+# The French Lower Division (constructor 0x5bd600): the same after its loop of the National and lower clubs (40).
+INSNS[0x5BD752] = ("lea edx, [esp + 0x1c]", "edi = rt_fra_lower_fill(esp + 0x1cu, edi); edx = esp + 0x1cu;")
 INSNS.update(CUP_INSNS)
