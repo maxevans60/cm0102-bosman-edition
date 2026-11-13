@@ -9,9 +9,9 @@ Usage:
         [--data-3960 <folder>] [--data-3965 <folder>] [--seed <n>]
     python3 tests/seasons/future/run_set.py --verify <folder> [--set release] [--seed <n>]
 
---set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script),
-background (b2001long and b2025long: the Tier B games to 2300, which play on after the release gate, and
-bw2001 and bw2025, open item 193; no gate of --verify) or all. --only: these rows of the set. A game whose folder holds
+--set: release (the rows of set release and nightly: the 34 rows of the release tests from 0.7.1), nightly, quick
+(the short games that test the script), background (bg2300, the Tier A game to 2300, and bg2100, the full world from
+2025 to 2100: they play while the Mac is idle and have no gate of --verify) or all. --only: these rows of the set. A game whose folder holds
 result.tsv is done and is not played again; delete
 its folder to play it again.
 
@@ -93,7 +93,7 @@ DATABASES = "/Users/max/Projects/cm0102/test-fixtures/databases"
 OWN_DBS = "/Users/max/Projects/cm0102/own-dbs"
 JUMP_DATABASE = "December 2025"
 COLUMNS = ["name", "tier", "start", "changing", "nations", "seed", "last", "leg_years", "set", "status", "note"]
-TIERS = {"A", "B", "jump", "normal", "late", "weekly"}
+TIERS = {"A", "B", "jump", "normal", "late", "weekly", "world"}
 # late (open item 193): the full world (as Tier B, with its health checks and limits) from a checkpoint save of a Tier
 # A row. Its optional column `from` names that row (same changing rules, nations and seed); its start is the year of
 # the save, so the game plays the seasons start to last in the full world on top of a long Tier A history.
@@ -224,8 +224,8 @@ def row_database(row):
 
 
 def full_world(row):
-    """A game of the full world with the health checks and the Tier B limits."""
-    return row["tier"] in ("B", "late", "weekly")
+    """A game of the full world with the health checks (the Tier B limits too, but for a world row)."""
+    return row["tier"] in ("B", "late", "weekly", "world")
 
 
 def checker_tier(row):
@@ -618,7 +618,7 @@ def play_game(row, o):
         return finish(folder, row, "waits", "the program has no weekly market switch (item 193)", "", 0, 0, began, o)
     os.environ.update(TIER_ENV.get(row["tier"], {}))
     # one game a process: soak_run's leg_env copies os.environ
-    base = next(r for r in read_set(seed=o.get("seed")) if r["name"] == row["from"]) if row.get("from") else row
+    base = next(r for r in read_set(o.get("set_file"), seed=o.get("seed")) if r["name"] == row["from"]) if row.get("from") else row
     so = {"program": o["program"], "game": o["game"], "start": row["start"], "last": row["last"] + 1,
           "seed": row["seed"], "nations": row["nations"].split(","), "rules": row["changing"],
           "extra": row["extras"]}
@@ -725,7 +725,7 @@ def play_game(row, o):
         previous_work, save = (work, keep), saved
     if previous_work:
         tidy(previous_work[0], previous_work[1])
-    limits = tier_b_limits(legs, row["last"]) if health else []
+    limits = tier_b_limits(legs, row["last"]) if health and row["tier"] != "world" else []   # decades of saves
     # every division and domestic cup moves on from one season to the next, over the reports of all legs (O278)
     import rules_report_check as rrc
     reports = [os.path.join(folder, f"leg{k:03d}", "report.tsv") for k in range(len(plan))]

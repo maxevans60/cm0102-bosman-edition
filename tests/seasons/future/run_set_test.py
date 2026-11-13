@@ -26,9 +26,12 @@ def results(folder, head, rows):
             f.write("\t".join(r) + "\n")
 
 
+LEGACY = os.path.join(HERE, "run_set_legacy.tsv")      # the 0.7.0 rows: the test plays the script's features on them
+
+
 def main():
     bad = []
-    rows = run_set.read_set()
+    rows = run_set.read_set(LEGACY)
     release = run_set.chosen(rows, "release")
     names = {r["name"] for r in release}
     for want in ("a2001s1", "a2001offs3", "a2025s3", "a2026s1", "a2026s2", "a2026s3", "a2001esb", "a2001nation", "a2001to2300", "jump2298", "b2001"):
@@ -244,7 +247,7 @@ def main():
 
     # Q15: leg 0 of a NATION_JOB row passes only with the appointment and the lines after the team's next match.
     if run_set.NATION_JOB.get("a2001nation") != "England" or \
-            [r for r in run_set.read_set() if r["name"] == "a2001nation"][0]["status"] != "run":
+            [r for r in run_set.read_set(LEGACY) if r["name"] == "a2001nation"][0]["status"] != "run":
         bad.append("nation job: a2001nation is not a NATION_JOB row with status run")
     made = "recomp: nation job test: the human manages Wales from day 182 of 2001 (appointed)\n"
     still = "recomp: nation job test: on day 245 of 2001 (after the match of day 244) the human still manages Wales\n"
@@ -384,7 +387,7 @@ def main():
     else:
         lo = {"program": "/no/program", "game": "/no/game", "out": out, "databases": run_set.DATABASES,
               "own": run_set.OWN_DBS, "commit": "c1", "code": "clean", "sha": "sha-b", "machine": 12, "floor": 0,
-              "data": run_set.DATA_FOLDERS, "seed": None}
+              "data": run_set.DATA_FOLDERS, "seed": None, "set_file": LEGACY}
         os.rename(os.path.join(out, "a"), os.path.join(out, "a2001to2300"))
         got = run_set.play_game(real[0], lo)
         if got[3] != "fail" or "comes from another program" not in got[4]:
@@ -479,7 +482,7 @@ def main():
         except SystemExit:
             if ok_:
                 bad.append(f"columns: read_set refuses {line.strip()!r}")
-    seeded = run_set.read_set(seed=72)
+    seeded = run_set.read_set(LEGACY, seed=72)
     if {r["seed"] for r in seeded} != {72} or run_set.row_key(seeded[0]) == run_set.row_key(rows[0]):
         bad.append("seed: --seed does not set the seed of every row, or the row key does not hold it")
     if {r["seed"] for r in rows} == {72}:
@@ -520,6 +523,74 @@ def main():
     if run_set.extras_missing(comps, ["sweden", "spain"]) != [] or \
             run_set.extras_missing(comps, ["sweden", "c2", "regional"]) != ["c2", "regional"]:
         bad.append("extras: a save missing an extra division is not found")
+
+
+    # Release tests 0.7.1, slice 2: the real run set holds the 34 release rows and the 2 background rows of the spec.
+    real_rows = run_set.read_set()
+    live = run_set.chosen(real_rows, "release")
+    background_rows = run_set.chosen(real_rows, "background")
+    by_name = {r["name"]: r for r in live}
+    if len(live) != 34 or len(background_rows) != 2:
+        bad.append(f"real set: {len(live)} release rows and {len(background_rows)} background rows, want 34 and 2")
+    if any(r["set"] == "quick" for r in live) or any(r["status"] != "run" for r in real_rows):
+        bad.append("real set: a quick row in the release set, or a row that waits")
+    spine = sorted(r["start"] for r in live if r["name"].startswith("sp"))
+    if spine != [2001, 2004, 2008, 2012, 2016, 2021, 2024, 2026] or \
+            any((r["tier"], r["extras"], r["nations"], r["changing"], r["last"], r["leg_years"]) !=
+                ("world", [], "all", "on", run_set.ENDS[r["start"]] - 1, 1) for r in live if r["name"].startswith("sp")):
+        bad.append(f"real set: the 8 spine soaks are {spine}, or one is not a plain Select All soak to its end point")
+    tiles = sorted(r["start"] for r in live if r["name"].startswith("t") and r["name"][1:].isdigit())
+    if tiles != [2002, 2003, 2005, 2006, 2007, 2009, 2010, 2011, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2022, 2023,
+                 2025] or any((r["tier"], r["extras"], r["nations"], r["changing"], r["database"], r["last"]) !=
+                              ("world", run_set.ALL_EXTRAS, "all", "on", "tile", r["start"])
+                              for r in live if r["name"].startswith("t") and r["name"][1:].isdigit()):
+        bad.append(f"real set: the 18 tile rows are {tiles}, or one is not all six extras for the first season change")
+    want_db = {"db3960": ("3.9.60", 2001), "db3965": ("3.9.65", 2003), "db3968": ("3.9.68", 2003)}
+    for name, (db, last) in want_db.items():
+        r = by_name.get(name)
+        if not r or (r["start"], r["database"], r["extras"], r["last"], r["changing"], r["nations"], r["tier"]) != (
+                2001, db, run_set.ALL_EXTRAS, last, "on", "all", "world"):
+            bad.append(f"real set: the database row {name} (2001 on {db}, all extras, last {last})")
+    off = {n: (by_name[n]["start"], by_name[n]["database"], by_name[n]["last"]) for n in ("off2001", "off2016")
+           if n in by_name and by_name[n]["changing"] == "off" and by_name[n]["extras"] == []}
+    if off != {"off2001": (2001, "3.9.68", 2003), "off2016": (2016, "tile", 2020)}:
+        bad.append(f"real set: the rules-off soaks are {off}")
+    jump = by_name.get("jump2098")
+    if not jump or (jump["tier"], jump["start"], jump["last"], jump["leg_years"], jump["changing"]) != \
+            ("jump", 2098, 2100, 1, "on"):
+        bad.append("real set: jump2098 is not the date jump through 2100/01")
+    tier_a = {r["name"]: (r["start"], r["last"], r["leg_years"], r["nations"], r["changing"]) for r in live
+              if r["tier"] == "A"}
+    if tier_a != {"ta2001": (2001, 2060, 10, "all", "on"), "ta2026": (2026, 2066, 10, "all", "on")}:
+        bad.append(f"real set: the Tier A rows are {tier_a}")
+    if {r["name"] for r in live} - {"jump2098", "ta2001", "ta2026", "off2001", "off2016", "db3960", "db3965", "db3968"} \
+            != {r["name"] for r in live if r["tier"] == "world" and r["name"][:2] in ("sp",) or
+                (r["name"].startswith("t") and r["name"][1:].isdigit())}:
+        bad.append("real set: a release row that the spec does not name")
+    bg = {r["name"]: (r["tier"], r["start"], r["last"], r["nations"], r["changing"], r["extras"], r["leg_years"])
+          for r in background_rows}
+    if bg != {"bg2300": ("A", 2001, 2300, "all", "on", [], 10), "bg2100": ("B", 2025, 2100, "all", "on", [], 1)}:
+        bad.append(f"real set: the background rows are {bg}")
+    if {r["name"] for r in run_set.chosen(real_rows, "release")} & {r["name"] for r in run_set.chosen(real_rows, "background")}:
+        bad.append("real set: a row is in both sets")
+    old = {"a2001s1", "a2001to2300", "jump2198", "jump2298", "b2001", "b2025", "late2101", "bw2001", "b2001long"}
+    if old & {r["name"] for r in real_rows}:
+        bad.append(f"real set: 0.7.0 rows are still there: {sorted(old & {r['name'] for r in real_rows})}")
+    for r in real_rows:                      # every row builds its steps, its database and its legs
+        if r["set"] == "quick":
+            continue
+        try:
+            rrc.league_steps(r["nations"].split(","), r["extras"])
+            run_set.database_of(r, dict(dbo, databases=run_set.DATABASES, own=run_set.OWN_DBS, out="/nonexistent"))
+        except (ValueError, KeyError, SystemExit) as e:
+            if "unpack" not in str(e) and "No such file" not in str(e) and not isinstance(e, OSError):
+                bad.append(f"real set: {r['name']}: {e!r}")
+        except OSError:
+            pass                              # an own database is unpacked at the start of a run, not here
+        if r["tier"] != "late" and not run_set.legs_of(r):
+            bad.append(f"real set: {r['name']} has no legs")
+    if run_set.full_world(by_name["sp2001"]) is not True or run_set.checker_tier(by_name["sp2001"]) != "world":
+        bad.append("real set: a world row is not a full-world row with the checks of real results")
 
     for b in bad:
         print("FAIL  " + b)
