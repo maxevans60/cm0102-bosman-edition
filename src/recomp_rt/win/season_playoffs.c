@@ -167,10 +167,7 @@ static int marked(uint32_t obj)
 /* The encoded row of a file and season (season_league_table.c), or NULL. */
 static const SeasonLeagueRule *league_rule(const char *file, int season)
 {
-    for (int i = 0; i < season_league_rule_count; i++)
-        if (season_league_rules[i].season == season && !strcmp(season_league_rules[i].file, file))
-            return &season_league_rules[i];
-    return NULL;
+    return season_league_rule(file, season);
 }
 
 /* The row of the rules of a season, or the last before it with no end year (the after-table rule, Q248), as

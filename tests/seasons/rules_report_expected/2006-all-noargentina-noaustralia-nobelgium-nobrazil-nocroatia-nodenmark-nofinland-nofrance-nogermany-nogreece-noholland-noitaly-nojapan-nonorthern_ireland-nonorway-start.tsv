@@ -35,6 +35,7 @@
 2006	down	swe_first (Superettan), row den-swe-195: game 3 (+0 play-off places), table 2 (2)
 2006	down	tur_second_b (Lig B), row rus-tur-222: game 0 (+0 play-off places), table 10 (10 (7th and 8th of each of five second-stage groups))
 2006	down	wel_first (Welsh Premier League), row wal-nir-irl-129: game 0 (+0 play-off places), table 1 (1 (pos 17))
+2006	meetings	kor_league (K League), row aus-jap-kor-330: game 3, table 2
 2006	no_row	friendly (Friendly): no table row
 2006	no_row	record_utils ('B' International): no table row
 2006	no_row	record_utils (Reserve): no table row
@@ -65,6 +66,10 @@
 2006	playoffs	swe_first (Superettan), row den-swe-195: game 1 up and 0 down play-off places, table 0 and 0 ('none')
 2006	playoffs	swe_prm (Allsvenskan), row den-swe-194: game 0 up and 1 down play-off places, table 0 and 0 ('none')
 2006	playoffs	tur_second_b (Lig B), row rus-tur-222: game 2 up and 0 down play-off places, table 0 and 0 ('see format')
+2006	rounds	kor_league (K League), row aus-jap-kor-330: game 27, table 26 (2 meetings, zones -, extra 0)
+2006	rounds	pol_first (I liga), row gre-pol-cro-195: game 14, table 30 (2 meetings, zones -, extra 0)
+2006	rounds	rus_first (Russian First Division), row rus-tur-33: game 34, table 42 (2 meetings, zones -, extra 0)
+2006	rounds	tur_second (Lig A), row rus-tur-195: game 38, table 34 (2 meetings, zones -, extra 0)
 2006	up	pol_first (I liga), row gre-pol-cro-195: game 4 (+0 play-off places), table na (n/a)
 2006	up	sco_second (Scottish Second Division), row sco-44: game 2 (+0 play-off places), table 1 (1)
 2006	up	sco_third (Scottish Third Division), row sco-45: game 2 (+0 play-off places), table 1 (1)

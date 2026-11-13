@@ -28,7 +28,7 @@
 2011	clubs	goldcup (Copa América), row int-continental-121: game 0/4, table 12 (12)
 2011	clubs	oceania_nations (OFC Nations Cup), row int-continental-120: game 0/4, table 8 (8)
 2011	clubs	uefa_cup (UEFA Europa League), row uefa-85: game 159/191, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2011	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-126: game 50, table 52 (52 entrants)
+2011	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-126: game 44, table 52 (52 entrants)
 2011	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-127: game 0, table 20 (20, then 10)
 2011	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-125: game 24, table 30 (30, then 12)
 2011	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-128: game 5, table 11 (11 entrants)
