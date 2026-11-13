@@ -292,7 +292,6 @@
 2007	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-79: game 0, table 43 (43 entrants)
 2007	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-77: game 24, table 35 (35 entrants)
 2007	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-80: game 5, table 11 (11 entrants)
-2007	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-76: game 9, table 10 (10)
 2007	clubs	world_club_champ (FIFA Club World Championship), row club-world-116: game 4, table 7 (7)
 2007	down	eng_third (English Third Division), row eng-91: game 1 (+0 play-off places), table 2 (2)
 2007	format	european_cup, row uefa-50: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -348,13 +347,12 @@
 2008	clubs	intertoto_cup (Inter-Toto Cup), row uefa-63: game 60, table 50 (50)
 2008	clubs	oceania_nations (Oceania Nations Cup), row int-continental-87: game 0/3, table 4 (4)
 2008	clubs	olympics (Olympic Games), row int-world-95: game 4, table 16 (16)
-2008	clubs	uefa_cup (UEFA Cup), row uefa-61: game 146, table 157 (157 in all, with the 24 Champions League clubs (the page labels it qualifying; i)
+2008	clubs	uefa_cup (UEFA Cup), row uefa-61: game 145, table 157 (157 in all, with the 24 Champions League clubs (the page labels it qualifying; i)
 2008	clubs	wc_african_cup (World Cup African Qualifying Section), row int-world-90: game 48, table 20 (20)
 2008	clubs	wc_asia_league (World Cup Asian Qualifying Section), row int-world-91: game 0/4, table 10 (10)
 2008	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-89: game 24, table 12 (12, then 6)
 2008	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-87: game 5, table 53 (53 entrants)
 2008	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-92: game 5, table 4 (4)
-2008	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-88: game 9, table 10 (10)
 2008	clubs	world_club_champ (FIFA Club World Championship), row club-world-135: game 0/4, table 7 (7)
 2008	down	eng_third (English Third Division), row eng-101: game 1 (+0 play-off places), table 2 (2)
 2008	format	european_cup, row uefa-58: game 16 clubs in a second group stage and 8 in the first knockout round, table 0 and 16
@@ -416,7 +414,6 @@
 2009	clubs	wc_concacaf_cup (World Cup CONCACAF Qualifying Section), row int-world-101: game 24, table 6 (6)
 2009	clubs	wc_europe_league (World Cup European Qualifying Section), row int-world-99: game 5, table 53 (53 entrants)
 2009	clubs	wc_oceania_league (World Cup Oceania Qualifying Section), row int-world-104: game 5, table 1 (1)
-2009	clubs	wc_south_american_league (World Cup South American Qualifying Section), row int-world-100: game 9, table 10 (10)
 2009	clubs	world_club_champ (FIFA Club World Championship), row club-world-154: game 4, table 7 (7)
 2009	clubs	world_cup (FIFA World Cup), row int-world-98: game 0/4, table 32 (32)
 2009	down	eng_third (English Third Division), row eng-111: game 1 (+0 play-off places), table 2 (2)
@@ -1534,7 +1531,7 @@
 2026	clubs	african_nations (African Cup of Nations), row int-continental-282: game 0/4, table 24 (24)
 2026	clubs	euro_champ_qual (European Championship Qualifying), row int-continental-277: game 5, table 54 (54 (scheduled))
 2026	clubs	european_cup (European Champions Cup), row uefa-202: game 55, table 81 (81 (36 in the league phase))
-2026	clubs	uefa_cup (UEFA Cup), row uefa-205: game 145, table 76 (76 (45 entered + 31 from the Champions League); 36 in the league phase)
+2026	clubs	uefa_cup (UEFA Cup), row uefa-205: game 146, table 76 (76 (45 entered + 31 from the Champions League); 36 in the league phase)
 2026	down	eng_third (English Third Division), row eng-281: game 1 (+0 play-off places), table 2 (2)
 2026	format	european_cup, row uefa-202: game 16 and 8 clubs in the league phase and its knockout stage, table 0 and 24
 2026	format	uefa_cup, row uefa-205: game 0 and 0 clubs in the league phase and its knockout stage, table 36 and 24
