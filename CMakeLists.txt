@@ -277,6 +277,12 @@ if(NOT WIN32)
     target_include_directories(season_playoff_winners_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_playoff_winners COMMAND season_playoff_winners_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_playoff_winners PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The league structure of the rules table: meetings, halves, zones, periods, splits (0.7.2 league sizes, slice 1).
+    add_executable(season_league_test tests/seasons/test_season_league.c src/recomp_rt/win/season_league.c
+        src/recomp_rt/win/season_rules.c src/recomp_rt/win/season_league_table.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_league_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_league COMMAND season_league_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_league PROPERTIES FIXTURES_REQUIRED rules_table)
     # Domestic cups that the rules table does not hold in some seasons (0.6.0 slice 21b).
     add_executable(season_cup_breaks_test tests/seasons/test_season_cup_breaks.c
         src/recomp_rt/win/season_cup_breaks.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
