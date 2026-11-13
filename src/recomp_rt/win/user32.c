@@ -216,15 +216,94 @@ static int full_screen_on(void)
     return SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 }
 
-static void toggle_full_screen(void)
+/* The Screen Mode row of the Preferences screen: bit 0x8 (Full) or 0x10 (Windowed) of the preference word
+ * at +4 of the game options object [0xae3138] (Config::set_option 0x5d7c60 cases 8 and 0x10). */
+#define GAME_OPTIONS 0xae3138u
+#define PREF_FULL 0x8u
+#define PREF_WINDOWED 0x10u
+#define DISPLAY_IS_FULL 0xae319cu       /* the full screen flag of the display code: set by 0x5e2620, read by 0x5e2ea0 */
+
+static int window_is_full(void)
 {
-    if (!window) return;
-    int full = (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) != 0;
-    if (full ? SDL_SetWindowFullscreen(window, 0) : full_screen_on())
+    return window && (SDL_GetWindowFlags(window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP)) != 0;
+}
+
+/* Sets the row and the full screen flag of the display code to the real state of the window. Ok on the Preferences
+ * screen (Config::apply_and_save 0x5d8480) starts the display init 0x5e2620 only when the row and the flag (0x5e2ea0)
+ * disagree, so without this a change of the F11 key, or a window that the start left in a window while the row said
+ * Full, would not match the row. Writes the same bits as 0x5d7c60, only when they differ. */
+static void sync_screen_mode_row(void)
+{
+    uint32_t obj = rd32(g_mem, GAME_OPTIONS);
+    if (!obj) return;
+    wr32(g_mem, DISPLAY_IS_FULL, window_is_full());
+    uint32_t bits = rd32(g_mem, obj + 4);
+    uint32_t want = (bits & ~(PREF_FULL | PREF_WINDOWED)) | (window_is_full() ? PREF_FULL : PREF_WINDOWED);
+    if (want != bits) wr32(g_mem, obj + 4, want);
+}
+
+static void set_full_screen(int want)
+{
+    if (!window || window_is_full() == want) return;
+    if (want ? full_screen_on() : SDL_SetWindowFullscreen(window, 0))
         fprintf(stderr, "recomp: full screen: %s\n", SDL_GetError());
     update_scaling();
     win_screen_dirty = 1;
-    display_report_event(full ? "full screen off" : "full screen on");
+    display_report_event(want ? "full screen on" : "full screen off");
+}
+
+static void toggle_full_screen(void)
+{
+    if (!window) return;
+    set_full_screen(!window_is_full());
+    sync_screen_mode_row();
+}
+
+/* 1 when the game options come from game.cfg or were applied once: the flag at +0x213 (0x81ba23 opens the settings
+ * screen of a first start when it is 0; 0x5d8480 sets it to 1 after it wrote the file). */
+static int prefs_saved(void)
+{
+    uint32_t obj = rd32(g_mem, GAME_OPTIONS);
+    return obj && rd32(g_mem, obj + 0x213) != 0;
+}
+
+/* The remembered full screen state of the last quit (window.txt), read when the window opens. */
+static int remembered_known, remembered_full;
+static int screen_mode_started;
+
+/* The original asks for the mode through IDirectDraw::SetCooperativeLevel in its display init 0x5e2620
+ * (DDSCL_FULLSCREEN 0x13 or DDSCL_NORMAL 8, from bit 0x8 of the preferences) at start and again after Ok on
+ * the Preferences screen when the Screen Mode row changed (0x5d8480 calls 0x5e2620). ddraw.c calls this at
+ * the SetDisplayMode that follows, so the 8 that 0x5e2620 sets first on a re-init does not show. The
+ * first call is the start of the game. */
+static int start_pending, start_level;
+
+void win_screen_mode(int pref_full)
+{
+    if (!window) return;
+    int want = pref_full;
+    if (!screen_mode_started) {
+        /* The first call comes from the constructor of the game options 0x5d72c0, which stores its object in
+         * [0xae3138] only after it returns. The start waits for the object (win_screen_mode_poll). */
+        if (!rd32(g_mem, GAME_OPTIONS)) { start_pending = 1; start_level = pref_full; return; }
+        screen_mode_started = 1;
+        want = winscale_start_full(pref_full, prefs_saved(), options_bool(OPT_REMEMBER_WINDOW), remembered_known,
+                                   remembered_full);
+        if (strstr(win_str(0xae2c98u), "-windowed")) want = 0;      /* the command line option of the original (0x5d7973) */
+        fprintf(stderr, "recomp: screen mode at start: row %s, game.cfg %s, window.txt %s: %s\n",
+                pref_full ? "Full" : "Windowed", prefs_saved() ? "read" : "none",
+                remembered_known ? (remembered_full ? "full" : "windowed") : "none", want ? "full" : "windowed");
+    }
+    set_full_screen(want);
+    sync_screen_mode_row();
+}
+
+/* Runs the start of the Screen Mode when the game options exist. */
+static void win_screen_mode_poll(void)
+{
+    if (!start_pending || !rd32(g_mem, GAME_OPTIONS)) return;
+    start_pending = 0;
+    win_screen_mode(start_level);
 }
 
 /* Remember the window (option remember_window): window.txt in the user folder, beside settings.txt,
@@ -353,7 +432,7 @@ void win_video_init(void)
         int ok = f && fscanf(f, "%d %d %d %d %d", &sx, &sy, &sw, &sh, &sf) == 5;
         if (f) fclose(f);
         if (ok) {
-            if (window_on_screen(sx, sy, sw, sh)) { x = sx; y = sy; w = sw; h = sh; full = sf != 0; remembered = 1; }
+            if (window_on_screen(sx, sy, sw, sh)) { x = sx; y = sy; w = sw; h = sh; full = sf != 0; remembered = 1; remembered_known = 1; remembered_full = sf != 0; }
             else { w = FALLBACK_W; h = FALLBACK_H; }          /* off every screen: 1280x800 in the middle */
         }
     }
@@ -822,6 +901,7 @@ static void handle_event(SDL_Event *e)
         if (e->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
             update_scaling();
             note_windowed();
+            if (screen_mode_started) sync_screen_mode_row();     /* the green button of the window, or Mission Control, left full screen */
             display_report_event("size changed");
         }
         if (e->window.event == SDL_WINDOWEVENT_MAXIMIZED) display_report_event("maximised");
@@ -970,6 +1050,7 @@ void win_poll_events(void)
         if (window) SDL_RaiseWindow(window);
     }
     invite_poll();
+    win_screen_mode_poll();
     if (window) run_script();
 }
 

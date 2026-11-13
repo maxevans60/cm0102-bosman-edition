@@ -130,6 +130,8 @@ void win_sound_focus(int focused);
 void win_video_init(void);
 /* Stores the window size, place and full screen state in window.txt (option remember_window). Call it at quit. */
 void win_save_window(void);
+/* The Screen Mode of the game (preference bit 0x8 Full, 0x10 Windowed): switches full screen on or off. Called from SetDisplayMode. */
+void win_screen_mode(int pref_full);
 void win_present(void);                /* show the primary surface */
 void win_poll_events(void);            /* SDL events to the message queue */
 void win_game_work(void);              /* user32.c: game work ran in this pass, no idle sleep (#58) */
