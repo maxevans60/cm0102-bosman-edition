@@ -100,6 +100,8 @@ int win_data_set_has(const char *name); /* 1 when the data set folder holds its 
 const char *win_databases_root(void);   /* the folder that holds Databases: the save folder */
 void net_lobby_install(void);           /* net_lobby.c: online games in the game list, at the first WSAStartup */
 const char *net_lobby_host_line(char *out, unsigned room);   /* this host's place in the lobby, or NULL (slice 7) */
+/* 0.7.1 (#137): the game code and invite link while this host's game is open in the lobby (1), else 0. */
+int net_lobby_invite(char *code, unsigned code_room, char *link, unsigned link_room);
 void net_lobby_test_start(void);        /* the connection test on this game's lobby address (net_test.c) */
 /* net_session.c (0.7.0 slice 6): drop in, drop out and host quit. */
 void net_session_turn(void);            /* at each human turn */

@@ -407,6 +407,16 @@ const char *net_lobby_host_line(char *out, unsigned room)
     return net_host_text(out, room, (int)st, code, refusal);
 }
 
+/* The Network tab's invite rows (0.7.1, #137): 1 and the game code and link while the game is in the online list. */
+int net_lobby_invite(char *code, unsigned code_room, char *link, unsigned link_room)
+{
+    char c[9];
+    if (!hosting || !online() || lobby_host_state(c) != LOBBY_OPEN) return 0;
+    if (!net_invite_link(link, link_room, lobby_address(), c)) return 0;
+    snprintf(code, code_room, "%s", c);
+    return 1;
+}
+
 /* The connection test (net_test.c) on the lobby address of this game. */
 void net_lobby_test_start(void)
 {

@@ -171,3 +171,18 @@ const char *net_host_text(char *out, size_t room, int state, const char *code, c
     }
     return out;
 }
+
+const char *net_invite_link(char *out, size_t room, const char *lobby_address, const char *code)
+{
+    if (!room) return NULL;
+    out[0] = 0;
+    if (!lobby_address || !lobby_address[0] || !code || !code[0]) return NULL;
+    size_t n = strlen(lobby_address);
+    while (n && lobby_address[n - 1] == '/') n--;
+    int w = snprintf(out, room, "%.*s/join/%s", (int)n, lobby_address, code);
+    if (!n || w < 0 || (size_t)w >= room) {
+        out[0] = 0;
+        return NULL;
+    }
+    return out;
+}
