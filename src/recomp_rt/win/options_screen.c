@@ -693,14 +693,16 @@ static void options_input(void)
         rt_ret_cdecl(REBUILD);
         return;
     }
-    if (w < 0 && node_slot(0) == 3) {
+    if (w < 0 && node_slot(0) == 3 && (!season_game_on() || net_session_hosting())) {   /* as network_rows */
         char c[9], l[200];
         if (net_lobby_invite(c, sizeof c, l, sizeof l) != invite_built) {   /* the game went into the lobby, or out */
+            save_password();                        /* the build puts the saved text back in the field */
             rt_ret_cdecl(REBUILD);
             return;
         }
     }
     if (w < 0 && test_built && net_test_state(NULL) != NT_RUNNING) {
+        save_password();
         rt_ret_cdecl(REBUILD);                      /* the connection test ended: show its result */
         return;
     }
@@ -804,6 +806,7 @@ int options_screen_open(int from)
     set_slot(1, (uint32_t)from);
     failed_row = -1;
     test_asked = test_built = 0;
+    copy_done = 0;
     open_failed = 0;
     handled_press = win_press_count();              /* the press that opened the box does not click in it */
     fprintf(stderr, "recomp: options box opened from %s\n", from == 1 ? "the start screen" : "the side bar");
