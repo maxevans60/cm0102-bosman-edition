@@ -205,13 +205,24 @@ static void shift_year(uint32_t a, int s)
     wr16(g_mem, a, (uint32_t)ny);
 }
 
+/* The contract rule: a year of D or later and REAL_CONTRACT_FROM or later is a real year (shift real), an earlier one
+ * a year of a 2001 start (shift old). */
+static int contract_shift(int y, int D, int old, int real)
+{
+    return y >= D && y >= REAL_CONTRACT_FROM ? real : old;
+}
+
+int season_dates_contract_shift(const SeasonShiftPlan *p, int y)
+{
+    return contract_shift(y, p->D, p->contract_old, p->contract_real);
+}
+
 /* A contract end or national job date, by the rule of its row. */
 static void shift_contract(uint32_t a, const Plan *p)
 {
     int y = (int)rd16(g_mem, a + 2);
     if (y <= (int)EMPTY_YEAR) return;
-    int real = y >= p->D && y >= REAL_CONTRACT_FROM;
-    int ny = y + (real ? p->contract_real : p->contract_old);
+    int ny = y + contract_shift(y, p->D, p->contract_old, p->contract_real);
     if (ny > p->N + CONTRACT_YEARS) ny = p->N + CONTRACT_YEARS;
     shift_date(a, ny - y);
 }

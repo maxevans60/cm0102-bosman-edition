@@ -384,6 +384,10 @@ void rt_match_day_set_place(uint32_t list);
 /* Test switch RECOMP_TEST_MARKET_WEEKLY (open item 193, win/market_weekly.c, tools/recomp/market_weekly.py at
  * 0x5cdc4e): the Enable Computer Bids flag that the day loop reads, 0 on days that are not Mondays when it is on. */
 uint32_t rt_market_bids_flag(uint32_t flag);
+/* The dates of a season database's player_setup.cfg (open item 229, win/player_setup.c, tools/recomp/player_setup.py
+ * in player_setup_apply_line 0x7a3a10): a year of the file (low 16 bits) moved by the rule of the database's contract
+ * ends in a season game; the high bits stay. */
+uint32_t rt_player_setup_year(uint32_t value);
 /* International goals above 255 (0.6.2 item 66): the goals byte after the goals of a match at 0x76b8d6, and the full
  * goals of a staff record for the screens. */
 uint32_t rt_goals_add(uint32_t staff, uint32_t byte, uint32_t goals);

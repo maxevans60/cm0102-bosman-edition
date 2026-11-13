@@ -16,8 +16,9 @@ Usage:
               role "season database" is made, and a missing source zip stops the tool.
 
 For each season database the tool writes <out>/<name>.zip. The zip holds one folder <name> with the 20 data
-files of the game (the list of src/recomp_rt/win/dbfolders.c) in lower case, and euro.cfg when the source has it
-(the first season's European entrants, 0.6.2 open item 100), and nothing else: no readme and
+files of the game (the list of src/recomp_rt/win/dbfolders.c) in lower case, euro.cfg when the source has it
+(the first season's European entrants, 0.6.2 open item 100) and player_setup.cfg when the source has it (the loans,
+injuries, retirements and future transfers of the database, open item 229), and nothing else: no readme and
 no name of a person from the source zip. <name> is the neutral name of the signatures table, for example
 "October 2003". The zips are the same for the same input: the tool sets every date and every attribute.
 Then the tool reads each new zip back and checks it against the signatures table. Any mismatch stops the tool
@@ -39,7 +40,10 @@ DATA_FILES = [
     "staff_comp.dat", "staff_comp_history.dat", "staff_history.dat"]
 # euro.cfg: the first season's European entrants of the database (UefaSeeding::apply_euro_cfg_order 0x9059e0).
 # Copied when the source has it. Without it the game read the 2001/02 file of its own Data (0.6.2 open item 100).
-OPTIONAL_FILES = ["euro.cfg"]
+# player_setup.cfg: the database's loans, injuries, bans, retirements and future transfers (player_setup_apply_line
+# 0x7a3a10). Without it the game read the 3.9.68 file of its own Data, so a season game had none of them (open item
+# 229; the dates move with the season in src/recomp_rt/win/player_setup.c).
+OPTIONAL_FILES = ["euro.cfg", "player_setup.cfg"]
 SEASON_ROLE = "season database"
 NEUTRAL_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9. ]*$")
 STAMP = (2001, 7, 1, 0, 0, 0)
@@ -163,7 +167,7 @@ def check_zip(path, row):
         want = sorted(f"{row['database']}/{f}" for f in DATA_FILES)
         extra = [n for n in names if n not in want]
         if [n for n in names if n in want] != want or any(n.rsplit("/", 1)[-1] not in OPTIONAL_FILES for n in extra):
-            raise Stop(f"{path}: the zip holds {names}, not the 20 data files of {row['database']} (and euro.cfg)")
+            raise Stop(f"{path}: the zip holds {names}, not the 20 data files of {row['database']} (and euro.cfg, player_setup.cfg)")
         sig, _ = signature_of(zf)
         if sig is None or not row_matches(row, sig):
             raise Stop(f"{path}: the new zip does not match the signatures table for {row['database']}")
