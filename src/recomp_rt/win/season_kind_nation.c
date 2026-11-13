@@ -17,7 +17,9 @@
  *   fills through the nation's rules object: bytes +0..+2 foreign, +3..+5 non-EU, 0xff for none
  *   (2026-10-16-foreign-and-tactics-positions.md). The kind runs after the lookup and gives the slot that is set
  *   the number of the table, only for a fixture of a first division. It adds no limit that the game does not
- *   have: a limit in a slot that is not set stays as the game has it.
+ *   have: a limit in a slot that is not set stays as the game has it. A table rule of non-EU players with no
+ *   foreign limit changes the kind of the game's foreign limit (Croatia from 2013/14, issue 135;
+ *   season_nation_squad_record).
  * - Work permits: TRANSFER_MANAGER::player_needs_work_permit 0x8c7560 (thiscall: player, club, flag; ret 0xc)
  *   asks 0x53d740 (player, 0) whether the player is of the EU and stops when he is. With the flag set it returns 1
  *   for every other player at once (0x8c760d); with the flag clear it looks for a permit in the list (0x8c7650).
@@ -331,7 +333,11 @@ static void news_for(const SeasonNation *n, int season)
         limit_text(now.squad_non_eu, a, sizeof a, "non-EU");
         season_change_news("%s: a match squad in the top division may now hold %s.", n->name, a);
     }
-    if (was.squad_foreign != now.squad_foreign && now.squad_foreign != SEASON_NATION_KEEP) {
+    int kind_change = now.squad_foreign == SEASON_NATION_NONE && now.squad_non_eu != SEASON_NATION_KEEP &&
+                      now.squad_non_eu != SEASON_NATION_NONE;     /* season_nation_squad_record: Croatia, issue 135 */
+    if (kind_change && was.squad_foreign != SEASON_NATION_NONE)
+        season_change_news("%s: players of the EU and EEA no longer count as foreign players in a match squad.", n->name);
+    else if (!kind_change && was.squad_foreign != now.squad_foreign && now.squad_foreign != SEASON_NATION_KEEP) {
         limit_text(now.squad_foreign, b, sizeof b, "foreign");
         season_change_news("%s: a match squad in the top division may now hold %s.", n->name, b);
     }
@@ -409,13 +415,6 @@ static const SeasonNation *file_nation(const char *file, int season, int *top)
     return n;
 }
 
-static void set_slots(uint32_t rec, int first, int v)
-{
-    if (v == SEASON_NATION_KEEP) return;
-    for (int s = first; s < first + 3; s++)
-        if (rd8(g_mem, rec + (uint32_t)s) != 0xff) wr8(g_mem, rec + (uint32_t)s, (uint32_t)v);
-}
-
 /* TRANSFER_MANAGER restriction lookup 0x8cf6b0, thiscall (fixture, record, collapse flag), ret 0xc. */
 void o_008cf6b0(void);
 RT_WRAP(008cf6b0, restriction_lookup)
@@ -438,14 +437,15 @@ RT_WRAP(008cf6b0, restriction_lookup)
     if (!n || !season_nation_state(n->name, season, &st)) return;
     uint8_t before[6];
     memcpy(before, g_mem + rec, 6);
-    if (top || st.squad_non_eu == SEASON_NATION_NONE) set_slots(rec, 3, st.squad_non_eu);
-    if (top || st.squad_foreign == SEASON_NATION_NONE) set_slots(rec, 0, st.squad_foreign);
-    if (log_on() && memcmp(before, g_mem + rec, 6)) {
-        static unsigned shown;
-        if (shown++ < 12)
-            fprintf(stderr, "recomp: season nation: %s %s %d squad record %02x %02x %02x %02x %02x %02x -> %02x %02x %02x %02x %02x %02x\n",
-                    n->name, file, season, before[0], before[1], before[2], before[3], before[4], before[5], g_mem[rec],
-                    g_mem[rec + 1], g_mem[rec + 2], g_mem[rec + 3], g_mem[rec + 4], g_mem[rec + 5]);
+    int changed = season_nation_squad_record(g_mem + rec, &st, top);
+    if (log_on()) {
+        /* By nation and by answer, so that the lines of one nation or of kept records do not hide the rest. */
+        static unsigned shown[64][2];
+        int k = (int)(n - season_nations);
+        if (k >= 0 && k < 64 && shown[k][changed]++ < (changed ? 12u : 4u))
+            fprintf(stderr, "recomp: season nation: %s %s %d %s squad record %02x %02x %02x %02x %02x %02x -> %02x %02x %02x %02x %02x %02x\n",
+                    n->name, file, season, top ? "top" : "lower", before[0], before[1], before[2], before[3], before[4],
+                    before[5], g_mem[rec], g_mem[rec + 1], g_mem[rec + 2], g_mem[rec + 3], g_mem[rec + 4], g_mem[rec + 5]);
     }
 }
 
