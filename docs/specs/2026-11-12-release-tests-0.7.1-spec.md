@@ -127,7 +127,7 @@ Delivers: run_set.tsv holds the 34 release rows and the 2 background rows of thi
 Merge danger: two-way door. Blast radius: the release check. A missing row lets a release pass with a gap, so the acceptance check counts the rows against this spec.
 - [x] The release set has 8 spine soaks, 18 tile rows, 3 database rows, 2 rules-off soaks, jump2098 and 2 Tier A rows, each with the start, database, extras and end of this spec.
 - [x] The background set has the Tier A game to 2300 and the full-world game from 2025 to 2100.
-- [x] ctest future_run_set passes. (--set quick: 5 of 7 rows pass; quicka and quick60x fail on checker faults of the data, open items 227 and 228. t072, 13 November 2026.)
+- [x] ctest future_run_set passes. --set quick passes (7 of 7, after items 227, 228 and 231; t072, 13 November 2026).
 
 ### 3. TESTING.md and the release script
 Blocked by: 2
