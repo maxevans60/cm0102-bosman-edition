@@ -224,6 +224,11 @@ if(NOT WIN32)
         src/recomp_rt/win/season_intl_rules.c src/recomp_rt/win/season_intl_table.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_asian16_test PRIVATE src/recomp_rt/win src/recomp_rt include)
     add_test(NAME season_asian16 COMMAND season_asian16_test)
+    # GitHub issue 136: the Asian Cup entrants after the hosts are the best sides by reputation, in every game.
+    add_executable(season_asian_pick_test tests/seasons/test_season_asian_pick.c src/recomp_rt/win/season_intl_cups.c
+        src/recomp_rt/win/season_intl_rules.c src/recomp_rt/win/season_intl_table.c src/recomp_rt/win/season_nl_table.c)
+    target_include_directories(season_asian_pick_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_asian_pick COMMAND season_asian_pick_test)
     add_executable(season_intl_rows_test tests/seasons/test_season_intl_rows.c src/recomp_rt/win/season_intl_rows.c)
     target_include_directories(season_intl_rows_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_intl_rows COMMAND season_intl_rows_test)

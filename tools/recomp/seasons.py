@@ -407,6 +407,11 @@ INSNS = {
     # replaced instructions only move; the flags are set again before they are read (0x40243d, 0x40ffbf).
     0x40242F: ("mov ecx, dword ptr [esi + 0xee]", "SYNC(); t0 = rt_intl_cup_acn_hosts(esi, edi, edx & 0xffu); edi = t0 >> 8; edx = (edx & 0xffffff00u) | ((edx + t0) & 0xffu); W8(esp + 0x13u, edx & 0xffu); ecx = R32(esi + 0xeeu);"),
     0x40FFB2: ("mov cl, byte ptr [esi + 0xf2]", "SYNC(); t0 = rt_intl_cup_asian_hosts(esi, esp + 0x228u, ebp, ebx); t1 = t0 & 0xffu; ebp = t0 >> 8; W32(esp + 0x14u, ebp); ebx += t1; edx = (edx & 0xffffff00u) | ((edx + t1) & 0xffu); W8(esp + 0x13u, edx & 0xffu); ecx = (ecx & 0xffffff00u) | R8(esi + 0xf2u);"),
+    # GitHub issue 136 (win/season_intl_cups.c): 0x4afbd0 sorts the Asian list by reputation and shuffles the top
+    # 3 * places, so the Asian Cup took weak sides at random. The site calls the original (the same random numbers)
+    # and sorts the list again: the best sides play, in every game. Args list, count, places on the stack (pushed at
+    # 0x40ffc5..0x40ffc7); the caller reads no register the call leaves (0x40ffcd, 0x40ffd2).
+    0x40FFC8: ("call 0x4afbd0", "SYNC(); rt_intl_cup_asian_pick(esi, R32(esp), R32(esp + 4u), R32(esp + 8u)); RT_AFTER_CALL();"),
 
     # Copa America of 16 teams (0.6.0 slice 27, win/season_intl_copa.c). Group A (0x5e11e0) takes the teams
     # 3 * k of +0xee: 4 * k with 16 teams. start_new_season 0x5e1530 keeps the stage array of the ctor: after

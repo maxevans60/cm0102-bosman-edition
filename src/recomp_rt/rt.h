@@ -529,6 +529,9 @@ void rt_intl_cup_stages(uint32_t self);
  * each gives the new count << 8 | the hosts it added; no change in the base game. */
 uint32_t rt_intl_cup_acn_hosts(uint32_t self, uint32_t count, uint32_t hosts);
 uint32_t rt_intl_cup_asian_hosts(uint32_t self, uint32_t list, uint32_t count, uint32_t placed);
+/* The Asian Cup entrants after the hosts (0x40fdf0 at 0x40ffc8, GitHub issue 136): the original's pick 0x4afbd0, then
+ * the list sorted by reputation again, so the best sides play. Every game; RECOMP_ASIAN_PICK=original keeps the pick. */
+void rt_intl_cup_asian_pick(uint32_t self, uint32_t list, uint32_t count, uint32_t places);
 /* The Copa America of 16 teams (win/season_intl_copa.c): the knockout stage index (2), the group count (3) and a
  * new stage array after the step of start_new_season. Each gives the original's value for an edition of 12
  * teams and in the base game. */

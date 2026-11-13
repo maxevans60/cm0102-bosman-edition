@@ -310,6 +310,12 @@ SAME_SAVE_RUNS = [
     # The merged parts of a save (0.6.2 slice 13, save_parts.c) change only how the temporary files go into the
     # save: with their test switch off the save holds the same files as normal.
     ("save-parts-keep", {"faster_days": "off", "_env": {"RECOMP_SAVE_PARTS": "keep"}}),
+    # GitHub issue 136 (0.7.2, season_intl_cups.c): the Asian Cup entrants after the hosts are the best sides by
+    # reputation, in every game (Max, 13 November 2026: changing rules on and off). The planned difference is the
+    # entrant list of the Asian Cup (asia_nations +0xee) from its draw, which comes first in the year of the 2004
+    # edition, outside the 14 days of each saved game. The fix keeps the original's random numbers, so with its test
+    # switch on the original's pick the save is that of normal.
+    ("asian-pick-off", {"faster_days": "off", "_env": {"RECOMP_ASIAN_PICK": "original"}}),
 ]
 
 # --ref-050 <0.5.0 program> (Q342): the run ref-0.5.0 plays the 0.5.0 build, and the run text-0.5.0 plays this
