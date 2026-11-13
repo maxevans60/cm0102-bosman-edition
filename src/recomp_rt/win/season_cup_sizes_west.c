@@ -33,13 +33,16 @@
  *   15 (0x63fbfe), so with a Serie A of 20 the clubs placed 15 to 17, which stay in Serie A, enter no loop. Here
  *   every club of Serie A and Serie B takes part: a missing one takes the place of the weakest pool club that is
  *   in neither division.
- * - FraCup::collect_entrants 0x5baa50: 222 places; its three lower passes (0x5bab90, 0x5bac3c, 0x5bacf0) already
- *   take the room left by Ligue 1 and Ligue 2 (rt_cup_add). A National of 18 gave the passes two more places, which
- *   took clubs with no squad, and a 2022/23 game stopped at virtual_staff.cpp 195: VIRTUAL_STAFF::fill_fixture_squads
- *   0x90d2f0 wants 15 players in the 50 slots at club +0xd7 (0x90d43a..0x90d469). Here a lower pass passes over a
- *   club with fewer, and so do the fills of this file. When that leaves the list short (sete at 0x5bae36 gives 0
- *   and the constructor stops), other French clubs with a squad take the empty places before Ligue 2 and Ligue 1,
- *   as the Danish Cup's fill does. */
+ * - FraCup::collect_entrants 0x5baa50: 222 places; its three lower passes (0x5bab90, 0x5bac3c, 0x5bacf0) take the
+ *   room left by Ligue 1 and Ligue 2 (rt_cup_add). When the list stays short (sete at 0x5bae36 gives 0 and
+ *   FraCup::FraCup stops at fra_cup.cpp 76, 0x5ba2d1), other French clubs take the empty places before Ligue 2.
+ * - FraLgeCup::collect_entrants 0x5bd160: 54 places, National clubs up to the room that Ligue 2 [0x9cf5d0] and
+ *   Ligue 1 [0x9cf5cc] leave (rt_cup_room at 0x5bd2ac, rt_fra_lge_first), then both. A National of 17 (2024/25)
+ *   with two Ligues of 18 left one place empty, and the constructor stopped at fra_lge_cup.cpp 73 (0x5bcb21).
+ *   The empty places take French clubs from below the National (season_cup_sizes_fra_lge, from the wrap in
+ *   season_sizes.c).
+ * The fills take only clubs with 15 players or more in the 50 slots at club +0xd7, the count that
+ * VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0 wants (0x90d43a..0x90d469, box virtual_staff.cpp 195). */
 #include "win.h"
 #include "../rt.h"
 #include "season.h"
@@ -129,21 +132,28 @@ static int clubs_of(const uint32_t *keys, int nkeys)
     return n;
 }
 
-/* The best club of a nation for an empty place that is not taken yet: not in a division of skip, with a squad,
+/* The best club of a nation for an empty place that is not taken yet: not in a division of skip, with 15 players,
  * the highest level first (a club with no division last), then the highest reputation; with none_only, only a
- * club with no division. taken(club, ctx) is 1 for a club that the cup holds. 0 when none is left. */
+ * club with no division. When no such club has 15 players, the club with the most players (the original's own
+ * lower pools take clubs with no test of the squad). taken(club, ctx) is 1 for a club that the cup holds. 0 when
+ * none is left. */
 static uint32_t best_club(uint32_t nation, const uint32_t *skip, int nskip, int none_only,
                           int (*taken)(uint32_t, void *), void *ctx)
 {
-    uint32_t best = 0;
-    int count = club_count();
+    uint32_t best = 0, most = 0;
+    int count = club_count(), most_players = -1;
     for (int i = 0; i < count; i++) {
         uint32_t c = club_at(i);
-        if (rd32(g_mem, c + CLUB_NATION) != nation || squad_of(c) < SQUAD_LEAST) continue;
+        if (rd32(g_mem, c + CLUB_NATION) != nation) continue;
         if (none_only && readable(rd32(g_mem, c + CLUB_DIVISION))) continue;
         int skipped = 0;
         for (int k = 0; k < nskip && !skipped; k++) skipped = in_key(c, skip[k]);
         if (skipped || taken(c, ctx)) continue;
+        int players = squad_of(c);
+        if (players < SQUAD_LEAST) {
+            if (players > most_players) most = c, most_players = players;
+            continue;
+        }
         if (best) {
             int lc = level_of(c), lb = level_of(best);
             if (lc < lb || (lc == lb && (int16_t)rd16(g_mem, c + CLUB_REPUTATION) <=
@@ -152,7 +162,7 @@ static uint32_t best_club(uint32_t nation, const uint32_t *skip, int nskip, int 
         }
         best = c;
     }
-    return best;
+    return best ? best : most;
 }
 
 /* ---- Belgian Cup ---- */
@@ -261,6 +271,17 @@ static int fill_short(uint32_t cup, int places, uint32_t nation_key, const uint3
     if (logging() || placed + k < count)
         fprintf(stderr, "recomp: cup sizes: %s: %d lower clubs, %d of the divisions, %d more clubs of the nation%s\n",
                 name, lower, placed - lower, k, placed + k < count ? " (still short)" : "");
+    if (placed + k < count) {          /* why: the nation's clubs that the cup does not hold */
+        int none = 0, none_squad = 0, other = 0, other_squad = 0, n = club_count();
+        for (int i = 0; i < n; i++) {
+            uint32_t c = club_at(i);
+            if (rd32(g_mem, c + CLUB_NATION) != nation || in_list6(c, &l)) continue;
+            int sq = squad_of(c) >= SQUAD_LEAST, nd = !readable(rd32(g_mem, c + CLUB_DIVISION));
+            none += nd, none_squad += nd && sq, other += !nd, other_squad += !nd && sq;
+        }
+        fprintf(stderr, "recomp: cup sizes: %s: the nation's clubs out of the cup: %d with no division (%d with 15 "
+                        "players), %d in a division (%d with 15 players)\n", name, none, none_squad, other, other_squad);
+    }
     return placed + k == count;
 }
 
@@ -373,24 +394,11 @@ void season_cup_sizes_ita_cup(uint32_t cup)
 
 /* ---- French Cup ---- */
 
-/* The three lower passes (0x5bab90, 0x5bac3c, 0x5bacf0): the value to add to the register so that the pass's
- * compare `cmp edi, reg` passes over a club with fewer than 15 players (the limit 0). */
-uint32_t rt_fra_cup_add(uint32_t original, uint32_t base, uint32_t club)
-{
-    uint32_t add = rt_cup_add(original, base, 222u, 0x9cf5d0u, 0x9cf5ccu);
-    if (!sizes_on() || !readable(club) || squad_of(club) >= SQUAD_LEAST) return add;
-    static int said;
-    if (logging() && said++ < 20)
-        fprintf(stderr, "recomp: cup sizes: French Cup: passes over %.40s (%d players)\n", win_str(club + 4),
-                squad_of(club));
-    return 0u - base;
-}
-
 void o_005baa50(void);
 
 /* FraCup::collect_entrants 0x5baa50, thiscall (cup), returns 1 with 222 clubs (sete at 0x5bae36). The lower passes
- * pass over clubs with no squad (rt_fra_cup_add), so with few French clubs below the National the list can stay
- * short: other French clubs with a squad take the empty places before Ligue 2 and Ligue 1. */
+ * take the room that Ligue 1 and Ligue 2 leave; when the French clubs below the National are too few, the list stays
+ * short, other French clubs take the empty places before Ligue 2 and Ligue 1. */
 RT_WRAP(005baa50, fra_cup_entrants)
 {
     uint32_t cup = cpu.ecx;
@@ -398,4 +406,40 @@ RT_WRAP(005baa50, fra_cup_entrants)
     if (!sizes_on() || cpu.eax) return;
     static const uint32_t keys[] = {0x9cf5d0u, 0x9cf5ccu};
     cpu.eax = (uint32_t)fill_short(cup, 222, 0x9cf300u, keys, 2, 0, "French Cup");
+}
+
+/* After FraLgeCup::collect_entrants 0x5bd160 (its wrap in season_sizes.c) left the list short: French clubs from below
+ * the National take the empty places. Returns 1 when the list is full. */
+int season_cup_sizes_fra_lge(uint32_t cup)
+{
+    if (!sizes_on()) return 0;
+    static const uint32_t keys[] = {0x9cf5d4u, 0x9cf5d0u, 0x9cf5ccu};
+    return fill_short(cup, 54, 0x9cf300u, keys, 3, 0, "French League Cup");
+}
+
+/* ---- French CFA ---- */
+
+#define CFA_PLACES 0x48
+
+/* FraCfa::FraCfa 0x5b91c0, at `lea eax, [esp + 0x21c]` (0x5b9320) after its loop: the array at esp + 0x21c holds
+ * edi clubs, every club of Ligue 1 and Ligue 2 and the A Lower Division clubs of the CFA zone up to the cap of
+ * rt_fra_cfa_lower_cap (0x5b92e8). The four groups of 18 read 72 places of an array that is never cleared
+ * (0x5b933b..0x5b9362). When the zone holds fewer clubs, the empty places take French clubs from below the National
+ * that the array does not hold, so no group takes a stack value. Returns the count for the shuffle (0x5b9327). */
+uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count)
+{
+    int n = (int16_t)(count & 0xffffu), from = n;
+    if (!sizes_on() || n >= CFA_PLACES || n < 0) return count;
+    static const uint32_t skip[] = {0x9cf5d4u, 0x9cf5d0u, 0x9cf5ccu};
+    struct list4 l = {array, n};
+    uint32_t nation = nation_of_key(0x9cf300u);
+    while (n < CFA_PLACES) {
+        uint32_t c = best_club(nation, skip, 3, 0, in_list4, &l);
+        if (!c) break;
+        wr32(g_mem, array + 4u * (uint32_t)n++, c);
+        l.n = n;
+    }
+    fprintf(stderr, "recomp: cup sizes: CFA: %d clubs, %d more from below the National%s\n", from, n - from,
+            n < CFA_PLACES ? " (still short)" : "");
+    return (count & 0xffff0000u) | (uint32_t)n;
 }

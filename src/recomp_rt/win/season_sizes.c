@@ -11,6 +11,7 @@
 #include "season_divisions_ita.h"
 #include "season_league.h"
 #include "season_template.h"
+#include "season_cup_sizes_west.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -506,6 +507,7 @@ void o_005bd160(void);
  * 0x5bd4d5) plays a short cup, so it stays the original's. */
 RT_WRAP(005bd160, fra_lge_entrants)
 {
+    uint32_t cup = cpu.ecx;
     enum { MOST = 64 };
     uint32_t lent[MOST];
     int nlent = 0;
@@ -532,6 +534,7 @@ RT_WRAP(005bd160, fra_lge_entrants)
     }
     o_005bd160();
     for (int i = 0; i < nlent; i++) wr32(g_mem, lent[i] + 0x5bu, 0);
+    if (!cpu.eax && !rt_unwinding) cpu.eax = (uint32_t)season_cup_sizes_fra_lge(cup);   /* 0.7.2 slice 5 */
 }
 
 /* EngFaCup::collect_entrants 0x56fab0 (O294) puts the National League clubs ([0x9cf69c]) in a stack array at

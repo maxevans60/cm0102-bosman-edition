@@ -12,8 +12,12 @@
  *   them, a division before no division, then reputation;
  * - Coppa Italia: a Serie A of 20 whose clubs placed 15 to 17 the original leaves out: each takes the pool place of
  *   the Serie C club with the highest last position;
- * - French Cup: a lower pass passes over a club with fewer than 15 players; a list left short takes French clubs
- *   with a squad before Ligue 2 and Ligue 1, and the cup returns 1.
+ * - French League Cup: a National of 17 with two Ligues of 18 leaves a place: the best French club from below the
+ *   National with 15 players takes it, first in the list, and the cup returns 1;
+ * - Danish Cup with too few clubs of 15 players: the clubs with the most players fill the rest;
+ * - CFA: 66 of 72 places: French clubs from below the National fill the array, a lower division first;
+ * - French Cup: a list left short takes French clubs with 15 players or more before Ligue 2 and Ligue 1, and the
+ *   cup returns 1.
  * ctest season_cup_west. */
 #include "win.h"
 #include "season.h"
@@ -37,7 +41,7 @@ uint32_t rt_bel_cup_lower(uint32_t original, uint32_t pool);
 uint32_t rt_bel_cup_place(uint32_t original, uint32_t taken);
 uint32_t rt_hol_cup_lower(uint32_t original, uint32_t esp);
 uint32_t rt_ita_c_cup_fill(uint32_t original, uint32_t cup, uint32_t placed);
-uint32_t rt_fra_cup_add(uint32_t original, uint32_t base, uint32_t club);
+uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);
 void f_00551240(void);
 void f_005baa50(void);
 
@@ -283,15 +287,67 @@ static void france_short(void)
           "French Cup: Ligue 2 and Ligue 1 keep the end of the list");
 }
 
-static void france(void)
+static void france_league_cup(void)
 {
     reset();
-    uint32_t fra = nation(0x9cf300u, 8);
-    uint32_t squad = club(fra, 0, 10, 15), none = club(fra, 0, 10, 14);
-    CHECK(rt_fra_cup_add(0xb8u, 40u, squad) == 60u, "French Cup: a club with 15 players: rt_cup_add");
-    CHECK(40u + rt_fra_cup_add(0xb8u, 40u, none) == 0u, "French Cup: a club with 14 players: the limit 0");
+    uint32_t fra = nation(0x9cf300u, 8), nat = division(0x9cf5d4u, 63, 8), l2 = division(0x9cf5d0u, 60, 9),
+             l1 = division(0x9cf5ccu, 61, 10), cfa = division(0, 64, 7), low = division(LOWER, 62, 2);
+    int n = 0;
+    for (int i = 0; i < 17; i++) wr32(g_mem, LIST + 6u * (uint32_t)n++, club(fra, nat, 50, 20));
+    for (int i = 0; i < 18; i++) wr32(g_mem, LIST + 6u * (uint32_t)n++, club(fra, l2, 60, 20));
+    for (int i = 0; i < 18; i++) wr32(g_mem, LIST + 6u * (uint32_t)n++, club(fra, l1, 80, 20));
+    club(fra, low, 99, 20);
+    uint32_t best = club(fra, cfa, 30, 20);
+    club(fra, cfa, 95, 5);                                         /* no squad */
+    wr16(g_mem, CUP + 0x3e, 54);
+    wr32(g_mem, CUP + 0xa7, LIST);
+    CHECK(season_cup_sizes_fra_lge(CUP) == 1, "French League Cup: 54 clubs");
+    CHECK(rd32(g_mem, LIST) == best, "French League Cup: the CFA club with a squad comes first");
+    CHECK(rd32(g_mem, LIST + 6u * 53u) != 0 && rd32(g_mem, LIST + 6u * 1u) != best, "French League Cup: one club in");
     game = 0;
-    CHECK(rt_fra_cup_add(0xb8u, 40u, none) == 0xb8u, "French Cup: the base game keeps the original");
+    CHECK(season_cup_sizes_fra_lge(CUP) == 0, "French League Cup: the base game keeps the original");
+}
+
+static void denmark_few(void)
+{
+    reset();
+    uint32_t den = nation(0x9cf2c0u, 5);
+    uint32_t lower = division(LOWER, 30, 1), second = division(0x9cf5b4u, 31, 3), first = division(0x9cf5b0u, 32, 4),
+             prm = division(0x9cf5acu, 33, 5);
+    nden_lower = nden_div = 0;
+    for (int i = 0; i < 48; i++) den_lower[nden_lower++] = club(den, lower, 50, 20);
+    for (int i = 0; i < 16; i++) den_div[nden_div++] = club(den, second, 70, 20);
+    for (int i = 0; i < 12; i++) den_div[nden_div++] = club(den, first, 80, 20);
+    for (int i = 0; i < 12; i++) den_div[nden_div++] = club(den, prm, 90, 20);
+    uint32_t few[5] = {club(den, 0, 10, 12), club(den, 0, 10, 2), club(den, 0, 10, 14), club(den, 0, 10, 9),
+                       club(den, 0, 10, 0)};
+    cpu.ecx = CUP;
+    f_00551240();
+    CHECK(cpu.eax == 1, "Danish Cup: filled with the clubs that have the most players");
+    uint32_t want[4] = {few[2], few[0], few[3], few[1]};
+    for (int i = 0; i < 4; i++) CHECK(rd32(g_mem, LIST + 6u * (uint32_t)(48 + i)) == want[i], "Danish Cup: place %d", 48 + i);
+}
+
+static void cfa(void)
+{
+    reset();
+    uint32_t fra = nation(0x9cf300u, 8), nat = division(0x9cf5d4u, 63, 8), l2 = division(0x9cf5d0u, 60, 9),
+             l1 = division(0x9cf5ccu, 61, 10), low = division(LOWER, 62, 2);
+    uint32_t array = 0xc0000u;
+    int n = 0;
+    for (int i = 0; i < 18; i++) wr32(g_mem, array + 4u * (uint32_t)n++, club(fra, l1, 80, 20));
+    for (int i = 0; i < 18; i++) wr32(g_mem, array + 4u * (uint32_t)n++, club(fra, l2, 60, 20));
+    for (int i = 0; i < 30; i++) wr32(g_mem, array + 4u * (uint32_t)n++, club(fra, low, 20, 20));
+    for (int i = 0; i < 20; i++) club(fra, nat, 50, 20);
+    uint32_t more[6];
+    for (int i = 0; i < 4; i++) more[i] = club(fra, low, 30 + i, 20);
+    more[4] = club(fra, 0, 90, 20);
+    more[5] = club(fra, 0, 80, 20);
+    CHECK(rt_fra_cfa_fill(array, 0x10000u | 66u) == (0x10000u | 72u), "CFA: 72 for the shuffle");
+    uint32_t want[6] = {more[3], more[2], more[1], more[0], more[4], more[5]};
+    for (int i = 0; i < 6; i++) CHECK(rd32(g_mem, array + 4u * (uint32_t)(66 + i)) == want[i], "CFA: place %d", 66 + i);
+    game = 0;
+    CHECK(rt_fra_cfa_fill(array, 66u) == 66u, "CFA: the base game keeps the count");
 }
 
 int main(void)
@@ -303,8 +359,10 @@ int main(void)
     denmark();
     italy_c();
     italy_cup();
-    france();
     france_short();
+    france_league_cup();
+    denmark_few();
+    cfa();
     printf("%s season_cup_west\n", failures ? "FAIL" : "PASS");
     return failures ? 1 : 0;
 }

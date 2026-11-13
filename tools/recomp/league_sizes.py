@@ -248,11 +248,9 @@ FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
 ROW_READS = {"bel_second": (16, "BelThird::create_promotion_playoff_stage 0x423880 reads row 15 (0x423a6a..0x423a80)")}
 
 CUP_INSNS = {
-    # Slice 5 (season_cup_sizes_west.c): rt_fra_cup_add is rt_cup_add, and passes over a club of the pass (ecx,
-    # ecx, ebx) with fewer than 15 players.
-    0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_fra_cup_add(0xb8u, ebx, ecx);"),
-    0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_fra_cup_add(0xb8u, ebx, ecx);"),
-    0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_fra_cup_add(0xb8u, eax, ebx);"),
+    0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_cup_add(0xb8u, eax, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
     # Slice 5, the cups of western Europe (src/recomp_rt/win/season_cup_sizes_west.c, its module comment).
     # BelFaCup::collect_entrants 0x41d8d0: the pool clubs (k of 0x4afbd0, the copy, edi is the pool's count at both)
     # and the place of the first third-tier club (edx is the clubs copied).
@@ -371,4 +369,7 @@ INSNS.update(DATES)
 INSNS[0x5B92E8] = ("cmp word ptr [esp + 0x10], 0x22",
                    "t0 = R16(esp + 0x10u); t1 = rt_fra_cfa_lower_cap(0x22u) & 0xffffu; t2 = ((t0 - t1 - 0) & 0xffffu); "
                    "SETF(K_SUB | SZ2, t0, t1, t2, 0);")
+# Slice 5 (season_cup_sizes_west.c, rt_fra_cfa_fill): after the loop, the places that the CFA zone cannot fill take
+# French clubs from below the National; edi is the count for the shuffle and the groups.
+INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu, edi); eax = esp + 0x21cu;")
 INSNS.update(CUP_INSNS)

@@ -37,7 +37,7 @@ RUNS = {
     "den2020": ("Denmark", 2020, [], "First Division 12 (the class holds 16; the November 2020 database gives 16): "
                                      "the Danish Cup takes clubs with no division"),
     "fra2024": ("France", 2024, [], "Ligue 1 18, Ligue 2 18, National 17: the French Cup and League Cup"),
-    "ita2010": ("Italy", 2010, ["c2"], "Serie C2 groups of 17, 16 and 16: the Coppa Italia Serie C"),
+    "ita2018": ("Italy", 2018, [], "Serie B 19 (the class holds 20): the Coppa Italia and the Coppa Italia Serie C"),
     "hol2005": ("Holland", 2005, [], "Eerste Divisie row 20 (the class holds 18): the Dutch Cup with no floor"),
 }
 # run: {file: clubs in the start report}
@@ -45,15 +45,15 @@ SIZES = {
     "bel2016": {"bel_first": 16},
     "den2020": {"den_first": 12},
     "fra2024": {"fra_first": 18, "fra_second": 18, "fra_third": 17},
-    "ita2010": {"ita_ser_c2a": 17, "ita_ser_c2b": 16, "ita_ser_c2c": 16},
+    "ita2018": {"ita_ser_b": 19},
     "hol2005": {"hol_first": 18, "hol_prm": 18},
 }
 # run: log lines (their start) that must fire
 FIRES = {
     "bel2016": ["recomp: cup sizes: Belgian Cup: "],
     "den2020": ["recomp: cup sizes: Danish Cup: "],
-    "fra2024": ["recomp: league sizes: a cup takes "],
-    "ita2010": ["recomp: cup sizes: Coppa Italia Serie C: "],
+    "fra2024": ["recomp: cup sizes: French League Cup: "],
+    "ita2018": [],
     "hol2005": [],
 }
 PREFIX = {"Belgium": "bel_", "Denmark": "den_", "France": "fra_", "Italy": "ita_", "Holland": "hol_"}
@@ -68,7 +68,10 @@ def faults(name, work):
     fails = [f"{name}: {x.strip()}" for x in log if "recomp: message box from" in x]
     if not any("recomp: season jump: done" in x for x in log):
         fails.append(f"{name}: the jump did not reach the end of {year + 1}/{(year + 2) % 100:02d}")
-    _seasons, comps = rrc.read_report(report)
+    try:
+        _seasons, comps = rrc.read_report(report)
+    except SystemExit:
+        return fails + [f"{name}: no rules report ({report})"]
     start = {c["file"]: c["clubs"] for c in comps if c["season"] == year and c["phase"] == "start"}
     for file, want in SIZES[name].items():
         if start.get(file) != want:

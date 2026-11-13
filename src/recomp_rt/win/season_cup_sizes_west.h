@@ -8,4 +8,8 @@
  * part (a season game with the sizes on; nothing otherwise). */
 void season_cup_sizes_ita_cup(uint32_t cup);
 
+/* After FraLgeCup::collect_entrants 0x5bd160 left its 54 places short: French clubs from below the National fill
+ * them. Returns 1 when the list is full (0 outside a season game with the sizes on). */
+int season_cup_sizes_fra_lge(uint32_t cup);
+
 #endif
