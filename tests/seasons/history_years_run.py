@@ -52,6 +52,11 @@ RUNS = {
         (NOR, 2005, "lerenga", "IK Start"), (NOR, 2007, "SK Brann", "Stab"),
         (IRL, 2001, "Bohemian", "Shelbourne"), (IRL, 2002, "Shelbourne", "Shamrock"),
     ]),
+    "October 2026": (2026, [
+        (WC, 2022, "Argentina", "France"),
+        (NOR, 2005, "lerenga", "IK Start"), (SWE, 2002, "Djurg", "AIK"),
+        (IRL, 2001, "Bohemian", "Shelbourne"),
+    ]),
 }
 
 
@@ -96,6 +101,11 @@ def main(argv):
     work = argv[argv.index("--keep") + 1] if "--keep" in argv else tempfile.mkdtemp(prefix="history-years-")
     os.makedirs(work, exist_ok=True)
     dbs = sdr.databases(dbs_dir)
+    for sub in sorted(os.listdir(dbs_dir)):        # a folder that holds the database folder (October 2026 Data Update)
+        p = os.path.join(dbs_dir, sub)
+        if os.path.isdir(p) and not os.path.exists(os.path.join(p, "index.dat")):
+            for name, v in sdr.databases(p).items():
+                dbs.setdefault(name, v)
     env = {"RECOMP_HISTORY_LOG": ";".join((NOR, SWE, IRL, WC))}
     failed = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
