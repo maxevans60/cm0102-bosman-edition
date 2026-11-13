@@ -134,7 +134,7 @@ NATION_ROWS_BELOW = ["Poland", "Portugal", "Republic of Ireland", "Russia", "Sco
                      "Turkey", "United States"]
 DOWN_ARROW, SCROLL = "768 517", 10
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
-ENV_EXTRA = {"spain", "portugal"}                           # slice 20: set by RECOMP_TEST_EXTRA, not by a click
+ENV_EXTRA = {"spain", "portugal", "sweden"}                 # slice 20: set by RECOMP_TEST_EXTRA, not by a click
 
 
 UEFA_LINES = []          # the uefa lines of the last report that read_report read (slice 22)

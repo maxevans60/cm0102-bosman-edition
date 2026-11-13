@@ -6,7 +6,8 @@ fail per game. The release script checks the results with --verify.
 Usage:
     python3 tests/seasons/future/run_set.py <cm0102_recomp> <game folder> --out <folder> [--set release]
         [--only <name,...>] [--jobs 2] [--machine 12] [--floor-gb 100] [--databases <folder>] [--own-dbs <folder>]
-    python3 tests/seasons/future/run_set.py --verify <folder> [--set release]
+        [--data-3960 <folder>] [--data-3965 <folder>] [--seed <n>]
+    python3 tests/seasons/future/run_set.py --verify <folder> [--set release] [--seed <n>]
 
 --set: release (the rows of set release and nightly, Q12), nightly, quick (the short games that test the script),
 background (b2001long and b2025long: the Tier B games to 2300, which play on after the release gate, and
@@ -84,6 +85,7 @@ ROOT = os.path.normpath(os.path.join(HERE, "..", "..", ".."))
 SEASONS = os.path.join(ROOT, "tests", "seasons")
 for p in (HERE, SEASONS, os.path.join(ROOT, "tests", "smoke"), os.path.join(ROOT, "tests", "fixtures")):
     sys.path.insert(0, p)
+import gate_run  # noqa: E402
 import history_check as hc  # noqa: E402
 
 HOLD = "/Users/max/Projects/cm0102/run-logs/HOLD"
@@ -95,7 +97,20 @@ TIERS = {"A", "B", "jump", "normal", "late", "weekly"}
 # late (open item 193): the full world (as Tier B, with its health checks and limits) from a checkpoint save of a Tier
 # A row. Its optional column `from` names that row (same changing rules, nations and seed); its start is the year of
 # the save, so the game plays the seasons start to last in the full world on top of a long Tier A history.
-OPTIONAL = ["from"]
+# database (release tests 0.7.1, slice 1): tile (the data that the start screen gives the start year: 3.9.60 for 2001,
+# the own and season databases for the other years, the December 2025 database for a jump), 3.9.60, 3.9.65 or 3.9.68.
+# extras: none, all (the six extra divisions below) or names joined by commas. last: a season, or tile (the season
+# before the end point of the start in ENDS: the game plays to its July save of the end year, after the later of the
+# next World Cup and European Championship).
+OPTIONAL = ["from", "database", "extras"]
+DEFAULTS = {"database": "tile", "extras": "none"}
+DATABASES_OF_ROW = ("tile", "3.9.60", "3.9.65", "3.9.68")
+# The six extra divisions: the English Conference, German Regionalliga and Serie C2 are clicks of Select League(s)
+# (rules_report_check.EXTRA); Spain, Portugal and Sweden come from RECOMP_TEST_EXTRA (rules_report_check.ENV_EXTRA).
+ALL_EXTRAS = ["conference", "regional", "c2", "spain", "portugal", "sweden"]
+# The nations that those extras need besides a Select All game (a quick row names them in `nations`).
+DATA_FOLDERS = {"3.9.60": "/Users/max/Projects/cm0102/data-3960", "3.9.65": "/Users/max/Projects/cm0102/data-3965"}
+ENDS = gate_run.ENDS
 # weekly (open item 193, Max 8 November 2026): the full world with the test-only market, RECOMP_TEST_MARKET_WEEKLY=1
 # (market_weekly.c): the AI market of the day loop runs on Mondays only. Faster, but it is not the shipped game; b2001
 # and b2025 play the real market.
@@ -116,7 +131,7 @@ SIZE_WINDOW = 10
 DAYS = 365.25
 SAVE_NAME = "samesave.sav"                    # the save of a leg (smoke_run.SAVE_NAME)
 SWITCHES = ("RECOMP_TIER_A", "RECOMP_DATE_JUMP", "RECOMP_TEST_EXTRA", "RECOMP_TEST_NATION_JOB",
-            "RECOMP_TEST_MARKET_WEEKLY")
+            "RECOMP_TEST_MARKET_WEEKLY", "RECOMP_DATA_DIR")
 # Q15: the rows whose human manager also manages a national team. Leg 0 sets RECOMP_TEST_NATION_JOB (nation_job.c): at
 # the first human turn the runtime appoints him through the original's appoint_manager_to_club 0x69ebc0, to this
 # nation or, when it has a manager, to the first senior national team with none and a nation value over 150. The
@@ -139,8 +154,9 @@ def arg(argv, name, default=None):
     return argv[argv.index(name) + 1] if name in argv else default
 
 
-def read_set(path=None):
-    """The rows of run_set.tsv; a row that does not fit the columns stops the script."""
+def read_set(path=None, seed=None):
+    """The rows of run_set.tsv; a row that does not fit the columns stops the script. seed (--seed, R8): the seed of
+    every row, in place of the column (the release version gives it: 0.7.2 gives 72)."""
     rows = []
     with open(path or os.path.join(HERE, "run_set.tsv"), encoding="utf-8") as f:
         for r in csv.DictReader((l for l in f if not l.startswith("#")), delimiter="\t"):
@@ -148,10 +164,17 @@ def read_set(path=None):
             if bad or r["tier"] not in TIERS or r["status"] not in ("run", "waits") or \
                     r["set"] not in SETS["all"] or r["changing"] not in ("on", "off"):
                 raise SystemExit(f"run_set.tsv: row {r.get('name')} does not fit the columns ({bad or 'a value'})")
-            for c in ("start", "seed", "last", "leg_years"):
-                r[c] = int(r[c])
             for c in OPTIONAL:
-                r[c] = r.get(c) or ""
+                r[c] = r.get(c) or DEFAULTS.get(c, "")
+            if r["database"] not in DATABASES_OF_ROW:
+                raise SystemExit(f"run_set.tsv: row {r['name']}: database {r['database']} is not one of "
+                                 f"{', '.join(DATABASES_OF_ROW)}")
+            for c in ("start", "seed", "leg_years"):
+                r[c] = int(r[c])
+            if seed is not None:
+                r["seed"] = int(seed)
+            r["last"] = end_season(r["start"], r["last"], r["name"])
+            r["extras"] = extras_of(r["extras"], r["name"])
             if (r["tier"] == "late") != bool(r["from"]):
                 raise SystemExit(f"run_set.tsv: row {r['name']}: a late row needs `from`, and only a late row has it")
             rows.append(r)
@@ -166,6 +189,38 @@ def read_set(path=None):
                 raise SystemExit(f"run_set.tsv: row {r['name']}: `from` must name a Tier A row of the same changing "
                                  f"rules, nations and seed, with a checkpoint save in the year {r['start']}")
     return rows
+
+
+def end_season(start, last, name="row"):
+    """The last season of a row: its number, or "tile" for the season before the end point of its start (ENDS)."""
+    if last == "tile":
+        if start not in ENDS:
+            raise SystemExit(f"run_set.tsv: row {name}: no end point for the start {start}")
+        return ENDS[start] - 1
+    return int(last)
+
+
+def extras_of(text, name="row"):
+    """The list of extra divisions of an `extras` cell: none, all, or names joined by commas."""
+    if text == "none":
+        return []
+    names = ALL_EXTRAS if text == "all" else text.split(",")
+    bad = [n for n in names if n not in ALL_EXTRAS]
+    if bad:
+        raise SystemExit(f"run_set.tsv: row {name}: no extra division {', '.join(bad)}")
+    return list(names)
+
+
+def row_database(row):
+    """The database of a row: 3.9.60, 3.9.65 or 3.9.68 for the base data, else the name of the season database
+    ("tile" resolves to the data of the start year: 3.9.60 for 2001, DATES or OWN of gate_run for the others)."""
+    if row["database"] != "tile":
+        return row["database"]
+    if row["tier"] == "jump":
+        return JUMP_DATABASE
+    if row["start"] == 2001:
+        return "3.9.60"
+    return gate_run.OWN.get(row["start"]) or gate_run.DATES[row["start"]]
 
 
 def full_world(row):
@@ -379,18 +434,93 @@ def greek_second(comps):
 # ---- One game ----
 
 def database_of(row, o):
-    """The --database folder of a row (None: the base data 3.9.68), as tests/seasons/gate_run.py picks it. A late
-    row loads a save of its `from` row, so it needs no database."""
+    """(database folder, settings.txt option, RECOMP_DATA_DIR) of a row. A season database is a folder (as
+    tests/seasons/gate_run.py picks it) and the option 3.9.68. The base data of 2001 are the option 3.9.60, 3.9.65 or
+    3.9.68: 3.9.60 and 3.9.65 name their data folder (--data-3960, --data-3965, the folders of the clean files'
+    Data-3.9.60 and Data-3.9.65 that the clean game of this Mac lacks). A late row loads a save of its `from` row, so
+    it needs no database."""
     if row["tier"] == "late":
-        return None
+        return None, "3.9.68", None
+    name = row_database(row)
+    if name in DATA_FOLDERS:
+        return None, name, o["data"][name]
+    if name == "3.9.68":
+        return None, name, None
     if row["tier"] == "jump":
         names = sorted(n for n in os.listdir(o["databases"]) if n.startswith(JUMP_DATABASE))
         if not names:
             raise SystemExit(f"run_set.py: no {JUMP_DATABASE} folder in {o['databases']}")
-        return os.path.join(o["databases"], names[0])
-    import gate_run
+        return os.path.join(o["databases"], names[0]), "3.9.68", None
     args, _ = gate_run.database(row["start"], {"run": o["out"], "own": o["own"], "databases": o["databases"]})
-    return args[1] if args else None
+    return (args[1] if args else None), "3.9.68", None
+
+
+# ---- The new game of a row: its database and extra divisions, read from the save (slice 1) ----
+
+# The competitions that each extra division adds to the game (the names of club_comp.dat in the save).
+EXTRA_COMPS = {"conference": "English Conference", "regional": "German Regional Division",
+               "c2": "Italian Serie C2", "spain": "Spanish Second Division B",
+               "portugal": "Portuguese Second Division B", "sweden": "Swedish Second Division"}
+
+
+def extras_missing(comp_names, extras):
+    """The extra divisions in `extras` that the save does not hold: none of its competitions starts with the name of
+    EXTRA_COMPS."""
+    return [e for e in extras if not any(n.startswith(EXTRA_COMPS[e]) for n in comp_names)]
+
+
+def club_names(folder):
+    """{nation name: the set of its club names} of the club.dat and nation.dat of a data folder."""
+    with open(os.path.join(folder, "nation.dat"), "rb") as f:
+        nat = f.read()
+    nations = {hc.s32(nat, i * hc.NATION): hc.text(nat[i * hc.NATION:(i + 1) * hc.NATION], 4)
+               for i in range(len(nat) // hc.NATION)}
+    with open(os.path.join(folder, "club.dat"), "rb") as f:
+        data = f.read()
+    out = {}
+    for i in range(len(data) // hc.CLUB):
+        r = data[i * hc.CLUB:(i + 1) * hc.CLUB]
+        out.setdefault(nations.get(hc.s32(r, 0x53), ""), set()).add(hc.text(r, 4))
+    return out
+
+
+def database_names(folders):
+    """{database: {nation name: club names}} for the data folders {database: folder with club.dat and nation.dat}."""
+    return {db: club_names(folder) for db, folder in folders.items()}
+
+
+HITS = 3                # a save that holds this many club names of another database only is not this database
+
+
+def save_database(save_clubs, names):
+    """The database that a save plays. save_clubs: {nation name: club names} of the save (a game with a few nations
+    keeps some of their clubs and adds others, for example second teams). A save of database d holds no club name
+    that only another database e has. So d is out when the save holds HITS names of e that d lacks, in the nations of
+    the save. The answer is the one database that stays, or None when none or more than one stays: the nations of
+    the game then do not tell the data apart. 3.9.60, 3.9.65 and 3.9.68 differ most in France, Holland, Russia and
+    the United States; England alone tells only 3.9.65 and 3.9.68 apart."""
+    here = {n for n, c in save_clubs.items() if n and c}
+    stays = [db for db, d in names.items()
+             if all(sum(len(save_clubs[n] & (e.get(n, set()) - d.get(n, set()))) for n in here) < HITS
+                    for other, e in names.items() if other != db)]
+    return stays[0] if len(stays) == 1 else None
+
+
+def new_game_check(row, game, o):
+    """The reason a row's new game is not the game that the row names, or "" when it is. Reads the save of leg 0: the
+    database by its club names, and the extra
+    divisions by their competitions. A wrong setting would test the wrong game and pass."""
+    want = row_database(row)
+    if want in DATA_FOLDERS or want == "3.9.68":
+        folders = dict(o["data"], **{"3.9.68": os.path.join(o["game"], "Data")})
+        by_nation = {}
+        for name, nation in game.clubs.values():
+            by_nation.setdefault(game.nations.get(nation, ("",))[0], set()).add(name)
+        got = save_database(by_nation, database_names(folders))
+        if got != want:
+            return f"the save plays {got or 'no known'} data, the row says {want}"
+    gone = extras_missing([c["name"] for c in game.comps.values()], row["extras"])
+    return f"the save has no competition of the extra divisions {', '.join(gone)}" if gone else ""
 
 
 def program_has(program, text):
@@ -488,10 +618,13 @@ def play_game(row, o):
         return finish(folder, row, "waits", "the program has no weekly market switch (item 193)", "", 0, 0, began, o)
     os.environ.update(TIER_ENV.get(row["tier"], {}))
     # one game a process: soak_run's leg_env copies os.environ
-    base = next(r for r in read_set() if r["name"] == row["from"]) if row.get("from") else row
+    base = next(r for r in read_set(seed=o.get("seed")) if r["name"] == row["from"]) if row.get("from") else row
     so = {"program": o["program"], "game": o["game"], "start": row["start"], "last": row["last"] + 1,
-          "seed": row["seed"], "nations": row["nations"].split(","), "database": database_of(base, o),
-          "rules": row["changing"], "extra": []}
+          "seed": row["seed"], "nations": row["nations"].split(","), "rules": row["changing"],
+          "extra": row["extras"]}
+    so["database"], so["option"], data_dir = database_of(base, o)
+    if data_dir:
+        os.environ["RECOMP_DATA_DIR"] = data_dir        # every leg: the data of 3.9.60 or 3.9.65 (files.c)
     checker = Checker()
     health = full_world(row)
     legs, kept_decades, save, previous_work, new_faults, accepted = [], set(), None, None, 0, 0
@@ -556,6 +689,11 @@ def play_game(row, o):
             os.remove(loaded)
         game, faults, summary, rows = checker.run(saved, health, checker_tier(row))
         year = game.date[0]
+        wrong = new_game_check(row, game, o) if k == 0 and row["tier"] != "late" else ""
+        if wrong:
+            tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, "wrong game", f"{took:.0f}", "", "", "", wrong],
+                    LEG_HEAD)
+            return finish(folder, row, "fail", f"leg {k} ({seasons}): {wrong}", "", k, new_faults, began, o)
         if (year, game.date[1]) < (s1 + 1, 181):         # the save must come after the season change of s1
             tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, "short", f"{took:.0f}",
                                                        f"{year}-{game.date[1] + 1:03d}", "", "", ""], LEG_HEAD)
@@ -611,7 +749,8 @@ def play_game(row, o):
 
 def row_key(row):
     """The row as run_set.tsv holds it, but the note: a result counts only for the row it was played for."""
-    return "|".join([str(row[c]) for c in COLUMNS if c != "note"] + [f"{c}={row[c]}" for c in OPTIONAL if row.get(c)])
+    return "|".join([str(row[c]) for c in COLUMNS if c != "note"] +
+                    [f"{c}={','.join(row[c]) if isinstance(row[c], list) else row[c]}" for c in OPTIONAL if row.get(c)])
 
 
 def finish(folder, row, result, reason, reached, legs, faults, began, o, accepted=0):
@@ -663,9 +802,12 @@ def run(argv):
     o = {"program": os.path.abspath(argv[1]), "game": os.path.abspath(argv[2]), "out": os.path.abspath(arg(argv, "--out")),
          "jobs": int(arg(argv, "--jobs", 2)), "machine": int(arg(argv, "--machine", 12)),
          "floor": float(arg(argv, "--floor-gb", 100)), "databases": arg(argv, "--databases", DATABASES),
-         "own": arg(argv, "--own-dbs", OWN_DBS)}
+         "own": arg(argv, "--own-dbs", OWN_DBS),
+         "data": {"3.9.60": arg(argv, "--data-3960", DATA_FOLDERS["3.9.60"]),
+                  "3.9.65": arg(argv, "--data-3965", DATA_FOLDERS["3.9.65"])}}
+    o["seed"] = arg(argv, "--seed")
     only = arg(argv, "--only", "").split(",") if "--only" in argv else None
-    rows = chosen(read_set(), arg(argv, "--set", "release"), only)
+    rows = chosen(read_set(seed=o["seed"]), arg(argv, "--set", "release"), only)
     if only and set(only) - {r["name"] for r in rows}:
         print(f"run_set.py: not in the set: {', '.join(sorted(set(only) - {r['name'] for r in rows}))}")
         return 2
@@ -701,8 +843,9 @@ def run(argv):
                 running[r["name"]] = subprocess.Popen(
                     [sys.executable, "-I", os.path.abspath(__file__), "--one", r["name"], o["program"], o["game"],
                      "--out", o["out"], "--machine", str(o["machine"]), "--floor-gb", str(o["floor"]),
-                     "--databases", o["databases"], "--own-dbs", o["own"], "--commit", o["commit"], "--code",
-                     o["code"], "--sha", o["sha"]],
+                     "--databases", o["databases"], "--own-dbs", o["own"], "--data-3960", o["data"]["3.9.60"],
+                     "--data-3965", o["data"]["3.9.65"], "--commit", o["commit"], "--code", o["code"], "--sha",
+                     o["sha"]] + (["--seed", str(o["seed"])] if o["seed"] is not None else []),
                     stdout=logf, stderr=subprocess.STDOUT)
             print(f"{r['name']}: started", flush=True)
             time.sleep(30)                  # the games do not all make their worlds at once
@@ -721,8 +864,11 @@ def one(argv):
     o = {"program": os.path.abspath(rest[1]), "game": os.path.abspath(rest[2]), "out": os.path.abspath(arg(rest, "--out")),
          "machine": int(arg(rest, "--machine", 12)), "floor": float(arg(rest, "--floor-gb", 100)),
          "databases": arg(rest, "--databases", DATABASES), "own": arg(rest, "--own-dbs", OWN_DBS),
-         "commit": arg(rest, "--commit"), "code": arg(rest, "--code"), "sha": arg(rest, "--sha")}
-    row = next(r for r in read_set() if r["name"] == name)
+         "commit": arg(rest, "--commit"), "code": arg(rest, "--code"), "sha": arg(rest, "--sha"),
+         "seed": arg(rest, "--seed"),
+         "data": {"3.9.60": arg(rest, "--data-3960", DATA_FOLDERS["3.9.60"]),
+                  "3.9.65": arg(rest, "--data-3965", DATA_FOLDERS["3.9.65"])}}
+    row = next(r for r in read_set(seed=o["seed"]) if r["name"] == name)
     return 0 if play_game(row, o)[3] in ("pass", "waits") else 1
 
 
@@ -790,7 +936,8 @@ def verify(folder, which="release", rows=None):
 
 def main(argv):
     if "--verify" in argv:
-        faults = verify(os.path.abspath(arg(argv, "--verify")), arg(argv, "--set", "release"))
+        faults = verify(os.path.abspath(arg(argv, "--verify")), arg(argv, "--set", "release"),
+                        read_set(seed=arg(argv, "--seed")))
         for line in faults:
             print("FAIL  " + line)
         print("run set: PASS" if not faults else f"run set: FAILED, {len(faults)} faults")

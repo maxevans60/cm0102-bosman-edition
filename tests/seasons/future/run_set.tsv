@@ -9,7 +9,11 @@
 # plays the season 2100/01). leg_years: the seasons of one leg (one save and load each); a leg that ends in a new
 # decade keeps its save as the checkpoint of that decade. set: release (the whole run set, Q12), nightly (also in the
 # release set), quick (only with --set quick), background (plays on after the release, not in --verify). status: run, or waits (with the reason in note).
-name	tier	start	changing	nations	seed	last	leg_years	set	status	note	from
+# database (release tests 0.7.1, slice 1; empty means tile): tile (the data of the start year on the start screen),
+#   3.9.60, 3.9.65 or 3.9.68 (the base data, 2001 only). extras: none (empty), all (the English Conference, German
+#   Regionalliga, Serie C2, Spanish Segunda B, Portuguese Second Division B and Swedish Second Division) or names
+#   joined by commas. last: a season, or tile (the season before the end point of the start, Decisions R1 of the spec).
+name	tier	start	changing	nations	seed	last	leg_years	set	status	note	from	database	extras
 a2001s1	A	2001	on	all	1	2100	10	release	run	Q11
 a2001s2	A	2001	on	all	2	2100	10	release	run	Q11
 a2001s3	A	2001	on	all	3	2100	10	release	run	Q11
@@ -54,3 +58,6 @@ quickjump	jump	2098	on	England	1	2099	1	quick	run	tests the script: a date jump,
 quicka	A	2025	on	England	1	2034	5	quick	run	tests the script: Tier A, two legs of five seasons
 quickgre	normal	2025	on	Greece	1	2027	1	quick	run	open item 68: the Greek Super League 2 plays one group from 2026/27
 quick2026	normal	2026	on	all	1	2026	1	quick	run	slice 21: the 2026/27 tile, the full world one season, the checker on its save
+quick60x	normal	2001	on	England,France,Germany,Italy,Spain,Portugal,Sweden	1	2001	1	quick	run	slice 1 of the release tests: 3.9.60 with all six extra divisions, one season		3.9.60	all
+quick65x	normal	2001	on	England,France,Holland,Sweden	1	2001	1	quick	run	slice 1 of the release tests: 3.9.65 with the Swedish Second Division, one season		3.9.65	sweden
+quick68	normal	2001	on	England,France,Holland	1	2001	1	quick	run	slice 1 of the release tests: 3.9.68, one season		3.9.68	
