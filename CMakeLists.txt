@@ -289,6 +289,10 @@ if(NOT WIN32)
     target_include_directories(season_cup_breaks_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_breaks COMMAND season_cup_breaks_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cup_breaks PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The date template of a league of any size (0.7.2 league sizes, slice 2, D4 and D5).
+    add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
+    target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_template COMMAND season_template_test)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
@@ -706,6 +710,9 @@ if(EXISTS "${CM0102_EXE}")
         --exe "${CM0102_EXE}" --classes "${CMAKE_BINARY_DIR}/seasons/comp_classes.c" --check)
     # League sizes (0.6.0 slice 18): the committed wraps of set_up_rules match tools/recomp/league_sizes.py.
     add_test(NAME season_size_wraps COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_size_wraps.py" --check)
+    # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
+    add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
+        --self-test)
     # Cup lists (0.6.2 item 64): every cup list of the original starts cleared in a season game.
     add_test(NAME cup_list_clear COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_list_clear_check.py"
         --exe "${CM0102_EXE}")

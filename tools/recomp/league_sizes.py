@@ -93,18 +93,78 @@ def _imm(n):
 # code (docs/research/2026-10-18-league-sizes.md, "Leagues whose size change the code cannot hold").
 CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if stores}
 
-# Classes whose table and date template the runtime makes for a larger count (GitHub issue 106): file: (count, the
-# address of the table's allocation push, the object register there, its bytes). The allocation becomes
-# rt_league_table_bytes, the rows of the season's count; the wrap of create_schedule (season_sizes.c) adds the rounds
-# of that count to the template.
-# - SwePrm (Allsvenskan, 14 to 2007, 16 from 2008): create_table 0x890430 allocates 14 rows (push 0x33a at 0x89043b,
-#   the object in esi from 0x890439) and stores 14 at 0x890442; create_schedule 0x88feb0 makes 26 dates (D at
-#   0x88feea, 0x69a = 26 x 0x41 bytes at 0x88fee5) for stage -1; set_up_rules 0x890550 sets 2 meetings (+0x3c at
-#   0x890563). Its constructor 0x88fb10 has no array of 14.
-GROWN = {"swe_prm": (16, 0x89043B, "esi", 0x33A)}
-for _f, (_n, _at, _reg, _bytes) in GROWN.items():
-    assert _n > CAPS[_f]
+# Classes whose table and date template the runtime makes for any count up to a cap (GitHub issue 106; 0.7.2 league
+# sizes, slice 2, D21): file: (cap, create_schedule address, template mode). recomp.py finds the table allocation of
+# each row (table_sites: `push n x 0x3b` before the count store, n the class's largest count) and makes it
+# rt_league_table_bytes, the rows of the season's count. make_size_wraps.py writes one wrap of create_schedule per row
+# (season_size_wraps.c): the runtime gives the template exactly the rounds of the count (season_template.h, D4 and D5)
+# and the meetings of the row (season_league_meetings). The mode is that of league_next_schedule_round 0x68a030:
+# shuffled (League::League sets +0xd9 = 3 at 0x6822a7), sequential (flag 0x40) or mirrored (flag 0x80).
+# - SwePrm (Allsvenskan, 14 to 2007, 16 from 2008): create_table 0x890430 allocates 14 rows (push 0x33a at
+#   0x89043b, the object in esi from 0x890439) and stores 14 at 0x890442; create_schedule 0x88feb0 makes 26 dates
+#   (D at 0x88feea, 0x69a = 26 x 0x41 bytes at 0x88fee5) for stage -1; set_up_rules 0x890550 sets 2 meetings
+#   (+0x3c at 0x890563). Its constructor 0x88fb10 has no array of 14.
+# - NorPrm (Eliteserien, 14 to 2007, 16 from 2008): create_table 0x7925e0 allocates 14 rows (push 0x33a at 0x7925eb,
+#   the object in esi from 0x7925e9) and stores 14 at 0x7925f2; create_schedule 0x7917c0 makes 26 dates (D at
+#   0x791813, 0x69a bytes at 0x79180e); set_up_rules 0x792700 sets 2 meetings (0x792713) and calls create_schedule
+#   (vtable +0x3c, 0x792790) with &+0xa9 and &+0x3a. It does not write +0xd9: shuffled.
+# - PorSecond (Segunda Liga, 16 to 24): create_table 0x7d1520 allocates 18 rows (push 0x426 at 0x7d152d, the object
+#   in edi from 0x7d1529) and stores 18 at 0x7d1532; create_schedule 0x7d0c40 makes 34 dates (D 0x22 at 0x7d0c7a).
+#   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
+#   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
+#   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+GROWN = {
+    "swe_prm": (16, 0x88FEB0, "shuffled"),
+    "nor_prm": (16, 0x7917C0, "shuffled"),
+    "por_second": (24, 0x7D0C40, "shuffled"),
+}
+GROWN_MODES = ("shuffled", "sequential", "mirrored")
+# The rows that the class allocates: its largest original count (before the cap of GROWN).
+HELD = {}
+for _f, (_n, _sched, _mode) in GROWN.items():
+    assert _mode in GROWN_MODES, _f
+    assert _n > CAPS[_f], _f
+    HELD[_f] = CAPS[_f]
     CAPS[_f] = _n
+
+ROW_BYTES = 0x3B
+# mov <reg>, ecx (8b /r, mod 11, rm ecx): the object register of create_table.
+_MOV_FROM_ECX = {"ebx": b"\x8b\xd9", "ebp": b"\x8b\xe9", "esi": b"\x8b\xf1", "edi": b"\x8b\xf9"}
+
+
+def table_sites(read):
+    """{file: (address of the allocation push, object register, bytes)} of the GROWN rows. read(addr, size) gives
+    the bytes of the original. The push is `push imm32` (68 xx xx xx xx) of HELD x 0x3b in the 16 bytes before a
+    count store of the class, after a `mov reg, ecx` of the store's register in the 8 bytes before it (NorPrm:
+    0x7925e9, 0x7925eb, 0x7925f2). No such push stops the build."""
+    sites = {}
+    for _cls, file, _rules, stores in CLASSES:
+        if file not in GROWN:
+            continue
+        want = (HELD[file] * ROW_BYTES).to_bytes(4, "little")
+        found = []
+        for at, reg, _n in stores:
+            code = read(at - 16, 16)
+            for k in range(len(code) - 5, -1, -1):
+                if code[k] == 0x68 and code[k + 1:k + 5] == want:
+                    push = at - 16 + k
+                    if _MOV_FROM_ECX[reg] in read(push - 8, 8):
+                        found.append((push, reg))
+                    break
+        if len(found) != 1:
+            raise SystemExit(f"league_sizes.py: {file}: {len(found)} table allocations of {HELD[file]} rows "
+                             f"(push {HELD[file] * ROW_BYTES:#x}) before its count stores, want 1")
+        push, reg = found[0]
+        sites[file] = (push, reg, HELD[file] * ROW_BYTES)
+    return sites
+
+
+def table_insns(read, taken=()):
+    """The INSNS of the table allocations of table_sites, less the addresses in taken (a site that another table
+    already patches, such as the Serie C pushes of new_divisions.py, is not patched twice)."""
+    return {push: (f"push {size:#x}", f"esp -= 4; W32(esp, rt_league_table_bytes({reg}, {size:#x}u));")
+            for _f, (push, reg, size) in table_sites(read).items() if push not in taken}
+
 
 # The French classes play the second half from the middle of their date template (league_next_schedule_round
 # 0x68a030, flag 0x80 at 0x68a090; the classes set flag 0x83 at 0x5bc480, 0x5bf138, 0x5c0798), so the template
@@ -275,8 +335,6 @@ for _cls, _file, _rules, _stores in CLASSES:
         INSNS[_at] = (f"mov word ptr [{_reg} + 0x3e], {_imm(_n)}",
                       f"W16({_reg} + 0x3eu, rt_league_clubs({_reg}, {_n:#x}u));")
 INSNS.update(DATES)
-for _f, (_n, _at, _reg, _bytes) in GROWN.items():
-    INSNS[_at] = (f"push {_bytes:#x}", f"esp -= 4; W32(esp, rt_league_table_bytes({_reg}, {_bytes:#x}u));")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and
