@@ -58,9 +58,13 @@ def read_signatures(path):
             if not NEUTRAL_NAME.match(r["database"]):
                 raise Stop(f"signatures table: the name {r['database']!r} is not a plain name")
             rows.append(r)
-    names = [r["database"] for r in rows]
+    # An official version may have two rows under one name: the files that the game ships and the forum files
+    # (open item 230). Every other name is unique.
+    names = [r["database"] for r in rows if r["role"] != "official version"]
     if len(set(names)) != len(names):
         raise Stop("signatures table: a database name appears twice")
+    if {r["database"] for r in rows if r["role"] == "official version"} & set(names):
+        raise Stop("signatures table: an official version shares its name with another role")
     return rows
 
 
