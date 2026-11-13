@@ -8,6 +8,7 @@ Usage:
         [--only <name,...>] [--jobs 2] [--machine 12] [--floor-gb 100] [--databases <folder>] [--own-dbs <folder>]
         [--data-3960 <folder>] [--data-3965 <folder>] [--seed <n>]
     python3 tests/seasons/future/run_set.py --verify <folder> [--set release] [--seed <n>]
+    python3 tests/seasons/future/run_set.py --list [--set release] [--seed <n>]
 
 --set: release (the rows of set release and nightly: the 34 rows of the release tests from 0.7.1), nightly, quick
 (the short games that test the script), background (bg2300, the Tier A game to 2300, and bg2100, the full world from
@@ -934,7 +935,20 @@ def verify(folder, which="release", rows=None):
     return out
 
 
+def listing(rows):
+    """One line a row for --list: the name, tier, start, database, extras, changing rules, last season, seed and legs."""
+    out = [f"{len(rows)} rows"]
+    for r in rows:
+        out.append(f"  {r['name']:9} {r['tier']:6} start {r['start']} {row_database(r):15} extras "
+                   f"{','.join(r['extras']) or 'none':45} changing {r['changing']:3} to {r['last']} seed {r['seed']} "
+                   f"legs of {r['leg_years']}")
+    return out
+
+
 def main(argv):
+    if "--list" in argv:
+        print("\n".join(listing(chosen(read_set(seed=arg(argv, "--seed")), arg(argv, "--set", "release")))))
+        return 0
     if "--verify" in argv:
         faults = verify(os.path.abspath(arg(argv, "--verify")), arg(argv, "--set", "release"),
                         read_set(seed=arg(argv, "--seed")))
