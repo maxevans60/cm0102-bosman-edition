@@ -551,6 +551,7 @@ int season_dates_plan(const char *folder, int N, SeasonShiftPlan *out)
 }
 
 static const char *loaded_db_name(void);
+static int official_version(void);
 
 static void shift_for(int N)
 {
@@ -568,7 +569,7 @@ static void shift_for(int N)
     }
     /* slice 11c: the history between 2001 and the start; open item 74: with or without a plan (a 2001 game with
      * changing rules on), the past editions of the records that the season code adds */
-    season_history_fill(plan ? p.name : NULL, N);
+    season_history_fill(plan ? p.name : NULL, N, official_version());
     /* 0.6.2 open item 106: the real six seasons, in every start year (a 2001 start has no plan) */
     season_coeffs_fill(loaded_db_name());
 }
@@ -604,6 +605,14 @@ static int official_data(void)
 {
     const SeasonKnownDb *k = loaded_db();
     return k && (k->role == SEASONS_ROLE_OFFICIAL_BASE || k->role == SEASONS_ROLE_OFFICIAL_VERSION);
+}
+
+/* 1 when the loaded data is 3.9.60 or 3.9.65: its duplicate history rows go in every start year (open item 227).
+ * Not the 3.9.68 data of the base game (Q152). */
+static int official_version(void)
+{
+    const SeasonKnownDb *k = loaded_db();
+    return k && k->role == SEASONS_ROLE_OFFICIAL_VERSION;
 }
 
 void season_dates_at_create(void)
