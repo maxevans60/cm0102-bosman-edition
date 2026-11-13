@@ -141,6 +141,7 @@ SWITCHES = ("RECOMP_TIER_A", "RECOMP_DATE_JUMP", "RECOMP_TEST_EXTRA", "RECOMP_TE
 NATION_JOB = {"a2001nation": "England"}
 NATION_JOB_LINE = "recomp: nation job test: "
 SAVE_ON = 200                                 # every leg saves on day 200 (from 0, about 20 July) after its last season
+TAIL_ON = 243                                 # the tail leg of a one-season world row: day 243 (1 September)
 SCRIPT_TIMEOUT = "recomp: script: wait"       # a step of the new game script that timed out (testrun.c)
 
 
@@ -458,16 +459,24 @@ def database_of(row, o):
 
 # ---- The new game of a row: its database and extra divisions, read from the save (slice 1) ----
 
-# The competitions that each extra division adds to the game (the names of club_comp.dat in the save).
-EXTRA_COMPS = {"conference": "English Conference", "regional": "German Regional Division",
-               "c2": "Italian Serie C2", "spain": "Spanish Second Division B",
-               "portugal": "Portuguese Second Division B", "sweden": "Swedish Second Division"}
+# The nation of each extra division. The flag of a selected extra division is bit 0x04 of the byte +0x11c of the nation
+# record (season_divisions.c NATION_SELECTED, EXTRA_DIVISION), and the save holds it. The competitions of the extra
+# divisions are in every save, set or not, so only the flag tells.
+EXTRA_NATION = {"conference": "England", "regional": "Germany", "c2": "Italy", "spain": "Spain",
+                "portugal": "Portugal", "sweden": "Sweden"}
+EXTRA_FLAG = (0x11c, 0x04)
 
 
-def extras_missing(comp_names, extras):
-    """The extra divisions in `extras` that the save does not hold: none of its competitions starts with the name of
-    EXTRA_COMPS."""
-    return [e for e in extras if not any(n.startswith(EXTRA_COMPS[e]) for n in comp_names)]
+def extras_missing(flags, extras):
+    """The extra divisions in `extras` that the save does not set. flags: {nation name: the byte +0x11c}."""
+    return [e for e in extras if not flags.get(EXTRA_NATION[e], 0) & EXTRA_FLAG[1]]
+
+
+def extra_flags(sav):
+    """{nation name: the byte +0x11c of its record} of a save's nation.dat (history_check.LazySav)."""
+    nat = sav.read("nation.dat")
+    return {hc.text(nat[i * hc.NATION:(i + 1) * hc.NATION], 4): nat[i * hc.NATION + EXTRA_FLAG[0]]
+            for i in range(len(nat) // hc.NATION)}
 
 
 def club_names(folder):
@@ -520,8 +529,12 @@ def new_game_check(row, game, o):
         got = save_database(by_nation, database_names(folders))
         if got != want:
             return f"the save plays {got or 'no known'} data, the row says {want}"
-    gone = extras_missing([c["name"] for c in game.comps.values()], row["extras"])
-    return f"the save has no competition of the extra divisions {', '.join(gone)}" if gone else ""
+    flags = extra_flags(game.sav)
+    gone = extras_missing(flags, row["extras"])
+    surplus = [e for e in ALL_EXTRAS if e not in row["extras"] and e not in extras_missing(flags, [e])]
+    if gone:
+        return f"the save does not set the extra divisions {', '.join(gone)}"
+    return f"the save sets the extra divisions {', '.join(surplus)}, which the row does not name" if surplus else ""
 
 
 def program_has(program, text):
@@ -630,7 +643,11 @@ def play_game(row, o):
     health = full_world(row)
     legs, kept_decades, save, previous_work, new_faults, accepted = [], set(), None, None, 0, 0
     full_streak = {}                                    # club -> saves in a row in which it was full
-    plan = legs_of(row)
+    plan = [(s0, s1, SAVE_ON) for s0, s1 in legs_of(row)]
+    if row["tier"] == "world" and row["last"] == row["start"]:
+        # A one-season row (a tile row, R2): after the July save, one more leg loads it and plays to 1 September, so
+        # the save and load of the first season change are tested too.
+        plan.append((row["last"], row["last"], TAIL_ON))
     since = game_days(row["start"], 181)              # the first day of a new game: about 1 July of the start year
     if row["tier"] == "late":                         # leg 0 loads the Tier A row's save of the start year
         found = checkpoint(row, o, log)
@@ -644,15 +661,16 @@ def play_game(row, o):
                                                f"({(made_by or 'not recorded')[:12]}, this one {o['sha'][:12]})", "",
                           0, 0, began, o)
         log(f"leg 0 loads {os.path.relpath(save, o['out'])}")
-    for k, (s0, s1) in enumerate(plan):
+    for k, (s0, s1, save_on) in enumerate(plan):
         work = os.path.join(folder, f"leg{k:03d}")
         if os.path.exists(work):
             return finish(folder, row, "fail", f"{work} exists: delete the game's folder to play it again", "",
                           k, new_faults, began, o)
         # RECOMP_SAVE_AFTER_DAYS counts in its own days (game_days) from the leg's first human turn: from the save it
         # loads, to day SAVE_ON after the leg's last season. In real days a 10-season leg saved up to 20 days early.
-        days = game_days(s1 + 1, SAVE_ON) - since
+        days = game_days(s1 + 1, save_on) - since
         so["timeout"] = 14400 * (s1 - s0 + 1)
+        so["last"] = s1 + (2 if save_on == TAIL_ON else 1)        # the tail leg must not end at the season jump
         wait_room(o, log)
         if k == 0 and row["tier"] != "late":
             if row["name"] in NATION_JOB:
@@ -695,11 +713,11 @@ def play_game(row, o):
             tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, "wrong game", f"{took:.0f}", "", "", "", wrong],
                     LEG_HEAD)
             return finish(folder, row, "fail", f"leg {k} ({seasons}): {wrong}", "", k, new_faults, began, o)
-        if (year, game.date[1]) < (s1 + 1, 181):         # the save must come after the season change of s1
+        if (year, game.date[1]) < (s1 + 1, 181 if save_on == SAVE_ON else TAIL_ON):   # after the season change of s1
             tsv_row(os.path.join(folder, "legs.tsv"), [k, seasons, "short", f"{took:.0f}",
                                                        f"{year}-{game.date[1] + 1:03d}", "", "", ""], LEG_HEAD)
             return finish(folder, row, "fail", f"leg {k} ({seasons}): the save is of day {game.date[1] + 1} of {year}, "
-                                               f"before July {s1 + 1}", "", k, new_faults, began, o)
+                                               f"before the end of the leg in {s1 + 1}", "", k, new_faults, began, o)
         since = game_days(year, game.date[1])
         kinds, here = grade(checker, faults, game, full_streak)
         for (c, comp, y, detail), kind in zip(faults, kinds):

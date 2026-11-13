@@ -103,6 +103,9 @@ if [ "$STAGE_ONLY" = 0 ]; then
         { echo "make_release.sh: the run set in $RUN_SET does not pass (above)." >&2; exit 1; }
     PROGRAM="${PROGRAM:-$REPO/build/cm0102_recomp}"
     [ -x "$PROGRAM" ] || { echo "make_release.sh: no program $PROGRAM for online release test 1. Give --program." >&2; exit 2; }
+    # The online test must run the program that played the set (its sha256 is in the head line of results.tsv).
+    grep -q "$(shasum -a 256 "$PROGRAM" | cut -d' ' -f1)" "$RUN_SET/results.tsv" ||
+        { echo "make_release.sh: $PROGRAM is not the program that played the run set. Give --program." >&2; exit 2; }
     python3 -I "$REPO/tests/online/release_mac_run.py" "$PROGRAM" "$GAME" ||
         { echo "make_release.sh: online release test 1 did not pass (above)." >&2; exit 1; }
 fi

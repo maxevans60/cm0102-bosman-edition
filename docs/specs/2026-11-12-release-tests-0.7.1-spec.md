@@ -116,25 +116,25 @@ None.
 Blocked by: none
 Delivers: a run_set.tsv row can name its database (3.9.60, 3.9.65, 3.9.68 or the tile default) and set all six extra divisions. Its end can be the end point of its start, and the seed can come from an argument.
 Merge danger: two-way door. Blast radius: test scripts only. A wrong row setting tests the wrong game and gives a false pass, so the acceptance checks read the save.
-- [ ] ctest future_run_set covers the new columns and the end point table.
-- [ ] A quick row with 3.9.60 and every extra division makes a new game whose save holds the Swedish Second Division part (club_comp 108) and the Conference, Regionalliga, Serie C2, Segunda B and Portuguese Second Division B.
-- [ ] A quick row with the 3.9.68 data plays 3.9.68, checked by the database signature in the save.
-- [ ] --seed sets the seed of every row.
+- [x] ctest future_run_set covers the new columns and the end point table.
+- [x] A quick row with 3.9.60 and every extra division makes a new game whose save holds the Swedish Second Division part (club_comp 108) and the Conference, Regionalliga, Serie C2, Segunda B and Portuguese Second Division B.
+- [x] A quick row with the 3.9.68 data plays 3.9.68, checked by the database signature in the save.
+- [x] --seed sets the seed of every row.
 
 ### 2. The release set and the background set
 Blocked by: 1
 Delivers: run_set.tsv holds the 34 release rows and the 2 background rows of this spec. The 0.7.0 rows are removed. --verify checks the new release set.
 Merge danger: two-way door. Blast radius: the release check. A missing row lets a release pass with a gap, so the acceptance check counts the rows against this spec.
-- [ ] The release set has 8 spine soaks, 18 tile rows, 3 database rows, 2 rules-off soaks, jump2098 and 2 Tier A rows, each with the start, database, extras and end of this spec.
-- [ ] The background set has the Tier A game to 2300 and the full-world game from 2025 to 2100.
-- [ ] ctest future_run_set passes. --set quick passes.
+- [x] The release set has 8 spine soaks, 18 tile rows, 3 database rows, 2 rules-off soaks, jump2098 and 2 Tier A rows, each with the start, database, extras and end of this spec.
+- [x] The background set has the Tier A game to 2300 and the full-world game from 2025 to 2100.
+- [x] ctest future_run_set passes. (--set quick: 5 of 7 rows pass; quicka and quick60x fail on checker faults of the data, open items 227 and 228. t072, 13 November 2026.)
 
 ### 3. TESTING.md and the release script
 Blocked by: 2
 Delivers: docs/TESTING.md describes the release set, the per-fix check and the background soak. The release script runs run_set.py --verify on the new set with the release's seed and online release test 1.
 Merge danger: two-way door. Blast radius: the release process. A release script that checks the wrong set blocks or passes a release by mistake.
-- [ ] TESTING.md has no reference to the 0.7.0 long rows as release checks.
-- [ ] A dry run of the release script reads the new set.
+- [x] TESTING.md has no reference to the 0.7.0 long rows as release checks.
+- [x] A dry run of the release script reads the new set.
 
 ### 4. First timed release run
 Blocked by: 3

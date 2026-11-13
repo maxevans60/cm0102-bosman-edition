@@ -56,4 +56,4 @@ quicka	A	2025	on	England	1	2034	5	quick	run	tests the script: Tier A, two legs o
 quickgre	normal	2025	on	Greece	1	2027	1	quick	run	open item 68: the Greek Super League 2 plays one group from 2026/27
 quick2026	normal	2026	on	all	1	2026	1	quick	run	slice 21: the 2026/27 tile, the full world one season, the checker on its save
 quick60x	normal	2001	on	all	1	2001	1	quick	run	slice 1 of the release tests: 3.9.60 with all six extra divisions, one season		3.9.60	all
-quick68	normal	2001	on	England,France,Holland	1	2001	1	quick	run	slice 1 of the release tests: 3.9.68, one season		3.9.68	
+quick68	world	2001	on	England,France,Holland	1	2001	1	quick	run	slice 1 of the release tests: 3.9.68, one season		3.9.68	
