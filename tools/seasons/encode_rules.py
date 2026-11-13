@@ -216,7 +216,15 @@ def parse_foreign(nation, season, text):
     if nation == "Holland" and low.startswith("no limit on foreign players"):
         return "ok", f("none", "none"), "", permit
     if nation == "Portugal" and re.match(r"no (quota for non-eu|nationality quota)", low):
-        return "ok", f("none", "none"), "", permit
+        # From 2006/07 the Liga and the Liga de Honra have no foreign player status: no limit at a signing and none
+        # on the match sheet (issue 121). sign_non_eu lifts the original's own limit of 0x7d3ef0 and 0x7d4040 for
+        # those two divisions. sign_foreign stays "keep": the base cap +0x13 is a signed byte in TRANSFER_RULES::
+        # can_make_offer 0x8e8800 (0x8e89a3..0x8e89ad, jg), so 255 would refuse every offer for a foreign player.
+        return "ok", f("none", "none", "none"), "", permit
+    if nation == "Portugal" and low.startswith("liga: at most 6 non-eu players registered and at most 4"):
+        # 2001/02 to 2005/06: the original's limits, 6 at a signing in the first division (0x7d3f35) and 4 on the
+        # match sheet (0x7d43c0).
+        return "keep", f(), "", permit
     if nation == "Poland" and low.startswith("ekstraklasa: no limit on non-eu"):
         return "ok", f("none", "none"), "", permit
     if nation == "Poland" and re.search(r"max \d non-eu players on the pitch", low):
