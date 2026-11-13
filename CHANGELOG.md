@@ -7,7 +7,7 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 This release has two screen fixes. They change no game decision, so saves from 0.7.0 load and play the same.
 
 - Invite link on the Network tab: while you host a game that is in the online list, the Network tab of Bosman Edition Options shows its game code and invite link, with a Copy link button. Before, the host could not see the code or the link (issue 137).
-- Screen Mode works: Full or Windowed in Preferences now switches full screen, the same as F11 and Cmd+F. The game starts again in the mode you chose, and a window opens at its remembered size and place. A first start still opens in a window (issue 120).
+- Screen Mode works: Full or Windowed on the Game Settings screen now switches full screen, the same as F11 and Cmd+F. The game starts again in the mode you chose, and a window opens at its remembered size and place. A first start still opens in a window (issue 120).
 
 ## 0.7.0 (pre-release)
 
