@@ -24,8 +24,12 @@ The checks:
                 of 0x1d bytes per staff) in at least one case, and only such players and loaned players differ there
                 more than a handful (the bans of the file reach the game; before, the year check at 0x7a3d78 refused
                 them).
-    y2010sim    December 2010 SIM in 2010/11, a database with real years in its file (LOAN 1 7 2010 30 6 2011):
-                the same loans and discipline rows as y2010sim-orig (no date of a real year moves).
+    y2010sim    December 2010 SIM in 2010/11, a database with real years in its file: the same loans and discipline
+                rows as y2010sim-orig (its 26 bans of 2010 do not move). Its LOAN lines end in 2011, which the
+                parser refuses in both runs, so the loans are 0 in both; its retirements and future transfers are
+                not checked here.
+The ban check sees the bans of the players an England game holds (one in October 2026, a MISCONDUCT line), so it
+does not test each ban type on its own.
 At most --jobs (2) games run at the same time.
 """
 import collections

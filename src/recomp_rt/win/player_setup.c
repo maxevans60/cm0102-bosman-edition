@@ -20,8 +20,10 @@
  * of the database's contract ends (season_dates_contract_shift, season_dates.c): a year of the data season D or later
  * and 2010 or later is a real year and moves by N - D; an earlier one is a year of a 2001 start and moves by the
  * database's contract shift (D - 2001 for the Update Team databases) plus N - D. So October 2026 in 2026/27 moves 2001
- * to 2026, and December 2010 SIM, whose lines carry real years (1 7 2010 30 6 2011), moves nothing in a 2010 start.
- * No dated line of the test-fixtures databases holds a 29 February, so no day changes.
+ * to 2026, and December 2010 SIM, whose dated lines carry the real year 2010 (its bans and retirements), moves
+ * nothing in a 2010 start (its LOAN lines end in 2011, which the parser refuses with or without the fix).
+ * Only the year moves. No dated line of the test-fixtures databases holds a 29 February; a future one that moved
+ * into a year that is not a leap year would reach Date::Date 0x549f70 as 29 February of that year.
  *
  * It acts only in a season game (start year after 2001, season code on) whose data set has its own player_setup.cfg
  * (win_data_set_has): without it the game reads its own Data/player_setup.cfg (the 3.9.68 file of 2001 players, files.c
@@ -29,8 +31,8 @@
  * before. The official data sets 3.9.60 and 3.9.65 have their own file; they start only in 2001/02, where nothing
  * moves, and in a later test start (RECOMP_START_SEASON) they take N - 2001, the rule of their contract ends.
  *
- * The result is cached by start year and data set folder; the folder check and the plan run once a game. Logged once
- * a game. Test switch RECOMP_PLAYER_SETUP_DATES=original: no date moves. */
+ * The result is cached by start year and data set folder (a Custom database edited in place between two games of one
+ * program run keeps the first plan); the folder check and the plan run once for each. Logged once for each. Test switch RECOMP_PLAYER_SETUP_DATES=original: no date moves. */
 #include "win.h"
 #include "../rt.h"
 #include "season.h"
