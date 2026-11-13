@@ -37,7 +37,6 @@
 #include "season_coeffs.h"
 #include "season_records.h"
 #include "seasons_db.h"
-#include "options.h"
 #include "../host.h"
 
 #include <fcntl.h>
@@ -620,17 +619,12 @@ static int official_data(void)
 }
 
 /* 1 when the loaded data is 3.9.60 or 3.9.65: its duplicate history rows go in every start year (open item 227).
- * Not the 3.9.68 data of the base game (Q152). The signature table (seasons_table.c) holds other files under these
- * names than the folders Data-3.9.60 and Data-3.9.65 that the game ships (make_clean_files.py), so a folder that it
- * does not know is taken by the option database, as files.c data_dir_find reads it. The test switch RECOMP_DATA_DIR
- * wins over the option there, and the option's default is 3.9.60: a test run that points it at another unknown folder
- * must also write the option (run_set.py of the release tests writes both). Open item 230: the table itself. */
+ * Not the 3.9.68 data of the base game (Q152). The signature table knows the folders Data-3.9.60 and Data-3.9.65
+ * that the game ships (make_clean_files.py) and the forum files of these versions (open item 230). */
 static int official_version(void)
 {
     const SeasonKnownDb *k = loaded_db();
-    if (k) return k->role == SEASONS_ROLE_OFFICIAL_VERSION;
-    int set = options_enum(OPT_DATABASE);
-    return loaded_dir[0] && (set == DATABASE_3960 || set == DATABASE_3965);
+    return k && k->role == SEASONS_ROLE_OFFICIAL_VERSION;
 }
 
 void season_dates_at_create(void)
@@ -670,8 +664,9 @@ RT_WRAP(00524d50, database_load_files)
     loaded = 1;
     loaded_year = season_start_year();
     snprintf(loaded_dir, sizeof loaded_dir, "%s", win_data_set_dir());
-    fprintf(stderr, "recomp: season dates: data loaded from %s in %d\n", loaded_dir[0] ? "a database folder"
-            : "the game's Data", season_start_year());
+    const char *known = loaded_db_name();      /* open item 230: the known database, or Custom */
+    fprintf(stderr, "recomp: season dates: data loaded from %s (%s) in %d\n", loaded_dir[0] ? "a database folder"
+            : "the game's Data", known ? known : "Custom", season_start_year());
     shift_for(season_start_year());
     /* Test switch RECOMP_DATES_RESHIFT=<year>: the shift is made again for that year and then for the start year,
      * as season_dates_at_create does when the game is made in another year than the load. The data must end as
