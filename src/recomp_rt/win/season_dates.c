@@ -653,8 +653,9 @@ RT_WRAP(00524d50, database_load_files)
     loaded = 1;
     loaded_year = season_start_year();
     snprintf(loaded_dir, sizeof loaded_dir, "%s", win_data_set_dir());
-    fprintf(stderr, "recomp: season dates: data loaded from %s in %d\n", loaded_dir[0] ? "a database folder"
-            : "the game's Data", season_start_year());
+    const char *known = loaded_db_name();      /* open item 230: the known database, or Custom */
+    fprintf(stderr, "recomp: season dates: data loaded from %s (%s) in %d\n", loaded_dir[0] ? "a database folder"
+            : "the game's Data", known ? known : "Custom", season_start_year());
     shift_for(season_start_year());
     /* Test switch RECOMP_DATES_RESHIFT=<year>: the shift is made again for that year and then for the start year,
      * as season_dates_at_create does when the game is made in another year than the load. The data must end as
