@@ -143,7 +143,8 @@ if(NOT WIN32)
         src/recomp_rt/host/posix.c)
     target_include_directories(seasons_db_test PRIVATE src/recomp_rt/win tests/seasons)
     target_compile_definitions(seasons_db_test PRIVATE
-        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv")
+        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv"
+        MANIFEST_DIR="${CMAKE_SOURCE_DIR}/tools/clean_files")
     add_test(NAME seasons_db COMMAND seasons_db_test)
     # The heap of the recompiled game: the join of the free blocks at the end of the arena (decision O121).
     add_executable(heap_test tests/recomp/test_heap.c src/recomp_rt/heap.c)
