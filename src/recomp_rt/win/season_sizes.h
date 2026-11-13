@@ -41,6 +41,10 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* After set_up_rules of a league class: the promotion and relegation places of the season. */
 void season_sizes_rules(uint32_t obj);
 
+/* After the places of season_sizes_rules, with the size engine on: Série A and B with the row's two meetings play
+ * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
+void season_sizes_bra_rules(uint32_t obj, const char *file);
+
 /* The club count of a division of a league class in the row of a season (the club moves of a new game), or -1
  * when the class is not in the size table or the row holds no usable count. */
 int season_sizes_clubs(const char *file, int season);

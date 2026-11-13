@@ -750,13 +750,37 @@ const int season_size_floors[] = {
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
+    {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 3;
+const int season_grown_count = 5;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* BraNatFirst::create_schedule */
+void o_00429b50(void);
+RT_WRAP(00429b50, schedule_429b50)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00429b50();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* BraNatSecond::create_schedule */
+void o_0042c140(void);
+RT_WRAP(0042c140, schedule_42c140)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0042c140();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* NorPrm::create_schedule */
 void o_007917c0(void);
