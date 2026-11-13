@@ -159,11 +159,24 @@ def table_sites(read):
     return sites
 
 
+# Table sites that another tool already patches for the grown count: file: (address, the tool and why it holds the
+# count). D21: such a site is not patched twice. Any other overlap stops the build. None yet (the Serie C pushes of
+# new_divisions.py, 0x64b67b, 0x64f82b, 0x653a9b, join here when a slice adds a Serie C class to GROWN).
+TABLE_SITE_TAKEN = {}
+
+
 def table_insns(read, taken=()):
-    """The INSNS of the table allocations of table_sites, less the addresses in taken (a site that another table
-    already patches, such as the Serie C pushes of new_divisions.py, is not patched twice)."""
-    return {push: (f"push {size:#x}", f"esp -= 4; W32(esp, rt_league_table_bytes({reg}, {size:#x}u));")
-            for _f, (push, reg, size) in table_sites(read).items() if push not in taken}
+    """The INSNS of the table allocations of table_sites. A site in taken (INSNS or PATCHES of another tool) is
+    skipped when TABLE_SITE_TAKEN names it, else the build stops."""
+    out = {}
+    for f, (push, reg, size) in table_sites(read).items():
+        if push in taken:
+            if TABLE_SITE_TAKEN.get(f, (None,))[0] != push:
+                raise SystemExit(f"league_sizes.py: {f}: the table allocation {push:#x} is patched by another tool; "
+                                 f"name it in TABLE_SITE_TAKEN with the tool that holds the count")
+            continue
+        out[push] = (f"push {size:#x}", f"esp -= 4; W32(esp, rt_league_table_bytes({reg}, {size:#x}u));")
+    return out
 
 
 # The French classes play the second half from the middle of their date template (league_next_schedule_round

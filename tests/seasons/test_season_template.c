@@ -161,6 +161,7 @@ static void test_two_years(void)
     /* An odd count: 23 clubs play as 24. */
     r = season_template_plan(2014, d, n, 46, SEASON_TEMPLATE_SEQUENTIAL, p, why, sizeof why);
     CHECK(r == 46, "por_second sequential: %d dates (%s)", r, why);
+    if (r == 46) check_plan("por_second sequential", 2014, d, n, r, p);
 }
 
 /* Mirrored (the French classes, flag 0x80): 17 dates in each half; 20 clubs give 38 rounds, 2 new in each half. */

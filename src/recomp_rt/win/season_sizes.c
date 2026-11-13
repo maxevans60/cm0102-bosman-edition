@@ -231,7 +231,10 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     if (!sizes_on() || !readable(obj)) return original;
     const char *file = season_change_file(obj);
     int have = 0, cap = 0, n = league_count(obj, file, &have, &cap);
-    if (!n || (grown_of(file) && kept_at(obj))) return original;
+    if (!n) return original;
+    /* A grown league whose template had no room keeps the class's count, or fewer: create_table fills only the
+     * clubs of the division and fails with more rows than clubs (NorPrm 0x7926a0..0x7926ce, box at 0x792845). */
+    if (grown_of(file) && kept_at(obj) && (uint32_t)n > original) return original;
     const SeasonRule *r = row_now(obj, file);
     int want = r && r->clubs >= MIN_CLUBS && r->clubs <= MAX_CLUBS ? r->clubs : (int)original;
     if (logging())
@@ -341,7 +344,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     const SeasonGrown *g = grown_of(file);
     if (!g) return;
     keep(self, 0);
-    int meetings = grown_meetings(self, file);
+    int class_meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS), meetings = grown_meetings(self, file);
     uint32_t old = cpu.eax;
     int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
     int n = league_count(self, file, NULL, NULL);
@@ -373,6 +376,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     char why[160];
     if (season_template_plan(base, days, have, rounds, mode, plan, why, sizeof why) != rounds) {
         keep(self, 1);
+        wr16(g_mem, self + COMP_MEETINGS, (uint16_t)class_meetings);   /* the class's template: its meetings */
         wr16(g_mem, self + COMP_MATCHES, 0xffffu);    /* check_complete counts the class's count again */
         fprintf(stderr, "recomp: league sizes: %s dates: no room for %d rounds of %d clubs (%.50s %d): %s; the class's "
                         "%d dates and count stay\n", file, rounds, n, record_name(self), base, why, have);
@@ -390,7 +394,14 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         wr16(g_mem, to + 2, (uint16_t)yoff);
         if (plan[k].added &&
             season_template_weekday(base, plan[k].day) != season_template_weekday(base, days[plan[k].from]))
+        {
             g_mem[to + 4] = TIME_MIDWEEK;
+            /* Slot 0 as the original's midweek rounds: no weekday, kind or option (NorPrm 0x79191d writes
+             * (round, 0, -1, -1, -1, 0) through 0x68a1c0, which stores +5 the value, +9 the weekday, +0xa the kind,
+             * +0xb the option at 0x68a3b9..0x68a3c9). A Sunday record holds weekday 6 there (PorSecond 0x7d0d21). */
+            wr32(g_mem, to + 5, 0);
+            g_mem[to + 9] = g_mem[to + 0xa] = g_mem[to + 0xb] = 0xff;
+        }
         new_days[k] = plan[k].day;
         added[k] = plan[k].added;
     }

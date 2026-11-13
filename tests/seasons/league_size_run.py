@@ -4,7 +4,7 @@ docs/specs/2026-11-13-league-sizes-0.7.2-spec.md, Testing seam 2, D4 and D5). Ma
 
 Usage:
     python3 tests/seasons/league_size_run.py <cm0102_recomp> <game folder> <file> [--year <season>]
-        [--last <season>] [--keep <folder>] [--reuse] [--timeout <seconds>]
+        [--last <season> | --to <season>] [--keep <folder>] [--reuse] [--timeout <seconds>]
     python3 tests/seasons/league_size_run.py --list
     python3 tests/seasons/league_size_run.py --self-test
 
@@ -48,7 +48,7 @@ ROWS = {
     "nor_prm": (2009, 2010, "Eliteserien, 16 clubs (the class holds 14): a calendar year with a summer break"),
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
-    "swe_prm": (2025, 2025, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
 }
 
 
@@ -178,6 +178,10 @@ def faults(work, file, year, last):
     held = league_sizes.HELD.get(file, 0)
     if clubs > held and not any(f"{file} table of {clubs} rows" in x for x in log.split("\n")):
         fails.append(f"{file} {year}: no log line of a table of {clubs} rows (the class allocates {held})")
+    fails += [f"{file}: {x.split(': ', 1)[1]}" for x in log.split("\n")
+              if x.startswith(f"recomp: league sizes: {file} template mode ")]
+    fails += [f"{file}: {x.split(': ', 1)[1]}" for x in log.split("\n")
+              if x.startswith(f"recomp: league sizes: {file} dates: no room")]
     tmpl = templates(log, file)
     want = [t for t in tmpl if len(t[1]) != rounds]
     if not tmpl:
@@ -218,8 +222,13 @@ def self_test():
     shrink = [(cls[0], False), (cls[2], False), (cls[4], False)]
     late = [(cls[0], False), (cls[1], False), (cls[2], False), (cls[3], False), (cls[4], False),
             (d(2009, 8, 5), True)]
+    shared = [(cls[0], False), (cls[0], True), (cls[1], False), (cls[2], False), (cls[3], False), (cls[4], False)]
+    thursday = [(cls[0], False), (d(2009, 4, 9), True), (cls[1], False), (cls[2], False), (cls[3], False),
+              (cls[4], False)]
     checks = [
         (template_faults("good", cls, good, 7), False),
+        (template_faults("shared", cls, shared, 6), True),
+        (template_faults("thursday", cls, thursday, 6), True),
         (template_faults("break", cls, bad_break, 6), True),
         (template_faults("shrink", cls, shrink, 3), False),
         (template_faults("late", cls, late, 6), True),
@@ -257,7 +266,7 @@ def main(argv):
     program, game, file = os.path.abspath(argv[0]), os.path.abspath(argv[1]), argv[2]
     year0, last0, _w = ROWS.get(file, (2025, None, ""))
     year = int(rrc.arg(argv, "--year", str(year0)))
-    last = int(rrc.arg(argv, "--last", str(last0 or year)))
+    last = int(rrc.arg(argv, "--last", rrc.arg(argv, "--to", str(last0 or year))))
     keep = rrc.arg(argv, "--keep", None)
     timeout = int(rrc.arg(argv, "--timeout", "7200"))
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix=f"cm0102-size-{file}-{year}-")
