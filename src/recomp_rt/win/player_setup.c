@@ -26,7 +26,9 @@
  *
  * Without its own player_setup.cfg the data set reads the game's own Data/player_setup.cfg (the 3.9.68 lines, files.c
  * data_dir_swap). Those dates do not move: the base game and our own databases (Summer 2002, 2004, 2006) play as
- * before. Test switch RECOMP_PLAYER_SETUP_DATES=original: no date moves. */
+ * before. The official data sets 3.9.60 and 3.9.65 have their own file; they start only in 2001/02, where nothing
+ * moves, and in a later test start (RECOMP_START_SEASON) they take N - 2001, the rule of their contract ends.
+ * Test switch RECOMP_PLAYER_SETUP_DATES=original: no date moves. */
 #include "win.h"
 #include "season.h"
 #include "season_dates.h"

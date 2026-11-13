@@ -8,8 +8,9 @@ Usage:
 <folder of databases> is test-fixtures/databases: it needs "October 2026" and "December 2025" as the Update Team
 gives them (with player_setup.cfg). Each run starts a new game (England, Arsenal, changing rules on), plays one day
 and saves. The loans are counted in contract.dat of the save (CONTRACT_MANAGER::load_from_disk 0x4db5c0: int n1, n1
-rows of 0x15, int n2, n2 contracts of 0x50, +0 the staff index, +4 the club id, +0x2d and +0x2f the end day and
-year): a player on loan has two contracts, his main one and the loan.
+rows of 0x15, int n2, n2 contracts of 0x50, +0 the staff index (the load writes it, 0x4db5c0), +4 the club id, +0x2d
+and +0x2f the end day and year, +0x35 the type in its low 6 bits): a loan is a contract of type 6, next to the
+player's main contract (type 2).
 
 The checks:
     y2026       October 2026 in 2026/27: more than 100 loans; Jack Grealish has a contract with Manchester City and
@@ -36,6 +37,7 @@ import season_core_run as scr  # noqa: E402
 import smoke_run  # noqa: E402
 
 LOG = "recomp: player setup: the dates of"
+LOAN = 6                                    # contract type of a loan (contract +0x35, low 6 bits)
 failures = 0
 
 
@@ -56,7 +58,7 @@ def find_db(dbs, name):
 
 
 def loans(save):
-    """(number of loans, {name: [(club name, end year)]} of the players on loan)."""
+    """(number of loans, {(staff index, name): [(club name, end year)]} of the players on loan)."""
     files = smoke_run.save_files(save)
     b = files["contract.dat"][0]
     n1 = struct.unpack_from("<i", b, 0)[0]
@@ -64,12 +66,12 @@ def loans(save):
     n2 = struct.unpack_from("<i", b, o)[0]
     o += 4
     rows = [(struct.unpack_from("<i", b, o + i * 0x50)[0], struct.unpack_from("<i", b, o + i * 0x50 + 4)[0],
-             struct.unpack_from("<H", b, o + i * 0x50 + 0x2f)[0]) for i in range(n2)]
+             struct.unpack_from("<H", b, o + i * 0x50 + 0x2f)[0], b[o + i * 0x50 + 0x35] & 0x3f) for i in range(n2)]
     per = collections.defaultdict(list)
-    for staff, club, end in rows:
+    for staff, club, end, kind in rows:
         if staff >= 0:
-            per[staff].append((club, end))
-    on_loan = {s: c for s, c in per.items() if len(c) >= 2}
+            per[staff].append((club, end, kind))
+    on_loan = {s: [(c, y) for c, y, _ in cs] for s, cs in per.items() if any(k == LOAN for _, _, k in cs)}
 
     def names(part):
         d = files[part][0]
@@ -83,7 +85,7 @@ def loans(save):
     out = {}
     for s, cs in on_loan.items():
         f, sn, cm = struct.unpack_from("<iii", sd, s * 0x6e + 4)
-        out[common.get(cm) or f"{first.get(f, '?')} {second.get(sn, '?')}"] = [(clubs.get(c, c), y) for c, y in cs]
+        out[(s, common.get(cm) or f"{first.get(f, '?')} {second.get(sn, '?')}")] = [(clubs.get(c, c), y) for c, y in cs]
     return len(on_loan), out
 
 
@@ -115,7 +117,7 @@ def main(argv):
             res[name] = (loans(path) if path else (0, {}), err or "")
     try:
         (n26, l26), e26 = res["y2026"]
-        g = l26.get("Jack Grealish", [])
+        g = next((v for (_, n), v in l26.items() if n == "Jack Grealish"), [])
         check(n26 > 100, f"y2026: {n26} loans at the start of 2026/27")
         check(sorted(c for c, _ in g) == ["Everton", "Manchester City"] and ("Everton", 2027) in g,
               f"y2026: Jack Grealish has a contract with Manchester City and a loan at Everton to 2027 ({g})")
@@ -123,7 +125,7 @@ def main(argv):
         (n26o, _), e26o = res["y2026-orig"]
         check(n26o == 0 and LOG not in e26o, f"y2026-orig: no loans with RECOMP_PLAYER_SETUP_DATES=original ({n26o})")
         (n25, l25), _ = res["y2025"]
-        g = l25.get("Jack Grealish", [])
+        g = next((v for (_, n), v in l25.items() if n == "Jack Grealish"), [])
         check(n25 > 100 and ("Everton", 2026) in g, f"y2025: {n25} loans, Grealish at Everton to 2026 ({g})")
         (n01, l01), e01 = res["y2001"]
         (n01o, l01o), _ = res["y2001-orig"]
