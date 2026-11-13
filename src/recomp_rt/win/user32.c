@@ -895,7 +895,9 @@ static void handle_event(SDL_Event *e)
             h->pressed = 0;
             break;
         }
-        if (!down && press_hold_up(h, SDL_GetTicks64())) {   /* a short press: the up waits for the game */
+        static int hold = -1;                  /* RECOMP_PRESS_HOLD=0: test runs only, the up never waits */
+        if (hold < 0) hold = !(getenv("RECOMP_PRESS_HOLD") && !strcmp(getenv("RECOMP_PRESS_HOLD"), "0"));
+        if (!down && hold && press_hold_up(h, SDL_GetTicks64())) {   /* a short press: the up waits for the game */
             if (getenv("RECOMP_SCREEN_LOG")) fprintf(stderr, "recomp: click up waits for the game (%d polls)\n", h->polls);
             break;
         }
@@ -1063,16 +1065,49 @@ static void run_script(void)
             script_char.polls = 0;
             script_char.at = SDL_GetTicks64();
         }
-        else if (!strcmp(s->action, "tap") || !strcmp(s->action, "sdldown") || !strcmp(s->action, "sdlup")) {
-            /* Test runs only (quick_click_run.py): left button events through SDL, as from a mouse or a trackpad,
-             * so they take the path of a real click (handle_event). tap gives the down and the up in one batch. */
+        else if (!strcmp(s->action, "wtap")) {
+            /* Test runs only: a move, a down and an up through SDL at window point x y, as given (no mapping). */
             SDL_Event ev;
+            memset(&ev, 0, sizeof ev);
+            ev.type = SDL_MOUSEMOTION;
+            ev.motion.windowID = window ? SDL_GetWindowID(window) : 0;
+            ev.motion.x = s->a;
+            ev.motion.y = s->b;
+            SDL_PushEvent(&ev);
             memset(&ev, 0, sizeof ev);
             ev.button.windowID = window ? SDL_GetWindowID(window) : 0;
             ev.button.button = SDL_BUTTON_LEFT;
             ev.button.clicks = 1;
             ev.button.x = s->a;
             ev.button.y = s->b;
+            ev.type = SDL_MOUSEBUTTONDOWN;
+            ev.button.state = SDL_PRESSED;
+            SDL_PushEvent(&ev);
+            ev.type = SDL_MOUSEBUTTONUP;
+            ev.button.state = SDL_RELEASED;
+            SDL_PushEvent(&ev);
+        }
+        else if (!strcmp(s->action, "tap") || !strcmp(s->action, "sdldown") || !strcmp(s->action, "sdlup")) {
+            /* Test runs only (quick_click_run.py): left button events through SDL, as from a mouse or a trackpad,
+             * so they take the path of a real click (handle_event). tap gives the down and the up in one batch. */
+            /* The position is in the picture; SDL maps window points to the picture (logical size), so the events
+             * carry window points. A move comes first, as from a real mouse: the window procedure takes the pointer
+             * only from WM_MOUSEMOVE (0x68d922), not from the button messages. */
+            SDL_Event ev;
+            int wx = s->a, wy = s->b;
+            if (renderer) SDL_RenderLogicalToWindow(renderer, (float)s->a + 0.5f, (float)s->b + 0.5f, &wx, &wy);
+            memset(&ev, 0, sizeof ev);
+            ev.type = SDL_MOUSEMOTION;
+            ev.motion.windowID = window ? SDL_GetWindowID(window) : 0;
+            ev.motion.x = wx;
+            ev.motion.y = wy;
+            SDL_PushEvent(&ev);
+            memset(&ev, 0, sizeof ev);
+            ev.button.windowID = window ? SDL_GetWindowID(window) : 0;
+            ev.button.button = SDL_BUTTON_LEFT;
+            ev.button.clicks = 1;
+            ev.button.x = wx;
+            ev.button.y = wy;
             if (strcmp(s->action, "sdlup")) {
                 ev.type = SDL_MOUSEBUTTONDOWN;
                 ev.button.state = SDL_PRESSED;
@@ -1290,6 +1325,51 @@ static void idle_rest(uint32_t widget)
 
 void o_0055f620(void);
 
+/* RECOMP_CLICK_LOG=1 (test runs only, 0.7.2 tactics click): for each press, at the first poll that sees the held
+ * flag 0xb67a34, the game's pointer (0xb67a20, 0xb67a14) and the widget of the hit test 0x560490 with its hit
+ * rectangle: widget i at Display+0xba95e+i*0x18c, x1 +0x10, y1 +0x14, x2 +0x18, y2 +0x1c, inclusive (0x56050e..
+ * 0x56052c). */
+static void click_log(uint32_t display, uint32_t widget)
+{
+    static int on = -1;
+    static uint32_t logged = 0xffffffffu;
+    if (on < 0) on = getenv("RECOMP_CLICK_LOG") != NULL;
+    if (!on || !rd32(g_mem, 0xb67a34u) || logged == press_count) return;
+    logged = press_count;
+    int32_t mx = (int32_t)rd32(g_mem, 0xb67a20u), my = (int32_t)rd32(g_mem, 0xb67a14u);
+    if (!strcmp(getenv("RECOMP_CLICK_LOG"), "all")) {   /* every clickable free widget: order list +0x12eb96 */
+        uint32_t n = rd16(g_mem, display + 0x12f4f8u);
+        for (uint32_t k = 0; k < n && k < 2000; k++) {
+            uint32_t i = rd16(g_mem, display + 0x12eb96u + k * 2), w = display + 0xba95eu + i * 0x18cu;
+            if (!(rd32(g_mem, w + 0x0c) & 2)) continue;
+            fprintf(stderr, "recomp: widget %u rect %d %d %d %d\n", i, (int32_t)rd32(g_mem, w + 0x10),
+                    (int32_t)rd32(g_mem, w + 0x14), (int32_t)rd32(g_mem, w + 0x18), (int32_t)rd32(g_mem, w + 0x1c));
+        }
+        /* the rows of open top-level areas (0x5605ba..0x560633): area a at Display+a*0xbf1, open +0xbed, owner
+         * +0x212 (-1: top level), count +0xb78, first +0xb7a, widget list +0x216 */
+        uint32_t na = rd16(g_mem, display + 0x12f4f6u);
+        for (uint32_t k = 0; k < na && k < 500; k++) {
+            uint32_t a = display + rd16(g_mem, display + 0x12e9a2u + k * 2) * 0xbf1u;
+            if (!rd32(g_mem, a + 0xbed) || rd16(g_mem, a + 0x212) != 0xffffu) continue;
+            for (uint32_t r = rd16(g_mem, a + 0xb7a); r < rd16(g_mem, a + 0xb78) && r < 2000; r++) {
+                uint32_t i = rd16(g_mem, a + 0x216 + r * 2), w = display + 0xba95eu + i * 0x18cu;
+                if (i == 0xffffu) break;
+                fprintf(stderr, "recomp: row %u widget %u flags %x rect %d %d %d %d\n", k, i, rd32(g_mem, w + 0x0c),
+                        (int32_t)rd32(g_mem, w + 0x10), (int32_t)rd32(g_mem, w + 0x14),
+                        (int32_t)rd32(g_mem, w + 0x18), (int32_t)rd32(g_mem, w + 0x1c));
+            }
+        }
+    }
+    if (widget == 0xffffu) {      /* display mode 1 (Display+0): the press opened a popup (0x560490) */
+        fprintf(stderr, "recomp: click at %d %d: no widget, mode %u\n", mx, my, rd32(g_mem, display));
+        return;
+    }
+    uint32_t w = display + 0xba95eu + widget * 0x18cu;
+    fprintf(stderr, "recomp: click at %d %d: widget %u rect %d %d %d %d\n", mx, my, widget,
+            (int32_t)rd32(g_mem, w + 0x10), (int32_t)rd32(g_mem, w + 0x14), (int32_t)rd32(g_mem, w + 0x18),
+            (int32_t)rd32(g_mem, w + 0x1c));
+}
+
 /* The input poll, thiscall, no arguments: the widget index in AX, -1 for nothing. */
 RT_WRAP(0055f620, input_poll)
 {
@@ -1316,6 +1396,7 @@ RT_WRAP(0055f620, input_poll)
     if (script_click.on && (int32_t)(q_head - script_click.down_at) >= 0) script_click.polls++;
     if (script_char.on && (int32_t)(q_head - script_char.sent_at) >= 0) script_char.polls++;
     uint32_t widget = cpu.eax & 0xffffu;
+    click_log(poll_display, widget);
     int held = replay || ((buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu));
     idle_rest(widget);
     if (widget == 0xffffu || !held) return;

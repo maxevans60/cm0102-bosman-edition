@@ -15,7 +15,7 @@ or a trackpad (script steps tap, sdldown and sdlup of user32.c), so they take th
 A click that does not open the screen is a miss (RECOMP_SCRIPT_SOFT_WAIT=1 goes on after the wait). The run then
 clicks Ok of the squad screen's place 705 573, which on the squad screen is empty space, and goes on.
 
-Pass rule: 0 misses. Before the fix (0.7.2 base e7bd634f) tap missed every click. The output names the misses and
+Pass rule: 0 misses. --no-hold runs the same build without the fix (RECOMP_PRESS_HOLD=0), to show the fault. The output names the misses and
 the stderr is in --out.
 """
 import argparse
@@ -67,6 +67,7 @@ def main():
     ap.add_argument("--kind", default="tap")
     ap.add_argument("--times", type=int, default=20)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--no-hold", action="store_true", help="RECOMP_PRESS_HOLD=0: the build without the fix")
     a = ap.parse_args()
     save = os.path.join(fixtures.DEFAULT_DIR, "start.sav")
     with tempfile.TemporaryDirectory(prefix="cm0102-quick-click-") as work:
@@ -76,18 +77,19 @@ def main():
         shutil.copyfile(save, os.path.join(user, "start.sav"))
         fixtures.write_settings(user, a.mode, [])
         env = dict(os.environ, HOME=home, SDL_VIDEODRIVER="dummy", SDL_AUDIODRIVER="dummy", RECOMP_NO_BOX="1",
-                   RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SCRIPT_SOFT_WAIT="1", RECOMP_SCREEN_LOG="1",
+                   RECOMP_USER_DIR=user, RECOMP_FIXED_CLOCK="1", RECOMP_SCRIPT_SOFT_WAIT="1", RECOMP_SCREEN_LOG="1", RECOMP_CLICK_LOG="1",
+                   **({"RECOMP_PRESS_HOLD": "0"} if a.no_hold else {}),
                    RECOMP_SCRIPT="; ".join(smoke_run.scaled_steps(a.mode, work, steps(a.kind, a.times))))
         r = subprocess.run([a.program, "--game", a.game, "-seed", "1"], env=env, capture_output=True, text=True,
                            errors="replace", timeout=1800)
     if a.out:
         os.makedirs(a.out, exist_ok=True)
-        with open(os.path.join(a.out, f"stderr-{a.mode}-{a.kind.replace(':', '-')}.txt"), "w") as f:
+        with open(os.path.join(a.out, f"stderr-{a.mode}-{a.kind.replace(':', '-')}{'-nohold' if a.no_hold else ''}.txt"), "w") as f:
             f.write(r.stderr)
     opened = len(re.findall(rf"^recomp: script reached screen:{TACTICS}", r.stderr, re.M))
     missed = len(re.findall(rf"^recomp: script missed screen:{TACTICS}", r.stderr, re.M))
     lost = len(re.findall(rf"^recomp: script missed screen:{SQUAD}", r.stderr, re.M))
-    print(f"{a.mode} {a.kind}: {opened} opened, {missed} missed of {a.times} (code {r.returncode})")
+    print(f"{a.mode} {a.kind}{' no hold' if a.no_hold else ''}: {opened} opened, {missed} missed of {a.times} (code {r.returncode})")
     if lost or opened + missed != a.times or r.returncode != 0:
         print(r.stderr[-2000:])
         print("FAIL: the run left the squad screen or did not end")
