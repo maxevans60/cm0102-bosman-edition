@@ -37,6 +37,8 @@ the clubs that go up. The runs:
           (proves that the test sees the fault)
     parent2014 the same with RECOMP_TEST_NOR_SECOND_YEAR=2014 (the last season of the old rule): the second teams of
           First Division clubs go down too, those of Eliteserien clubs stay
+    parent-rules the same as parent with changing rules on: the rule of the season that starts (2025) holds; with
+          changing rules off (the other runs) that of the start year (season_rule_year)
     rule2014 September 2008, a 2008 start to 1 June 2009 (the database of the forum report): at the change of January
           2009 the rule to 2014 holds, so the second team of each First Division club leaves the Second Division
           and those of Eliteserien clubs stay
@@ -58,8 +60,8 @@ DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
 ENV = {"RECOMP_TEST_NOR_SECOND_REP": "1", "RECOMP_NOR_SECOND_LOG": "1"}
 
 
-def jump(name, program, game, work, env, last=2024, year=2024, db="October 2024"):
-    code, _ = rrc.run(program, game, last, year, os.path.join(DB, db), ["Norway"], [], work, 7200, None,
+def jump(name, program, game, work, env, last=2024, year=2024, db="October 2024", options=None):
+    code, _ = rrc.run(program, game, last, year, os.path.join(DB, db), ["Norway"], [], work, 7200, options,
                       dict(ENV, **env))
     fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
     found, log = ufr.boxes(work)
@@ -145,24 +147,25 @@ def run_off(program, game, work):
     return fails
 
 
-PAIR = re.compile(r"recomp: nor second: pairs (before|after) \(season (\d+)\): (\d+) second teams of the groups, "
-                  r"(\d+) with no first team, (\d+) barred there")
+PAIR = re.compile(r"recomp: nor second: pairs (before|after) \(season (\d+), rule of (\d+)\): (\d+) second teams of "
+                  r"the groups, (\d+) with no first team, (\d+) barred there")
 
 
 def pairs_of(log):
     return {m.group(1): tuple(map(int, m.groups()[1:])) for m in PAIR.finditer(log)}
 
 
-DOWN = re.compile(r"recomp: nor second: (.*) goes down to the Third Division \(season (\d+): (.*) plays (Eliteserien|"
+DOWN = re.compile(r"recomp: nor second: (.*) goes down to the Third Division \(rule of (\d+): (.*) plays (Eliteserien|"
                   r"the First Division|the Second Division|a lower division), (.*?)(, a third team)?\)")
-MAY = re.compile(r"recomp: nor second: (.*) may play the Second Division \(season (\d+): (.*)\)")
+MAY = re.compile(r"recomp: nor second: (.*) may play the Second Division \(rule of (\d+): (.*)\)")
 
 
-def run_parent(name, program, game, work, env, year=2025):
+def run_parent(name, program, game, work, env, year=2024, rules="off"):
+    """year: the rule that holds (the start year 2024 with changing rules off, 2025 with them on, or the test year)."""
     env = dict(env, RECOMP_TEST_NOR_SECOND_DOWN="Kongsvinger IL,Raufoss IL")
-    if year != 2025:
+    if year not in (2024, 2025):
         env["RECOMP_TEST_NOR_SECOND_YEAR"] = str(year)
-    fails, _, _, log = jump(name, program, game, work, env)
+    fails, _, _, log = jump(name, program, game, work, env, options={"changing_rules": rules})
     pairs = pairs_of(log)
     down = DOWN.findall(log)
     may = MAY.findall(log)
@@ -173,24 +176,25 @@ def run_parent(name, program, game, work, env, year=2025):
         fails.append(f"{name}: the test switch sent {len(forced)} First Division clubs down, want 2")
     if "after" not in pairs or "before" not in pairs:
         return fails + [f"{name}: no pair census at the change"]
-    if pairs["after"][0] != year:
-        fails.append(f"{name}: the change reads season {pairs['after'][0]}, want {year}")
+    if pairs["after"][0] != 2025 or pairs["after"][1] != year:
+        fails.append(f"{name}: the change reads season {pairs['after'][0]}, rule of {pairs['after'][1]}, want 2025 and "
+                     f"{year}")
     if name == "parent-off":
         if down:
             fails.append(f"{name}: second teams moved with the switch off: {down}")
-        if not pairs["after"][3]:
+        if not pairs["after"][4]:
             fails.append(f"{name}: no second team is barred after the change (the test does not see the fault)")
         return fails
-    if pairs["after"][3]:
-        fails.append(f"{name}: {pairs['after'][3]} second teams still barred from the Second Division")
-    if pairs["after"][2] or pairs["before"][2]:
+    if pairs["after"][4]:
+        fails.append(f"{name}: {pairs['after'][4]} second teams still barred from the Second Division")
+    if pairs["after"][3] or pairs["before"][3]:
         fails.append(f"{name}: second teams of the groups with no first team: {pairs}")
     names = [d[0] for d in down]
     for want in ("Kongsvinger IL II", "Raufoss IL 2"):
         if want not in names:
             fails.append(f"{name}: {want} did not go to the Third Division")
     allowed = ("Eliteserien",) if year <= 2014 else ("Eliteserien", "the First Division")
-    wrong = [d[0] for d in down if d[3] in allowed]
+    wrong = [d[0] for d in down if d[3] in allowed and not d[5]]
     if wrong:
         fails.append(f"{name}: second teams of clubs that the rule of {year} allows went down: {wrong}")
     stay_wrong = [m[0] for m in may if m[2] not in allowed]
@@ -215,19 +219,20 @@ def run_rule2014(name, program, game, work, env):
     print(f"{name}: pairs {pairs}, to the Third Division: {[(d[0], d[2], d[3]) for d in down]}")
     if "after" not in pairs or "before" not in pairs:
         return fails + [f"{name}: no pair census at the change"]
-    if pairs["after"][0] != 2009:
-        fails.append(f"{name}: the change reads season {pairs['after'][0]}, want 2009")
-    if not pairs["before"][3]:
+    if pairs["after"][0] != 2009 or pairs["after"][1] != 2008:
+        fails.append(f"{name}: the change reads season {pairs['after'][0]}, rule of {pairs['after'][1]}, want 2009 and "
+                     f"2008 (changing rules off: the rule of the start year)")
+    if not pairs["before"][4]:
         fails.append(f"{name}: no second team barred before the change (the test sees no case)")
     if name.endswith("-off"):
-        if down or not pairs["after"][3]:
+        if down or not pairs["after"][4]:
             fails.append(f"{name}: with the switch off second teams moved ({down}) or none is barred")
         return fails
-    if pairs["after"][3] or pairs["after"][2]:
-        fails.append(f"{name}: after the change {pairs['after'][3]} barred, {pairs['after'][2]} with no first team")
+    if pairs["after"][4] or pairs["after"][3]:
+        fails.append(f"{name}: after the change {pairs['after'][4]} barred, {pairs['after'][3]} with no first team")
     if not any(d[3] == "the First Division" for d in down):
         fails.append(f"{name}: no second team of a First Division club went down (the rule to 2014)")
-    wrong = [d[0] for d in down if d[3] == "Eliteserien"]
+    wrong = [d[0] for d in down if d[3] == "Eliteserien" and not d[5]]
     if wrong:
         fails.append(f"{name}: second teams of Eliteserien clubs went down: {wrong}")
     may = MAY.findall(log)
@@ -243,6 +248,7 @@ RUNS = {"on": run_on,
         "parent": lambda p, g, w: run_parent("parent", p, g, w, {}),
         "parent-off": lambda p, g, w: run_parent("parent-off", p, g, w, {"RECOMP_NOR_SECOND_PAIRS": "off"}),
         "parent2014": lambda p, g, w: run_parent("parent2014", p, g, w, {}, year=2014),
+        "parent-rules": lambda p, g, w: run_parent("parent-rules", p, g, w, {}, year=2025, rules="on"),
         "rule2014": lambda p, g, w: run_rule2014("rule2014", p, g, w, {}),
         "rule2014-off": lambda p, g, w: run_rule2014("rule2014-off", p, g, w, {"RECOMP_NOR_SECOND_PAIRS": "off"}), "off": run_off,
         "old1": lambda p, g, w: run_old("old1", p, g, w, 1, 2025, no_mark=True),

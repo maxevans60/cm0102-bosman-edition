@@ -269,8 +269,11 @@ static void log_census(const char *when)
  * stays up. The game does not play the Second Division and sends no club down from it, and 0x792b40 (at 0x7927c2)
  * shares its clubs out into the eight groups again, so no club needs to take the place.
  *
- * The fix (season games with changing rules on, after the call of 0x792960 in its wrap, for the season that
- * starts: Eliteserien's year +0x40 still holds the season played, 0x7927f8 adds 1 after 0x792960 and 0x792b40):
+ * The fix (season games, season_game_changes as the rest of this file, after the call of 0x792960 in its wrap). The
+ * rule is that of the season that starts (Eliteserien's year +0x40 still holds the season played, 0x7927f8 adds 1
+ * after 0x792960 and 0x792b40), through season_rule_year: with changing rules off, the rule of the start year holds
+ * in every season. The 3.9.68 base data has no club of nation Norway with a second-team name (its B sides have no
+ * nation), so a base game is unchanged with changing rules on too.
  * each second team of the groups whose first team plays below Eliteserien (to 2014) or below the First Division
  * (from 2015) goes to the Third Division [0x9cf738], which the game does not play, through League::
  * relegate_club_to_division 0x6831a0 (as the original sends a club down at 0x792b1d). So does a third team (last
@@ -376,13 +379,19 @@ static uint32_t first_team(uint32_t club)
     return by_plain;
 }
 
-/* The season that starts at the change: Eliteserien's year +0x40 plus 1 (RECOMP_TEST_NOR_SECOND_YEAR, tests only,
- * gives another). */
+/* The season that starts at the change: Eliteserien's year +0x40 plus 1. */
 static int season_starts(uint32_t prm_league)
+{
+    return readable(prm_league) ? (int16_t)rd16(g_mem, prm_league + 0x40u) + 1 : 0;
+}
+
+/* The year whose rule holds in season y: season_rule_year (the start year with changing rules off), or
+ * RECOMP_TEST_NOR_SECOND_YEAR (tests only). */
+static int rule_year_of(int y)
 {
     const char *v = getenv("RECOMP_TEST_NOR_SECOND_YEAR");
     if (v && atoi(v) > 0) return atoi(v);
-    return readable(prm_league) ? (int16_t)rd16(g_mem, prm_league + 0x40u) + 1 : 0;
+    return season_rule_year(y);
 }
 
 /* The level of a division, for the log. */
@@ -409,7 +418,7 @@ static int pair_barred(uint32_t first_div, int y)
 }
 
 /* The second teams of the groups, those with no first team, and those that the rule of season y bars there. */
-static void log_pairs(const char *when, int y)
+static void log_pairs(const char *when, int season, int y)
 {
     if (!log_on()) return;
     uint32_t table = rd32(g_mem, CLUBS);
@@ -419,15 +428,17 @@ static void log_pairs(const char *when, int y)
         if (!in_group(rd32(g_mem, club + CLUB_DIVISION)) || !barred_club(club)) continue;
         uint32_t p = first_team(club);
         n++;
-        if (!p) {
+        if (third_team(win_str(club + CLUB_NAME))) {
+            shared++;
+        } else if (!p) {
             none++;
             fprintf(stderr, "recomp: nor second: %.51s has no first team\n", win_str(club + CLUB_NAME));
-        } else if (third_team(win_str(club + CLUB_NAME)) || pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) {
+        } else if (pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) {
             shared++;
         }
     }
-    fprintf(stderr, "recomp: nor second: pairs %s (season %d): %d second teams of the groups, %d with no first team, "
-            "%d barred there\n", when, y, n, none, shared);
+    fprintf(stderr, "recomp: nor second: pairs %s (season %d, rule of %d): %d second teams of the groups, %d with no "
+            "first team, %d barred there\n", when, season, y, n, none, shared);
 }
 
 /* After 0x792960: each second team of the groups that the rule of season y bars there goes to the Third Division. */
@@ -444,10 +455,10 @@ static void pairs_down(uint32_t self, int y)
         uint32_t club = table + (uint32_t)i * CLUB_SIZE;
         if (!in_group(rd32(g_mem, club + CLUB_DIVISION)) || !barred_club(club)) continue;
         uint32_t p = first_team(club);
-        int is_third = third_team(win_str(club + CLUB_NAME));
-        if (!p || (!is_third && !pair_barred(rd32(g_mem, p + CLUB_DIVISION), y))) {
+        int is_third = third_team(win_str(club + CLUB_NAME));   /* barred with or without a first team */
+        if (!is_third && (!p || !pair_barred(rd32(g_mem, p + CLUB_DIVISION), y))) {
             if (log_on())
-                fprintf(stderr, "recomp: nor second: %.51s may play the Second Division (season %d: %s)\n",
+                fprintf(stderr, "recomp: nor second: %.51s may play the Second Division (rule of %d: %s)\n",
                         win_str(club + CLUB_NAME), y, p ? level_word(rd32(g_mem, p + CLUB_DIVISION)) : "no first team");
             continue;
         }
@@ -459,10 +470,11 @@ static void pairs_down(uint32_t self, int y)
         uint32_t a[3] = {club, third, 1};
         call_this(F_MOVE_DOWN, self, 3, a);
         if (log_on()) {
-            uint32_t d = rd32(g_mem, p + CLUB_DIVISION);
-            fprintf(stderr, "recomp: nor second: %.51s goes down to the Third Division (season %d: %.51s plays %s, "
-                    "%.51s%s)\n", win_str(club + CLUB_NAME), y, win_str(p + CLUB_NAME), level_word(d),
-                    readable(d) ? win_str(d + 4) : "none", is_third ? ", a third team" : "");
+            uint32_t d = p ? rd32(g_mem, p + CLUB_DIVISION) : 0;
+            fprintf(stderr, "recomp: nor second: %.51s goes down to the Third Division (rule of %d: %.51s plays %s, "
+                    "%.51s%s)\n", win_str(club + CLUB_NAME), y, p ? win_str(p + CLUB_NAME) : "no first team",
+                    p ? level_word(d) : "a lower division", readable(d) ? win_str(d + 4) : "none",
+                    is_third ? ", a third team" : "");
         }
     }
 }
@@ -495,8 +507,8 @@ RT_WRAP(00792960, nor_second_exchange)
     }
     int on = rule_on();
     uint32_t self = cpu.ecx, first = comp_of(KEY_FIRST);
-    int year = season_starts(self);
-    log_pairs("before", year);
+    int season = season_starts(self), year = rule_year_of(season);
+    log_pairs("before", season, year);
     /* The second teams of the groups, with their divisions, and the clubs of the First Division before the call. */
     int *held = malloc(sizeof *held * (size_t)count);
     uint32_t *div_of = malloc(sizeof *div_of * (size_t)count);
@@ -554,7 +566,7 @@ RT_WRAP(00792960, nor_second_exchange)
         first_extra = prm_down = 0;
         pairs_down(self, year);
     }
-    if (!rt_unwinding) log_pairs("after", year);
+    if (!rt_unwinding) log_pairs("after", season, year);
     if (log && was_first && !rt_unwinding)
         for (int i = 0; i < count; i++) {
             uint32_t club = table + (uint32_t)i * CLUB_SIZE;
@@ -595,7 +607,8 @@ static void test_up(uint32_t league, uint8_t status)
     for (int i = 0; i < n; i++) {
         uint32_t row = table + (uint32_t)i * ROW_SIZE;
         int barred = barred_club(rd32(g_mem, row));
-        if (barred && g_mem[row + ROW_STATUS] == status) return;      /* a second team has it already */
+        if (barred && (g_mem[row + ROW_STATUS] == status || (status == ST_UP && g_mem[row + ROW_STATUS] == ST_TITLE)))
+            return;                                                      /* a second team has it already */
         if (barred && second < 0) second = i;
         if (!barred && g_mem[row + ROW_STATUS] == status) other = i;
     }
