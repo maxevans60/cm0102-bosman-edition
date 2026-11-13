@@ -2,6 +2,13 @@
 
 CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes bugs. A minor release (0.2.0) adds features. A major release (1.0.0 and later) can break saved games or settings. Releases below 1.0.0 are test releases.
 
+## 0.7.1 (pre-release)
+
+This release has two screen fixes. They change no game decision, so saves from 0.7.0 load and play the same.
+
+- Invite link on the Network tab: while you host a game that is in the online list, the Network tab of Bosman Edition Options shows its game code and invite link, with a Copy link button. Before, the host could not see the code or the link (issue 137).
+- Screen Mode works: Full or Windowed in Preferences now switches full screen, the same as F11 and Cmd+F. The game starts again in the mode you chose, and a window opens at its remembered size and place. A first start still opens in a window (issue 120).
+
 ## 0.7.0 (pre-release)
 
 Play network games with friends online, on a Mac, Windows or Linux, with no patch, no VPN and no router setting. This release also fixes many faults in seasons and competitions that long test games to 2300 found. New lines in `settings.txt`: `online_play` and `game_password`. The `season` line can also be `2026/27`.

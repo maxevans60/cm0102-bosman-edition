@@ -332,7 +332,7 @@ a { color: inherit; }
             <li>The game list shows the games online and the games on your own network, up to 50, with the season, the game date, the managers online and the ping.</li>
             <li>A host's game goes into the online list when it starts. A relay carries the games, so nobody changes a setting on their router.</li>
             <li>Mac, Windows and Linux players play in one game.</li>
-            <li>An invite link for each online game opens a page with an Open in Bosman Edition button, the game code and a download link. A click on the button opens the game and joins that game.</li>
+            <li>An invite link for each online game opens a page with an Open in Bosman Edition button, the game code and a download link. A click on the button opens the game and joins that game. From 0.7.1, the host copies the link from the Network tab.</li>
             <li>A game password and a Kick button for the host, on the Network tab of Bosman Edition Options.</li>
             <li>A human manager who leaves shows as Away, and their club goes on holiday. They come back with their manager password.</li>
             <li>When the host quits, the host's game saves, and every human manager goes back to the start screen.</li>
@@ -511,6 +511,7 @@ a { color: inherit; }
     <div class="release history">
     <div class="panel" data-in>
       <ul>
+        <li><b>0.7.1</b> (13 November 2026): the Network tab shows the host its game code and invite link, with a Copy link button, and the Screen Mode setting (Full or Windowed) works.</li>
         <li><b>0.7.0</b> (12 November 2026): network games with friends online and on your own network, for Mac, Windows and Linux together, with invite links, a game password, Kick, drop in and drop out, clear errors and a connection test. Also a 2026/27 season, real rules for reserve and B teams, real formats for many competitions, and fixes for long games to 2300.</li>
         <li><b>0.6.1</b> (30 October 2026): fixes for crashes at save and start, the Linux AppImage on current systems, season short names, goalkeeper groups in every language, an Open folder button for your saves and faster new games.</li>
         <li><b>0.6.0</b> (29 October 2026): any season from 2001/02 to 2025/26 with its own database, leagues, cups and rules, changing rules in a long game, Best XI with squad depth, a new Setup Game.</li>
@@ -534,18 +535,19 @@ a { color: inherit; }
 <section class="screen" id="next" aria-labelledby="next-title">
   <div class="inner">
     <h2 class="bar" id="next-title">The road to <em>1.0</em></h2>
-    <p class="lead" data-in>Next is 0.7.1 with rule fixes found after 0.7.0. Then 0.8.0 brings the features players asked for most, with a Rules tab of options. Android follows in 0.9.0, and 1.0.0 is the finished game.</p>
+    <p class="lead" data-in>Next is 0.7.2 with rule fixes found after 0.7.0. Then 0.8.0 brings the features players asked for most, with a Rules tab of options. Android follows in 0.9.0, and 1.0.0 is the finished game.</p>
     <div class="plans" data-plans>
       <div class="panel" data-in>
-        <h3 class="sub">Version 0.7.1</h3>
-        <p class="plan-note">Rule fixes after 0.7.0.</p>
+        <h3 class="sub">Version 0.7.2</h3>
+        <p class="plan-note">Rule fixes found after 0.7.0.</p>
         <ul>
           <li>The Polish Ekstraklasa plays the format of each season</li>
           <li>Portugal's limit on non-EU players</li>
           <li>Turkey's European places in the first season</li>
           <li>The Swedish third tier in 2025/26</li>
           <li>The UEFA Cup winner in the news</li>
-          <li>The Screen Mode setting (Full or Windowed)</li>
+          <li>Croatia's count of foreign players</li>
+          <li>The national sides in the Asian Cup finals</li>
         </ul>
       </div>
       <div class="panel" data-in>
@@ -638,7 +640,7 @@ a { color: inherit; }
         <p>On a Mac: <code>~/Library/Application Support/cm0102</code>. On Windows: <code>%APPDATA%\cm0102</code>. On Linux: <code>~/.local/share/cm0102</code>. A new release does not change this folder. Older copies of each save are in the <code>backups</code> folder inside it.</p></details>
       <details><summary>How do I get the 800 × 600 layout back?</summary>
         <p>Open Bosman Edition Options from Setup Game or from Game Options, and set Display mode to Classic. Then start the game again. You can also change the line in <code>settings.txt</code> in the save folder to <code>display = classic</code>.</p></details>
-      <details><summary>Which settings can I change in version 0.7.0?</summary>
+      <details><summary>Which settings can I change in version 0.7.1?</summary>
         <p>Open Bosman Edition Options from Setup Game or from Game Options in the side bar, or open <code>settings.txt</code> in the save folder. Each option has one line in the file, and a switch takes <code>on</code> or <code>off</code>. The defaults are:</p>
         <ul>
           <li><code>display = widescreen</code> draws the game at 1280 × 800, and <code>classic</code> at 800 × 600.</li>
