@@ -146,7 +146,7 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 Blocked by: 2
 Delivers: `GreCup`, `CroCup` (48, no bound), `RusCup`, `TurCup`, `PolLgeCup`, `JapJCup`, `JapEmpCup` and `KorLeagueCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A season game per nation with a grown and a shrunk division plays every cup round
+- [x] A season game per nation with a grown and a shrunk division plays every cup round (`tests/seasons/cup_sizes_run.py`: grown-2010, shrunk-2012, poland-2007, mixed-2020; sizes above the class caps through the seam `RECOMP_CUP_SIZE_TEST` until slices 11, 12 and 14; no K League under 10 in the rules)
 - [ ] The same-save set is equal
 
 ### 7. Split engine
