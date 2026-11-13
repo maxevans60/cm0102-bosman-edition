@@ -273,8 +273,11 @@ static void log_census(const char *when)
  * starts: Eliteserien's year +0x40 still holds the season played, 0x7927f8 adds 1 after 0x792960 and 0x792b40):
  * each second team of the groups whose first team plays below Eliteserien (to 2014) or below the First Division
  * (from 2015) goes to the Third Division [0x9cf738], which the game does not play, through League::
- * relegate_club_to_division 0x6831a0 (as the original sends a club down at 0x792b1d). A second team with no first
- * team found stays.
+ * relegate_club_to_division 0x6831a0 (as the original sends a club down at 0x792b1d). So does a third team (last
+ * word 3 or III), which (a) places below the club's second team. A second team with no first team found stays.
+ * Accepted effect: the game moves no club out of the Third Division (the original's 0x792960 takes only the groups),
+ * so a second team sent there stays there when its club goes back up. The original treats every club of the Third
+ * Division so.
  *
  * The first team of a second team: a pair of PARENTS, else the Norwegian club named as the second team less its last
  * word (case aside), else the one whose plain form is the same (plain_form: the letters folded to a to z, "-" and
@@ -362,9 +365,12 @@ static uint32_t first_team(uint32_t club)
         const char *n = win_str(c + CLUB_NAME);
         if (lower_team(n)) continue;
         if (!strncasecmp(n, want, 52)) return c;
-        if (!by_plain && plain[0]) {
+        if (plain[0]) {
             plain_form(n, 0, other, sizeof other);
-            if (!strcmp(other, plain)) by_plain = c;
+            if (strcmp(other, plain)) continue;
+            if (!by_plain) by_plain = c;
+            else if (log_on()) fprintf(stderr, "recomp: nor second: %.51s: two first teams by the plain form, %.51s "
+                                       "taken, %.51s left\n", name, win_str(by_plain + CLUB_NAME), n);
         }
     }
     return by_plain;
@@ -377,6 +383,21 @@ static int season_starts(uint32_t prm_league)
     const char *v = getenv("RECOMP_TEST_NOR_SECOND_YEAR");
     if (v && atoi(v) > 0) return atoi(v);
     return readable(prm_league) ? (int16_t)rd16(g_mem, prm_league + 0x40u) + 1 : 0;
+}
+
+/* The level of a division, for the log. */
+static const char *level_word(uint32_t d)
+{
+    if (readable(d) && d == comp_of(KEY_PREMIER)) return "Eliteserien";
+    if (readable(d) && d == comp_of(KEY_FIRST)) return "the First Division";
+    return in_group(d) ? "the Second Division" : "a lower division";
+}
+
+/* 1 for a third team (a last word 3 or III): § 2-7 (1) (a) places it below the club's second team, which plays the
+ * Second Division at most, so it never plays the groups. */
+static int third_team(const char *name)
+{
+    return lower_team(name) && !season_clubs_reserve_name(name);
 }
 
 /* 1 when the rule of season y bars a second team from the Second Division while its first team plays div. */
@@ -401,7 +422,7 @@ static void log_pairs(const char *when, int y)
         if (!p) {
             none++;
             fprintf(stderr, "recomp: nor second: %.51s has no first team\n", win_str(club + CLUB_NAME));
-        } else if (pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) {
+        } else if (third_team(win_str(club + CLUB_NAME)) || pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) {
             shared++;
         }
     }
@@ -423,7 +444,13 @@ static void pairs_down(uint32_t self, int y)
         uint32_t club = table + (uint32_t)i * CLUB_SIZE;
         if (!in_group(rd32(g_mem, club + CLUB_DIVISION)) || !barred_club(club)) continue;
         uint32_t p = first_team(club);
-        if (!p || !pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) continue;
+        int is_third = third_team(win_str(club + CLUB_NAME));
+        if (!p || (!is_third && !pair_barred(rd32(g_mem, p + CLUB_DIVISION), y))) {
+            if (log_on())
+                fprintf(stderr, "recomp: nor second: %.51s may play the Second Division (season %d: %s)\n",
+                        win_str(club + CLUB_NAME), y, p ? level_word(rd32(g_mem, p + CLUB_DIVISION)) : "no first team");
+            continue;
+        }
         if (!readable(third)) {
             if (log_on()) fprintf(stderr, "recomp: nor second: %.51s stays: the data has no Third Division\n",
                                   win_str(club + CLUB_NAME));
@@ -434,9 +461,8 @@ static void pairs_down(uint32_t self, int y)
         if (log_on()) {
             uint32_t d = rd32(g_mem, p + CLUB_DIVISION);
             fprintf(stderr, "recomp: nor second: %.51s goes down to the Third Division (season %d: %.51s plays %s, "
-                    "%.51s)\n", win_str(club + CLUB_NAME), y, win_str(p + CLUB_NAME),
-                    d == comp_of(KEY_FIRST) ? "the First Division" : in_group(d) ? "the Second Division"
-                                                                    : "a lower division", readable(d) ? win_str(d + 4) : "none");
+                    "%.51s%s)\n", win_str(club + CLUB_NAME), y, win_str(p + CLUB_NAME), level_word(d),
+                    readable(d) ? win_str(d + 4) : "none", is_third ? ", a third team" : "");
         }
     }
 }
@@ -555,10 +581,37 @@ static void nor_before_status(uint32_t league)
         st_mark(league, barred_club, "nor second", "the First Division", log_on());
 }
 
+/* RECOMP_TEST_NOR_SECOND_UP=1 (tests only, the old-save runs): the best placed second team of the First Division
+ * that has no row of the status takes the status from the lowest placed club that has it, which takes the second
+ * team's status. So an old save holds a second team in a promotion or play-off place with any results. */
+static void test_up(uint32_t league, uint8_t status)
+{
+    static int on = -1;
+    if (on < 0) on = env_is("RECOMP_TEST_NOR_SECOND_UP", "1");
+    int n;
+    uint32_t table = on && league ? table_of(league, &n) : 0;
+    if (!table) return;
+    int second = -1, other = -1;
+    for (int i = 0; i < n; i++) {
+        uint32_t row = table + (uint32_t)i * ROW_SIZE;
+        int barred = barred_club(rd32(g_mem, row));
+        if (barred && g_mem[row + ROW_STATUS] == status) return;      /* a second team has it already */
+        if (barred && second < 0) second = i;
+        if (!barred && g_mem[row + ROW_STATUS] == status) other = i;
+    }
+    if (second < 0 || other < 0) return;
+    uint32_t a = table + (uint32_t)second * ROW_SIZE, b = table + (uint32_t)other * ROW_SIZE;
+    g_mem[b + ROW_STATUS] = g_mem[a + ROW_STATUS];
+    g_mem[a + ROW_STATUS] = status;
+    fprintf(stderr, "recomp: nor second: test: %.51s takes status %d from %.51s\n", win_str(rd32(g_mem, a) + CLUB_NAME),
+            status, win_str(rd32(g_mem, b) + CLUB_NAME));
+}
+
 /* NorFirst::create_play_off_stage 0x790e20, thiscall, no arguments. */
 void o_00790e20(void);
 RT_WRAP(00790e20, nor_second_playoff)
 {
+    if (cpu.ecx == league_of(KEY_FIRST) && rule_on()) test_up(cpu.ecx, ST_PLAYOFF);
     if (cpu.ecx == league_of(KEY_FIRST) && rule_on())
         st_shift_up(cpu.ecx, barred_club, "nor second", "before the play-off", log_on());
     o_00790e20();
@@ -579,6 +632,7 @@ static void test_down(void)
         uint32_t row = table + (uint32_t)i * ROW_SIZE;
         const char *name = win_str(rd32(g_mem, row) + CLUB_NAME);
         size_t len = strnlen(name, 51);
+        if (!len) continue;
         for (const char *p = v; (p = strstr(p, name)) != NULL; p++)
             if ((p == v || p[-1] == ',') && (p[len] == ',' || !p[len])) {
                 g_mem[row + ROW_STATUS] = ST_DOWN;
@@ -605,6 +659,7 @@ static void nor_before_chain(uint32_t self)
     for (int i = 0; was_prm && i < count; i++)
         was_prm[i] = rd32(g_mem, table + (uint32_t)i * CLUB_SIZE + CLUB_DIVISION) == prm;
     test_down();
+    if (switched_off() && !env_is("RECOMP_NOR_SECOND", "off")) test_up(league_of(KEY_FIRST), ST_UP);
     if (rule_on()) {
         uint32_t first = league_of(KEY_FIRST);
         st_shift_up(first, barred_club, "nor second", "at the season change", log_on());
