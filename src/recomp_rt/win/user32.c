@@ -21,6 +21,7 @@
 #include "options.h"
 #include "winfit.h"
 #include "winscale.h"
+#include "press_hold.h"
 #include "net_core.h"
 #include "invite.h"
 
@@ -808,9 +809,34 @@ static int wait_done(Step *s, uint64_t now)
         char state[256];
         waits_describe(state, sizeof state);
         fprintf(stderr, "recomp: script: wait %s timed out after %d ms. Now: %s\n", s->text, s->a, state);
+        /* RECOMP_SCRIPT_SOFT_WAIT=1 (test runs only, quick_click_run.py): a wait that times out goes on, so one
+         * run can count the clicks that did not act. */
+        const char *soft = getenv("RECOMP_SCRIPT_SOFT_WAIT");
+        if (soft && !strcmp(soft, "1")) {
+            fprintf(stderr, "recomp: script missed %s\n", s->text);
+            waiting = 0;
+            return 1;
+        }
         script_exit(3);
     }
     return 0;
+}
+
+/* The presses of the real mouse, left and right (press_hold.h): the up of a short press waits for the game. */
+static PressHold real_press[2];
+
+/* The waiting up of button bit goes to the game, where the pointer is now. */
+static void release_press(uint32_t bit)
+{
+    buttons &= ~(int)bit;
+    post(bit == 1 ? WM_LBUTTONUP : WM_RBUTTONUP, (uint32_t)buttons, mouse_lparam());
+}
+
+static void release_due_presses(void)
+{
+    uint64_t now = SDL_GetTicks64();
+    for (uint32_t bit = 1; bit <= 2; bit++)
+        if (press_hold_due(&real_press[bit - 1], now)) release_press(bit);
 }
 
 static SDL_Keycode swallow_key = SDLK_UNKNOWN;    /* a key that did the work of an option */
@@ -855,10 +881,24 @@ static void handle_event(SDL_Event *e)
         }
         uint32_t bit = e->button.button == SDL_BUTTON_LEFT ? 1u : e->button.button == SDL_BUTTON_RIGHT ? 2u : 0u;
         if (!bit) break;
+        PressHold *h = &real_press[bit - 1];
+        if (key_click.on) {                    /* the click of a key runs: drop the event, keep the button state */
+            if (down) buttons |= (int)bit; else buttons &= ~(int)bit;
+            h->pressed = h->up_waits = 0;
+            break;
+        }
+        if (down && h->up_waits) {             /* a new press: the up of the last one goes first */
+            h->up_waits = h->pressed = 0;
+            release_press(bit);
+        }
+        if (!down && press_hold_up(h, SDL_GetTicks64())) {   /* a short press: the up waits for the game */
+            if (getenv("RECOMP_SCREEN_LOG")) fprintf(stderr, "recomp: click up waits for the game (%d polls)\n", h->polls);
+            break;
+        }
         if (down) buttons |= (int)bit; else buttons &= ~(int)bit;
-        if (key_click.on) break;               /* the click of a key runs: drop the event, keep the button state */
         uint32_t msg = bit == 1 ? (down ? WM_LBUTTONDOWN : WM_LBUTTONUP) : (down ? WM_RBUTTONDOWN : WM_RBUTTONUP);
         post_mouse(msg, e->button.x, e->button.y);
+        if (down) press_hold_down(h, q_tail);
         break;
     }
     case SDL_MOUSEWHEEL:
@@ -1019,6 +1059,27 @@ static void run_script(void)
             script_char.polls = 0;
             script_char.at = SDL_GetTicks64();
         }
+        else if (!strcmp(s->action, "tap") || !strcmp(s->action, "sdldown") || !strcmp(s->action, "sdlup")) {
+            /* Test runs only (quick_click_run.py): left button events through SDL, as from a mouse or a trackpad,
+             * so they take the path of a real click (handle_event). tap gives the down and the up in one batch. */
+            SDL_Event ev;
+            memset(&ev, 0, sizeof ev);
+            ev.button.windowID = window ? SDL_GetWindowID(window) : 0;
+            ev.button.button = SDL_BUTTON_LEFT;
+            ev.button.clicks = 1;
+            ev.button.x = s->a;
+            ev.button.y = s->b;
+            if (strcmp(s->action, "sdlup")) {
+                ev.type = SDL_MOUSEBUTTONDOWN;
+                ev.button.state = SDL_PRESSED;
+                SDL_PushEvent(&ev);
+            }
+            if (strcmp(s->action, "sdldown")) {
+                ev.type = SDL_MOUSEBUTTONUP;
+                ev.button.state = SDL_RELEASED;
+                SDL_PushEvent(&ev);
+            }
+        }
         else if (!strcmp(s->action, "press")) press_key(s->text);
         else if (!strcmp(s->action, "resize")) {
             SDL_SetWindowSize(window, s->a, s->b);
@@ -1041,6 +1102,7 @@ void win_poll_events(void)
     last_poll = now;
     if (net_session_quit_overdue()) win_quit_now();
     end_click_for_key();
+    release_due_presses();
     SDL_Event e;
     while (SDL_PollEvent(&e))
         handle_event(&e);
@@ -1239,8 +1301,11 @@ RT_WRAP(0055f620, input_poll)
         replay_press = press_count;
         wr32(g_mem, 0xb67a34u, 1);
     }
+    uint32_t head_in = q_head;
     o_0055f620();
     if (replay) wr32(g_mem, 0xb67a34u, 0);
+    press_hold_poll(&real_press[0], head_in);
+    press_hold_poll(&real_press[1], head_in);
     options_screen_after_poll(poll_ret, poll_display, cpu.eax & 0xffffu);   /* the options box item */
     names_after_poll();
     if (key_down_in) key_click.polls++;
