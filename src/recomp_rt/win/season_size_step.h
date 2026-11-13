@@ -26,7 +26,7 @@ typedef struct {
     int nation;         /* any number: the step takes clubs with no division only of the division's nation */
     int rep;            /* reputation: the order of the clubs with no division */
     int up_ok;          /* 0: never moves up by the step (reserve or B side, a second-team bar) */
-    int down_ok;        /* 0: never leaves the leagues by the step (a club with a human manager) */
+    int down_ok;        /* 0: never goes down by the step (a club with a human manager) */
 } StepClub;
 
 typedef struct {

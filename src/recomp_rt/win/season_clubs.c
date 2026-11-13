@@ -884,9 +884,9 @@ static void move_clubs(int season)
          * lower division with a list, 1 a club with no division, 2 a club of a spare division, 3 a club of a lower
          * division with no list. Groups 4 and 2 take the club with the highest reputation first (see FILL_BY_REP). */
         static const int kind1_groups[] = {0, 4, 1, 2, 3, 5, 6};
-        /* D12: a grown class (season_sizes.h) plays with the clubs it has, so it takes no reserve side of groups 5
-         * and 6. Any other class needs every place (its table and arrays are made for its count). */
-        int kind1_count = season_sizes_grown(class_file(d->name)) ? 5 : 7;
+        /* D12: a class that plays with fewer clubs (season_sizes_plays_short) takes no reserve side of groups 5
+         * and 6. A class with a floor, or outside the size table, needs every place (open item 105). */
+        int kind1_count = season_sizes_plays_short(class_file(d->name)) ? 5 : 7;
         for (int kind = 0; kind < 2; kind++) {
             /* Open item 105: a class of CLASS_SIZE needs every place (BelSecond's period stages expect 10, 12 and
              * 12 matches a club, BelSecond::create_period_stage 0x4204d0 at 0x4205b4..0x4205cb). A new division of

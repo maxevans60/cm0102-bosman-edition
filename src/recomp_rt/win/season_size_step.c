@@ -63,7 +63,7 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
             /* The worst place first, only the clubs of its last table that are still in it. */
             for (int r = v->nrows - 1; r >= 0 && surplus > 0; r--) {
                 int c = v->rows[r];
-                if (c < 0 || c >= nclub || club[c].div != d) continue;
+                if (c < 0 || c >= nclub || club[c].div != d || !club[c].down_ok) continue;
                 int to = STEP_NONE;
                 if (open) {
                     /* The division below with the most need. */
@@ -75,7 +75,7 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
                         int need = div[l].want - count_in(club, nclub, l);
                         if (to == -2 || need > most) to = l, most = need;
                     }
-                } else if (v->nlower || !club[c].down_ok) {
+                } else if (v->nlower) {
                     continue;
                 }
                 if (add_move(out, max, &n, club, c, to)) surplus--;

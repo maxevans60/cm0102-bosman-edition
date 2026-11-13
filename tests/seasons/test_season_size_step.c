@@ -102,6 +102,15 @@ static void shrink(void)
     CHECK(moved(n, b + 18, 1, STEP_NONE) && moved(n, b + 17, 1, STEP_NONE), "shrink: B's 19th and 18th leave");
     CHECK(club[b + 19].div == 1, "shrink: the human club stays");
     CHECK(n == 4, "shrink: %d moves", n);
+
+    /* A club with a human manager in a division above the lowest is not sent down either: the next worst goes. */
+    reset();
+    a = add_division(0, 18, 20);
+    add_division(1, 20, 20);
+    below(0, 1);
+    club[a + 19].down_ok = 0;
+    n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(club[a + 19].div == 0 && moved(n, a + 18, 0, 1) && moved(n, a + 17, 0, 1), "shrink: the human club stays up");
 }
 
 /* A division below that made its new table, or that takes no part, gives no club: A stays short and says so. */

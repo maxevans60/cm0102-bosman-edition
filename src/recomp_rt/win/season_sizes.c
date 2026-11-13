@@ -189,6 +189,7 @@ static const char *record_name(uint32_t obj)
 /* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
 static void size_step_run(uint32_t trigger);
 static void step_note_pair(uint32_t upper, uint32_t lower);
+static int row_reachable(uint32_t obj, const char *file);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
  * original's count stays. */
@@ -210,8 +211,6 @@ static const SeasonGrown *grown_of(const char *file)
         if (!strcmp(season_grown[k].file, file)) return &season_grown[k];
     return NULL;
 }
-
-int season_sizes_grown(const char *file) { return grown_of(file) != NULL; }
 
 /* The objects whose template had no room for their count this edition (D4): they keep the class's count. */
 #define MAX_KEPT 16
@@ -775,7 +774,10 @@ RT_WRAP(00689c80, promote_relegate)
         int ll = floor_of(fl_name) > MIN_CLUBS * 4 ? floor_of(fl_name) : MIN_CLUBS * 4;
         int nu = clubs_in_division(upper) - down + up, nl = clubs_in_division(lower) + down - up;
         int fits = nu >= lu && nu <= cu && nl >= ll && nl <= cl;
-        single = cu > 0 && cl > 0 && (fits || !season_change_is_creating());
+        /* Only when both new rows are counts that the classes hold: a row above the cap (Serie A 20 in 2004/05 with a
+         * class of 18) would leave the step to send down clubs that finished safe (review 2). */
+        int reach = row_reachable(upper, fu_name) && row_reachable(lower, fl_name);
+        single = cu > 0 && cl > 0 && (fits || (reach && !season_change_is_creating()));
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
                             "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
@@ -890,6 +892,19 @@ static int step_want(uint32_t obj, const char *file, int year)
     return n;
 }
 
+/* 1 when the row of the next edition of a division is a count that its class holds (within its cap and floor). */
+static int row_reachable(uint32_t obj, const char *file)
+{
+    int cap = season_ita_cap(obj, cap_of(file));
+    const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
+    return cap > 0 && r && r->clubs >= MIN_CLUBS && r->clubs <= cap && r->clubs >= floor_of(file);
+}
+
+int season_sizes_plays_short(const char *file)
+{
+    return sizes_on() && size_file(file) && cap_of(file) > 0 && floor_of(file) == 0;
+}
+
 static uint32_t current_division(uint32_t club) { return rd32(g_mem, club + CLUB_DIVISION); }
 
 static int is_human(uint32_t club)
@@ -990,9 +1005,9 @@ static void size_step_run(uint32_t trigger)
         club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
         if (rt_unwinding) goto done;
     }
-    /* A club with a human manager never leaves the leagues by the step (the lowest divisions send to no division). */
+    /* The step never sends down a club with a human manager (review 2: a club that finished safe). */
     for (int d = 0; d < ndiv; d++)
-        for (int r = 0; !div[d].nlower && r < div[d].nrows; r++) {
+        for (int r = 0; r < div[d].nrows; r++) {
             club[div[d].rows[r]].down_ok = !is_human(at[div[d].rows[r]]);
             if (rt_unwinding) goto done;
         }
