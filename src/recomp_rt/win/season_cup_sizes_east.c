@@ -43,7 +43,7 @@
  * The test seam RECOMP_CUP_SIZE_TEST ("gre_prm:+2,jap_j2:-3", season_cup_sizes_east.h) changes the clubs that a
  * cup sees in a division while it collects: +n clubs of the nation from no division of the cup, by reputation,
  * -n of its clubs. They are back in their own divisions after the call. With RECOMP_SIZE_LOG=1 each cup logs its
- * places, and the season change logs the winner of each edition that ends (season_kind_cup_sizes_east).
+ * places and the last winner in the history.
  *
  * The base game and RECOMP_LEAGUE_SIZES=off keep every cup as the original (Q152). */
 #include "win.h"
@@ -240,7 +240,27 @@ static int place_count(uint32_t cup, int pointers)
     return n < 0 ? 0 : n > 512 ? 512 : n;
 }
 
-/* "recomp: cup sizes: <file> <year>: <clubs> of <places> places (<division> <in the cup>/<clubs>, ...)". */
+/* The latest row of a cup in the history (club_comp_history, as season_dates.c log_comp reads it): its year, and
+ * the winner's name in name (or "none"). */
+static int last_winner(uint32_t cup, char *name, size_t size)
+{
+    uint32_t rec = rd32(g_mem, cup + COMP_RECORD), rows = rd32(g_mem, HISTORY);
+    uint32_t n = rd32(g_mem, HISTORY_COUNT), table = rd32(g_mem, CLUBS), winner = 0;
+    int year = 0;
+    for (uint32_t i = 0; readable(rows) && i < n && i < 1000000u; i++) {
+        uint32_t r = rows + i * HISTORY_SIZE;
+        if (rd32(g_mem, r + 4) != rec || (int16_t)rd16(g_mem, r + 8) < year) continue;
+        year = (int16_t)rd16(g_mem, r + 8);
+        winner = rd32(g_mem, r + 0xa);
+    }
+    int known = readable(table) && winner >= table && winner < table + (uint32_t)club_count() * CLUB_SIZE;
+    snprintf(name, size, "%.50s", known ? win_str(winner + 4) : "none");
+    return year;
+}
+
+/* "recomp: cup sizes: <file> <year>: <clubs> of <places> places (<division> <in the cup>/<clubs>, ...)<more>; last
+ * winner <club> (history <year>)". A collect starts an edition, so the history holds the winner of the edition
+ * before: tests/seasons/cup_sizes_run.py reads that each edition of the run ends with a winner. */
 static void log_counts(uint32_t cup, int pointers, const CupDivision *divs, int ndivs, const char *more)
 {
     if (!logging()) return;
@@ -258,8 +278,11 @@ static void log_counts(uint32_t cup, int pointers, const CupDivision *divs, int 
         at += snprintf(text + at, sizeof text - (size_t)at, "%s%s %d/%d", k ? ", " : "", divs[k].file, in,
                        clubs_of_key(divs[k].key));
     }
-    fprintf(stderr, "recomp: cup sizes: %s %d: %d of %d places (%s)%s\n", season_change_file(cup),
-            (int16_t)rd16(g_mem, cup + COMP_YEAR), filled, places, text, more ? more : "");
+    char winner[64];
+    int history = last_winner(cup, winner, sizeof winner);
+    fprintf(stderr, "recomp: cup sizes: %s %d: %d of %d places (%s)%s; last winner %s (history %d)\n",
+            season_change_file(cup), (int16_t)rd16(g_mem, cup + COMP_YEAR), filled, places, text, more ? more : "",
+            winner, history);
 }
 
 /* The places of a list (+0xa7) that hold a club. */
@@ -619,44 +642,3 @@ RT_WRAP(0066cf20, kor_league_cup_teams)
     log_counts(cup, 1, kor_divs, 1, more);
     restore_moved();
 }
-
-/* ---- The winner of each edition that ends (RECOMP_SIZE_LOG=1, the season tests) ---- */
-
-static int east_cup(const char *file)
-{
-    static const char *const files[] = {"gre_cup", "cro_cup", "rus_cup", "tur_cup", "pol_lge_cup", "jap_j_cup",
-                                        "jap_emp_cup", "kor_league_cup"};
-    for (int i = 0; file && i < (int)(sizeof files / sizeof files[0]); i++)
-        if (!strcmp(file, files[i])) return 1;
-    return 0;
-}
-
-/* Before start_new_season: the latest row of the cup in the history (club_comp_history, as season_dates.c
- * log_comp reads it). */
-static void east_before(const SeasonChange *c)
-{
-    if (!logging() || !c->comp || !east_cup(c->file)) return;
-    uint32_t rec = rd32(g_mem, c->comp + COMP_RECORD), rows = rd32(g_mem, HISTORY);
-    uint32_t n = rd32(g_mem, HISTORY_COUNT), table = rd32(g_mem, CLUBS);
-    int year = 0;
-    uint32_t winner = 0;
-    for (uint32_t i = 0; readable(rows) && i < n && i < 1000000u; i++) {
-        uint32_t r = rows + i * HISTORY_SIZE;
-        if (rd32(g_mem, r + 4) != rec || (int16_t)rd16(g_mem, r + 8) < year) continue;
-        year = (int16_t)rd16(g_mem, r + 8);
-        winner = rd32(g_mem, r + 0xa);
-    }
-    int known = readable(table) && winner >= table && winner < table + (uint32_t)club_count() * CLUB_SIZE;
-    fprintf(stderr, "recomp: cup sizes: %s %d ends: winner %.50s (history %d)\n", c->file,
-            (int16_t)rd16(g_mem, c->comp + COMP_YEAR), known ? win_str(winner + 4) : "none", year);
-}
-
-/* On the update day, a cup that did not start a new edition (c->started 0) has not finished. */
-static void east_after(const SeasonChange *c)
-{
-    if (!logging() || !c->comp || c->started || !east_cup(c->file)) return;
-    fprintf(stderr, "recomp: cup sizes: %s %d: no new edition on the update day\n", c->file,
-            (int16_t)rd16(g_mem, c->comp + COMP_YEAR));
-}
-
-const SeasonRuleKind season_kind_cup_sizes_east = {"cup sizes east", NULL, NULL, NULL, NULL, east_before, east_after};

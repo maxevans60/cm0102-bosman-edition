@@ -17,7 +17,10 @@ RECOMP_CUP_SIZE_TEST: the cup sees that many clubs in the division while it coll
              division of the run holds the clubs of RUNS, and every club of each division is in the cup (the K League
              Cup: 10 clubs, its best clubs out); a list of 44 or 10 pointers (GreCup, KorLeagueCup) is full;
     filled   a list with empty places gets a club for each place before the draw (season_cup_entrants.c);
-    winner   each cup has an edition that ends with a winner in the history, and none that does not start again.
+    room     a division that takes the places left (J2 in the J.League Cup, the Polish second tier) has
+             min(its clubs, places less the other division) in the cup;
+    winner   each collect line names the last winner in the history: a later collect of the run names a winner of
+             a later year, so the edition that the run played ended with a winner.
 A run takes about an hour at load 15. Exit code 1 on a failure.
 """
 import os
@@ -36,6 +39,8 @@ CUPS = {"gre_cup": ("gre_prm", "gre_second"), "cro_cup": ("cro_a1", "cro_a2a", "
         "pol_lge_cup": ("pol_first", "pol_second"), "jap_j_cup": ("jap_j1", "jap_j2"),
         "jap_emp_cup": ("jap_j1", "jap_j2"), "kor_league_cup": ("kor_league",)}
 POINTER_CUPS = {"gre_cup": 44, "kor_league_cup": 10}
+# The division of a cup that takes the places that the other leaves (JapJCup 0x665aba, PolLgeCup 0x7cae01).
+ROOM = {"jap_j_cup": ("jap_j2", "jap_j1"), "pol_lge_cup": ("pol_second", "pol_first")}
 
 # run: (start year, last season, nations, seam, {division: clubs at the first collect}, what it shows).
 RUNS = {
@@ -52,17 +57,17 @@ RUNS = {
     "poland-2007": (2007, 2008, ["Poland"], "pol_first:+2,pol_second:-3", {"pol_first": 18, "pol_second": 15},
                     "the Polish League Cup with an Ekstraklasa of 18 (grown) and a second tier of 15 (shrunk): one "
                     "place empty before the draw"),
-    "mixed-2020": (2020, 2021, ["Croatia", "Turkey", "Greece"], "cro_a2a:+2,tur_first:+3",
+    "mixed-2020": (2020, 2021, ["Croatia", "Turkey", "Greece"], "cro_a2a:+2,tur_first:+3,gre_second:-2",
                    {"cro_a1": 10, "cro_a2a": 18, "tur_first": 21, "gre_second": 12},
                    "grown: the Croatian second tier 18 and the Super Lig 21 (rows of 2020); shrunk: the Croatian First "
-                   "Division 10 and the Greek second tier 12 (rows of 2020)"),
+                   "Division 10 (row of 2020) and the Greek second tier 12 (row of 2020; the database holds 14 until "
+                   "the club moves of slice 3)"),
 }
 NATION_CUPS = {"Greece": ["gre_cup"], "Croatia": ["cro_cup"], "Russia": ["rus_cup"], "Turkey": ["tur_cup"],
                "Poland": ["pol_lge_cup"], "Japan": ["jap_j_cup", "jap_emp_cup"], "South Korea": ["kor_league_cup"]}
 
-LINE = re.compile(r"recomp: cup sizes: (\w+) (-?\d+): (\d+) of (\d+) places \(([^)]*)\)(.*)$")
-ENDS = re.compile(r"recomp: cup sizes: (\w+) (-?\d+) ends: winner (.*) \(history (-?\d+)\)$")
-NONE = re.compile(r"recomp: cup sizes: (\w+) (-?\d+): no new edition")
+LINE = re.compile(r"recomp: cup sizes: (\w+) (-?\d+): (\d+) of (\d+) places \(([^)]*)\)(.*); last winner (.*) "
+                  r"\(history (-?\d+)\)$")
 FILLED = re.compile(r"recomp: cup entrants: (\w+) \(.*\) (-?\d+): (\d+) of (\d+) places empty .*, (\d+) filled")
 
 
@@ -74,9 +79,9 @@ def left_out(more):
 
 
 def parse(log):
-    """(collects {file: [(year, filled, places, {division: (in, clubs)}, more)]}, ends {file: [(year, winner,
-    history)]}, unfinished {file: [year]}, fills {file: [(year, empty, filled)]})."""
-    collects, ends, unfinished, fills = {}, {}, {}, {}
+    """(collects {file: [(year, filled, places, {division: (in, clubs)}, more, winner, history year)]}, fills
+    {file: [(year, empty, filled)]})."""
+    collects, fills = {}, {}
     for line in log.split("\n"):
         m = LINE.search(line)
         if m:
@@ -87,26 +92,18 @@ def parse(log):
                 if a.isdigit() and b.isdigit():
                     divs[name] = (int(a), int(b))
             collects.setdefault(m.group(1), []).append((int(m.group(2)), int(m.group(3)), int(m.group(4)), divs,
-                                                        m.group(6)))
-            continue
-        m = ENDS.search(line)
-        if m:
-            ends.setdefault(m.group(1), []).append((int(m.group(2)), m.group(3), int(m.group(4))))
-            continue
-        m = NONE.search(line)
-        if m:
-            unfinished.setdefault(m.group(1), []).append(int(m.group(2)))
+                                                        m.group(6), m.group(7), int(m.group(8))))
             continue
         m = FILLED.search(line)
         if m:
             fills.setdefault(m.group(1), []).append((int(m.group(2)), int(m.group(3)), int(m.group(5))))
-    return collects, ends, unfinished, fills
+    return collects, fills
 
 
 def faults(log, run):
     _year, _last, nations, _seam, expect, _what = RUNS[run]
     out = [x.strip() for x in log.split("\n") if "recomp: message box from" in x]
-    collects, ends, unfinished, fills = parse(log)
+    collects, fills = parse(log)
     for nation in nations:
         for cup in NATION_CUPS[nation]:
             got = collects.get(cup, [])
@@ -118,9 +115,11 @@ def faults(log, run):
                 held = first.get(div, (0, 0))[1] + left_out(got[0][4])
                 if div in expect and held != expect[div]:
                     out.append(f"{cup} {got[0][0]}: {div} holds {held} clubs, want {expect[div]}")
-            for year, filled, places, divs, more in got:
+            for year, filled, places, divs, more, _w, _h in got:
                 for div, (inside, clubs) in divs.items():
                     want = clubs
+                    if cup in ROOM and div == ROOM[cup][0]:
+                        want = min(clubs, places - divs.get(ROOM[cup][1], (0, 0))[1])
                     if cup == "kor_league_cup" and inside != 10:
                         out.append(f"{cup} {year}: {inside} K League clubs in the cup, want 10")
                     if cup == "cro_cup" and "left out" in more:
@@ -132,43 +131,52 @@ def faults(log, run):
             for year, empty, filled in fills.get(cup, []):
                 if filled != empty:
                     out.append(f"{cup} {year}: {empty} empty places, {filled} filled")
-            won = [e for e in ends.get(cup, []) if e[1] != "none"]
-            if not won:
-                out.append(f"{cup}: no edition ends with a winner ({ends.get(cup, [])})")
-            for year in unfinished.get(cup, []):
-                out.append(f"{cup} {year}: no new edition on the update day")
+            first_history = got[0][6]
+            if not any(h > first_history and w != "none" for *_x, w, h in got[1:]):
+                out.append(f"{cup}: no later collect names a winner after history {first_history} "
+                           f"({[(g[0], g[5], g[6]) for g in got]})")
     return out
 
 
 def self_test():
     log = "\n".join([
-        "recomp: cup sizes: gre_cup 2010: 44 of 44 places (gre_prm 16/16, gre_second 18/18), 10 lower picks",
-        "recomp: cup sizes: kor_league_cup 2010: 10 of 10 places (kor_league 10/10), the 6 best by last place left out",
-        "recomp: cup sizes: rus_cup 2010: 47 of 48 places (rus_prm 16/16, rus_first 20/20)",
+        "recomp: cup sizes: gre_cup 2010: 44 of 44 places (gre_prm 16/16, gre_second 18/18), 10 lower picks; "
+        "last winner AEK (history 2010)",
+        "recomp: cup sizes: kor_league_cup 2010: 10 of 10 places (kor_league 10/10), the 6 best by last place left "
+        "out; last winner none (history 0)",
+        "recomp: cup sizes: rus_cup 2010: 47 of 48 places (rus_prm 16/16, rus_first 20/20); last winner X (history "
+        "2010)",
         "recomp: cup entrants: rus_cup (Russian Cup) 2010: 1 of 48 places empty (the first is place 0), 1 filled",
-        "recomp: cup sizes: tur_cup 2010: 63 of 64 places (tur_first 18/18, tur_second 16/17)",
-        "recomp: cup sizes: gre_cup 2011 ends: winner Olympiakos (history 2011)",
-        "recomp: cup sizes: rus_cup 2011 ends: winner none (history 0)",
-        "recomp: cup sizes: tur_cup 2011: no new edition on the update day",
+        "recomp: cup sizes: tur_cup 2010: 63 of 64 places (tur_first 18/18, tur_second 16/17); last winner Y "
+        "(history 2010)",
+        "recomp: cup sizes: jap_j_cup 2010: 28 of 28 places (jap_j1 18/18, jap_j2 10/20); last winner Z (history "
+        "2009)",
+        "recomp: cup sizes: gre_cup 2011: 44 of 44 places (gre_prm 16/16, gre_second 18/18), 10 lower picks; "
+        "last winner Olympiakos (history 2011)",
+        "recomp: cup sizes: rus_cup 2011: 48 of 48 places (rus_prm 16/16, rus_first 20/20); last winner X (history "
+        "2010)",
+        "recomp: cup sizes: jap_j_cup 2011: 28 of 28 places (jap_j1 18/18, jap_j2 9/20); last winner Q (history "
+        "2010)",
     ])
-    collects, ends, unfinished, fills = parse(log)
+    collects, fills = parse(log)
     bad = []
-    if collects["gre_cup"][0][3] != {"gre_prm": (16, 16), "gre_second": (18, 18)}:
+    if collects["gre_cup"][0][3] != {"gre_prm": (16, 16), "gre_second": (18, 18)} or collects["gre_cup"][1][5:] != (
+            "Olympiakos", 2011):
         bad.append(("parse", collects["gre_cup"]))
-    if fills.get("rus_cup") != [(2010, 1, 1)] or unfinished.get("tur_cup") != [2011]:
-        bad.append(("fills", fills, unfinished))
-    if ends.get("gre_cup") != [(2011, "Olympiakos", 2011)]:
-        bad.append(("ends", ends))
-    RUNS["self"] = (2010, 2011, ["Greece", "Russia", "Turkey", "South Korea"], "",
+    if fills.get("rus_cup") != [(2010, 1, 1)]:
+        bad.append(("fills", fills))
+    RUNS["self"] = (2010, 2011, ["Greece", "Russia", "Turkey", "South Korea", "Japan"], "",
                     {"gre_prm": 16, "rus_first": 22, "kor_league": 16}, "")
     f = faults(log, "self")
     del RUNS["self"]
     want = ["rus_cup 2010: rus_first holds 20 clubs, want 22", "tur_cup 2010: 16 of the 17 clubs of tur_second",
-            "rus_cup: no edition ends with a winner", "tur_cup 2011: no new edition", "kor_league_cup: no edition"]
+            "rus_cup: no later collect names a winner", "tur_cup: no later collect", "kor_league_cup: no later",
+            "jap_j_cup 2011: 9 of the 20 clubs of jap_j2", "jap_emp_cup: no collect line"]
     for w in want:
         if not any(x.startswith(w) for x in f):
             bad.append(("missing", w, f))
-    if any(x.startswith("gre_cup") or x.startswith("kor_league_cup 2010") for x in f):
+    if any(x.startswith("gre_cup") or x.startswith("kor_league_cup 2010") or x.startswith("jap_j_cup 2010")
+           or x.startswith("jap_j_cup:") for x in f):
         bad.append(("extra", f))
     for b in bad:
         print("FAIL self-test", b)

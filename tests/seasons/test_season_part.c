@@ -61,7 +61,7 @@ void season_playoffs_release(void) {}
 const SeasonRuleKind season_kind_club_cups, season_kind_club_world, season_kind_comps, season_kind_cup_breaks,
     season_kind_cups, season_kind_divisions, season_kind_intl, season_kind_ita_serie_c, season_kind_names,
     season_kind_nation, season_kind_new_cups, season_kind_playoffs, season_kind_sizes, season_kind_subs,
-    season_kind_uefa, season_kind_cup_sizes_east;
+    season_kind_uefa;
 
 uint32_t season_change_part_size(void);
 void season_change_part_write(uint8_t *out);

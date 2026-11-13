@@ -44,7 +44,6 @@
 /* The rule kinds, in the order they run. Each later slice adds its kinds here (season_change.h). */
 extern const SeasonRuleKind season_kind_names;
 extern const SeasonRuleKind season_kind_sizes;
-extern const SeasonRuleKind season_kind_cup_sizes_east;  /* 0.7.2 sizes slice 6: season_cup_sizes_east.c */
 extern const SeasonRuleKind season_kind_subs;
 extern const SeasonRuleKind season_kind_nation;
 extern const SeasonRuleKind season_kind_cups;
@@ -69,7 +68,6 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_cup_breaks,            /* slice 21b: domestic cups that are not held in some seasons */
     &season_kind_new_cups,              /* slice 21c: the seasons of the new domestic cups */
     &season_kind_sizes,                 /* slice 18: news of league sizes and places (season_sizes.c) */
-    &season_kind_cup_sizes_east,        /* 0.7.2 sizes slice 6: the cup winners for the size log */
     &season_kind_uefa,                  /* slice 22: formats of the UEFA club competitions */
     &season_kind_club_world,            /* slice 26: seasons of the club competitions outside UEFA */
     &season_kind_club_cups,             /* slice 26c: years of the new club cups (season_club_cups.c) */
