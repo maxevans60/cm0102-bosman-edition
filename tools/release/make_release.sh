@@ -4,7 +4,8 @@
 # Usage:
 #   tools/release/make_release.sh --game <clean files> --data-3960 <folder> --data-3965 <folder>
 #       --sdl2-mac <folder> --sdl2-mingw <folder> --site-assets <folder> --season-dbs <folder> --own-dbs <folder>
-#       --run-set <folder> [--publish]
+#       --run-set <folder> [--program <cm0102_recomp>] [--publish]
+#   tools/release/make_release.sh --check-set --run-set <folder>
 #
 #   --game         the clean files (tools/clean_files/make_clean_files.py). The script checks them
 #                  against tools/clean_files/manifest.tsv.
@@ -26,10 +27,17 @@
 #   --site-assets  the site's pictures (logo, screenshots). They go into site-assets.zip on the release,
 #                  where the Pages workflow fetches them, so git never holds them. logo.png also gives
 #                  the intro logo, Data/bosman_logo.rgn of each download (tools/release/make_intro_logo.py).
-#   --run-set      the --out folder of a run of the whole future run set (tests/seasons/future/run_set.py, 0.6.2 slice
-#                  15). Before any build the script runs its release check (run_set.py --verify) and stops when a
-#                  game of the set did not pass, when the checker of this checkout finds a fault on a save the run
-#                  kept, or when the game code changed after the run's commit (Q12). Not needed with --stage-only.
+#   --run-set      the --out folder of a run of the release set (tests/seasons/future/run_set.py, the 34 rows of the
+#                  release tests from 0.7.1). Before any build the script lists the set with the seed of this release
+#                  (version 0.M.P gives the seed M*10+P: 0.7.2 gives 72), runs its release check (run_set.py --verify
+#                  --seed) and stops when a game of the set did not pass, when the run used another seed, when the
+#                  checker of this checkout finds a fault on a save the run kept, or when the game code changed after
+#                  the run's commit (Q12). Then it runs online release test 1 (tests/online/release_mac_run.py: two
+#                  and four games through the real lobby and relay) and stops unless it passes. Not needed with
+#                  --stage-only.
+#   --program      the cm0102_recomp for online release test 1. Default build/cm0102_recomp of this checkout.
+#   --check-set    a dry run: print the seed and the rows of the release set, run the release check on --run-set and
+#                  stop (no build, no online test). It needs only --run-set. Exit 1 when the run does not pass.
 #   --stage-only   stop after the game folder and its manifest are staged in build/release-<version> (before the
 #                  Mac, Windows and Linux builds). --sdl2-mac and --sdl2-mingw are then not needed. For tests.
 #   --publish      tag v<version>, push the tag and upload the release. Without it the script only builds
@@ -42,7 +50,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 GH_REPO="maxevans60/cm0102-bosman-edition"
 GAME=""; DATA_3960=""; DATA_3965=""; SDL_MAC=""; SDL_MINGW=""; SITE=""; SEASON_DBS=""; OWN_DBS=""; RUN_SET=""; STAGE_ONLY=0
-PUBLISH=0
+PUBLISH=0; CHECK_SET=0; PROGRAM=""
 while [ $# -gt 0 ]; do
     case "$1" in
         --game) GAME="$2"; shift 2 ;;
@@ -54,6 +62,8 @@ while [ $# -gt 0 ]; do
         --season-dbs) SEASON_DBS="$2"; shift 2 ;;
         --own-dbs) OWN_DBS="$2"; shift 2 ;;
         --run-set) RUN_SET="$2"; shift 2 ;;
+        --program) PROGRAM="$2"; shift 2 ;;
+        --check-set) CHECK_SET=1; shift ;;
         --stage-only) STAGE_ONLY=1; shift ;;
         --publish) PUBLISH=1; shift ;;
         *) echo "make_release.sh: unknown option $1" >&2; exit 2 ;;
@@ -61,23 +71,43 @@ while [ $# -gt 0 ]; do
 done
 NEEDED="GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE SEASON_DBS OWN_DBS RUN_SET"
 [ "$STAGE_ONLY" = 1 ] && NEEDED="GAME DATA_3960 DATA_3965 SITE SEASON_DBS OWN_DBS"
+[ "$CHECK_SET" = 1 ] && NEEDED="RUN_SET"
 for v in $NEEDED; do
     [ -n "${!v}" ] || { echo "make_release.sh: give --$(echo $v | tr 'A-Z_' 'a-z-' | sed 's/sdl-/sdl2-/')." >&2; exit 2; }
 done
-[ -f "$GAME/cm0102.exe" ] || { echo "make_release.sh: $GAME has no cm0102.exe." >&2; exit 2; }
+[ "$CHECK_SET" = 1 ] || [ -f "$GAME/cm0102.exe" ] || { echo "make_release.sh: $GAME has no cm0102.exe." >&2; exit 2; }
 
 VERSION="$(sed -n 's/^project([^)]*VERSION \([0-9][0-9.]*\).*/\1/p' "$REPO/CMakeLists.txt" | head -n 1)"
 TAG="v$VERSION"
+# The seed of the release tests (spec R8): each row plays this seed, so a release is repeatable and the next release
+# plays other games. Version 0.M.P gives M*10+P: 0.7.1 gives 71, 0.7.2 gives 72.
+SEED="$(echo "$VERSION" | awk -F. '{ print $2 * 10 + $3 }')"
+if [ "$CHECK_SET" = 1 ]; then
+    echo "make_release.sh: dry run of the release set for $VERSION, seed $SEED"
+    python3 -I "$REPO/tests/seasons/future/run_set.py" --list --set release --seed "$SEED"
+    python3 -I "$REPO/tests/seasons/future/run_set.py" --verify "$RUN_SET" --seed "$SEED"
+    exit $?
+fi
 NOTES="$(awk -v v="## $VERSION" 'index($0, v) == 1 { on = 1; next } /^## / && on { exit } on' "$REPO/CHANGELOG.md")"
 [ -n "$NOTES" ] || { echo "make_release.sh: CHANGELOG.md has no section for $VERSION." >&2; exit 2; }
 if [ -n "$(git -C "$REPO" status --porcelain)" ]; then
     echo "make_release.sh: commit or remove every change and every new file first, so that the tag names the code that was built." >&2; exit 2
 fi
 
-# The future run set (0.6.2 slice 15, Q12): every game passed and the checker finds no fault on its saves.
+# The release set (release tests from 0.7.1, Q12): every row passed with this release's seed and the checker finds no
+# fault on its saves. Then online release test 1 (two and four games through the real lobby and relay).
 if [ "$STAGE_ONLY" = 0 ]; then
-    python3 -I "$REPO/tests/seasons/future/run_set.py" --verify "$RUN_SET" ||
+    echo "make_release.sh: release set of $VERSION, seed $SEED"
+    python3 -I "$REPO/tests/seasons/future/run_set.py" --list --set release --seed "$SEED"
+    python3 -I "$REPO/tests/seasons/future/run_set.py" --verify "$RUN_SET" --seed "$SEED" ||
         { echo "make_release.sh: the run set in $RUN_SET does not pass (above)." >&2; exit 1; }
+    PROGRAM="${PROGRAM:-$REPO/build/cm0102_recomp}"
+    [ -x "$PROGRAM" ] || { echo "make_release.sh: no program $PROGRAM for online release test 1. Give --program." >&2; exit 2; }
+    # The online test must run the program that played the set (its sha256 is in the head line of results.tsv).
+    grep -q "$(shasum -a 256 "$PROGRAM" | cut -d' ' -f1)" "$RUN_SET/results.tsv" ||
+        { echo "make_release.sh: $PROGRAM is not the program that played the run set. Give --program." >&2; exit 2; }
+    python3 -I "$REPO/tests/online/release_mac_run.py" "$PROGRAM" "$GAME" ||
+        { echo "make_release.sh: online release test 1 did not pass (above)." >&2; exit 1; }
 fi
 OUT="$REPO/build/release-$VERSION"
 mkdir -p "$OUT"
