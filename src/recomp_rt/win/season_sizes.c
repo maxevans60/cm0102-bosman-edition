@@ -114,11 +114,12 @@ static int real_starts(const SeasonRule *r, int year)
            (r->real_season[4] < '0' || r->real_season[4] > '9');
 }
 
-/* The row of the rules of a league object now (season_sizes.h). */
-static const SeasonRule *row_now(uint32_t obj, const char *file)
+/* The row of the edition of a year: the row whose real season begins with the year, else the row of the season.
+ * A calendar-year league holds the real season Y + 1 in row Y ("Calendar-year league: real season 2009" in row
+ * 2008 of nor_prm), so its edition Y takes row Y - 1. A 2008 start then plays the Tippeligaen 2008 with the 14
+ * clubs of row 2007, and the 2009 edition with the 16 of row 2008. */
+static const SeasonRule *row_of_edition(const char *file, int year)
 {
-    if (!season_changing_rules() || season_change_is_creating()) return row_of_season(file, season_start_year());
-    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
     for (int s = year - 1; s <= year; s++) {
         const SeasonRule *r = season_rules_find(s, file, 0);
         if (real_starts(r, year)) return r;
@@ -126,10 +127,17 @@ static const SeasonRule *row_now(uint32_t obj, const char *file)
     return row_of_season(file, year);
 }
 
+/* The row of the rules of a league object now (season_sizes.h). */
+static const SeasonRule *row_now(uint32_t obj, const char *file)
+{
+    if (!season_changing_rules() || season_change_is_creating()) return row_of_edition(file, season_start_year());
+    return row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
+}
+
 int season_sizes_clubs(const char *file, int season)
 {
     if (!sizes_on() || !size_file(file)) return -1;
-    const SeasonRule *r = row_of_season(file, season);
+    const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
 }
