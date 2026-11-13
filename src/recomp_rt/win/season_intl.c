@@ -24,7 +24,6 @@
 #include "season_rules.h"
 #include "season_wc48.h"
 #include "season_nl.h"                     /* slice 28: the Gold Cup */
-#include "player_setup.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1513,8 +1512,6 @@ RT_WRAP(00549f70, date_make)
 {
     uint32_t date = cpu.ecx;
     int delta = 0;
-    /* The dates of a season database's player_setup.cfg (open item 229). */
-    player_setup_date_args(rd32(g_mem, cpu.esp), cpu.esp + 4u);
     if (date_shift) {
         int day = (int16_t)rd16(g_mem, cpu.esp + 4u), month0 = (int16_t)rd16(g_mem, cpu.esp + 8u);
         int year = (int16_t)rd16(g_mem, cpu.esp + 12u);

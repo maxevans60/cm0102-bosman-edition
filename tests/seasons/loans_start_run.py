@@ -19,6 +19,13 @@ The checks:
     y2025       December 2025 in 2025/26: more than 100 loans, Grealish on loan at Everton to 2026.
     y2001       October 2026 in 2001/02 (no season game): the same loans as y2001-orig, where the switch keeps the
                 original; nothing moves (no log line).
+    bans        y2026 against y2026-orig: the players of the database's DRUGS, MISCONDUCT and FALSE_PASSPORT lines that
+                the game holds have another discipline row (discipline.dat, Discipline::save 0x555dd0: first one row
+                of 0x1d bytes per staff) in at least one case, and only such players and loaned players differ there
+                more than a handful (the bans of the file reach the game; before, the year check at 0x7a3d78 refused
+                them).
+    y2010sim    December 2010 SIM in 2010/11, a database with real years in its file (LOAN 1 7 2010 30 6 2011):
+                the same loans and discipline rows as y2010sim-orig (no date of a real year moves).
 At most --jobs (2) games run at the same time.
 """
 import collections
@@ -89,6 +96,39 @@ def loans(save):
     return len(on_loan), out
 
 
+def ban_players(cfg):
+    """(first, second) names of the DRUGS, MISCONDUCT and FALSE_PASSPORT lines of a player_setup.cfg."""
+    out = set()
+    for line in open(cfg, encoding="latin-1"):
+        f = line.split('"')
+        if len(f) > 7 and f[1] in ("DRUGS", "MISCONDUCT", "FALSE_PASSPORT"):
+            out.add((f[3], f[7]))
+    return out
+
+
+def staff_by_name(save):
+    files = smoke_run.save_files(save)
+
+    def names(part):
+        d = files[part][0]
+        return {struct.unpack_from("<i", d, i + 0x33)[0]: d[i:i + 51].split(b"\0")[0].decode("latin-1")
+                for i in range(0, len(d) - 59, 60)}
+    first, second = names("first_names.dat"), names("second_names.dat")
+    sd = files["staff.dat"][0]
+    out = {}
+    for i in range(len(sd) // 0x6e):
+        f, sn = struct.unpack_from("<ii", sd, i * 0x6e + 4)
+        out.setdefault((first.get(f, ""), second.get(sn, "")), i)
+    return out
+
+
+def discipline_rows(save):
+    """The per-staff rows of discipline.dat (0x1d bytes each, one per staff of staff.dat)."""
+    files = smoke_run.save_files(save)
+    d, n = files["discipline.dat"][0], len(files["staff.dat"][0]) // 0x6e
+    return [d[i * 0x1d:(i + 1) * 0x1d] for i in range(n)]
+
+
 def main(argv):
     if len(argv) < 3:
         print(__doc__)
@@ -99,9 +139,11 @@ def main(argv):
     work = keep or tempfile.mkdtemp(prefix="cm0102-loans-")
     os.makedirs(work, exist_ok=True)
     oct26, dec25 = find_db(dbs, "October 2026"), find_db(dbs, "December 2025")
+    sim10 = find_db(dbs, "December 2010 SIM")
     runs = [("y2026", 2026, oct26, {}), ("y2026-orig", 2026, oct26, {"RECOMP_PLAYER_SETUP_DATES": "original"}),
             ("y2025", 2025, dec25, {}), ("y2001", 2001, oct26, {}),
-            ("y2001-orig", 2001, oct26, {"RECOMP_PLAYER_SETUP_DATES": "original"})]
+            ("y2001-orig", 2001, oct26, {"RECOMP_PLAYER_SETUP_DATES": "original"}),
+            ("y2010sim", 2010, sim10, {}), ("y2010sim-orig", 2010, sim10, {"RECOMP_PLAYER_SETUP_DATES": "original"})]
 
     def one(r):
         name, year, db, env = r
@@ -110,11 +152,12 @@ def main(argv):
         path, err, t = scr.play(program, game, work, name, {"changing_rules": "on"}, scr.new_game_steps(), 1,
                                 env_extra={"RECOMP_START_SEASON": str(year), **env}, database=db)
         return name, path, err
-    res = {}
+    res, saves = {}, {}
     with concurrent.futures.ThreadPoolExecutor(jobs) as ex:
         for name, path, err in ex.map(one, runs):
             check(path is not None, f"{name}: the game starts and saves")
             res[name] = (loans(path) if path else (0, {}), err or "")
+            saves[name] = path
     try:
         (n26, l26), e26 = res["y2026"]
         g = next((v for (_, n), v in l26.items() if n == "Jack Grealish"), [])
@@ -131,6 +174,21 @@ def main(argv):
         (n01o, l01o), _ = res["y2001-orig"]
         check(n01 > 100 and l01 == l01o and LOG not in e01,
               f"y2001: a 2001 start keeps the original ({n01} loans, {n01o} with the switch, no log line)")
+        banned = ban_players(os.path.join(oct26, "player_setup.cfg"))
+        rows, rows_o = discipline_rows(saves["y2026"]), discipline_rows(saves["y2026-orig"])
+        idx = staff_by_name(saves["y2026"])
+        hit = sorted(n for n in banned if n in idx and rows[idx[n]] != rows_o[idx[n]])
+        loaned = {s for s, _ in l26}
+        other = [i for i in range(min(len(rows), len(rows_o))) if rows[i] != rows_o[i] and i not in loaned and
+                 i not in {idx[n] for n in banned if n in idx}]
+        check(len(hit) >= 1 and len(other) <= 5,
+              f"bans: {len(hit)} of {sum(n in idx for n in banned)} banned players in the game have a new discipline "
+              f"row ({hit[:5]}), {len(other)} other rows differ")
+        (n10, l10), e10 = res["y2010sim"]
+        (n10o, l10o), _ = res["y2010sim-orig"]
+        same = discipline_rows(saves["y2010sim"]) == discipline_rows(saves["y2010sim-orig"])
+        check(l10 == l10o and same, f"y2010sim: real years do not move ({n10} loans, {n10o} with the switch, "
+              f"discipline rows {'equal' if same else 'differ'})")
     finally:
         if not keep:
             shutil.rmtree(work, ignore_errors=True)
