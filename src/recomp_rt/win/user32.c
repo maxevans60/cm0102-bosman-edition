@@ -832,6 +832,10 @@ static void release_press(uint32_t bit)
     post(bit == 1 ? WM_LBUTTONUP : WM_RBUTTONUP, (uint32_t)buttons, mouse_lparam());
 }
 
+/* 1 while the left button of the mouse is really down: a waiting up counts as up. The repeat waits below end at
+ * the up, so a short press gives one step, as before the hold. */
+static int left_down(void) { return (buttons & 1) && !real_press[0].up_waits; }
+
 static void release_due_presses(void)
 {
     uint64_t now = SDL_GetTicks64();
@@ -882,14 +886,14 @@ static void handle_event(SDL_Event *e)
         uint32_t bit = e->button.button == SDL_BUTTON_LEFT ? 1u : e->button.button == SDL_BUTTON_RIGHT ? 2u : 0u;
         if (!bit) break;
         PressHold *h = &real_press[bit - 1];
-        if (key_click.on) {                    /* the click of a key runs: drop the event, keep the button state */
-            if (down) buttons |= (int)bit; else buttons &= ~(int)bit;
-            h->pressed = h->up_waits = 0;
-            break;
-        }
-        if (down && h->up_waits) {             /* a new press: the up of the last one goes first */
+        if (h->up_waits) {                     /* a new press: the up of the last one goes first */
             h->up_waits = h->pressed = 0;
             release_press(bit);
+        }
+        if (key_click.on) {                    /* the click of a key runs: drop the event, keep the button state */
+            if (down) buttons |= (int)bit; else buttons &= ~(int)bit;
+            h->pressed = 0;
+            break;
         }
         if (!down && press_hold_up(h, SDL_GetTicks64())) {   /* a short press: the up waits for the game */
             if (getenv("RECOMP_SCREEN_LOG")) fprintf(stderr, "recomp: click up waits for the game (%d polls)\n", h->polls);
@@ -1331,11 +1335,11 @@ RT_WRAP(0055f620, input_poll)
     /* A press that opened or closed a screen does not repeat on the next screen: the same widget number
      * there is another widget (the options box, options_screen.c). */
     if (top != last_top) { cpu.eax |= 0xffffu; return; }
-    while ((buttons & 1) && SDL_GetTicks64() < next_repeat_at) {
+    while (left_down() && SDL_GetTicks64() < next_repeat_at) {
         win_poll_events();
         SDL_Delay(1);
     }
-    if (!(buttons & 1)) { cpu.eax |= 0xffffu; return; }    /* released while it waited */
+    if (!left_down()) { cpu.eax |= 0xffffu; return; }      /* released while it waited */
     next_repeat_at = SDL_GetTicks64() + REPEAT_INTERVAL;
 }
 
@@ -1359,11 +1363,11 @@ RT_WRAP(00561f10, scrollbar_test)
     int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
     int again = held && scroll_press == press_count && scroll_this == self && scroll_area == area;
     if (again) {
-        while ((buttons & 1) && SDL_GetTicks64() < next_scroll_at) {
+        while (left_down() && SDL_GetTicks64() < next_scroll_at) {
             win_poll_events();
             SDL_Delay(1);
         }
-        if (!(buttons & 1)) {                                  /* released while it waited */
+        if (!left_down()) {                                    /* released while it waited */
             wr32(g_mem, 0xb67a34u, 0);
             o_00561f10();
             wr32(g_mem, 0xb67a34u, 1);
