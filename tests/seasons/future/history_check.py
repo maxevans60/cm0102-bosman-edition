@@ -361,6 +361,28 @@ class Rules:
                 "years": sorted(int(y) for y in re.findall(r"\d{4}", r.get("table_years", "")))}
 
 
+def no_place(entrants, free):
+    """entrant-route: the indexes of entrants [(nation, confederation)] that come by no route and find no free place.
+    A free place is (nation, confederations) of a route that did not play: a club of that nation for a national
+    route, else of one of the confederations (None: any). The places go by a maximum matching (augmenting paths),
+    not first fit: a place open to two confederations (the Copa Libertadores, CONMEBOL or CONCACAF) or to any (a
+    route with no rules row) must not take the club that another place needs (open item 228)."""
+    fits = [[k for k, (rn, cs) in enumerate(free) if (nat == rn if rn else cs is None or conf in cs)]
+            for nat, conf in entrants]
+    holder = {}                                               # free place index: entrant index
+
+    def place(i, seen):
+        for k in fits[i]:
+            if k not in seen:
+                seen.add(k)
+                if k not in holder or place(holder[k], seen):
+                    holder[k] = i
+                    return True
+        return False
+
+    return [i for i in range(len(entrants)) if not place(i, set())]
+
+
 def read_known(path):
     if not path or not os.path.exists(path):
         return []
@@ -1122,13 +1144,8 @@ def entrants(game, rules, access, changes=()):
             # each route that did not play leaves one place to a drawn club of its confederation
             free = [(route_nation.get(r), set(c.split("|")) if (c := rules.rows.get(r, {}).get("confed")) else None)
                     for r in won if not played(r, year)]
-            for nat, conf, text in no_route:
-                take = next((i for i, (rn, cs) in enumerate(free)
-                             if (nat == rn if rn else cs is None or conf in cs)), None)
-                if take is None:
-                    faults.append(("entrant-route", name, year, text))
-                else:
-                    free.pop(take)
+            for i in no_place([(nat, conf) for nat, conf, text in no_route], free):
+                faults.append(("entrant-route", name, year, no_route[i][2]))
             if dead:
                 faults.append(("entrant-dead", name, year, f"{len(dead)} entrants of a nation under an old name: "
                                                            f"{', '.join(dead[:6])}"))
