@@ -33,6 +33,28 @@ The structured values (the same words in the TSV and in the C table):
                  "transition" (a row that holds more or less than one season: Ireland 2002/03, Russia 2010/11 and
                  2011/12).
 
+The structure values (0.7.2 league sizes, slice 1; the engine of the later slices reads them). A row of a file
+that is not a league (LEAGUE_NOT: cups, continental competitions, nation rules) has "-" in each:
+    meetings     the times each pair of clubs meets in the table (1 to 4): in each half of a season of halves, in
+                 each zone, before the split of a split season, in each group of a division of groups. Read from
+                 the format text, then the split text ("single", "double", "triple", "quadruple round robin",
+                 "each pair four times", or matches and rounds over the club count), else MEETINGS_BY_HAND
+                 (docs/research/2026-11-13-league-meetings.tsv, with the evidence of each range).
+                 "-": the class's own meetings stay (a season not held, a future row with unknown clubs, an
+                 unbalanced schedule). The tool stops on a held league row it can read neither way.
+    halves       1: two halves (Apertura and Clausura, two stages), each a table of the meetings; 0: one table.
+    zones        "-", or the club counts of the zones of one division joined by "+" ("15+15"); "gap" when the
+                 text names zones the tool cannot count.
+    extra        rounds beyond meetings x (n' - 1) in the table (a half, a zone): derby or inter-zone rounds
+                 ("plus one derby round" 1, "plus two interzonal matches" 2); "?" when the text gives no number.
+    periods      the period titles of the season (0 none, "?" unknown).
+    split_meet   with a split ("after N: ..."): the meetings in each section, joined by "+" in the order of the
+                 split's sections ("1+1", "2+1"), "?" for a section the text does not give; "-" without a split.
+    rounds       the rounds of the table (of each half, of each zone): meetings x (n' - 1) + extra, n' the club
+                 count (the largest zone) rounded up to even. With an odd count the derby or inter-zone matches
+                 first fill the rounds in which a club rests (one a meeting). "-" when the meetings, the count or
+                 the extra are not known, or for a division of groups.
+
 The tool stops, with exit code 1, on a text that it neither encodes nor lists in KNOWN_GAPS with a reason, so
 a changed research text never goes unseen.
 """
@@ -51,7 +73,48 @@ OUT_GAPS = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-gaps.
 OUT_C = os.path.join(ROOT, "src", "recomp_rt", "win", "season_league_table.c")
 
 TSV_COLUMNS = ["id", "season", "comp_file", "tier", "clubs", "po_up", "po_down", "po_other", "po_status", "split",
-               "calendar"]
+               "calendar", "meetings", "halves", "zones", "extra", "periods", "split_meet", "rounds"]
+
+# The files of the table with a numbered tier that are not leagues: they get no structure values.
+LEAGUE_NOT = {"argentina_rules", "usa_rules", "usa_mls_all_stars", "usa_open_cup", "gre_cup", "gre_super", "pol_cup",
+              "pol_lge_cup", "pol_super", "cro_cup", "conmebol_liber", "conmebol_merc", "con_merc_cup", "con_champ",
+              "asia_club_champ", "asia_cup_winner", "oceania_club_champ", "european_cup", "uefa_cup"}
+
+# The meetings of the league rows whose texts do not give them: {comp_file: [(first season, last season, meetings,
+# evidence)]}, from docs/research/2026-11-13-league-meetings.tsv (each range with its evidence). "-" and "?" keep
+# the class's meetings.
+MEETINGS_FILE = os.path.join(ROOT, "docs", "research", "2026-11-13-league-meetings.tsv")
+
+
+def read_meetings_by_hand(path=MEETINGS_FILE):
+    out = {}
+    with open(path, encoding="utf-8") as fh:
+        lines = [x.rstrip("\n").split("\t") for x in fh if x.strip() and not x.startswith("#")]
+    if lines[0] != ["comp_file", "first_season", "last_season", "meetings", "evidence"]:
+        raise SystemExit("encode_leagues.py: %s: the columns are not those expected" % path)
+    for cells in lines[1:]:
+        file, first, last, value, why = cells
+        value = int(value) if value.isdigit() else value
+        if value not in (1, 2, 3, 4, "-", "?") or not why.strip():
+            raise SystemExit("encode_leagues.py: %s: bad line %s" % (path, cells))
+        out.setdefault(file, []).append((int(first), int(last), value, why))
+    return out
+
+
+MEETINGS_BY_HAND = read_meetings_by_hand()
+
+# Texts whose meetings the reading above gets wrong: {(comp_file, season): (meetings, evidence)}.
+MEETINGS_FIX = {
+    # "three rounds: double round robin (22 matches), then a third game against each club with pairings set by the
+    # standings (33 matches)": three meetings, the third set by the standings.
+    ("cro_a1", 2006): (3, "33 matches of 12 clubs in the format cell"),
+}
+
+# The period titles of rows whose texts do not give them: {(comp_file, first, last): (periods, evidence)}.
+PERIODS_BY_HAND = {
+    ("bel_second", 2016, 2019): (2, "First Division B: an opening and a closing period of 14 rounds (check of 13 "
+                                    "November 2026, sizes-check-north line 230)"),
+}
 
 ORD = r"(\d+)(?:st|nd|rd|th)"
 
@@ -374,8 +437,9 @@ def fmt(places):
     return ",".join(str(p) for p in places)
 
 
-def encode_playoffs(r):
-    """(po_up, po_down, po_other, po_status), or None when the tool does not know the text."""
+def encode_playoffs(r, last_clubs=None):
+    """(po_up, po_down, po_other, po_status), or None when the tool does not know the text. last_clubs: the count
+    of the last row of the file with one, for a row with unknown clubs (the after-table rule)."""
     code, text = r["playoffs"], r["playoffs_text"].strip()
     if code in ("na", "none", "unknown") or text.lower() in NONE_TEXTS:
         return "-", "-", "-", "ok"
@@ -394,7 +458,7 @@ def encode_playoffs(r):
         return "-", "-", "title", "ok"
     if re.match(r"as \d{4}", text.lower()):
         return None                      # "as 2026/27": the tool reads the earlier row (encode below)
-    clubs = r["clubs"] if isinstance(r["clubs"], int) else None
+    clubs = r["clubs"] if isinstance(r["clubs"], int) else last_clubs if r["clubs"] == "unknown" else None
     up, down, other = [], [], []
     status = "ok"
     for clause in re.split(r";|(?<=[a-z)])\.\s", text):
@@ -487,12 +551,158 @@ def encode_calendar(r):
     return "transition"
 
 
+NUMBERS = {"one": 1, "once": 1, "two": 2, "twice": 2, "three": 3, "four": 4, "five": 5, "six": 6, "a third": 1}
+ROBIN = {"single": 1, "double": 2, "triple": 3, "quadruple": 4}
+
+
+def meetings_of_text(text, clubs):
+    """The meetings of a format or split text, or None. Words first, then a count of matches or rounds."""
+    low = text.lower()
+    m = re.search(r"\b(single|double|triple|quadruple)[ -]round[ -]robin", low)
+    if m:
+        return ROBIN[m.group(1)]
+    m = re.search(r"(?:each pair|the others|each other) (once|twice|three times|four times)(?! more)", low)
+    if m:
+        return {"once": 1, "twice": 2, "three times": 3, "four times": 4}[m.group(1)]
+    if "home and away" in low:
+        return 2
+    if not isinstance(clubs, int) or clubs < 3:
+        return None
+    m = (re.search(r"after (?:the first )?(\d+) (?:matches|rounds|games)", low)
+         or re.search(r"(\d+)[ -](?:rounds|matches|games|match)(?:,? then| plus| first stage)", low)
+         or re.search(r"(\d+) (?:matches|rounds|games)", low))
+    if not m:
+        return None
+    n = int(m.group(1))
+    for d in (clubs - 1, clubs + clubs % 2 - 1):
+        if d and n % d == 0 and 1 <= n // d <= 4:
+            return n // d
+    return None
+
+
+def encode_meetings(r):
+    """(meetings, evidence) of a league row: an int, or "-" with the reason; None when the tool cannot read it."""
+    key = (r["comp_file"], r["season"])
+    if key in MEETINGS_FIX:
+        return MEETINGS_FIX[key]
+    if r["format"] == "not_held" or r["clubs"] == "not_held":
+        return "-", "not held"
+    for text in (r["format_text"], r["split_text"]):
+        m = meetings_of_text(text, r["clubs"])
+        if m:
+            return m, "text"
+    m = re.search(r"(\d+) (?:matches|rounds|games)", r["notes"].lower())
+    if m and isinstance(r["clubs"], int) and r["clubs"] > 2:
+        n = int(m.group(1))
+        for d in (r["clubs"] - 1, r["clubs"] + r["clubs"] % 2 - 1):
+            if n % d == 0 and 1 <= n // d <= 4:
+                return n // d, "notes"
+    for first, last, value, why in MEETINGS_BY_HAND.get(r["comp_file"], ()):
+        if first <= r["season"] <= last:
+            return ("-", "no source settles it: " + why) if value == "?" else (value, why)
+    if r["clubs"] == "unknown":
+        return "-", "unknown clubs"
+    return None
+
+
+def encode_halves(split):
+    return 1 if split == "stages" else 0
+
+
+def encode_zones(r):
+    """The zone sizes of one division joined by "+", "-", or "gap"."""
+    text = (r["split_text"] + " " + r["format_text"] + " " + r["clubs_text"]).lower()
+    if "zone" not in text:
+        return "-"
+    m = re.search(r"(\w+) zones(?: \([^)]*\))? of (\d+)", text)
+    if m and (m.group(1).isdigit() or m.group(1) in NUMBERS):
+        k = int(m.group(1)) if m.group(1).isdigit() else NUMBERS[m.group(1)]
+        return "+".join([m.group(2)] * k)
+    m = re.search(r"zones? \((\d+) and (\d+) clubs\)", text)
+    if m:
+        return m.group(1) + "+" + m.group(2)
+    m = re.search(r"(\w+) zones\b.*?\((\d+) each", text)
+    if m and m.group(1) in NUMBERS:
+        return "+".join([m.group(2)] * NUMBERS[m.group(1)])
+    sizes = re.findall(r"\b[A-Z][a-z]+ (\d+)", r["clubs_text"])
+    if len(sizes) >= 2:
+        return "+".join(sizes)
+    return "gap"
+
+
+def encode_extra(r):
+    text = (r["split_text"] + " " + r["format_text"]).lower()
+    m = re.search(r"plus (\w+) (?:interzonal|derby|inter-zone)", text)
+    if m:
+        return NUMBERS.get(m.group(1), int(m.group(1)) if m.group(1).isdigit() else "?")
+    if re.search(r"plus (?:interzonal|derby|inter-zone)", text):
+        return "?"
+    return 0
+
+
+def encode_periods(r):
+    for (file, first, last), (value, _why) in PERIODS_BY_HAND.items():
+        if r["comp_file"] == file and first <= r["season"] <= last:
+            return value
+    text = (r["format_text"] + " " + r["split_text"]).lower()
+    if "periods unknown" in text:
+        return "?"
+    m = re.search(r"\b(two|three|four|five|six) periods", text)
+    return NUMBERS[m.group(1)] if m else 0
+
+
+def encode_split_meetings(r, split):
+    """The meetings in each section of a split ("1+1", "2+1"), "?" where the text gives none, "-" with no split."""
+    m = re.match(r"after (\d+): ([\d+]+), points", split)
+    if not m:
+        return "-"
+    after, sizes = int(m.group(1)), [int(x) for x in m.group(2).split("+")]
+    low = r["split_text"].lower()
+    # A text per section: "top 6 play a double round ..., bottom 6 a single round ...", "(double round robin, 10
+    # matches) ... (single round robin, 7 matches)".
+    each = re.findall(r"\b(single|double) round", low)
+    if len(each) == len(sizes) > 1:
+        return "+".join(str(ROBIN[x]) for x in each)
+    one = None
+    w = re.search(r"(?:each other|the others(?: in its group| of its group)?) (once|twice|a third time)(?: more)?", low)
+    if w:
+        one = {"once": 1, "twice": 2, "a third time": 1}[w.group(1)]
+    if one is None:
+        t = re.search(r"\((\d+) matches\)", low) or re.search(r"(\d+) in all", low)
+        if t and len(set(sizes)) == 1 and sizes[0] > 1 and (int(t.group(1)) - after) % (sizes[0] - 1) == 0:
+            one = (int(t.group(1)) - after) // (sizes[0] - 1)
+    if one is None:
+        e = re.search(r"(\d+) more (?:matches|rounds)", low)
+        if e and len(set(sizes)) == 1 and sizes[0] > 1 and int(e.group(1)) % (sizes[0] - 1) == 0:
+            one = int(e.group(1)) // (sizes[0] - 1)
+    if one is not None and 1 <= one <= 4:
+        return str(one) if len(sizes) == 1 else "+".join([str(one)] * len(sizes))
+    return "?"
+
+
+def encode_rounds(r, meetings, zones, extra, split):
+    if not isinstance(meetings, int) or extra == "?" or split == "groups":
+        return "-"
+    if zones not in ("-", "gap"):
+        n = max(int(x) for x in zones.split("+"))
+    elif zones == "-" and isinstance(r["clubs"], int) and "group" not in r["clubs_text"].lower():
+        n = r["clubs"]
+    else:
+        return "-"
+    # With an odd count each club rests one round a meeting; its derby or inter-zone match fills that round
+    # (Argentina 2024/25: zones of 15, 14 zone matches and 2 inter-zone matches in 16 rounds).
+    rests = meetings if n % 2 else 0
+    return meetings * (n + n % 2 - 1) + max(0, extra - rests)
+
+
 def encode():
     rows = [r for r in make_rules.read_rows() if isinstance(r["tier"], int) and r["comp_file"] not in ("na", "new")]
     out, gaps, problems = [], [], []
-    last = {}
+    last, last_clubs = {}, {}
     for r in rows:
-        po = encode_playoffs(r)
+        if isinstance(r["clubs"], int):
+            last_clubs[r["comp_file"]] = r["clubs"]
+        po = encode_playoffs(r, last_clubs.get(r["comp_file"]))
         if po is None and re.match(r"as \d{4}", r["playoffs_text"].lower()) and r["comp_file"] in last:
             po = last[r["comp_file"]]
         if po is None:
@@ -503,7 +713,29 @@ def encode():
         split = encode_split(r)
         e = {"id": r["id"], "season": r["season"], "comp_file": r["comp_file"], "tier": r["tier"],
              "clubs": r["clubs"] if isinstance(r["clubs"], int) else -1, "po_up": po[0], "po_down": po[1],
-             "po_other": po[2], "po_status": po[3], "split": split, "calendar": encode_calendar(r)}
+             "po_other": po[2], "po_status": po[3], "split": split, "calendar": encode_calendar(r),
+             "meetings": "-", "halves": "-", "zones": "-", "extra": "-", "periods": "-", "split_meet": "-",
+             "rounds": "-"}
+        if r["comp_file"] not in LEAGUE_NOT:
+            meet = encode_meetings(r)
+            if meet is None:
+                problems.append("%s (%s %d): meetings not known: format %r, split %r" % (
+                    r["id"], r["comp_file"], r["season"], r["format_text"][:80], r["split_text"][:80]))
+                continue
+            zones, extra = encode_zones(r), encode_extra(r)
+            e.update(meetings=meet[0], halves=encode_halves(split), zones=zones, extra=extra,
+                     periods=encode_periods(r), split_meet=encode_split_meetings(r, split),
+                     rounds=encode_rounds(r, meet[0], zones, extra, split))
+            if meet[0] == "-" and meet[1] not in ("not held", "unknown clubs") and not meet[1].startswith("unknown"):
+                gaps.append((r["id"], r["season"], r["comp_file"], "meetings", "the class's meetings stay: " + meet[1],
+                             r["format_text"]))
+            for col, bad in (("zones", "gap"), ("extra", "?"), ("periods", "?")):
+                if e[col] == bad:
+                    gaps.append((r["id"], r["season"], r["comp_file"], col, "the text does not give it",
+                                 r["split_text"] if col != "periods" else r["format_text"]))
+            if "?" in str(e["split_meet"]):
+                gaps.append((r["id"], r["season"], r["comp_file"], "split_meet",
+                             "the text does not give the meetings of each section", r["split_text"]))
         out.append(e)
         if po[3] != "ok":
             gaps.append((r["id"], r["season"], r["comp_file"], "playoffs", po[3], r["playoffs_text"]))
@@ -537,8 +769,16 @@ def gaps_text(gaps):
     return "\n".join(lines) + "\n"
 
 
+def c_list(values):
+    """A C initializer of SEASON_LEAGUE_PARTS ints."""
+    if len(values) > 4:
+        raise SystemExit("encode_leagues.py: more than 4 zones or split sections: %s" % values)
+    return ", ".join(str(v) for v in (list(values) + [0] * 4)[:4])
+
+
 def c_text(rows):
-    lines = ["/* The structured league rules: play-off places, splits and calendars (0.6.0 slice 19). Made by",
+    lines = ["/* The structured league rules: play-off places, splits and calendars (0.6.0 slice 19), and the structure",
+             " * of each league row (0.7.2 league sizes, slice 1). Made by",
              " * tools/seasons/encode_leagues.py from the rules table (docs/research/rules-0.6.0): do not edit by",
              " * hand. Values: season_league.h. */",
              '#include "season_league.h"', "",
@@ -547,12 +787,21 @@ def c_text(rows):
         m = re.match(r"after (\d+): ([\d+]+), points (\w+)", e["split"])
         after, groups = (int(m.group(1)), m.group(2).split("+")) if m else (0, [])
         top = int(groups[0]) if groups else 0
-        lines.append('    {"%s", %d, %d, %d, %d, %d, %d, %d, %d, %d},' % (
+        zones = [int(x) for x in e["zones"].split("+")] if e["zones"] not in ("-", "gap") else []
+        meet = e["split_meet"].split("+") if e["split_meet"] not in ("-", "?") else []
+        lines.append('    {"%s", %d, %d, %d, %d, %d, %d, %d, %d, %d,' % (
             e["comp_file"], e["season"], count(e["po_up"]),
             min(int(x) for x in re.findall(r"\d+", e["po_up"])) if e["po_up"] != "-" else 0,
             count(e["po_down"]), 1 if e["po_status"] == "ok" else 0, after, top,
             {"-": 0, "split": 0, "calendar": 1, "transition": 2}[e["calendar"]] if e["calendar"] != "split" else 0,
             {"kept": 0, "halved": 1, "unknown": 2}[m.group(3)] if m else 0))
+        lines.append('     %d, %d, %d, {%s}, %d, %d, {%s}, {%s}, %d},' % (
+            e["meetings"] if isinstance(e["meetings"], int) else 0,
+            e["halves"] if isinstance(e["halves"], int) else 0, len(zones), c_list(zones),
+            e["extra"] if isinstance(e["extra"], int) else -1,
+            e["periods"] if isinstance(e["periods"], int) else -1,
+            c_list([int(x) for x in groups]), c_list([int(x) if x != "?" else 0 for x in meet]),
+            e["rounds"] if isinstance(e["rounds"], int) else 0))
     lines += ["};", "const int season_league_rule_count = %d;" % len(rows), ""]
     return "\n".join(lines)
 

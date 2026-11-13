@@ -83,6 +83,11 @@ The differences, by kind:
                                 database. The line names each club, so another fill is a new difference
     division_clubs              (slice 18) a league of the size table whose division holds another number of clubs
                                 at a season start than its table has rows
+    meetings                    (0.7.2 slice 1) a division's meetings of each pair (+0x3c, the rounds column of a
+                                league line) differ from the encoded row's meetings (tools/seasons/encode_leagues.py)
+    rounds                      (0.7.2 slice 1) the rounds of a division's table, meetings x (n' - 1) with n' the
+                                game's count rounded up to even, differ from the encoded row's rounds (the row's
+                                meetings and count, its largest zone and its derby or inter-zone rounds)
     format                      the stages of the Champions League at the end of a season (the uefa line of the
                                 report, slice 22): the second group stage and the first knockout round differ
                                 from the "Rounds (clubs):" list of the row ("Groups 2 16, KO 8" or "KO 16")
@@ -426,6 +431,20 @@ def differences(seasons, comps, rows):
                 if not same:
                     out.add((season, "playoffs", f"{label}: game {game[0]} up and {game[1]} down play-off places, "
                                                  f"table {want[0]} and {want[1]} ({r['playoffs_text'][:80]!r})"))
+            # 0.7.2 league sizes, slice 1: the meetings of each pair (+0x3c, the report's rounds column of a league)
+            # and the rounds of the table, meetings x (n' - 1) with n' the game's count rounded up to even, against
+            # the encoded row (meetings; rounds = meetings x (n' - 1) + extra of the row's count).
+            if e is not None and isinstance(e["meetings"], int):
+                meet = sorted({x["rounds"] for x in both if x["rounds"] > 0})
+                if meet and meet != [e["meetings"]]:
+                    out.add((season, "meetings", f"{label}: game {'/'.join(map(str, meet))}, table "
+                                                 f"{e['meetings']}"))
+            if e is not None and isinstance(e["rounds"], int):
+                made = sorted({x["rounds"] * (x["clubs"] + x["clubs"] % 2 - 1) for x in both
+                               if x["rounds"] > 0 and x["clubs"] > 1})
+                if made and made != [e["rounds"]]:
+                    out.add((season, "rounds", f"{label}: game {'/'.join(map(str, made))}, table {e['rounds']} "
+                                               f"({e['meetings']} meetings, zones {e['zones']}, extra {e['extra']})"))
         shown = make_names.shown_name(r["name"])
         if shown and c["name"] not in (r["name"], shown):
             out.add((season, "name", f"{label}: game {c['name']!r}, table {r['name']!r}"))
