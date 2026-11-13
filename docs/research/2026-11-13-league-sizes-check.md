@@ -47,7 +47,7 @@ Calendar-year leagues: the research table keys by the row's start year. As real 
 
 | Cup | Fact | Effect |
 |---|---|---|
-| `NirCup` 0x78ac90 | Premiership and First Division from place 12 of 32, no bound (0x78ad81..0x78adb0) | the two must hold exactly 20; every real season from 2003/04 has 24 to 29 |
+| `NirCup` 0x78ac90 | Premiership and First Division from place 12 of 32, no bound (0x78ad81..0x78adb0) | the two must hold exactly 20, and every real season from 2003/04 has 24 to 29 |
 | `EngFaCup` 0x56fab0 | the Conference into a stack array of 22, no bound (store 0x56fd98) | 24 overwrites the lower-club array |
 | `CroCup` 0x517bb0 | 48 slots, no bound (0x517c71..0x517d08) | a second tier of 18 writes past the list |
 | `GreCup` 0x5e9a80 | 44 places, second + top at least 28 (box gre_cup.cpp 802, 0x5e9c24) | larger Greek divisions leave top clubs out |
