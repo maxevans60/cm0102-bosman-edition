@@ -318,7 +318,7 @@ static int has_row(uint32_t hist, uint32_t count, uint32_t comp, uint16_t label)
     return 0;
 }
 
-void season_history_fill(const char *name, int N)
+void season_history_fill(const char *name, int N, int duplicates)
 {
     season_history_undo();
     saved_n = 0;
@@ -331,7 +331,7 @@ void season_history_fill(const char *name, int N)
         uint32_t c = new_comp_rows[k].label <= N ? find_record(new_comp_rows[k].comp) : 0;
         if (c && !has_row(hist, count, c, new_comp_rows[k].label)) extra[n_extra++] = &new_comp_rows[k];
     }
-    if (name) drop_duplicates();
+    if (name || duplicates) drop_duplicates();       /* open item 227: also the 3.9.60 and 3.9.65 data */
     const SeasonHistDb *e = name ? entry_for(name, N) : NULL;
     if (!e && !n_extra) return;
     hist = rd32(g_mem, HISTORY_PTR);

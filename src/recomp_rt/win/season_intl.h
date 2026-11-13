@@ -252,6 +252,11 @@ typedef struct {
 extern const SeasonIntlRename season_intl_renames[];
 extern const int season_intl_rename_count;
 
+/* 1 when the game renamed a nation from old to now: old is an earlier name of now in a chain of the rename table
+ * (Turkey for T\xfcrkiye), without case, and no nation record holds old any more. A database that holds Serbia
+ * beside its dead record Yugoslavia gives 0 for Yugoslavia: that nation was never renamed. */
+int season_intl_renamed_from(const char *old, const char *now);
+
 /* 1 when the data holds a later name of the chain of rename row i (Serbia for Yugoslavia), by held(name, ctx),
  * which compares names without case (the databases from 2019 write "eSwatini"). The record of the old name is
  * then a dead record beside the live one. */

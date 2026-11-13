@@ -28,7 +28,8 @@
  *   3. the Europa League title holder: from 2015/16 a Champions League place ("X" rows), before a Europa League
  *      group place ("H" rows), when it has no place yet.
  *   4. the Europa League places of each nation: the first the domestic cup winner (the cup of the league
- *      table entry, 0xb63d7e, as 0x9047e2: the winner, else the runner-up), the last the league cup winner for the
+ *      table entry, 0xb63d7e, as 0x9047e2: the winner, else the runner-up; from 2015/16 the best league club with
+ *      no place, cup_runner_up), the last the league cup winner for the
  *      nations of the "L" rows (0xb63d82, as 0x904ad8), the others the first club with no place (0x9050d0 with
  *      skip placed 1).
  *   5. the fair play places (to 2015/16): three nations at random (0x90cfc0, as 0x904670) get one Europa League
@@ -68,6 +69,7 @@
 #include "season_uefa.h"
 #include "season_nation.h"
 #include "season_playoffs.h"
+#include "season_intl.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -223,6 +225,18 @@ static uint32_t cup_club(uint32_t nation, uint32_t off, int k)
     return rt_unwinding || !readable(c) ? 0 : c;
 }
 
+/* The club that takes the cup place when the cup winner has a place already (0.6.2 open item 222). The original
+ * gives it to the cup runner-up (0x9047e2). From 2015/16 UEFA gives it to the best league club with no place:
+ * "the highest-ranked club in their domestic league not already qualified for the UEFA Europa League will
+ * qualify ... national cup runners-up no longer qualify" (UEFA, "New approach broadens Europa League appeal", 2013,
+ * https://www.uefa.com/uefaeuropaleague/news/0257-0def7f60e195-fd6dc0500321-1000--new-approach-broadens-europa-league-appeal).
+ * 0 then: the caller picks the first league club with no place (0x9050d0). */
+#define CUP_RUNNER_UP_LAST 2014
+static uint32_t cup_runner_up(uint32_t nation, int season)
+{
+    return season > CUP_RUNNER_UP_LAST ? 0 : cup_club(nation, 0x1e, 1);
+}
+
 static int rank_of_nation(uint32_t self, int entries, uint32_t nation)
 {
     for (int i = 0; i < entries; i++)
@@ -354,7 +368,8 @@ static const char *comp_name(char comp)
  * A vacancy (the title holder places, a suspended nation) moves the best-ranked cup winners up one round, and the
  * gap at the bottom goes to the cup winner of the best-ranked association with no Europa League place (the notes
  * of the access list rows: in 2021/22 Cyprus, rank 16; in 2022/23 Serbia and Czech Republic, 16 and 17). The cup
- * winner as in step 4 (0x9047e2: the winner, else the runner-up), else the first club with no place. Returns 0
+ * winner as in step 4 (0x9047e2: the winner, else the runner-up to 2014/15, cup_runner_up), else the first club
+ * with no place. Returns 0
  * in a season where every rank has places (to 2020/21): the gap then stays empty (open item 94). */
 static uint32_t el_cup_filler(uint32_t self, uint32_t records, int count, int entries, int *rank)
 {
@@ -364,7 +379,7 @@ static uint32_t el_cup_filler(uint32_t self, uint32_t records, int count, int en
         const char *pl = season_uefa_access_places(r->season, 'e', e + 1);
         if (!pl || *pl || nation_suspended(r, nation)) continue;
         uint32_t club = cup_club(nation, 0x1e, 0);
-        if (!club || has_place(club)) club = cup_club(nation, 0x1e, 1);
+        if (!club || has_place(club)) club = cup_runner_up(nation, r->season);
         if (!club || has_place(club)) club = pick(self, records, count, rd32(g_mem, ent), 1, 1);
         if (club && !has_place(club)) {
             *rank = e + 1;
@@ -525,6 +540,36 @@ uint32_t rt_euro_cfg_year(void)
     return 0;
 }
 
+/* 0.6.2 open item 222 (GitHub issue 94). apply_euro_cfg_order 0x9059e0 finds the nation of a "*<nation>" line of
+ * euro.cfg by strstr 0x945a60 (line, nation name 0x5453f0, the long name +4) for each nation of the seeding
+ * (this+4 + 0x12 i, count this+0x438), call 0x905a74, return 0x905a79; no match skips the nation's block
+ * (0x905a8c), so its clubs keep the order of 0x905ce0 (division, last league place, reputation). A database's
+ * euro.cfg names a nation as its own nation.dat does ("*Turkey", "*Czech Republic", "*FYR of Macedonia",
+ * "*Yugoslavia" in the databases of test-fixtures), but a season game renames the nations of its start season
+ * before the first seeding (season_intl.c nations_rename at season_intl_at_create: Turkey is T\xfcrkiye from 2022,
+ * Czech Republic is Czechia from 2016). So in a 2025/26 start Turkey's block found no nation, and Basaksehir and
+ * Sivasspor took Galatasaray's and Fenerbahce's places. The line also matches the nation when the game renamed it
+ * from the line's name, as the data it came with named it. A database that has its own record of the later name
+ * (Serbia beside a dead Yugoslavia, 0.6.2 item 200) keeps the original's match: no nation was renamed there. The
+ * match stays whole-name after "*" (the original's strstr also takes a longer line; no euro.cfg of the 49
+ * databases of test-fixtures has one). */
+void o_00945a60(void);
+
+RT_WRAP(00945a60, euro_cfg_nation)
+{
+    uint32_t ret = rd32(g_mem, cpu.esp), line = rt_arg(0), name = rt_arg(1);
+    o_00945a60();
+    if (rt_unwinding || ret != 0x00905a79u || cpu.eax || !season_code_on() || !readable(line) || !readable(name))
+        return;
+    char head[64];
+    snprintf(head, sizeof head, "%s", win_str(line));
+    size_t n = strlen(head);
+    while (n && (head[n - 1] == '\r' || head[n - 1] == '\n' || head[n - 1] == ' ')) head[--n] = 0;
+    if (head[0] != '*' || !season_intl_renamed_from(head + 1, win_str(name))) return;
+    cpu.eax = line;
+    fprintf(stderr, "recomp: uefa: euro.cfg: the line %s is the nation %s (renamed)\n", head, win_str(name));
+}
+
 void o_00904210(void);
 void o_00904580(void);
 void o_00904e30(void);
@@ -652,7 +697,7 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
             uint32_t club = 0;
             if (k == 0) {
                 club = cup_club(nation, 0x1e, 0);
-                if (has_place(club)) club = cup_club(nation, 0x1e, 1);
+                if (has_place(club)) club = cup_runner_up(nation, s);
             } else if (k == n - 1 && league_cup) {
                 club = cup_club(nation, 0x22, 0);
             }
@@ -672,7 +717,7 @@ static void assign_all(uint32_t self, uint32_t records, int count, const SeasonU
             uint32_t club = 0;
             if (k == 0 && el == 0) {
                 club = cup_club(nation, 0x1e, 0);
-                if (has_place(club)) club = cup_club(nation, 0x1e, 1);
+                if (has_place(club)) club = cup_runner_up(nation, s);
             } else if (k == n - 1 && league_cup) {
                 club = cup_club(nation, 0x22, 0);
             }

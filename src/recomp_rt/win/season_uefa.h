@@ -165,6 +165,12 @@ const SeasonUefa *season_uefa_table_row(int season);
 /* The row of season S for the game that runs, or NULL: the original's formats (see above). */
 const SeasonUefa *season_uefa_row(int season);
 
+/* Issue 119: the outcome that a UEFA Cup (or Conference League) with stages passes on for a result. stage is the
+ * byte +0x44 of the object that played the round (-1 the cup's own round table, else the knockout stage),
+ * outcome the status of the club (1 won the last round of its table, 2 lost it, 0 through to the next round, -1
+ * out). With stages the cup's own round table ends before the group stage, so its winners go on: 0, not 1. */
+int season_uefa_cup_outcome(int stage, int outcome);
+
 /* The clubs of a named round of a row's Champions League or UEFA Cup, 0 when the row has no such round. */
 int season_uefa_cl_round(const SeasonUefa *r, const char *name);
 int season_uefa_uc_round(const SeasonUefa *r, const char *name);

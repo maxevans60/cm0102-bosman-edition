@@ -72,6 +72,55 @@ int main(void)
     season_nation_state("Brazil", 2023, &s);
     CHECK(s.squad_foreign == 9, "Brazil 2023: %d", s.squad_foreign);
 
+    /* Croatia (issue 135): all foreigners count to 2012/13 (4 fielded in 2007/08); from 2013/14 only players
+     * not of the EU or EEA (HNS Glasnik 28/2013): 6, 8 from 2017/18, 6 from 2019/20, 5 from 2026/27. */
+    season_nation_state("Croatia", 2012, &s);
+    CHECK(s.squad_foreign == 4 && s.squad_non_eu == SEASON_NATION_KEEP, "Croatia 2012: %d %d", s.squad_foreign, s.squad_non_eu);
+    season_nation_state("Croatia", 2013, &s);
+    CHECK(s.squad_non_eu == 6 && s.squad_foreign == SEASON_NATION_NONE, "Croatia 2013: %d %d", s.squad_non_eu, s.squad_foreign);
+    season_nation_state("Croatia", 2017, &s);
+    CHECK(s.squad_non_eu == 8 && s.squad_foreign == SEASON_NATION_NONE, "Croatia 2017: %d %d", s.squad_non_eu, s.squad_foreign);
+    season_nation_state("Croatia", 2020, &s);
+    CHECK(s.squad_non_eu == 6 && s.squad_foreign == SEASON_NATION_NONE, "Croatia 2020: %d %d", s.squad_non_eu, s.squad_foreign);
+    season_nation_state("Croatia", 2026, &s);
+    CHECK(s.squad_non_eu == 5 && s.squad_foreign == SEASON_NATION_NONE, "Croatia 2026: %d %d", s.squad_non_eu, s.squad_foreign);
+
+    /* The match squad record under a state (bytes +0..+2 foreign, +3..+5 non-EU, 0xff none). Croatia's filler
+     * 0x518620 writes 4 foreign at +0; the lookup 0x8cf6b0 with the collapse flag moves it to +2 (0x8cf794). */
+    {
+        uint8_t rec[6] = {4, 0xff, 0xff, 0xff, 0xff, 0xff};
+        season_nation_state("Croatia", 2020, &s);
+        CHECK(season_nation_squad_record(rec, &s, 1) == 1 && rec[0] == 0xff && rec[3] == 6 && rec[1] == 0xff &&
+              rec[2] == 0xff && rec[4] == 0xff && rec[5] == 0xff,
+              "Croatia 2020 top: %02x %02x %02x %02x %02x %02x", rec[0], rec[1], rec[2], rec[3], rec[4], rec[5]);
+        uint8_t col[6] = {0xff, 0xff, 4, 0xff, 0xff, 0xff};
+        season_nation_squad_record(col, &s, 1);
+        CHECK(col[2] == 0xff && col[5] == 6, "Croatia 2020 collapsed: %02x %02x", col[2], col[5]);
+        uint8_t low[6] = {4, 0xff, 0xff, 0xff, 0xff, 0xff};
+        season_nation_squad_record(low, &s, 0);
+        CHECK(low[0] == 0xff && low[3] == 4, "Croatia 2020 lower division keeps the game's number as non-EU: %02x %02x",
+              low[0], low[3]);
+        uint8_t old[6] = {4, 0xff, 0xff, 0xff, 0xff, 0xff};
+        season_nation_state("Croatia", 2010, &s);
+        CHECK(season_nation_squad_record(old, &s, 1) == 0 && old[0] == 4 && old[3] == 0xff, "Croatia 2010: foreign 4 stays");
+        uint8_t eng[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 3};
+        season_nation_state("Germany", 2005, &s);
+        CHECK(season_nation_squad_record(eng, &s, 1) == 1 && eng[5] == 4 && eng[0] == 0xff, "Germany 2005: non-EU 4");
+        uint8_t pol[6] = {0xff, 0xff, 5, 0xff, 0xff, 0xff};
+        season_nation_state("Poland", 2010, &s);
+        season_nation_squad_record(pol, &s, 1);
+        CHECK(pol[2] == 0xff && pol[5] == 0xff, "Poland 2010: no limit of either kind");
+    }
+    /* Only Croatia's rows move a foreign limit to the non-EU slots (a non-EU number with no foreign limit). */
+    for (int i = 0; i < season_nation_count; i++)
+        for (int y = 2001; y <= 2027; y++) {
+            season_nation_state(season_nations[i].name, y, &s);
+            int moves = s.squad_foreign == SEASON_NATION_NONE && s.squad_non_eu != SEASON_NATION_KEEP &&
+                        s.squad_non_eu != SEASON_NATION_NONE;
+            if (moves && strcmp(season_nations[i].name, "Croatia"))
+                CHECK(0, "%s %d would move a foreign limit to the non-EU slots", season_nations[i].name, y);
+        }
+
     /* Brexit for one signing (2021/22 = season 2021, the date in 2021, the rule from 2021). */
     CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 1, "France", NULL) == 1, "a French player at an English club: the permit decision");
     CHECK(season_brexit_blocks("England", 2021, 2021, 2021, 1, "Republic of Ireland", NULL) == 0, "an Irish player at an English club goes through");

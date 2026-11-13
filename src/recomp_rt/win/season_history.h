@@ -33,7 +33,10 @@
  * United, which the shift of slice 11b makes 2010; tests/seasons/history_duplicates_check.py lists every
  * database). The winners tab 0x4991f0 then shows the year twice. Before the fill, every season database load
  * with a shift (season_dates.c) clears the second and later copy of each such row in the same way, and the undo
- * gives them back. The base game and its 3.9.68 data (2 such rows) are not touched.
+ * gives them back. So does a load of the 3.9.60 or the 3.9.65 data, which has no shift plan in a 2001 start (open
+ * item 227: 3.9.60 holds the African Super Cup 2000 Hearts of Oak / Zamalek and the Merconorte Cup 2000 Atletico
+ * Nacional / Millonarios twice, 3.9.65 the same two). The base game and its 3.9.68 data (2 such rows) are not
+ * touched, nor is a Custom database without a plan.
  *
  * Rows after the start (0.6.2 slice 7, open items 3 and 17). The data holds results of editions that the game
  * then plays itself: the 3.9.68 data holds 128 club rows and 3 nation rows of the label year 2002 (the 2001/02
@@ -90,8 +93,9 @@ extern const int season_history_dbs_count;
 
 /* After the shift of a database load or a new shift (season_dates.c): the rows of database `name` for start
  * year N: first the duplicate rows go (above), then the researched rows and the rows of the added records.
- * name NULL (no shift plan): only the rows of the added records. */
-void season_history_fill(const char *name, int N);
+ * name NULL (no shift plan): only the rows of the added records, and the duplicate rows go when duplicates is 1
+ * (the 3.9.60 or the 3.9.65 data, open item 227). */
+void season_history_fill(const char *name, int N, int duplicates);
 
 /* At the creation of a new game, after the shift and the fill: clears every row with a label after S (above), and
  * with official (the 3.9.60, 3.9.65 or 3.9.68 data) the rows of S of a split season. */

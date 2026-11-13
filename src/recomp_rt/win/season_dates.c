@@ -37,6 +37,7 @@
 #include "season_coeffs.h"
 #include "season_records.h"
 #include "seasons_db.h"
+#include "options.h"
 #include "../host.h"
 
 #include <fcntl.h>
@@ -551,6 +552,7 @@ int season_dates_plan(const char *folder, int N, SeasonShiftPlan *out)
 }
 
 static const char *loaded_db_name(void);
+static int official_version(void);
 
 static void shift_for(int N)
 {
@@ -568,7 +570,7 @@ static void shift_for(int N)
     }
     /* slice 11c: the history between 2001 and the start; open item 74: with or without a plan (a 2001 game with
      * changing rules on), the past editions of the records that the season code adds */
-    season_history_fill(plan ? p.name : NULL, N);
+    season_history_fill(plan ? p.name : NULL, N, official_version());
     /* 0.6.2 open item 106: the real six seasons, in every start year (a 2001 start has no plan) */
     season_coeffs_fill(loaded_db_name());
 }
@@ -604,6 +606,20 @@ static int official_data(void)
 {
     const SeasonKnownDb *k = loaded_db();
     return k && (k->role == SEASONS_ROLE_OFFICIAL_BASE || k->role == SEASONS_ROLE_OFFICIAL_VERSION);
+}
+
+/* 1 when the loaded data is 3.9.60 or 3.9.65: its duplicate history rows go in every start year (open item 227).
+ * Not the 3.9.68 data of the base game (Q152). The signature table (seasons_table.c) holds other files under these
+ * names than the folders Data-3.9.60 and Data-3.9.65 that the game ships (make_clean_files.py), so a folder that it
+ * does not know is taken by the option database, as files.c data_dir_find reads it. The test switch RECOMP_DATA_DIR
+ * wins over the option there, and the option's default is 3.9.60: a test run that points it at another unknown folder
+ * must also write the option (run_set.py of the release tests writes both). Open item 230: the table itself. */
+static int official_version(void)
+{
+    const SeasonKnownDb *k = loaded_db();
+    if (k) return k->role == SEASONS_ROLE_OFFICIAL_VERSION;
+    int set = options_enum(OPT_DATABASE);
+    return loaded_dir[0] && (set == DATABASE_3960 || set == DATABASE_3965);
 }
 
 void season_dates_at_create(void)
