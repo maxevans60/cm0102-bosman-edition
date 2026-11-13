@@ -204,6 +204,16 @@ int main(void)
     code_on = 0;
     CHECK(season_uefa_row(2010) == NULL);
 
+    /* Issue 119: with stages a winner of the cup's own round table (stage -1: Q1, Q2, R1 of 2004/05 to 2008/09,
+     * the qualifying rounds from 2009/10) goes on to the group stage. It is not the cup winner (outcome 1 gave
+     * the cup winners record 0x86a800 and "Fans celebrate winning the UEFA Cup"). Only the final of the knockout
+     * stage gives outcome 1. A loser of any round stays out (2 or -1), and a winner of an earlier round stays 0. */
+    CHECK(season_uefa_cup_outcome(-1, 1) == 0);
+    CHECK(season_uefa_cup_outcome(-1, 2) == 2 && season_uefa_cup_outcome(-1, -1) == -1);
+    CHECK(season_uefa_cup_outcome(-1, 0) == 0);
+    CHECK(season_uefa_cup_outcome(8, 1) == 1 && season_uefa_cup_outcome(1, 1) == 1);
+    CHECK(season_uefa_cup_outcome(8, 2) == 2 && season_uefa_cup_outcome(8, 0) == 0);
+
     if (failures) return 1;
     printf("season_uefa: all checks pass\n");
     return 0;
