@@ -13,8 +13,9 @@ rows of 2001 (one copy of each stays). The winners tab 0x4991f0 then shows the y
 shift plan has the second copy cleared at the load (open item 3); a 2001 start has no plan, so before item 227 the
 copies stayed. The 3.9.68 data (the base game, Q152) keeps its rows: the same-save set checks that.
 
-One new game: 2001, England, seed 1, changing rules on (default), the data folder (default
-/Users/max/Projects/cm0102/data-3960 or data-3965), 10 days, a save. The checks: the run ends with code 0 and shows
+One new game: 2001, England, seed 1, changing rules on (default), the option database 3.9.60 or 3.9.65 with
+RECOMP_DATA_DIR at the data folder (default /Users/max/Projects/cm0102/data-3960 or data-3965), as run_set.py loads
+these data sets, 10 days, a save. The checks: the run ends with code 0 and shows
 no message box; the save holds no history row twice; the African Super Cup and the Merconorte Cup hold one row of
 2000 each.
 """
@@ -71,7 +72,13 @@ def main(argv):
     print(f"      database {db} ({folder}), changing rules {rules}")
     os.environ.pop("RECOMP_TIER_A", None)
     os.environ.pop("RECOMP_DATE_JUMP", None)
-    o = {"program": program, "game": game, "rules": rules, "database": folder, "seed": 1, "start": 2001,
+    os.environ["RECOMP_DATA_DIR"] = folder                  # files.c data_dir_find: the folder of the data set
+
+    def settings(user, rules_, database):
+        with open(os.path.join(user, "settings.txt"), "w") as f:
+            f.write(f"display = classic\nchanging_rules = {rules_}\nfaster_days = on\ndatabase = {db}\n")
+    soak_run.settings = settings
+    o = {"program": program, "game": game, "rules": rules, "database": None, "seed": 1, "start": 2001,
          "last": 2300, "nations": ["England"], "extra": [], "timeout": 3600}
     work = os.path.join(keep, "leg")
     code, took, box = soak_run.new_game_leg(o, work, DAYS)
