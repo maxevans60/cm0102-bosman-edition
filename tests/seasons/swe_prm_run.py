@@ -9,7 +9,9 @@ The run starts a new game in a season (default 2025, December 2025) with all nat
 first 16 rows of the Select League(s) screen), changing rules on, and plays that one season (RECOMP_SEASON_JUMP =
 the start year: the rules report of tests/seasons/rules_report_check.py, the end report of that season, then the
 program ends). --last plays to that season and checks it: a 2006 start (Summer 2006, own database) with --last
-2007 plays the change from 14 to 16 at a season start. SwePrm held 14 clubs: create_table 0x890430 allocates 14 rows (push 0x33a at 0x89043b) and
+2007 plays the change from 14 to 16 at a season start. A calendar-year league holds edition Y in the start report
+of season Y (real 2007: 14 clubs) and edition Y + 1 in its end report (real 2008: 16), so a later season checks the
+end report and the log lines only. SwePrm held 14 clubs: create_table 0x890430 allocates 14 rows (push 0x33a at 0x89043b) and
 create_schedule 0x88feb0 makes 26 dates (0x88feea). The rules table (swe_prm) has 16 from 2008.
 The checks:
     report  the Allsvenskan row (file swe_prm) of the start report holds 16 clubs, each pair meeting twice; the end
@@ -48,13 +50,15 @@ def report_rows(path, year, file="swe_prm"):
     return out
 
 
-def faults(work, year):
+def faults(work, year, first):
     report = os.path.join(work, "report.tsv")
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
     fails = [f"{year}: {x.strip()}" for x in log.split("\n") if "recomp: message box from" in x]
     rows = report_rows(report, year)
     start, end = rows.get("start"), rows.get("end")
-    if not start:
+    if year != first:
+        pass                            # the start report holds the edition of that calendar year
+    elif not start:
         fails.append(f"{year}: no Allsvenskan row in the start report")
     elif (int(start["clubs"]), int(start["rounds"])) != (CLUBS, 2):
         fails.append(f"{year}: start report clubs and meetings {(int(start['clubs']), int(start['rounds']))}, "
@@ -71,6 +75,8 @@ def faults(work, year):
     dates = [x for x in log.split("\n") if "recomp: league sizes: swe_prm dates" in x]
     if not any(f"{want} dates for {CLUBS} clubs" in x for x in dates):
         fails.append(f"{year}: no log line of a swe_prm template of {want} dates")
+    if year != first:
+        return fails
     clubs = []
     seasons, comps = rrc.read_report(report, clubs)
     diffs = set(rrc.differences(seasons, comps, rrc.make_rules.read_rows())) | rrc.division_differences(comps, clubs)
@@ -96,7 +102,7 @@ def main(argv):
         if code != 0:
             print(f"FAIL {year}: the run ended with code {code} ({work})")
             return 1
-    fails = faults(work, last)
+    fails = faults(work, last, year)
     for f in fails:
         print("FAIL", f)
     print(("FAIL" if fails else "PASS") + f" swe_prm {year} to {last} ({work})")
