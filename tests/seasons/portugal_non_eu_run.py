@@ -68,6 +68,10 @@ def check_run(name, program, game, keep, reuse):
     if got != answer or (code_want is not None and code != code_want):
         fails.append(f"{name}: the check of a 7th non-EU player answers {got} code 0x{code:x}, expected {answer}"
                      + (f" code 0x{code_want:x}" if code_want is not None else ""))
+    # The base cap +0x13 stays: 255 there refuses every offer for a foreign player (0x8e8800, signed compare).
+    caps = [x for x in log if re.search(r"season nation: Portugal foreign cap", x)]
+    if caps:
+        fails.append(f"{name}: the foreign cap of Portugal was changed: {caps[0].strip()}")
     print(f"{name}: {club} had {had} non-EU players, held {held} for the test ({n_found} found elsewhere); "
           f"a 7th: answer {got} code 0x{code:x}; {len(fails)} problems ({work})")
     return fails
