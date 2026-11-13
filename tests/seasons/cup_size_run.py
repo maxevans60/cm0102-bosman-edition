@@ -72,7 +72,10 @@ def faults(name, work):
         _seasons, comps = rrc.read_report(report)
     except SystemExit:
         return fails + [f"{name}: no rules report ({report})"]
-    start = {c["file"]: c["clubs"] for c in comps if c["season"] == year and c["phase"] == "start"}
+    start = {}          # a file can name more objects (fra_first: the CFA stub and an empty FraFirst): the largest league
+    for c in comps:
+        if c["season"] == year and c["phase"] == "start" and c["kind"] == "league":
+            start[c["file"]] = max(start.get(c["file"], 0), c["clubs"])
     for file, want in SIZES[name].items():
         if start.get(file) != want:
             fails.append(f"{name}: {file} holds {start.get(file)} clubs at the start of {year}, want {want}")
