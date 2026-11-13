@@ -965,9 +965,12 @@ static void size_step_run(uint32_t trigger)
     /* Every other club of a noted division (a club that joined it outside the noted pairs, such as the Conference
      * club that EngPrm::exchange_conference_feeder_clubs 0x5750a0 moves up through 0x6830b0 at 0x575268, so the plan
      * counts what the division holds), and the clubs with no division of the nation of a lowest division (no club
-     * of a national side, no club with no nation: season_clubs.c, the shells). */
+     * of a national side, no club with no nation: season_clubs.c, the shells). A club of a spare division (A Lower
+     * Division, A Premier Division: the small clubs of every nation) counts as a club with no division, as the fill
+     * of a new game takes it (season_clubs.c group 2): the Portuguese clubs below the Segunda Liga sit there. */
     for (int i = 0; readable(table) && i < count && i < national_from; i++) {
         uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION), now = current_division(c);
+        if (now && season_clubs_in_spare(c)) now = 0;
         int wanted = 0;
         if (now) {
             for (int d = 0; d < ndiv && !wanted; d++) wanted = now == step_seen[d].rec;
@@ -982,6 +985,7 @@ static void size_step_run(uint32_t trigger)
     }
     for (int k = 0; k < nclub; k++) {
         uint32_t c = at[k], now = current_division(c);
+        if (now && season_clubs_in_spare(c)) now = 0;
         club[k].div = now ? -3 : STEP_NONE;     /* -3: a division outside the step */
         for (int d = 0; d < ndiv; d++)
             if (now == step_seen[d].rec) club[k].div = d;
@@ -1042,7 +1046,7 @@ static void size_step_run(uint32_t trigger)
                     season_change_file(obj), record_name(obj), step_seen[d].year + 1, have, div[d].want,
                     div[d].started ? " (its new table is made: no step)"
                     : have < div[d].want ? (div[d].nlower ? ": the division below has no club to give"
-                                                          : ": no club of its nation with no division")
+                                                          : ": no club of its nation with no division or in a spare division")
                     : have > div[d].want ? ": no club can go down" : "");
     }
 done:

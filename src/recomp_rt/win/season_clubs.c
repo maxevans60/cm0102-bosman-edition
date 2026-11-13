@@ -522,6 +522,19 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
     return 0;
 }
 
+int season_clubs_in_spare(uint32_t club)
+{
+    uint32_t comps = rd32(g_mem, COMPS), now = rd32(g_mem, club + CLUB_DIVISION);
+    int32_t key_lower = (int32_t)rd32(g_mem, KEY_LOWER), key_premier = (int32_t)rd32(g_mem, KEY_PREMIER);
+    if (!comps || !now) return 0;
+    if (now != (key_lower >= 0 ? comps + (uint32_t)key_lower * COMP_SIZE : 0) &&
+        now != (key_premier >= 0 ? comps + (uint32_t)key_premier * COMP_SIZE : 0))
+        return 0;
+    /* As move_clubs: DenCup::collect_entrants 0x551240 takes its lower clubs from A Lower Division. */
+    uint32_t nations = rd32(g_mem, NATIONS);
+    return !nations || rd32(g_mem, club + CLUB_NATION) != nations + rd32(g_mem, DEN_NATION) * 0x122u;
+}
+
 /* FILL_BY_REP: the club of the group with the highest reputation (+0x80), or -1. A list of a lower division (the
  * English Conference) sends the clubs that it does not keep out of that division. Its former clubs are the clubs
  * of the nation nearest to the division above, so they take its open places first, best first. The spare
