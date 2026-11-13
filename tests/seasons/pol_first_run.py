@@ -2,7 +2,7 @@
 """The Ekstraklasa in its real format of each season (GitHub issue 92, 0.6.2 open item 221).
 
 Usage:
-    python3 tests/seasons/pol_first_run.py <cm0102_recomp> <game folder> [--only 2002,2013,2025,long] [--keep <folder>]
+    python3 tests/seasons/pol_first_run.py <cm0102_recomp> <game folder> [--only 2002,2013,2025,long,long2] [--keep <folder>]
         [--reuse] [--timeout <seconds>]
 
 Each run starts a new game in a season with all nations (the rows of the Select League(s) screen differ by
@@ -14,8 +14,7 @@ season, then the program ends). The format of the rules table (docs/research/rul
     2025  December 2025: one table of 18 clubs, 34 rounds.
 The checks:
     report  the Polish First Division row of the start report (rules report, file pol_first) has the clubs of the row,
-            each pair meeting twice, the places of the original's final table (none up, 2 to
-            the play-off with the I liga's 3rd and 4th, 2 down); the end report has the same clubs, each with 2 (n - 1)
+            each pair meeting twice, the places of the season (PLACES); the end report has the same clubs, each with 2 (n - 1)
             matches of the first phase (+0xa7);
     log     RECOMP_POL_FIRST_LOG (src/recomp_rt/win/season_pol_first.c) names one table of n clubs, and in 2013 the
             split (8 and 8 clubs, 7 dates, points halved);
@@ -23,6 +22,7 @@ The checks:
     history the club history records the final table (Club_History::record_comp_season 0x442e80), with the 30 matches
             before the split;
     box     no message box.
+    long2   a December 2025 game played to 2026/27: the I liga's own play-off is drawn, both leagues hold 18 clubs.
     long    a 2002 game played to 2005/06: the Ekstraklasa holds 16, 14, 14 and 16 clubs, the I liga 18, and both have
             each season's places.
 A run takes about 20 to 40 minutes; they run one after the other. --reuse checks the logs in --keep again.
@@ -51,10 +51,14 @@ RUNS = {2002: ("Summer 2002", True, 16, None),
 # the Ekstraklasa (2002/03 2 pairs, 2003/04 to 2008/09 1) or its own play-off of 3rd to 6th (4, from 2019/20); its
 # relegation play-offs against the third tier have no opponent in the game (0).
 PLACES = {2002: ((0, 0, 2, 3), (1, 2, 0, 6)), 2003: ((0, 0, 1, 2), (2, 1, 0, 4)), 2004: ((0, 0, 1, 1), (3, 1, 0, 2)),
-          2005: ((0, 0, 1, 2), (2, 1, 0, 3)), 2013: ((0, 0, 0, 2), (2, 0, 0, 3)), 2025: ((0, 0, 0, 3), (2, 4, 0, 3))}
+          2005: ((0, 0, 1, 2), (2, 1, 0, 3)), 2013: ((0, 0, 0, 2), (2, 0, 0, 3)), 2025: ((0, 0, 0, 3), (2, 4, 0, 3)),
+          2026: ((0, 0, 0, 3), (2, 4, 0, 3))}
 # The long run: a 2002 game to the end of 2005/06, the Ekstraklasa's clubs of each season (16, then 3 down and 1 up
 # with the play-off pairs swapping: 14; 2 and 2: 14; 1 and 3: 16).
 LONG = (2002, 2005, {2002: 16, 2003: 14, 2004: 14, 2005: 16})
+# The second long run: a December 2025 game to the end of 2026/27. The I liga's own play-off of 3rd to 6th (2025/26) must
+# be drawn and played before the Polish season change (log line of season_playoffs.c), and both leagues keep 18 clubs.
+LONG2 = (2025, 2026, {2025: 18, 2026: 18})
 
 
 def database(year, work):
@@ -150,10 +154,10 @@ def one(program, game, year, keep, reuse, timeout):
     return fails
 
 
-def long_run(program, game, keep, reuse, timeout):
-    """LONG: a 2002 game to 2005/06; the clubs and places of each season."""
-    start, last, sizes = LONG
-    work = os.path.join(keep, "long") if keep else tempfile.mkdtemp(prefix="cm0102-pol-first-long-")
+def long_run(program, game, keep, reuse, timeout, which="long"):
+    """LONG: a 2002 game to 2005/06; the clubs and places of each season. LONG2: a 2025 game to 2026/27."""
+    start, last, sizes = LONG if which == "long" else LONG2
+    work = os.path.join(keep, which) if keep else tempfile.mkdtemp(prefix="cm0102-pol-first-long-")
     report = os.path.join(work, "report.tsv")
     if not reuse:
         code, report = rrc.run(program, game, last, start, database(start, keep or work), ["all"], [], work,
@@ -174,6 +178,11 @@ def long_run(program, game, keep, reuse, timeout):
         second = report_rows(report, year, "pol_second").get("start")
         if second and int(second["clubs"]) != 18:
             fails.append(f"long: {year}/{(year + 1) % 100:02d} I liga clubs {second['clubs']}, want 18")
+    if which == "long2":
+        if not re.search(r"recomp: playoffs: pol_second 2025: the play-off draws on day \d+ of 2026", log):
+            fails.append("long: no line for the I liga's own play-off of 2025/26 (drawn before the season change)")
+        if re.search(r"recomp: season change net: .*pol", log):
+            fails.append("long: the season change net acted on the Polish leagues")
     print(("FAIL  " + "; ".join(fails)) if fails else f"ok    long: a 2002 game to {last}/{(last + 1) % 100:02d} ({work})")
     return fails
 
@@ -183,12 +192,12 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = argv[0], argv[1]
-    only = [y for y in argv[argv.index("--only") + 1].split(",")] if "--only" in argv else [str(y) for y in sorted(RUNS)] + ["long"]
+    only = [y for y in argv[argv.index("--only") + 1].split(",")] if "--only" in argv else [str(y) for y in sorted(RUNS)] + ["long", "long2"]
     keep = argv[argv.index("--keep") + 1] if "--keep" in argv else None
     timeout = int(argv[argv.index("--timeout") + 1]) if "--timeout" in argv else 7200
     fails = []
     for y in only:
-        fails += long_run(program, game, keep, "--reuse" in argv, timeout) if y == "long" else \
+        fails += long_run(program, game, keep, "--reuse" in argv, timeout, y) if y in ("long", "long2") else \
             one(program, game, int(y), keep, "--reuse" in argv, timeout)
     print(("FAIL  " + f"{len(fails)} failures") if fails else f"ok    pol_first_run: {len(only)} seasons")
     return 1 if fails else 0
