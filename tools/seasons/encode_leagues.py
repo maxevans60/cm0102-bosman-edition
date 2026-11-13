@@ -701,7 +701,8 @@ def encode_rounds(r, meetings, zones, extra, split):
         return "-"
     if zones not in ("-", "gap"):
         n = max(int(x) for x in zones.split("+"))
-    elif zones == "-" and isinstance(r["clubs"], int) and "group" not in r["clubs_text"].lower():
+    elif (zones == "-" and isinstance(r["clubs"], int) and "group" not in (r["clubs_text"] + r["format_text"]).lower()
+          and not re.search(r"\(\s*[A-Z][\w ]* \d+", r["clubs_text"])):     # "32 (A 16, B 16)": groups
         n = r["clubs"]
     else:
         return "-"

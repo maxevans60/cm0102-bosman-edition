@@ -154,6 +154,9 @@ check(st("usa_mls", 2008, "meetings") == "-", "MLS 2008: 30 games of 15 clubs is
 check(st("jap_j1", 2025, "zones") == "10+10" and st("jap_j1", 2025, "rounds") == 18, "J1 2025: two regions of 10")
 check(st("swe_second", 2001, "rounds") == "-" and st("tur_second_b", 2003, "rounds") == "-",
       "divisions of regional groups have no one table")
+check(st("bel_third", 2001, "rounds") == "-" and st("bra_nat_third", 2001, "rounds") == "-",
+      "groups in the clubs cell (A 16, B 16) or the format (regional groups): no one table")
+check(st("tur_second", 2023, "rounds") == 34, "18 (19 entered; ...): one table of 18")
 check(st("arg_second", 2001, "zones") == "gap", "ZONES_FIX: the Apertura of 25, then zones")
 check(st("den_prm", 2020, "split_meet") == "2+2", "home and away (10 rounds) in sixes")
 bad_zones = [(r["comp_file"], r["season"]) for r in rows if r["zones"] not in ("-", "gap", "?") and r["clubs"] > 0

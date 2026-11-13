@@ -324,9 +324,9 @@ bra-52	2025	bra_nat_first	1	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-53	2026	bra_nat_first	1	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-54	2027	bra_nat_first	1	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-55	2001	bra_nat_second	2	26	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	25
-bra-56	2002	bra_nat_second	2	24	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	23
-bra-57	2003	bra_nat_second	2	24	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	23
-bra-58	2004	bra_nat_second	2	22	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	21
+bra-56	2002	bra_nat_second	2	24	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	-
+bra-57	2003	bra_nat_second	2	24	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	-
+bra-58	2004	bra_nat_second	2	22	1-8	-	-	ok	-	calendar	1	0	-	0	0	-	-
 bra-59	2005	bra_nat_second	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-60	2006	bra_nat_second	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-61	2007	bra_nat_second	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
@@ -350,33 +350,33 @@ bra-78	2024	bra_nat_second	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-79	2025	bra_nat_second	2	20	3-6	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-80	2026	bra_nat_second	2	20	3-6	-	-	ok	-	calendar	2	0	-	0	0	-	38
 bra-81	2027	bra_nat_second	2	20	3-6	-	-	ok	-	calendar	2	0	-	0	0	-	38
-bra-82	2001	bra_nat_third	3	61	-	-	-	ok	-	calendar	2	0	-	0	0	-	122
-bra-83	2002	bra_nat_third	3	93	-	-	-	ok	-	calendar	2	0	-	0	0	-	186
-bra-84	2003	bra_nat_third	3	60	-	-	-	ok	-	calendar	2	0	-	0	0	-	118
-bra-85	2004	bra_nat_third	3	63	-	-	-	ok	-	calendar	2	0	-	0	0	-	126
-bra-86	2005	bra_nat_third	3	63	-	-	-	ok	-	calendar	2	0	-	0	0	-	126
-bra-87	2006	bra_nat_third	3	64	-	-	-	ok	-	calendar	2	0	-	0	0	-	126
-bra-88	2007	bra_nat_third	3	63	-	-	-	ok	-	calendar	2	0	-	0	0	-	126
-bra-89	2008	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-90	2009	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-91	2010	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-92	2011	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-93	2012	bra_nat_third	3	21	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	42
-bra-94	2013	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-95	2014	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-96	2015	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-97	2016	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-98	2017	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-99	2018	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-100	2019	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-101	2020	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	38
-bra-102	2021	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	19
-bra-103	2022	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	19
-bra-104	2023	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	19
-bra-105	2024	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	19
-bra-106	2025	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	19
-bra-107	2026	bra_nat_third	3	24	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	23
-bra-108	2027	bra_nat_third	3	28	-	-	-	ok	-	calendar	2	0	-	0	0	-	54
+bra-82	2001	bra_nat_third	3	61	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-83	2002	bra_nat_third	3	93	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-84	2003	bra_nat_third	3	60	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-85	2004	bra_nat_third	3	63	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-86	2005	bra_nat_third	3	63	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-87	2006	bra_nat_third	3	64	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-88	2007	bra_nat_third	3	63	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
+bra-89	2008	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-90	2009	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-91	2010	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-92	2011	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-93	2012	bra_nat_third	3	21	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-94	2013	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-95	2014	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-96	2015	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-97	2016	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-98	2017	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-99	2018	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-100	2019	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-101	2020	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	2	0	-	0	0	-	-
+bra-102	2021	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	-
+bra-103	2022	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	-
+bra-104	2023	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	-
+bra-105	2024	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	-
+bra-106	2025	bra_nat_third	3	20	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	-
+bra-107	2026	bra_nat_third	3	24	-	-	-	partial: a stage of groups (see format)	-	calendar	1	0	-	0	0	-	-
+bra-108	2027	bra_nat_third	3	28	-	-	-	ok	-	calendar	2	0	-	0	0	-	-
 club-world-4	2001	conmebol_liber	1	32	-	-	-	ok	-	calendar	-	-	-	-	-	-	-
 club-world-5	2001	conmebol_merc	2	20	-	-	-	ok	-	calendar	-	-	-	-	-	-	-
 club-world-6	2001	con_merc_cup	2	16	-	-	-	ok	-	calendar	-	-	-	-	-	-	-
@@ -1148,25 +1148,25 @@ gre-pol-cro-59	2005	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-60	2006	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-61	2007	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-62	2008	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
-gre-pol-cro-63	2009	gre_second	2	18	3-6	13-16	-	ok	-	split	2	0	-	0	0	-	34
-gre-pol-cro-64	2010	gre_second	2	18	3-6	-	-	ok	-	split	2	0	-	0	0	-	34
+gre-pol-cro-63	2009	gre_second	2	18	3-6	13-16	-	ok	-	split	2	0	-	0	0	-	-
+gre-pol-cro-64	2010	gre_second	2	18	3-6	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-65	2011	gre_second	2	18	3-6	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-66	2012	gre_second	2	21	4-7	-	-	ok	-	split	2	0	-	0	0	-	42
-gre-pol-cro-67	2013	gre_second	2	14	1-4	-	-	partial: the places of each group	-	split	2	0	-	0	0	-	26
-gre-pol-cro-68	2014	gre_second	2	13	1-3	5-10	-	partial: the places of each group	-	split	2	0	-	0	0	-	26
+gre-pol-cro-67	2013	gre_second	2	14	1-4	-	-	partial: the places of each group	-	split	2	0	-	0	0	-	-
+gre-pol-cro-68	2014	gre_second	2	13	1-3	5-10	-	partial: the places of each group	-	split	2	0	-	0	0	-	-
 gre-pol-cro-69	2015	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-70	2016	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-71	2017	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-72	2018	gre_second	2	16	2	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-73	2019	gre_second	2	12	2	-	-	ok	-	split	2	0	-	0	0	-	22
 gre-pol-cro-74	2020	gre_second	2	12	2	-	-	partial: the 2nd of the play-off round of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-75	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	34
-gre-pol-cro-76	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	30
+gre-pol-cro-75	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	-
+gre-pol-cro-76	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-77	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
 gre-pol-cro-78	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
 gre-pol-cro-79	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
-gre-pol-cro-80	2026	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-81	2027	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
+gre-pol-cro-80	2026	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	-
+gre-pol-cro-81	2027	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-82	2001	gre_super	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-83	2002	gre_super	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-84	2003	gre_super	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
@@ -1194,10 +1194,10 @@ gre-pol-cro-105	2024	gre_super	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-106	2025	gre_super	0	2	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-107	2026	gre_super	0	2	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-108	2027	gre_super	0	2	-	-	-	ok	-	split	-	-	-	-	-	-	-
-gre-pol-cro-121	2013	gre_second	2	14	1-4	-	-	partial: the places of each group	-	split	2	0	-	0	0	-	26
-gre-pol-cro-122	2014	gre_second	2	13	1-3	5-10	-	partial: the places of each group	-	split	2	0	-	0	0	-	26
-gre-pol-cro-129	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	34
-gre-pol-cro-130	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	30
+gre-pol-cro-121	2013	gre_second	2	14	1-4	-	-	partial: the places of each group	-	split	2	0	-	0	0	-	-
+gre-pol-cro-122	2014	gre_second	2	13	1-3	5-10	-	partial: the places of each group	-	split	2	0	-	0	0	-	-
+gre-pol-cro-129	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	-
+gre-pol-cro-130	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-131	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
 gre-pol-cro-132	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
 gre-pol-cro-133	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
@@ -1448,77 +1448,77 @@ hol-bel-2	2001	hol_prm	1	18	-	16-17	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-3	2001	hol_first	2	18	2-7	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-8	2001	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-9	2001	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-10	2001	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-10	2001	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-15	2002	hol_prm	1	18	-	16-17	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-16	2002	hol_first	2	18	2-7	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-21	2002	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-22	2002	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-23	2002	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-23	2002	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-28	2003	hol_prm	1	18	-	16-17	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-29	2003	hol_first	2	19	2-7	-	-	ok	-	split	2	0	-	0	?	-	38
 hol-bel-34	2003	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-35	2003	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-36	2003	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-36	2003	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-41	2004	hol_prm	1	18	-	16-17	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-42	2004	hol_first	2	19	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-47	2004	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-48	2004	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-49	2004	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-49	2004	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-54	2005	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-55	2005	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	6	-	38
 hol-bel-60	2005	bel_first	1	18	-	17	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-61	2005	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-62	2005	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-62	2005	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-67	2006	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-68	2006	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	6	-	38
 hol-bel-73	2006	bel_first	1	18	-	17	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-74	2006	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-75	2006	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-75	2006	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-80	2007	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-81	2007	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	6	-	38
 hol-bel-86	2007	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-87	2007	bel_second	2	19	2-5	-	-	ok	-	split	2	0	-	0	0	-	38
-hol-bel-88	2007	bel_third	3	31	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-88	2007	bel_third	3	31	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-93	2008	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-94	2008	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	6	-	38
 hol-bel-99	2008	bel_first	1	18	-	15-16	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-100	2008	bel_second	2	19	2-5	-	-	ok	-	split	2	0	-	0	0	-	38
-hol-bel-101	2008	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	62
+hol-bel-101	2008	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-106	2009	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-107	2009	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-112	2009	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-113	2009	bel_second	2	19	2-4	-	-	ok	-	split	2	0	-	0	?	-	38
-hol-bel-114	2009	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	74
+hol-bel-114	2009	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-119	2010	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-120	2010	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
 hol-bel-125	2010	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-126	2010	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-127	2010	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	70
+hol-bel-127	2010	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-132	2011	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-133	2011	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
 hol-bel-138	2011	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-139	2011	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-140	2011	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	70
+hol-bel-140	2011	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-145	2012	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-146	2012	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
 hol-bel-151	2012	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-152	2012	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-153	2012	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	74
+hol-bel-153	2012	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-158	2013	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-159	2013	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-164	2013	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-165	2013	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-166	2013	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	70
+hol-bel-166	2013	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-171	2014	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-172	2014	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-177	2014	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-178	2014	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
-hol-bel-179	2014	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	70
+hol-bel-179	2014	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-184	2015	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-185	2015	hol_first	2	19	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-190	2015	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
 hol-bel-191	2015	bel_second	2	17	-	-	-	ok	-	split	2	0	-	0	0	-	34
-hol-bel-192	2015	bel_third	3	37	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	74
+hol-bel-192	2015	bel_third	3	37	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	-
 hol-bel-197	2016	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-198	2016	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-203	2016	bel_first	1	16	-	-	-	ok	after 30: 6+9, points halved	split	2	0	-	0	0	?	30
@@ -1563,17 +1563,17 @@ hol-bel-301	2024	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-302	2024	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
 hol-bel-307	2024	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	?	30
 hol-bel-308	2024	bel_second	2	16	3-6	-	-	ok	-	split	2	0	-	0	0	-	30
-hol-bel-309	2024	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	54
+hol-bel-309	2024	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	-
 hol-bel-314	2025	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-315	2025	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
 hol-bel-320	2025	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	?	30
 hol-bel-321	2025	bel_second	2	17	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	34
-hol-bel-322	2025	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	54
+hol-bel-322	2025	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	-
 hol-bel-327	2026	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-328	2026	hol_first	2	20	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	4	-	38
 hol-bel-333	2026	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-334	2026	bel_second	2	15	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	30
-hol-bel-335	2026	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	54
+hol-bel-335	2026	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	-
 hol-bel-340	2027	hol_prm	1	-1	-	-	-	ok	-	split	-	?	?	?	?	-	-
 hol-bel-341	2027	hol_first	2	-1	-	-	-	ok	-	split	-	?	?	?	?	-	-
 hol-bel-346	2027	bel_first	1	-1	-	-	-	ok	-	split	-	?	?	?	?	-	-
@@ -1862,7 +1862,7 @@ por-29	2004	por_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 por-30	2004	por_second_b	3	59	-	-	-	gap: a rule of one region of the nation	-	split	2	0	20+19+20	0	0	-	38
 por-37	2005	por_prm	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 por-38	2005	por_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
-por-39	2005	por_second_b	3	58	-	-	-	gap: the winners of zones or series: places of a second stage that the game does not play	-	split	2	0	-	0	0	-	114
+por-39	2005	por_second_b	3	58	-	-	-	gap: the winners of zones or series: places of a second stage that the game does not play	-	split	2	0	-	0	0	-	-
 por-46	2006	por_prm	1	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 por-47	2006	por_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 por-48	2006	por_second_b	3	56	-	-	-	gap: the winners of zones or series: places of a second stage that the game does not play	-	split	2	0	-	0	0	-	110
