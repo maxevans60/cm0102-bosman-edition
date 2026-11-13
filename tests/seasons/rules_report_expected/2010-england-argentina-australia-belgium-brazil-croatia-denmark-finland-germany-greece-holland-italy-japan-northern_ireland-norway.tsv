@@ -72,6 +72,13 @@
 2010	down	nir_first (IFA Championship 1), row wal-nir-irl-236: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
 2010	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-115: the game waits for 2012, the table holds it
 2010	idle	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-113: the game waits for 2012, the table holds it
+2010	meetings	arg_second (Primera B Nacional), row arg-usa-37: game 1, table 2
+2010	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-37: game 1, table 2
+2010	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-64: game 1, table 2
+2010	meetings	fin_first (Ykkönen), row nor-fin-98: game 3, table 2
+2010	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-226: game 4, table 2
+2010	meetings	nir_first (IFA Championship 1), row wal-nir-irl-236: game 4, table 2
+2010	meetings	nir_prm (IFA Premiership), row wal-nir-irl-235: game 4, table 3
 2010	no_row	friendly (Friendly): no table row
 2010	no_row	record_utils ('B' International): no table row
 2010	no_row	record_utils (Reserve): no table row
@@ -108,6 +115,19 @@
 2010	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-158: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
 2010	playoffs	nor_first (Adeccoligaen), row nor-fin-93: game 1 up and 0 down play-off places, table 0 and 0 ('none')
 2010	playoffs	nor_prm (Tippeligaen), row nor-fin-92: game 0 up and 1 down play-off places, table 0 and 0 ('none')
+2010	rounds	arg_second (Primera B Nacional), row arg-usa-37: game 25, table 38 (2 meetings, zones -, extra 0)
+2010	rounds	bel_first (Belgian Pro League), row hol-bel-125: game 34, table 30 (2 meetings, zones -, extra 0)
+2010	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-37: game 19, table 38 (2 meetings, zones -, extra 0)
+2010	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-64: game 19, table 38 (2 meetings, zones -, extra 0)
+2010	rounds	fin_first (Ykkönen), row nor-fin-98: game 27, table 26 (2 meetings, zones -, extra 0)
+2010	rounds	gre_prm (Super League Greece), row gre-pol-cro-37: game 26, table 30 (2 meetings, zones -, extra 0)
+2010	rounds	ita_ser_a (Serie A), row ita-155: game 34, table 38 (2 meetings, zones -, extra 0)
+2010	rounds	ita_ser_b (Serie B), row ita-156: game 38, table 42 (2 meetings, zones -, extra 0)
+2010	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-199: game 30, table 34 (2 meetings, zones -, extra 0)
+2010	rounds	jap_j2 (J.League Division 2), row aus-jap-kor-226: game 44, table 38 (2 meetings, zones -, extra 0)
+2010	rounds	nir_first (IFA Championship 1), row wal-nir-irl-236: game 36, table 26 (2 meetings, zones -, extra 0)
+2010	rounds	nir_prm (IFA Premiership), row wal-nir-irl-235: game 36, table 33 (3 meetings, zones -, extra 0)
+2010	rounds	nor_prm (Tippeligaen), row nor-fin-92: game 26, table 30 (2 meetings, zones -, extra 0)
 2010	up	arg_second (Primera B Nacional), row arg-usa-37: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2010	up	aus_nsl (A-League), row aus-jap-kor-33: game 6 (+0 play-off places), table na (n/a)
 2010	up	bel_third (Belgian Third Division), row hol-bel-127: game 1 (+0 play-off places), table 2 (2 (group champions))
