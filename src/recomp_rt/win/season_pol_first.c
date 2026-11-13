@@ -669,6 +669,7 @@ RT_WRAP(007cbdf0, pol_second_table)
     if (stages && !readable(rd32(g_mem, self + OBJ_STAGES))) {
         uint32_t slot = game_malloc(4);
         if (!slot) return;
+        wr32(g_mem, slot, 0);
         wr32(g_mem, self + OBJ_STAGES, slot);
     }
     wr32(g_mem, self + OBJ_STAGE_COUNT, (uint32_t)stages);
@@ -685,8 +686,19 @@ RT_WRAP(007cc290, pol_second_playoff)
     uint32_t self = cpu.ecx;
     Exchange x;
     if (second_exchange(self, &x) && x.own) {
+        /* PolSecond::advance_stage 0x7cc1c0 sets +0x30 to 0 (0x7cc276..0x7cc281) before it calls this function, so the
+         * stage is built whatever +0x30 holds. The slot is cleared first: a play-off that is not built (a direct
+         * promotion, no time left) leaves no stage, as the 3. Liga (season_divisions.c): +0x2c 0 and +0x30 -1, or
+         * League::update_for_date 0x6847c0 calls the stage of an empty slot each day (0x6848f8, call to 0x1). */
+        uint32_t slots = rd32(g_mem, self + OBJ_STAGES);
+        if (readable(slots)) wr32(g_mem, slots, 0);
         season_playoffs_build_for(self);
-        if (!rt_unwinding) rt_ret_stdcall(0, 0);
+        if (rt_unwinding) return;
+        if (!readable(slots) || !readable(rd32(g_mem, slots))) {
+            wr32(g_mem, self + OBJ_STAGE_COUNT, 0);
+            wr32(g_mem, self + OBJ_STAGE_NOW, 0xffffffffu);
+        }
+        rt_ret_stdcall(0, 0);
         return;
     }
     o_007cc290();
@@ -734,9 +746,16 @@ uint32_t rt_pol_first_pairwise(uint32_t obj, uint32_t original)
     return ours(obj) ? 0u : original;
 }
 
+static uint32_t pol_object(void);
+static uint32_t split_stage(uint32_t obj);
+
+/* The chain's upper league: the object in one table, or in the seasons of the split the split stage (slot 0), whose
+ * promotion and relegation places are the season's (the review of 13 November 2026, point 2). */
 int season_pol_first_moves_alone(uint32_t upper)
 {
-    return ours(upper);
+    if (ours(upper)) return 1;
+    uint32_t obj = readable(upper) ? pol_object() : 0;
+    return obj && upper == split_stage(obj);
 }
 
 /* 0x7ca030 (start_new_season, the object in ebx) takes 4 clubs of the Polish third tier, a pool (cmp si, 4 at 0x7ca132,

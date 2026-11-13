@@ -506,7 +506,7 @@ static void build_stage(uint32_t obj)
  * own play-off from 2019/20 (season_pol_first.c). The caller sets its places and one stage. */
 int season_playoffs_build_for(uint32_t obj)
 {
-    if ((int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1 || !readable(rd32(g_mem, obj + COMP_STAGES))) return 0;
+    if (!readable(rd32(g_mem, obj + COMP_STAGES))) return 0;     /* +0x30 is 0 already: the caller is advance_stage */
     build_stage(obj);
     return 1;
 }
