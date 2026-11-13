@@ -94,6 +94,7 @@
 #define KEY_FIRST 0x9cf6c0u             /* the Norwegian First Division */
 #define KEY_GROUP1 0x9cf6c4u            /* the 8 groups of the Second Division, 0x9cf6c4..0x9cf6e0 */
 #define GROUPS 8
+#define KEY_THIRD 0x9cf738u            /* the Norwegian Third Division (not played) */
 #define CLUBS 0xae23b4u
 #define CLUB_COUNT 0xae235cu
 #define CLUB_SIZE ST_CLUB_SIZE
@@ -245,6 +246,201 @@ static void log_census(const char *when)
             "%d second teams\n", when, c1, s1, c2, s2);
 }
 
+/* Item 232 (0.7.2, forum report of 13 November 2026): a second team in the Second Division whose club does not
+ * allow it there.
+ *
+ * The real rule by season. Sources, read on 13 November 2026 (notes: run-logs/0.7.2-nor-b/research-nor.md):
+ * the NFF Tinghefte of the Forbundsting of 7 to 9 March 2014, Forslag 17, pages 27 and 28 (https://www.fotball.no/
+ * globalassets/nff-org/forbundstinget/tinghefte2014_materieorig_3_rev4.pdf), which prints the Kampreglement then in
+ * force, and the NFF Kampreglement on Lovdata (above). no.wikipedia "2. divisjon fotball for menn" gives 2015 as
+ * the first season of the new text.
+ * - To the season 2014, Kampreglement § 2-10 (1): (a) a second team plays at most in the division below the club's
+ *   higher team; (b) the second team of a tier 1 club goes no higher than the 2. divisjon; (c) the second team of a
+ *   tier 2 club goes no higher than the 3. divisjon. So only the second team of an Eliteserien club plays the
+ *   Second Division, and it goes down when its club goes down (the Tinghefte: "2. lag har blitt flyttet ned en
+ *   divisjon"). Cases (no.wikipedia tables): Stabæk 2 in 2004, Molde 2 and HamKam 2 in 2006, Odd Grenland 2 and
+ *   Start 2 in 2007, Fredrikstad 2 in 2009, Tromsø 2 in 2013. The text of 2001 to 2012 was not found; the cases of
+ *   2004 to 2013 show the same rule, so it runs in every season to 2014.
+ * - From the season 2015, § 2-7 (1): (b) the second team of a tier 1 or tier 2 club goes no higher than the
+ *   2. divisjon; (a) as before. So the second team of an Eliteserien or First Division club may play the Second
+ *   Division, and goes down when its club comes down into the Second Division (Vålerenga 2 stayed in the 2. divisjon
+ *   in 2024 after its club went down from Eliteserien).
+ * Who takes the place: the cases show a club of the same group (2004 to 2007) or the best twelfth (2009, 2013) that
+ * stays up. The game does not play the Second Division and sends no club down from it, and 0x792b40 (at 0x7927c2)
+ * shares its clubs out into the eight groups again, so no club needs to take the place.
+ *
+ * The fix (season games with changing rules on, after the call of 0x792960 in its wrap, for the season that
+ * starts: Eliteserien's year +0x40 still holds the season played, 0x7927f8 adds 1 after 0x792960 and 0x792b40):
+ * each second team of the groups whose first team plays below Eliteserien (to 2014) or below the First Division
+ * (from 2015) goes to the Third Division [0x9cf738], which the game does not play, through League::
+ * relegate_club_to_division 0x6831a0 (as the original sends a club down at 0x792b1d). A second team with no first
+ * team found stays.
+ *
+ * The first team of a second team: a pair of PARENTS, else the Norwegian club named as the second team less its last
+ * word (case aside), else the one whose plain form is the same (plain_form: the letters folded to a to z, "-" and
+ * "/" as spaces, the club-form words FK, SK, IF, IL, BK, IK, FF, TF, FC and Fotball left out). Over the 46 season
+ * databases every second team of the groups finds its first team this way, except Gjøvik-Lyn 2 of Autumn 2013 and
+ * March 2014 (its club there is Gjøvik FotballForening: the tie in those years, I don't know). */
+static const char *const PARENTS[][4] = {
+    {"\xc5lesund IF B", "Aalesunds FK"},
+    {"\xc5lesund IF 2", "Aalesunds FK"},
+    {"V\xe5lerenga Fotball II", "V\xe5lerenga Fotball", "V\xe5lerenga Fotball Elite"},
+    {"Valerenga Oslo II", "Valerenga Oslo", "V\xe5lerenga Fotball"},
+    {"Sparta Sarpsborg 2", "Sparta Sarpsborg", "Sarpsborg 08 FF", "Sarpsborg 08"},
+    {"Lyn Fotball 2", "Lyn Oslo", "FC Lyn Oslo"},
+    {"Lyn Fotball B", "FC Lyn Oslo", "Lyn Oslo"},
+    {"Viking FK Stavanger II", "Viking FK", "Viking Stavanger"},
+    {"Byasen Trondheim II", "By\xe5sen TF"},
+    {"By\xe5sen IL II", "By\xe5sen TF"},
+    {"Ranheim IL Fotball Topp 2", "Ranheim IL"},
+};
+
+/* The plain form of a name (Windows-1252), less its last word when drop_last. */
+static void plain_form(const char *name, int drop_last, char *out, size_t room)
+{
+    static const char *const forms[] = {"fk", "sk", "if", "il", "bk", "ik", "ff", "tf", "fc", "fotball"};
+    char buf[128];
+    size_t n = 0;
+    for (size_t i = 0; i < 51 && name[i] && n + 3 < sizeof buf; i++) {
+        unsigned char c = (unsigned char)name[i];
+        const char *f = NULL;
+        if (c == 0xe6 || c == 0xc6) f = "ae";
+        else if (c == 0xf8 || c == 0xd8 || c == 0xf6 || c == 0xd6 || c == 0xf3 || c == 0xd3) f = "o";
+        else if (c == 0xe5 || c == 0xc5 || c == 0xe4 || c == 0xc4 || c == 0xe1 || c == 0xe0) f = "a";
+        else if (c == 0xe9 || c == 0xe8 || c == 0xc9) f = "e";
+        else if (c == 0xfc || c == 0xdc) f = "u";
+        if (f) { while (*f) buf[n++] = *f++; continue; }
+        if (c >= 'A' && c <= 'Z') c = (unsigned char)(c + 32);
+        buf[n++] = (char)((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') ? c : ' ');
+    }
+    buf[n] = 0;
+    if (drop_last) {
+        while (n && buf[n - 1] == ' ') buf[--n] = 0;
+        while (n && buf[n - 1] != ' ') buf[--n] = 0;
+    }
+    out[0] = 0;
+    size_t w = 0;
+    char *save = NULL;
+    for (char *t = strtok_r(buf, " ", &save); t; t = strtok_r(NULL, " ", &save)) {
+        int skip = 0;
+        for (size_t k = 0; k < sizeof forms / sizeof *forms; k++) skip |= !strcmp(t, forms[k]);
+        if (skip || w + strlen(t) + 2 > room) continue;
+        if (w) out[w++] = ' ';
+        strcpy(out + w, t);
+        w += strlen(t);
+    }
+}
+
+/* The first team of a Norwegian second team (0 when none is found). */
+static uint32_t first_team(uint32_t club)
+{
+    const char *name = win_str(club + CLUB_NAME);
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT);
+    if (!readable(table)) return 0;
+    for (size_t r = 0; r < sizeof PARENTS / sizeof *PARENTS; r++) {
+        if (strncmp(name, PARENTS[r][0], 52)) continue;
+        for (int k = 1; k < 4 && PARENTS[r][k]; k++)
+            for (int i = 0; i < count; i++) {
+                uint32_t c = table + (uint32_t)i * CLUB_SIZE;
+                if (norwegian(c) && !strncmp(win_str(c + CLUB_NAME), PARENTS[r][k], 52)) return c;
+            }
+        return 0;
+    }
+    size_t at = strnlen(name, 51);
+    while (at && name[at - 1] == ' ') at--;
+    while (at && name[at - 1] != ' ') at--;
+    while (at && name[at - 1] == ' ') at--;
+    if (!at) return 0;
+    char want[64], plain[64], other[64];
+    snprintf(want, sizeof want, "%.*s", (int)at, name);
+    plain_form(name, 1, plain, sizeof plain);
+    uint32_t by_plain = 0;
+    for (int i = 0; i < count; i++) {
+        uint32_t c = table + (uint32_t)i * CLUB_SIZE;
+        if (c == club || !norwegian(c)) continue;
+        const char *n = win_str(c + CLUB_NAME);
+        if (lower_team(n)) continue;
+        if (!strncasecmp(n, want, 52)) return c;
+        if (!by_plain && plain[0]) {
+            plain_form(n, 0, other, sizeof other);
+            if (!strcmp(other, plain)) by_plain = c;
+        }
+    }
+    return by_plain;
+}
+
+/* The season that starts at the change: Eliteserien's year +0x40 plus 1 (RECOMP_TEST_NOR_SECOND_YEAR, tests only,
+ * gives another). */
+static int season_starts(uint32_t prm_league)
+{
+    const char *v = getenv("RECOMP_TEST_NOR_SECOND_YEAR");
+    if (v && atoi(v) > 0) return atoi(v);
+    return readable(prm_league) ? (int16_t)rd16(g_mem, prm_league + 0x40u) + 1 : 0;
+}
+
+/* 1 when the rule of season y bars a second team from the Second Division while its first team plays div. */
+static int pair_barred(uint32_t first_div, int y)
+{
+    if (readable(first_div) && first_div == comp_of(KEY_PREMIER)) return 0;
+    if (readable(first_div) && first_div == comp_of(KEY_FIRST)) return y > 0 && y <= 2014;
+    return 1;
+}
+
+/* The second teams of the groups, those with no first team, and those that the rule of season y bars there. */
+static void log_pairs(const char *when, int y)
+{
+    if (!log_on()) return;
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = readable(table) ? (int)rd32(g_mem, CLUB_COUNT) : 0, n = 0, none = 0, shared = 0;
+    for (int i = 0; i < count; i++) {
+        uint32_t club = table + (uint32_t)i * CLUB_SIZE;
+        if (!in_group(rd32(g_mem, club + CLUB_DIVISION)) || !barred_club(club)) continue;
+        uint32_t p = first_team(club);
+        n++;
+        if (!p) {
+            none++;
+            fprintf(stderr, "recomp: nor second: %.51s has no first team\n", win_str(club + CLUB_NAME));
+        } else if (pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) {
+            shared++;
+        }
+    }
+    fprintf(stderr, "recomp: nor second: pairs %s (season %d): %d second teams of the groups, %d with no first team, "
+            "%d barred there\n", when, y, n, none, shared);
+}
+
+/* After 0x792960: each second team of the groups that the rule of season y bars there goes to the Third Division. */
+static void pairs_down(uint32_t self, int y)
+{
+    static int off = -1;
+    if (off < 0) off = env_is("RECOMP_NOR_SECOND_PAIRS", "off");    /* test switch: this step alone off */
+    if (off) return;
+    int32_t id = (int32_t)rd32(g_mem, KEY_THIRD);
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = readable(table) ? (int)rd32(g_mem, CLUB_COUNT) : 0;
+    uint32_t third = id >= 0 ? comp_of(KEY_THIRD) : 0;
+    for (int i = 0; i < count && !rt_unwinding; i++) {
+        uint32_t club = table + (uint32_t)i * CLUB_SIZE;
+        if (!in_group(rd32(g_mem, club + CLUB_DIVISION)) || !barred_club(club)) continue;
+        uint32_t p = first_team(club);
+        if (!p || !pair_barred(rd32(g_mem, p + CLUB_DIVISION), y)) continue;
+        if (!readable(third)) {
+            if (log_on()) fprintf(stderr, "recomp: nor second: %.51s stays: the data has no Third Division\n",
+                                  win_str(club + CLUB_NAME));
+            continue;
+        }
+        uint32_t a[3] = {club, third, 1};
+        call_this(F_MOVE_DOWN, self, 3, a);
+        if (log_on()) {
+            uint32_t d = rd32(g_mem, p + CLUB_DIVISION);
+            fprintf(stderr, "recomp: nor second: %.51s goes down to the Third Division (season %d: %.51s plays %s, "
+                    "%.51s)\n", win_str(club + CLUB_NAME), y, win_str(p + CLUB_NAME),
+                    d == comp_of(KEY_FIRST) ? "the First Division" : in_group(d) ? "the Second Division"
+                                                                    : "a lower division", readable(d) ? win_str(d + 4) : "none");
+        }
+    }
+}
+
 /* The places of the First Division that the clubs of the groups take beyond the original's four (more second teams
  * than clubs of status 3), and the Eliteserien second teams that the chain sends down to it. */
 static int first_extra, prm_down;
@@ -273,6 +469,8 @@ RT_WRAP(00792960, nor_second_exchange)
     }
     int on = rule_on();
     uint32_t self = cpu.ecx, first = comp_of(KEY_FIRST);
+    int year = season_starts(self);
+    log_pairs("before", year);
     /* The second teams of the groups, with their divisions, and the clubs of the First Division before the call. */
     int *held = malloc(sizeof *held * (size_t)count);
     uint32_t *div_of = malloc(sizeof *div_of * (size_t)count);
@@ -328,7 +526,9 @@ RT_WRAP(00792960, nor_second_exchange)
             call_this(F_MOVE_UP, self, 3, a);
         }
         first_extra = prm_down = 0;
+        pairs_down(self, year);
     }
+    if (!rt_unwinding) log_pairs("after", year);
     if (log && was_first && !rt_unwinding)
         for (int i = 0; i < count; i++) {
             uint32_t club = table + (uint32_t)i * CLUB_SIZE;
@@ -366,6 +566,28 @@ RT_WRAP(00790e20, nor_second_playoff)
 
 /* Before and after the promotion chain 0x689c20 (season_second_teams.c): NorPrm::start_new_season calls it first
  * (0x7927b3). For Eliteserien the second teams go down before it. */
+/* RECOMP_TEST_NOR_SECOND_DOWN="<club>,<club>" (tests only): the rows of these First Division clubs get status 3
+ * before the chain, so 0x792960 sends them down into the groups. */
+static void test_down(void)
+{
+    const char *v = getenv("RECOMP_TEST_NOR_SECOND_DOWN");
+    uint32_t first = league_of(KEY_FIRST);
+    if (!v || !*v || !first) return;
+    int n;
+    uint32_t table = table_of(first, &n);
+    for (int i = 0; i < n; i++) {
+        uint32_t row = table + (uint32_t)i * ROW_SIZE;
+        const char *name = win_str(rd32(g_mem, row) + CLUB_NAME);
+        size_t len = strnlen(name, 51);
+        for (const char *p = v; (p = strstr(p, name)) != NULL; p++)
+            if ((p == v || p[-1] == ',') && (p[len] == ',' || !p[len])) {
+                g_mem[row + ROW_STATUS] = ST_DOWN;
+                fprintf(stderr, "recomp: nor second: test: %.51s goes down\n", name);
+                break;
+            }
+    }
+}
+
 static char *was_prm;
 static int was_count;
 
@@ -382,6 +604,7 @@ static void nor_before_chain(uint32_t self)
     was_count = count;
     for (int i = 0; was_prm && i < count; i++)
         was_prm[i] = rd32(g_mem, table + (uint32_t)i * CLUB_SIZE + CLUB_DIVISION) == prm;
+    test_down();
     if (rule_on()) {
         uint32_t first = league_of(KEY_FIRST);
         st_shift_up(first, barred_club, "nor second", "at the season change", log_on());
