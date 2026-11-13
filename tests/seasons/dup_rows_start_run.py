@@ -14,8 +14,8 @@ shift plan has the second copy cleared at the load (open item 3); a 2001 start h
 copies stayed. The 3.9.68 data (the base game, Q152) keeps its rows: the same-save set checks that.
 
 One new game: 2001, England, seed 1, changing rules on (default), the option database 3.9.60 or 3.9.65 with
-RECOMP_DATA_DIR at the data folder (default /Users/max/Projects/cm0102/data-3960 or data-3965), as run_set.py loads
-these data sets, 10 days, a save. The checks: the run ends with code 0 and shows
+RECOMP_DATA_DIR at the data folder (default /Users/max/Projects/cm0102/data-3960 or data-3965), as run_set.py of the
+release tests loads these data sets, 10 days, a save. The checks: the run ends with code 0 and shows
 no message box; the save holds no history row twice; the African Super Cup and the Merconorte Cup hold one row of
 2000 each.
 """
