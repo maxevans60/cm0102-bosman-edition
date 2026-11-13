@@ -681,7 +681,7 @@ const int season_size_caps[] = {
     20,       /* spa_first */
     22,       /* spa_second */
     16,       /* swe_first */
-    14,       /* swe_prm */
+    16,       /* swe_prm */
     18,       /* tur_first */
     20,       /* tur_second */
     18,       /* wel_first */

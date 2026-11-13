@@ -1,5 +1,6 @@
 /* League sizes, promotion and relegation in existing divisions (season_sizes.h). */
 #include "win.h"
+#include "../rt_host.h"
 #include "season.h"
 #include "season_change.h"
 #include "season_names.h"
@@ -34,6 +35,9 @@
 #define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each competition record */
 #define COMP_SLOTS 0xadadf8u        /* its slot count, one per club competition record (0x8386f0) */
 #define STATUS_DOWN 3               /* league_promote_and_relegate 0x689c80: moves down a row of 3 (0x689d26) */
+#define DATE_SIZE 0x41u             /* a date of the template: +0 s16 day of the year, +2 s16 year (0x68a1a5..0x68a1b7) */
+#define F_MALLOC 0x00944e46u        /* cdecl (size) */
+#define F_FREE 0x009452cau          /* cdecl (block) */
 #define MIN_CLUBS 2
 #define MAX_CLUBS 60
 
@@ -156,13 +160,48 @@ static const char *record_name(uint32_t obj)
     return readable(rec) ? win_str(rec + 4) : "?";
 }
 
+/* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
+ * original's count stays. */
+static int league_count(uint32_t obj, const char *file, int *have_out, int *cap_out)
+{
+    int have = clubs_in_division(obj);
+    if (have < MIN_CLUBS || have > MAX_CLUBS) return 0;
+    int cap = season_ita_cap(obj, cap_of(file));   /* slice 20b: Serie C */
+    if (have_out) *have_out = have;
+    if (cap_out) *cap_out = cap;
+    return cap > 0 && have > cap ? cap : have;
+}
+
+/* A class of league_sizes.py GROWN (issue 106): its create_table allocates the rows of its largest original count
+ * and its date template has the rounds of that count. SwePrm: 14 rows (push 0x33a at 0x89043b), 26 dates
+ * (0x88feea); the cap of season_size_wraps.c is 16. */
+static const struct { const char *file; int held; } GROWN[] = {{"swe_prm", 14}};
+
+static int grown_held(const char *file)
+{
+    for (size_t k = 0; file && k < sizeof GROWN / sizeof GROWN[0]; k++)
+        if (!strcmp(GROWN[k].file, file)) return GROWN[k].held;
+    return 0;
+}
+
+uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
+{
+    if (!sizes_on() || !readable(obj)) return original;
+    const char *file = season_change_file(obj);
+    int n = grown_held(file) ? league_count(obj, file, NULL, NULL) : 0;
+    if (n * (int)ROW_SIZE <= (int)original) return original;
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: %s table of %d rows (%.50s %d, the class makes %u)\n", file, n,
+                record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), original / ROW_SIZE);
+    return (uint32_t)n * ROW_SIZE;
+}
+
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
 {
     if (!sizes_on() || !readable(obj)) return original;
     const char *file = season_change_file(obj);
-    int have = clubs_in_division(obj);
-    if (have < MIN_CLUBS || have > MAX_CLUBS) return original;
-    int cap = season_ita_cap(obj, cap_of(file)), n = cap > 0 && have > cap ? cap : have;   /* slice 20b: Serie C */
+    int have = 0, cap = 0, n = league_count(obj, file, &have, &cap);
+    if (!n) return original;
     const SeasonRule *r = row_now(obj, file);
     int want = r && r->clubs >= MIN_CLUBS && r->clubs <= MAX_CLUBS ? r->clubs : (int)original;
     if (logging())
@@ -201,6 +240,91 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original)
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s): %d dates for %d clubs\n", file, record_name(obj), rounds, n);
     return (uint32_t)rounds;
+}
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t game_malloc(uint32_t size)
+{
+    uint32_t a[1] = {size};
+    uint32_t p = call_cdecl(F_MALLOC, 1, a);
+    if (rt_unwinding || !readable(p)) return 0;
+    memset(g_mem + p, 0, size);
+    return p;
+}
+
+static void game_free(uint32_t p)
+{
+    uint32_t a[1] = {p};
+    if (p) call_cdecl(F_FREE, 1, a);
+}
+
+/* The date template of a grown class for its count (issue 106). The class's create_schedule (thiscall: stage,
+ * &count, &code, &flag; ret 0x10) returns a template of the rounds of its original count for stage -1 (SwePrm
+ * 0x88feb0: 26 dates, D at 0x88feea; the writes of 0x68a160 fill them). A table of n clubs that meet m times
+ * plays m (n - 1) rounds (n even; one more with an odd n). The new template takes the class's dates and puts each
+ * extra round on the Wednesday after a date whose next date is at least a week later in the same year, spread over
+ * the season, as the 3. Liga (season_divisions.c, GerRegional::create_schedule 0x5dcef0). The template is in the
+ * game's heap; the old one is freed. With no room the class's template stays and the log says so. */
+static void grown_dates(uint32_t self, uint32_t count_at)
+{
+    const char *file = season_change_file(self);
+    if (!grown_held(file)) return;
+    uint32_t old = cpu.eax;
+    int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS);
+    if (n < MIN_CLUBS || n > MAX_CLUBS) n = league_count(self, file, NULL, NULL);
+    if (meetings < 1 || meetings > 4) meetings = 2;
+    int rounds = meetings * (n + (n & 1) - 1);
+    if (!readable(old) || have <= 0 || rounds <= have || rounds > 2 * have) return;
+    uint32_t tmpl = game_malloc((uint32_t)rounds * DATE_SIZE);
+    if (!tmpl) return;
+    int extra = rounds - have, k = 0, done = 0;
+    for (int i = 0; i < have; i++) {
+        memcpy(g_mem + tmpl + (uint32_t)k * DATE_SIZE, g_mem + old + (uint32_t)i * DATE_SIZE, DATE_SIZE);
+        k++;
+        /* An extra round after date i when i is at or past the next even spread point. */
+        if (done < extra && i + 1 < have && i >= (done + 1) * have / (extra + 1)) {
+            uint32_t a = old + (uint32_t)i * DATE_SIZE, b = a + DATE_SIZE;
+            int day = (int16_t)rd16(g_mem, a), year = (int16_t)rd16(g_mem, a + 2);
+            int next = (int16_t)rd16(g_mem, b), next_year = (int16_t)rd16(g_mem, b + 2);
+            if (year == next_year && next - day >= 7 && day + 4 < 365) {
+                memcpy(g_mem + tmpl + (uint32_t)k * DATE_SIZE, g_mem + a, DATE_SIZE);
+                wr16(g_mem, tmpl + (uint32_t)k * DATE_SIZE, (uint16_t)(day + 4));
+                k++;
+                done++;
+            }
+        }
+    }
+    if (done < extra) {
+        game_free(tmpl);
+        fprintf(stderr, "recomp: league sizes: %s dates: no room for %d more rounds, the class's %d stay\n", file,
+                extra - done, have);
+        return;
+    }
+    game_free(old);
+    wr16(g_mem, count_at, (uint16_t)k);
+    cpu.eax = tmpl;
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: %s dates: %d dates for %d clubs (%.50s %d, the class makes %d)\n", file,
+                k, n, record_name(self), (int16_t)rd16(g_mem, self + COMP_YEAR), have);
+}
+
+/* SwePrm::create_schedule 0x88feb0. */
+void o_0088feb0(void);
+RT_WRAP(0088feb0, swe_prm_schedule)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0088feb0();
+    if (rt_unwinding || stage != -1 || !sizes_on()) return;
+    grown_dates(self, count_at);
 }
 
 /* The clubs whose division has the record id of a key id global. */
