@@ -234,6 +234,7 @@ tur_second_b	2008	2008	2	https://tr.wikipedia.org/wiki/2008-09_2._Lig: first-sta
 tur_second_b	2009	2009	2	https://en.wikipedia.org/wiki/2009–10_TFF_2._Lig: first-stage groups of 11 pld 20 and 12 pld 22; 2 inside a group
 tur_second_b	2024	2024	2	https://tr.wikipedia.org/wiki/2024-25_2._Lig: "Çift devreli lig" (double round) in two groups of 18, 612 matches = 2 x 18 x 17; 2 inside a group
 tur_second_b	2027	2027	-	unknown: clubs unknown (row rus-tur-243)
+usa_mls	2008	2008	-	unbalanced: 30 games for 15 clubs, 30 / 14 is not whole (sizes-check-americas.md line 193; row arg-usa-224 notes)
 usa_mls	2001	2001	-	unbalanced: 28 games a club for 10 clubs (sizes-check-americas.md lines 186 and 212)
 usa_mls	2002	2003	-	unbalanced: 30 games a club for 10 clubs (sizes-check-americas.md lines 187-188 and 212)
 usa_mls	2004	2005	-	unbalanced: 32 games a club for 12 clubs (sizes-check-americas.md lines 189-190 and 212)

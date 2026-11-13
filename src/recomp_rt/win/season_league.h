@@ -23,7 +23,9 @@ typedef struct {
     /* The structure of the row (0.7.2 league sizes, slice 1). 0 for a row of a file that is not a league. */
     int meetings;           /* times each pair meets in the table (in each half, zone, group, before a split);
                              * 0: the class's own meetings stay */
-    int halves;             /* 1: two halves (Apertura and Clausura, two stages), each a table of the meetings */
+    int halves;             /* 1: two halves (Apertura and Clausura, two stages), each a table of the meetings;
+                             * -1 (with zones, extra_rounds and periods -1): a future row with unknown clubs, whose
+                             * structure is the last known row's (season_league_row) */
     int zones;              /* zones of one division, 0 for none */
     int zone_size[SEASON_LEAGUE_PARTS]; /* the clubs of each zone */
     int extra_rounds;       /* rounds beyond meetings x (n' - 1) (derby, inter-zone rounds); -1 unknown */
@@ -39,6 +41,11 @@ extern const int season_league_rule_count;
 
 /* The encoded row of a file and season, or NULL (season_playoffs.c). */
 const SeasonLeagueRule *season_league_rule(const char *file, int season);
+
+/* The row whose structure a league plays in a season: the row of that season, or by the after-table rule the last
+ * row before it (Q248); a future row with unknown clubs (halves -1) gives the last row before it with known
+ * clubs. NULL when the file has no row. */
+const SeasonLeagueRule *season_league_row(const char *file, int season);
 
 /* The meetings of a league in a season: the row of that season, or by the after-table rule the last row before
  * it (Q248). A row with unknown clubs (a future season with no announcement) takes the meetings of the last row

@@ -43,6 +43,8 @@ that is not a league (LEAGUE_NOT: cups, continental competitions, nation rules) 
                  "-": the class's own meetings stay (a season not held, a future row with unknown clubs, an
                  unbalanced schedule). The tool stops on a held league row it can read neither way.
     halves       1: two halves (Apertura and Clausura, two stages), each a table of the meetings; 0: one table.
+                 A future row with unknown clubs has "?" in halves, zones, extra and periods (-1 in the C table):
+                 its structure is the last known row's (D20).
     zones        "-", or the club counts of the zones of one division joined by "+" ("15+15"); "gap" when the
                  text names zones the tool cannot count.
     extra        rounds beyond meetings x (n' - 1) in the table (a half, a zone): derby or inter-zone rounds
@@ -50,7 +52,8 @@ that is not a league (LEAGUE_NOT: cups, continental competitions, nation rules) 
     periods      the period titles of the season (0 none, "?" unknown).
     split_meet   with a split ("after N: ..."): the meetings in each section, joined by "+" in the order of the
                  split's sections ("1+1", "2+1"), "?" for a section the text does not give; "-" without a split.
-    rounds       the rounds of the table (of each half, of each zone): meetings x (n' - 1) + extra, n' the club
+    rounds       the rounds of the table (of each half, of each zone): meetings x (n' - 1) + extra (the spec's R
+                 is meetings x (n' - 1); the derby and inter-zone rounds come on top), n' the club
                  count (the largest zone) rounded up to even. With an odd count the derby or inter-zone matches
                  first fill the rounds in which a club rests (one a meeting). "-" when the meetings, the count or
                  the extra are not known, or for a division of groups.
@@ -568,16 +571,16 @@ def meetings_of_text(text, clubs):
         return 2
     if not isinstance(clubs, int) or clubs < 3:
         return None
-    m = (re.search(r"after (?:the first )?(\d+) (?:matches|rounds|games)", low)
-         or re.search(r"(\d+)[ -](?:rounds|matches|games|match)(?:,? then| plus| first stage)", low)
-         or re.search(r"(\d+) (?:matches|rounds|games)", low))
-    if not m:
-        return None
-    n = int(m.group(1))
-    for d in (clubs - 1, clubs + clubs % 2 - 1):
-        if d and n % d == 0 and 1 <= n // d <= 4:
-            return n // d
-    return None
+    m = (re.search(r"after (?:the first )?(\d+) (matches|rounds|games)", low)
+         or re.search(r"(\d+)[ -](rounds|matches|games|match)(?:,? then| plus| first stage)", low)
+         or re.search(r"(\d+) (matches|rounds|games)", low))
+    return per_pair(int(m.group(1)), m.group(2), clubs) if m else None
+
+
+def per_pair(n, unit, clubs):
+    """The meetings that n matches of a club (clubs - 1 a meeting) or n rounds (n' - 1 a meeting) give, or None."""
+    d = clubs + clubs % 2 - 1 if unit.startswith("round") else clubs - 1
+    return n // d if d > 0 and n % d == 0 and 1 <= n // d <= 4 else None
 
 
 def encode_meetings(r):
@@ -591,12 +594,9 @@ def encode_meetings(r):
         m = meetings_of_text(text, r["clubs"])
         if m:
             return m, "text"
-    m = re.search(r"(\d+) (?:matches|rounds|games)", r["notes"].lower())
-    if m and isinstance(r["clubs"], int) and r["clubs"] > 2:
-        n = int(m.group(1))
-        for d in (r["clubs"] - 1, r["clubs"] + r["clubs"] % 2 - 1):
-            if n % d == 0 and 1 <= n // d <= 4:
-                return n // d, "notes"
+    m = re.search(r"(\d+) (matches|rounds|games)", r["notes"].lower())
+    if m and isinstance(r["clubs"], int) and r["clubs"] > 2 and per_pair(int(m.group(1)), m.group(2), r["clubs"]):
+        return per_pair(int(m.group(1)), m.group(2), r["clubs"]), "notes"
     for first, last, value, why in MEETINGS_BY_HAND.get(r["comp_file"], ()):
         if first <= r["season"] <= last:
             return ("-", "no source settles it: " + why) if value == "?" else (value, why)
@@ -609,11 +609,21 @@ def encode_halves(split):
     return 1 if split == "stages" else 0
 
 
+# Zone texts that the reading below gets wrong: {(comp_file, season): (zones, reason)}.
+ZONES_FIX = {
+    # "Apertura (25 clubs) and Clausura in 3 zones of 8": one table of 25, then zones of 8 that leave a club out.
+    ("arg_second", 2001): ("gap", "the Apertura is one table of 25, the Clausura three zones of 8"),
+}
+
+
 def encode_zones(r):
     """The zone sizes of one division joined by "+", "-", or "gap"."""
+    if (r["comp_file"], r["season"]) in ZONES_FIX:
+        return ZONES_FIX[(r["comp_file"], r["season"])][0]
     text = (r["split_text"] + " " + r["format_text"] + " " + r["clubs_text"]).lower()
-    if "zone" not in text:
+    if "zone" not in text and not re.search(r"\bregions? of", text):
         return "-"
+    text = re.sub(r"\bregions\b", "zones", text)
     m = re.search(r"(\w+) zones(?: \([^)]*\))? of (\d+)", text)
     if m and (m.group(1).isdigit() or m.group(1) in NUMBERS):
         k = int(m.group(1)) if m.group(1).isdigit() else NUMBERS[m.group(1)]
@@ -671,6 +681,12 @@ def encode_split_meetings(r, split):
         t = re.search(r"\((\d+) matches\)", low) or re.search(r"(\d+) in all", low)
         if t and len(set(sizes)) == 1 and sizes[0] > 1 and (int(t.group(1)) - after) % (sizes[0] - 1) == 0:
             one = (int(t.group(1)) - after) // (sizes[0] - 1)
+    if one is None and len(set(sizes)) == 1 and sizes[0] > 1:
+        e = re.search(r"\((\d+) rounds\)", low)
+        if e and int(e.group(1)) % (sizes[0] - 1) == 0:
+            one = int(e.group(1)) // (sizes[0] - 1)
+        elif "home and away" in low:
+            one = 2
     if one is None:
         e = re.search(r"(\d+) more (?:matches|rounds)", low)
         if e and len(set(sizes)) == 1 and sizes[0] > 1 and int(e.group(1)) % (sizes[0] - 1) == 0:
@@ -681,7 +697,7 @@ def encode_split_meetings(r, split):
 
 
 def encode_rounds(r, meetings, zones, extra, split):
-    if not isinstance(meetings, int) or extra == "?" or split == "groups":
+    if not isinstance(meetings, int) or extra == "?" or split == "groups" or (split == "zones" and zones == "-"):
         return "-"
     if zones not in ("-", "gap"):
         n = max(int(x) for x in zones.split("+"))
@@ -726,11 +742,15 @@ def encode():
             e.update(meetings=meet[0], halves=encode_halves(split), zones=zones, extra=extra,
                      periods=encode_periods(r), split_meet=encode_split_meetings(r, split),
                      rounds=encode_rounds(r, meet[0], zones, extra, split))
+            if r["clubs"] == "unknown":
+                # A future row with no announcement: its structure is the last known row's (D20, the after-table
+                # rule), which season_league_row (season_league.c) takes. "?" here, -1 in the C table.
+                e.update(halves="?", zones="?", extra="?", periods="?", split_meet="-", rounds="-")
             if meet[0] == "-" and meet[1] not in ("not held", "unknown clubs") and not meet[1].startswith("unknown"):
                 gaps.append((r["id"], r["season"], r["comp_file"], "meetings", "the class's meetings stay: " + meet[1],
                              r["format_text"]))
             for col, bad in (("zones", "gap"), ("extra", "?"), ("periods", "?")):
-                if e[col] == bad:
+                if e[col] == bad and r["clubs"] != "unknown":
                     gaps.append((r["id"], r["season"], r["comp_file"], col, "the text does not give it",
                                  r["split_text"] if col != "periods" else r["format_text"]))
             if "?" in str(e["split_meet"]):
@@ -787,7 +807,7 @@ def c_text(rows):
         m = re.match(r"after (\d+): ([\d+]+), points (\w+)", e["split"])
         after, groups = (int(m.group(1)), m.group(2).split("+")) if m else (0, [])
         top = int(groups[0]) if groups else 0
-        zones = [int(x) for x in e["zones"].split("+")] if e["zones"] not in ("-", "gap") else []
+        zones = [int(x) for x in e["zones"].split("+")] if e["zones"] not in ("-", "gap", "?") else []
         meet = e["split_meet"].split("+") if e["split_meet"] not in ("-", "?") else []
         lines.append('    {"%s", %d, %d, %d, %d, %d, %d, %d, %d, %d,' % (
             e["comp_file"], e["season"], count(e["po_up"]),
@@ -797,7 +817,8 @@ def c_text(rows):
             {"kept": 0, "halved": 1, "unknown": 2}[m.group(3)] if m else 0))
         lines.append('     %d, %d, %d, {%s}, %d, %d, {%s}, {%s}, %d},' % (
             e["meetings"] if isinstance(e["meetings"], int) else 0,
-            e["halves"] if isinstance(e["halves"], int) else 0, len(zones), c_list(zones),
+            e["halves"] if isinstance(e["halves"], int) else -1 if e["halves"] == "?" else 0,
+            -1 if e["zones"] == "?" else len(zones), c_list(zones),
             e["extra"] if isinstance(e["extra"], int) else -1,
             e["periods"] if isinstance(e["periods"], int) else -1,
             c_list([int(x) for x in groups]), c_list([int(x) if x != "?" else 0 for x in meet]),

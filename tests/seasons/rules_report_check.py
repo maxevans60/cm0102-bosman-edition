@@ -87,7 +87,7 @@ The differences, by kind:
                                 league line) differ from the encoded row's meetings (tools/seasons/encode_leagues.py)
     rounds                      (0.7.2 slice 1) the rounds of a division's table, meetings x (n' - 1) with n' the
                                 game's count rounded up to even, differ from the encoded row's rounds (the row's
-                                meetings and count, its largest zone and its derby or inter-zone rounds)
+                                meetings and count). Only rows of one table with no derby or inter-zone rounds
     format                      the stages of the Champions League at the end of a season (the uefa line of the
                                 report, slice 22): the second group stage and the first knockout round differ
                                 from the "Rounds (clubs):" list of the row ("Groups 2 16, KO 8" or "KO 16")
@@ -439,7 +439,10 @@ def differences(seasons, comps, rows):
                 if meet and meet != [e["meetings"]]:
                     out.add((season, "meetings", f"{label}: game {'/'.join(map(str, meet))}, table "
                                                  f"{e['meetings']}"))
-            if e is not None and isinstance(e["rounds"], int):
+            # Rounds only for one table with no derby round: the game's object of a season of halves or zones
+            # holds other counts.
+            if e is not None and isinstance(e["rounds"], int) and e["zones"] == "-" and not e["extra"] \
+                    and not e["halves"]:
                 made = sorted({x["rounds"] * (x["clubs"] + x["clubs"] % 2 - 1) for x in both
                                if x["rounds"] > 0 and x["clubs"] > 1})
                 if made and made != [e["rounds"]]:

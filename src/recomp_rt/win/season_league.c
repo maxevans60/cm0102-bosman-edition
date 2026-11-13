@@ -13,14 +13,18 @@ const SeasonLeagueRule *season_league_rule(const char *file, int season)
     return NULL;
 }
 
-int season_league_meetings(const char *file, int season)
+const SeasonLeagueRule *season_league_row(const char *file, int season)
 {
     for (int s = season_rules_last_season(season, file); s >= SEASON_RULE_FIRST; s--) {
         const SeasonLeagueRule *e = season_league_rule(file, s);
-        if (!e) return 0;
-        if (e->meetings > 0) return e->meetings;
-        const SeasonRule *r = season_rules_find(s, file, 0);
-        if (!r || r->clubs != SEASON_RULE_UNKNOWN) return 0;   /* only a row with unknown clubs takes the one before */
+        if (!e) return NULL;
+        if (e->halves >= 0) return e;              /* -1: a future row with unknown clubs takes the row before */
     }
-    return 0;
+    return NULL;
+}
+
+int season_league_meetings(const char *file, int season)
+{
+    const SeasonLeagueRule *e = season_league_row(file, season);
+    return e ? e->meetings : 0;
 }

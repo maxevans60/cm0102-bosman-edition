@@ -44,6 +44,10 @@ int main(int argc, char **argv)
     meet("gre_cup", 2010, 0);           /* a cup */
     meet("no_such_file", 2010, 0);
 
+    CHECK(season_league_row("arg_prm", 2026) == season_league_rule("arg_prm", 2025),
+          "arg_prm 2026 (unknown clubs): the structure of 2025");
+    CHECK(season_league_row("eng_prm", 2400) == season_league_rule("eng_prm", 2027), "eng_prm 2400: the last row");
+    CHECK(!season_league_row("no_such_file", 2010), "no row");
     const SeasonLeagueRule *a = season_league_rule("arg_prm", 2024);
     CHECK(a && a->halves == 1 && a->zones == 2 && a->zone_size[0] == 15 && a->zone_size[1] == 15 &&
           a->extra_rounds == 2 && a->rounds == 16, "arg_prm 2024: halves, two zones of 15, 2 inter-zone rounds, 16");
@@ -65,7 +69,10 @@ int main(int argc, char **argv)
         int big = 0;
         for (int z = 0; z < e->zones; z++)
             if (e->zone_size[z] > big) big = e->zone_size[z];
-        int count = e->zones ? big : r->clubs;
+        int count = e->zones ? big : r->clubs, sum = 0;
+        for (int z = 0; z < e->zones; z++) sum += e->zone_size[z];
+        CHECK(!e->zones || r->clubs <= 0 || sum == r->clubs, "%s %d: zones add up to %d, not %d", e->file, e->season,
+              sum, r->clubs);
         if (count <= 0) continue;
         checked++;
         int rests = count % 2 ? e->meetings : 0, extra = e->extra_rounds > rests ? e->extra_rounds - rests : 0;

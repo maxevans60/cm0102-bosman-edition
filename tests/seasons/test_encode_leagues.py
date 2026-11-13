@@ -149,6 +149,23 @@ check(st("kor_league", 2012, "split") == "after 26: 7+7, points kept", "K League
 check(st("fin_prm", 2020, "split") == "-", "Veikkausliiga 2020: the split was cancelled")
 check(st("bel_first", 2022, "split").endswith("points halved"), "Pro League 2022/23: points halved")
 check(st("bel_second", 2007, "po_up") == "2-5", "Belgian second tier 2007/08: a final round of 2nd to 5th")
+check(st("arg_prm", 2026, "halves") == "?" and st("arg_prm", 2026, "zones") == "?", "a future row: structure unknown")
+check(st("usa_mls", 2008, "meetings") == "-", "MLS 2008: 30 games of 15 clubs is unbalanced (matches over clubs - 1)")
+check(st("jap_j1", 2025, "zones") == "10+10" and st("jap_j1", 2025, "rounds") == 18, "J1 2025: two regions of 10")
+check(st("swe_second", 2001, "rounds") == "-" and st("tur_second_b", 2003, "rounds") == "-",
+      "divisions of regional groups have no one table")
+check(st("arg_second", 2001, "zones") == "gap", "ZONES_FIX: the Apertura of 25, then zones")
+check(st("den_prm", 2020, "split_meet") == "2+2", "home and away (10 rounds) in sixes")
+bad_zones = [(r["comp_file"], r["season"]) for r in rows if r["zones"] not in ("-", "gap", "?") and r["clubs"] > 0
+             and sum(int(x) for x in r["zones"].split("+")) != r["clubs"]]
+check(not bad_zones, "the zones add up to the count: %s" % bad_zones[:5])
+table = {(x["comp_file"], x["season"]): x for x in e.make_rules.read_rows()}
+check(table[("hol_first", 2019)]["up"] == 0 and table[("hol_first", 2019)]["down"] == 0
+      and table[("hol_prm", 2019)]["down"] == 0, "Eerste Divisie and Eredivisie 2019/20: abandoned, no club up or down")
+check(table[("bel_second", 2001)]["down"] == 0 and table[("bel_second", 2002)]["down"] == 0
+      and table[("bel_second", 2020)]["down"] == 0, "Belgian second tier: no sporting relegation 2001/02, 2002/03, 2020/21")
+check("sources disagree" in table[("usa_mls", 2006)]["playoffs_text"]
+      and "sources disagree" in table[("usa_mls", 2007)]["playoffs_text"], "MLS 2007 and 2008 play-off rule")
 fake_format = {"format_text": "the league of the moon", "split_text": "n/a", "notes": "", "clubs": 10,
                "comp_file": "eng_conf", "season": 2001, "format": "text"}
 check(e.encode_meetings(fake_format) is None, "a format text the tool does not know is not encoded")
