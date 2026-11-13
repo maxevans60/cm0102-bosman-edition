@@ -758,22 +758,24 @@ RT_WRAP(00689c80, promote_relegate)
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
-    /* When the places of the two divisions differ, the clubs move on their own only with changing rules on, between
-     * two classes of the size table, and when both divisions hold counts within their floor and cap after the moves:
-     * the upper the clubs it holds now less down and plus up, the lower the clubs it holds now plus down and less up
-     * (before its own exchange with the division below, the next call of the chain). Else the clubs move in pairs,
-     * so no size changes (with changing rules off the start season's sizes stay, Q232). So a change that needs a
-     * division above its cap for a moment stays in pairs: Ligue 1 from 20 to 18 in 2023/24 would put 22 in Ligue 2
-     * until its exchange with the National, which holds 20. The
-     * French chain passes no pairs (FraFirst::start_new_season pushes 0 at 0x5bc4f1, League::process_promotion_
-     * relegation_chain passes it at 0x689c59), so pairs are set here. */
+    /* When the places of the two divisions differ, the clubs move on their own only with changing rules on and
+     * between two classes of the size table. Else the clubs move in pairs, so no size changes (with changing rules
+     * off the start season's sizes stay, Q232). The French chain passes no pairs (FraFirst::start_new_season pushes
+     * 0 at 0x5bc4f1, League::process_promotion_relegation_chain passes it at 0x689c59), so pairs are set here.
+     * D23 (slice 3): the real places of the season before a change move the clubs, so the count changes in its own
+     * season. A division may hold a count outside its floor and cap for a moment (Ligue 1 from 20 to 18 in 2023/24
+     * puts 22 in Ligue 2 until its exchange with the National): the size step (D13, noted above) runs after the whole
+     * chain and before any new table, and brings each division within its cap and floor to its row. Without the step
+     * (a chain while the game is made) the moves stay in pairs unless both counts fit. A class that counts the clubs
+     * of its data (cap 0) takes only some counts, so its moves stay in pairs. */
     if (change && season_changing_rules()) {
         const char *fu_name = season_change_file(upper), *fl_name = season_change_file(lower);
         int cu = cap_of(fu_name), cl = cap_of(fl_name);
         int lu = floor_of(fu_name) > MIN_CLUBS * 4 ? floor_of(fu_name) : MIN_CLUBS * 4;
         int ll = floor_of(fl_name) > MIN_CLUBS * 4 ? floor_of(fl_name) : MIN_CLUBS * 4;
         int nu = clubs_in_division(upper) - down + up, nl = clubs_in_division(lower) + down - up;
-        single = cu > 0 && cl > 0 && nu >= lu && nu <= cu && nl >= ll && nl <= cl;
+        int fits = nu >= lu && nu <= cu && nl >= ll && nl <= cl;
+        single = cu > 0 && cl > 0 && (fits || !season_change_is_creating());
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
                             "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
@@ -945,14 +947,19 @@ static void size_step_run(uint32_t trigger)
             div[d].rows[div[d].nrows++] = k;
         }
     int from_tables = nclub;
-    /* The clubs with no division of the nation of a lowest division (no club of a national side, no club with no
-     * nation: season_clubs.c, the shells). */
+    /* Every other club of a noted division (a club that joined it outside the noted pairs, such as the Conference
+     * club that EngPrm::exchange_conference_feeder_clubs 0x5750a0 moves up through 0x6830b0 at 0x575268, so the plan
+     * counts what the division holds), and the clubs with no division of the nation of a lowest division (no club
+     * of a national side, no club with no nation: season_clubs.c, the shells). */
     for (int i = 0; readable(table) && i < count && i < national_from; i++) {
-        uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION);
-        if (current_division(c) || !nation) continue;
+        uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION), now = current_division(c);
         int wanted = 0;
-        for (int d = 0; d < ndiv && !wanted; d++)
-            wanted = !div[d].nlower && div[d].want >= 0 && rd32(g_mem, step_seen[d].rec + REC_NATION) == nation;
+        if (now) {
+            for (int d = 0; d < ndiv && !wanted; d++) wanted = now == step_seen[d].rec;
+        } else if (nation) {
+            for (int d = 0; d < ndiv && !wanted; d++)
+                wanted = !div[d].nlower && div[d].want >= 0 && rd32(g_mem, step_seen[d].rec + REC_NATION) == nation;
+        }
         if (!wanted) continue;
         int k = 0;
         while (k < from_tables && at[k] != c) k++;

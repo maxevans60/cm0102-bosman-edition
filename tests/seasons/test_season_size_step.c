@@ -167,8 +167,41 @@ static void steady(void)
     CHECK(season_size_step_plan(div, 2, club, nclub, mv, 200) == 0, "steady: moves");
 }
 
+/* A club that joined a division outside the chain (the Conference club of League Two) is not in its last table, but
+ * it counts: League Two at 24 takes nobody. Two lowest divisions of one nation share the clubs with no division. */
+static void outsiders_and_pool(void)
+{
+    reset();
+    add_division(0, 24, 23);
+    club[nclub++] = (StepClub){0, 1, 100, 1, 1};     /* joined from the Conference */
+    int n = season_size_step_plan(div, 1, club, nclub, mv, 200);
+    CHECK(n == 0 && count_in(0) == 24, "outsider: %d moves, %d clubs", n, count_in(0));
+
+    reset();
+    add_division(0, 12, 10);
+    add_division(1, 12, 11);
+    int f1 = add_free(1, 900, 1), f2 = add_free(1, 800, 1);
+    n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(moved(n, f1, STEP_NONE, 0) && moved(n, f2, STEP_NONE, 0), "pool: the first lowest takes the best two");
+    CHECK(div[0].short_by == 0 && div[1].short_by == 1, "pool: short %d %d", div[0].short_by, div[1].short_by);
+}
+
+/* The plan stops at max moves and says how many it lacks. */
+static void truncated(void)
+{
+    reset();
+    add_division(0, 20, 16);
+    add_division(1, 20, 20);
+    below(0, 1);
+    int n = season_size_step_plan(div, 2, club, nclub, mv, 3);
+    CHECK(n == 3 && count_in(0) == 19 && div[0].short_by == 1, "max: %d moves, %d clubs, short %d", n, count_in(0),
+          div[0].short_by);
+}
+
 int main(void)
 {
+    outsiders_and_pool();
+    truncated();
     grow();
     shrink();
     started();
