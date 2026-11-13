@@ -78,6 +78,13 @@ def left_out(more):
     return int(m.group(1)) if m else 0
 
 
+def joined(more, div):
+    """The clubs of no cup division that join a division for the call ("2 clubs of no cup division join jap_j2":
+    the J.League Cup fills its 28 places)."""
+    m = re.search(r"(\d+) clubs of no cup division join (\w+)", more)
+    return int(m.group(1)) if m and m.group(2) == div else 0
+
+
 def parse(log):
     """(collects {file: [(year, filled, places, {division: (in, clubs)}, more, winner, history year)]}, fills
     {file: [(year, empty, filled)]})."""
@@ -112,7 +119,7 @@ def faults(log, run):
                 continue
             first = got[0][3]
             for div in CUPS[cup]:
-                held = first.get(div, (0, 0))[1] + left_out(got[0][4])
+                held = first.get(div, (0, 0))[1] + left_out(got[0][4]) - joined(got[0][4], div)
                 if div in expect and held != expect[div]:
                     out.append(f"{cup} {got[0][0]}: {div} holds {held} clubs, want {expect[div]}")
             for year, filled, places, divs, more, _w, _h in got:
@@ -149,8 +156,8 @@ def self_test():
         "recomp: cup entrants: rus_cup (Russian Cup) 2010: 1 of 48 places empty (the first is place 0), 1 filled",
         "recomp: cup sizes: tur_cup 2010: 63 of 64 places (tur_first 18/18, tur_second 16/17); last winner Y "
         "(history 2010)",
-        "recomp: cup sizes: jap_j_cup 2010: 28 of 28 places (jap_j1 18/18, jap_j2 10/20); last winner Z (history "
-        "2009)",
+        "recomp: cup sizes: jap_j_cup 2010: 28 of 28 places (jap_j1 16/16, jap_j2 12/12), 2 clubs of no cup "
+        "division join jap_j2; last winner Z (history 2009)",
         "recomp: cup sizes: gre_cup 2011: 44 of 44 places (gre_prm 16/16, gre_second 18/18), 10 lower picks; "
         "last winner Olympiakos (history 2011)",
         "recomp: cup sizes: rus_cup 2011: 48 of 48 places (rus_prm 16/16, rus_first 20/20); last winner X (history "
@@ -166,7 +173,7 @@ def self_test():
     if fills.get("rus_cup") != [(2010, 1, 1)]:
         bad.append(("fills", fills))
     RUNS["self"] = (2010, 2011, ["Greece", "Russia", "Turkey", "South Korea", "Japan"], "",
-                    {"gre_prm": 16, "rus_first": 22, "kor_league": 16}, "")
+                    {"gre_prm": 16, "rus_first": 22, "kor_league": 16, "jap_j2": 10}, "")
     f = faults(log, "self")
     del RUNS["self"]
     want = ["rus_cup 2010: rus_first holds 20 clubs, want 22", "tur_cup 2010: 16 of the 17 clubs of tur_second",

@@ -516,14 +516,14 @@ uint32_t rt_jap_j_cup_j2(uint32_t cup)
 
 /* After a collect that returns 1 only for a full list (sete): a short list moves its clubs to the last places and
  * counts as made, as the empty places get clubs before the draw (season_cup_entrants.c). */
-static void short_list(uint32_t cup, const CupDivision *divs, int ndivs)
+static void short_list(uint32_t cup, const CupDivision *divs, int ndivs, const char *more)
 {
     int used = list_filled(cup), count = (int16_t)rd16(g_mem, cup + CUP_TEAMS);
     if (cpu.eax == 0 && used > 0 && used < count) {
         clubs_to_tail(cup);
         cpu.eax = 1;
     }
-    log_counts(cup, 0, divs, ndivs, used < count ? ", the clubs in the last places" : NULL);
+    log_counts(cup, 0, divs, ndivs, used < count ? ", the clubs in the last places" : more);
 }
 
 void o_007cad30(void);
@@ -537,7 +537,7 @@ RT_WRAP(007cad30, pol_lge_cup_entrants)
     }
     seam(pol_divs, 2, pol_keys, 2);
     o_007cad30();
-    short_list(cup, pol_divs, 2);
+    short_list(cup, pol_divs, 2, NULL);
     restore_moved();
 }
 
@@ -554,9 +554,12 @@ RT_WRAP(00665a00, jap_j_cup_entrants)
     /* The original sorts places 11 to 26 (0x665b88..0x665b9b), so a short list would sort empty places: Japanese
      * clubs of no cup division join J2 for the call until J2 and J1 fill the 28 places. */
     int count = 28, short_by = count - clubs_of_key(JAP_J1) - clubs_of_key(JAP_J2);
-    if (short_by > 0) join(JAP_J2, nation_of_key(JAP_J1), short_by, jemp_keys, 5);
+    int joined = short_by > 0 ? join(JAP_J2, nation_of_key(JAP_J1), short_by, jemp_keys, 5) : 0;
     o_00665a00();
-    short_list(cup, jcup_divs, 2);
+    /* cup_sizes_run.py reads the count of this text. */
+    char more[64] = "";
+    if (joined) snprintf(more, sizeof more, ", %d clubs of no cup division join jap_j2", joined);
+    short_list(cup, jcup_divs, 2, more);
     restore_moved();
 }
 
@@ -592,7 +595,7 @@ RT_WRAP(006624f0, jap_emp_cup_entrants)
     }
     seam(jcup_divs, 2, jemp_keys, 5);
     o_006624f0();
-    short_list(cup, jcup_divs, 2);
+    short_list(cup, jcup_divs, 2, NULL);
     restore_moved();
 }
 
