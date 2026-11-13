@@ -12,7 +12,6 @@
 2016	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Cittadella, Pisa; others: -
 2016	clubs	african_nations (Africa Cup of Nations), row int-continental-172: game 0/4, table 16 (16)
 2016	clubs	fifa_confed (FIFA Confederations Cup), row int-world-190: game 0/4, table 8 (8)
-2016	clubs	fra_third (Championnat National), row fra-139: game 20, table 18 (18)
 2016	clubs	ita_c1_super (Supercoppa di Lega Pro), row ita-271: game 2, table 3 (3)
 2016	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-269: game 3, table 60 (60)
 2016	clubs	ita_cup (Coppa Italia), row ita-268: game 4, table 78 (78)
@@ -65,7 +64,6 @@
 2017	bench	world_club_champ (FIFA Club World Cup), row club-world-306: game 7/9, table 12 (12)
 2017	bench	world_cup (FIFA World Cup), row int-world-194: game 7, table 12 (12)
 2017	clubs	european_cup (UEFA Champions League), row uefa-130: game 78, table 79 (79 (32 in the group stage))
-2017	clubs	fra_third (Championnat National), row fra-148: game 20, table 17 (17)
 2017	clubs	ita_c1_super (Supercoppa di Lega Pro), row ita-288: game 2, table 3 (3)
 2017	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-286: game 3, table 57 (57)
 2017	clubs	ita_cup (Coppa Italia), row ita-285: game 4, table 78 (78)

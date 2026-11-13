@@ -227,10 +227,10 @@ PATCHES = {
 # divisions), PolLgeCup 0x7cad30 (Second + First = 34), FraCup 0x5baa50 (the whole National, then lower clubs to
 # 182: a National of 18 gave 2 more squadless lower clubs, and a 2022/23 game stopped in January 2023 at
 # virtual_staff.cpp 195, VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0).
-FLOORS = {"eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first", "bel_first", "bel_second",
+FLOORS = {"eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first", "bel_second",
           "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first", "tur_second",
-          "nir_first", "nir_prm", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm", "jap_j1", "jap_j2",
-          "kor_league", "sco_first", "sco_prm", "sco_second", "sco_third", "pol_second", "fra_third"}
+          "nir_first", "nir_prm", "ita_ser_c1a", "ita_ser_c1b", "jap_j1", "jap_j2",
+          "kor_league", "sco_first", "sco_prm", "sco_second", "sco_third", "pol_second"}
 # The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
 # after 2001, 0x7cad4f), else its largest count.
 FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
@@ -248,9 +248,25 @@ FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
 ROW_READS = {"bel_second": (16, "BelThird::create_promotion_playoff_stage 0x423880 reads row 15 (0x423a6a..0x423a80)")}
 
 CUP_INSNS = {
-    0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
-    0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
-    0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_cup_add(0xb8u, eax, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    # Slice 5 (season_cup_sizes_west.c): rt_fra_cup_add is rt_cup_add, and passes over a club of the pass (ecx,
+    # ecx, ebx) with fewer than 15 players.
+    0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_fra_cup_add(0xb8u, ebx, ecx);"),
+    0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_fra_cup_add(0xb8u, ebx, ecx);"),
+    0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_fra_cup_add(0xb8u, eax, ebx);"),
+    # Slice 5, the cups of western Europe (src/recomp_rt/win/season_cup_sizes_west.c, its module comment).
+    # BelFaCup::collect_entrants 0x41d8d0: the pool clubs (k of 0x4afbd0, the copy, edi is the pool's count at both)
+    # and the place of the first third-tier club (edx is the clubs copied).
+    0x41D9E4: ("push 0x2c", "t0 = rt_bel_cup_lower(0x2cu, edi); esp -= 4; W32(esp, t0);"),
+    0x41D9F4: ("mov edi, 0x2c", "edi = rt_bel_cup_lower(0x2cu, edi);"),
+    0x41DA43: ("mov eax, 0x108", "eax = rt_bel_cup_place(0x108u, edx);"),
+    # HolCup::collect_entrants 0x5f4820: the copy that makes the empty places, the pool pick and the fill (the pool's
+    # count is at [esp + 0x10] at all three).
+    0x5F49E1: ("mov edx, 0x32", "edx = rt_hol_cup_lower(0x32u, esp);"),
+    0x5F4A62: ("push 0x32", "t0 = rt_hol_cup_lower(0x32u, esp); esp -= 4; W32(esp, t0);"),
+    0x5F4A7C: ("mov ebp, 0x32", "ebp = rt_hol_cup_lower(0x32u, esp);"),
+    # ItaCCup::collect_entrants 0x63dfe0: the empty places take clubs before the second pass (esi the cup, edi the
+    # clubs placed).
+    0x63E109: ("mov eax, 0x50", "eax = rt_ita_c_cup_fill(0x50u, esi, edi);"),
     # FraLgeCup::collect_entrants: the limit of its first National loop (16 - 2 after 2001), raised by the
     # places that National clubs from the CFA cannot fill; `cmp edi, edx` at 0x5bd247 sets the flags again.
     0x5BD244: ("add edx, 0x10", "edx = edx + rt_fra_lge_first(0x10u, edx);"),
