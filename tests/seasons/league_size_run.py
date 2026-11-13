@@ -4,11 +4,13 @@ docs/specs/2026-11-13-league-sizes-0.7.2-spec.md, Testing seam 2, D4 and D5). Ma
 
 Usage:
     python3 tests/seasons/league_size_run.py <cm0102_recomp> <game folder> <file> [--year <season>]
-        [--last <season> | --to <season>] [--keep <folder>] [--reuse] [--timeout <seconds>]
+        [--last <season> | --to <season>] [--nations all|<name,name,...>|all,-<name>,...] [--keep <folder>] [--reuse]
+        [--timeout <seconds>]
     python3 tests/seasons/league_size_run.py --list
     python3 tests/seasons/league_size_run.py --self-test
 
-The run starts a new game in a season (default: the year of the file in ROWS) with all nations, changing rules on,
+The run starts a new game in a season (default: the year of the file in ROWS) with all nations (--nations as in
+tests/seasons/rules_report_check.py: a list keeps England; "all,-<name>" leaves a nation out), changing rules on,
 and plays to the end of --last (default the start year: RECOMP_SEASON_JUMP, the rules report of
 tests/seasons/rules_report_check.py). Each edition (+0x40) is checked against its own row of the encoded rules
 table (docs/research/2026-10-18-league-rules-encoded.tsv, slice 1): a calendar-year league plays edition Y by the
@@ -26,7 +28,7 @@ the meetings m; the rounds are R = m x (n' - 1), n' the count rounded up to even
              m x (n - 1) matches, the matches per club (+0xa7);
     expect   the rules report check lists no clubs difference of the file (the first season);
     box      no message box.
-A run takes about 20 to 40 minutes a season. A two-year league ends its table after the end report of its season:
+A message box ends the run at once (stop_on_box) and fails it. A run takes about 20 to 40 minutes a season. A two-year league ends its table after the end report of its season:
 use --last <year + 1> for its played check. --reuse checks the logs in --keep again. Exit code 1 on a failure.
 """
 import datetime
@@ -311,8 +313,14 @@ def main(argv):
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix=f"cm0102-size-{file}-{year}-")
     if "--reuse" not in argv:
         db = rrc.run_database(argv, year, os.path.join(work, "owndb"))
-        code, _report = rrc.run(program, game, last, year, db, ["all"], [], work, timeout,
-                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"})
+        words = [x.strip().lower().replace("_", " ") for x in rrc.arg(argv, "--nations", "all").split(",")]
+        rows = rrc.NATION_ROWS + rrc.NATION_ROWS_BELOW
+        names = [next(n for n in rows if n.lower() == w.lstrip("-")) for w in words if w != "all"]
+        nations = (["all"] + names) if words[0] == "all" else names
+        if nations[0] != "all" and "England" not in nations:
+            nations = ["England"] + nations
+        code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
+                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"}, stop_on_box=True)
         if code != 0:
             print(f"FAIL {file} {year}: the run ended with code {code} ({work})")
             return 1
