@@ -93,6 +93,19 @@ def _imm(n):
 # code (docs/research/2026-10-18-league-sizes.md, "Leagues whose size change the code cannot hold").
 CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if stores}
 
+# Classes whose table and date template the runtime makes for a larger count (GitHub issue 106): file: (count, the
+# address of the table's allocation push, the object register there, its bytes). The allocation becomes
+# rt_league_table_bytes, the rows of the season's count; the wrap of create_schedule (season_sizes.c) adds the rounds
+# of that count to the template.
+# - SwePrm (Allsvenskan, 14 to 2007, 16 from 2008): create_table 0x890430 allocates 14 rows (push 0x33a at 0x89043b,
+#   the object in esi from 0x890439) and stores 14 at 0x890442; create_schedule 0x88feb0 makes 26 dates (D at
+#   0x88feea, 0x69a = 26 x 0x41 bytes at 0x88fee5) for stage -1; set_up_rules 0x890550 sets 2 meetings (+0x3c at
+#   0x890563). Its constructor 0x88fb10 has no array of 14.
+GROWN = {"swe_prm": (16, 0x89043B, "esi", 0x33A)}
+for _f, (_n, _at, _reg, _bytes) in GROWN.items():
+    assert _n > CAPS[_f]
+    CAPS[_f] = _n
+
 # The French classes play the second half from the middle of their date template (league_next_schedule_round
 # 0x68a030, flag 0x80 at 0x68a090; the classes set flag 0x83 at 0x5bc480, 0x5bf138, 0x5c0798), so the template
 # must have exactly the rounds of the count: 34 dates for 18 clubs, as FraFirst's own 2001 path (0x5bb6ad).
@@ -262,6 +275,8 @@ for _cls, _file, _rules, _stores in CLASSES:
         INSNS[_at] = (f"mov word ptr [{_reg} + 0x3e], {_imm(_n)}",
                       f"W16({_reg} + 0x3eu, rt_league_clubs({_reg}, {_n:#x}u));")
 INSNS.update(DATES)
+for _f, (_n, _at, _reg, _bytes) in GROWN.items():
+    INSNS[_at] = (f"push {_bytes:#x}", f"esp -= 4; W32(esp, rt_league_table_bytes({_reg}, {_bytes:#x}u));")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and

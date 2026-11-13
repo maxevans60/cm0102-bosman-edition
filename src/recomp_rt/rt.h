@@ -391,6 +391,8 @@ uint32_t rt_goals_full(uint32_t staff);
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
+/* The bytes of the table that create_table of a grown class allocates (season_sizes.h, issue 106). */
+uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
 uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
