@@ -330,7 +330,11 @@ static void news_for(const SeasonNation *n, int season)
         limit_text(now.squad_non_eu, a, sizeof a, "non-EU");
         season_change_news("%s: a match squad in the top division may now hold %s.", n->name, a);
     }
-    if (was.squad_foreign != now.squad_foreign && now.squad_foreign != SEASON_NATION_KEEP) {
+    int kind_change = now.squad_foreign == SEASON_NATION_NONE && now.squad_non_eu != SEASON_NATION_KEEP &&
+                      now.squad_non_eu != SEASON_NATION_NONE;     /* season_nation_squad_record: Croatia, issue 135 */
+    if (kind_change && was.squad_foreign != SEASON_NATION_NONE)
+        season_change_news("%s: players of the EU and EEA no longer count as foreign players in a match squad.", n->name);
+    else if (!kind_change && was.squad_foreign != now.squad_foreign && now.squad_foreign != SEASON_NATION_KEEP) {
         limit_text(now.squad_foreign, b, sizeof b, "foreign");
         season_change_news("%s: a match squad in the top division may now hold %s.", n->name, b);
     }
