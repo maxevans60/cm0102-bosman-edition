@@ -127,12 +127,22 @@ LEAGUE_INTS = ["matches", "up", "playoff_up", "playoff_down", "down", "above", "
 RECORD = 0x6b
 NATION_ROWS = ["Argentina", "Australia", "Belgium", "Brazil", "Croatia", "Denmark", "England", "Finland", "France",
                "Germany", "Greece", "Holland", "Italy", "Japan", "Northern Ireland", "Norway"]
-# The 10 nations below Norway in the list of the base data (3.9.68): the list shows 16 rows, so a click on one of
-# these comes after 10 clicks on the list's down arrow (768 517), which put Greece on the top row (run set pass 2,
-# a2001esb: screenshots in run-logs/runset-pass2/esb).
+# The 11 nations below Norway in the list of the base data (3.9.68), Poland to Wales: the list holds 27 rows and shows
+# 16. A click on one of these comes after SCROLL clicks on the list's down arrow (768 517), enough to bring the list to
+# its end, so the last row is Wales and the rows show the last 16 nations. The first version counted 10 clicks and a
+# list of 26 (it lacked Wales): the list stops at 11 clicks, so every click selected the next nation, Portugal gave
+# the Republic of Ireland (open item 231). tests/seasons/nation_click_run.py reads the nation that a click selects
+# from the start report, for each nation on each data set.
 NATION_ROWS_BELOW = ["Poland", "Portugal", "Republic of Ireland", "Russia", "Scotland", "South Korea", "Spain", "Sweden",
-                     "Turkey", "United States"]
-DOWN_ARROW, SCROLL = "768 517", 10
+                     "Turkey", "United States", "Wales"]
+VISIBLE = 16
+DOWN_ARROW, SCROLL = "768 517", 14
+
+
+def below_y(nation):
+    """The y of a nation of NATION_ROWS_BELOW on the list scrolled to its end (the last VISIBLE rows show)."""
+    rows = NATION_ROWS + NATION_ROWS_BELOW
+    return 188 + 22 * (rows.index(nation) - (len(rows) - VISIBLE))
 EXTRA = {"conference": 320, "regional": 385, "c2": 451}     # y of the row; the extra division is at x 675
 ENV_EXTRA = {"spain", "portugal", "sweden"}                 # slice 20: set by RECOMP_TEST_EXTRA, not by a click
 
@@ -786,7 +796,7 @@ def league_steps(nations, extra):
         points.append("592 155")                                    # Select All, then a click takes a nation out
     for n in clicks:
         if n in NATION_ROWS_BELOW:
-            below.append(f"390 {188 + 22 * (len(NATION_ROWS) + NATION_ROWS_BELOW.index(n) - SCROLL)}")
+            below.append(f"390 {below_y(n)}")
         else:
             points.append(f"390 {188 + 22 * NATION_ROWS.index(n)}")
     for e in extra:

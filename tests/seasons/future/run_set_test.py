@@ -73,8 +73,12 @@ def main():
             bad.append(f"league steps of {r['name']} ({r['nations']}): {e}")
     esb = [s.split(" ", 1)[1] for s in rrc.league_steps(["England", "Spain", "Brazil"], []) if " click " in s]
     esb = esb[esb.index("click 390 254"):] if "click 390 254" in esb else esb      # from the Brazil row
-    if esb[:13] != ["click 390 254"] + ["click 768 517"] * 10 + ["click 390 452", "click 705 572"]:
-        bad.append(f"league steps of England, Spain and Brazil: {esb[:13]}")
+    if esb[:rrc.SCROLL + 3] != ["click 390 254"] + ["click 768 517"] * rrc.SCROLL + ["click 390 430", "click 705 572"]:
+        bad.append(f"league steps of England, Spain and Brazil: {esb[:rrc.SCROLL + 3]}")
+    # Open item 231: the list holds 27 rows (Wales is the last), so the scroll ends at row 11 and Wales is the bottom row.
+    if rrc.below_y("Wales") != 188 + 22 * 15 or rrc.below_y("Portugal") != 188 + 22 * 6 or \
+            len(rrc.NATION_ROWS + rrc.NATION_ROWS_BELOW) != 27:
+        bad.append("click rows: Wales is not the bottom row, or Portugal is not row 6 of the scrolled list")
 
     legs = run_set.legs_of({"start": 2001, "last": 2100, "leg_years": 10})
     if len(legs) != 10 or legs[0] != (2001, 2010) or legs[-1] != (2091, 2100):
