@@ -227,13 +227,13 @@ PATCHES = {
 # divisions), PolLgeCup 0x7cad30 (Second + First = 34), FraCup 0x5baa50 (the whole National, then lower clubs to
 # 182: a National of 18 gave 2 more squadless lower clubs, and a 2022/23 game stopped in January 2023 at
 # virtual_staff.cpp 195, VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0).
+# 0.7.2 slice 6: the cups of Greece, Croatia, Russia, Turkey, Poland, Japan and South Korea take the divisions of
+# the season (cup_sizes_east.py, season_cup_sizes_east.c), so their floors are gone.
 FLOORS = {"eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first", "bel_first", "bel_second",
-          "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first", "tur_second",
-          "nir_first", "nir_prm", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm", "jap_j1", "jap_j2",
-          "kor_league", "sco_first", "sco_prm", "sco_second", "sco_third", "pol_second", "fra_third"}
-# The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
-# after 2001, 0x7cad4f), else its largest count.
-FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
+          "nir_first", "nir_prm", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm",
+          "sco_first", "sco_prm", "sco_second", "sco_third", "fra_third"}
+# The floor is the class's largest count.
+FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
 # The count of the file (+0x3e, the store of CLASSES) must reach the count here in every season, or the row holds no
@@ -356,3 +356,12 @@ INSNS[0x5B92E8] = ("cmp word ptr [esp + 0x10], 0x22",
                    "t0 = R16(esp + 0x10u); t1 = rt_fra_cfa_lower_cap(0x22u) & 0xffffu; t2 = ((t0 - t1 - 0) & 0xffffu); "
                    "SETF(K_SUB | SZ2, t0, t1, t2, 0);")
 INSNS.update(CUP_INSNS)
+# 0.7.2 slice 6: the cups of eastern Europe and Asia (cup_sizes_east.py).
+import os as _os  # noqa: E402
+import sys as _sys  # noqa: E402
+
+if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
+    _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import cup_sizes_east  # noqa: E402
+
+INSNS.update(cup_sizes_east.INSNS)

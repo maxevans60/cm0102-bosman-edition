@@ -293,6 +293,11 @@ if(NOT WIN32)
     add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
     target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_template COMMAND season_template_test)
+    # The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6).
+    add_executable(season_cup_sizes_east_test tests/seasons/test_season_cup_sizes_east.c)
+    target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
+    add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
