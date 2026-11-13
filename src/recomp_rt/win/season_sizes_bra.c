@@ -23,10 +23,21 @@
  * qualify for the play-offs (BraNatFirst::build_fate_news_text 0x42ac70, result 6). A top league with no play-off
  * writes 0 there (EngPrm 0x574bb8, SpaFirst 0x84fe12). Série B keeps its places: they move its clubs up.
  *
+ * The champion. update_positions_and_status gives the top row status 5 and the result code 5 only with bit 1 of the
+ * rule flags +0xd9 (0x684dc0, 0x6850f2..0x685159); League::League sets 3 (0x6822a7), SpaFirst 0x43. The classes set
+ * 8 and 2 (0x42a618, 0x42cbd8): their champion is the play-off winner (code 1 in stage 0, 0x42ac1c, row +0x37 5).
+ * With no play-off the flags get bit 1, and Série A loses bit 8 (status 6 for the +0xbe rows, 0x6851dd..0x6851ff),
+ * so the club on top of the table is the champion (D2). The result handlers (vtable +0x44, BraNatFirst 0x42abc0,
+ * BraNatSecond 0x42d040) drop code 5 in the league stage (stage -1: codes 6 and 3 at 0x42abcf, 0x42abf6; codes 0
+ * and 3 at 0x42d04f, 0x42d06f), so the wraps below hand code 5 to the base League handler 0x686940, which writes the
+ * manager's title record (0x868c50 at 0x686957), as the classes do for their play-off winner (0x42ac3d).
+ *
  * With 1 meeting (the base game, the rows of 2001 and the Série B rows 2002 to 2004, or no room for the dates) the
  * class plays its play-off as the original. The base game and RECOMP_LEAGUE_SIZES=off never reach this file
  * (season_sizes_rules calls it only with the size engine on). */
 #include "win.h"
+#include "../rt_host.h"
+#include "season_change.h"
 #include "season_sizes.h"
 
 #include <stdio.h>
@@ -40,6 +51,11 @@
 #define COMP_YEAR 0x40u             /* s16: the edition */
 #define UP 0xbeu                    /* s8: the top places (the play-off places of Série A) */
 #define SERIE_A_PLAYOFF_PLACES 4    /* 0x42a5ad, 0x42a5db */
+#define RULE_FLAGS 0xd9u            /* u16: bit 1 a champion row, 2 promotion, 8 play-off rows (0x684dc0, 0x685191) */
+#define FLAG_CHAMPION 0x01u
+#define FLAG_PLAYOFF_ROWS 0x08u
+#define F_BASE_RESULT 0x00686940u   /* League +0x44: code 5 the title record, 0 promotion, 3 relegation */
+#define STATUS_CHAMPION 5
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -54,6 +70,9 @@ void season_sizes_bra_rules(uint32_t obj, const char *file)
     if (meetings >= 2) {
         wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
         if (first && (int8_t)g_mem[obj + UP] == SERIE_A_PLAYOFF_PLACES) g_mem[obj + UP] = 0;
+        uint16_t flags = rd16(g_mem, obj + RULE_FLAGS) | FLAG_CHAMPION;
+        if (first) flags &= (uint16_t)~FLAG_PLAYOFF_ROWS;
+        wr16(g_mem, obj + RULE_FLAGS, flags);
         if (count != 0 && getenv("RECOMP_SIZE_LOG"))
             fprintf(stderr, "recomp: league sizes: %s %d: %d meetings, no play-off\n", file,
                     (int16_t)rd16(g_mem, obj + COMP_YEAR), meetings);
@@ -64,3 +83,39 @@ void season_sizes_bra_rules(uint32_t obj, const char *file)
      * original's set_up_rules writes +0xbe 4 again. */
     if (count == 0 && readable(rd32(g_mem, obj + COMP_STAGES))) wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
 }
+
+/* 1 for a Série A or B object that plays no play-off this season (season_sizes_bra_rules set its stage count 0). */
+static int no_playoff(uint32_t obj)
+{
+    if (!readable(obj) || rd32(g_mem, obj + COMP_STAGE_COUNT) != 0) return 0;
+    const char *file = season_change_file(obj);
+    return file && (!strcmp(file, "bra_nat_first") || !strcmp(file, "bra_nat_second")) &&
+           (int16_t)rd16(g_mem, obj + COMP_MEETINGS) >= 2;
+}
+
+/* The result handler (thiscall: club, code, stage, a4, a5, a6; ret 0x18): code 5 of the league stage goes to the base
+ * League handler, the rest to the class's. */
+static void result(void (*original)(void))
+{
+    uint32_t self = cpu.ecx;
+    if ((rt_arg(1) & 0xff) != STATUS_CHAMPION || (rt_arg(2) & 0xff) != 0xff || !no_playoff(self)) {
+        original();
+        return;
+    }
+    uint32_t a[6];
+    for (int i = 0; i < 6; i++) a[i] = rt_arg(i);
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    rt_callback(F_BASE_RESULT, 6, a);
+    if (rt_unwinding) return;
+    cpu = saved;
+    if (getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: %s %d: champion club %u (the top of the table)\n",
+                season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR), a[0]);
+    rt_ret_stdcall(0, 6);
+}
+
+void o_0042abc0(void);
+RT_WRAP(0042abc0, bra_first_result) { result(o_0042abc0); }
+void o_0042d040(void);
+RT_WRAP(0042d040, bra_second_result) { result(o_0042d040); }

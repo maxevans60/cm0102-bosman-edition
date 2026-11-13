@@ -154,6 +154,24 @@ def played(log, file):
     return out
 
 
+# Slice 17 (D11): leagues whose class plays a play-off that the row's meetings leave out (season_sizes_bra.c).
+NO_PLAYOFF = {"bra_nat_first", "bra_nat_second"}
+
+
+def no_playoff_faults(log, file, meetings):
+    """With two meetings: the log says the play-off is off, and the club on top of the table gets the title (code 5
+    in the league stage, the base handler 0x686940)."""
+    if file not in NO_PLAYOFF or meetings < 2:
+        return []
+    lines = log.split("\n")
+    fails = []
+    if not any(x.startswith(f"recomp: league sizes: {file} ") and x.endswith("no play-off") for x in lines):
+        fails.append(f"{file}: no log line of a season with no play-off")
+    if not any(x.startswith(f"recomp: league sizes: {file} ") and " champion " in x for x in lines):
+        fails.append(f"{file}: no champion of the table in the log")
+    return fails
+
+
 def faults(work, file, year, last):
     import rules_report_check as rrc
     report = os.path.join(work, "report.tsv")
@@ -205,6 +223,7 @@ def faults(work, file, year, last):
     for ed, n, matches, lo, hi in done:
         if not (matches == lo == hi == m * (n - 1)):
             fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}, want {m * (n - 1)} each")
+    fails += no_playoff_faults(log, file, m)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -251,6 +270,13 @@ def self_test():
         bad.append(("played", p))
     if encoded_row("nor_prm", 2009) != (16, 2) or encoded_row("por_second", 2014) != (24, 2):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
+        bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
+    off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"
+           "recomp: league sizes: bra_nat_first 2011: champion club 1234 (Série A)")
+    if no_playoff_faults(off, "bra_nat_first", 2) or len(no_playoff_faults("", "bra_nat_first", 2)) != 2 or \
+            no_playoff_faults("", "bra_nat_first", 1) or no_playoff_faults("", "nor_prm", 2):
+        bad.append(("no play-off", no_playoff_faults(off, "bra_nat_first", 2)))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
