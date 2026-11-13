@@ -271,18 +271,21 @@ static int list_filled(uint32_t cup)
     return n;
 }
 
-/* The clubs of the first places of a list (+0xa7) move to its last places. The original fills from place 0 with no
- * gap, so the empty places come first, for season_cup_entrants.c. Returns the clubs of the list. */
+/* The clubs of a list (+0xa7) move to its last places in their order, so the empty places come first, for
+ * season_cup_entrants.c. A list with a hole (a sort over a range with empty places, JapJCup 0x665b9b) closes it
+ * too. Returns the clubs of the list. */
 static int clubs_to_tail(uint32_t cup)
 {
     uint32_t list = rd32(g_mem, cup + CUP_LIST);
     int count = (int16_t)rd16(g_mem, cup + CUP_TEAMS), used = 0;
-    if (!readable(list) || count < 1) return 0;
-    while (used < count && readable(rd32(g_mem, list + (uint32_t)used * ENTRY))) used++;
+    if (!readable(list) || count < 1 || count > 512) return 0;
+    static uint8_t keep[512 * ENTRY];
+    for (int i = 0; i < count; i++)
+        if (readable(rd32(g_mem, list + (uint32_t)i * ENTRY)))
+            memcpy(keep + (size_t)used++ * ENTRY, g_mem + list + (uint32_t)i * ENTRY, ENTRY);
     if (used == 0 || used == count) return used;
-    uint32_t to = list + (uint32_t)east_tail_place(count, used, 0) * ENTRY;
-    memmove(g_mem + to, g_mem + list, (size_t)used * ENTRY);
     memset(g_mem + list, 0, (size_t)(count - used) * ENTRY);
+    memcpy(g_mem + list + (uint32_t)east_tail_place(count, used, 0) * ENTRY, keep, (size_t)used * ENTRY);
     return used;
 }
 
@@ -332,10 +335,13 @@ RT_WRAP(005e9a80, gre_cup_entrants)
      * at 0x5e9c24 does not come. */
     int need = 44 - clubs_of_key(GRE_PRM) - clubs_of_key(GRE_SECOND), pool = clubs_of_key(GRE_LOWER), joined = 0;
     if (pool > 100) pool = 100;
-    if (need > pool && need <= 100) joined = join(GRE_LOWER, nation_of_key(GRE_PRM), need - pool, gre_keys, 3);
+    /* At least one: the copy loop (0x5e9b75..0x5e9b89) copies one place before its test. */
+    int want = need < 1 ? 1 : need;
+    if (want > pool && want <= 100) joined = join(GRE_LOWER, nation_of_key(GRE_PRM), want - pool, gre_keys, 3);
     o_005e9a80();
     char more[96];
-    snprintf(more, sizeof more, ", %d lower picks%s", need < 1 ? 1 : need, joined ? ", clubs of no cup division in the pool" : "");
+    snprintf(more, sizeof more, ", %d lower picks%s", want,
+             joined ? ", clubs of no cup division in the pool" : "");
     log_counts(cup, 1, gre_divs, 2, more);
     restore_moved();
 }
@@ -378,6 +384,16 @@ uint32_t rt_rus_cup_lower(uint32_t pool)
 {
     if (!sizes_on()) return 0xeu;
     return (uint32_t)east_lower_picks(32, clubs_of_key(RUS_FIRST), (int8_t)pool, 1);
+}
+
+/* push 0xe at 0x7e9b74: the lower picks. With an empty pool the copy loop (0x7e9c2c..0x7e9c7d) still copies one slot
+ * before its test: that slot ([esp + 0x230] before the push, lea ecx, [esp + 0x234] at 0x7e9b76) is cleared, so
+ * the place stays empty and season_cup_entrants.c fills it. */
+uint32_t rt_rus_cup_picks(uint32_t esp)
+{
+    if (!sizes_on()) return 0xeu;
+    if ((int8_t)rd8(g_mem, esp + 0x13u) <= 0) wr32(g_mem, esp + 0x230u, 0);
+    return rt_rus_cup_lower(rd8(g_mem, esp + 0x13u));
 }
 
 /* The first place of the Premier League (0x7e9c7f): the places taken so far, at least 32 in a season game, so the
@@ -458,7 +474,8 @@ RT_WRAP(008fcb90, tur_cup_entrants)
 static const CupDivision pol_divs[] = {{"pol_first", POL_FIRST}, {"pol_second", POL_SECOND}};
 static const uint32_t pol_keys[] = {POL_FIRST, POL_SECOND};
 static const CupDivision jcup_divs[] = {{"jap_j1", JAP_J1}, {"jap_j2", JAP_J2}};
-static const uint32_t jcup_keys[] = {JAP_J1, JAP_J2};
+/* Both Japanese cups: no club joins a division from J1, J2 or JapEmpCup's three lower pools. */
+static const uint32_t jemp_keys[] = {JAP_J1, JAP_J2, 0x9cf678u, 0x9cf674u, 0x9cf670u};
 
 /* movsx edx, word ptr [esi + 0x3e] at 0x7cae01 and 0x7cae84: the limit of the second-tier loops. */
 uint32_t rt_pol_lge_second(uint32_t cup)
@@ -510,7 +527,11 @@ RT_WRAP(00665a00, jap_j_cup_entrants)
         o_00665a00();
         return;
     }
-    seam(jcup_divs, 2, jcup_keys, 2);
+    seam(jcup_divs, 2, jemp_keys, 5);
+    /* The original sorts places 11 to 26 (0x665b88..0x665b9b), so a short list would sort empty places: Japanese
+     * clubs of no cup division join J2 for the call until J2 and J1 fill the 28 places. */
+    int count = 28, short_by = count - clubs_of_key(JAP_J1) - clubs_of_key(JAP_J2);
+    if (short_by > 0) join(JAP_J2, nation_of_key(JAP_J1), short_by, jemp_keys, 5);
     o_00665a00();
     short_list(cup, jcup_divs, 2);
     restore_moved();
@@ -518,7 +539,6 @@ RT_WRAP(00665a00, jap_j_cup_entrants)
 
 /* ---- JapEmpCup ---- */
 
-static const uint32_t jemp_keys[] = {JAP_J1, JAP_J2, 0x9cf678u, 0x9cf674u, 0x9cf670u};
 static int jemp_lower = 0x2f;
 
 /* cmp bl, 0x2f at 0x66268b: the lower picks, 75 less J2 and J1 (47 in the original), at most the pool (bl). The
@@ -594,6 +614,7 @@ RT_WRAP(0066cf20, kor_league_cup_teams)
     leave_best(skip);
     o_0066cf20();
     char more[64] = "";
+    /* cup_sizes_run.py reads the count of this text. */
     if (skip) snprintf(more, sizeof more, ", the %d best by last place left out", skip);
     log_counts(cup, 1, kor_divs, 1, more);
     restore_moved();

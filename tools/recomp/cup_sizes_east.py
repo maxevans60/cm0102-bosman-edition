@@ -18,7 +18,7 @@ INSNS = {
     0x5E9B86: ("cmp eax, 0x10", _cmp("0xffffffffu", "SZ4", "eax", "rt_gre_cup_lower(ebx & 0xffu)")),
     # RusCup::select_entrants 0x7e99a0: 14 lower picks (pool in the byte at [esp + 0x13]) and the first place of the
     # Premier League (the places taken, the byte at [esp + 0x12]).
-    0x7E9B74: ("push 0xe", "t0 = rt_rus_cup_lower(R8(esp + 0x13u)); esp -= 4; W32(esp, t0);"),
+    0x7E9B74: ("push 0xe", "t0 = rt_rus_cup_picks(esp); esp -= 4; W32(esp, t0);"),
     0x7E9C73: ("cmp edx, 0xe", _cmp("0xffffffffu", "SZ4", "edx", "rt_rus_cup_lower(R8(esp + 0x13u))")),
     0x7E9C7F: ("mov cl, byte ptr [esp + 0x12]",
                "ecx = (ecx & 0xffffff00u) | (rt_rus_cup_premier_place(R8(esp + 0x12u)) & 0xffu);"),

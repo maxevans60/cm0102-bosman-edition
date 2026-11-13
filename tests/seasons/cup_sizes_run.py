@@ -43,7 +43,8 @@ RUNS = {
                    "gre_prm:+2,gre_second:+4,rus_first:+2,jap_j1:+2,jap_j2:+8,kor_league:+6",
                    {"gre_prm": 16, "gre_second": 18, "rus_first": 20, "tur_second": 17, "jap_j1": 18, "jap_j2": 20,
                     "kor_league": 16},
-                   "grown: the Greek Super League 16 and second tier 18, the Russian First Division 20, J1 18 and J2 20, "
+                   "grown: the Greek Super League 16 and second tier 18, the Russian First Division 20, J1 18 and J2 "
+                   "20, "
                    "the K League 16 (rows of 2010); shrunk: the Turkish second tier 17 (row of 2010)"),
     "shrunk-2012": (2012, 2013, ["Russia", "Croatia", "Japan"], "jap_j2:-2",
                     {"rus_first": 17, "cro_a1": 12, "jap_j2": 10},
@@ -63,6 +64,13 @@ LINE = re.compile(r"recomp: cup sizes: (\w+) (-?\d+): (\d+) of (\d+) places \(([
 ENDS = re.compile(r"recomp: cup sizes: (\w+) (-?\d+) ends: winner (.*) \(history (-?\d+)\)$")
 NONE = re.compile(r"recomp: cup sizes: (\w+) (-?\d+): no new edition")
 FILLED = re.compile(r"recomp: cup entrants: (\w+) \(.*\) (-?\d+): (\d+) of (\d+) places empty .*, (\d+) filled")
+
+
+def left_out(more):
+    """The K League clubs that the cup leaves out ("the 6 best by last place left out"): they are out of the
+    division during the call, so the line's count is 10."""
+    m = re.search(r"the (\d+) best by last place left out", more)
+    return int(m.group(1)) if m else 0
 
 
 def parse(log):
@@ -107,11 +115,14 @@ def faults(log, run):
                 continue
             first = got[0][3]
             for div in CUPS[cup]:
-                if div in expect and first.get(div, (0, 0))[1] != expect[div]:
-                    out.append(f"{cup} {got[0][0]}: {div} holds {first.get(div, (0, 0))[1]} clubs, want {expect[div]}")
+                held = first.get(div, (0, 0))[1] + left_out(got[0][4])
+                if div in expect and held != expect[div]:
+                    out.append(f"{cup} {got[0][0]}: {div} holds {held} clubs, want {expect[div]}")
             for year, filled, places, divs, more in got:
                 for div, (inside, clubs) in divs.items():
-                    want = min(clubs, 10) if cup == "kor_league_cup" else clubs
+                    want = clubs
+                    if cup == "kor_league_cup" and inside != 10:
+                        out.append(f"{cup} {year}: {inside} K League clubs in the cup, want 10")
                     if cup == "cro_cup" and "left out" in more:
                         continue
                     if inside != want:
@@ -132,7 +143,7 @@ def faults(log, run):
 def self_test():
     log = "\n".join([
         "recomp: cup sizes: gre_cup 2010: 44 of 44 places (gre_prm 16/16, gre_second 18/18), 10 lower picks",
-        "recomp: cup sizes: kor_league_cup 2010: 10 of 10 places (kor_league 10/16), the 6 best by last place left out",
+        "recomp: cup sizes: kor_league_cup 2010: 10 of 10 places (kor_league 10/10), the 6 best by last place left out",
         "recomp: cup sizes: rus_cup 2010: 47 of 48 places (rus_prm 16/16, rus_first 20/20)",
         "recomp: cup entrants: rus_cup (Russian Cup) 2010: 1 of 48 places empty (the first is place 0), 1 filled",
         "recomp: cup sizes: tur_cup 2010: 63 of 64 places (tur_first 18/18, tur_second 16/17)",
@@ -148,8 +159,8 @@ def self_test():
         bad.append(("fills", fills, unfinished))
     if ends.get("gre_cup") != [(2011, "Olympiakos", 2011)]:
         bad.append(("ends", ends))
-    RUNS["self"] = (2010, 2011, ["Greece", "Russia", "Turkey", "South Korea"], "", {"gre_prm": 16, "rus_first": 22},
-                    "")
+    RUNS["self"] = (2010, 2011, ["Greece", "Russia", "Turkey", "South Korea"], "",
+                    {"gre_prm": 16, "rus_first": 22, "kor_league": 16}, "")
     f = faults(log, "self")
     del RUNS["self"]
     want = ["rus_cup 2010: rus_first holds 20 clubs, want 22", "tur_cup 2010: 16 of the 17 clubs of tur_second",

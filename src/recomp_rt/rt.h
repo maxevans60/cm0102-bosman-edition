@@ -428,6 +428,7 @@ uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  
  * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
 uint32_t rt_gre_cup_lower(uint32_t pool);
 uint32_t rt_rus_cup_lower(uint32_t pool);
+uint32_t rt_rus_cup_picks(uint32_t esp);
 uint32_t rt_rus_cup_premier_place(uint32_t placed);
 uint32_t rt_tur_cup_copy_from(uint32_t esp);
 uint32_t rt_tur_cup_lower(uint32_t esp);
