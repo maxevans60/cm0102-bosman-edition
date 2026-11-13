@@ -1312,6 +1312,13 @@ int season_divisions_new_record(const char *division)
     return division && !strcmp(division, SEASON_DIV_GRE_RECORD);
 }
 
+/* The counters of the Select League(s) screen (2026-10-14-start-new-game-inventory.md, 1c): the leagues to load,
+ * the selected nations and the first selected nation. save_game_data 0x82e430 writes them (0x82e8ab, 0x82e8c8). */
+#define LEAGUES_TO_LOAD 0x00ae2d00u
+#define SELECTED_NATIONS 0x00ae2d04u
+#define MAIN_NATION 0x00ae2d08u
+#define SELECTED 0x02u
+
 void season_divisions_test_extra(void)
 {
     const char *want = getenv("RECOMP_TEST_EXTRA");
@@ -1324,8 +1331,27 @@ void season_divisions_test_extra(void)
     for (size_t i = 0; i < sizeof nations / sizeof nations[0]; i++) {
         int32_t id = (int32_t)rd32(g_mem, nations[i].key);
         if (!strstr(want, nations[i].name) || id < 0) continue;
-        g_mem[table + (uint32_t)id * NATION_SIZE + NATION_SELECTED] |= EXTRA_DIVISION;
-        fprintf(stderr, "recomp: new divisions: test: extra division of %s on\n", nations[i].name);
+        /* Item 226: the click on the extra division box (Select League(s), id 0x38, 0x81e139..0x81e288). A nation
+         * with flag 0 first becomes a selected nation (flag 2, one more league and one more selected nation, the
+         * first selected nation when there is none), then bit 0x04 goes on with one more league. A flag of 0x04
+         * alone, which the screen never makes, gave a nation that create_game trims as not loaded (comp history
+         * 0x539ae0 at 0x828371, clubs 0x5267c0 at 0x828395) but makes the competitions of (+0x11c not 0,
+         * key_nation_create_all_comps 0x669196): PorSuper::select_teams 0x7d3260 then found no league champion
+         * (comp_util_get_latest_placed_club 0x4afd80) and stopped at por_super.cpp 211, SpaSuper at 203. */
+        uint32_t nation = table + (uint32_t)id * NATION_SIZE;
+        uint8_t before = g_mem[nation + NATION_SELECTED];
+        if (!before) {
+            g_mem[nation + NATION_SELECTED] = SELECTED;
+            wr32(g_mem, LEAGUES_TO_LOAD, rd32(g_mem, LEAGUES_TO_LOAD) + 1);
+            wr32(g_mem, SELECTED_NATIONS, rd32(g_mem, SELECTED_NATIONS) + 1);
+            if (!rd32(g_mem, MAIN_NATION)) wr32(g_mem, MAIN_NATION, nation);
+        }
+        if (!(before & EXTRA_DIVISION)) {
+            g_mem[nation + NATION_SELECTED] |= EXTRA_DIVISION;
+            wr32(g_mem, LEAGUES_TO_LOAD, rd32(g_mem, LEAGUES_TO_LOAD) + 1);
+        }
+        fprintf(stderr, "recomp: new divisions: test: extra division of %s on (flags %u before%s)\n",
+                nations[i].name, before, before ? "" : ", the nation is selected with it");
     }
 }
 
