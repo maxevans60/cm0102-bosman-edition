@@ -41,10 +41,11 @@ SUMS = {"eng_cc_cup": ["eng_prm", "eng_first", "eng_second", "eng_third"],
         "sco_chal_cup": ["sco_first", "sco_second", "sco_third"]}
 HIST = 26       # club_comp_history.dat: +0 id, +4 competition, +8 u16 year, +0xa first, +0xe second, +0x12 third
 
-# run: (start year, what it shows, {file: club count at the start}).
+# run: (start year, what it shows, {file: club count at the start}). The Welsh League Cup is a League of groups:
+# its +0x3e is the clubs of one group (3, wel_lge_cup_init_teams 0x926712), and its 18 entrants are the groups.
 RUNS = {
     "w2012": (2012, "Welsh Premier of 12: the Welsh League Cup lends 6 lower clubs, the Welsh Cup takes 20 lower",
-              {"wel_first": 12, "wel_lge_cup": 18, "wel_cup": 32, "eng_cc_cup": 92, "eng_fa_cup": 152,
+              {"wel_first": 12, "wel_lge_cup": 3, "wel_cup": 32, "eng_cc_cup": 92, "eng_fa_cup": 152,
                "nir_cup": 32, "sco_lge_cup": 42, "sco_chal_cup": 30}),
     "c2015": (2015, "2015/16: the FA Cup with the Conference of its class (22 until slice 8)",
               {"eng_conf": 22, "eng_fa_cup": 152, "eng_cc_cup": 92, "wel_first": 12, "sco_lge_cup": 42}),
