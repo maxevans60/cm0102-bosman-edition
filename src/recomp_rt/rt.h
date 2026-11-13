@@ -420,6 +420,9 @@ uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint3
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
 uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 uint32_t rt_fa_cup_takes(uint32_t esp);   /* EngFaCup places by pool (0x56ffe4) */
+/* The clubs of up to four divisions (key ids, 0 for none), the original outside a season game with the sizes on:
+ * the cups of Britain and Ireland that take whole divisions (0.7.2 slice 4, season_cup_sizes_uk.c). */
+uint32_t rt_cup_clubs(uint32_t original, uint32_t key_a, uint32_t key_b, uint32_t key_c, uint32_t key_d);
 uint32_t rt_fra_cfa_lower_cap(uint32_t original);              /* FraCfa lower club cap (0x5b92e8) */
 uint32_t rt_ita_cup_first_position(uint32_t original);   /* ItaCup second loop start (0x63fb16) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */

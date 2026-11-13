@@ -26,8 +26,9 @@ rows = [
     row('11', '2017/18', '2017-18', 'Primera', '28', nation='Argentina', comp_file='arg_prm'),
     row('12', '2019/20', '2020', 'Primera', '18', nation='Argentina', comp_file='arg_prm'),
     # A count under the floor that a cup of the nation needs (FLOOR_COUNT of tools/recomp/league_sizes.py).
-    row('13', '2001/02', '2002', 'Scottish Premier', '12', nation='Scotland', comp_file='sco_prm'),
-    row('14', '2002/03', '2003', 'Scottish Premier', '10', nation='Scotland', comp_file='sco_prm'),
+    # (0.7.2 slice 4: the divisions of the cups of Britain and Ireland have no floor, the cups follow them.)
+    row('13', '2001/02', '2002', 'Belgian First', '18', nation='Belgium', comp_file='bel_first'),
+    row('14', '2002/03', '2003', 'Belgian First', '16', nation='Belgium', comp_file='bel_first'),
     # The Serie C groups have no floor in the Serie C era (season_ita_cap): no mark. Before it the C1 floor is 18.
     row('15', '2012/13', '2013', 'Serie C1/A', '18', nation='Italy', comp='Serie C1 group A', comp_file='ita_ser_c1a'),
     row('16', '2013/14', '2014', 'Serie C1/A', '16', nation='Italy', comp='Serie C1 group A', comp_file='ita_ser_c1a'),
@@ -50,8 +51,7 @@ assert 'The game keeps 12 clubs (Q404).' in text
 assert '- 2014/15 (real 2015): clubs changes from "20" to "30". The game keeps 20 clubs (league sizes).' in text, text
 assert 'clubs changes from "30" to "28". The game keeps 20 clubs (league sizes).' in text
 assert 'clubs changes from "28" to "18".\n' in text            # under the class count: the game plays it
-assert 'clubs changes from "12" to "10". The game keeps 12 clubs (league sizes).' in text
-assert 'clubs changes from "18" to "16". The game keeps 18 clubs (league sizes).' in text
+assert text.count('clubs changes from "18" to "16". The game keeps 18 clubs (league sizes).') == 2   # Belgium, C1
 assert 'clubs changes from "20" to "16".\n' in text            # Serie C era group: no mark
 assert 'clubs changes from "14" to "13".\n' in text            # second Greek group: the game plays 13
 assert 'clubs changes from "18" to "21". The game keeps 20 clubs (league sizes).' in text
