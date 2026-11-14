@@ -179,8 +179,21 @@ def long_run(program, game, keep, reuse, timeout, which="long"):
         if second and int(second["clubs"]) != 18:
             fails.append(f"long: {year}/{(year + 1) % 100:02d} I liga clubs {second['clubs']}, want 18")
     if which == "long2":
-        if not re.search(r"recomp: playoffs: pol_second 2025: the play-off draws on day \d+ of 2026", log):
+        if not re.search(r"recomp: playoffs: pol_second 2025: play-off of places 3, 4, 5 and 6 drawn on day \d+", log):
             fails.append("long: no line for the I liga's own play-off of 2025/26 (drawn before the season change)")
+        # 2 direct places and the play-off's winner go up, 3 clubs go down, all between the two leagues.
+        def members(season, slot):
+            out = set()
+            with open(report, encoding="latin-1") as f:
+                for line in f:
+                    p = line.rstrip("\n").split("\t")
+                    if len(p) > 5 and p[0] == "club" and p[1] == str(season) and p[2] == "start" and p[3] == slot:
+                        out.add(p[5])
+            return out
+        e1, e2, i1, i2 = members(2025, "133"), members(2026, "133"), members(2025, "134"), members(2026, "134")
+        up, down = e2 - e1, e1 - e2
+        if not e1 or len(up) != 3 or len(down) != 3 or not up <= i1 or not down <= i2:
+            fails.append(f"long: the exchange of 2025/26: {len(up)} clubs up (want 3, from the I liga), {len(down)} down (want 3)")
         if re.search(r"recomp: season change net: .*pol", log):
             fails.append("long: the season change net acted on the Polish leagues")
     print(("FAIL  " + "; ".join(fails)) if fails else f"ok    long: a 2002 game to {last}/{(last + 1) % 100:02d} ({work})")
