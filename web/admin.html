@@ -196,7 +196,11 @@ function render() {
             link.click();
             setTimeout(() => URL.revokeObjectURL(link.href), 60000);
             get.textContent = 'Download the save';
-          } catch (err) { get.textContent = `Not got: ${err.message}`; }
+          } catch (err) {
+            // The bucket's CORS rules do not let this page read it (a page cannot tell why a fetch failed): the
+            // packed link opens as a plain download, which needs no CORS.
+            get.textContent = 'Not got here: use the packed (.gz) link';
+          }
           get.disabled = false;
         };
       }

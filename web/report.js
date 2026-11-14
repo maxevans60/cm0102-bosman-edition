@@ -3,14 +3,14 @@
 // first, so it arrives even when the save does not. The save goes packed (gzip) straight to the store, with a link the
 // server signs, as the cloud saves do; when the store does not let the page in (its CORS rules: the first try on the
 // live site failed so, 13 November 2026), it goes through the server (saveBody). The admin page lists the report.
-import { listSaves, readBlob } from './saves.js';
+import { SAVE_HEADER, listSaves, readBlob } from './saves.js';
 
 export const REPORT_LOG_LINES = 2000;
-const HEADER = 0x416ec;                                // a save's container header (saves.js)
 // A read that starts this far into a save is a load: the Load Game list reads each save's header only, 270,336 bytes
 // (the header in 4 KB reads), and a load reads the parts after it (a run of the real engine, 13 November 2026: a 46 MB
 // save, the list read 270,336 bytes of each of two saves; the load opened the chosen one about 100 times, 68 MB).
-const PAST_HEADER = HEADER + 0x10000;
+const PAST_HEADER = SAVE_HEADER + 0x10000;
+const LINE_MAX = 400;                                  // what the server keeps of a log line (stats.mjs)
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -84,6 +84,7 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
   const dialog = $('report'), note = $('report-note'), choice = $('report-save'), state = $('report-state');
   const sendBtn = $('report-send');
   let context = { message: '', where: '' }, sending = false, offered = [];
+  let unsent = null;              // a report whose log went and whose save did not: { sent, save }, for Send the save again
   const say = (text, bad = false) => { state.textContent = text; state.className = bad ? 'small bad' : 'small'; };
 
   function open({ message = '', where = '', files = [] } = {}) {
@@ -92,13 +93,15 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
     offered = [...files];
     let saves = [], fs = null;
     try { fs = FS(); saves = fs ? listSaves(fs).saves : []; } catch { /* no folder yet */ }
+    // The save in play is chosen; with none, No save: a save goes only when the player picks one (privacy.html).
     const playing = inPlay();
-    const pick = offered.length ? null : saves.some((f) => f.path === playing) ? playing : saves[0]?.path ?? '';
+    const pick = offered.length ? null : saves.some((f) => f.path === playing) ? playing : '';
     choice.innerHTML = `<option value="">${fs || offered.length ? 'No save' : 'No save: the game did not start, so its saves cannot be read'}</option>${
       offered.map((f, i) => `<option value="file:${i}"${i === 0 ? ' selected' : ''}>${esc(f.name)} (${size(f.size)}), the file you uploaded</option>`).join('')}${
       saves.map((f) => `<option value="${esc(f.path)}"${f.path === pick ? ' selected' : ''}>${esc(f.name)} (${size(f.size)})${f.path === playing ? ', in play' : ''}</option>`).join('')}`;
     $('report-error').textContent = message ? `The error: ${message}` : '';
     $('report-error').hidden = !message;
+    unsent = null;
     say('');
     sendBtn.disabled = false;
     sendBtn.textContent = 'Send';
@@ -109,22 +112,27 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
     if (sending) return;
     sending = true;
     sendBtn.disabled = true;
-    const value = choice.value, fs = FS();
-    let save = null;
-    if (value.startsWith('file:')) {
-      const f = offered[Number(value.slice(5))];
-      if (f) save = { name: f.name, size: f.size, blob: async () => f, uploaded: true };
-    } else if (value && fs) {
-      const f = listSaves(fs).saves.find((x) => x.path === value);
-      if (f) save = { name: f.name, size: f.size, blob: () => readBlob(fs, f.path) };
+    let save = null, sent = null;
+    if (unsent) ({ sent, save } = unsent);             // Send the save again: the same report, its save only
+    else {
+      const value = choice.value, fs = FS();
+      if (value.startsWith('file:')) {
+        const f = offered[Number(value.slice(5))];
+        if (f) save = { name: f.name, size: f.size, blob: async () => f, uploaded: true };
+      } else if (value && fs) {
+        const f = listSaves(fs).saves.find((x) => x.path === value);
+        if (f) save = { name: f.name, size: f.size, blob: () => readBlob(fs, f.path) };
+      }
     }
     const elsewhere = () => (save?.uploaded ? 'Send the file another way.' : 'Download it in Saved games and send it another way.');
-    let sent = null;
     try {
-      say('Sending the log…');
-      sent = await post('/api/report/send', { ...who(), message: context.message, where: [context.where, pageInfo()].filter(Boolean).join('; '), note: note.value,
-        log: lines().slice(-REPORT_LOG_LINES) });
-      log(`page: report sent (${sent.key})`);
+      if (!sent) {
+        say('Sending the log…');
+        // Each line as the server keeps it: a log of long lines (a stack is one) would not fit the request whole.
+        sent = await post('/api/report/send', { ...who(), message: context.message, where: [context.where, pageInfo()].filter(Boolean).join('; '), note: note.value,
+          log: lines().slice(-REPORT_LOG_LINES).map((l) => String(l).slice(0, LINE_MAX)) });
+        log(`page: report sent (${sent.key})`);
+      }
       if (save && !sent.saves) {
         say(`The log was sent. ${save.name} was not: this server takes no saves. ${elsewhere()}`, true);
         return;
@@ -153,12 +161,14 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
       }
       say(`Sent${save ? `, with ${save.name}` : ''}. Thank you: the developer has it now.`);
       note.value = '';
+      unsent = null;
       sendBtn.textContent = 'Sent';
     } catch (err) {
       log(`page: report: ${err.message}`);
-      say(sent ? `The log was sent, but ${save?.name ?? 'the save'} was not: ${err.message}. ${elsewhere()}`
+      say(sent ? `The log was sent, but ${save?.name ?? 'the save'} was not: ${err.message}. Send the save again, or ${elsewhere().replace(/^./, (c) => c.toLowerCase())}`
         : `Nothing was sent: ${err.message}. Try again in a moment.`, true);
-      if (!sent) sendBtn.disabled = false;
+      if (sent && save) { unsent = { sent, save }; sendBtn.textContent = 'Send the save again'; }
+      sendBtn.disabled = Boolean(sent && !save);
     } finally {
       sending = false;
     }

@@ -243,11 +243,11 @@ test('a report the player sends: a note and a long log, a save by a signed link 
   const plain = createStats({ store: memoryStore(), now: () => t });
   const viaServer = await plain.send({ log: ['x'] }, null, '');
   assert.equal(viaServer.saves, true);
-  assert.equal((await plain.saveBody({ key: viaServer.key, token: viaServer.token }, Buffer.from('gz'))).status, 400, 'announced first');
+  const bytes = (buf) => async () => buf;
+  assert.equal((await plain.saveBody({ key: viaServer.key, token: viaServer.token }, bytes(Buffer.from('gz')), 2)).status, 400, 'announced first');
   assert.deepEqual(await plain.saveLink({ key: viaServer.key, token: viaServer.token, name: 'St-Etienne 2002-02-13.sav', size: 20, rawSize: 0 }, true), { direct: false });
-  assert.equal((await plain.saveBody({ key: viaServer.key, token: 'nope' }, Buffer.from('gz'))).status, 403);
-  assert.equal((await plain.saveBody({ key: viaServer.key, token: viaServer.token }, Buffer.alloc(0))).status, 413);
-  assert.deepEqual(await plain.saveBody({ key: viaServer.key, token: viaServer.token }, Buffer.alloc(20, 1)), { status: 200, ok: true, size: 20 });
+  assert.equal((await plain.saveBody({ key: viaServer.key, token: 'nope' }, bytes(Buffer.from('gz')), 2)).status, 403);
+  assert.deepEqual(await plain.saveBody({ key: viaServer.key, token: viaServer.token }, bytes(Buffer.alloc(20, 1)), 20), { status: 200, ok: true, size: 20 });
   const viaFile = await plain.reportFile(viaServer.key);
   assert.deepEqual([viaFile.save.done, viaFile.save.size, viaFile.save.rawSize, viaFile.token], [true, 20, 0, undefined]);
   assert.equal(viaFile.saveUrl, undefined, 'a store that signs no links gives the admin no link');
@@ -267,4 +267,33 @@ test('a report the player sends: a note and a long log, a save by a signed link 
   await s.beat({ anon: A, session: 'z', seconds: 1 }, null);
   await s.flush();
   assert.equal(store.m.has(saveKey), false, 'the save went with its report');
+});
+
+test('a save through the server: checked before its bytes are read, and only of the announced size', async () => {
+  const t = Date.parse('2026-11-14T10:00:00Z');
+  const s = createStats({ store: memoryStore(), now: () => t });
+  const sent = await s.send({ log: [] }, null, '');
+  await s.saveLink({ key: sent.key, token: sent.token, name: 'BIF.sav', size: 20, rawSize: 100 }, false);
+  let reads = 0;
+  const reader = (buf) => async () => { reads++; return buf; };
+  assert.equal((await s.saveBody({ key: sent.key, token: 'nope' }, reader(Buffer.alloc(20)), 20)).status, 403);
+  assert.equal(reads, 0, 'a wrong token: the bytes are not read');
+  assert.equal((await s.saveBody({ key: sent.key, token: sent.token }, reader(Buffer.alloc(150 << 20)), 150 << 20)).status, 400, 'more than announced');
+  assert.equal(reads, 0, 'a length other than the announced one: the bytes are not read');
+  assert.equal((await s.saveBody({ key: sent.key, token: sent.token }, reader(Buffer.alloc(19)), 20)).status, 400, 'fewer bytes came than the length said');
+  assert.deepEqual(await s.saveBody({ key: sent.key, token: sent.token }, reader(Buffer.alloc(20, 1)), 20), { status: 200, ok: true, size: 20 });
+});
+
+test('sent reports: at most 200 a day on a machine, then refused until the next day', async () => {
+  let t = Date.parse('2026-11-14T10:00:00Z');
+  const s = createStats({ store: memoryStore(), now: () => t });
+  let refused = null;
+  for (let i = 0; i < 205 && refused === null; i++) {
+    const r = await s.send({ log: ['x'] }, null, '');
+    if (r.error) refused = { i, r };
+  }
+  assert.equal(refused?.i, 200, 'the 201st of the day');
+  assert.equal(refused.r.status, 429);
+  t += 86400000;
+  assert.ok((await s.send({ log: [] }, null, '')).key, 'a new day');
 });

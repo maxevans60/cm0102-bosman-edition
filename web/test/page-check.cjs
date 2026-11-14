@@ -106,16 +106,23 @@ const PORT = 8097;
       const hasReport = await pg.locator('#fail-report').count() === 1;
       await pg.click('#fail-report');
       const dlg = await pg.evaluate(() => ({ open: document.getElementById('report').open, error: document.getElementById('report-error').textContent,
+        intro: document.querySelector('#report .dlg-body p').textContent.replace(/\s+/g, ' '),
         options: [...document.querySelectorAll('#report-save option')].map((o) => `${o.selected ? '*' : ''}${o.textContent}`) }));
       await pg.fill('#report-note', 'I pressed Exit and it stopped.');
+      await pg.selectOption('#report-save', '/user/Harbour City 2001-07-14.sav');
+      // A log of long lines (a stack is one line): the page sends each line cut to what the server keeps, so a long log
+      // still fits the request (3 MB of log here, more than the 2 MB the server takes).
+      await pg.evaluate(() => { for (let i = 0; i < 300; i++) window.Module.printErr(`recomp: long line ${i} ${'x'.repeat(10000)}`); });
       await pg.click('#report-send');
       await pg.waitForFunction(() => /was sent|Sent/.test(document.getElementById('report-state').textContent), null, { timeout: 15000 }).catch(() => {});
       const said = await pg.textContent('#report-state');
       const adm = await (await fetch(`http://127.0.0.1:${PORT}/api/admin/stats`, { headers: { authorization: 'Bearer page-check-admin-token' } })).json();
       const listed = adm.reports?.[0] ?? {};
-      check('the error box: Send to the developer opens with the error and the saves, the newest chosen',
-        hasReport && dlg.open && /The game ended with code 70/.test(dlg.error) && dlg.options[0] === 'No save' && /^\*Harbour City 2001-07-14\.sav \(262 KB\)/.test(dlg.options[1] ?? ''),
+      check('the error box: Send to the developer opens with the error and the saves; with no save in play, No save is chosen',
+        hasReport && dlg.open && /The game ended with code 70/.test(dlg.error) && dlg.options[0] === '*No save' && /^Harbour City 2001-07-14\.sav \(262 KB\)/.test(dlg.options[1] ?? ''),
         JSON.stringify(dlg));
+      check('the dialog names everything a report holds (the page\'s size, the device\'s memory, the id or account)',
+        /the size of the page and the device's memory/.test(dlg.intro) && /signed in, your account/.test(dlg.intro) && !/Nothing else of your browser/.test(dlg.intro), dlg.intro);
       check('Send: the report reaches the server with the note; a server without a bucket says the save did not go',
         listed.sent === true && listed.note === 'I pressed Exit and it stopped.' && /The game ended with code 70/.test(listed.message)
           && /The log was sent\. Harbour City 2001-07-14\.sav was not: this server takes no saves/.test(said), `${said} | ${JSON.stringify(listed)}`);
@@ -497,6 +504,27 @@ const PORT = 8097;
       armedDrag === `down2 move2… up2@${at.y - 100}` && (await t.getAttribute('#right-click', 'aria-pressed')) === 'false', armedDrag);
     const plainDrag = (await dragBy(50)).replace(/(move1 )+/g, 'move1… ');
     check('a plain drag is still the left button\'s (a player moved on the board)', plainDrag === `down0 move1… up0@${at.y - 100}`, plainDrag);
+    // A second finger that touches and lifts while the first one drags (with either button): the first finger's lift
+    // still lets the button go, so the game does not keep it held.
+    // Touch events made in the page: the DevTools touch API lifts every finger at a touchEnd, not one of two.
+    const withSecondFinger = (pressMs) => t.evaluate(async ({ x, y, pressMs: ms }) => {
+      window.__seq.length = 0;
+      const c = document.getElementById('canvas');
+      const T = (id, tx, ty) => new Touch({ identifier: id, target: c, clientX: tx, clientY: ty });
+      const fire = (type, touches, changed) => c.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, touches, targetTouches: touches, changedTouches: changed }));
+      const a0 = T(1, x, y), a1 = T(1, x, y - 40), b = T(2, x + 80, y);
+      fire('touchstart', [a0], [a0]);
+      await new Promise((r) => setTimeout(r, ms));
+      fire('touchmove', [a1], [a1]);
+      fire('touchstart', [a1, b], [b]);
+      fire('touchend', [a1], [b]);                       // the second finger lifts first
+      fire('touchend', [], [a1]);
+      await new Promise((r) => setTimeout(r, 150));
+      return window.__seq.join(' ');
+    }, { x: at.x, y: at.y, pressMs });
+    const rightTwo = await withSecondFinger(600), leftTwo = await withSecondFinger(50);
+    check('a second finger during a drag: the first finger\'s lift still lets the button go (right and left)',
+      /^down2 .*up2@\d+$/.test(rightTwo) && /^down0 .*up0@\d+$/.test(leftTwo), `${rightTwo} | ${leftTwo}`);
     check('no page errors on the touch device', terrors.length === 0, terrors.join('; '));
     await tc.close();
     // A Mac: Control and a click is the right button there (and a trackpad's only easy right-button drag); the browser
@@ -526,6 +554,19 @@ const PORT = 8097;
       await m.mouse.click(mx, my);
       const macSeq = await m.evaluate(() => window.__seq.join(' '));
       check('a Mac: Control and a drag is the right button for the game, a plain click the left', macSeq === 'down2 up2 down0 up0', macSeq);
+      // The window loses the focus while a Control-press is held (Command-Tab): its release never comes, so the page lets
+      // the right button go then, and a later click is a plain one.
+      await m.evaluate(() => { window.__seq.length = 0; });
+      await m.keyboard.down('Control');
+      await m.mouse.down();
+      await m.keyboard.up('Control');
+      await m.evaluate(() => window.dispatchEvent(new Event('blur')));
+      const atBlur = await m.evaluate(() => window.__seq.join(' '));
+      await m.mouse.up();
+      await m.mouse.click(mx, my);
+      const afterBlur = await m.evaluate(() => window.__seq.join(' '));
+      check('a Mac: a blur during a Control-press lets the right button go, and a later click is the left button\'s',
+        atBlur === 'down2 up2' && /down0 up0$/.test(afterBlur) && !/up2.*up2/.test(afterBlur), `${atBlur} | ${afterBlur}`);
       await mc.close();
     }
     // An engine built before the keyboard calls: no button, and the log says to build it again.
@@ -719,6 +760,7 @@ const PORT = 8097;
         /The game is open in another tab/.test(asked) && /two would delete each other's saves/.test(asked)
           && await two.locator('#turn-take').count() === 1 && !(await two.evaluate(() => Boolean(window.__fake))), asked.slice(0, 160));
       const storesBefore = await one.evaluate(() => window.__syncs.store);
+      await one.evaluate(() => { window.Module.SDL2 = { audioContext: { state: 'running', suspend() { this.state = 'suspended'; return Promise.resolve(); } } }; });
       await two.click('#turn-take');
       await two.waitForFunction(() => window.__fake, null, { timeout: 60000 }).catch(() => {});
       await one.waitForSelector('#turn-back', { timeout: 10000 }).catch(() => {});
@@ -730,6 +772,8 @@ const PORT = 8097;
       await one.evaluate(() => window.Module.FS.writeFile('/user/Late 2001-08-01.sav', new Uint8Array(0x416ec + 8)));
       await one.waitForTimeout(3000);
       check('the tab that handed over writes nothing more to the browser\'s storage', (await one.evaluate(() => window.__syncs.store)) === storesAfter);
+      check('the tab that handed over is silent (an engine that cannot be stopped plays on behind its box)',
+        (await one.evaluate(() => window.Module.SDL2.audioContext.state)) === 'suspended');
       check('no page errors with two tabs', errs.length === 0, errs.join('; '));
       await ctx.close();
     }

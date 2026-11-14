@@ -908,6 +908,8 @@ async function stopHere(store) {
   status('The game moved to another tab');
   overlay(`<h1>The game moves to another tab</h1><div class="row"><i class="spin"></i>${store ? 'Your saves go to this browser\'s storage first.' : 'The game here stops.'}</div>`);
   await within(letEngineGo(), 10000);
+  // An engine whose sleep cannot be ended (Asyncify) plays on behind the box: at least its sound stops.
+  try { window.Module?.SDL2?.audioContext?.suspend?.(); } catch { /* no sound */ }
   // The lock stays until the store is done, however long it takes: the asking tab must not read the storage while this
   // one still writes it (a review found the 60 s cap that was here). A store that never ends: the asking tab offers
   // Play here anyway after its own wait.

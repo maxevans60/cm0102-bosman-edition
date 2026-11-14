@@ -24,6 +24,7 @@ const REPORT_DAYS = 90;             // report files older than this go (the priv
 const MAX_SENT_LOG = 2000;          // lines of the log in a report the player sent
 const MAX_SENT_SAVE = 400 << 20;    // a save the player sent, packed (gzip)
 export const MAX_SENT_THROUGH = 150 << 20;   // one sent through this server (saveBody): it is held in memory while it goes
+const SENT_REPORTS_A_DAY = 200;    // reports sent a day, on this machine (each up to about 800 KB of log)
 const SENT_SAVES_A_DAY = 40;        // saves sent a day, on this machine: a bound on what the store takes
 const SENT_BYTES_A_DAY = 4 * 2 ** 30;           // and their packed bytes (4 GB)
 const MAX_BEAT_SECONDS = 180;       // a beat counts at most this much play: the page sends one each minute
@@ -97,7 +98,8 @@ export function browserOf(ua = '') {
 export function createStats({ store = null, log = (t) => console.log(t), now = () => Date.now(), flushMs = FLUSH } = {}) {
   let data = { version: 1, people: {}, days: {}, today: { day: day(now()), ids: [] }, reports: [] };
   let dirty = false, timer = null, prunedReports = 0;
-  let sentToday = { day: '', saves: 0, bytes: 0 };
+  let sentToday = { day: '', reports: 0, saves: 0, bytes: 0 };
+  const today = () => { const d = day(now()); if (sentToday.day !== d) sentToday = { day: d, reports: 0, saves: 0, bytes: 0 }; return sentToday; };
   let base = clone(data);                    // the object as this machine last read or wrote it (mergeStats)
   const todayIds = new Set();
 
@@ -202,6 +204,8 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     const t = now();
     rollDay(t);
     const id = user ? `g:${user.sub}` : ANON.test(anon) ? `a:${anon}` : 'a:unknown';
+    if (today().reports >= SENT_REPORTS_A_DAY) return { status: 429, error: 'the server takes no more reports today: try again tomorrow' };
+    sentToday.reports++;
     const note = String(body?.note ?? '').replace(/[\u0000-\u0009\u000b-\u001f]/g, ' ').slice(0, 2000);
     const token = store ? randomBytes(16).toString('hex') : null;
     const r = {
@@ -240,8 +244,7 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     if (!r) return { status, error };
     const size = Math.floor(Number(body?.size)), rawSize = Math.floor(Number(body?.rawSize));
     if (!(size > 0) || size > MAX_SENT_SAVE) return { status: 413, error: `a save may be ${MAX_SENT_SAVE >> 20} MB at most, packed` };
-    const today = day(now());
-    if (sentToday.day !== today) sentToday = { day: today, saves: 0, bytes: 0 };
+    today();
     if (sentToday.saves >= SENT_SAVES_A_DAY || sentToday.bytes + size > SENT_BYTES_A_DAY)
       return { status: 503, error: 'the server takes no more saves today: try again tomorrow' };
     sentToday.saves++;
@@ -255,13 +258,16 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     return { direct: true, url: link.url, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])) };
   }
 
-  // The save of a sent report through this server ({ key, token } and its packed bytes), after saveLink announced it:
-  // for a page that the store does not let in.
-  async function saveBody(body, buf) {
+  // The save of a sent report through this server ({ key, token }), after saveLink announced it: for a page that the
+  // store does not let in. read() gives its packed bytes; it is called only once the report, its token and the length
+  // (the request's) match what was announced, so a request that would not be taken holds no memory.
+  async function saveBody(body, read, length) {
     const { r, status, error } = await sentReport(body?.key, body?.token);
     if (!r) return { status, error };
     if (!r.save) return { status: 400, error: 'no save was announced' };
-    if (!buf?.length || buf.length > MAX_SENT_THROUGH) return { status: 413, error: `a save may be ${MAX_SENT_THROUGH >> 20} MB at most, packed, through the server` };
+    if (length !== r.save.size) return { status: 400, error: `the save was announced as ${r.save.size} bytes, packed` };
+    const buf = await read();
+    if (buf.length !== r.save.size) return { status: 400, error: `the save came with ${buf.length} of its ${r.save.size} bytes` };
     await (store.putFile ?? store.put)(r.save.key, buf, 'application/gzip');
     return finishSave(body.key, r, buf.length);
   }

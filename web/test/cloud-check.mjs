@@ -380,6 +380,14 @@ try {
       && dl?.suggestedFilename() === 'Harbour City 2001-07-14.sav' && Boolean(dlPath) && readFileSync(dlPath).equals(Buffer.from(sentBytes)),
     `${dl?.suggestedFilename()} ${dlPath ? readFileSync(dlPath).length : 'no file'}`);
   await shot(adm2, 'admin-sent-report');
+  // A bucket that does not let the admin page in (its CORS rules): the button says to use the packed link.
+  s3fake.faults.corsGone = true;
+  await adm2.click('#report-save-get');
+  await adm2.waitForFunction(() => !document.getElementById('report-save-get').disabled, null, { timeout: 10000 }).catch(() => {});
+  const refusedGet = await adm2.textContent('#report-head');
+  s3fake.faults.corsGone = false;
+  check('the admin page: a bucket that refuses the page, and Download the save points to the packed (.gz) link',
+    /use the packed \(\.gz\) link/.test(refusedGet), refusedGet);
   await adm2.close();
   // An upload that is refused (an empty save, as an empty Download made one) offers the same, with that file: it goes
   // as it is, and the admin data says it was empty.
@@ -416,6 +424,28 @@ try {
   check('a store that does not let the page in: the save goes through the server and arrives whole',
     /^Sent, with Harbour City 2001-07-14\.sav\./.test(viaSaid) && /the store did not take the save from this page .* it goes through the server/.test(await a.textContent('#log'))
       && viaFull.save?.done === true && viaGot.equals(Buffer.from(viaBytes)), `${viaSaid} | ${JSON.stringify(viaFull.save)}`);
+  // The server could not store the save (the store failed): the log went, and Send the save again sends the save only,
+  // with the same report, not a second one.
+  s3fake.faults.corsGone = true;
+  Object.assign(s3fake.faults, { failPuts: 5, failMatch: /\.sav\.gz$/ });
+  await a.click('#help-open');
+  await a.click('#help-report-open');
+  await a.selectOption('#report-save', '/user/Harbour City 2001-07-14.sav');
+  await a.click('#report-send');
+  await a.waitForFunction(() => /^Sent|was not|Nothing/.test(document.getElementById('report-state').textContent), null, { timeout: 20000 }).catch(() => {});
+  const failedOnce = await a.textContent('#report-state'), againLabel = await a.textContent('#report-send');
+  Object.assign(s3fake.faults, { failPuts: 0, failMatch: /./ });
+  const sentBefore = (await a.evaluate(async () => (await fetch('/api/admin/stats', { credentials: 'same-origin' })).json())).reports.filter((r) => r.sent).length;
+  await a.click('#report-send', { timeout: 5000 }).catch(() => {});
+  await a.waitForFunction(() => /^Sent/.test(document.getElementById('report-state').textContent), null, { timeout: 20000 }).catch(() => {});
+  const retried = await a.textContent('#report-state');
+  const afterRetry = (await a.evaluate(async () => (await fetch('/api/admin/stats', { credentials: 'same-origin' })).json())).reports.filter((r) => r.sent);
+  s3fake.faults.corsGone = false;
+  await a.click('#report-close');
+  check('a save the server could not store: Send the save again sends it, with the same report',
+    /The log was sent, but Harbour City 2001-07-14\.sav was not/.test(failedOnce) && againLabel === 'Send the save again'
+      && /^Sent, with Harbour City 2001-07-14\.sav\./.test(retried) && afterRetry.length === sentBefore && afterRetry[0].save?.name === 'Harbour City 2001-07-14.sav',
+    `${failedOnce} | ${againLabel} | ${retried} | ${afterRetry.length} vs ${sentBefore}`);
 
   check('no page errors', errors.length === 0, errors.join('; '));
   check('the server logged no failure', !logs.some((l) => /fail|not written|not read/.test(l)), logs.join('; '));

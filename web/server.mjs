@@ -163,19 +163,27 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
     if (path === '/api/report/save-body') {
       const length = Number(req.headers['content-length']);
       if (!(length > 0) || length > MAX_SENT_THROUGH) { req.resume(); json(res, 413, { error: `a save may be ${MAX_SENT_THROUGH >> 20} MB at most, packed, through the server` }); return; }
-      if (reportHeld + length > MAX_SENT_THROUGH) { req.resume(); json(res, 503, { error: 'the server is taking another save: try again in a minute' }); return; }
-      reportHeld += length;
+      // The bytes are read (and held in memory) only after the report, its token and the length were checked.
+      let held = 0;
       try {
-        const buf = await readRaw(req, MAX_SENT_THROUGH);
-        const { status = 200, ...r } = await stats.saveBody({ key: url.searchParams.get('key'), token: url.searchParams.get('token') }, buf);
+        const { status = 200, ...r } = await stats.saveBody({ key: url.searchParams.get('key'), token: url.searchParams.get('token') }, () => {
+          if (reportHeld + length > MAX_SENT_THROUGH) throw Object.assign(new Error('the server is taking another save: try again in a minute'), { status: 503 });
+          reportHeld += length;
+          held = length;
+          return readRaw(req, length);
+        }, length);
+        if (!held) req.resume();
         json(res, status, r);
-      } finally { reportHeld -= length; }
+      } catch (err) {
+        if (!held) req.resume();                         // refused before the body was read
+        throw err;
+      } finally { reportHeld -= held; }
       return;
     }
     const body = await readJson(req, path === '/api/report/send' ? 2 << 20 : 4 << 10);
     if (path === '/api/report/send') {
-      const r = await stats.send(body, user, req.headers['user-agent']);
-      json(res, r.error ? 400 : 201, r);
+      const { status, ...r } = await stats.send(body, user, req.headers['user-agent']);
+      json(res, r.error ? status ?? 400 : 201, r);
     } else {
       const { status = 200, ...r } = path === '/api/report/save' ? await stats.saveLink(body, Boolean(await cloud?.directReady)) : await stats.saveDone(body);
       json(res, status, r);

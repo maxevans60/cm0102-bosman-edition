@@ -266,8 +266,8 @@ players in the EU, whose consent rules want the question); `CM_STATS=off`: none.
 refused upload, a download that failed), and Help (Something wrong?) have Send to the developer. After a refused upload
 the dialog offers the refused files first, so the file that did not load goes as it is (an empty one too). It is a dialog
 with the error, a note the player may write, and a choice of saved game, preset to the save in play (the last one the
-game read past its 262 KB header, which a load does and the Load Game list does not, or the last one it wrote; else the
-newest). Send posts the note, the error and the last 2,000 lines of the engine log (`/api/report/send`); the server
+game read from past its 262 KB header, which a load does and the Load Game list does not, or the last one it wrote);
+with none in play it is No save, so a save goes only when the player picks one. Send posts the note, the error and the last 2,000 lines of the engine log (`/api/report/send`); the server
 keeps it as a report file marked as sent, with no need of the statistics' consent, since the player sends it. The log
 goes first, so it arrives even when the save does not. The save then goes packed with gzip in the browser, straight to
 the bucket with a link the server signs for its packed size (`/api/report/save`, then `/api/report/save-done`, which
@@ -276,8 +276,11 @@ add its save (a token in the report file, gone once the save is there). When the
 CORS rules missing or wrong: on the live site the first try failed so, "the connection to the store failed", where Cloud
 Saves had gone through the server unnoticed), the page sends the packed save through the server instead
 (`/api/report/save-body`, at most 150 MB packed, one at a time in memory), and the engine log says why. A server without
-a bucket takes the log only, and the dialog says to send the save another way. A save may be 400 MB packed straight to
-the bucket; a machine takes 40 saves and 4 GB a day. The
+a bucket takes the log only, and the dialog says to send the save another way. When the save did not go (the server
+busy, the store failing), Send the save again sends it to the same report. The page cuts each log line to the 400
+characters the server keeps, so a log of long lines still fits. A save may be 400 MB packed straight to the bucket; a
+machine takes 200 reports, 40 saves and 4 GB a day, and the server checks a save it takes itself (its report, token
+and announced size) before it reads a byte of it. The
 admin page marks such a report "Sent by the player", shows the note and the save, and Download the save gets it from
 the bucket (a link for an hour) and unpacks it under its own name. Reports and saves go after 90 days.
 

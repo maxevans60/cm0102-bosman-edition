@@ -153,6 +153,9 @@ export function mountTouch({ canvas, stage, fx, onFirstTouch = () => {}, onTap =
   function onEnd(e) {
     if (mode === 'idle') return;
     if (e.target === canvas) { e.preventDefault(); e.stopImmediatePropagation(); }
+    // Another finger lifted while the first one drags (with either button): the drag goes on, and the first finger's
+    // own lift lets the button go (else the game kept it held).
+    if ((mode === 'drag' || mode === 'right') && !find(e.changedTouches, first.id) && find(e.touches, first.id)) return;
     clearTimeout(longTimer);
     holdEnd();
     const cancelled = e.type === 'touchcancel';
@@ -206,7 +209,8 @@ export function mountMacRightButton({ canvas, mac = isMac() }) {
   const send = (target, type, e, button, buttons) => target.dispatchEvent(new MouseEvent(type, {
     bubbles: true, cancelable: true, view: window, clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY, button, buttons }));
   addEventListener('mousedown', (e) => {
-    if (!e.isTrusted || e.target !== canvas || e.button !== 0 || !e.ctrlKey) return;
+    if (!e.isTrusted || e.target !== canvas || e.button !== 0) return;
+    if (!e.ctrlKey) { letGo(); return; }               // a plain press: a right press still held ends first
     e.preventDefault();
     e.stopImmediatePropagation();
     held = true;
@@ -219,5 +223,15 @@ export function mountMacRightButton({ canvas, mac = isMac() }) {
     held = false;
     send(canvas, 'mouseup', e, 2, 0);                  // it bubbles to the document, where SDL listens for ups
   }, true);
+  // The window lost the focus while the press was held (Command-Tab): its release does not come here, so the right
+  // button goes up now, else the next click's release would be taken for it and the game kept its left button held.
+  const letGo = () => {
+    if (!held) return;
+    held = false;
+    const r = canvas.getBoundingClientRect();
+    send(canvas, 'mouseup', { clientX: r.left, clientY: r.top, screenX: 0, screenY: 0 }, 2, 0);
+  };
+  addEventListener('blur', letGo);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) letGo(); });
   return { get held() { return held; } };
 }
