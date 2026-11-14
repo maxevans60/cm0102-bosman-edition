@@ -143,44 +143,95 @@ RT_WRAP(0042abc0, bra_first_result) { result(o_0042abc0); }
  * (0x689d47..0x689d4e). The class has 4 places, so its winner is always one of them. The rows 2002 to 2004 give 2
  * (Série B 2003 to 2005: the champion and the runner-up of the final group went up), so a winner from row 3 or 4
  * made 3 promotions against 2 relegations, and Série A one club over its count. So the winner takes the place of the
- * lowest row of status 0, which gets no status (0xff), and the promotions stay the places. */
+ * lowest row of status 0, which gets no status (0xff), and the promotions stay the places.
+ *
+ * The promotion record. When the league stage ends, 0x684cd0 sends code 0 for each row of status 0 (0x6851a5,
+ * announce_team_status 0x686670 at 0x6851b3), and the handler writes Staff_Records::add_promotion_record 0x869480
+ * (0x42d04f..0x42d064: club, [this+4], 0x64; ret 0xc). The lowest place is not sure until the play-off ends, so its
+ * record waits: code 0 for that row writes nothing, and the play-off's end writes it for the club that goes up in
+ * that place (the winner from row 3 or 4, else the row's own club). The news of 0x686670 stays. */
 #define ROW_TABLE 0xb1u
 #define ROW_SIZE 0x3bu
 #define ROW_STATUS 0x37u
 #define COMP_CLUBS 0x3eu
 #define STATUS_UP 0
 #define STATUS_NONE 0xffu
+#define PLAYOFF_ROWS 4              /* create_play_off_stage 0x42ce60 takes rows 0, 3, 1 and 2 (0x42cef3..0x42cf20) */
+#define F_PROMOTION_RECORD 0x00869480u /* Staff_Records::add_promotion_record, thiscall (club, manager, 0x64) */
+#define STAFF_RECORDS 0x00dd7f00u   /* the Staff_Records object (0x42d05e) */
+#define COMP_STAGE_COUNT_PLAYOFF 1
 
-static void playoff_places(uint32_t self)
+/* The table row of the last promotion place whose record waits, or -1: a Série B season of the size engine that
+ * plays the class's play-off (stage count 1) with fewer places than its rows. */
+static int waiting_row(uint32_t self)
+{
+    if (!season_sizes_on() || !readable(self)) return -1;
+    const char *file = season_change_file(self);
+    if (!file || strcmp(file, "bra_nat_second")) return -1;
+    if ((int32_t)rd32(g_mem, self + COMP_STAGE_COUNT) != COMP_STAGE_COUNT_PLAYOFF) return -1;
+    int places = (int8_t)g_mem[self + UP];
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    return places > 0 && places < PLAYOFF_ROWS && places <= n ? places - 1 : -1;
+}
+
+static uint32_t row_club(uint32_t self, int i)
+{
+    uint32_t table = rd32(g_mem, self + ROW_TABLE);
+    return readable(table) ? rd32(g_mem, table + (uint32_t)i * ROW_SIZE) : 0;
+}
+
+static void promotion_record(uint32_t self, uint32_t club)
+{
+    if (!readable(club)) return;
+    uint32_t a[3] = {club, rd32(g_mem, self + 4), 0x64u};
+    Cpu saved = cpu;
+    cpu.ecx = rd32(g_mem, STAFF_RECORDS);
+    rt_callback(F_PROMOTION_RECORD, 3, a);
+    if (rt_unwinding) return;
+    cpu = saved;
+}
+
+/* 1 when the winner took the place of the lowest row of status 0. */
+static int playoff_places(uint32_t self)
 {
     int places = (int8_t)g_mem[self + UP];
     uint32_t table = rd32(g_mem, self + ROW_TABLE);
     int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
-    if (places <= 0 || !readable(table) || n <= 0 || n > 200) return;
+    if (places <= 0 || !readable(table) || n <= 0 || n > 200) return 0;
     int moving = 0, last = -1;
     for (int i = 0; i < n; i++) {
         int st = g_mem[table + (uint32_t)i * ROW_SIZE + ROW_STATUS];
         if (st == STATUS_UP || st == STATUS_CHAMPION) moving++;
         if (st == STATUS_UP) last = i;
     }
-    if (moving <= places || last < 0) return;
+    if (moving <= places || last < 0) return 0;
     uint32_t row = table + (uint32_t)last * ROW_SIZE;
     g_mem[row + ROW_STATUS] = STATUS_NONE;
     if (getenv("RECOMP_SIZE_LOG"))
         fprintf(stderr, "recomp: league sizes: bra_nat_second %d: the play-off winner goes up in place of row %d "
                         "(%.40s), %d places\n", (int16_t)rd16(g_mem, self + COMP_YEAR), last + 1,
                 readable(rd32(g_mem, row)) ? win_str(rd32(g_mem, row) + 4) : "?", places);
+    return 1;
 }
 
 void o_0042d040(void);
 RT_WRAP(0042d040, bra_second_result)
 {
-    uint32_t self = cpu.ecx;
-    int won = (rt_arg(1) & 0xff) == 1 && (rt_arg(2) & 0xff) == 0;
+    uint32_t self = cpu.ecx, club = rt_arg(0);
+    int code = rt_arg(1) & 0xff, stage = rt_arg(2) & 0xff;
+    int wait = waiting_row(self);
+    if (wait >= 0 && code == STATUS_UP && stage == 0xff && club == row_club(self, wait)) {
+        rt_ret_stdcall(0, 6);   /* the record of the lowest place waits for the play-off */
+        return;
+    }
     result(o_0042d040);
-    if (rt_unwinding || !won || !season_sizes_on() || !readable(self)) return;
-    const char *file = season_change_file(self);
-    if (file && !strcmp(file, "bra_nat_second")) playoff_places(self);
+    if (rt_unwinding || wait < 0 || code != 1 || stage != 0) return;
+    uint32_t kept = row_club(self, wait), up = playoff_places(self) ? club : kept;
+    if (rt_unwinding) return;
+    promotion_record(self, up);
+    if (!rt_unwinding && getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: bra_nat_second %d: promotion record of place %d to %.40s\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), wait + 1, readable(up) ? win_str(up + 4) : "?");
 }
 
 /* The honours. League::update_for_date 0x6847c0 calls vtable +0x30 when the season is complete (0x684a8f). The
