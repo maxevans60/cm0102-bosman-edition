@@ -105,8 +105,14 @@ def templates(log, file):
     return out
 
 
-def template_faults(name, cls, new, rounds):
-    """The faults of a new template (D4, D5) against the class's dates."""
+# Earlier starts of 7 days a class may take (season_template.h SEASON_TEMPLATE_EARLIER, season_sizes_bra.c BRA_EARLIER).
+EARLIER = 4
+EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13}
+
+
+def template_faults(name, cls, new, rounds, earlier=EARLIER):
+    """The faults of a new template (D4, D5) against the class's dates. A template with no gap over 7 days has no
+    winter break (season_template.c)."""
     fails = []
     if len(new) != rounds:
         return [f"{name}: {len(new)} dates, want {rounds}"]
@@ -115,13 +121,15 @@ def template_faults(name, cls, new, rounds):
         fails.append(f"{name}: the dates do not ascend, or two rounds share a date")
     gaps = [(a, b) for a, b in zip(cls, cls[1:])]
     largest = max(((b - a).days for a, b in gaps), default=0)
+    if largest <= 7:
+        largest = 0
     for d, added in new:
         if not added:
             if d not in cls:
                 fails.append(f"{name}: {d} is not a date of the class")
             continue
         if d < cls[0]:
-            if (cls[0] - d).days % 7 or (cls[0] - d).days > 28:
+            if (cls[0] - d).days % 7 or (cls[0] - d).days > 7 * earlier:
                 fails.append(f"{name}: earlier start {d} is not a week step before {cls[0]}")
             continue
         if d.weekday() != 2:
@@ -215,7 +223,8 @@ def faults(work, file, year, last):
         if new is None:
             fails.append(f"{file} template {base}: the class's {len(cls)} dates stay, want {rounds}")
         else:
-            fails += template_faults(f"{file} template {base}", cls, new, rounds)
+            fails += template_faults(f"{file} template {base}", cls, new, rounds,
+                                     EARLIER_BY_FILE.get(file, EARLIER))
     done = [p for p in played(log, file) if p[1] == clubs]
     if not done:
         fails.append(f"{file}: no finished table of {clubs} clubs in the run (a two-year league needs --last "
@@ -257,6 +266,16 @@ def self_test():
         (template_faults("shrink", cls, shrink, 3), False),
         (template_faults("late", cls, late, 6), True),
         (template_faults("count", cls, good, 8), True),
+    ]
+    # A template of 7-day gaps only (the Brazilian classes) has no winter break: a Wednesday in a gap is good, and the
+    # earlier starts go up to the class's limit.
+    week = [d(2010, 8, 1), d(2010, 8, 8), d(2010, 8, 15)]
+    wed = [(d(2010, 7, 4), True), (d(2010, 8, 1), False), (d(2010, 8, 4), True), (d(2010, 8, 8), False),
+           (d(2010, 8, 11), True), (d(2010, 8, 15), False)]
+    checks += [
+        (template_faults("weeks", week, wed, 6, 13), False),
+        (template_faults("weeks limit", week, wed, 6), False),
+        (template_faults("weeks far", week, [(d(2010, 4, 25), True)] + wed[1:], 6, 13), True),
     ]
     bad = [(i, f) for i, (f, want) in enumerate(checks) if bool(f) != want]
     line = "recomp: league sizes: nor_prm template 2009: class 2 2009-04-05 2009-04-12"
