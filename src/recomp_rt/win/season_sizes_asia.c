@@ -34,12 +34,17 @@
  *
  * Halves of any count. The half bound (0x66395a, 15) and the matches of a club in a half (0x663d36, 15) are half of
  * the 30 rounds and the 30 matches of 16 clubs: rt_jap_half_rounds and rt_jap_half_matches give half of the template
- * (+0xa9) and of the matches of the table ((+0x3e - 1) x +0x3c). Both rows of halves have an even count (16, 18), so
- * each half is one round robin of the shuffled template (the class's 16 clubs have the same).
+ * (+0xa9) and of the matches of the table ((+0x3e - 1) x +0x3c). A half is not always one round robin: the shuffled
+ * walk of the dates (league_next_schedule_round 0x68a030, blocks at 0x68a0fa..0x68a13b) can put a match of the second
+ * meeting before the bound, as in the original's 30 dates. Each club still plays (n - 1) x meetings / 2 matches in each
+ * half, which the half stage counts (+0xa7). Both rows of halves have an even count (16, 18).
  *
  * The base game and RECOMP_LEAGUE_SIZES=off change nothing here (Q152): season_sizes_rules calls
  * season_sizes_asia_rules only with the size engine on, the meetings come only from the grown rows, the rt_ functions
- * return the original's value with the engine off, and the wraps act only on a J1 object with a stage count of 0. */
+ * return the original's value with the engine off, and the wraps act only on a J1 object with a stage count of 0,
+ * which only season_sizes_asia_rules writes. The wraps do not test the engine: a game saved in a one-table season
+ * and continued with the engine off still has stage count 0 and no final in slot 2, so it must keep the League's
+ * add_result and honours (the class's 0x6643f3 would call through the empty slot), as Série A (season_sizes_bra.c). */
 #include "win.h"
 #include "../rt_host.h"
 #include "season_change.h"
@@ -65,7 +70,6 @@
 #define F_LEAGUE_HONOURS 0x00684640u /* League::record_season_honours, thiscall () */
 #define STATUS_CHAMPION 5
 #define STAGE_LEAGUE 0xffu
-#define J1_HALF_BOUND 15            /* 0x66395a, 0x663d36: the halves of 16 clubs */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -84,10 +88,10 @@ static int is_j1(uint32_t obj)
 
 /* season_sizes_asia_meetings: season_sizes_asia_rows.c. */
 
-/* 1 for a J1 object of a season of one table: stage count 0 (season_sizes_asia_rules). */
+/* 1 for a J1 object of a season of one table: stage count 0 (season_sizes_asia_rules; the class's 3 or 2 else). */
 static int one_table(uint32_t obj)
 {
-    return season_sizes_on() && is_j1(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0;
+    return is_j1(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0;
 }
 
 void season_sizes_asia_rules(uint32_t obj, const char *file)
@@ -117,7 +121,18 @@ uint32_t rt_jap_half_rounds(uint32_t league, uint32_t original)
 {
     if (!season_sizes_on() || !is_j1(league)) return original;
     int d = (int16_t)rd16(g_mem, league + COMP_DATES);
-    return d >= 2 && d % 2 == 0 ? (uint32_t)(d / 2) : original;
+    uint32_t half = d >= 2 && d % 2 == 0 ? (uint32_t)(d / 2) : original;
+    /* The test log: once an edition, the round that begins the second half. */
+    static uint32_t logged_obj;
+    static int logged_year;
+    int year = (int16_t)rd16(g_mem, league + COMP_YEAR);
+    if (logging() && (logged_obj != league || logged_year != year)) {
+        logged_obj = league;
+        logged_year = year;
+        fprintf(stderr, "recomp: league sizes: jap_j1 %d: second half from round %u of %d (the class's %u)\n", year,
+                half + 1, d, original + 1);
+    }
+    return half;
 }
 
 uint32_t rt_jap_half_matches(uint32_t league, uint32_t original)
@@ -156,7 +171,13 @@ RT_WRAP(00663db0, j1_result)
 {
     uint32_t self = cpu.ecx;
     if ((rt_arg(1) & 0xff) != STATUS_CHAMPION || (rt_arg(2) & 0xff) != STAGE_LEAGUE || !one_table(self)) {
+        /* The test log: a club that wins both halves is the champion with no final (stage 1, +0x2c 2 at 0x663f13). */
+        int was = (int32_t)rd32(g_mem, self + COMP_STAGE_COUNT), stage = rt_arg(2) & 0xff;
         o_00663db0();
+        if (!rt_unwinding && logging() && is_j1(self) && stage == 1 && was != 2 &&
+            (int32_t)rd32(g_mem, self + COMP_STAGE_COUNT) == 2)
+            fprintf(stderr, "recomp: league sizes: jap_j1 %d: double winner, no final\n",
+                    (int16_t)rd16(g_mem, self + COMP_YEAR));
         return;
     }
     uint32_t a[6];

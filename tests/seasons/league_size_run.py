@@ -73,7 +73,8 @@ ROWS = {
     # Slice 14 (D8): calendar-year leagues, edition Y plays row Y - 1. J1 plays halves and the final only in the rows
     # of two stages; its table holds both halves (season_sizes_asia.c).
     "jap_j1": (2005, 2006, "J1, 18 clubs in one table: 34 dates, no halves and no final"),
-    "jap_j1@2015": (2015, 2016, "J1, 18 clubs in two halves of 17 rounds and the final"),
+    "jap_j1@2015": (2015, 2017, "J1, 18 clubs in two halves of 17 rounds and the final, then one table in 2017"),
+    "jap_j1@2024": (2024, 2025, "J1, 20 clubs in one table: 38 dates"),
     "jap_j2": (2010, 2011, "J2, 19 clubs in two meetings: 38 dates (the class plays 4 meetings of 12)"),
     "kor_league": (2013, 2014, "K League, 14 clubs: 26 rounds, then sections of 7 and 7 that meet twice"),
 }
@@ -380,10 +381,16 @@ def j1_faults(log, file, editions):
             half = m * (clubs - 1) // 2
             if half != 15 and not any(x.startswith(f"half of {clubs} clubs, {half} matches") for x in mine):
                 fails.append(f"jap_j1 {ed}: no half of {clubs} clubs with {half} matches a club")
+            rounds = rounds_of(clubs, m)
+            bound = [x for x in mine if x.startswith("second half from round ")]
+            if not bound or any(not x.startswith(f"second half from round {rounds // 2 + 1} of {rounds} ") for x in bound):
+                fails.append(f"jap_j1 {ed}: second half lines {bound}, want from round {rounds // 2 + 1} of {rounds}")
+            if not any(x == "final of the halves" or x == "double winner, no final" for x in mine):
+                fails.append(f"jap_j1 {ed}: neither a final of the halves nor a double winner")
         else:
             if not any(x.startswith("one table, no halves and no final") for x in mine):
                 fails.append(f"jap_j1 {ed}: no log line of a season of one table")
-            if any(x.startswith(("half of", "final of the halves")) for x in mine):
+            if any(x.startswith(("half of", "final of the halves", "second half from", "double winner")) for x in mine):
                 fails.append(f"jap_j1 {ed}: a season of one table made a half or a final")
             if not any(x.startswith("champion club ") for x in mine):
                 fails.append(f"jap_j1 {ed}: no champion of the table in the log")
@@ -636,10 +643,16 @@ def self_test():
     one = ("recomp: league sizes: jap_j1 2005: one table, no halves and no final (row 2004)\n"
            "recomp: league sizes: jap_j1 2005: champion club 1234 (the top of the table)")
     halves = ("recomp: league sizes: jap_j1 2015: halves and the final (row 2014), 3 stages\n"
-              "recomp: league sizes: jap_j1 2015: half of 18 clubs, 17 matches a club (the class makes 15)")
+              "recomp: league sizes: jap_j1 2015: half of 18 clubs, 17 matches a club (the class makes 15)\n"
+              "recomp: league sizes: jap_j1 2015: second half from round 18 of 34 (the class's 16)\n"
+              "recomp: league sizes: jap_j1 2015: final of the halves")
+    if (not j1_faults(halves.replace("round 18", "round 16"), "jap_j1", {2015}) or
+            not j1_faults(halves.replace("final of the halves", "final of the halves not made"), "jap_j1", {2015}) or
+            j1_faults(halves.replace("final of the halves", "double winner, no final"), "jap_j1", {2015})):
+        bad.append(("j1 bound", j1_faults(halves.replace("round 18", "round 16"), "jap_j1", {2015})))
     if (j1_faults(one, "jap_j1", {2005}) or j1_faults(halves, "jap_j1", {2015}) or
             len(j1_faults(halves.replace("2015", "2005"), "jap_j1", {2005})) != 3 or
-            len(j1_faults(one.replace("2005", "2015"), "jap_j1", {2015})) != 3 or j1_faults("", "nor_prm", {2009})):
+            len(j1_faults(one.replace("2005", "2015"), "jap_j1", {2015})) != 5 or j1_faults("", "nor_prm", {2009})):
         bad.append(("j1", j1_faults(one, "jap_j1", {2005}), j1_faults(halves, "jap_j1", {2015})))
     for b in bad:
         print("FAIL self-test", b)
