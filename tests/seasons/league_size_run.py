@@ -277,11 +277,17 @@ def faults(work, file, year, last):
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
                  | rrc.division_differences(comps, rep_clubs))
-        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
+        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and own_difference(file, d[2]))
         fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs]
     print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
           "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done))
     return fails
+
+
+def own_difference(file, text):
+    """1 when a rules report difference ("<file> (<name>), row ...") is one of the file itself, not of a file whose
+    name starts with it (tur_second and tur_second_b)."""
+    return text.split(" ", 1)[0] == file
 
 
 def self_test():
@@ -329,6 +335,10 @@ def self_test():
         bad.append(("edition rows", [(f, y, edition_season(f, y), edition_row(f, y)) for f, y in
                                      (("rus_first", 2006), ("rus_first", 2012), ("rus_first", 2013),
                                       ("tur_first", 2020), ("tur_second", 2023))]))
+    # A difference of tur_second_b (TFF 2. Lig) is not one of tur_second.
+    if (own_difference("tur_second", "tur_second_b (TFF 2. Lig), row rus-tur-239: game 10, table 38 (38)") or
+            not own_difference("tur_second", "tur_second (TFF 1. Lig), row rus-tur-1: game 20, table 18 (18)")):
+        bad.append(("own difference", "tur_second"))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
