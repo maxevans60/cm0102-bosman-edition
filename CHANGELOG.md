@@ -2,6 +2,46 @@
 
 CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes bugs. A minor release (0.2.0) adds features. A major release (1.0.0 and later) can break saved games or settings. Releases below 1.0.0 are test releases.
 
+## 0.7.2 (pre-release, draft)
+
+This release fixes league sizes, loans, history years, the Tactics click and rules of several nations. The league-size part is a draft. Finish it when all 18 slices of `docs/specs/2026-11-13-league-sizes-0.7.2-spec.md` have merged.
+
+A season game saved by 0.7.2 does not load safely in 0.7.1. Saves from 0.7.1 and earlier load in 0.7.2. A game with changing rules on takes the new league sizes at its next season change.
+
+### Real league sizes (draft: slices 1 to 5 of 18 merged)
+
+- In a season game each league plays the club count, the meetings and the dates of its real season. Before, a league played the count of its class in the original game, so Argentina, Serie A, Serie B, the Eerste Divisie, J1, J2, the K League and 16 other leagues held fewer clubs than in real life, and some leagues held more clubs than they had because a cup needed them. A league of any size now builds its table and its fixture dates from its row in the rules table. With changing rules on, a division reaches its new size at the season change, through promotion and relegation. With changing rules off, the start season's sizes stay.
+- Cups of Britain and Ireland, and of western Europe, take the clubs of the real divisions. Examples: the Welsh League Cup counts the clubs of one group, and the French Lower Division fills its 40 places.
+- The base game (2001/02 with changing rules off) stays the original. `RECOMP_LEAGUE_SIZES=off` keeps the original counts in a season game.
+- To finish: the split engine, England, France, Italy, the Netherlands, Belgium, Denmark, Finland, Croatia, Greece, Russia, Turkey, Northern Ireland, Ireland, Japan, Korea, the Argentine Primera and second division, Brazil, and the cups of eastern Europe and Asia. The Allsvenskan 16 clubs from 2008 (issue 106) is already in.
+
+### Seasons, leagues and cups
+
+- Sweden: the Allsvenskan holds 16 clubs from 2008 in a season game (issue 106).
+- Norway: a second team leaves the Second Division when its club plays too low. Up to 2014 only an Eliteserien club's second team plays there. From 2015 a second team plays below its club (item 232).
+- Croatia: from 2013/14 only players from outside the EU and EEA count as foreign in the match squad, and the news says so (issue 135).
+- Portugal: no limit on non-EU signings in the Liga and the Liga de Honra from 2006/07 (issue 121).
+- Asian Cup: after the hosts, the entrants are the best sides by reputation (issue 136).
+- European places in the first season of a game: a renamed nation (Turkey and others) takes its places, and from 2015/16 the cup runner-up gets none (issue 94, item 222).
+- UEFA Cup: the news after a group stage names the group winner that goes on, not the cup winner (issue 119).
+- Competition history on the season databases: about 14,800 rows in 42 databases were one year off in the database files (the Norwegian league 1963 to 2007 and the cup, the Swedish Cup to 2007, the League of Ireland before 2003, La Liga 1929 to 1936, the Scottish Challenge Cup 1990 to 2007, and some German, Italian and Finnish rows). A new game now shows them in their real years. The files stay unchanged. A saved game keeps the history it started with (item 233).
+- A reserve side with fewer than 11 fit players in a normal game keeps fewer players back, so the game no longer stops with "match_eng..cpp 612" (item 237).
+
+### Databases and new games
+
+- Loans: a new game on an Update Team season database starts with the loans, bans and injuries of the database. The season downloads leave out the file `player_setup.cfg` that holds them, and the dates in it were those of 2001/02. Both are fixed. In the 2026/27 game Grealish starts on loan at Everton. Start a new game to get them (item 229).
+- The game knows the shipped 3.9.60 and 3.9.65 data sets (item 230). A new 2001 game on them no longer holds history rows twice (item 227).
+- A new game with a few nations and the Spain or Portugal extra division starts without the boxes "spa_super..cpp 203" and "por_super..cpp 211" (item 226).
+- The test click on a nation below Norway on Select League(s) selects that nation (item 231). This affects tests only.
+
+### Interface
+
+- Tactics: a very quick click, for example a tap on a trackpad, opens the Tactics screen. The game now holds back the release of a click until it has seen the button down.
+
+### Tests
+
+- A release passes a fixed set of 34 games that finish in about 12 hours: 8 soaks that together play every season from 2001/02 to 2029/30, 18 start-season games with all extra divisions, 3 data-set games, 2 games with changing rules off, a date jump and 2 Tier A games. A background set plays only while the Mac is idle. See `docs/TESTING.md`.
+
 ## 0.7.1 (pre-release)
 
 This release has two screen fixes. They change no game decision, so saves from 0.7.0 load and play the same.
