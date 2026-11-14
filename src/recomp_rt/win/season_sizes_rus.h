@@ -11,8 +11,9 @@
 #define RUS_FIRST_TAKE_MAX 22
 
 /* The bound of the take loop for a table of `count` clubs: the original's 18, or the count when it is larger, up to
- * RUS_FIRST_TAKE_MAX. A smaller count keeps 18: the loop takes the clubs of the division up to 18, shuffles them and
- * adds the first `count` (0x7ea7bf), so a division of `count` clubs still enters in full. */
+ * RUS_FIRST_TAKE_MAX. A smaller count keeps 18: the loop takes the clubs of the division up to 18, orders them
+ * (0x4afbd0: a qsort, then random swaps) and adds the first `count` (0x7ea7bf), so a division of `count` clubs still
+ * enters in full. */
 static inline int season_rus_first_take(int count)
 {
     if (count <= RUS_FIRST_TAKE) return RUS_FIRST_TAKE;

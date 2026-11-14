@@ -115,8 +115,8 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
 # - RusFirst (Russian First Division, 17 to 22, slice 12): create_table 0x7ea6c0 allocates 18 rows (push 0x426 at
 #   0x7ea6cc, the object in ebp from 0x7ea6c9) and stores 18 at 0x7ea6d3. Its take loop puts at most 18 clubs of the
-#   division into a stack array (`cmp bl, 0x12` at 0x7ea77d, store at 0x7ea787), shuffles them (0x4afbd0 at 0x7ea7ac),
-#   adds the first +0x3e (0x687430 at 0x7ea7cf) and moves the rest to division [0x9cf91c] (0x7ea7d6..0x7ea7ef). With
+#   division into a stack array (`cmp bl, 0x12` at 0x7ea77d, store at 0x7ea787), orders them (0x4afbd0 at 0x7ea7ac:
+#   a qsort at 0x4afc0e, then random swaps within 3 x picks, 0x4afc13..0x4afc57), adds the first +0x3e (0x687430 at 0x7ea7cf) and moves the rest to division [0x9cf91c] (0x7ea7d6..0x7ea7ef). With
 #   fewer than +0x3e it returns 0 with an empty table (0x7ea7a3). sizes_rus_tur.py gives the loop the count.
 #   create_schedule 0x7ea220 makes 36 dates (D 0x24 at 0x7ea25a, 0x924 bytes at 0x7ea255) for 34 rounds; set_up_rules
 #   0x7ea810 sets 2 meetings (+0x3c at 0x7ea81d) and does not write +0xd9: shuffled.

@@ -326,7 +326,9 @@ def self_test():
     if (edition_row("rus_first", 2006) != (22, 2) or edition_row("rus_first", 2012) != (17, 2) or
             edition_row("rus_first", 2013) != (19, 2) or edition_row("tur_first", 2020) != (21, 2) or
             edition_row("tur_second", 2023) != (18, 2)):
-        bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+        bad.append(("edition rows", [(f, y, edition_season(f, y), edition_row(f, y)) for f, y in
+                                     (("rus_first", 2006), ("rus_first", 2012), ("rus_first", 2013),
+                                      ("tur_first", 2020), ("tur_second", 2023))]))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
