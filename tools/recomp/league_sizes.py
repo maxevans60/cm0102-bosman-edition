@@ -121,19 +121,27 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   allocates 20 rows (push 0x49c at 0x5c05db) and stores 20 at 0x5c05e2; create_schedule 0x5bfe30 makes 38 dates (D
 #   0x26 at 0x5bfe6a, 0x9a6 bytes at 0x5bfe65); set_up_rules 0x5c0700 sets flag 0x83 (0x5c0798): mirrored. Its D is
 #   no longer in DATES: the wrap makes the template of any count, and a smaller count drops dates evenly (D5).
+# - BraNatFirst, BraNatSecond (Série A and B, slice 17, D11): create_table 0x42a480 and 0x42ca70 allocate 28 rows (the
+#   cap stays 28: no row holds more). create_schedule 0x429b50 and 0x42c140 make 27 dates for stage -1 (D 0x1b at
+#   0x429b8d and 0x42c17d) and the play-off for stage 0. set_up_rules 0x42a5a0 and 0x42cb70 set 1 meeting (+0x3c at
+#   0x42a5af, 0x42cb83) and +0xd9 8 and 2 (0x42a618, 0x42cbd8): neither 0x40 nor 0x80, so shuffled. Two meetings
+#   from the 2003 Série A and the 2006 Série B; season_sizes_bra.c then plays no play-off.
 GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
     "eng_conf": (24, 0x56DE60, "shuffled"),
     "fra_third": (21, 0x5BFE30, "mirrored"),
+    # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
+    "bra_nat_first": (28, 0x429B50, "shuffled"),
+    "bra_nat_second": (28, 0x42C140, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
     assert _mode in GROWN_MODES, _f
-    assert _n > CAPS[_f], _f
+    assert _n >= CAPS[_f], _f   # equal: only the meetings and dates change (Brazil)
     HELD[_f] = CAPS[_f]
     CAPS[_f] = _n
 
