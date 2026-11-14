@@ -100,13 +100,15 @@ int season_sizes_bra_earlier(const char *file)
                                                                                         : SEASON_TEMPLATE_EARLIER;
 }
 
-/* 1 for a Série A or B object that plays no play-off this season (season_sizes_bra_rules set its stage count 0). */
+/* 1 for a Série A or B object that plays no play-off this season: its stage count is 0 (season_sizes_bra_rules). The
+ * meetings are not read: a game loaded in a season of two meetings has no stage array (League::load 0x688e49), and
+ * when the next season has no room for the dates the class's 1 meeting comes back with the count still 0
+ * (season_sizes_bra_rules). The original 0x408eb0 would then jump through the absent stage 0. */
 static int no_playoff(uint32_t obj)
 {
     if (!readable(obj) || rd32(g_mem, obj + COMP_STAGE_COUNT) != 0) return 0;
     const char *file = season_change_file(obj);
-    return file && (!strcmp(file, "bra_nat_first") || !strcmp(file, "bra_nat_second")) &&
-           (int16_t)rd16(g_mem, obj + COMP_MEETINGS) >= 2;
+    return file && (!strcmp(file, "bra_nat_first") || !strcmp(file, "bra_nat_second"));
 }
 
 /* The result handler (thiscall: club, code, stage, a4, a5, a6; ret 0x18): code 5 of the league stage goes to the base
