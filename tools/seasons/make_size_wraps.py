@@ -28,7 +28,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "tools", "recomp"))
-from league_sizes import CAPS, CLASSES, FLOOR_COUNT, GROWN, HELD, ROW_READS  # noqa: E402
+from league_sizes import CAPS, CLASSES, FIXED_EXCHANGE, FLOOR_COUNT, GROWN, HELD, ROW_READS  # noqa: E402
 
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_size_wraps.c")
 ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encoded.tsv")
@@ -74,6 +74,9 @@ def make():
     lines += ["};", "/* The smallest count of each file: the largest where a cup of the nation needs it (league_sizes.py FLOORS). */",
               "const int season_size_floors[] = {"]
     lines += [f"    {FLOOR_COUNT.get(f, 0)},       /* {f} */" for f in files]
+    lines += ["};", "/* The count whose places and exchange stay the class's (league_sizes.py FIXED_EXCHANGE). */",
+              "const int season_size_fixed[] = {"]
+    lines += [f"    {FIXED_EXCHANGE.get(f, 0)},       /* {f} */" for f in files]
     lines += ["};"]
     names = {f: c for c, f, _r, _s in CLASSES}
     lines += ["", "/* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the",

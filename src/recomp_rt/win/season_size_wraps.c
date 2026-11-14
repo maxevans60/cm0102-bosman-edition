@@ -691,8 +691,67 @@ const int season_size_caps[] = {
 const int season_size_floors[] = {
     0,       /* arg_prm */
     0,       /* aus_nsl */
-    18,       /* bel_first */
+    0,       /* bel_first */
     18,       /* bel_second */
+    0,       /* bra_nat_first */
+    0,       /* bra_nat_second */
+    0,       /* cro_a1 */
+    0,       /* cro_a2a */
+    0,       /* cro_a2b */
+    0,       /* den_first */
+    0,       /* den_prm */
+    0,       /* eng_conf */
+    0,       /* eng_first */
+    0,       /* eng_prm */
+    0,       /* eng_second */
+    0,       /* eng_third */
+    0,       /* fin_prm */
+    0,       /* fra_first */
+    0,       /* fra_second */
+    0,       /* fra_third */
+    0,       /* ger_first */
+    0,       /* ger_second */
+    0,       /* gre_prm */
+    0,       /* gre_second */
+    0,       /* hol_first */
+    0,       /* hol_prm */
+    0,       /* ire_first */
+    0,       /* ire_prm */
+    0,       /* ita_ser_a */
+    0,       /* ita_ser_b */
+    18,       /* ita_ser_c1a */
+    18,       /* ita_ser_c1b */
+    0,       /* jap_j1 */
+    0,       /* jap_j2 */
+    0,       /* kor_league */
+    0,       /* nir_first */
+    0,       /* nir_prm */
+    0,       /* nor_first */
+    0,       /* nor_prm */
+    0,       /* pol_first */
+    0,       /* pol_second */
+    0,       /* por_prm */
+    0,       /* por_second */
+    0,       /* rus_first */
+    0,       /* rus_prm */
+    0,       /* sco_first */
+    0,       /* sco_prm */
+    0,       /* sco_second */
+    0,       /* sco_third */
+    0,       /* spa_first */
+    0,       /* spa_second */
+    0,       /* swe_first */
+    0,       /* swe_prm */
+    0,       /* tur_first */
+    0,       /* tur_second */
+    0,       /* wel_first */
+};
+/* The count whose places and exchange stay the class's (league_sizes.py FIXED_EXCHANGE). */
+const int season_size_fixed[] = {
+    0,       /* arg_prm */
+    0,       /* aus_nsl */
+    0,       /* bel_first */
+    0,       /* bel_second */
     0,       /* bra_nat_first */
     0,       /* bra_nat_second */
     0,       /* cro_a1 */
@@ -708,19 +767,19 @@ const int season_size_floors[] = {
     0,       /* fin_prm */
     0,       /* fra_first */
     0,       /* fra_second */
-    20,       /* fra_third */
+    0,       /* fra_third */
     0,       /* ger_first */
     0,       /* ger_second */
     0,       /* gre_prm */
     0,       /* gre_second */
-    18,       /* hol_first */
-    18,       /* hol_prm */
+    0,       /* hol_first */
+    0,       /* hol_prm */
     0,       /* ire_first */
     0,       /* ire_prm */
     0,       /* ita_ser_a */
     0,       /* ita_ser_b */
-    18,       /* ita_ser_c1a */
-    18,       /* ita_ser_c1b */
+    0,       /* ita_ser_c1a */
+    0,       /* ita_ser_c1b */
     0,       /* jap_j1 */
     0,       /* jap_j2 */
     0,       /* kor_league */
@@ -750,13 +809,37 @@ const int season_size_floors[] = {
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
+    {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 3;
+const int season_grown_count = 5;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* BraNatFirst::create_schedule */
+void o_00429b50(void);
+RT_WRAP(00429b50, schedule_429b50)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00429b50();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* BraNatSecond::create_schedule */
+void o_0042c140(void);
+RT_WRAP(0042c140, schedule_42c140)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0042c140();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* NorPrm::create_schedule */
 void o_007917c0(void);

@@ -133,16 +133,16 @@ Merge danger: one-way door for saves. Blast radius: club lists of every division
 Blocked by: 2
 Delivers: `EngFaCup` (the Conference array of 22), `EngCcCup`, `WelCup`, `WelLgeCup`, `NirCup` (exactly 20 today), `ScoLgeCup` and `ScoChalCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A 2012/13 game with a Welsh Premier of 12 and a 2015/16 game with a Conference of 24 play every cup round
-- [ ] A Northern Irish game with 24 to 29 clubs in the two divisions plays the Irish Cup
-- [ ] The same-save set is equal
+- [x] A 2012/13 game with a Welsh Premier of 12 and a 2015/16 game with a Conference of 24 play every cup round (live: Welsh Premier 12 and the 2015/16 Conference of the database, `tests/seasons/cup_sizes_uk_run.py`; a Conference of 24: host test `season_cup_sizes_uk`, the cap holds it at 22 until slice 8)
+- [x] A Northern Irish game with 24 to 29 clubs in the two divisions plays the Irish Cup (host test `season_cup_sizes_uk` at 24 and 29; live n2002 at 18, the caps hold 10 and 10 until slice 13)
+- [x] The same-save set is equal (rules off, against the lead-072-base build e27b094e)
 
 ### 5. Cups of western Europe follow the divisions
 Blocked by: 2
 Delivers: `FraCup`, `FraLgeCup`, the CFA fill, `ItaCCup`, the Coppa Italia positions (Serie A 20 leaves 15th to 17th out today), `HolCup`, `BelFaCup` (112 today) and `DenCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A season game per nation with a grown and a shrunk division plays every cup round
-- [ ] The same-save set is equal
+- [x] A season game per nation with a grown and a shrunk division plays every cup round (`tests/seasons/cup_size_run.py` runs the shrunk divisions: bel2016, den2020, fra2024, ita2018, hol2005. The grown divisions need slices 8, 9 and 10. `test_season_cup_west.c` checks their cup counts, and those slices' runs check the cups.)
+- [x] The same-save set is equal
 
 ### 6. Cups of eastern Europe and Asia follow the divisions
 Blocked by: 2
@@ -229,8 +229,8 @@ Merge danger: two-way door. Blast radius: Argentina's second tier and its promot
 Blocked by: 2
 Delivers: Série A at 24 and 20 in two meetings from 2003, Série B in two meetings from 2006, no top-4 play-off in those seasons (D11).
 Merge danger: two-way door. Blast radius: Brazil.
-- [ ] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
+- [x] The same-save set is equal
 
 ### 18. Full check
 Blocked by: 1 to 17

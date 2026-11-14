@@ -420,8 +420,18 @@ uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint3
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
 uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 uint32_t rt_fa_cup_takes(uint32_t esp);   /* EngFaCup places by pool (0x56ffe4) */
+/* The clubs of up to four divisions (key ids, 0 for none), the original outside a season game with the sizes on:
+ * the cups of Britain and Ireland that take whole divisions (0.7.2 slice 4, season_cup_sizes_uk.c). */
+uint32_t rt_cup_clubs(uint32_t original, uint32_t key_a, uint32_t key_b, uint32_t key_c, uint32_t key_d);
 uint32_t rt_fra_cfa_lower_cap(uint32_t original);              /* FraCfa lower club cap (0x5b92e8) */
 uint32_t rt_ita_cup_first_position(uint32_t original);   /* ItaCup second loop start (0x63fb16) */
+/* The cups of western Europe (0.7.2 slice 5, win/season_cup_sizes_west.c, tools/recomp/league_sizes.py CUP_INSNS). */
+uint32_t rt_bel_cup_lower(uint32_t original, uint32_t pool);                /* BelFaCup pool clubs (0x41d9e4) */
+uint32_t rt_bel_cup_place(uint32_t original, uint32_t taken);               /* BelFaCup third tier (0x41da43) */
+uint32_t rt_hol_cup_lower(uint32_t original, uint32_t esp);                 /* HolCup pool clubs (0x5f49e1) */
+uint32_t rt_ita_c_cup_fill(uint32_t original, uint32_t cup, uint32_t placed);  /* ItaCCup fill (0x63e109) */
+uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);   /* FraCfa empty places (0x5b9320) */
+uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count); /* French Lower Division places (0x5bd752) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
 /* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
