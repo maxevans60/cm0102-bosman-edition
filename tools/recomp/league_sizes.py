@@ -136,6 +136,12 @@ GROWN = {
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
+    # Slice 11: Croatia and Greece. The four classes set +0xd9 bit 0x40 in set_up_rules (sequential: 0x514958,
+    # 0x515e5a, 0x5eaf04, 0x5ebe4d). CroA1 keeps the class's 16 (10 and 12 clubs in 3 and 4 meetings).
+    "cro_a1": (16, 0x5140E0, "sequential"),
+    "cro_a2a": (18, 0x5155E0, "sequential"),
+    "gre_prm": (18, 0x5EA6D0, "sequential"),
+    "gre_second": (21, 0x5EB570, "sequential"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
@@ -444,3 +450,7 @@ if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
 import cup_sizes_east  # noqa: E402
 
 INSNS.update(cup_sizes_east.INSNS)
+# 0.7.2 slice 11: the Croatian second tier at 18 (sizes_cro.py, D22).
+import sizes_cro  # noqa: E402
+
+INSNS.update(sizes_cro.INSNS)

@@ -9,6 +9,7 @@
 #include "season_esp_second.h"
 #include "season_names.h"
 #include "season_rules.h"
+#include "season_sizes.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1023,6 +1024,7 @@ static void group_above_rules(uint32_t obj, const GroupTier *g)
 #define KEY_GRE_LOWER 0x009cf874u       /* Greek Lower Division: the pool of 0x5eb120 */
 #define GRE_GROUP_COMP "league group 2"
 #define GRE_GROUP_MAX 14                /* GreSecond's table: malloc(0x33a) at 0x5ebcbb, 14 rows */
+#define GRE_GROUP_GROWN 21              /* the table with the sizes on (0.7.2 slice 11, league_sizes.py GROWN) */
 #define F_NEW 0x00944cf1u               /* operator new, cdecl (size) */
 #define F_GRE_SECOND 0x005eb2b0u        /* GreSecond::GreSecond, thiscall (year, record), ret 8 */
 
@@ -1039,12 +1041,14 @@ static uint32_t gre_group(void)
 
 static int gre_held(int season) { return season_comps_held(GRE_GROUP_COMP, season) == 1; }
 
-/* The group's club count in a season: its row (the second gre_second row of the season), at most 14. */
+/* The group's club count in a season: its row (the second gre_second row of the season), at most the rows of
+ * its table: 14, or 21 with the sizes on (the 17 of 2021/22). */
 static int gre_count(int season)
 {
     const SeasonRule *r = season_rules_find(season, "gre_second", 1);
     int n = r && r->clubs >= MIN_CLUBS ? r->clubs : 0;
-    return n > GRE_GROUP_MAX ? GRE_GROUP_MAX : n;
+    int most = season_sizes_on() ? GRE_GROUP_GROWN : GRE_GROUP_MAX;
+    return n > most ? most : n;
 }
 
 /* Fills a record from the Greek Lower Division up to n clubs, as 0x5eb120 takes its new clubs: the clubs of the

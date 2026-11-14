@@ -70,6 +70,15 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Slice 11: Croatia and Greece (sequential classes, flag 0x40).
+    "cro_a2a": (2020, 2021, "Druga HNL, 18 clubs (the class holds 16): 34 rounds, tie-breaks of up to 9 pairs"),
+    "cro_a1": (2010, 2011, "Prva HNL, 16 clubs in two meetings: the class's count"),
+    "cro_a1@2013": (2013, 2014, "Prva HNL, 10 clubs in four meetings: 36 rounds on a class of 30 dates"),
+    "gre_prm": (2005, 2006, "Super League, 16 clubs (the class holds 14): 30 rounds"),
+    "gre_prm@2019": (2019, 2020, "Super League, 14 clubs: 26 rounds, then sections of 6 (2 meetings) and 8 (1)"),
+    "gre_second": (2010, 2011, "Beta Ethniki, 18 clubs (the class holds 14): 34 rounds"),
+    "gre_second@2014": (2014, 2015, "Football League, 13 clubs (two regional groups in real life, D16): one table "
+                                    "of 26 rounds with a rest round"),
 }
 
 
@@ -562,6 +571,13 @@ def self_test():
             not end_faults("short", short, 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
+    # Slice 11: the section meetings of the Greek and Croatian splits (encode_leagues.py SPLIT_MEET_BY_HAND).
+    if (encoded_split("gre_prm", 2019) != (26, [(6, 2), (8, 1)]) or
+            encoded_split("gre_prm", 2024) != (26, [(4, 2), (4, 2), (6, 2)]) or
+            encoded_split("cro_a1", 2004) != (22, [(6, 2), (6, 2)]) or
+            encoded_split("gre_second", 2020) != (22, [(6, 1), (6, 1)]) or encoded_split("gre_prm", 2018) is not None or
+            encoded_row("cro_a1", 2013) != (10, 4) or encoded_row("cro_a2a", 2020) != (18, 2)):
+        bad.append(("encoded cro gre", encoded_split("gre_prm", 2019), encoded_split("gre_prm", 2024)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"

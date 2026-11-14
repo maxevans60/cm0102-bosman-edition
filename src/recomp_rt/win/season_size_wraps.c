@@ -637,7 +637,7 @@ const int season_size_caps[] = {
     28,       /* bra_nat_first */
     28,       /* bra_nat_second */
     16,       /* cro_a1 */
-    16,       /* cro_a2a */
+    18,       /* cro_a2a */
     16,       /* cro_a2b */
     16,       /* den_first */
     12,       /* den_prm */
@@ -652,8 +652,8 @@ const int season_size_caps[] = {
     20,       /* fra_third */
     18,       /* ger_first */
     18,       /* ger_second */
-    14,       /* gre_prm */
-    14,       /* gre_second */
+    18,       /* gre_prm */
+    21,       /* gre_second */
     18,       /* hol_first */
     18,       /* hol_prm */
     0,       /* ire_first */
@@ -811,13 +811,17 @@ const int season_size_fixed[] = {
 const SeasonGrown season_grown[] = {
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"cro_a1", 16, 16, SEASON_TEMPLATE_SEQUENTIAL},
+    {"cro_a2a", 16, 18, SEASON_TEMPLATE_SEQUENTIAL},
+    {"gre_prm", 14, 18, SEASON_TEMPLATE_SEQUENTIAL},
+    {"gre_second", 14, 21, SEASON_TEMPLATE_SEQUENTIAL},
     {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 7;
+const int season_grown_count = 11;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -839,6 +843,50 @@ RT_WRAP(0042c140, schedule_42c140)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_0042c140();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* CroA1::create_schedule */
+void o_005140e0(void);
+RT_WRAP(005140e0, schedule_5140e0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005140e0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* CroA2a::create_schedule */
+void o_005155e0(void);
+RT_WRAP(005155e0, schedule_5155e0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005155e0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* GrePrm::create_schedule */
+void o_005ea6d0(void);
+RT_WRAP(005ea6d0, schedule_5ea6d0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005ea6d0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* GreSecond::create_schedule */
+void o_005eb570(void);
+RT_WRAP(005eb570, schedule_5eb570)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005eb570();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

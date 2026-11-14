@@ -440,6 +440,14 @@ uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  
 /* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
  * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
 uint32_t rt_gre_cup_lower(uint32_t pool);
+/* The CroA2a tie-break list of a table of more than 16 (0.7.2 slice 11, season_sizes_cro.c) */
+uint32_t rt_cro_tiebreak_slot(uint32_t obj, uint32_t array, uint32_t index);
+uint32_t rt_cro_tiebreak_list(uint32_t obj, uint32_t array);
+uint32_t rt_cro_regroup_max(uint32_t original);
+uint32_t rt_cro_regroup_slot(uint32_t array, uint32_t index);
+uint32_t rt_cro_regroup_list(uint32_t array, uint32_t count);
+uint32_t rt_cro_regroup_north(uint32_t original);
+uint32_t rt_cro_regroup_end(uint32_t original);
 uint32_t rt_rus_cup_lower(uint32_t pool);
 uint32_t rt_rus_cup_picks(uint32_t esp);
 uint32_t rt_rus_cup_premier_place(uint32_t placed);

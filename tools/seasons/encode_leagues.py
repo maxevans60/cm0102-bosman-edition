@@ -113,6 +113,20 @@ MEETINGS_FIX = {
     ("cro_a1", 2006): (3, "33 matches of 12 clubs in the format cell"),
 }
 
+# The section meetings of split rows whose texts do not give them (0.7.2 league sizes, slice 11): {(comp_file, first
+# season, last season): (split_meet, evidence)}. Checked against the matches per club of the section tables.
+SPLIT_MEET_BY_HAND = {
+    ("cro_a1", 2003, 2005): ("2+2", "format cell: 22 rounds then split (32 matches), so 10 more in sections of 6, as "
+                                    "the 2002/03 row (championship and relegation groups of 6, 10 more matches)"),
+    ("gre_prm", 2019, 2021): ("2+1", "en.wikipedia.org 2019-20, 2020-21 and 2021-22 Super League Greece: top 6 meet "
+                                     "twice (10 matches), bottom 8 play 7 matches; the 2022/23 row of the table"),
+    ("gre_prm", 2023, 2023): ("2+1", "format cell: top 6 play-off (10 matches), bottom 8 play-out (7 matches)"),
+    ("gre_prm", 2024, 2026): ("2+2+2", "en.wikipedia.org 2024-25 and 2025-26 Super League Greece: top 4 and 5th to "
+                                       "8th 6 matches each, 9th to 14th 10 matches; 2026/27 row the same split"),
+    ("gre_second", 2020, 2020): ("1+1", "en.wikipedia.org 2020-21 Super League Greece 2: top 6 and bottom 6 meet "
+                                        "once (5 matches per team)"),
+}
+
 # The period titles of rows whose texts do not give them: {(comp_file, first, last): (periods, evidence)}.
 PERIODS_BY_HAND = {
     ("bel_second", 2016, 2019): (2, "First Division B: an opening and a closing period of 14 rounds (check of 13 "
@@ -667,6 +681,11 @@ def encode_split_meetings(r, split):
     if not m:
         return "-"
     after, sizes = int(m.group(1)), [int(x) for x in m.group(2).split("+")]
+    for (file, first, last), (value, _why) in SPLIT_MEET_BY_HAND.items():
+        if r["comp_file"] == file and first <= int(r["season"]) <= last:
+            if len(value.split("+")) != len(sizes):
+                raise SystemExit("encode_leagues.py: %s %s: %s for sections %s" % (file, r["season"], value, sizes))
+            return value
     low = r["split_text"].lower()
     # A text per section: "top 6 play a double round ..., bottom 6 a single round ...", "(double round robin, 10
     # matches) ... (single round robin, 7 matches)".
