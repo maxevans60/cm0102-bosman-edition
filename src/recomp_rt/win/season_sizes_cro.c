@@ -21,8 +21,13 @@
  * (0x5152bb) whatever it found. The real second tier is one division from 2006/07 (the South row of the rules table
  * is "not held"), of 12 to 18 clubs. In those seasons of a season game the regroup gives the North the count of its
  * row (season_sizes_clubs, the edition after the one of the First Division object) and the South the rest, and it
- * walks the clubs it found, in a list of the runtime of REGROUP_MAX slots. In 2001/02 to 2005/06 the two groups
- * play as now, 16 each (D16). The base game and RECOMP_LEAGUE_SIZES=off keep the original. */
+ * walks the clubs it found, in a list of the runtime of REGROUP_MAX slots. The South keeps at most the 16 rows of
+ * its table (CroA2b::create_table 0x516dd0 stores 16 at 0x516de2 and stops filling at the count, 0x516e9b; cro_a2b
+ * is not a grown class): with a North of 12 to 15 the clubs after North + 16 in the sort (the southernmost) go to A
+ * Lower Division [0x9cf764], the spare division that the club moves and the size step take clubs from
+ * (season_clubs.c), through the same store and news of the regroup (0x5152be, 0x515251..0x5152a1: the news reads
+ * the target's id, so the target is a record). In 2001/02 to 2005/06 the two groups play as now, 16 each (D16).
+ * The base game and RECOMP_LEAGUE_SIZES=off keep the original. */
 #include "win.h"
 #include "../rt_host.h"
 #include "season.h"
@@ -36,7 +41,11 @@
 #define TIEBREAK_MAX 32            /* more than the largest cap of the class (league_sizes.py GROWN cro_a2a 18) */
 #define REGROUP_MAX 64             /* North at its cap 18 and South at its class count 16 is 34 */
 #define LEAGUES 0x00adadfcu        /* the league objects by division index (0x5150f0) */
-#define CRO_A1 0x009cf8a4u         /* the division indexes of the First Division, North, South */
+#define CRO_A1 0x009cf8a4u         /* the division index of the First Division */
+#define KEY_LOWER 0x009cf764u      /* the division index of A Lower Division (season_clubs.c) */
+#define COMPS 0x00ae23d0u          /* the division records, 0x6b bytes each (0x5151b2..0x5151d2) */
+#define COMP_SIZE 0x6bu
+#define SOUTH_ROWS 16              /* CroA2b's table (0x516de2) */
 #define COMP_YEAR 0x40u
 
 static uint32_t list;              /* the list in the game's memory, made at the first table of more than 16 */
@@ -105,9 +114,10 @@ static int north_of(int found)
     int north = season_sizes_clubs("cro_a2a", year);
     if (north < 2) return 0;
     if (north > found) north = found;
+    int south = found - north > SOUTH_ROWS ? SOUTH_ROWS : found - north;
     if (getenv("RECOMP_SIZE_LOG"))
-        fprintf(stderr, "recomp: league sizes: cro_a2a regroup %d: %d clubs, %d North, %d South\n", year, found,
-                north, found - north);
+        fprintf(stderr, "recomp: league sizes: cro_a2a regroup %d: %d clubs, %d North, %d South, %d to A Lower "
+                        "Division\n", year, found, north, south, found - north - south);
     return north;
 }
 
@@ -130,4 +140,14 @@ uint32_t rt_cro_regroup_north(uint32_t original)
 uint32_t rt_cro_regroup_end(uint32_t original)
 {
     return regroup_on() ? (uint32_t)regroup_found : original;
+}
+
+/* The division of the club at a place of the walk (0x51523a, place [esp+0x10]): the North or South that the original
+ * chose (ebx), or A Lower Division for a place after North + 16. */
+uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place)
+{
+    if (!regroup_on() || regroup_north <= 0 || (int32_t)place < regroup_north + SOUTH_ROWS) return chosen;
+    int32_t key = (int32_t)rd32(g_mem, KEY_LOWER);
+    uint32_t comps = rd32(g_mem, COMPS);
+    return key >= 0 && readable(comps) ? comps + (uint32_t)key * COMP_SIZE : chosen;
 }

@@ -448,6 +448,7 @@ uint32_t rt_cro_regroup_slot(uint32_t array, uint32_t index);
 uint32_t rt_cro_regroup_list(uint32_t array, uint32_t count);
 uint32_t rt_cro_regroup_north(uint32_t original);
 uint32_t rt_cro_regroup_end(uint32_t original);
+uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place);
 uint32_t rt_rus_cup_lower(uint32_t pool);
 uint32_t rt_rus_cup_picks(uint32_t esp);
 uint32_t rt_rus_cup_premier_place(uint32_t placed);

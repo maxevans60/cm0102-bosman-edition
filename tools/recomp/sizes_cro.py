@@ -34,6 +34,9 @@ INSNS = {
     0x51522D: ("lea esi, [esp + 0x14]", "esi = rt_cro_regroup_list(esp + 0x14u, 0xffffffffu);"),
     # The North's count: the first 16 go North (jl 0x51523a), the others South.
     0x515231: ("cmp eax, 0x10", _cmp("0xffffffffu", "SZ4", "eax", "rt_cro_regroup_north(0x10u)")),
+    # The division of each club of the walk: the South keeps its 16 rows, the clubs after North + 16 go to A Lower
+    # Division (season_sizes_cro.c). The place is [esp+0x10] (0x515229, 0x5152c1).
+    0x51523A: ("mov eax, dword ptr [esi]", "ebx = rt_cro_regroup_target(ebx, R32(esp + 0x10u)); eax = R32(esi);"),
     # The end of the walk (jl 0x515231).
     0x5152BB: ("cmp eax, 0x20", _cmp("0xffffffffu", "SZ4", "eax", "rt_cro_regroup_end(0x20u)")),
 }

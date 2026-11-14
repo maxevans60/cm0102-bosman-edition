@@ -72,6 +72,8 @@ ROWS = {
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
     # Slice 11: Croatia and Greece (sequential classes, flag 0x40).
     "cro_a2a": (2020, 2021, "Druga HNL, 18 clubs (the class holds 16): 34 rounds, tie-breaks of up to 9 pairs"),
+    "cro_a2a@2012": (2012, 2013, "Druga HNL 16 in 2012/13, 12 in three meetings in 2013/14: the regroup of the "
+                                 "season change gives the North 12 and the South its 16"),
     "cro_a1": (2010, 2011, "Prva HNL, 16 clubs in two meetings: the class's count"),
     "cro_a1@2013": (2013, 2014, "Prva HNL, 10 clubs in four meetings: 36 rounds on a class of 30 dates"),
     "gre_prm": (2005, 2006, "Super League, 16 clubs (the class holds 14): 30 rounds"),
