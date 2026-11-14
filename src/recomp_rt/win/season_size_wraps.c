@@ -666,7 +666,7 @@ const int season_size_caps[] = {
     12,       /* jap_j2 */
     10,       /* kor_league */
     10,       /* nir_first */
-    10,       /* nir_prm */
+    16,       /* nir_prm */
     16,       /* nor_first */
     16,       /* nor_prm */
     0,       /* pol_first */
@@ -813,11 +813,13 @@ const SeasonGrown season_grown[] = {
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
     {"fra_third", 20, 21, SEASON_TEMPLATE_MIRRORED},
+    {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
+    {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 7;
+const int season_grown_count = 9;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -865,6 +867,17 @@ RT_WRAP(005bfe30, schedule_5bfe30)
     season_sizes_schedule(self, stage, count_at);
 }
 
+/* NirPrm::create_schedule */
+void o_0078e330(void);
+RT_WRAP(0078e330, schedule_78e330)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0078e330();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
 /* NorPrm::create_schedule */
 void o_007917c0(void);
 RT_WRAP(007917c0, schedule_7917c0)
@@ -894,6 +907,17 @@ RT_WRAP(0088feb0, schedule_88feb0)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_0088feb0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* WelFirst::create_schedule */
+void o_009250f0(void);
+RT_WRAP(009250f0, schedule_9250f0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_009250f0();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }
