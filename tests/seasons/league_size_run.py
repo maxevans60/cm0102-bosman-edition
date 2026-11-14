@@ -53,6 +53,12 @@ ROWS = {
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    # Slice 9: Italy. All four classes are sequential (flag 0x40): the template holds exactly the rounds.
+    "ita_ser_a": (2005, 2006, "Serie A, 20 clubs (the class holds 18): 38 dates of a template of 34"),
+    "ita_ser_b@2003": (2003, 2004, "Serie B, 24 clubs (the class holds 20): 46 dates of a template of 38"),
+    "ita_ser_b": (2018, 2019, "Serie B, 19 clubs: 38 dates, a rest round each round"),
+    "ita_ser_c1a": (2004, 2005, "Serie C1/A, 19 clubs (the class holds 18): 38 dates of a template of 34"),
+    "ita_ser_c1a@2012": (2012, 2013, "Serie C1/A 17 and C1/B 16: 34 and 30 dates, the play-out rows of the count"),
 }
 
 
@@ -287,6 +293,12 @@ def self_test():
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    # Slice 9: the Italian rows of the runs.
+    for file, season, want in (("ita_ser_a", 2005, (20, 2)), ("ita_ser_b", 2003, (24, 2)), ("ita_ser_b", 2018, (19, 2)),
+                               ("ita_ser_c1a", 2004, (19, 2)), ("ita_ser_c1a", 2012, (17, 2)),
+                               ("ita_ser_c1b", 2012, (16, 2)), ("ita_ser_a", 2003, (18, 2))):
+        if edition_row(file, season) != want:
+            bad.append(("encoded", file, season, edition_row(file, season), want))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")

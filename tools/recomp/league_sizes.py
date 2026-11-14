@@ -117,6 +117,24 @@ GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    # Italy (0.7.2 slice 9). All four classes are sequential: set_up_rules sets flag 0x40 (ItaSerA 0x6416b7, ItaSerB
+    # 0x64691a, ItaSerC1a 0x64b7e5, ItaSerC1b 0x64f9ae), so league_next_schedule_round 0x68a030 takes index + 1 with
+    # no wrap (0x68a081..0x68a08f) and the template must hold exactly the rounds.
+    # - ItaSerA (Serie A, 18 to 2003/04, 20 from 2004/05): create_table 0x641510 allocates 18 rows (push 0x426 at
+    #   0x64151b) and stores 18 at 0x641522; create_schedule 0x6409b0 makes 34 dates (D 0x22 at 0x6409ed, block 0x8a2
+    #   at 0x6409e8).
+    # - ItaSerB (Serie B, 20; 24 in 2003/04, 22 from 2004/05 to 2017/18, 19 in 2018/19): create_table allocates 20
+    #   rows (push 0x49c at 0x64678b) and stores 20 at 0x646792; create_schedule 0x645af0 makes 38 dates (D 0x26 at
+    #   0x645b2d, block 0x9a6 at 0x645b28).
+    # - ItaSerC1a and ItaSerC1b (Serie C1 groups, 18; 19 and 18 in 2004/05, 17 and 16 in 2012/13, 16 and 17 in
+    #   2013/14; groups of the Serie C from 2014/15): create_table allocates 18 rows (0x64b67b, 0x64f82b) and
+    #   create_schedule (0x64ad80, 0x64ef30) makes 34 dates (D 0x22 at 0x64adbd, 0x64ef6d). Slice 20b already patches
+    #   both table pushes (new_divisions.py, rt_ita_table_bytes) and wraps both create_schedule functions
+    #   (season_divisions_ita.c) for the groups of 20 of the Serie C era: TABLE_SITE_TAKEN and SCHEDULE_TAKEN.
+    "ita_ser_a": (20, 0x6409B0, "sequential"),
+    "ita_ser_b": (24, 0x645AF0, "sequential"),
+    "ita_ser_c1a": (20, 0x64AD80, "sequential"),
+    "ita_ser_c1b": (20, 0x64EF30, "sequential"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
@@ -160,9 +178,18 @@ def table_sites(read):
 
 
 # Table sites that another tool already patches for the grown count: file: (address, the tool and why it holds the
-# count). D21: such a site is not patched twice. Any other overlap stops the build. None yet (the Serie C pushes of
-# new_divisions.py, 0x64b67b, 0x64f82b, 0x653a9b, join here when a slice adds a Serie C class to GROWN).
-TABLE_SITE_TAKEN = {}
+# count). D21: such a site is not patched twice. Any other overlap stops the build. rt_ita_table_bytes
+# (season_divisions_ita.c) gives the 20 rows of the Serie C era, and otherwise rt_league_table_bytes.
+TABLE_SITE_TAKEN = {
+    "ita_ser_c1a": (0x64B67B, "new_divisions.py rt_ita_table_bytes"),
+    "ita_ser_c1b": (0x64F82B, "new_divisions.py rt_ita_table_bytes"),
+}
+# Grown classes whose create_schedule another module wraps already (RT_WRAP takes an address once). That wrap calls
+# season_sizes_schedule after the original, and make_size_wraps.py writes none: file: the module.
+SCHEDULE_TAKEN = {
+    "ita_ser_c1a": "season_divisions_ita.c c1a_schedule",
+    "ita_ser_c1b": "season_divisions_ita.c c1b_schedule",
+}
 
 
 def table_insns(read, taken=()):
@@ -228,9 +255,10 @@ PATCHES = {
 # The cups of western Europe follow the divisions (slice 5, D14): BelFaCup 0x41d8d0, ItaCCup 0x63dfe0, HolCup
 # 0x5f4820, FraCup 0x5baa50 and DenCup. Slice 5 keeps the floors of bel_second and the Serie C1 groups.
 # A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5: the floors both
-# slices removed are gone).
+# slices removed are gone). Slice 9 removes the Serie C1 groups: the regroup ita_ser_a_regroup_serie_c1_clubs
+# 0x642630 and the play-out rows take the counts (season_sizes_ita.c).
 FLOORS = {"bel_second", "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first",
-          "tur_second", "ita_ser_c1a", "ita_ser_c1b", "jap_j1", "jap_j2", "kor_league", "pol_second"}
+          "tur_second", "jap_j1", "jap_j2", "kor_league", "pol_second"}
 # The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
 # after 2001, 0x7cad4f), else its largest count.
 FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}

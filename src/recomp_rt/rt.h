@@ -436,6 +436,17 @@ uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
+/* Italy at its real sizes (0.7.2 league sizes slice 9, season_sizes_ita.c, tools/recomp/league_sizes_ita.py). */
+uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at);
+uint32_t rt_ita_c1_row(uint32_t obj, uint32_t original);
+uint32_t rt_ita_c1_seed(uint32_t obj, uint32_t original);
+uint32_t rt_ita_regroup_max(uint32_t original);
+uint32_t rt_ita_regroup_buf(uint32_t stack);
+uint32_t rt_ita_regroup_count(uint32_t n);
+uint32_t rt_ita_regroup_split(uint32_t original);
+uint32_t rt_ita_regroup_end(uint32_t original);
+uint32_t rt_ita_c1_rows(uint32_t c1a, uint32_t c1b);
+uint32_t rt_ita_row_status(uint32_t obj, uint32_t i, uint32_t row);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_none(uint32_t group);
