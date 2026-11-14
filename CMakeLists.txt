@@ -296,6 +296,10 @@ if(NOT WIN32)
     add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
     target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_template COMMAND season_template_test)
+    # The size step at a season change (0.7.2 league sizes, slice 3, D13).
+    add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
+    target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_size_step COMMAND season_size_step_test)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
