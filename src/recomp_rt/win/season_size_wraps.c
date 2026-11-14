@@ -3,6 +3,7 @@
  * do not edit by hand. */
 #include "win.h"
 #include "season_sizes.h"
+#include "season_template.h"
 
 /* Each wrap: the original (thiscall, no arguments), then season_sizes_rules(this). The recompiler reads
  * the RT_WRAP lines as they are (tools/recomp/recomp.py), so they are written out in full. */
@@ -667,11 +668,11 @@ const int season_size_caps[] = {
     10,       /* nir_first */
     10,       /* nir_prm */
     16,       /* nor_first */
-    14,       /* nor_prm */
+    16,       /* nor_prm */
     0,       /* pol_first */
     20,       /* pol_second */
     18,       /* por_prm */
-    18,       /* por_second */
+    24,       /* por_second */
     18,       /* rus_first */
     16,       /* rus_prm */
     10,       /* sco_first */
@@ -745,3 +746,47 @@ const int season_size_floors[] = {
     20,       /* tur_second */
     18,       /* wel_first */
 };
+
+/* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
+ * mode of the date template. */
+const SeasonGrown season_grown[] = {
+    {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
+    {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
+    {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
+};
+const int season_grown_count = 3;
+
+/* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* NorPrm::create_schedule */
+void o_007917c0(void);
+RT_WRAP(007917c0, schedule_7917c0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_007917c0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* PorSecond::create_schedule */
+void o_007d0c40(void);
+RT_WRAP(007d0c40, schedule_7d0c40)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_007d0c40();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* SwePrm::create_schedule */
+void o_0088feb0(void);
+RT_WRAP(0088feb0, schedule_88feb0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0088feb0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}

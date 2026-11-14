@@ -9,6 +9,8 @@
 #include "season_playoffs.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
+#include "season_league.h"
+#include "season_template.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,22 +114,35 @@ static int real_starts(const SeasonRule *r, int year)
            (r->real_season[4] < '0' || r->real_season[4] > '9');
 }
 
+/* The season of the row of the edition of a year (season_sizes.h): row Y when its real season begins with Y
+ * ("2008/09", "2026/27"), else row Y - 1 when its real season begins with Y, else Y. A calendar-year league holds
+ * the real season Y + 1 in row Y ("Calendar-year league: real season 2009" in row 2008 of nor_prm), so its edition
+ * Y takes row Y - 1: a 2008 start plays the Tippeligaen 2008 with the 14 clubs of row 2007 and the 2009 edition
+ * with the 16 of row 2008. Row Y comes first, so a league that changes from calendar years to two-year seasons
+ * (jap_j1 row 2025 "2026", row 2026 "2026/27") plays its two-year season in the year of the change. */
+int season_sizes_edition(const char *file, int year)
+{
+    if (real_starts(season_rules_find(year, file, 0), year)) return year;
+    if (real_starts(season_rules_find(year - 1, file, 0), year)) return year - 1;
+    return year;
+}
+
+static const SeasonRule *row_of_edition(const char *file, int year)
+{
+    return row_of_season(file, season_sizes_edition(file, year));
+}
+
 /* The row of the rules of a league object now (season_sizes.h). */
 static const SeasonRule *row_now(uint32_t obj, const char *file)
 {
-    if (!season_changing_rules() || season_change_is_creating()) return row_of_season(file, season_start_year());
-    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
-    for (int s = year - 1; s <= year; s++) {
-        const SeasonRule *r = season_rules_find(s, file, 0);
-        if (real_starts(r, year)) return r;
-    }
-    return row_of_season(file, year);
+    if (!season_changing_rules() || season_change_is_creating()) return row_of_edition(file, season_start_year());
+    return row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
 }
 
 int season_sizes_clubs(const char *file, int season)
 {
     if (!sizes_on() || !size_file(file)) return -1;
-    const SeasonRule *r = row_of_season(file, season);
+    const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
 }
@@ -172,23 +187,51 @@ static int league_count(uint32_t obj, const char *file, int *have_out, int *cap_
     return cap > 0 && have > cap ? cap : have;
 }
 
-/* A class of league_sizes.py GROWN (issue 106): its create_table allocates the rows of its largest original count
- * and its date template has the rounds of that count. SwePrm: 14 rows (push 0x33a at 0x89043b), 26 dates
- * (0x88feea); the cap of season_size_wraps.c is 16. */
-static const struct { const char *file; int held; } GROWN[] = {{"swe_prm", 14}};
-
-static int grown_held(const char *file)
+/* A grown class (league_sizes.py GROWN, season_size_wraps.c): its create_table allocates the rows of its largest
+ * original count (SwePrm: push 0x33a at 0x89043b, 14 rows) and its date template has the rounds of that count. */
+static const SeasonGrown *grown_of(const char *file)
 {
-    for (size_t k = 0; file && k < sizeof GROWN / sizeof GROWN[0]; k++)
-        if (!strcmp(GROWN[k].file, file)) return GROWN[k].held;
+    for (int k = 0; file && k < season_grown_count; k++)
+        if (!strcmp(season_grown[k].file, file)) return &season_grown[k];
+    return NULL;
+}
+
+/* The objects whose template had no room for their count this edition (D4): they keep the class's count. */
+#define MAX_KEPT 16
+static struct { uint32_t obj; int year; } kept[MAX_KEPT];
+
+static int kept_at(uint32_t obj)
+{
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    for (int k = 0; k < MAX_KEPT; k++)
+        if (kept[k].obj == obj) return kept[k].year == year;
     return 0;
+}
+
+static void keep(uint32_t obj, int on)
+{
+    int free_at = -1;
+    for (int k = 0; k < MAX_KEPT; k++) {
+        if (kept[k].obj == obj) { kept[k].obj = 0; if (free_at < 0) free_at = k; }
+        else if (!kept[k].obj && free_at < 0) free_at = k;
+    }
+    if (on && free_at >= 0) {
+        kept[free_at].obj = obj;
+        kept[free_at].year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    }
+}
+
+/* The count of a grown league this edition: the clubs of its division up to its cap, or 0 for the class's count. */
+static int grown_count(uint32_t obj, const char *file)
+{
+    return grown_of(file) && !kept_at(obj) ? league_count(obj, file, NULL, NULL) : 0;
 }
 
 uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
 {
     if (!sizes_on() || !readable(obj)) return original;
     const char *file = season_change_file(obj);
-    int n = grown_held(file) ? league_count(obj, file, NULL, NULL) : 0;
+    int n = grown_count(obj, file);
     if (n * (int)ROW_SIZE <= (int)original) return original;
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s table of %d rows (%.50s %d, the class makes %u)\n", file, n,
@@ -202,6 +245,9 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     const char *file = season_change_file(obj);
     int have = 0, cap = 0, n = league_count(obj, file, &have, &cap);
     if (!n) return original;
+    /* A grown league whose template had no room keeps the class's count, or fewer: create_table fills only the
+     * clubs of the division and fails with more rows than clubs (NorPrm 0x7926a0..0x7926ce, box at 0x792845). */
+    if (grown_of(file) && kept_at(obj) && (uint32_t)n > original) return original;
     const SeasonRule *r = row_now(obj, file);
     int want = r && r->clubs >= MIN_CLUBS && r->clubs <= MAX_CLUBS ? r->clubs : (int)original;
     if (logging())
@@ -224,6 +270,9 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     if (old == 0 && meet > 0 && m > 0 && m % meet == 0) old = m / meet + 1;
     if ((uint32_t)n != original || (old != n && old >= MIN_CLUBS && m == (old - 1) * meet))
         wr16(g_mem, obj + COMP_MATCHES, 0xffffu);
+    /* A grown class: the matches of the count and the row's meetings (slice 2), as check_complete counts them
+     * ((+0x3e - 1) x +0x3c, 0x689b27..0x689b36; an odd count plays the same, with a rest round). */
+    if (grown_of(file) && meet > 0) wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet));
     return (uint32_t)n;
 }
 
@@ -265,66 +314,144 @@ static void game_free(uint32_t p)
     if (p) call_cdecl(F_FREE, 1, a);
 }
 
-/* The date template of a grown class for its count (issue 106). The class's create_schedule (thiscall: stage,
- * &count, &code, &flag; ret 0x10) returns a template of the rounds of its original count for stage -1 (SwePrm
- * 0x88feb0: 26 dates, D at 0x88feea; the writes of 0x68a160 fill them). A table of n clubs that meet m times
- * plays m (n - 1) rounds (n even; one more with an odd n). The new template takes the class's dates and puts each
- * extra round on the Wednesday after a date whose next date is at least a week later in the same year, spread over
- * the season, as the 3. Liga (season_divisions.c, GerRegional::create_schedule 0x5dcef0). The template is in the
- * game's heap; the old one is freed. With no room the class's template stays and the log says so. */
-static void grown_dates(uint32_t self, uint32_t count_at)
+/* The meetings of a grown league in the row of its season (season_league_meetings, slice 1), written to +0x3c;
+ * 0 leaves the class's meetings (set_up_rules: NorPrm 2 at 0x792713, PorSecond 0x7d16b1, SwePrm 0x890563). */
+static int grown_meetings(uint32_t obj, const char *file)
 {
-    const char *file = season_change_file(self);
-    if (!grown_held(file)) return;
-    uint32_t old = cpu.eax;
-    int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
-    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS);
-    if (n < MIN_CLUBS || n > MAX_CLUBS) n = league_count(self, file, NULL, NULL);
-    if (meetings < 1 || meetings > 4) meetings = 2;
-    int rounds = meetings * (n + (n & 1) - 1);
-    if (!readable(old) || have <= 0 || rounds <= have || rounds > 2 * have) return;
-    uint32_t tmpl = game_malloc((uint32_t)rounds * DATE_SIZE);
-    if (!tmpl) return;
-    int extra = rounds - have, k = 0, done = 0;
-    for (int i = 0; i < have; i++) {
-        memcpy(g_mem + tmpl + (uint32_t)k * DATE_SIZE, g_mem + old + (uint32_t)i * DATE_SIZE, DATE_SIZE);
-        k++;
-        /* An extra round after date i when i is at or past the next even spread point. */
-        if (done < extra && i + 1 < have && i >= (done + 1) * have / (extra + 1)) {
-            uint32_t a = old + (uint32_t)i * DATE_SIZE, b = a + DATE_SIZE;
-            int day = (int16_t)rd16(g_mem, a), year = (int16_t)rd16(g_mem, a + 2);
-            int next = (int16_t)rd16(g_mem, b), next_year = (int16_t)rd16(g_mem, b + 2);
-            if (year == next_year && next - day >= 7 && day + 4 < 365) {
-                memcpy(g_mem + tmpl + (uint32_t)k * DATE_SIZE, g_mem + a, DATE_SIZE);
-                wr16(g_mem, tmpl + (uint32_t)k * DATE_SIZE, (uint16_t)(day + 4));
-                k++;
-                done++;
-            }
-        }
+    const SeasonRule *r = row_now(obj, file);
+    int m = r ? season_league_meetings(file, r->season) : 0;
+    if (m >= 1 && m <= 4 && m != (int16_t)rd16(g_mem, obj + COMP_MEETINGS)) {
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s meetings %d (%.50s %d, the class sets %d)\n", file, m,
+                    record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), (int16_t)rd16(g_mem, obj + COMP_MEETINGS));
+        wr16(g_mem, obj + COMP_MEETINGS, (uint16_t)m);
     }
-    if (done < extra) {
-        game_free(tmpl);
-        fprintf(stderr, "recomp: league sizes: %s dates: no room for %d more rounds, the class's %d stay\n", file,
-                extra - done, have);
-        return;
-    }
-    game_free(old);
-    wr16(g_mem, count_at, (uint16_t)k);
-    cpu.eax = tmpl;
-    if (logging())
-        fprintf(stderr, "recomp: league sizes: %s dates: %d dates for %d clubs (%.50s %d, the class makes %d)\n", file,
-                k, n, record_name(self), (int16_t)rd16(g_mem, self + COMP_YEAR), have);
+    m = (int16_t)rd16(g_mem, obj + COMP_MEETINGS);
+    return m >= 1 && m <= 4 ? m : 2;
 }
 
-/* SwePrm::create_schedule 0x88feb0. */
-void o_0088feb0(void);
-RT_WRAP(0088feb0, swe_prm_schedule)
+static const char *const MODE_NAMES[] = {"shuffled", "sequential", "mirrored"};
+
+/* The dates of a template as YYYY-MM-DD, a new date with "+", for the test log (tests/seasons/league_size_run.py). */
+static void log_days(int base, const int *days, const int *added, int n)
 {
-    uint32_t self = cpu.ecx, count_at = rt_arg(1);
-    int stage = (int8_t)(rt_arg(0) & 0xff);
-    o_0088feb0();
-    if (rt_unwinding || stage != -1 || !sizes_on()) return;
-    grown_dates(self, count_at);
+    static const int cum[2][12] = {{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334},
+                                   {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335}};
+    for (int k = 0; k < n; k++) {
+        int yoff, doy, mon = 11;
+        season_template_split(base, days[k], &yoff, &doy);
+        int leap = season_template_year_days(base + yoff) == 366;
+        while (mon > 0 && cum[leap][mon] > doy) mon--;
+        fprintf(stderr, " %04d-%02d-%02d%s", base + yoff, mon + 1, doy - cum[leap][mon] + 1, added && added[k] ? "+" : "");
+    }
+}
+
+/* The time byte (+4) of a new midweek date whose record copies a date of another weekday: 2, as the original's
+ * Wednesdays (NorPrm 0x79190b: 8 April, weekday 2, time 2). */
+#define TIME_MIDWEEK 2
+
+void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
+{
+    if (stage != -1 || !sizes_on() || !readable(self)) return;
+    const char *file = season_change_file(self);
+    const SeasonGrown *g = grown_of(file);
+    if (!g) return;
+    keep(self, 0);
+    int class_meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS), meetings = grown_meetings(self, file);
+    uint32_t old = cpu.eax;
+    int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
+    int n = league_count(self, file, NULL, NULL);
+    if (n < MIN_CLUBS || !readable(old) || have < 1 || have > SEASON_TEMPLATE_MAX ||
+        !readable(old + (uint32_t)have * DATE_SIZE))
+        return;
+    int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
+    /* The mode of the row against the object's flags (+0xd9, league_next_schedule_round 0x68a030: 0x80 mirrored at
+     * 0x68a090, 0x40 sequential). */
+    int flags = rd16(g_mem, self + 0xd9u);
+    int mode = flags & 0x80 ? SEASON_TEMPLATE_MIRRORED : flags & 0x40 ? SEASON_TEMPLATE_SEQUENTIAL : g->mode;
+    if (mode != g->mode)
+        fprintf(stderr, "recomp: league sizes: %s template mode %s in league_sizes.py, the object's flags 0x%x\n", file,
+                MODE_NAMES[g->mode], flags);
+    int days[SEASON_TEMPLATE_MAX];
+    for (int i = 0; i < have; i++) {
+        uint32_t r = old + (uint32_t)i * DATE_SIZE;
+        days[i] = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r));
+    }
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: %s template %d: class %d", file, base, have);
+        log_days(base, days, NULL, have);
+        fprintf(stderr, "\n");
+    }
+    /* The matches of the count (rt_league_clubs writes the same when create_table runs after this). */
+    wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings));
+    if (rounds == have) return;
+    SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
+    char why[160];
+    if (season_template_plan(base, days, have, rounds, mode, plan, why, sizeof why) != rounds) {
+        keep(self, 1);
+        wr16(g_mem, self + COMP_MEETINGS, (uint16_t)class_meetings);   /* the class's template: its meetings */
+        wr16(g_mem, self + COMP_MATCHES, 0xffffu);    /* check_complete counts the class's count again */
+        fprintf(stderr, "recomp: league sizes: %s dates: no room for %d rounds of %d clubs (%.50s %d): %s; the class's "
+                        "%d dates and count stay\n", file, rounds, n, record_name(self), base, why, have);
+        return;
+    }
+    uint32_t tmpl = game_malloc((uint32_t)rounds * DATE_SIZE);
+    if (!tmpl) return;
+    int new_days[SEASON_TEMPLATE_MAX], added[SEASON_TEMPLATE_MAX];
+    for (int k = 0; k < rounds; k++) {
+        uint32_t to = tmpl + (uint32_t)k * DATE_SIZE, from = old + (uint32_t)plan[k].from * DATE_SIZE;
+        memcpy(g_mem + to, g_mem + from, DATE_SIZE);
+        int yoff, doy;
+        season_template_split(base, plan[k].day, &yoff, &doy);
+        wr16(g_mem, to, (uint16_t)doy);
+        wr16(g_mem, to + 2, (uint16_t)yoff);
+        if (plan[k].added &&
+            season_template_weekday(base, plan[k].day) != season_template_weekday(base, days[plan[k].from]))
+        {
+            g_mem[to + 4] = TIME_MIDWEEK;
+            /* Slot 0 as the original's midweek rounds: no weekday, kind or option (NorPrm 0x79191d writes
+             * (round, 0, -1, -1, -1, 0) through 0x68a1c0, which stores +5 the value, +9 the weekday, +0xa the kind,
+             * +0xb the option at 0x68a3b9..0x68a3c9). A Sunday record holds weekday 6 there (PorSecond 0x7d0d21). */
+            wr32(g_mem, to + 5, 0);
+            g_mem[to + 9] = g_mem[to + 0xa] = g_mem[to + 0xb] = 0xff;
+        }
+        new_days[k] = plan[k].day;
+        added[k] = plan[k].added;
+    }
+    game_free(old);
+    wr16(g_mem, count_at, (uint16_t)rounds);
+    cpu.eax = tmpl;
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: %s dates: %d dates for %d clubs (%.50s %d, the class makes %d)\n", file,
+                rounds, n, record_name(self), base, have);
+        fprintf(stderr, "recomp: league sizes: %s template %d: new %d", file, base, rounds);
+        log_days(base, new_days, added, rounds);
+        fprintf(stderr, "\n");
+    }
+}
+
+/* League::free_table 0x687970 (thiscall: table, 0 for its own; ret 4): at the start of a new edition it frees the
+ * table of the last one (start_new_season, for example 0x64b830). For the test log: the matches that each club of a
+ * grown league played (row +0x11, the count that check_complete compares with +0xa7 at 0x689b47..0x689b58). */
+void o_00687970(void);
+RT_WRAP(00687970, league_free_table)
+{
+    uint32_t self = cpu.ecx, table = rt_arg(0);
+    if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self))) {
+        uint32_t t = rd32(g_mem, self + COMP_TABLE);
+        int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), lo = 999, hi = -1;
+        if (readable(t) && n >= MIN_CLUBS && n <= MAX_CLUBS) {
+            for (int i = 0; i < n; i++) {
+                int p = g_mem[t + (uint32_t)i * ROW_SIZE + 0x11u];
+                if (p < lo) lo = p;
+                if (p > hi) hi = p;
+            }
+            fprintf(stderr, "recomp: league sizes: %s played %d: %d clubs, %d matches, played %d to %d (%.50s)\n",
+                    season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR), n,
+                    (int16_t)rd16(g_mem, self + COMP_MATCHES), lo, hi, record_name(self));
+        }
+    }
+    o_00687970();
 }
 
 /* The clubs whose division has the record id of a key id global. */

@@ -41,8 +41,13 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* After set_up_rules of a league class: the promotion and relegation places of the season. */
 void season_sizes_rules(uint32_t obj);
 
-/* The club count of a division of a league class in the row of a season (the club moves of a new game), or -1
- * when the class is not in the size table or the row holds no usable count. */
+/* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
+ * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
+int season_sizes_edition(const char *file, int year);
+
+/* The club count of a division of a league class in the row of the edition of a season (the club moves of a new
+ * game; a calendar-year league takes the row whose real season is that year), or -1 when the class is not in the
+ * size table or the row holds no usable count. */
 int season_sizes_clubs(const char *file, int season);
 
 /* 1 when the club moves leave a division of this file the clubs of the database, up to the class count, where its
@@ -54,5 +59,22 @@ extern const char *const season_size_files[];
 extern const int season_size_file_count;
 extern const int season_size_caps[];         /* the largest count of each file, 0: the class counts its data */
 extern const int season_size_floors[];       /* the smallest count, 0: none (a cup of the nation needs it) */
+
+/* The grown classes of tools/recomp/league_sizes.py GROWN (0.7.2 league sizes, slice 2, D21; season_size_wraps.c):
+ * create_table allocates the rows of the season's count up to the cap (rt_league_table_bytes), and the wrap of
+ * create_schedule gives the date template exactly the rounds of the count (season_template.h, D4 and D5). */
+typedef struct {
+    const char *file;
+    int held;               /* the rows that the class allocates (its largest original count) */
+    int cap;                /* the largest count of its rows */
+    int mode;               /* SEASON_TEMPLATE_SHUFFLED, _SEQUENTIAL or _MIRRORED (league_next_schedule_round 0x68a030) */
+} SeasonGrown;
+extern const SeasonGrown season_grown[];
+extern const int season_grown_count;
+
+/* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
+ * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
+ * replaces the class's (the pointer in eax, the count at count_at). */
+void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
 
 #endif
