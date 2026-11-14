@@ -321,14 +321,6 @@ static int data_class_count(const char *name, int n)
     return n;
 }
 
-/* The count of a class after 2001. */
-static int class_size_of(const char *file)
-{
-    for (size_t k = 0; file && k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
-        if (!strcmp(file, CLASS_SIZE[k].file)) return CLASS_SIZE[k].size;
-    return 0;
-}
-
 /* 1 for a letter or digit of Windows-1252 (a letter with an accent counts). */
 static int plain_letter(unsigned char ch)
 {
@@ -623,10 +615,6 @@ static void move_clubs(int season)
     for (int i = 0; i < ncomps; i++) {
         int size = (div[i].n0 > 0 || div[i].fresh) && !div[i].spare ? class_size(div[i].name, season) : -1;
         const char *file = class_file(div[i].name);
-        if (size > 0 && div[i].n0 > size && season_sizes_keeps_database(file)) {     /* a cup takes it whole */
-            int most = class_size_of(file);
-            size = div[i].n0 < most ? div[i].n0 : most;
-        }
         div[i].want = size >= 0 ? size : div[i].n0;     /* 0: a division that ends (slice 20, Q290) */
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;

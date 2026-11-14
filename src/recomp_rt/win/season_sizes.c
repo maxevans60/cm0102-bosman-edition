@@ -17,6 +17,7 @@
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
+#include "season_cup_sizes_west.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,6 +73,8 @@ static int sizes_on(void)
     return !off && season_game_changes();
 }
 
+int season_sizes_on(void) { return sizes_on(); }
+
 static int logging(void)
 {
     static int on = -1;
@@ -104,6 +107,16 @@ static int floor_of(const char *file)
     if (i < 0) return 0;
     if (!strcmp(file, "eng_second") && season_start_year() == 2019) return 23;
     return season_size_floors[i];
+}
+
+/* The smallest count of a file's exchange: its floor, or the count of FIXED_EXCHANGE (league_sizes.py) whose places
+ * and exchange stay the class's until the league's own slice (0.7.2 slice 4: the floors of the cups of Britain and
+ * Ireland went, their exchanges stay). sizes_rules and the wrap of 0x689c80 read it, the club moves do not. */
+static int exchange_floor(const char *file)
+{
+    int i = size_index(file), low = floor_of(file);
+    /* floor_of gives League One 23 in a 2019 start (Q282): that floor stays the bound, as before slice 4. */
+    return low > 0 || i < 0 ? low : season_size_fixed[i];
 }
 
 /* A count within the class's floor and cap. */
@@ -163,17 +176,6 @@ int season_sizes_clubs(const char *file, int season)
     const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
-}
-
-/* A division that a cup takes whole after a capped number of lower clubs keeps the clubs that the database gives
- * it, up to its class count, when its row has fewer (season_sizes.h). DenCup::collect_entrants 0x551240 wants 92
- * clubs (0x5c at 0x551254): lower clubs of [0x9cf764] up to the room of rt_cup_room (0x55131c), then every club of
- * [0x9cf5b4], [0x9cf5b0] and [0x9cf5ac]. A club that the club moves cut from the First Division goes to no
- * division, so the cup is short by that many and the constructor stops at den_cup.cpp 75 (push 0x4b at
- * 0x550a62). A 2020/21 start (November 2020 database: First Division 16, row 12) stopped there. */
-int season_sizes_keeps_database(const char *file)
-{
-    return sizes_on() && file && !strcmp(file, "den_first");
 }
 
 /* The clubs whose division is the record of the object. */
@@ -566,6 +568,7 @@ void o_005bd160(void);
  * 0x5bd4d5) plays a short cup, so it stays the original's. */
 RT_WRAP(005bd160, fra_lge_entrants)
 {
+    uint32_t cup = cpu.ecx;
     enum { MOST = 64 };
     uint32_t lent[MOST];
     int nlent = 0;
@@ -592,6 +595,7 @@ RT_WRAP(005bd160, fra_lge_entrants)
     }
     o_005bd160();
     for (int i = 0; i < nlent; i++) wr32(g_mem, lent[i] + 0x5bu, 0);
+    if (!cpu.eax && !rt_unwinding) cpu.eax = (uint32_t)season_cup_sizes_fra_lge(cup);   /* 0.7.2 slice 5 */
 }
 
 /* EngFaCup::collect_entrants 0x56fab0 (O294) puts the National League clubs ([0x9cf69c]) in a stack array at
@@ -674,7 +678,7 @@ static int open_neighbour(uint32_t obj, uint32_t at)
     uint32_t other = neighbour(obj, at);
     if (!other) return 0;
     const char *f = season_change_file(other);
-    return size_file(f) && floor_of(f) == 0;
+    return size_file(f) && exchange_floor(f) == 0;
 }
 
 static void sizes_rules(uint32_t obj)
@@ -683,7 +687,7 @@ static void sizes_rules(uint32_t obj)
     const char *file = season_change_file(obj);
     /* A floor division keeps its places too: its count must stay, and some of its exchanges are fixed code (League
      * Two with the Conference: 2 down and 1 back gave 23 clubs in 2023/24 of a 2022/23 game). */
-    if (!size_file(file) || floor_of(file) > 0) return;
+    if (!size_file(file) || exchange_floor(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
     /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
@@ -777,8 +781,8 @@ RT_WRAP(00689c80, promote_relegate)
     if (change && season_changing_rules()) {
         const char *fu_name = season_change_file(upper), *fl_name = season_change_file(lower);
         int cu = cap_of(fu_name), cl = cap_of(fl_name);
-        int lu = floor_of(fu_name) > MIN_CLUBS * 4 ? floor_of(fu_name) : MIN_CLUBS * 4;
-        int ll = floor_of(fl_name) > MIN_CLUBS * 4 ? floor_of(fl_name) : MIN_CLUBS * 4;
+        int lu = exchange_floor(fu_name) > MIN_CLUBS * 4 ? exchange_floor(fu_name) : MIN_CLUBS * 4;
+        int ll = exchange_floor(fl_name) > MIN_CLUBS * 4 ? exchange_floor(fl_name) : MIN_CLUBS * 4;
         int nu = clubs_in_division(upper) - down + up, nl = clubs_in_division(lower) + down - up;
         int fits = nu >= lu && nu <= cu && nl >= ll && nl <= cl;
         /* Only when both new rows are counts that the classes hold: a row above the cap (Serie A 20 in 2004/05 with a

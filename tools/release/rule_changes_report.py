@@ -118,9 +118,6 @@ def note(field, new, nation, comp, name, comp_file='', season=''):
             return ' The game keeps %d clubs (league sizes).' % cap
         if n is not None and n < floor:
             return ' The game keeps %d clubs (league sizes).' % floor
-        # DenCup needs the First Division's clubs: it keeps those of the database (season_sizes_keeps_database).
-        if n is not None and comp_file == 'den_first' and n < cap:
-            return ' The game keeps the clubs of the database, up to %d (league sizes).' % cap
     if field == 'clubs' and comp_file in C2_FILES and season in C2_SEASONS:
         m = re.match(r'\s*(\d+)', new)
         if m and int(m.group(1)) > C2_CAP:

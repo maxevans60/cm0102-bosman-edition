@@ -50,15 +50,15 @@ int season_sizes_edition(const char *file, int year);
  * size table or the row holds no usable count. */
 int season_sizes_clubs(const char *file, int season);
 
-/* 1 when the club moves leave a division of this file the clubs of the database, up to the class count, where its
- * row has fewer (a cup takes the division whole). */
-int season_sizes_keeps_database(const char *file);
-
 /* The source files of the league classes of tools/recomp/league_sizes.py (season_size_wraps.c). */
 extern const char *const season_size_files[];
 extern const int season_size_file_count;
 extern const int season_size_caps[];         /* the largest count of each file, 0: the class counts its data */
 extern const int season_size_floors[];       /* the smallest count, 0: none (a cup of the nation needs it) */
+extern const int season_size_fixed[];        /* the count whose exchange stays the class's, 0: none (FIXED_EXCHANGE) */
+
+/* 1 in a season game with the sizes on (not RECOMP_LEAGUE_SIZES=off): the cups of season_cup_sizes_uk.c. */
+int season_sizes_on(void);
 
 /* The grown classes of tools/recomp/league_sizes.py GROWN (0.7.2 league sizes, slice 2, D21; season_size_wraps.c):
  * create_table allocates the rows of the season's count up to the cap (rt_league_table_bytes), and the wrap of

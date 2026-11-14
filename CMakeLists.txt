@@ -305,6 +305,13 @@ if(NOT WIN32)
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
     target_include_directories(season_level_ties_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_level_ties COMMAND season_level_ties_test)
+    # The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14): the Irish Cup, the
+    # Welsh League Cup and the FA Cup take every club of a larger division, and the counts of the League Cup and the
+    # Scottish cups.
+    add_executable(season_cup_sizes_uk_test tests/seasons/test_season_cup_sizes_uk.c
+        src/recomp_rt/win/season_cup_sizes_uk.c)
+    target_include_directories(season_cup_sizes_uk_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_cup_sizes_uk COMMAND season_cup_sizes_uk_test)
     # The rest of the domestic cups (0.6.0 slice 21c): four-club super cups, group stages and new cups.
     add_executable(season_cups_more_test tests/seasons/test_season_cups_more.c
         src/recomp_rt/win/season_cups_more.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
@@ -723,6 +730,12 @@ if(EXISTS "${CM0102_EXE}")
     # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
     add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
         --self-test)
+    # The cups of western Europe take the real divisions (0.7.2 league sizes, slice 5): the counts with grown and
+    # shrunk divisions on a made-up club table, and the run list of the season runs (tests/seasons/cup_size_run.py).
+    add_executable(season_cup_west_test tests/seasons/test_season_cup_west.c src/recomp_rt/win/season_cup_sizes_west.c)
+    target_include_directories(season_cup_west_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_cup_west COMMAND season_cup_west_test)
+    add_test(NAME cup_size_run_list COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_size_run.py" --list)
     # Cup lists (0.6.2 item 64): every cup list of the original starts cleared in a season game.
     add_test(NAME cup_list_clear COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_list_clear_check.py"
         --exe "${CM0102_EXE}")
