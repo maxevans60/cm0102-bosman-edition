@@ -164,9 +164,9 @@ Merge danger: one-way door for saves (a save holds the section stages). Blast ra
 Blocked by: 2, 3, 4, 5
 Delivers: the Conference at 24 with the row's exchange places (D15), League One by its row, the National at 21 (2010/11, a template block of 42) and at 17 and 18.
 Merge danger: two-way door. Blast radius: the English and French pyramids.
-- [ ] `league_size_run.py` passes for eng_conf 2010 and fra_third 2010 and 2014
-- [ ] A 2005 game with changing rules on through 2007 moves the row's Conference places
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for eng_conf 2010 and fra_third 2010 and 2014
+- [x] A 2005 game with changing rules on through 2007 moves the row's Conference places (`size_step_run.py conference`)
+- [x] The same-save set is equal
 
 ### 9. Italy
 Blocked by: 2, 3, 5
