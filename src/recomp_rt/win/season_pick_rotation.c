@@ -18,12 +18,36 @@
  * The original keeps back at most 14 players who can play the current match too. So in a season game, when fewer than
  * 25 squad players can play the current match (not injured, 0x62c400 not 2, and eligible, 0x8cf5e0 code 0), the pick
  * finds no next fixture and does not rotate: the search at 0x6dbe7e returns 0 fixtures. The base game keeps the
- * original (Q152). */
+ * original (Q152).
+ *
+ * The reserve side (open item 237). For a club's reserve side (pick +0x19 not 0) pick_team skips the rotation test
+ * (0x6dbdbe) and keeps back players for the first team by the pick's mode +0x1a, which its caller sets
+ * (0x6dc59f..0x6dc6a4): 14 for mode 0, 7 for 1, 2 for 2, none for 3. Its first loop (0x6dc6b9..0x6dc87c) takes the
+ * players who can play (not injured, 0x62c400 at 0x6dc6f4; no ban, 0x55d270 at 0x6dc71f; no national duty, 0x7757d0
+ * at 0x6dc7b1 and 0x6dc7d0; not away on loan, 0x4cf6d0 and 0x4cf5a0 at 0x6dc7e4..0x6dc81f), and 0x6e1940 at 0x6dc8a6
+ * keeps the best of them back. The second loop picks the side from the rest; for a reserve side it also drops a
+ * player who is recovering (0x62c400 at 0x6dcb88). As for the first team above, nothing checks that the rest can
+ * field 11. init_match 0x6b7f20 then stops at match_eng.cpp 612 or 652 (0x6b8973, 0x6b8aca).
+ *
+ * The case: since item 229 a season game gets the database's loans, and a player on loan keeps his squad slot at his
+ * parent club (the loan is a second contract). In a 2014 start (October 2014, all nations, changing rules on, seed 1,
+ * session sz02) GNK Dinamo Zagreb had all 50 slots filled on day 269 of 2014, 18 of those players away on loan and 4
+ * injured or recovering. The pick kept 14 back for the first team, and its Reserve side (record 87) had 10. The
+ * original's answer to a short side, the virtual players of VIRTUAL_STAFF::top_up_club_squad 0x90dae0, needs a free
+ * slot, and there was none.
+ *
+ * The fix, in a season game, for a club's reserve side: when the pick gives fewer than 11 players, it runs again
+ * with the next mode (fewer players kept back), up to mode 3, until the side has 11. pick_team writes every slot of
+ * its selection (0x6e0d00 at 0x6dd6de), so a later pick replaces an earlier one. The mode is set back after the pick.
+ * Logged. The base game keeps the original (Q152). Test switch RECOMP_TEST_RESERVE_PICK=original: the original's
+ * short side in a season game too (the proof of tests/seasons/reserve_pick_run.py). */
 #include "win.h"
 #include "season.h"
 #include "season_names.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define SQUAD_SLOTS 50
 #define KEPT_BACK 14
@@ -64,7 +88,7 @@ static int can_play(uint32_t pick)
 
 void o_006dbc50(void);
 
-RT_WRAP(006dbc50, pick_rotation)
+static void pick_rotation(void)
 {
     uint32_t pick = cpu.ecx, fixture = rd32(g_mem, pick + 0x37), club = rd32(g_mem, pick + 0x2f);
     if (!season_game_changes() || g_mem[pick + 0x19] || g_mem[pick + 0x1a] != 3 || !readable(fixture) ||
@@ -85,6 +109,57 @@ RT_WRAP(006dbc50, pick_rotation)
     no_rotation_free = n;
     o_006dbc50();
     no_rotation_pick = 0;
+}
+
+static const int kept_back[4] = {14, 7, 2, 0};   /* by mode +0x1a, 0x6dc5e4..0x6dc6a4 */
+
+static int reserve_original(void)
+{
+    static int v = -1;
+    if (v < 0) { const char *e = getenv("RECOMP_TEST_RESERVE_PICK"); v = e && !strcmp(e, "original"); }
+    return v;
+}
+
+/* A club of the club table ([0xae23b4], [0xae235c] rows of 0x245), not a national side. */
+static int club_side(uint32_t club)
+{
+    uint32_t base = rd32(g_mem, 0xae23b4u), end = base + rd32(g_mem, 0xae235cu) * 0x245u;
+    return readable(base) && club >= base && club < end && (club - base) % 0x245u == 0;
+}
+
+static int reserve_again;               /* a later pick of the reserve fix is running */
+
+RT_WRAP(006dbc50, pick_team_season)
+{
+    uint32_t pick = cpu.ecx, opponent = rt_arg(0), mode = rt_arg(1), club = rd32(g_mem, pick + 0x2f);
+    uint8_t keep = g_mem[pick + 0x1a];
+    if (reserve_again || !season_game_changes() || reserve_original() || !g_mem[pick + 0x19] || keep >= 3 ||
+        !club_side(club)) {
+        pick_rotation();
+        return;
+    }
+    pick_rotation();
+    int first = (int8_t)cpu.eax, n = first;
+    if (rt_unwinding || n >= 11) return;
+    Cpu after = cpu;
+    uint8_t m = keep;
+    while (n < 11 && m < 3 && !rt_unwinding) {
+        uint32_t a[2] = {opponent, mode};
+        g_mem[pick + 0x1a] = ++m;
+        reserve_again = 1;
+        cpu.ecx = pick;
+        n = (int8_t)rt_callback(0x6dbc50u, 2, a);
+        reserve_again = 0;
+    }
+    if (rt_unwinding) return;
+    g_mem[pick + 0x1a] = keep;
+    cpu = after;
+    cpu.eax = (after.eax & 0xffffff00u) | (uint8_t)n;
+    uint32_t fixture = rd32(g_mem, pick + 0x37), rec = readable(fixture) ? rd32(g_mem, fixture + 0x14) : 0;
+    fprintf(stderr, "recomp: reserve pick: %.30s keeps %d players back for its first team, not %d, and fields %d, not %d, "
+                    "in the %.30s match on day %d of %d\n", win_str(club + 4), kept_back[m], kept_back[keep], n, first,
+            readable(rec) ? win_str(rec + 4) : "?", readable(fixture) ? (int16_t)rd16(g_mem, fixture + 0x2a) : -1,
+            readable(fixture) ? (int16_t)rd16(g_mem, fixture + 0x28) : -1);
 }
 
 void o_005acbe0(void);

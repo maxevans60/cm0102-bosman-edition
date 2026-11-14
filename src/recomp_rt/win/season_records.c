@@ -1354,4 +1354,23 @@ RT_WRAP(006db500, team_pick_log)
     }
     fprintf(stderr, ", record %d %s, home %s, round %d\n", rec >= 0x10000u ? (int)rd32(g_mem, rec) : -1, cname, hname,
             (int16_t)rd16(g_mem, fixture + 0x30));
+    /* Each filled slot: the staff id, the age byte +0x18 (as 0x8cf9a8 reads it), the club of +0x39 when it is not
+     * this club, and the loan contract's club (the staff row [0xae2d0c] + id * 79, +4; the contract table
+     * [[0xae1050]], 80 bytes a contract, +4 the club id). */
+    uint32_t rows = rd32(g_mem, 0xae2d0cu), table = rd32(g_mem, 0xae1050u), clubs = rd32(g_mem, 0xae23b4u);
+    table = table ? rd32(g_mem, table) : 0;
+    fprintf(stderr, "recomp: club records:   slots:");
+    for (uint32_t j = 0; j < SQUAD; j++) {
+        uint32_t s = rd32(g_mem, club + 0xd7 + 4 * j);
+        if (!s) continue;
+        uint32_t id = rd32(g_mem, s), at = rd32(g_mem, s + 0x39);
+        fprintf(stderr, " %u/%d", id, (int8_t)g_mem[s + 0x18]);
+        if (at != club) fprintf(stderr, "@%.12s", at >= 0x10000u ? (char *)(g_mem + at + 4) : "none");
+        int32_t loan = rows && id < 0x100000u ? (int32_t)rd32(g_mem, rows + id * 79u + 4u) : -1;
+        if (loan >= 0 && table) {
+            int32_t lc = (int32_t)rd32(g_mem, table + (uint32_t)loan * 80u + 4u);
+            fprintf(stderr, "(loan %.12s)", lc >= 0 && clubs ? (char *)(g_mem + clubs + (uint32_t)lc * 0x245u + 4) : "?");
+        }
+    }
+    fputc('\n', stderr);
 }
