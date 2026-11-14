@@ -177,12 +177,26 @@ int season_sizes_row_season(uint32_t obj, const char *file)
     return r ? r->season : -1;
 }
 
+static const SeasonGrown *grown_of(const char *file);
+
 int season_sizes_clubs(const char *file, int season)
 {
     if (!sizes_on() || !size_file(file)) return -1;
     const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
+}
+
+/* The count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT, held 0:
+ * IreFirst::create_table 0x635910 counts division [0x9cf810] and allocates count x 0x3b): its row's count, so that
+ * the club moves of a new game give the division that many clubs. -1 for any other class or with the sizes off. */
+int season_sizes_data_clubs(const char *file, int season)
+{
+    const SeasonGrown *g = grown_of(file);
+    if (!sizes_on() || !g || g->held) return -1;
+    const SeasonRule *r = row_of_edition(file, season);
+    if (!r || r->clubs < MIN_CLUBS || r->clubs > g->cap) return -1;
+    return r->clubs;
 }
 
 /* The clubs whose division is the record of the object. */

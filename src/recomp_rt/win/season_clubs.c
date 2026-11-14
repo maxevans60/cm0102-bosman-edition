@@ -290,6 +290,9 @@ static int class_size(const char *name, int season)
             if (table > 0) return table;
             return season == SEASON_FIRST_YEAR ? CLASS_SIZE[k].first_season : CLASS_SIZE[k].size;
         }
+    /* A class that counts the clubs of its data plays the count of its row with the sizes on (0.7.2 slice 13): the
+     * 2013 list holds 8 Irish First Division clubs, and the 3.9.68 data 10. Off, the data's count stays. */
+    if (!strncmp(name, "Irish First Division", 52)) return season_sizes_data_clubs("ire_first", season);
     return -1;
 }
 

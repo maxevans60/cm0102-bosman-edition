@@ -153,17 +153,26 @@ def split_ends(log, file):
 
 
 def end_faults(name, rows, after, sp):
-    """The faults of a table at its end after a split: the places after match N are each place once, the table keeps
-    each section together and above the next, and each club played N and its own section's matches."""
+    """The faults of a table at its end after a split: each section holds its count of clubs by their places after
+    match N, the table keeps each section together and above the next, and each club played N and its own section's
+    matches. The places after match N need not be each place once at the end: League::sort_table 0x6827d0 writes
+    each row's place again at index played - 1 at every sort (0x682ada..0x682b0f), so a club that has not yet played
+    its first section match (a later kick-off on the day, or a postponed match) gets its place within its section
+    at match N again. That place stays in its section, as the order sorts by section first (season_split.c)."""
     fails = []
     places = [p for p, _x in rows]
-    if sorted(places) != list(range(sum(n for n, _m in sp))):
-        return [f"{name}: the places after match {after} are not each place once: {places}"]
+    total = sum(n for n, _m in sp)
+    if len(places) != total or any(not 0 <= p < total for p in places):
+        return [f"{name}: the places after match {after} are not places of a table of {total}: {places}"]
     bounds, top = [], 0
     for n, m in sp:
         bounds.append((top, top + n, after + m * (n - 1)))
         top += n
     secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
+    counts = [secs.count(k) for k in range(len(sp))]
+    if counts != [n for n, _m in sp]:
+        return [f"{name}: the sections hold {counts} clubs by the places after match {after}, want "
+                f"{[n for n, _m in sp]}: {places}"]
     if secs != sorted(secs):
         fails.append(f"{name}: the table does not keep the sections in order: {secs}")
     for (p, played), k in zip(rows, secs):
@@ -348,7 +357,9 @@ def faults(work, file, year, last):
     fails = [f"{x.strip()}" for x in lines if "recomp: message box from" in x]
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
-    held = league_sizes.HELD.get(file, 0)
+    # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
+    # writes no table line.
+    held = league_sizes.DATA_COUNT.get(file, league_sizes.HELD.get(file, 0))
     # The report: every edition of the run holds the clubs and meetings of its row, and the matches of the count.
     rows = report_rows(report, file) if os.path.exists(report) else []
     if not any(r[0] == year and r[1] == "start" for r in rows):
@@ -565,6 +576,8 @@ def self_test():
     short = good_end[:6] + [(6, 35)] + good_end[7:]
     if (end_faults("good", good_end, 30, sp16) or not end_faults("mixed", mixed, 30, sp16) or
             not end_faults("short", short, 30, sp16) or
+            end_faults("again", good_end[:7] + [(6, 33)] + good_end[8:], 30, sp16) or
+            not end_faults("crossed", good_end[:5] + [(6, 35)] + good_end[6:], 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):

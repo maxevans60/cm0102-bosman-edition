@@ -87,6 +87,10 @@ extern const int season_grown_count;
  * with the sizes on): the club moves of a new game then take no reserve side for it (D12). */
 int season_sizes_plays_short(const char *file);
 
+/* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
+ * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
+int season_sizes_data_clubs(const char *file, int season);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */
