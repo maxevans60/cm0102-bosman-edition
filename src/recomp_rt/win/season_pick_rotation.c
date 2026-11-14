@@ -120,11 +120,15 @@ static int reserve_original(void)
     return v;
 }
 
-/* A club of the club table ([0xae23b4], [0xae235c] rows of 0x245), not a national side. */
+/* A club, not a national side, by the test of 0x53b900: the club index (row of 0x245 bytes from [0xae23b4]) is
+ * below [0xae235c] - 2 * [0xae2350]; the national sides take the last rows. pick_team keeps nobody back for a
+ * national side (0x53b900 at 0x6dc5d4). */
 static int club_side(uint32_t club)
 {
-    uint32_t base = rd32(g_mem, 0xae23b4u), end = base + rd32(g_mem, 0xae235cu) * 0x245u;
-    return readable(base) && club >= base && club < end && (club - base) % 0x245u == 0;
+    uint32_t base = rd32(g_mem, 0xae23b4u);
+    int32_t clubs = (int32_t)rd32(g_mem, 0xae235cu) - 2 * (int32_t)rd32(g_mem, 0xae2350u);
+    return readable(base) && club >= base && (club - base) % 0x245u == 0 &&
+           (int32_t)((club - base) / 0x245u) < clubs;
 }
 
 static int reserve_again;               /* a later pick of the reserve fix is running */
@@ -155,6 +159,7 @@ RT_WRAP(006dbc50, pick_team_season)
     g_mem[pick + 0x1a] = keep;
     cpu = after;
     cpu.eax = (after.eax & 0xffffff00u) | (uint8_t)n;
+    if (n == first) return;             /* the pick kept nobody back (0x600a50 at 0x6dc5c0): no change to log */
     uint32_t fixture = rd32(g_mem, pick + 0x37), rec = readable(fixture) ? rd32(g_mem, fixture + 0x14) : 0;
     fprintf(stderr, "recomp: reserve pick: %.30s keeps %d players back for its first team, not %d, and fields %d, not %d, "
                     "in the %.30s match on day %d of %d\n", win_str(club + 4), kept_back[m], kept_back[keep], n, first,

@@ -1365,11 +1365,13 @@ RT_WRAP(006db500, team_pick_log)
         if (!s) continue;
         uint32_t id = rd32(g_mem, s), at = rd32(g_mem, s + 0x39);
         fprintf(stderr, " %u/%d", id, (int8_t)g_mem[s + 0x18]);
-        if (at != club) fprintf(stderr, "@%.12s", at >= 0x10000u ? (char *)(g_mem + at + 4) : "none");
-        int32_t loan = rows && id < 0x100000u ? (int32_t)rd32(g_mem, rows + id * 79u + 4u) : -1;
+        if (at != club) fprintf(stderr, "@%.12s", at >= clubs && clubs && at < clubs + rd32(g_mem, 0xae235cu) * 0x245u ?
+                                                      (char *)(g_mem + at + 4) : "none");
+        int32_t loan = rows && id < rd32(g_mem, 0xae2364u) ? (int32_t)rd32(g_mem, rows + id * 79u + 4u) : -1;
         if (loan >= 0 && table) {
             int32_t lc = (int32_t)rd32(g_mem, table + (uint32_t)loan * 80u + 4u);
-            fprintf(stderr, "(loan %.12s)", lc >= 0 && clubs ? (char *)(g_mem + clubs + (uint32_t)lc * 0x245u + 4) : "?");
+            int ok = lc >= 0 && clubs && lc < (int32_t)rd32(g_mem, 0xae235cu);
+            fprintf(stderr, "(loan %.12s)", ok ? (char *)(g_mem + clubs + (uint32_t)lc * 0x245u + 4) : "?");
         }
     }
     fputc('\n', stderr);
