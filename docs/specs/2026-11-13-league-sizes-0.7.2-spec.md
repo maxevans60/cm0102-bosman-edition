@@ -75,6 +75,8 @@ D21. The engine table. `GROWN` becomes one row per class in `league_sizes.py`: t
 
 D22. Fixed arrays and rows of the classes (the Serie A and Serie B tie-break arrays, the Serie C1 regroup and play-out rows, the RusFirst take loop, the CroA2a tie-break array, BelThird row 15, the Argentine averages) are replaced by runtime code that takes the count, in the slice of their league.
 
+D23. Both directions, in the right year (Max, 13 November 2026). Every change of a division's club count in the rules table plays in the season it happened, up or down, for every league in the game, also those whose new count the class already holds. In the season before a change, the division plays that season's real promotion and relegation places from its row (for example four down when the league goes from 20 to 18), so the step comes through the real places. The size step of D13 is the fallback only when the real places do not reach the new count (a start season, a database with too few clubs). Slice 3 owns this. Slice 18 checks every count change of the rules table from 2001 to 2027: each one shows in the save of its season, and the season before shows its real places.
+
 ## Testing
 
 Three seams, all existing:

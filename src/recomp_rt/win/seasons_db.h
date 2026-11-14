@@ -49,7 +49,7 @@ typedef struct {
 } SeasonKnownDb;
 
 extern const SeasonKnownDb seasons_known_dbs[];     /* seasons_table.c */
-extern const int seasons_known_count;               /* 52 */
+extern const int seasons_known_count;               /* 55 */
 
 /* The three decades of the Choose Season screen (layout C, Q346): a season belongs to the decade of the year
  * it starts in. The names and the colours belong to the screen; the names are in one table (seasons_db.c). */

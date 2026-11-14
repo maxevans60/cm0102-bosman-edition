@@ -37,7 +37,6 @@
 #include "season_coeffs.h"
 #include "season_records.h"
 #include "seasons_db.h"
-#include "options.h"
 #include "../host.h"
 
 #include <fcntl.h>
@@ -266,6 +265,13 @@ static int nation_shift(const Plan *p, uint32_t id)
     return p->nation_history;
 }
 
+static const SeasonYearFixes *year_fixes_for(const char *name)
+{
+    for (int i = 0; name && i < season_year_fixes_count; i++)
+        if (!strcmp(season_year_fixes[i].name, name)) return &season_year_fixes[i];
+    return NULL;
+}
+
 static int last_row_comp(const SeasonDateShifts *s, uint32_t id)
 {
     for (uint32_t i = 0; s && i < s->last_count; i++)
@@ -311,13 +317,36 @@ static void apply(const Plan *p)
     uint32_t comps = rd32(g_mem, COMPS_PTR);
     journal_ch_base = ch;
     journal_ch_end = ch + rd32(g_mem, COMP_HISTORY_COUNT) * COMP_HISTORY_SIZE;
+    const SeasonYearFixes *fx = year_fixes_for(p->name);
+    uint32_t k = 0, fixed = 0, missed = 0;
     for (uint32_t i = 0; ch && i < n_ch; i++) {
         uint32_t r = ch + i * COMP_HISTORY_SIZE, c = rd32(g_mem, r + 4);
         int id_ok = c >= comps && (c - comps) % COMP_SIZE == 0;
         uint32_t id = id_ok ? (c - comps) / COMP_SIZE : 0xffffffffu;
         int last = p->last_rows && rd16(g_mem, r + 8) == LAST_ROW_YEAR && id_ok && last_row_comp(p->row, id);
-        shift_year(r + 8, last ? p->last_rows : i >= n_club ? nation_shift(p, id) : p->history);
+        int s = last ? p->last_rows : i >= n_club ? nation_shift(p, id) : p->history;
+        /* open item 233: the rows of the year fix table, in the order of this walk (club rows, then nation rows) */
+        uint32_t nation = i >= n_club, row = nation ? i - n_club : i;
+        while (fx && k < fx->count && (fx->fixes[k].nation < nation || (fx->fixes[k].nation == nation &&
+                                                                       fx->fixes[k].row < row))) {
+            k++;
+            missed++;               /* a row past the end of its file */
+        }
+        if (fx && k < fx->count && fx->fixes[k].nation == nation && fx->fixes[k].row == row) {
+            if (fx->fixes[k].comp == id && fx->fixes[k].year == rd16(g_mem, r + 8)) {
+                s += fx->fixes[k].delta;
+                fixed++;
+            } else {
+                missed++;
+            }
+            k++;
+        }
+        shift_year(r + 8, s);
     }
+    if (fx) missed += fx->count - k;
+    if (fx)
+        fprintf(stderr, "recomp: season dates: %u competition history years corrected for %s (open item 233), %u "
+                        "rows of the table not found\n", fixed, p->name, missed);
     fprintf(stderr, "recomp: season dates: %s (data %d) in %d: birth %+d, joined %+d, contract %+d (real ends "
                     "%+d), officials %+d, careers %+d (kept %+d), competition history %+d (nations %+d, last rows "
                     "%+d); %u staff, %u careers, %u history rows, %zu changes\n", p->name, p->D, p->N, p->birth,
@@ -620,17 +649,12 @@ static int official_data(void)
 }
 
 /* 1 when the loaded data is 3.9.60 or 3.9.65: its duplicate history rows go in every start year (open item 227).
- * Not the 3.9.68 data of the base game (Q152). The signature table (seasons_table.c) holds other files under these
- * names than the folders Data-3.9.60 and Data-3.9.65 that the game ships (make_clean_files.py), so a folder that it
- * does not know is taken by the option database, as files.c data_dir_find reads it. The test switch RECOMP_DATA_DIR
- * wins over the option there, and the option's default is 3.9.60: a test run that points it at another unknown folder
- * must also write the option (run_set.py of the release tests writes both). Open item 230: the table itself. */
+ * Not the 3.9.68 data of the base game (Q152). The signature table knows the folders Data-3.9.60 and Data-3.9.65
+ * that the game ships (make_clean_files.py) and the forum files of these versions (open item 230). */
 static int official_version(void)
 {
     const SeasonKnownDb *k = loaded_db();
-    if (k) return k->role == SEASONS_ROLE_OFFICIAL_VERSION;
-    int set = options_enum(OPT_DATABASE);
-    return loaded_dir[0] && (set == DATABASE_3960 || set == DATABASE_3965);
+    return k && k->role == SEASONS_ROLE_OFFICIAL_VERSION;
 }
 
 void season_dates_at_create(void)
@@ -670,8 +694,9 @@ RT_WRAP(00524d50, database_load_files)
     loaded = 1;
     loaded_year = season_start_year();
     snprintf(loaded_dir, sizeof loaded_dir, "%s", win_data_set_dir());
-    fprintf(stderr, "recomp: season dates: data loaded from %s in %d\n", loaded_dir[0] ? "a database folder"
-            : "the game's Data", season_start_year());
+    const char *known = loaded_db_name();      /* open item 230: the known database, or Custom */
+    fprintf(stderr, "recomp: season dates: data loaded from %s (%s) in %d\n", loaded_dir[0] ? "a database folder"
+            : "the game's Data", known ? known : "Custom", season_start_year());
     shift_for(season_start_year());
     /* Test switch RECOMP_DATES_RESHIFT=<year>: the shift is made again for that year and then for the start year,
      * as season_dates_at_create does when the game is made in another year than the load. The data must end as
