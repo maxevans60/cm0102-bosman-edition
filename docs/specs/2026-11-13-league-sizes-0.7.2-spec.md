@@ -126,8 +126,9 @@ Blocked by: 2
 Delivers: a new game fills each division to its row (D12). At a season change with changing rules on, each division reaches its new row's count (D13). A 0.7.1 save reaches the row at its next season change (D18).
 Merge danger: one-way door for saves. Blast radius: club lists of every division in a season game.
 - [ ] A 2001 game with changing rules on across 2004/05 gives Serie A 20 in 2004/05
-- [ ] A 0.7.1 save of a 2015 game loads and reaches the row sizes at the next season change
-- [ ] Each division short of clubs in a database is named in the log, and the same-save set is equal
+  Open: Serie A gets its row of 20 only when slice 9 adds ita_ser_a to the grown classes. The size step and D23 are proven by Allsvenskan 14 to 16 in 2008 and Ligue 1 20 to 18 in 2023/24 (`tests/seasons/size_step_run.py` grow and shrink).
+- [x] A 0.7.1 save of a 2015 game loads and reaches the row sizes at the next season change
+- [x] Each division short of clubs in a database is named in the log, and the same-save set is equal
 
 ### 4. Cups of Britain and Ireland follow the divisions
 Blocked by: 2
