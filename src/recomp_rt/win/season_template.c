@@ -113,6 +113,11 @@ int season_template_plan(int base_year, const int *days, int count, int rounds, 
         order[j] = i;
     }
     for (int i = 0; i < count; i++) sorted[i] = days[order[i]];
+    for (int i = 0; i + 1 < count; i++)
+        if (sorted[i + 1] == sorted[i]) {   /* two rounds on one day: the plan could keep both */
+            snprintf(why, (size_t)why_size, "class dates %d and %d are on one day", order[i], order[i + 1]);
+            return 0;
+        }
     days = sorted;
     int largest = 0;
     for (int i = 0; i + 1 < count; i++)

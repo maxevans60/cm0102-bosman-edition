@@ -249,6 +249,11 @@ static void test_out_of_order(void)
     for (int k = 0; k + 1 < r; k++)
         if (p[k].from == 23 && !p[k].added) CHECK(p[k + 1].from == 22 && !p[k + 1].added, "out of order: 1 March "
                                                   "is not followed by 2 March");
+    /* Two class dates on one day: no plan (two rounds on one day). */
+    d[23] = d[22];
+    why[0] = 0;
+    r = season_template_plan(2013, d, 34, 42, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
+    CHECK(r == 0 && why[0], "one day: %d dates, reason '%s'", r, why);
 }
 
 int main(void)

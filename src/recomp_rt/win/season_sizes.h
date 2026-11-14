@@ -41,6 +41,10 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* After set_up_rules of a league class: the promotion and relegation places of the season. */
 void season_sizes_rules(uint32_t obj);
 
+/* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
+ * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
+int season_sizes_edition(const char *file, int year);
+
 /* The club count of a division of a league class in the row of the edition of a season (the club moves of a new
  * game; a calendar-year league takes the row whose real season is that year), or -1 when the class is not in the
  * size table or the row holds no usable count. */
