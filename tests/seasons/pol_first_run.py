@@ -196,7 +196,7 @@ def long_run(program, game, keep, reuse, timeout, which="long"):
             fails.append(f"long: the exchange of 2025/26: {len(up)} clubs up (want 3, from the I liga), {len(down)} down (want 3)")
         if re.search(r"recomp: season change net: .*pol", log):
             fails.append("long: the season change net acted on the Polish leagues")
-    print(("FAIL  " + "; ".join(fails)) if fails else f"ok    long: a 2002 game to {last}/{(last + 1) % 100:02d} ({work})")
+    print(("FAIL  " + "; ".join(fails)) if fails else f"ok    {which}: a {start} game to {last}/{(last + 1) % 100:02d} ({work})")
     return fails
 
 
