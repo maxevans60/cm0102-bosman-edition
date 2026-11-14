@@ -434,6 +434,19 @@ uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);   /* FraCfa empty plac
 uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count); /* French Lower Division places (0x5bd752) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
+/* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
+ * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
+uint32_t rt_gre_cup_lower(uint32_t pool);
+uint32_t rt_rus_cup_lower(uint32_t pool);
+uint32_t rt_rus_cup_picks(uint32_t esp);
+uint32_t rt_rus_cup_premier_place(uint32_t placed);
+uint32_t rt_tur_cup_copy_from(uint32_t esp);
+uint32_t rt_tur_cup_lower(uint32_t esp);
+uint32_t rt_tur_cup_second_place(uint32_t esp);
+uint32_t rt_pol_lge_second(uint32_t cup);
+uint32_t rt_jap_j_cup_j2(uint32_t cup);
+uint32_t rt_jap_emp_lower(uint32_t pool);
+uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
 /* Italy at its real sizes (0.7.2 league sizes slice 9, season_sizes_ita.c, tools/recomp/league_sizes_ita.py). */
