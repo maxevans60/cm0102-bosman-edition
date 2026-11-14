@@ -41,17 +41,24 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* After set_up_rules of a league class: the promotion and relegation places of the season. */
 void season_sizes_rules(uint32_t obj);
 
-/* After the places of season_sizes_rules, with the size engine on: Série A and B with the row's two meetings play
- * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
-/* The most earlier starts of 7 days of a file's date template: 13 for the Brazilian Série A and B, else
- * SEASON_TEMPLATE_EARLIER (season_sizes_bra.c). */
 /* 1 in a season game with the size engine on (RECOMP_LEAGUE_SIZES=off turns it off). */
 int season_sizes_on(void);
+
+/* The most earlier starts of 7 days of a file's date template: 13 for the Brazilian Série A and B, else
+ * SEASON_TEMPLATE_EARLIER (season_sizes_bra.c). */
 int season_sizes_bra_earlier(const char *file);
+
+/* After the places of season_sizes_rules, with the size engine on: Série A and B with the row's two meetings play
+ * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
 void season_sizes_bra_rules(uint32_t obj, const char *file);
 
-/* The club count of a division of a league class in the row of a season (the club moves of a new game), or -1
- * when the class is not in the size table or the row holds no usable count. */
+/* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
+ * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
+int season_sizes_edition(const char *file, int year);
+
+/* The club count of a division of a league class in the row of the edition of a season (the club moves of a new
+ * game; a calendar-year league takes the row whose real season is that year), or -1 when the class is not in the
+ * size table or the row holds no usable count. */
 int season_sizes_clubs(const char *file, int season);
 
 /* 1 when the club moves leave a division of this file the clubs of the database, up to the class count, where its

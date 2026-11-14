@@ -251,6 +251,47 @@ static void test_brazil(void)
     CHECK(r == 0, "Brazil 28 clubs in two meetings: %d dates, want no room", r);
 }
 
+/* Open item 236: a class date that snaps to its weekday can fall before the date ahead of it. PorSecond 2013/14
+ * (the game's log of the 2013 start, run-logs/0.7.2-sz03/run-portugal) makes Sunday 2 March 2014 and then
+ * Saturday 1 March 2014; the plan of 42 rounds for 22 clubs failed with "class date 23 is not after date 22". */
+static void test_out_of_order(void)
+{
+    static const int ymd[34][3] = {{2013, 8, 25}, {2013, 9, 1}, {2013, 9, 15}, {2013, 9, 22}, {2013, 9, 29}, {2013, 10, 5}, {2013, 10, 20}, {2013, 10, 27}, {2013, 11, 3}, {2013, 11, 10}, {2013, 11, 24}, {2013, 12, 1}, {2013, 12, 8}, {2013, 12, 15}, {2013, 12, 22}, {2014, 1, 5}, {2014, 1, 19}, {2014, 1, 26}, {2014, 2, 2}, {2014, 2, 9}, {2014, 2, 16}, {2014, 2, 23}, {2014, 3, 2}, {2014, 3, 1}, {2014, 3, 9}, {2014, 3, 16}, {2014, 3, 23}, {2014, 3, 30}, {2014, 4, 6}, {2014, 4, 13}, {2014, 4, 19}, {2014, 4, 27}, {2014, 5, 4}, {2014, 5, 11}};
+    int d[34];
+    for (int i = 0; i < 34; i++) d[i] = day(ymd[i][0], ymd[i][1], ymd[i][2]) + (ymd[i][0] - 2013) * 365;
+    CHECK(d[23] < d[22], "out of order: the class dates 22 and 23 are in order (%d, %d)", d[22], d[23]);
+    SeasonTemplateDate p[SEASON_TEMPLATE_MAX];
+    char why[128] = "";
+    int r = season_template_plan(2013, d, 34, 42, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
+    CHECK(r == 42, "out of order: %d dates, want 42 (%s)", r, why);
+    if (r != 42) return;
+    int seen[34] = {0};
+    for (int k = 0; k < r; k++) {
+        CHECK(k == 0 || p[k].day > p[k - 1].day, "out of order: date %d (%d) not after date %d (%d)", k, p[k].day,
+              k - 1, p[k - 1].day);
+        CHECK(p[k].from >= 0 && p[k].from < 34, "out of order: date %d copies record %d", k, p[k].from);
+        if (p[k].added) {
+            CHECK(p[k].day < d[0] || season_template_weekday(2013, p[k].day) == SEASON_TEMPLATE_WEDNESDAY,
+                  "out of order: new date %d is weekday %d", p[k].day, season_template_weekday(2013, p[k].day));
+            continue;
+        }
+        CHECK(d[p[k].from] == p[k].day, "out of order: date %d is %d, record %d is %d", k, p[k].day, p[k].from,
+              d[p[k].from]);
+        seen[p[k].from]++;
+    }
+    for (int i = 0; i < 34; i++) CHECK(seen[i] == 1, "out of order: class date %d taken %d times", i, seen[i]);
+    CHECK(p[r - 1].day == d[33], "out of order: last date %d, class %d", p[r - 1].day, d[33]);
+    /* 2 March (record 22) comes after 1 March (record 23). */
+    for (int k = 0; k + 1 < r; k++)
+        if (p[k].from == 23 && !p[k].added) CHECK(p[k + 1].from == 22 && !p[k + 1].added, "out of order: 1 March "
+                                                  "is not followed by 2 March");
+    /* Two class dates on one day: no plan (two rounds on one day). */
+    d[23] = d[22];
+    why[0] = 0;
+    r = season_template_plan(2013, d, 34, 42, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
+    CHECK(r == 0 && why[0], "one day: %d dates, reason '%s'", r, why);
+}
+
 int main(void)
 {
     test_brazil();
@@ -259,6 +300,7 @@ int main(void)
     test_two_years();
     test_mirrored();
     test_no_room();
+    test_out_of_order();
     printf("%s: season_template\n", fails ? "FAIL" : "PASS");
     return fails ? 1 : 0;
 }

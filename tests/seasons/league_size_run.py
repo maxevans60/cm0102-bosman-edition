@@ -4,18 +4,21 @@ docs/specs/2026-11-13-league-sizes-0.7.2-spec.md, Testing seam 2, D4 and D5). Ma
 
 Usage:
     python3 tests/seasons/league_size_run.py <cm0102_recomp> <game folder> <file> [--year <season>]
-        [--last <season> | --to <season>] [--keep <folder>] [--reuse] [--timeout <seconds>]
+        [--last <season> | --to <season>] [--nations all|<name,name,...>|all,-<name>,...] [--keep <folder>] [--reuse]
+        [--timeout <seconds>]
     python3 tests/seasons/league_size_run.py --list
     python3 tests/seasons/league_size_run.py --self-test
 
-The run starts a new game in a season (default: the year of the file in ROWS) with all nations, changing rules on,
+The run starts a new game in a season (default: the year of the file in ROWS) with all nations (--nations as in
+tests/seasons/rules_report_check.py: a list keeps England; "all,-<name>" leaves a nation out), changing rules on,
 and plays to the end of --last (default the start year: RECOMP_SEASON_JUMP, the rules report of
-tests/seasons/rules_report_check.py). The row of the file and season in the encoded rules table
-(docs/research/2026-10-18-league-rules-encoded.tsv, slice 1) gives the clubs n and the meetings m; the rounds are
-R = m x (n' - 1), n' the count rounded up to even. RECOMP_SIZE_LOG=1 (src/recomp_rt/win/season_sizes.c) writes the
-lines that the checks read. The checks:
-    report   the row of the file in the start report holds n clubs and m meetings (the first season only: a
-             calendar-year league holds edition Y + 1 in later reports);
+tests/seasons/rules_report_check.py). Each edition (+0x40) is checked against its own row of the encoded rules
+table (docs/research/2026-10-18-league-rules-encoded.tsv, slice 1): a calendar-year league plays edition Y by the
+row of season Y - 1 (its real season is Y), any other league by the row of season Y. The row gives the clubs n and
+the meetings m; the rounds are R = m x (n' - 1), n' the count rounded up to even. RECOMP_SIZE_LOG=1
+(src/recomp_rt/win/season_sizes.c) writes the lines that the checks read. The checks:
+    report   every row of the file in the rules report (start and end of each season) holds the n clubs and m
+             meetings of its edition, and m x (n - 1) matches a club once they are set;
     table    a table of n rows when n is more than the class allocates (league_sizes.py HELD);
     dates    a template of R dates for n clubs: the dates ascend, each new date ("+") is a Wednesday or an earlier
              start in steps of 7 days, none is in the largest gap of the class's template (the winter break) or in a
@@ -25,7 +28,7 @@ lines that the checks read. The checks:
              m x (n - 1) matches, the matches per club (+0xa7);
     expect   the rules report check lists no clubs difference of the file (the first season);
     box      no message box.
-A run takes about 20 to 40 minutes a season. A two-year league ends its table after the end report of its season:
+A message box ends the run at once (stop_on_box) and fails it. A run takes about 20 to 40 minutes a season. A two-year league ends its table after the end report of its season:
 use --last <year + 1> for its played check. --reuse checks the logs in --keep again. Exit code 1 on a failure.
 """
 import datetime
@@ -46,6 +49,7 @@ ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encode
 # The runs of each slice: file: (start year, last season, what it shows). Slice 2: the pilots.
 ROWS = {
     "nor_prm": (2009, 2010, "Eliteserien, 16 clubs (the class holds 14): a calendar year with a summer break"),
+    "nor_prm@2008": (2008, 2012, "Eliteserien 14 in 2008, 16 from 2009 (a forum report: 14 still in 2012)"),
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
@@ -162,6 +166,39 @@ def played(log, file):
     return out
 
 
+def calendar_year(file):
+    """1 when the encoded rows of a file are of a calendar-year league (column calendar)."""
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") == file:
+                return row.get("calendar") == "calendar"
+    return False
+
+
+def edition_row(file, edition):
+    """(clubs, meetings) of the row that an edition (+0x40) plays: a calendar-year league plays edition Y by the
+    row of season Y - 1 (its real season is Y, season_sizes.c row_now), any other league by the row of season Y."""
+    return encoded_row(file, edition - 1 if calendar_year(file) else edition)
+
+
+def report_rows(report, file):
+    """The rows of a file in the rules report: [(season, phase, edition, clubs, meetings, matches)]."""
+    out, cols = [], None
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            p = line.rstrip("\n").split("\t")
+            if p[0] == "columns":
+                cols = p[1:]
+            elif cols and p[0] == "comp" and len(p) == len(cols) + 1:
+                row = dict(zip(cols, p[1:]))
+                if row["file"] == file:
+                    out.append((int(row["season"]), row["phase"], int(row["year"]), int(row["clubs"]),
+                                int(row["rounds"]), int(row["matches"])))
+    return out
+
+
 # Slice 17 (D11): leagues whose class plays a play-off that the row's meetings leave out (season_sizes_bra.c).
 NO_PLAYOFF = {"bra_nat_first", "bra_nat_second"}
 
@@ -181,68 +218,68 @@ def no_playoff_faults(log, file, meetings):
 
 
 def faults(work, file, year, last):
+    """The faults of a run, edition by edition: each edition that the report, the template lines and the played
+    lines show is checked against its own row (edition_row)."""
     import rules_report_check as rrc
     report = os.path.join(work, "report.tsv")
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
-    fails = [f"{x.strip()}" for x in log.split("\n") if "recomp: message box from" in x]
-    clubs, meetings = encoded_row(file, year)
-    m = meetings or 2
-    rounds = rounds_of(clubs, m)
-    if clubs < 2:
+    lines = log.split("\n")
+    fails = [f"{x.strip()}" for x in lines if "recomp: message box from" in x]
+    if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
-    start = None
-    with open(report, encoding="latin-1") as f:
-        cols = None
-        for line in f:
-            p = line.rstrip("\n").split("\t")
-            if p[0] == "columns":
-                cols = p[1:]
-            elif cols and p[0] == "comp" and len(p) == len(cols) + 1:
-                row = dict(zip(cols, p[1:]))
-                if row["file"] == file and row["season"] == str(year) and row["phase"] == "start":
-                    start = row
-    if not start:
-        fails.append(f"{file} {year}: no row in the start report")
-    elif (int(start["clubs"]), int(start["rounds"])) != (clubs, m):
-        fails.append(f"{file} {year}: start report clubs and meetings {(int(start['clubs']), int(start['rounds']))}, "
-                     f"want {(clubs, m)}")
     held = league_sizes.HELD.get(file, 0)
-    if clubs > held and not any(f"{file} table of {clubs} rows" in x for x in log.split("\n")):
-        fails.append(f"{file} {year}: no log line of a table of {clubs} rows (the class allocates {held})")
-    fails += [f"{file}: {x.split(': ', 1)[1]}" for x in log.split("\n")
-              if x.startswith(f"recomp: league sizes: {file} template mode ")]
-    fails += [f"{file}: {x.split(': ', 1)[1]}" for x in log.split("\n")
-              if x.startswith(f"recomp: league sizes: {file} dates: no room")]
-    # The templates of the run's seasons: the run's last day makes the template of the season after --last, whose row
-    # may give another count (Série A 2005: 22 clubs, row 2004).
-    tmpl = [t for t in templates(log, file) if t[0] <= last]
-    want = [t for t in tmpl if len(t[1]) != rounds]
+    # The report: every edition of the run holds the clubs and meetings of its row, and the matches of the count.
+    rows = report_rows(report, file) if os.path.exists(report) else []
+    if not any(r[0] == year and r[1] == "start" for r in rows):
+        fails.append(f"{file} {year}: no row in the start report")
+    for season, phase, ed, n, meet, matches in rows:
+        clubs, m = edition_row(file, ed)
+        m = m or meet
+        if (n, meet) != (clubs, m):
+            fails.append(f"{file}: report {season} {phase}, edition {ed}: clubs and meetings {(n, meet)}, want "
+                         f"{(clubs, m)}")
+        elif matches != -1 and matches != m * (n - 1):
+            fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {m * (n - 1)}")
+    fails += [f"{file}: {x.split(': ', 1)[1]}" for x in lines
+              if x.startswith(f"recomp: league sizes: {file} template mode ")
+              or x.startswith(f"recomp: league sizes: {file} dates: no room")]
+    # The templates of each edition.
+    tmpl = templates(log, file)
     if not tmpl:
         fails.append(f"{file} {year}: no template line")
-    elif not want:
-        fails.append(f"{file} {year}: every template has the class's {len(tmpl[0][1])} dates, want {rounds}")
-    for base, cls, new in want:
+    for base, cls, new in tmpl:
+        clubs, m = edition_row(file, base)
+        rounds = rounds_of(clubs, m or 2)
+        if rounds == len(cls):
+            continue
         if new is None:
             fails.append(f"{file} template {base}: the class's {len(cls)} dates stay, want {rounds}")
         else:
             fails += template_faults(f"{file} template {base}", cls, new, rounds,
                                      EARLIER_BY_FILE.get(file, EARLIER))
-    done = [p for p in played(log, file) if p[1] == clubs]
+        if clubs > held and not any(x.startswith(f"recomp: league sizes: {file} table of {clubs} rows") and
+                                    f" {base}, the class makes" in x for x in lines):
+            fails.append(f"{file} {base}: no log line of a table of {clubs} rows (the class allocates {held})")
+    # The finished tables: every club played the matches of the count of its edition's row.
+    done = played(log, file)
     if not done:
-        fails.append(f"{file}: no finished table of {clubs} clubs in the run (a two-year league needs --last "
-                     f"{year + 1})")
+        fails.append(f"{file}: no finished table in the run (a two-year league needs --last {year + 1})")
     for ed, n, matches, lo, hi in done:
-        if not (matches == lo == hi == m * (n - 1)):
-            fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}, want {m * (n - 1)} each")
-    fails += no_playoff_faults(log, file, m)
+        clubs, m = edition_row(file, ed)
+        m = m or 2
+        if n != clubs or not (matches == lo == hi == m * (n - 1)):
+            fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs with "
+                         f"{m * (clubs - 1)} each")
+    fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
                  | rrc.division_differences(comps, rep_clubs))
-        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2] and
-                       str(year) in str(d[0]))
-        fails += [f"{file} {year}: rules report difference: {d[2]}" for d in diffs]
+        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
+        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs]
+    print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
+          "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done))
     return fails
 
 
@@ -289,7 +326,9 @@ def self_test():
                "nor_prm")
     if p != [(2009, 16, 30, 30, 30)]:
         bad.append(("played", p))
-    if encoded_row("nor_prm", 2009) != (16, 2) or encoded_row("por_second", 2014) != (24, 2):
+    if (encoded_row("nor_prm", 2009) != (16, 2) or encoded_row("por_second", 2014) != (24, 2) or
+            edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
+            edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
@@ -324,8 +363,14 @@ def main(argv):
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix=f"cm0102-size-{file}-{year}-")
     if "--reuse" not in argv:
         db = rrc.run_database(argv, year, os.path.join(work, "owndb"))
-        code, _report = rrc.run(program, game, last, year, db, ["all"], [], work, timeout,
-                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"})
+        words = [x.strip().lower().replace("_", " ") for x in rrc.arg(argv, "--nations", "all").split(",")]
+        rows = rrc.NATION_ROWS + rrc.NATION_ROWS_BELOW
+        names = [next(n for n in rows if n.lower() == w.lstrip("-")) for w in words if w != "all"]
+        nations = (["all"] + names) if words[0] == "all" else names
+        if nations[0] != "all" and "England" not in nations:
+            nations = ["England"] + nations
+        code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
+                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"}, stop_on_box=True)
         if code != 0:
             print(f"FAIL {file} {year}: the run ended with code {code} ({work})")
             return 1

@@ -63,7 +63,7 @@
 2011	clubs	nor_prm (Tippeligaen), row nor-fin-102: game 14, table 16 (16)
 2011	clubs	oceania_nations (OFC Nations Cup), row int-continental-120: game 0, table 8 (8)
 2011	clubs	uefa_cup (UEFA Europa League), row uefa-85: game 161, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2011	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-126: game 50, table 52 (52 entrants)
+2011	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-126: game 44, table 52 (52 entrants)
 2011	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-127: game 0, table 20 (20, then 10)
 2011	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-125: game 24, table 30 (30, then 12)
 2011	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-128: game 5, table 11 (11 entrants)
@@ -87,6 +87,12 @@
 2011	down	jap_j1 (J.League Division 1), row aus-jap-kor-200: game 2 (+0 play-off places), table 3 (3)
 2011	down	jap_j2 (J.League Division 2), row aus-jap-kor-227: game 0 (+0 play-off places), table 1 (1 (to the JFL, only if a JFL club holds a licence))
 2011	down	nir_first (IFA Championship 1), row wal-nir-irl-261: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
+2011	meetings	arg_second (Primera B Nacional), row arg-usa-38: game 1, table 2
+2011	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-38: game 1, table 2
+2011	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-65: game 1, table 2
+2011	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-227: game 4, table 2
+2011	meetings	nir_first (IFA Championship 1), row wal-nir-irl-261: game 4, table 2
+2011	meetings	nir_prm (IFA Premiership), row wal-nir-irl-260: game 4, table 3
 2011	no_row	friendly (Friendly): no table row
 2011	no_row	record_utils ('B' International): no table row
 2011	no_row	record_utils (Reserve): no table row
@@ -127,6 +133,20 @@
 2011	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-175: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
 2011	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-227: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
 2011	playoffs	nor_first (Adeccoligaen), row nor-fin-103: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
+2011	rounds	arg_second (Primera B Nacional), row arg-usa-38: game 25, table 38 (2 meetings, zones -, extra 0)
+2011	rounds	bel_first (Belgian Pro League), row hol-bel-138: game 34, table 30 (2 meetings, zones -, extra 0)
+2011	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-38: game 19, table 38 (2 meetings, zones -, extra 0)
+2011	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-65: game 19, table 38 (2 meetings, zones -, extra 0)
+2011	rounds	den_first (Danish 1st Division), row den-swe-63: game 30, table 26 (2 meetings, zones -, extra 0)
+2011	rounds	gre_prm (Super League Greece), row gre-pol-cro-38: game 26, table 30 (2 meetings, zones -, extra 0)
+2011	rounds	gre_second (Football League), row gre-pol-cro-65: game 26, table 34 (2 meetings, zones -, extra 0)
+2011	rounds	ita_ser_a (Serie A), row ita-172: game 34, table 38 (2 meetings, zones -, extra 0)
+2011	rounds	ita_ser_b (Serie B), row ita-173: game 38, table 42 (2 meetings, zones -, extra 0)
+2011	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-200: game 30, table 34 (2 meetings, zones -, extra 0)
+2011	rounds	jap_j2 (J.League Division 2), row aus-jap-kor-227: game 44, table 42 (2 meetings, zones -, extra 0)
+2011	rounds	nir_first (IFA Championship 1), row wal-nir-irl-261: game 36, table 26 (2 meetings, zones -, extra 0)
+2011	rounds	nir_prm (IFA Premiership), row wal-nir-irl-260: game 36, table 33 (3 meetings, zones -, extra 0)
+2011	rounds	nor_prm (Tippeligaen), row nor-fin-102: game 26, table 30 (2 meetings, zones -, extra 0)
 2011	subs_used	new_suruga_bank (Suruga Bank Championship), row club-world-523: game 3, table 7 (7)
 2011	up	arg_second (Primera B Nacional), row arg-usa-38: game 1 (+0 play-off places), table 2 (2 (champion and runner-up))
 2011	up	aus_nsl (A-League), row aus-jap-kor-34: game 6 (+0 play-off places), table na (n/a)

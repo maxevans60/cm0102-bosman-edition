@@ -332,8 +332,10 @@ void seasons_db_scan_in(const char *game_dir, const char *save_dir, SeasonsList 
                 snprintf(s->folder, sizeof s->folder, "%s", names[i]);
             }
         } else if (s->extra_count < SEASONS_EXTRA_MAX) {
-            int dup = 0;                          /* a copy of a data set that the game folder holds */
-            for (int j = 0; j < s->extra_count; j++) dup |= s->extra[j].db == k;
+            /* a copy of a data set that the game folder holds: by name, since 3.9.60 and 3.9.65 have two rows (the
+             * shipped files and the forum files, open item 230) and the identify cache keeps only the name */
+            int dup = 0;
+            for (int j = 0; j < s->extra_count; j++) dup |= !strcmp(s->extra[j].db->name, k->name);
             if (dup) continue;
             SeasonsExtra *x = &s->extra[s->extra_count++];
             x->db = k;

@@ -45,6 +45,29 @@ typedef struct {
 extern const SeasonDateShifts season_date_shifts[];     /* season_dates_table.c */
 extern const int season_date_shifts_count;
 
+/* Open item 233: competition history rows of a database whose year stays wrong after the shift of their database
+ * (the data holds them one or more years off against the other rows: Norwegian Premier Division 1937 to 2007 one
+ * year late in every database from 2010/11 on, the Irish league seasons before 2003 one year early). Each entry is
+ * one row of the file: it gets delta years on top of its shift. docs/research/history-years/wrong-rows.tsv gives
+ * each row with its right year and the reference (the 3.9.68 row or the research source); the table is made by
+ * tools/seasons/make_history_years_table.py, the rows found by tools/seasons/history_years_check.py. */
+typedef struct {
+    uint8_t nation;                 /* 0: club_comp_history.dat, 1: nation_comp_history.dat */
+    int8_t delta;                   /* the years to add on top of the shift */
+    uint16_t year;                  /* the year of the row in the file (+0x08): the row must still hold it */
+    uint16_t comp;                  /* the competition id of the row (+0x04): the row must still hold it */
+    uint32_t row;                   /* the row in its file */
+} SeasonYearFix;
+
+typedef struct {
+    const char *name;               /* the neutral name of seasons_known_dbs */
+    const SeasonYearFix *fixes;     /* by nation, then row */
+    uint32_t count;
+} SeasonYearFixes;
+
+extern const SeasonYearFixes season_year_fixes[];       /* season_history_years_table.c */
+extern const int season_year_fixes_count;
+
 /* The shifts that a load of the database folder (host path, "" for the game's own Data) gets in start year N, in
  * years: a date of the files plus the shift is the real date (slice 15b writes its new rows by them). A contract end
  * y gets contract_real when y >= D and y >= 2010, else contract_old. The career of staff row i keeps its years
