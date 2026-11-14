@@ -408,7 +408,8 @@ uint32_t season_sizes_build_template(uint32_t self, const char *file, uint32_t o
     }
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
-    if (season_template_plan(base, days, have, rounds, mode, plan, why, sizeof why) != rounds) {
+    if (season_template_plan_from(base, days, have, rounds, mode, season_sizes_bra_earlier(file), plan, why,
+                                  sizeof why) != rounds) {
         fprintf(stderr, "recomp: league sizes: %s dates: no room for %d rounds of %d clubs (%.50s %d): %s; the class's "
                         "%d dates and count stay\n", file, rounds, n, record_name(self), base, why, have);
         return 0;
@@ -761,6 +762,7 @@ void season_sizes_rules(uint32_t obj)
     sizes_rules(obj);
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
+    if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
 }
 
 /* ---- Promotion and relegation of a size change ---- */

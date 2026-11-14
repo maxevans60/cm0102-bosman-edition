@@ -118,18 +118,26 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   makes 19 dates for the Apertura (stage -1, D at 0x4045aa) and 19 for the Clausura (stage 0, D at 0x404d9a), none
 #   for the aggregate table (stage 1). Mode halves: the runtime of the class (season_sizes_arg.c) makes the dates of
 #   each half, or of one table over both halves, and the fixed fixture lists of the zones and the derby round.
+# - BraNatFirst, BraNatSecond (Série A and B, slice 17, D11): create_table 0x42a480 and 0x42ca70 allocate 28 rows (the
+#   cap stays 28: no row holds more). create_schedule 0x429b50 and 0x42c140 make 27 dates for stage -1 (D 0x1b at
+#   0x429b8d and 0x42c17d) and the play-off for stage 0. set_up_rules 0x42a5a0 and 0x42cb70 set 1 meeting (+0x3c at
+#   0x42a5af, 0x42cb83) and +0xd9 8 and 2 (0x42a618, 0x42cbd8): neither 0x40 nor 0x80, so shuffled. Two meetings
+#   from the 2003 Série A and the 2006 Série B; season_sizes_bra.c then plays no play-off.
 GROWN = {
     "arg_prm": (30, 0x404570, "halves"),
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
+    "bra_nat_first": (28, 0x429B50, "shuffled"),
+    "bra_nat_second": (28, 0x42C140, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
     assert _mode in GROWN_MODES, _f
-    assert _n > CAPS[_f], _f
+    assert _n >= CAPS[_f], _f   # equal: only the meetings and dates change (Brazil)
     HELD[_f] = CAPS[_f]
     CAPS[_f] = _n
 
@@ -224,22 +232,19 @@ PATCHES = {
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
 # cups are slice 21). Each cup fills fixed places with every club of these divisions, or needs their sum:
-# GreCup 0x5e9a80 (a sort of 16 at 0x5e9b60), CroCup 0x517bb0 (48, no check), RusCup 0x7e99a0 (48, box
-# rus_cup.cpp 78), TurCup 0x8fcb90 (64 from fixed places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0
-# (J1 16 sorted at 0x6628af), KorLeagueCup 0x66cf20 (10 places, box line 703), PolLgeCup 0x7cad30 (Second + First
-# = 34).
+# The cups of eastern Europe and Asia follow the divisions (0.7.2 slice 6, D14; cup_sizes_east.py and
+# src/recomp_rt/win/season_cup_sizes_east.c): GreCup 0x5e9a80, CroCup 0x517bb0, RusCup 0x7e99a0, TurCup 0x8fcb90,
+# PolLgeCup 0x7cad30, JapJCup 0x665a00, JapEmpCup 0x6624f0 and KorLeagueCup 0x66cf20. Their divisions have no floor.
 # The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14;
 # src/recomp_rt/win/season_cup_sizes_uk.c): EngCcCup 0x56ccc0, EngFaCup 0x56fab0, WelCup 0x924ab0, WelLgeCup
 # 0x927010, NirCup 0x78ac90, ScoLgeCup 0x7f0400 and ScoChalCup 0x7ed010. Their divisions have no floor.
 # The cups of western Europe follow the divisions (slice 5, D14): BelFaCup 0x41d8d0, ItaCCup 0x63dfe0, HolCup
 # 0x5f4820, FraCup 0x5baa50 and DenCup. Slice 5 keeps the floors of bel_second and the Serie C1 groups.
-# A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5: the floors both
-# slices removed are gone).
-FLOORS = {"bel_second", "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first",
-          "tur_second", "ita_ser_c1a", "ita_ser_c1b", "jap_j1", "jap_j2", "kor_league", "pol_second"}
-# The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
-# after 2001, 0x7cad4f), else its largest count.
-FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
+# A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5, and the merge of
+# slice 6: the floors any slice removed are gone).
+FLOORS = {"bel_second", "ita_ser_c1a", "ita_ser_c1b"}
+# The floor is the class's largest count.
+FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # The divisions whose places and exchange stay the class's, though the club moves give them the count of their row
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
@@ -417,3 +422,12 @@ INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu
 # The French Lower Division (constructor 0x5bd600): the same after its loop of the National and lower clubs (40).
 INSNS[0x5BD752] = ("lea edx, [esp + 0x1c]", "edi = rt_fra_lower_fill(esp + 0x1cu, edi); edx = esp + 0x1cu;")
 INSNS.update(CUP_INSNS)
+# 0.7.2 slice 6: the cups of eastern Europe and Asia (cup_sizes_east.py).
+import os as _os  # noqa: E402
+import sys as _sys  # noqa: E402
+
+if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
+    _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import cup_sizes_east  # noqa: E402
+
+INSNS.update(cup_sizes_east.INSNS)

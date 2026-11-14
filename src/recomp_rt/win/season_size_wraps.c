@@ -695,9 +695,9 @@ const int season_size_floors[] = {
     18,       /* bel_second */
     0,       /* bra_nat_first */
     0,       /* bra_nat_second */
-    16,       /* cro_a1 */
-    16,       /* cro_a2a */
-    16,       /* cro_a2b */
+    0,       /* cro_a1 */
+    0,       /* cro_a2a */
+    0,       /* cro_a2b */
     0,       /* den_first */
     0,       /* den_prm */
     0,       /* eng_conf */
@@ -712,7 +712,7 @@ const int season_size_floors[] = {
     0,       /* ger_first */
     0,       /* ger_second */
     0,       /* gre_prm */
-    14,       /* gre_second */
+    0,       /* gre_second */
     0,       /* hol_first */
     0,       /* hol_prm */
     0,       /* ire_first */
@@ -721,19 +721,19 @@ const int season_size_floors[] = {
     0,       /* ita_ser_b */
     18,       /* ita_ser_c1a */
     18,       /* ita_ser_c1b */
-    16,       /* jap_j1 */
-    12,       /* jap_j2 */
-    10,       /* kor_league */
+    0,       /* jap_j1 */
+    0,       /* jap_j2 */
+    0,       /* kor_league */
     0,       /* nir_first */
     0,       /* nir_prm */
     0,       /* nor_first */
     0,       /* nor_prm */
     0,       /* pol_first */
-    18,       /* pol_second */
+    0,       /* pol_second */
     0,       /* por_prm */
     0,       /* por_second */
-    18,       /* rus_first */
-    16,       /* rus_prm */
+    0,       /* rus_first */
+    0,       /* rus_prm */
     0,       /* sco_first */
     0,       /* sco_prm */
     0,       /* sco_second */
@@ -742,8 +742,8 @@ const int season_size_floors[] = {
     0,       /* spa_second */
     0,       /* swe_first */
     0,       /* swe_prm */
-    18,       /* tur_first */
-    20,       /* tur_second */
+    0,       /* tur_first */
+    0,       /* tur_second */
     0,       /* wel_first */
 };
 /* The count whose places and exchange stay the class's (league_sizes.py FIXED_EXCHANGE). */
@@ -810,11 +810,13 @@ const int season_size_fixed[] = {
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
     {"arg_prm", 20, 30, SEASON_TEMPLATE_HALVES},
+    {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 4;
+const int season_grown_count = 6;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -825,6 +827,28 @@ RT_WRAP(00404570, schedule_404570)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_00404570();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* BraNatFirst::create_schedule */
+void o_00429b50(void);
+RT_WRAP(00429b50, schedule_429b50)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00429b50();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* BraNatSecond::create_schedule */
+void o_0042c140(void);
+RT_WRAP(0042c140, schedule_42c140)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0042c140();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

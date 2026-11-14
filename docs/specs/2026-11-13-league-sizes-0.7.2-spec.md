@@ -149,8 +149,8 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 Blocked by: 2
 Delivers: `GreCup`, `CroCup` (48, no bound), `RusCup`, `TurCup`, `PolLgeCup`, `JapJCup`, `JapEmpCup` and `KorLeagueCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A season game per nation with a grown and a shrunk division plays every cup round
-- [ ] The same-save set is equal
+- [x] A season game per nation with a grown and a shrunk division plays every cup round (`tests/seasons/cup_sizes_run.py`: grown-2010, shrunk-2012, poland-2007, mixed-2020; sizes above the class caps through the seam `RECOMP_CUP_SIZE_TEST` until slices 11, 12 and 14; no K League under 10 in the rules)
+- [x] The same-save set is equal (start.sav, prematch.sav, new game and match pass on 2d203e4e; the reference build is this branch without slice 6, because main lacks the lead base)
 
 ### 7. Split engine
 Blocked by: 2, 4
@@ -230,8 +230,8 @@ Merge danger: two-way door. Blast radius: Argentina's second tier and its promot
 Blocked by: 2
 Delivers: Série A at 24 and 20 in two meetings from 2003, Série B in two meetings from 2006, no top-4 play-off in those seasons (D11).
 Merge danger: two-way door. Blast radius: Brazil.
-- [ ] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
+- [x] The same-save set is equal
 
 ### 18. Full check
 Blocked by: 1 to 17
