@@ -46,6 +46,7 @@
 #include "season_league.h"
 #include "season_names.h"
 #include "season_rules.h"
+#include "season_sizes.h"
 #include "season_playoffs.h"
 #include "season_pol_playoff.h"
 #include "season_cup_third_place.h"
@@ -167,10 +168,7 @@ static int marked(uint32_t obj)
 /* The encoded row of a file and season (season_league_table.c), or NULL. */
 static const SeasonLeagueRule *league_rule(const char *file, int season)
 {
-    for (int i = 0; i < season_league_rule_count; i++)
-        if (season_league_rules[i].season == season && !strcmp(season_league_rules[i].file, file))
-            return &season_league_rules[i];
-    return NULL;
+    return season_league_rule(file, season);
 }
 
 /* The row of the rules of a season, or the last before it with no end year (the after-table rule, Q248), as
@@ -539,24 +537,13 @@ RT_WRAP(00686940, playoff_result)
 
 /* ---- The places of each season ---- */
 
-/* 1 when the real season of a row begins with the year (as season_sizes.c). */
-static int real_starts(const SeasonRule *r, int year)
-{
-    char y[8];
-    snprintf(y, sizeof y, "%d", year);
-    return r && r->real_season && !strncmp(r->real_season, y, 4) &&
-           (r->real_season[4] < '0' || r->real_season[4] > '9');
-}
-
-/* The season of the rules of a league object now, as season_sizes.c row_now: the start season at a new game and
- * with changing rules off (Q232), else the row whose real season begins with the edition +0x40. */
+/* The season of the rules of a league object now, as season_sizes.c row_now: the edition of the start season at a
+ * new game and with changing rules off (Q232), else the edition +0x40 (season_sizes_edition: a calendar-year league
+ * takes row Y - 1). */
 static int season_now(uint32_t obj, const char *file)
 {
-    if (!season_changing_rules() || season_change_is_creating()) return season_start_year();
-    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
-    for (int s = year - 1; s <= year; s++)
-        if (real_starts(season_rules_find(s, file, 0), year)) return s;
-    return year;
+    if (!season_changing_rules() || season_change_is_creating()) return season_sizes_edition(file, season_start_year());
+    return season_sizes_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
 }
 
 /* No stage of a season before: a stage object that the class's start_new_season did not free stays in the heap

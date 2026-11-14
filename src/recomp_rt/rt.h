@@ -384,6 +384,10 @@ void rt_match_day_set_place(uint32_t list);
 /* Test switch RECOMP_TEST_MARKET_WEEKLY (open item 193, win/market_weekly.c, tools/recomp/market_weekly.py at
  * 0x5cdc4e): the Enable Computer Bids flag that the day loop reads, 0 on days that are not Mondays when it is on. */
 uint32_t rt_market_bids_flag(uint32_t flag);
+/* The dates of a season database's player_setup.cfg (open item 229, win/player_setup.c, tools/recomp/player_setup.py
+ * in player_setup_apply_line 0x7a3a10): a year of the file (low 16 bits) moved by the rule of the database's contract
+ * ends in a season game; the high bits stay. */
+uint32_t rt_player_setup_year(uint32_t value);
 /* International goals above 255 (0.6.2 item 66): the goals byte after the goals of a match at 0x76b8d6, and the full
  * goals of a staff record for the screens. */
 uint32_t rt_goals_add(uint32_t staff, uint32_t byte, uint32_t goals);
@@ -391,6 +395,8 @@ uint32_t rt_goals_full(uint32_t staff);
 /* The club count of a league in a season game (0.6.0 slice 18, src/recomp_rt/win/season_sizes.c): the
  * patched stores of tools/recomp/league_sizes.py in create_table read it in place of the class's constant. */
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
+/* The bytes of the table that create_table of a grown class allocates (season_sizes.h, issue 106). */
+uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
 uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
@@ -425,10 +431,33 @@ uint32_t rt_cup_room(uint32_t original, uint32_t entrants, uint32_t key_a, uint3
 uint32_t rt_cup_add(uint32_t original, uint32_t base, uint32_t entrants, uint32_t key_a, uint32_t key_b);
 uint32_t rt_fra_lge_first(uint32_t original, uint32_t edx);   /* FraLgeCup first loop limit (0x5bd244) */
 uint32_t rt_fa_cup_takes(uint32_t esp);   /* EngFaCup places by pool (0x56ffe4) */
+/* The clubs of up to four divisions (key ids, 0 for none), the original outside a season game with the sizes on:
+ * the cups of Britain and Ireland that take whole divisions (0.7.2 slice 4, season_cup_sizes_uk.c). */
+uint32_t rt_cup_clubs(uint32_t original, uint32_t key_a, uint32_t key_b, uint32_t key_c, uint32_t key_d);
 uint32_t rt_fra_cfa_lower_cap(uint32_t original);              /* FraCfa lower club cap (0x5b92e8) */
 uint32_t rt_ita_cup_first_position(uint32_t original);   /* ItaCup second loop start (0x63fb16) */
+/* The cups of western Europe (0.7.2 slice 5, win/season_cup_sizes_west.c, tools/recomp/league_sizes.py CUP_INSNS). */
+uint32_t rt_bel_cup_lower(uint32_t original, uint32_t pool);                /* BelFaCup pool clubs (0x41d9e4) */
+uint32_t rt_bel_cup_place(uint32_t original, uint32_t taken);               /* BelFaCup third tier (0x41da43) */
+uint32_t rt_hol_cup_lower(uint32_t original, uint32_t esp);                 /* HolCup pool clubs (0x5f49e1) */
+uint32_t rt_ita_c_cup_fill(uint32_t original, uint32_t cup, uint32_t placed);  /* ItaCCup fill (0x63e109) */
+uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);   /* FraCfa empty places (0x5b9320) */
+uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count); /* French Lower Division places (0x5bd752) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
+/* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
+ * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
+uint32_t rt_gre_cup_lower(uint32_t pool);
+uint32_t rt_rus_cup_lower(uint32_t pool);
+uint32_t rt_rus_cup_picks(uint32_t esp);
+uint32_t rt_rus_cup_premier_place(uint32_t placed);
+uint32_t rt_tur_cup_copy_from(uint32_t esp);
+uint32_t rt_tur_cup_lower(uint32_t esp);
+uint32_t rt_tur_cup_second_place(uint32_t esp);
+uint32_t rt_pol_lge_second(uint32_t cup);
+uint32_t rt_jap_j_cup_j2(uint32_t cup);
+uint32_t rt_jap_emp_lower(uint32_t pool);
+uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
@@ -540,6 +569,9 @@ void rt_intl_cup_stages(uint32_t self);
  * each gives the new count << 8 | the hosts it added; no change in the base game. */
 uint32_t rt_intl_cup_acn_hosts(uint32_t self, uint32_t count, uint32_t hosts);
 uint32_t rt_intl_cup_asian_hosts(uint32_t self, uint32_t list, uint32_t count, uint32_t placed);
+/* The Asian Cup entrants after the hosts (0x40fdf0 at 0x40ffc8, GitHub issue 136): the original's pick 0x4afbd0, then
+ * the list sorted by reputation again, so the best sides play. Every game; RECOMP_ASIAN_PICK=original keeps the pick. */
+void rt_intl_cup_asian_pick(uint32_t self, uint32_t list, uint32_t count, uint32_t places);
 /* The Copa America of 16 teams (win/season_intl_copa.c): the knockout stage index (2), the group count (3) and a
  * new stage array after the step of start_new_season. Each gives the original's value for an edition of 12
  * teams and in the base game. */

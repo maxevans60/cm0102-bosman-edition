@@ -326,14 +326,6 @@ static int data_class_count(const char *name, int n)
     return n;
 }
 
-/* The count of a class after 2001. */
-static int class_size_of(const char *file)
-{
-    for (size_t k = 0; file && k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
-        if (!strcmp(file, CLASS_SIZE[k].file)) return CLASS_SIZE[k].size;
-    return 0;
-}
-
 /* 1 for a letter or digit of Windows-1252 (a letter with an accent counts). */
 static int plain_letter(unsigned char ch)
 {
@@ -510,17 +502,34 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
     if (season_tur_groups_tagged(c->at)) return 0;      /* Summer 2002: the first season places it in its group */
     int t = c->db_div >= comps ? (int)((c->db_div - comps) / COMP_SIZE) : -1;
     int reserve_ok = !season_clubs_reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve;
+    /* 0.7.2 slice 3 (D12): groups 2 and 3 take no reserve or B side either. Groups 5 and 6 are groups 2 and 3 with
+     * them, the last resort of a class that cannot play with fewer clubs (move_clubs). */
+    if (group == 5 || group == 6) group -= 3, reserve_ok = 1;
     if (group == 0)                     /* a club that left a division of a higher rank */
         return !c->div && t >= 0 && t < ncomps && div[t].rank > d->rank && reserve_ok;
     if (group == 4)                     /* a club that left a lower division with a list */
         return !c->div && t >= 0 && t < ncomps && div[t].target && !div[t].spare && div[t].rank < d->rank && reserve_ok;
     if (group == 1) return !c->div && !c->db_div && reserve_ok;
-    if (group == 2) return c->div && (c->div == spare1 || c->div == spare2) && c->nation != cup_pool_nation;
+    if (group == 2)
+        return c->div && (c->div == spare1 || c->div == spare2) && c->nation != cup_pool_nation && reserve_ok;
     if (c->div >= comps && c->div < comps + (uint32_t)ncomps * COMP_SIZE) {
         const Division *from = &div[(c->div - comps) / COMP_SIZE];
-        return !from->spare && !from->target && from->rank < d->rank;
+        return !from->spare && !from->target && from->rank < d->rank && reserve_ok;
     }
     return 0;
+}
+
+int season_clubs_in_spare(uint32_t club)
+{
+    uint32_t comps = rd32(g_mem, COMPS), now = rd32(g_mem, club + CLUB_DIVISION);
+    int32_t key_lower = (int32_t)rd32(g_mem, KEY_LOWER), key_premier = (int32_t)rd32(g_mem, KEY_PREMIER);
+    if (!comps || !now) return 0;
+    if (now != (key_lower >= 0 ? comps + (uint32_t)key_lower * COMP_SIZE : 0) &&
+        now != (key_premier >= 0 ? comps + (uint32_t)key_premier * COMP_SIZE : 0))
+        return 0;
+    /* As move_clubs: DenCup::collect_entrants 0x551240 takes its lower clubs from A Lower Division. */
+    uint32_t nations = rd32(g_mem, NATIONS);
+    return !nations || rd32(g_mem, club + CLUB_NATION) != nations + rd32(g_mem, DEN_NATION) * 0x122u;
 }
 
 /* FILL_BY_REP: the club of the group with the highest reputation (+0x80), or -1. A list of a lower division (the
@@ -611,10 +620,6 @@ static void move_clubs(int season)
     for (int i = 0; i < ncomps; i++) {
         int size = (div[i].n0 > 0 || div[i].fresh) && !div[i].spare ? class_size(div[i].name, season) : -1;
         const char *file = class_file(div[i].name);
-        if (size > 0 && div[i].n0 > size && season_sizes_keeps_database(file)) {     /* a cup takes it whole */
-            int most = class_size_of(file);
-            size = div[i].n0 < most ? div[i].n0 : most;
-        }
         div[i].want = size >= 0 ? size : div[i].n0;     /* 0: a division that ends (slice 20, Q290) */
         if (div[i].want != div[i].n0) {
             div[i].sized = 1;
@@ -884,7 +889,10 @@ static void move_clubs(int season)
         /* The groups of a kind 1 place, in this order: 0 a club that left a higher division, 4 a club that left a
          * lower division with a list, 1 a club with no division, 2 a club of a spare division, 3 a club of a lower
          * division with no list. Groups 4 and 2 take the club with the highest reputation first (see FILL_BY_REP). */
-        static const int kind1_groups[] = {0, 4, 1, 2, 3};
+        static const int kind1_groups[] = {0, 4, 1, 2, 3, 5, 6};
+        /* D12: a class that plays with fewer clubs (season_sizes_plays_short) takes no reserve side of groups 5
+         * and 6. A class with a floor, or outside the size table, needs every place (open item 105). */
+        int kind1_count = season_sizes_plays_short(class_file(d->name)) ? 5 : 7;
         for (int kind = 0; kind < 2; kind++) {
             /* Open item 105: a class of CLASS_SIZE needs every place (BelSecond's period stages expect 10, 12 and
              * 12 matches a club, BelSecond::create_period_stage 0x4204d0 at 0x4205b4..0x4205cb). A new division of
@@ -893,9 +901,9 @@ static void move_clubs(int season)
                 places[1] += places[0];
                 places[0] = 0;
             }
-            for (int g = 0; g < (kind ? 5 : 1) && places[kind] > 0; g++) {
+            for (int g = 0; g < (kind ? kind1_count : 1) && places[kind] > 0; g++) {
                 int group = kind ? kind1_groups[g] : 1;
-                int by_rep = group == 4 || group == 2;
+                int by_rep = group == 4 || group == 2 || group == 5;
                 for (int i = 0; i < count && places[kind] > 0; i++) {
                     int pick = by_rep ? best_fill(club, count, div, ncomps, comps, d, group, spare1, spare2,
                                                   cup_pool_nation)
@@ -912,7 +920,7 @@ static void move_clubs(int season)
                     if (group == 0) d->filled_left++;
                     else if (group == 4) d->filled_up++;
                     else if (group == 1) d->filled_pool++;
-                    else if (group == 2) d->filled_spare++;
+                    else if (group == 2 || group == 5) d->filled_spare++;
                     else d->filled_lower++;
                     if (kind == 0 && d->tier <= 2 && reserve_places-- <= 0) d->stand_in++;
                 }
@@ -1025,7 +1033,6 @@ void o_00524d70(void);
 RT_WRAP(00524d70, trim_staff_tables)
 {
     const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
-    season_divisions_test_extra();                     /* slice 20: test switch RECOMP_TEST_EXTRA */
     if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
     if (season_game_changes()) season_records_fill(season_start_year());     /* slice 15b: after the moves */
     o_00524d70();

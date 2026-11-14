@@ -514,6 +514,35 @@ def guest_rule():
     return bad
 
 
+def free_places_rule():
+    """entrant-route (open item 228): each route that did not play leaves one place to a drawn club of its
+    confederation, and every entrant with no route needs its own place. The FIFA Intercontinental Cup 2030 of an
+    England-only Tier A game: the Libertadores place takes a CONMEBOL or CONCACAF club, the CAF Champions League
+    has no rules row (any confederation). A first-fit pick gave the Libertadores place to the CONCACAF club and the
+    CAF place to the CONMEBOL club, so the CAF club was left with none."""
+    sys.path.insert(0, HERE)
+    import history_check as hc
+    bad = []
+    lib, asia, conc, ofc, caf = ((None, {"CONMEBOL", "CONCACAF"}), (None, {"AFC"}), (None, {"CONCACAF"}),
+                                 (None, {"OFC"}), (None, None))
+    j_cup = ("Japan", None)                                   # a national route: a club of its nation (open item 77)
+    for no_route, free, want in (
+            ([("UAE", "AFC"), ("USA", "CONCACAF"), ("Argentina", "CONMEBOL"), ("Algeria", "CAF")],
+             [lib, asia, conc, ofc, caf], []),
+            ([("UAE", "AFC"), ("Mexico", "CONCACAF"), ("Tunisia", "CAF"), ("Brazil", "CONMEBOL")],
+             [lib, asia, conc, ofc, caf], []),
+            ([("USA", "CONCACAF"), ("Mexico", "CONCACAF"), ("Brazil", "CONMEBOL")], [lib, conc, caf], []),
+            ([("Brazil", "CONMEBOL"), ("Argentina", "CONMEBOL")], [lib, conc], [1]),
+            ([("Algeria", "CAF")], [lib, asia], [0]),
+            ([("Japan", "AFC"), ("Korea", "AFC")], [j_cup, asia], []),
+            ([("Korea", "AFC"), ("China", "AFC")], [j_cup, asia], [1]),
+            ([("Japan", "AFC")], [], [0])):
+        got = hc.no_place(no_route, free)
+        if got != want:
+            bad.append(f"no_place {no_route} with {free}: {got}, not {want}")
+    return bad
+
+
 def start_season_rule():
     """missing and gap (open item 169): an edition of a season before the start season is history of the database.
     The World Cup of 2098 ends the 2097/98 season, so a 2098 game (a date jump with December 2025 data, whose last
@@ -1123,6 +1152,7 @@ def main():
     bad += titles_rule()
     bad += olympics_rule()
     bad += guest_rule()
+    bad += free_places_rule()
     bad += duty_dates_rule()
     bad += start_season_rule()
     bad += not_held_rule()

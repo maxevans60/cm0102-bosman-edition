@@ -127,21 +127,21 @@ def folders(work):
     return user, home, shots
 
 
-def settings(user, rules, database):
+def settings(user, rules, database, option="3.9.68"):
     import custom_database_run as cdr
     lines = ["display = classic", f"changing_rules = {rules}", "faster_days = on"]
     if database:
         cdr.copy_data(database, os.path.join(user, "Databases", os.path.basename(database)))
         lines.append("database = folder:" + os.path.basename(database))
     else:
-        lines.append("database = 3.9.68")
+        lines.append("database = " + option)   # 3.9.68, or 3.9.60 / 3.9.65 (RECOMP_DATA_DIR names the data)
     with open(os.path.join(user, "settings.txt"), "w") as f:
         f.write("\n".join(lines) + "\n")
 
 
 def new_game_leg(o, work, save_days):
     user, home, shots = folders(work)
-    settings(user, o["rules"], o["database"])
+    settings(user, o["rules"], o["database"], o.get("option", "3.9.68"))
     steps = rrc.league_steps(o["nations"], o["extra"])
     extra = {"RECOMP_START_SEASON": str(o["start"])}
     test_extra = [e for e in o["extra"] if e in rrc.ENV_EXTRA]     # Spain and Portugal: a test switch, no click
@@ -157,7 +157,7 @@ def new_game_leg(o, work, save_days):
 def load_leg(o, work, save, save_days):
     import fixtures
     user, home, shots = folders(work)
-    settings(user, o["rules"], o["database"])
+    settings(user, o["rules"], o["database"], o.get("option", "3.9.68"))
     shutil.copyfile(save, os.path.join(user, "soak.sav"))
     # The save was made on holiday, so the loaded game goes on by itself and shows no first news to wait for.
     load = smoke_run.without_intro_click(fixtures.LOAD_STEPS)

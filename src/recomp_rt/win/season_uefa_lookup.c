@@ -327,3 +327,8 @@ int season_uefa_super_cup_venue(int year, const char **stadium, const char **cit
     *city = r->sc_city;
     return 1;
 }
+
+int season_uefa_cup_outcome(int stage, int outcome)
+{
+    return stage < 0 && outcome == 1 ? 0 : outcome;
+}

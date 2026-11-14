@@ -45,39 +45,75 @@ Two runs hold for the base game only (start 2001/02, changing rules off). `seaso
 
 ## Start-season soaks
 
-For each start season from 2001/02 to 2026/27, a soak plays a new game with all nations loaded and the changing rules on. The manager goes on holiday and the quick result engine plays the matches.
+A soak plays a new game with all nations loaded, the manager on holiday and the quick result engine. Changing rules are on unless the row says off.
 
-Each soak goes on until the game completes at least one World Cup and one European Championship, with their qualifiers and every season change between them. It stops at about 1 September after the later tournament. A 2001 start runs to September 2004, and a 2016 start runs to September 2021 because Euro 2020 was played in 2021.
+Every soak plays through a World Cup and a European Championship, with their qualifiers and every season change between them. It starts in season Y and stops at about 1 September after the later of the next World Cup and the next European Championship that it reaches. A tournament played in June or July of year Y comes before a start in Y and does not count. The November 2022 World Cup counts for a 2022 start. Euro 2020 was played in 2021, so a 2016 start runs to September 2021. A 2001 start runs to September 2004. The table of end points is `ENDS` in `tests/seasons/gate_run.py`, and the spec `docs/specs/2026-11-12-release-tests-0.7.1-spec.md` lists it.
 
-Near each 1 July the game saves. A new copy of the program loads that save and plays on.
+Each soak saves near each 1 July. A new copy of the program loads that save and plays on. The pass rule is no error box, no stall and a save and load that work at each July. The release set below holds these soaks. A fix that touches a season change gets the same run to the same end point.
 
-The scripts are `tests/seasons/soak_run.py` and `tests/seasons/rules_report_check.py`. The soaks run at each release on the final main branch. A fix that touches a season change gets the same run to the same end point. The pass rule is no error box, no stall and a save and load that work at each July.
+Each tile plays the database that the start screen gives it: 3.9.60 for 2001, our own Summer 2002, 2004 and 2006 databases, and the season databases for the other years.
 
 ## Full play
 
 Full play uses the match engine, as a player sees it. It runs five starts across the eras: 2002, 2006, 2013, 2021 and 2025, with all nations. Each goes to the same end point as the soaks, with the same save and load near each 1 July.
 
-The script is `tests/seasons/full_play_run.py`. It runs at each release. The pass rule is the same as for the soaks.
+The script is `tests/seasons/full_play_run.py`. It runs at each release. The pass rule is the same as for the soaks. It stays outside the 12-hour release set.
 
 ## Long games
 
-Long games run from 2001/02 to 2027/28 with all nations and different random seeds, to find faults that build up over many seasons. They use `tests/seasons/soak_run.py` with `--last 2027`. They run when the machine has free time, and they do not hold back a release. A fault that they find is fixed in the same way as any other.
+Long games find faults that build up over many seasons. They play in the background set of the release set (see "The background soak" below): a Tier A game to 2300 and a full-world game from 2025 to 2100. They run when the machine has free time and do not hold back a release. A fault that they find goes on the open items of the next release.
 
 ## Date jumps
 
 A date jump starts a new game in a far year, with every date of the database moved to that year. It needs an Update Team or Custom database. The test variable `RECOMP_START_SEASON` takes a start year up to 2099. With the date jump switch `RECOMP_DATE_JUMP=1` it takes a year up to 2300. The program reads the switch once at the start, and it is off by default. The same-save set proves that the switch changes nothing in a game of the normal start years (run `date-jump-on`). The season code itself has no year limit: its hooks, rules and save parts work in every year (ctest `future_2300` and `season_part` step them to 2301).
 
-## The run set
+## The release set
 
-The run set is the fixed list of games that a release must pass (from 0.6.2): Tier A games from seven starts with three seeds each to 2100, a game with England, Spain and Brazil, one Tier A game to 2300, the date jumps to 2098, 2198 and 2298, two Tier B games of the full world to 2300, and three late games of the full world from the Tier A game's saves of 2101, 2201 and 2291. Two full-world games with a test-only weekly market to 2300 play in the background set. The list is `tests/seasons/future/run_set.tsv`. `tests/seasons/future/run_set.py` plays it several games at a time. It runs the history checker (`tests/seasons/future/history_check.py`) on the save of every leg and keeps one save a decade. For Tier B it also checks the world's health and the Tier B limits: a national side with no manager for more than a season, a game day twice as slow as in the first seasons, and a save that would pass 4 GB before 2300. It starts no game below 100 GB of free disk. Each game ends with pass or fail. The release script runs `run_set.py --verify` on the folder of a run of the whole set and stops unless every game passed on the same game code and the checker finds no fault on the kept saves. ctest `future_run_set` tests the script without a game.
+From 0.7.1 a release passes a fixed set of 34 games that 10 games on the Mac finish in about 12 hours or less (spec `docs/specs/2026-11-12-release-tests-0.7.1-spec.md`). The list is `tests/seasons/future/run_set.tsv`. `tests/seasons/future/run_set.py` plays it several games at a time. A full-world season takes about 63 minutes with 10 games on the Mac, and a Tier A season about 7 minutes. The first timed run of a release measures the real time of each row.
 
-Three late games play the full world from checkpoint saves of the Tier A game to 2300: late2101 from its save of 2101 to the end of 2110, late2201 to the end of 2210, and late2291 to the end of 2300. Each plays ten seasons with two World Cups and two Euros, and gets the Tier B checks and limits. A full-world season takes about as long as a Tier A decade, so a full-world game from 2001 needs ten days or more to reach 2300. The late games end within about a day of their saves.
+The full-world rows (tier `world`) are a new game with Select All, the manager on holiday and the quick result engine. Each gets the history checker and the health checks on every save. It gets no Tier B limits, because those need decades of saves. Each row plays one seed. The seed comes from the release version: version 0.M.P gives M*10+P, so 0.7.2 gives 72. It stays fixed within a release, so a fix replay plays the same game, and the next release plays other games. `run_set.py --seed 72` sets it for every row.
 
-The late games prove that the full world plays in far years on top of a long history: the transfer market, background matches, injuries, manager moves, the world's health, and a save and load each season. They cannot prove 300 seasons of full-world growth, such as the size of the save and the number of players, because their first seasons were played in Tier A with no transfers. The Tier B games from 2001 and 2025 go on in the background for that.
+| Rows | Settings | Seasons | Protects against |
+|---|---|---|---|
+| 8 spine soaks `sp2001`, `sp2004`, `sp2008`, `sp2012`, `sp2016`, `sp2021`, `sp2024`, `sp2026` | Plain Select All, each to its end point. Together they play every season from 2001/02 to 2029/30 once, in the real calendar. | about 33 | faults of the running seasons: a squad with one player in 11 slots (item 187), the Date box of 2024 (131), a Champions League place from 7th (206), the CONCACAF windows of 2023 and 2024 (214, 215), the Club World Cup 2025 (197), a Mexican Libertadores winner (219), the 24-team finals (217) |
+| 18 tile rows `t2002` to `t2025` (every start that is not a spine row) | Select All with all six extra divisions, a new game through the first season change with the July save and load | about 22 | first-season faults of each database: European entrants of the first season (items 100, 222), rows held twice at the start (189, 176), missing history (197), a box at the new game (123), an extra division that the data does not fit (224) |
+| 3 database rows `db3960`, `db3965`, `db3968` | 2001 on 3.9.60, 3.9.65 and 3.9.68 with all six extra divisions. 3.9.65 and 3.9.68 play to September 2004. 3.9.60 plays to September 2002, because its spine soak plays on to 2004. | about 8 | item 224 (line 656 on 3.9.60, line 643 on 3.9.65), item 123 |
+| 2 rules-off soaks `off2001` (3.9.68 data to September 2004), `off2016` (to September 2021) | Plain Select All, changing rules off | about 8 | club cups on national match days with rules off (items 157 to 162), item 102 |
+| 1 date jump `jump2098` | A new game in 2098 through the season change of 2100/01 | 3 | the non-leap year 2100, the World Cup 2099 (item 169) |
+| 2 Tier A rows `ta2001` (2001 to 2060), `ta2026` (2026 to 2066) | Tier A, all nations, legs of 10 seasons, a checkpoint save each decade | 99 Tier A seasons | decade faults (items 201, 183, 218, 102, 194). Their checkpoint saves are the start of a fix replay. |
 
-A late row names its Tier A row in the column `from`. Its first leg waits for that row's save of the start year in the same run folder, and it fails when the save never comes or when the save comes from another program.
+The six extra divisions are the English Conference, the German Regionalliga, Serie C2, the Spanish Segunda B, the Portuguese Second Division B and the Swedish Second Division. Select All sets none of them. The first three are clicks on the Select League(s) screen. The other three come from the test switch `RECOMP_TEST_EXTRA`.
 
-Two more full-world games, bw2001 and bw2025, play to 2300 with a test-only market. They take 6 to 9 days, so they are in the background set (`--set background`), which plays on after the release and is not part of `--verify`. The test switch `RECOMP_TEST_MARKET_WEEKLY=1` lets the AI transfer market of the day loop (club shortlists and bids) run on Mondays only, so a season takes less time. This is not the shipped game, and the rows say so in `run_set.tsv`. They get the Tier B checks and limits. They cannot catch a fault that needs the daily market, such as one in the timing of bids, in clubs that refill their squads between Mondays, or in market work that grows over the years. b2001 and b2025 play the real market for that. The program reads the switch once at the start, and it is off by default. Off, the day loop reads the Enable Computer Bids setting as the original does. The same-save set against the main build proves that. ctest `market_weekly` checks the day rule from 2001 to 2301.
+The columns of `run_set.tsv` that the set needs: `database` (`tile`, `3.9.60`, `3.9.65` or `3.9.68`), `extras` (`none`, `all` or names joined by commas) and `last` (a season, or `tile` for the season before the end point of the start). After leg 0 the runner reads the save of the new game. It finds the database by the club names of its `club.dat` and the extra divisions by the flag of each nation record (the competitions of the extra divisions are in every save). A row whose save does not hold the data or the divisions that the row names fails with "wrong game", so a wrong setting cannot give a false pass.
+
+For each leg the runner runs the history checker (`tests/seasons/future/history_check.py`) on the save and keeps one save a decade. A Tier A game skips the check of real results. A Tier B game also gets the Tier B limits: a national side with no manager for more than a season, a game day twice as slow as in the first seasons, and a save that would pass 4 GB before 2300. It starts no game below 100 GB of free disk. Each game ends with pass or fail. `run_set.py --list` shows the rows with the seed.
+
+The release script (`tools/release/make_release.sh`) lists the set with the seed of the release, runs `run_set.py --verify` on the folder of the run with that seed, and runs online release test 1 (`tests/online/release_mac_run.py`). It stops unless every game passed on the same game code with a clean program, the seed matches, and the checker finds no fault on the kept saves. `make_release.sh --check-set --run-set <folder>` is a dry run that reads the set and runs the check, with no build. ctest `future_run_set` tests the script without a game, and `run_set.py --set quick` plays short games that test it, including a 3.9.60 game with all extra divisions and a 3.9.68 game.
+
+The other release checks do not change: the smoke tests in both modes, the same-save set, the rules report, the screen and data sweeps, the Windows and Linux checks and online release tests 2 to 4.
+
+### The per-fix check
+
+Each fix gets these checks, in this order:
+
+1. The fix's replay: the save before the fault, played with the fixed build to the end of that row. The fix's log line must fire.
+2. The same-save set against the main build.
+3. h-r2001-e: the rules report of the base game from 2001 to 2027 with England.
+4. One fresh Opus review. A second review runs only when the first finds a real problem.
+5. A full rerun of every release row whose saves or logs show the fix's trigger. The fix session gives a scan for the trigger. When no scan is possible, every row with the same start, database and rules setting reruns.
+
+Release rows take 7 hours or less each, so a full rerun fits in one night. Every failure is still fixed and retested before the release.
+
+### The background soak
+
+Two games play only while the Mac is idle, from the release build on (`--set background`):
+
+- `bg2300`, a Tier A game from 2001 to 2300, with its checkpoint save each decade
+- `bg2100`, a full-world game from 2025 to 2100
+
+They are not part of `--verify` and do not hold a release. A fault that they find goes on the open items of the next release, with its save. Faults of the years 2070, 2074, 2096 and 2222 came to light only in runs this long.
+
+The scripts keep the Tier B, late and weekly tiers for one fix. The rows of 0.7.0 that were release checks (Tier A rows of seven starts with three seeds, the date jumps to 2198 and 2298, the Tier B games from 2001 and 2025, and the late games) are in `tests/seasons/future/run_set_legacy.tsv`, which only the ctest reads. A later release can copy a row back to `run_set.tsv`. The test-only weekly market (`RECOMP_TEST_MARKET_WEEKLY=1`, `market_weekly.c`) lets the AI transfer market of the day loop run on Mondays only. It is not the shipped game. ctest `market_weekly` checks the day rule from 2001 to 2301.
 
 ## Tier A runs
 
@@ -156,6 +192,8 @@ The season rules come from a table with one row per competition and season. `too
 ## Database checks
 
 The duplicate check, `tests/seasons/history_duplicates_check.py`, lists the history rows that a season database holds twice. The game clears the extra copies when it loads the database. `tests/seasons/season_history_run.py --duplicates` checks that no copy is left in the game.
+
+Some history rows of the season databases are one year off against the other rows of their competition (open item 233: the Norwegian league before 2008, the Irish league before 2003, the Swedish Cup 2002 to 2007 and others). `tools/seasons/history_years_check.py` lists them with a reference each in `docs/research/history-years/wrong-rows.tsv`, and the game corrects them at the database load (`ctest -R season_history_years_table` checks the C table). `tests/seasons/history_years_run.py` starts the October 2018, December 2025 and October 2026 databases and checks rows of the Norwegian league, the Swedish Cup, the Irish league and the World Cup.
 
 Our own season databases have two more checks. `tools/seasons/own_db/duplicates.py check <database>` fails while any player is listed twice (same nation, matching names and birth dates, or the same full name at one club). `tools/seasons/own_db/long_test.py` plays a holiday from July 2001 to 1 September 2004 on the database, with a save each 1 July that the next step loads. `tools/seasons/own_db/save_check.py` then checks each save: big clubs keep full squads, and no player or name appears twice. The pass rule is no error box and every check passes.
 

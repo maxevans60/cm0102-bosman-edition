@@ -37,6 +37,7 @@
 #include "season_load.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define COMP_TABLE 0xadadfcu
@@ -1065,18 +1066,35 @@ RT_WRAP(00519a90, cup_honours)
     rt_jump(rd32(g_mem, rd32(g_mem, ko) + 0x30));
 }
 
-/* Uefa_Cup slot 17 0x9030e0: the base 0x519890 does nothing for a cup with stages (+0x2c, 0x5198a3); here it
- * runs as for the original's UEFA Cup (the title holder of 0x519974, the staff records). A round index past the
- * round table is not read (0x5199e0..0x5199e6).
+/* Uefa_Cup slot 17 0x9030e0 (club, outcome, stage, &code, fixture, arg) ret 0x18: Cup::add_team_result_news
+ * 0x519690 calls it at 0x51970c with the outcome of a club and the byte +0x44 of the object that played the round
+ * (Cup::process_fixture 0x51a150 pushes it at 0x51afbf, 0x51afea and 0x51b118): -1 for the cup's own round table,
+ * the stage number for the knockout stage. It clears club +0x1db for the outcomes 1, 2 and -1
+ * (0x9030e8..0x9030f4) and calls Cup::update_staff_records_for_status 0x519890. The base 0x519890 does nothing
+ * for a cup with stages (+0x2c, 0x5198a3); here it runs as for the original's UEFA Cup (the staff records). A
+ * round index past the round table is not read (0x5199e0..0x5199e6).
  *
- * The club's European mark (O270). 0x9030e0 clears club +0x1db for the outcomes 1, 2 and -1 (0x9030e8..0x9030f4):
- * in the original's UEFA Cup, a knockout from start to final, each of them ends the club's cup. With groups the
- * round table ends at the last qualifying round, so its winners get outcome 1 there (the round codes of the access
- * list, 220 to 270, as 0x4b0870 rounds them) and lost the mark, though they go on into the groups. The registration
- * of 2 February (process_euro_registration 0x85a9b0, phase 3, at 0x85aa5c) then left them out, and in the knockout
- * rounds only the players registered in August could play: Leeds United had 10 on 14 February 2012 and the match
- * stopped at match_eng.cpp 652 (0x6b8aca). Such a winner keeps its mark; the group stage takes it off the clubs
- * that go out (draw_knockout, draw_knockout_po). */
+ * Issue 119, the outcome of the cup's own round table. 0x51a150 gives outcome 1 to the winner of a tie with no
+ * next tie (0x51af06, 0x51af95), so the winners of the last round of the round table get 1. In the original's
+ * UEFA Cup that is the final. With groups the round table ends before the group stage: at R1 (2004/05 to
+ * 2008/09) or at the last qualifying round (2009/10 on, the round codes 220 to 270). With outcome 1, 0x519890
+ * called Staff_Records::add_cup_winners_record 0x86a800 (0x5198d5) for each of those clubs: a cup win for the
+ * club, its manager and its squad, and Media::queue_trophy_praise_story 0x75c390 (0x86b000, 0x86b021), the news
+ * "Fans celebrate winning the UEFA Cup". The club also lost its European mark (O270 below). Such a winner goes
+ * on, so it now passes outcome 0 (season_uefa_cup_outcome), as a winner of an earlier round does: 0x519890 gives
+ * no record for a round past the round table (0x5199e6), and 0x9030e0 keeps the mark. Only the final of the
+ * knockout stage (stage >= 0) gives outcome 1. The news item of the result itself (0x519690, "win in UEFA Cup
+ * First Round") reads its own copy of the outcome and does not change.
+ *
+ * The club's European mark (O270). In the original's UEFA Cup, a knockout from start to final, the outcomes 1, 2
+ * and -1 each end the club's cup. The registration of 2 February (process_euro_registration 0x85a9b0, phase 3, at
+ * 0x85aa5c) left out a winner that lost its mark, and in the knockout rounds only the players registered in
+ * August could play: Leeds United had 10 on 14 February 2012 and the match stopped at match_eng.cpp 652
+ * (0x6b8aca). The group stage takes the mark off the clubs that go out (draw_knockout, draw_knockout_po).
+ *
+ * RECOMP_TEST_UC_OUTCOME=original (tests only): the code before issue 119 (outcome 1 to 0x9030e0, the mark put
+ * back for the qualifying round codes 220 to 270), with a log line for each such winner, for the replay of the
+ * fault. */
 RT_WRAP(009030e0, uc_result)
 {
     uint32_t uc = cpu.ecx;
@@ -1084,10 +1102,29 @@ RT_WRAP(009030e0, uc_result)
         o_009030e0();
         return;
     }
+    static int original = -1;
+    if (original < 0) {
+        const char *v = getenv("RECOMP_TEST_UC_OUTCOME");
+        original = v && !strcmp(v, "original");
+    }
     uint32_t club = rt_arg(0), fixture = rt_arg(4), mark = readable(club) ? rd32(g_mem, club + 0x1db) : 0;
-    int outcome = (int8_t)rt_arg(1), code = readable(fixture) ? (int16_t)rd16(g_mem, fixture + 0x30) : 0;
-    int base = code < 1000 ? code - code % 10 : code;
-    int keep = outcome == 1 && base >= 220 && base <= 270;
+    int outcome = (int8_t)rt_arg(1), stage = (int8_t)rt_arg(2);
+    int code = readable(fixture) ? (int16_t)rd16(g_mem, fixture + 0x30) : 0;
+    int pass = season_uefa_cup_outcome(stage, outcome), keep = 0;
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, uc + 0x40);
+    const char *name = readable(club) ? win_str(club + 4) : "?";
+    const char *cup = is_uc(uc) == 'k' ? "Conference League" : year < 2009 ? "UEFA Cup" : "Europa League";
+    if (pass != outcome && original) {
+        int base = code < 1000 ? code - code % 10 : code;
+        keep = base >= 220 && base <= 270;
+        fprintf(stderr, "recomp: uefa: %s %u/%02u: %.50s won round %d of the round table: outcome 1, the cup "
+                "winners record 0x86a800 (fixture +0x3a %d, test: the code before issue 119)\n", cup, year,
+                (year + 1) % 100, name, code, readable(fixture) ? g_mem[fixture + 0x3a] : -1);
+    } else if (pass != outcome) {
+        g_mem[cpu.esp + 8] = (uint8_t)pass;
+        fprintf(stderr, "recomp: uefa: %s %u/%02u: %.50s won round %d of the round table: goes on, outcome %d "
+                "(not the cup winner)\n", cup, year, (year + 1) % 100, name, code, pass);
+    }
     uint32_t stages = rd32(g_mem, uc + 0x2c);
     wr32(g_mem, uc + 0x2c, 0);
     o_009030e0();

@@ -26,9 +26,12 @@ def results(folder, head, rows):
             f.write("\t".join(r) + "\n")
 
 
+LEGACY = os.path.join(HERE, "run_set_legacy.tsv")      # the 0.7.0 rows: the test plays the script's features on them
+
+
 def main():
     bad = []
-    rows = run_set.read_set()
+    rows = run_set.read_set(LEGACY)
     release = run_set.chosen(rows, "release")
     names = {r["name"] for r in release}
     for want in ("a2001s1", "a2001offs3", "a2025s3", "a2026s1", "a2026s2", "a2026s3", "a2001esb", "a2001nation", "a2001to2300", "jump2298", "b2001"):
@@ -53,7 +56,8 @@ def main():
     if len([r for r in release if r["tier"] == "A" and r["last"] == 2100 and r["nations"] == "all"]) != 25:
         bad.append("run set: not 25 Tier A games of all nations to 2100 (8 starts with Q56's 2026, three seeds, and Q15)")
     for r in (r for r in release if r["start"] == 2026):
-        db = run_set.database_of(r, {"databases": run_set.DATABASES, "out": "", "own": run_set.OWN_DBS})
+        db = run_set.database_of(r, {"databases": run_set.DATABASES, "out": "", "own": run_set.OWN_DBS,
+                                     "data": run_set.DATA_FOLDERS})[0]
         if not (os.path.relpath(db, run_set.DATABASES).startswith("October 2026")
                 and os.path.isfile(os.path.join(db, "index.dat"))):
             bad.append(f"run set: {r['name']} does not play the October 2026 data (the folder of its index.dat): {db}")
@@ -69,8 +73,12 @@ def main():
             bad.append(f"league steps of {r['name']} ({r['nations']}): {e}")
     esb = [s.split(" ", 1)[1] for s in rrc.league_steps(["England", "Spain", "Brazil"], []) if " click " in s]
     esb = esb[esb.index("click 390 254"):] if "click 390 254" in esb else esb      # from the Brazil row
-    if esb[:13] != ["click 390 254"] + ["click 768 517"] * 10 + ["click 390 452", "click 705 572"]:
-        bad.append(f"league steps of England, Spain and Brazil: {esb[:13]}")
+    if esb[:rrc.SCROLL + 3] != ["click 390 254"] + ["click 768 517"] * rrc.SCROLL + ["click 390 430", "click 705 572"]:
+        bad.append(f"league steps of England, Spain and Brazil: {esb[:rrc.SCROLL + 3]}")
+    # Open item 231: the list holds 27 rows (Wales is the last), so the scroll ends at row 11 and Wales is the bottom row.
+    if rrc.below_y("Wales") != 188 + 22 * 15 or rrc.below_y("Portugal") != 188 + 22 * 6 or \
+            len(rrc.NATION_ROWS + rrc.NATION_ROWS_BELOW) != 27:
+        bad.append("click rows: Wales is not the bottom row, or Portugal is not row 6 of the scrolled list")
 
     legs = run_set.legs_of({"start": 2001, "last": 2100, "leg_years": 10})
     if len(legs) != 10 or legs[0] != (2001, 2010) or legs[-1] != (2091, 2100):
@@ -243,7 +251,7 @@ def main():
 
     # Q15: leg 0 of a NATION_JOB row passes only with the appointment and the lines after the team's next match.
     if run_set.NATION_JOB.get("a2001nation") != "England" or \
-            [r for r in run_set.read_set() if r["name"] == "a2001nation"][0]["status"] != "run":
+            [r for r in run_set.read_set(LEGACY) if r["name"] == "a2001nation"][0]["status"] != "run":
         bad.append("nation job: a2001nation is not a NATION_JOB row with status run")
     made = "recomp: nation job test: the human manages Wales from day 182 of 2001 (appointed)\n"
     still = "recomp: nation job test: on day 245 of 2001 (after the match of day 244) the human still manages Wales\n"
@@ -301,7 +309,7 @@ def main():
     if run_set.grade(checker, [("full-squad", "Alpha", 2010, "d")] * 1, FakeGame(0))[0] != ["accepted"]:
         bad.append("grade without a streak does not accept a full-squad fault")
     # a late row (item 193) starts from a save: no database, whatever its start year
-    if run_set.database_of({"tier": "late", "start": 2101, "name": "late2101"}, {"databases": "/nonexistent"}) is not None:
+    if run_set.database_of({"tier": "late", "start": 2101, "name": "late2101"}, {"databases": "/nonexistent"})[0] is not None:
         bad.append("database_of: a late row has a database")
     old_read = run_set.hc.read_known
     run_set.hc.read_known = lambda path: [{"check": "duplicate", "competition": "Euro Finals", "year": "2028",
@@ -343,7 +351,7 @@ def main():
     with open(path, "w", encoding="utf-8") as f:
         f.write(head_line + tier_a + "l\tlate\t2291\ton\tall\t1\t2300\t1\trelease\trun\tn\ta\n")
     late = dict(run_set.read_set(path)[1])
-    if not run_set.row_key(late).endswith("|from=a") or run_set.checker_tier(late) != "A" or \
+    if "|from=a" not in run_set.row_key(late) or run_set.checker_tier(late) != "A" or \
             not run_set.full_world(late) or run_set.full_world(dict(late, tier="A")):
         bad.append("late: row key, checker tier or full world")
     out = os.path.join(work, "late_out")
@@ -382,7 +390,8 @@ def main():
         bad.append("late: no row late2291 from a2001to2300 to 2300")
     else:
         lo = {"program": "/no/program", "game": "/no/game", "out": out, "databases": run_set.DATABASES,
-              "own": run_set.OWN_DBS, "commit": "c1", "code": "clean", "sha": "sha-b", "machine": 12, "floor": 0}
+              "own": run_set.OWN_DBS, "commit": "c1", "code": "clean", "sha": "sha-b", "machine": 12, "floor": 0,
+              "data": run_set.DATA_FOLDERS, "seed": None, "set_file": LEGACY}
         os.rename(os.path.join(out, "a"), os.path.join(out, "a2001to2300"))
         got = run_set.play_game(real[0], lo)
         if got[3] != "fail" or "comes from another program" not in got[4]:
@@ -433,6 +442,91 @@ def main():
     if not all(r["tier"] == "B" for r in release if r["name"] in ("b2001", "b2025")):
         bad.append("weekly: b2001 and b2025 no longer play the real market")
 
+
+    # Release tests 0.7.1, slice 1: the database and extras columns, the end point table and --seed.
+    spec_ends = {2001: 2004, 2002: 2006, 2003: 2006, 2004: 2008, 2005: 2008, 2006: 2010, 2007: 2010, 2008: 2012,
+                 2009: 2012, 2010: 2014, 2011: 2014, 2012: 2016, 2013: 2016, 2014: 2018, 2015: 2018, 2016: 2021,
+                 2017: 2021, 2018: 2023, 2019: 2023, 2020: 2023, 2021: 2024, 2022: 2024, 2023: 2026, 2024: 2028,
+                 2025: 2028, 2026: 2030}
+    if run_set.ENDS != spec_ends:
+        bad.append("end points: the table is not the one of the spec (Decisions, End point)")
+    if run_set.end_season(2001, "tile") != 2003 or run_set.end_season(2016, "tile") != 2020 or \
+            run_set.end_season(2001, "2001") != 2001:
+        bad.append("end points: tile is not the season before the end year")
+    if run_set.extras_of("none") != [] or run_set.extras_of("all") != ["conference", "regional", "c2", "spain",
+                                                                       "portugal", "sweden"] or \
+            run_set.extras_of("c2,sweden") != ["c2", "sweden"]:
+        bad.append("extras: none, all or a list is not read")
+    for text in ("c3", "all,c2x"):
+        try:
+            run_set.extras_of(text)
+            bad.append(f"extras: {text} is taken")
+        except SystemExit:
+            pass
+    head2 = "\t".join(run_set.COLUMNS + ["from", "database", "extras"]) + "\n"
+    cases = (("x\tnormal\t2001\ton\tall\t1\ttile\t1\trelease\trun\tn\t\t3.9.65\tall\n", True),
+             ("x\tnormal\t2001\ton\tall\t1\ttile\t1\trelease\trun\tn\t\t\t\n", True),
+             ("x\tnormal\t2001\ton\tall\t1\t2003\t1\trelease\trun\tn\n", True),     # no optional cell at all
+             ("x\tnormal\t2001\ton\tall\t1\ttile\t1\trelease\trun\tn\t\t3.9.99\t\n", False),
+             ("x\tnormal\t2001\ton\tall\t1\ttile\t1\trelease\trun\tn\t\t\tc3\n", False),
+             ("x\tnormal\t2030\ton\tall\t1\ttile\t1\trelease\trun\tn\n", False))      # no end point for 2030
+    for line, ok_ in cases:
+        path = os.path.join(work, "cols_set.tsv")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(head2 + line)
+        try:
+            got = run_set.read_set(path)[0]
+            if not ok_:
+                bad.append(f"columns: read_set takes {line.strip()!r}")
+            elif "3.9.65" in line and (got["database"], got["extras"], got["last"]) != (
+                    "3.9.65", run_set.ALL_EXTRAS, 2003):
+                bad.append(f"columns: a row with database and extras reads as {got}")
+            elif "\t\t\t\n" in line and (got["database"], got["extras"]) != ("tile", []):
+                bad.append("columns: empty database and extras are not tile and none")
+        except SystemExit:
+            if ok_:
+                bad.append(f"columns: read_set refuses {line.strip()!r}")
+    seeded = run_set.read_set(LEGACY, seed=72)
+    if {r["seed"] for r in seeded} != {72} or run_set.row_key(seeded[0]) == run_set.row_key(rows[0]):
+        bad.append("seed: --seed does not set the seed of every row, or the row key does not hold it")
+    if {r["seed"] for r in rows} == {72}:
+        bad.append("seed: the column is lost")
+    dbo = {"databases": run_set.DATABASES, "out": "", "own": run_set.OWN_DBS, "data": {"3.9.60": "/d60", "3.9.65": "/d65"}}
+    base = {"tier": "normal", "start": 2001, "database": "tile"}
+    for row, want in ((base, (None, "3.9.60", "/d60")), (dict(base, database="3.9.65"), (None, "3.9.65", "/d65")),
+                      (dict(base, database="3.9.68"), (None, "3.9.68", None))):
+        if run_set.database_of(row, dbo) != want:
+            bad.append(f"database: {row['database']} gives {run_set.database_of(row, dbo)}, want {want}")
+    if run_set.row_database(dict(base, start=2006)) != "Summer 2006" or \
+            run_set.row_database(dict(base, start=2013)) != "Autumn 2013" or \
+            run_set.row_database(dict(base, tier="jump", start=2098)) != "December 2025":
+        bad.append("database: the tile data of a start year")
+    import soak_run
+    with tempfile.TemporaryDirectory() as user:
+        soak_run.settings(user, "on", None, "3.9.65")
+        if "database = 3.9.65" not in open(os.path.join(user, "settings.txt")).read():
+            bad.append("database: soak_run does not write the option 3.9.65")
+    if not {"conference", "regional", "c2"} <= set(rrc.EXTRA) or not {"spain", "portugal", "sweden"} <= rrc.ENV_EXTRA:
+        bad.append("extras: the three clicks and the three test switch names")
+    if len([s for s in rrc.league_steps(["all"], ["conference", "regional", "c2"]) if " click 675 " in s]) != 3:
+        bad.append("extras: Select All with three extra divisions does not click three boxes")
+    # The save checks: the database by club names, the extras by competition names.
+    n60 = {"Fra": {f"f{i}" for i in range(0, 60)}, "Swe": {f"s{i}" for i in range(0, 50)}}
+    n65 = {"Fra": {f"f{i}" for i in range(10, 70)}, "Swe": {f"s{i}" for i in range(0, 50)}}
+    n68 = {"Fra": {f"f{i}" for i in range(70, 400)}, "Swe": {f"s{i}" for i in range(0, 80)}}
+    names = {"3.9.60": n60, "3.9.65": n65, "3.9.68": n68}
+    for db, own in names.items():           # a game with half the clubs of France and Sweden, two second teams added
+        save = {nation: set(sorted(own[nation])[::2]) | {"second 1", "second 2"} for nation in ("Fra", "Swe")}
+        if run_set.save_database(save, names) != db:
+            bad.append(f"save database: the save of {db} is read as {run_set.save_database(save, names)}")
+    if run_set.save_database({"Swe": {"s1", "s2"}}, names) is not None:
+        bad.append("save database: a nation that does not tell the databases apart gives an answer")
+    if run_set.save_database({}, names) is not None:
+        bad.append("save database: an empty save gives a database")
+    flags = {"England": 2, "Sweden": 4, "Spain": 4, "Germany": 0}
+    if run_set.extras_missing(flags, ["sweden", "spain"]) != [] or \
+            run_set.extras_missing(flags, ["sweden", "c2", "regional", "conference"]) != ["c2", "regional", "conference"]:
+        bad.append("extras: a save that does not set an extra division is not found (the competitions are in every save)")
     for b in bad:
         print("FAIL  " + b)
     print(f"{'ok  ' if not bad else 'FAIL'}  run set: {len(release)} games in the release set, legs, Tier B limits and "

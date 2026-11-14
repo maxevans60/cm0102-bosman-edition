@@ -396,6 +396,49 @@ uint32_t rt_intl_cup_asian_hosts(uint32_t self, uint32_t list, uint32_t count, u
     return (uint32_t)c << 8 | (uint32_t)added;
 }
 
+/* ---- The Asian Cup entrants by reputation (GitHub issue 136) ---- */
+
+#define ASIAN_PICK 0x004afbd0u          /* sort and shuffle of a club list, cdecl (list, count, places) */
+#define PICK_ROOM 128                   /* the list on the stack of 0x40fdf0: esp + 0x228, count below 0x64 (0x40ff24) */
+
+/* Asian Cup entrants 0x40fdf0 at 0x40ffc8: 0x4afbd0 gets the list of the Asian national teams that are not hosts
+ * (list, count ebp, places 0xf2 - hosts), sorts it by club reputation (+0x80, qsort 0x945333 with compare
+ * 0x4b07d0 at 0x4afc0e, best first) and then swaps two random places of the top min(3 * places, count), that
+ * many times (0x4afc2f..0x4afc57). The caller takes the first places (0x40ffe6..0x410006). So 11 of the top 33
+ * of a 12-team edition played, and from 2019 (24 teams) any AFC nation could. The real finals take the sides
+ * that win the AFC qualifiers, which the game does not play: the best sides by reputation stand in for them, as
+ * the ACN takes them (qsort at 0x402446, no shuffle). The original still runs, so the game draws the same random
+ * numbers, and then the list gets its sorted order again: the same sort of the same list. Every game, changing
+ * rules on or off (Max, 13 November 2026). RECOMP_ASIAN_PICK=original keeps the original's pick (the same-save
+ * run asian-pick-off). */
+void rt_intl_cup_asian_pick(uint32_t self, uint32_t list, uint32_t count, uint32_t places)
+{
+    int c = (int16_t)count, p = (int16_t)places;
+    uint32_t keep[PICK_ROOM];
+    const char *v = getenv("RECOMP_ASIAN_PICK");
+    int fix = !(v && !strcmp(v, "original")) && readable(list) && p >= 1 && p <= c && c <= PICK_ROOM;
+    if (fix) memcpy(keep, g_mem + list, 4u * (uint32_t)c);
+    uint32_t a[3] = {list, count, places};
+    call_cdecl(ASIAN_PICK, 3, a);
+    if (rt_unwinding) return;
+    if (fix) {
+        memcpy(g_mem + list, keep, 4u * (uint32_t)c);
+        uint32_t q[4] = {list, (uint32_t)c, 4u, CLUB_COMPARE};
+        call_cdecl(GAME_QSORT, 4, q);
+        if (rt_unwinding) return;
+    }
+    if (logging() && readable(list) && p >= 1 && p <= c) {
+        fprintf(stderr, "recomp: season intl: asia_nations %d %s %d of %d:", year_of(self),
+                fix ? "takes the best" : "takes at random (original)", p, c);
+        for (int i = 0; i < p; i++) {
+            uint32_t t = rd32(g_mem, list + 4u * (uint32_t)i), n = readable(t) ? rd32(g_mem, t + TEAM_NATION) : 0;
+            fprintf(stderr, " %s %d;", readable(n) ? win_str(n + 4u) : "?",
+                    readable(t) ? (int16_t)rd16(g_mem, t + 0x80u) : -1);
+        }
+        fputc('\n', stderr);
+    }
+}
+
 /* ---- The template function (ACN 0x4012e0, Asian Cup 0x40eb00) ---- */
 
 static int leap(int year) { return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0; }

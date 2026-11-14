@@ -252,3 +252,9 @@ from net_scale import INSNS as NET_SCALE_INSNS  # noqa: E402
 
 assert not set(NET_SCALE_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(NET_SCALE_INSNS)
+
+# The dates of a season database's player_setup.cfg in a season game (open item 229).
+from player_setup import INSNS as PLAYER_SETUP_INSNS  # noqa: E402
+
+assert not set(PLAYER_SETUP_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(PLAYER_SETUP_INSNS)

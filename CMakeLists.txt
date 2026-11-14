@@ -143,7 +143,8 @@ if(NOT WIN32)
         src/recomp_rt/host/posix.c)
     target_include_directories(seasons_db_test PRIVATE src/recomp_rt/win tests/seasons)
     target_compile_definitions(seasons_db_test PRIVATE
-        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv")
+        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv"
+        MANIFEST_DIR="${CMAKE_SOURCE_DIR}/tools/clean_files")
     add_test(NAME seasons_db COMMAND seasons_db_test)
     # The heap of the recompiled game: the join of the free blocks at the end of the arena (decision O121).
     add_executable(heap_test tests/recomp/test_heap.c src/recomp_rt/heap.c)
@@ -210,6 +211,8 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Open item 233 (0.7.2): the year fix table matches docs/research/history-years/wrong-rows.tsv.
+    add_test(NAME season_history_years_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_years_table.py" --check)
     # International competitions (0.6.0 slice 27): the C table of the editions matches the rules table, and
     # the editions and the rules of the code sites.
     add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
@@ -224,6 +227,11 @@ if(NOT WIN32)
         src/recomp_rt/win/season_intl_rules.c src/recomp_rt/win/season_intl_table.c src/recomp_rt/win/season_nl_table.c)
     target_include_directories(season_asian16_test PRIVATE src/recomp_rt/win src/recomp_rt include)
     add_test(NAME season_asian16 COMMAND season_asian16_test)
+    # GitHub issue 136: the Asian Cup entrants after the hosts are the best sides by reputation, in every game.
+    add_executable(season_asian_pick_test tests/seasons/test_season_asian_pick.c src/recomp_rt/win/season_intl_cups.c
+        src/recomp_rt/win/season_intl_rules.c src/recomp_rt/win/season_intl_table.c src/recomp_rt/win/season_nl_table.c)
+    target_include_directories(season_asian_pick_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_asian_pick COMMAND season_asian_pick_test)
     add_executable(season_intl_rows_test tests/seasons/test_season_intl_rows.c src/recomp_rt/win/season_intl_rows.c)
     target_include_directories(season_intl_rows_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_intl_rows COMMAND season_intl_rows_test)
@@ -272,17 +280,43 @@ if(NOT WIN32)
     target_include_directories(season_playoff_winners_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_playoff_winners COMMAND season_playoff_winners_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_playoff_winners PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The league structure of the rules table: meetings, halves, zones, periods, splits (0.7.2 league sizes, slice 1).
+    add_executable(season_league_test tests/seasons/test_season_league.c src/recomp_rt/win/season_league.c
+        src/recomp_rt/win/season_rules.c src/recomp_rt/win/season_league_table.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_league_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_league COMMAND season_league_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_league PROPERTIES FIXTURES_REQUIRED rules_table)
     # Domestic cups that the rules table does not hold in some seasons (0.6.0 slice 21b).
     add_executable(season_cup_breaks_test tests/seasons/test_season_cup_breaks.c
         src/recomp_rt/win/season_cup_breaks.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
     target_include_directories(season_cup_breaks_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_breaks COMMAND season_cup_breaks_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_cup_breaks PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The date template of a league of any size (0.7.2 league sizes, slice 2, D4 and D5).
+    add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
+    target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_template COMMAND season_template_test)
+    # The size step at a season change (0.7.2 league sizes, slice 3, D13).
+    add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
+    target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_size_step COMMAND season_size_step_test)
+    # The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6).
+    add_executable(season_cup_sizes_east_test tests/seasons/test_season_cup_sizes_east.c)
+    target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
+    add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
     target_include_directories(season_level_ties_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_level_ties COMMAND season_level_ties_test)
+    # The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14): the Irish Cup, the
+    # Welsh League Cup and the FA Cup take every club of a larger division, and the counts of the League Cup and the
+    # Scottish cups.
+    add_executable(season_cup_sizes_uk_test tests/seasons/test_season_cup_sizes_uk.c
+        src/recomp_rt/win/season_cup_sizes_uk.c)
+    target_include_directories(season_cup_sizes_uk_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_cup_sizes_uk COMMAND season_cup_sizes_uk_test)
     # The rest of the domestic cups (0.6.0 slice 21c): four-club super cups, group stages and new cups.
     add_executable(season_cups_more_test tests/seasons/test_season_cups_more.c
         src/recomp_rt/win/season_cups_more.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
@@ -492,6 +526,9 @@ if(NOT WIN32)
     add_executable(winscale_test tests/winscale/test_winscale.c)
     target_include_directories(winscale_test PRIVATE src/recomp_rt/win)
     add_test(NAME winscale COMMAND winscale_test)
+    add_executable(press_hold_test tests/winscale/test_press_hold.c)
+    target_include_directories(press_hold_test PRIVATE src/recomp_rt/win)
+    add_test(NAME press_hold COMMAND press_hold_test)
     add_executable(savename_test tests/savename/test_cp1252.c)
     target_include_directories(savename_test PRIVATE src/recomp_rt/win)
     add_test(NAME savename COMMAND savename_test)
@@ -695,6 +732,15 @@ if(EXISTS "${CM0102_EXE}")
         --exe "${CM0102_EXE}" --classes "${CMAKE_BINARY_DIR}/seasons/comp_classes.c" --check)
     # League sizes (0.6.0 slice 18): the committed wraps of set_up_rules match tools/recomp/league_sizes.py.
     add_test(NAME season_size_wraps COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_size_wraps.py" --check)
+    # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
+    add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
+        --self-test)
+    # The cups of western Europe take the real divisions (0.7.2 league sizes, slice 5): the counts with grown and
+    # shrunk divisions on a made-up club table, and the run list of the season runs (tests/seasons/cup_size_run.py).
+    add_executable(season_cup_west_test tests/seasons/test_season_cup_west.c src/recomp_rt/win/season_cup_sizes_west.c)
+    target_include_directories(season_cup_west_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_cup_west COMMAND season_cup_west_test)
+    add_test(NAME cup_size_run_list COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_size_run.py" --list)
     # Cup lists (0.6.2 item 64): every cup list of the original starts cleared in a season game.
     add_test(NAME cup_list_clear COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_list_clear_check.py"
         --exe "${CM0102_EXE}")

@@ -34,6 +34,7 @@
 #include "caps_wide.h"
 #include "season_dates.h"
 #include "season_intl.h"
+#include "season_divisions.h"
 #include "season_load_check.h"
 #include "options.h"
 #include "../host.h"
@@ -549,6 +550,7 @@ RT_WRAP(00828110, create_game)
     season_dates_at_create();                   /* slice 11b: the dates of the loaded data fit this year */
     season_intl_at_create();                    /* slice 27: Australia in Asia from 2006/07 */
     season_change_creating(1);
+    season_divisions_test_extra();              /* slice 20 test switch, before the trims of create_game (item 226) */
     o_00828110();
     season_change_creating(0);
     if (!rt_unwinding && cpu.eax) {
