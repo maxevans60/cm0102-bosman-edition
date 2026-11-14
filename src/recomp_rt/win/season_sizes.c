@@ -18,6 +18,7 @@
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
+#include "season_sizes_arg.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -299,7 +300,10 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
         wr16(g_mem, obj + COMP_MATCHES, 0xffffu);
     /* A grown class: the matches of the count and the row's meetings (slice 2), as check_complete counts them
      * ((+0x3e - 1) x +0x3c, 0x689b27..0x689b36; an odd count plays the same, with a rest round). */
-    if (grown_of(file) && meet > 0) wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet));
+    if (grown_of(file) && grown_of(file)->mode == SEASON_TEMPLATE_HALVES)
+        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)season_arg_matches(obj, n));   /* slice 15: zones, derby round */
+    else if (grown_of(file) && meet > 0)
+        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet));
     return (uint32_t)n;
 }
 
@@ -366,7 +370,7 @@ static int grown_meetings(uint32_t obj, const char *file)
     return m >= 1 && m <= 4 ? m : 2;
 }
 
-static const char *const MODE_NAMES[] = {"shuffled", "sequential", "mirrored"};
+static const char *const MODE_NAMES[] = {"shuffled", "sequential", "mirrored", "halves"};
 
 /* The dates of a template as YYYY-MM-DD, a new date with "+", for the test log (tests/seasons/league_size_run.py). */
 static void log_days(int base, const int *days, const int *added, int n)
@@ -386,29 +390,12 @@ static void log_days(int base, const int *days, const int *added, int n)
  * Wednesdays (NorPrm 0x79190b: 8 April, weekday 2, time 2). */
 #define TIME_MIDWEEK 2
 
-void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
+uint32_t season_sizes_build_template(uint32_t self, const char *file, uint32_t old, int have, int rounds, int mode)
 {
-    if (stage != -1 || !sizes_on() || !readable(self)) return;
-    size_step_run(self);
-    const char *file = season_change_file(self);
-    const SeasonGrown *g = grown_of(file);
-    if (!g) return;
-    keep(self, 0);
-    int class_meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS), meetings = grown_meetings(self, file);
-    uint32_t old = cpu.eax;
-    int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
-    int n = league_count(self, file, NULL, NULL);
-    if (n < MIN_CLUBS || !readable(old) || have < 1 || have > SEASON_TEMPLATE_MAX ||
+    int base = (int16_t)rd16(g_mem, self + COMP_YEAR), n = league_count(self, file, NULL, NULL);
+    if (have < 1 || have > SEASON_TEMPLATE_MAX || rounds < 1 || rounds > SEASON_TEMPLATE_MAX || !readable(old) ||
         !readable(old + (uint32_t)have * DATE_SIZE))
-        return;
-    int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
-    /* The mode of the row against the object's flags (+0xd9, league_next_schedule_round 0x68a030: 0x80 mirrored at
-     * 0x68a090, 0x40 sequential). */
-    int flags = rd16(g_mem, self + 0xd9u);
-    int mode = flags & 0x80 ? SEASON_TEMPLATE_MIRRORED : flags & 0x40 ? SEASON_TEMPLATE_SEQUENTIAL : g->mode;
-    if (mode != g->mode)
-        fprintf(stderr, "recomp: league sizes: %s template mode %s in league_sizes.py, the object's flags 0x%x\n", file,
-                MODE_NAMES[g->mode], flags);
+        return 0;
     int days[SEASON_TEMPLATE_MAX];
     for (int i = 0; i < have; i++) {
         uint32_t r = old + (uint32_t)i * DATE_SIZE;
@@ -419,21 +406,15 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         log_days(base, days, NULL, have);
         fprintf(stderr, "\n");
     }
-    /* The matches of the count (rt_league_clubs writes the same when create_table runs after this). */
-    wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings));
-    if (rounds == have) return;
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
     if (season_template_plan(base, days, have, rounds, mode, plan, why, sizeof why) != rounds) {
-        keep(self, 1);
-        wr16(g_mem, self + COMP_MEETINGS, (uint16_t)class_meetings);   /* the class's template: its meetings */
-        wr16(g_mem, self + COMP_MATCHES, 0xffffu);    /* check_complete counts the class's count again */
         fprintf(stderr, "recomp: league sizes: %s dates: no room for %d rounds of %d clubs (%.50s %d): %s; the class's "
                         "%d dates and count stay\n", file, rounds, n, record_name(self), base, why, have);
-        return;
+        return 0;
     }
     uint32_t tmpl = game_malloc((uint32_t)rounds * DATE_SIZE);
-    if (!tmpl) return;
+    if (!tmpl) return 0;
     int new_days[SEASON_TEMPLATE_MAX], added[SEASON_TEMPLATE_MAX];
     for (int k = 0; k < rounds; k++) {
         uint32_t to = tmpl + (uint32_t)k * DATE_SIZE, from = old + (uint32_t)plan[k].from * DATE_SIZE;
@@ -455,9 +436,6 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         new_days[k] = plan[k].day;
         added[k] = plan[k].added;
     }
-    game_free(old);
-    wr16(g_mem, count_at, (uint16_t)rounds);
-    cpu.eax = tmpl;
     if (logging()) {
         fprintf(stderr, "recomp: league sizes: %s dates: %d dates for %d clubs (%.50s %d, the class makes %d)\n", file,
                 rounds, n, record_name(self), base, have);
@@ -465,7 +443,82 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         log_days(base, new_days, added, rounds);
         fprintf(stderr, "\n");
     }
+    return tmpl;
 }
+
+void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
+{
+    if (!sizes_on() || !readable(self)) return;
+    const char *file = season_change_file(self);
+    const SeasonGrown *g = grown_of(file);
+    /* A class of halves makes the dates of each half itself (the Argentine Primera, slice 15). */
+    if (g && g->mode == SEASON_TEMPLATE_HALVES) {
+        if (stage == -1) size_step_run(self);
+        if (!rt_unwinding) season_arg_schedule(self, stage, count_at);
+        return;
+    }
+    if (stage != -1) return;
+    size_step_run(self);
+    if (!g) return;
+    keep(self, 0);
+    int class_meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS), meetings = grown_meetings(self, file);
+    uint32_t old = cpu.eax;
+    int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
+    int n = league_count(self, file, NULL, NULL);
+    if (n < MIN_CLUBS || !readable(old) || have < 1 || have > SEASON_TEMPLATE_MAX ||
+        !readable(old + (uint32_t)have * DATE_SIZE))
+        return;
+    int rounds = meetings * (n + (n & 1) - 1);
+    /* The mode of the row against the object's flags (+0xd9, league_next_schedule_round 0x68a030: 0x80 mirrored at
+     * 0x68a090, 0x40 sequential). */
+    int flags = rd16(g_mem, self + 0xd9u);
+    int mode = flags & 0x80 ? SEASON_TEMPLATE_MIRRORED : flags & 0x40 ? SEASON_TEMPLATE_SEQUENTIAL : g->mode;
+    if (mode != g->mode)
+        fprintf(stderr, "recomp: league sizes: %s template mode %s in league_sizes.py, the object's flags 0x%x\n", file,
+                MODE_NAMES[g->mode], flags);
+    /* The matches of the count (rt_league_clubs writes the same when create_table runs after this). */
+    wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings));
+    if (rounds == have) {
+        if (logging()) {    /* the test reads the class's template of every edition */
+            int base = (int16_t)rd16(g_mem, self + COMP_YEAR), days[SEASON_TEMPLATE_MAX];
+            for (int i = 0; i < have; i++) {
+                uint32_t r = old + (uint32_t)i * DATE_SIZE;
+                days[i] = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r));
+            }
+            fprintf(stderr, "recomp: league sizes: %s template %d: class %d", file, base, have);
+            log_days(base, days, NULL, have);
+            fprintf(stderr, "\n");
+        }
+        return;
+    }
+    uint32_t tmpl = season_sizes_build_template(self, file, old, have, rounds, mode);
+    if (rt_unwinding) return;
+    if (!tmpl) {
+        keep(self, 1);
+        wr16(g_mem, self + COMP_MEETINGS, (uint16_t)class_meetings);   /* the class's template: its meetings */
+        wr16(g_mem, self + COMP_MATCHES, 0xffffu);    /* check_complete counts the class's count again */
+        return;
+    }
+    game_free(old);
+    wr16(g_mem, count_at, (uint16_t)rounds);
+    cpu.eax = tmpl;
+}
+
+int season_sizes_count(uint32_t obj)
+{
+    if (!sizes_on() || !readable(obj)) return 0;
+    return league_count(obj, season_change_file(obj), NULL, NULL);
+}
+
+int season_sizes_row_season(uint32_t obj)
+{
+    if (!sizes_on() || !readable(obj)) return -1;
+    const SeasonRule *r = row_now(obj, season_change_file(obj));
+    return r ? r->season : -1;
+}
+
+uint32_t season_sizes_game_malloc(uint32_t size) { return game_malloc(size); }
+void season_sizes_game_free(uint32_t p) { game_free(p); }
 
 /* League::free_table 0x687970 (thiscall: table, 0 for its own; ret 4): at the start of a new edition it frees the
  * table of the last one (start_new_season, for example 0x64b830). For the test log: the matches that each club of a
@@ -879,6 +932,8 @@ static int step_index(uint32_t obj)
     return i;
 }
 
+void season_sizes_step_note(uint32_t upper, uint32_t lower) { step_note_pair(upper, lower); }
+
 static void step_note_pair(uint32_t upper, uint32_t lower)
 {
     if (step_running) return;
@@ -893,6 +948,9 @@ static void step_note_pair(uint32_t upper, uint32_t lower)
  * class that counts the clubs of its data, cap 0, takes only some counts: IrePrm 10 or 12, 0x63a79f..0x63a7c6). */
 static int step_want(uint32_t obj, const char *file, int year)
 {
+    /* The Argentine second division takes exactly 25 (ArgSecond::fill_league_table 0x407ce2) and gives the Primera
+     * its clubs (slice 15; its own row is slice 16's). */
+    if (!strcmp(file, "arg_second")) return 25;
     int cap = season_ita_cap(obj, cap_of(file));     /* slice 20b: Serie C */
     if (cap <= 0) return -1;
     const SeasonRule *r = row_of_edition(file, year);

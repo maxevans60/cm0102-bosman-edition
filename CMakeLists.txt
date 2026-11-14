@@ -730,6 +730,12 @@ if(EXISTS "${CM0102_EXE}")
     # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
     add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
         --self-test)
+    # The Argentine Primera (0.7.2 league sizes, slice 15): the fixture plans of the zones and the derby round, and the
+    # committed table of the zones, rivals and derbies of the research.
+    add_executable(arg_prm_plan_test tests/seasons/test_arg_prm_plan.c src/recomp_rt/win/season_arg_plan.c)
+    target_include_directories(arg_prm_plan_test PRIVATE src/recomp_rt/win)
+    add_test(NAME arg_prm_plan COMMAND arg_prm_plan_test)
+    add_test(NAME arg_prm_zones COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_arg_prm_zones.py" --check)
     # The cups of western Europe take the real divisions (0.7.2 league sizes, slice 5): the counts with grown and
     # shrunk divisions on a made-up club table, and the run list of the season runs (tests/seasons/cup_size_run.py).
     add_executable(season_cup_west_test tests/seasons/test_season_cup_west.c src/recomp_rt/win/season_cup_sizes_west.c)

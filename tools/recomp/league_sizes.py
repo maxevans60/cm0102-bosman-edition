@@ -113,12 +113,18 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
 #   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+# - ArgPrm (Primera, 20 to 2013/14, then 30, 28, 26, 24 and 30; slice 15): create_table 0x405540 allocates 20 rows
+#   (push 0x49c at 0x40554b, the object in esi from 0x405549) and stores 20 at 0x405552; create_schedule 0x404570
+#   makes 19 dates for the Apertura (stage -1, D at 0x4045aa) and 19 for the Clausura (stage 0, D at 0x404d9a), none
+#   for the aggregate table (stage 1). Mode halves: the runtime of the class (season_sizes_arg.c) makes the dates of
+#   each half, or of one table over both halves, and the fixed fixture lists of the zones and the derby round.
 GROWN = {
+    "arg_prm": (30, 0x404570, "halves"),
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
 }
-GROWN_MODES = ("shuffled", "sequential", "mirrored")
+GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():

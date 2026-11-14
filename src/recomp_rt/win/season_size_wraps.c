@@ -630,7 +630,7 @@ const char *const season_size_files[] = {
 const int season_size_file_count = 56;
 /* The largest count of each file (0: the class counts the clubs of the data). */
 const int season_size_caps[] = {
-    20,       /* arg_prm */
+    30,       /* arg_prm */
     13,       /* aus_nsl */
     18,       /* bel_first */
     18,       /* bel_second */
@@ -809,13 +809,25 @@ const int season_size_fixed[] = {
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
+    {"arg_prm", 20, 30, SEASON_TEMPLATE_HALVES},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 3;
+const int season_grown_count = 4;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* ArgPrm::create_schedule */
+void o_00404570(void);
+RT_WRAP(00404570, schedule_404570)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00404570();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* NorPrm::create_schedule */
 void o_007917c0(void);
