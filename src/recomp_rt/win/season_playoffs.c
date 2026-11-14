@@ -49,6 +49,7 @@
 #include "season_playoffs.h"
 #include "season_pol_playoff.h"
 #include "season_cup_third_place.h"
+#include "season_second_teams.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -290,7 +291,10 @@ static int season_now(uint32_t obj, const char *file);
  * senior club (the rows' play-off text: "reserve teams excluded, next club moves up"). club_get_linked_b_team
  * 0x540a50 gives the paired club of a Spanish, German or Portuguese club from fixed key id pairs (the nation test
  * at 0x540af6..0x540b10, the pairs from 0x540b1b and 0x541871, *out 1 at 0x54187c), or 0. Which side is the
- * reserve one does not matter: a senior club's reserve side never plays in the division above it. */
+ * reserve one does not matter: a senior club's reserve side never plays in the division above it. A club with no
+ * pair asks the reserve-side rules of the nations (season_second_barred, items 111 to 122 and 232 to 244): 1 when
+ * the rule of its nation bars it from the division above (for example a Polish reserve side in the I liga play-off
+ * of issue 92, item 243). */
 static int barred(uint32_t obj, uint32_t club)
 {
     uint32_t above = league_above(obj);
@@ -300,7 +304,8 @@ static int barred(uint32_t obj, uint32_t club)
     uint32_t a[3] = {club, out, 0};
     uint32_t pair = call_cdecl(F_LINKED, 3, a);
     game_free(out);
-    if (rt_unwinding || !readable(pair)) return 0;
+    if (rt_unwinding) return 0;
+    if (!readable(pair)) return season_second_barred(club, rd32(g_mem, above + COMP_RECORD));
     uint32_t div = rd32(g_mem, pair + CLUB_DIVISION);
     return readable(div) && div == rd32(g_mem, above + COMP_RECORD);
 }

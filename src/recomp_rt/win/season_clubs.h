@@ -50,4 +50,10 @@ int season_clubs_load(const char *path);
  * or "(reserve team)"). Also used for the Norwegian second teams (season_nor_second.c, open item 111). */
 int season_clubs_reserve_name(const char *name);
 
+/* The division (club_comp record) that the club moves of a new game plan for a club (a club record), or its
+ * division +0x57 outside the moves. The new-game bars of the reserve-side rules read a first team's division here,
+ * as Spain does (season_esp_barred), since the moves write +0x57 only at their end. */
+#include <stdint.h>
+uint32_t season_clubs_planned_division(uint32_t club);
+
 #endif

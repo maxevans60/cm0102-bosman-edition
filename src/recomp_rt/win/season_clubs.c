@@ -181,6 +181,11 @@ static uint32_t planned_division(uint32_t at)
     return moves_club[i].div;
 }
 
+uint32_t season_clubs_planned_division(uint32_t club)
+{
+    return planned_division(club);
+}
+
 /* One division of the game. */
 typedef struct {
     uint32_t at, nation;
