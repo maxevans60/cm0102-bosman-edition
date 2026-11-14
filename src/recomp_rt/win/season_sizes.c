@@ -504,6 +504,9 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     cpu.eax = tmpl;
 }
 
+void season_sizes_keep(uint32_t obj, int on) { keep(obj, on); }
+int season_sizes_kept(uint32_t obj) { return kept_at(obj); }
+
 int season_sizes_count(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return 0;
@@ -1039,7 +1042,7 @@ static void size_step_run(uint32_t trigger)
      * of a new game takes it (season_clubs.c group 2): the Portuguese clubs below the Segunda Liga sit there. */
     for (int i = 0; readable(table) && i < count && i < national_from; i++) {
         uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION), now = current_division(c);
-        if (now && season_clubs_in_spare(c)) now = 0;
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
         int wanted = 0;
         if (now) {
             for (int d = 0; d < ndiv && !wanted; d++) wanted = now == step_seen[d].rec;
@@ -1054,7 +1057,7 @@ static void size_step_run(uint32_t trigger)
     }
     for (int k = 0; k < nclub; k++) {
         uint32_t c = at[k], now = current_division(c);
-        if (now && season_clubs_in_spare(c)) now = 0;
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
         club[k].div = now ? -3 : STEP_NONE;     /* -3: a division outside the step */
         for (int d = 0; d < ndiv; d++)
             if (now == step_seen[d].rec) club[k].div = d;

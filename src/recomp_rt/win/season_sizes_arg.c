@@ -92,6 +92,7 @@ static int form_of(uint32_t obj, int n, Form *f)
 {
     memset(f, 0, sizeof *f);
     if (!season_sizes_on() || !readable(obj) || n < MIN_CLUBS || n > MAX_CLUBS) return 0;
+    if (season_sizes_kept(obj)) return 0;     /* no room for the dates this edition: the class's form */
     f->season = season_sizes_row_season(obj);
     const SeasonLeagueRule *r = f->season >= 0 ? season_league_row("arg_prm", f->season) : NULL;
     if (!r) return 0;
@@ -133,9 +134,38 @@ static void put_template(uint32_t count_at, uint32_t old, uint32_t tmpl, int rou
 
 static int in_schedule;
 
+/* The records of a template with one round on each day: the class can date two rounds on one day (the Apertura of 2025
+ * makes 21 and 28 September twice: Date 0x54a2d0 snaps each date to its weekday), which the plan refuses. The block
+ * keeps its size; returns the records left. */
+static int one_a_day(uint32_t block, int have, int base)
+{
+    int days[SEASON_TEMPLATE_MAX], n = 0;
+    for (int i = 0; i < have && i < SEASON_TEMPLATE_MAX; i++) {
+        uint32_t r = block + (uint32_t)i * DATE_SIZE;
+        int d = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r)), twice = 0;
+        for (int j = 0; j < n; j++) twice |= days[j] == d;
+        if (twice) continue;
+        if (n != i) memmove(g_mem + block + (uint32_t)n * DATE_SIZE, g_mem + r, DATE_SIZE);
+        days[n++] = d;
+    }
+    if (n != have && logging())
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: %d class dates on a day of another, left out\n", base, have - n);
+    return n;
+}
+
+/* No room for the dates (D4): the Primera keeps the class's count and form this edition, as a grown class does
+ * (season_sizes_schedule), and its Clausura and fixtures stay the class's. */
+static void no_room(uint32_t self)
+{
+    season_sizes_keep(self, 1);
+    fprintf(stderr, "recomp: league sizes: arg_prm %d: no room for the dates of its row; the class's 20 clubs in two "
+                    "halves stay\n", (int16_t)rd16(g_mem, self + COMP_YEAR));
+}
+
 void season_arg_schedule(uint32_t self, int stage, uint32_t count_at)
 {
     if (in_schedule || (stage != -1 && stage != 0) || !readable(count_at)) return;
+    if (stage == -1) season_sizes_keep(self, 0);    /* a new edition (set_up_rules, 0x40570c) */
     int n = season_sizes_count(self);
     Form f;
     if (n < MIN_CLUBS || !form_of(self, n, &f)) return;
@@ -153,11 +183,21 @@ void season_arg_schedule(uint32_t self, int stage, uint32_t count_at)
                     (int16_t)rd16(g_mem, self + COMP_YEAR), n);
         return;
     }
+    int base = (int16_t)rd16(g_mem, self + COMP_YEAR);
     if (f.halves) {
         /* A half: its own 19 dates, fewer for the zones (D5). */
         if (f.rounds == have) return;
-        uint32_t t = season_sizes_build_template(self, "arg_prm", old, have, f.rounds, SEASON_TEMPLATE_SEQUENTIAL);
-        if (!rt_unwinding && t) put_template(count_at, old, t, f.rounds);
+        int left = one_a_day(old, have, base);
+        uint32_t t = season_sizes_build_template(self, "arg_prm", old, left, f.rounds, SEASON_TEMPLATE_SEQUENTIAL);
+        if (rt_unwinding) return;
+        if (t) put_template(count_at, old, t, f.rounds);
+        else if (stage == -1) no_room(self);
+        else {
+            /* The Apertura has its dates; a Clausura with none would leave the season short. The class's own dates
+             * stay and the stage plays the class's fixtures (create_stages then counts its rows as the class). */
+            wr16(g_mem, count_at, (uint16_t)left);
+            fprintf(stderr, "recomp: league sizes: arg_prm %d: no room for the Clausura's %d rounds\n", base, f.rounds);
+        }
         return;
     }
     /* One table: the dates of both halves (the Clausura's of create_schedule(0)), down to the rounds of the row. */
@@ -172,17 +212,23 @@ void season_arg_schedule(uint32_t self, int stage, uint32_t count_at)
     season_sizes_game_free(scratch);
     if (!readable(second) || have2 < 1 || have + have2 > SEASON_TEMPLATE_MAX) {
         season_sizes_game_free(second);
+        no_room(self);
         return;
     }
     uint32_t both = season_sizes_game_malloc((uint32_t)(have + have2) * DATE_SIZE);
-    if (!both) return;
+    if (!both) {
+        no_room(self);
+        return;
+    }
     memcpy(g_mem + both, g_mem + old, (size_t)have * DATE_SIZE);
     memcpy(g_mem + both + (uint32_t)have * DATE_SIZE, g_mem + second, (size_t)have2 * DATE_SIZE);
     season_sizes_game_free(second);
-    uint32_t t = season_sizes_build_template(self, "arg_prm", both, have + have2, f.rounds,
-                                             SEASON_TEMPLATE_SEQUENTIAL);
+    int left = one_a_day(both, have + have2, base);
+    uint32_t t = season_sizes_build_template(self, "arg_prm", both, left, f.rounds, SEASON_TEMPLATE_SEQUENTIAL);
     season_sizes_game_free(both);
-    if (!rt_unwinding && t) put_template(count_at, old, t, f.rounds);
+    if (rt_unwinding) return;
+    if (t) put_template(count_at, old, t, f.rounds);
+    else no_room(self);
 }
 
 /* ---- The plan of an edition ---- */
@@ -286,24 +332,19 @@ static int zones_plan(const Form *f, const uint32_t *club, int n, int round[][SE
         order[j] = i;
     }
     if (draw_at < 0 || draw_at > z) draw_at = z / 2;
-    /* Drawn opponents for the clubs of no pair: a club of zone B not drawn yet and not the rival, else a swap. */
-    for (int i = 0; i < z; i++) {
+    /* Drawn opponents for the clubs of no pair: a club of zone B not drawn yet and not the rival. When the last
+     * clubs are left with their rivals only, every club of the zone takes the club after its rival instead (a
+     * matching apart from the rivals). */
+    int ok = 1;
+    for (int i = 0; i < z && ok; i++) {
         if (draw_b[i] >= 0) continue;
         for (int j = 0; j < z && draw_b[i] < 0; j++)
             if (!d_used[j] && j != rival_b[i]) draw_b[i] = j, d_used[j] = 1;
-        if (draw_b[i] < 0) {
-            int j = 0;
-            while (d_used[j]) j++;
-            for (int k = 0; k < z; k++)
-                if (draw_b[k] >= 0 && draw_b[k] != rival_b[i] && j != rival_b[k]) {
-                    draw_b[i] = draw_b[k];
-                    draw_b[k] = j;
-                    d_used[j] = 1;
-                    break;
-                }
-            if (draw_b[i] < 0) draw_b[i] = j, d_used[j] = 1;
-        }
+        ok = draw_b[i] >= 0;
     }
+    for (int i = 0; i < z && ok; i++) ok = draw_b[i] != rival_b[i];
+    if (!ok)
+        for (int i = 0; i < z; i++) draw_b[i] = (rival_b[i] + 1) % z;
     int rival[MAX_CLUBS / 2], draw[MAX_CLUBS / 2];
     for (int c = 0; c < z; c++) {
         rival[c] = rival_b[order[c]];
@@ -501,7 +542,11 @@ RT_WRAP(00405950, arg_create_stages)
     if (!form_of(self, n, &f) || !readable(stages)) return;
     uint32_t clausura = rd32(g_mem, stages), aggregate = rd32(g_mem, stages + 4);
     if (readable(clausura)) {
-        if ((int16_t)rd16(g_mem, clausura + COMP_DATES) <= 1 && !f.halves) {
+        int dates = (int16_t)rd16(g_mem, clausura + COMP_DATES);
+        if (f.halves && dates != f.rounds) {
+            /* No room for the Clausura's rounds (season_arg_schedule): its rows count the class's matches. */
+            wr16(g_mem, clausura + COMP_MATCHES, (uint16_t)((n - 1) * (int)g_mem[self + COMP_MEETINGS]));
+        } else if (dates <= 1 && !f.halves) {
             /* No dates (season_arg_schedule): complete, so check_complete returns 1 at once (0x689b09..0x689b11)
              * and gives it no places, no prize money and no news. */
             wr32(g_mem, clausura + COMP_COMPLETE, 1);
@@ -635,4 +680,9 @@ RT_WRAP(004067f0, arg_chain)
     int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
     uint32_t second = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
     if (readable(second)) season_sizes_step_note(self, second);
+}
+
+int season_arg_third(uint32_t record)
+{
+    return season_sizes_on() && readable(record) && rd32(g_mem, record) == rd32(g_mem, 0x9cf688u);
 }

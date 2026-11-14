@@ -17,7 +17,8 @@ int season_arg_zone_plan(int z, const int *rival, const int *draw, int draw_at,
         return 0;
     char seen_r[MAX_CLUBS / 2] = {0}, seen_d[MAX_CLUBS / 2] = {0};
     for (int i = 0; i < z; i++) {
-        if (rival[i] < 0 || rival[i] >= z || draw[i] < 0 || draw[i] >= z || seen_r[rival[i]]++ || seen_d[draw[i]]++)
+        if (rival[i] < 0 || rival[i] >= z || draw[i] < 0 || draw[i] >= z || seen_r[rival[i]]++ || seen_d[draw[i]]++ ||
+            draw[i] == rival[i])
             return 0;
     }
     /* Zone B in the order of its rest rounds: club rival[r] rests in round r, as club r of zone A. */

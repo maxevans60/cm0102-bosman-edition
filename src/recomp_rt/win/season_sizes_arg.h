@@ -55,6 +55,11 @@ int season_arg_matches(uint32_t obj, int n);
  * this league (the Primera, or its Clausura stage being made), or 0. */
 uint32_t season_arg_fixtures(uint32_t league);
 
+/* 1 when a division record is the Argentine third division (key [0x9cf688], whose clubs
+ * arg_prm_swap_second_and_third_division_clubs 0x4068d0 exchanges with the second division, 0x4069a6..0x4069ae): the
+ * size step takes its clubs as clubs with no division, so the second division can refill to its 25. */
+int season_arg_third(uint32_t record);
+
 /* tools/recomp/arg_prm.py: a constant of the class for 20 clubs plus (count - 20) in a season game. */
 uint32_t rt_arg_count(uint32_t original);
 

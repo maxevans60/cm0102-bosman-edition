@@ -94,6 +94,11 @@ int season_sizes_count(uint32_t obj);
  * off), -1 for none. */
 int season_sizes_row_season(uint32_t obj);
 
+/* The objects whose template had no room this edition (D4) keep the class's count and form: on 1 marks the object,
+ * 0 clears it; season_sizes_kept gives the mark of the object's edition. */
+void season_sizes_keep(uint32_t obj, int on);
+int season_sizes_kept(uint32_t obj);
+
 /* The game's malloc 0x944e46 (cleared) and free 0x9452ca. */
 uint32_t season_sizes_game_malloc(uint32_t size);
 void season_sizes_game_free(uint32_t p);

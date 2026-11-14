@@ -121,6 +121,11 @@ int main(void)
     CHECK(season_arg_zone_plan(4, r2, d2, 0, round) == 0, "an even zone gives a plan");
     CHECK(season_arg_zone_plan(3, r2, d2, 0, round) == 0, "a rival twice gives a plan");
     CHECK(season_arg_derby_plan(4, p3, 0, round) == 0, "a derby that is not a pairing gives a plan");
+    int r5[5] = {0, 1, 2, 3, 4}, d5[5] = {1, 2, 3, 4, 4};
+    d5[4] = 0;
+    d5[0] = 0;
+    d5[1] = 2;
+    CHECK(season_arg_zone_plan(5, r5, d5, 0, round) == 0, "a drawn opponent that is the rival gives a plan");
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;
