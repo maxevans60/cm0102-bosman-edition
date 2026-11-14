@@ -425,6 +425,17 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     if (n < MIN_CLUBS || !readable(old) || have < 1 || have > SEASON_TEMPLATE_MAX ||
         !readable(old + (uint32_t)have * DATE_SIZE))
         return;
+    /* A class that sets its meetings by its count in create_table (IreFirst, slice 13): a row with no meetings value
+     * takes the class's meetings for this count, not the value set_up_rules wrote for another count. */
+    if (!probe) {
+        const SeasonRule *r = row_now(self, file);
+        int row_m = r ? season_league_meetings(file, r->season) : 0;
+        int m = season_sizes_irl_class_meetings(file, n, row_m >= 1 && row_m <= 4 ? row_m : 0);
+        if (m && m != meetings) {
+            meetings = m;
+            wr16(g_mem, self + COMP_MEETINGS, (uint16_t)m);
+        }
+    }
     int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
     /* A split (slice 7, D7): the template plans the rounds before the split and the most rounds of a section after
      * it. The table plays the first; the sections take the rest when the split comes (season_split.c), through

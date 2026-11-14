@@ -96,6 +96,11 @@ void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
  * and the template had room for the count): its +0x3c then holds the meetings of the row (slice 13: IreFirst). */
 int season_sizes_planned(uint32_t obj);
 
+/* The meetings of a class that sets them by its count in create_table (slice 13, season_sizes_irl.c: IreFirst 4 for 9
+ * or 10 clubs, else 3, 0x635983..0x635997) for a row with no meetings value (row_meetings 0), or 0: the engine's
+ * meetings stay. */
+int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings);
+
 /* The season of the rules row of a league object this edition (the row of the start season with changing rules off),
  * or -1. */
 int season_sizes_row_season(uint32_t obj, const char *file);
