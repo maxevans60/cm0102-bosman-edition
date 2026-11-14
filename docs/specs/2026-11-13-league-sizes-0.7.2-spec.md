@@ -229,8 +229,8 @@ Merge danger: two-way door. Blast radius: Argentina's second tier and its promot
 Blocked by: 2
 Delivers: Série A at 24 and 20 in two meetings from 2003, Série B in two meetings from 2006, no top-4 play-off in those seasons (D11).
 Merge danger: two-way door. Blast radius: Brazil.
-- [ ] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
+- [x] The same-save set is equal
 
 ### 18. Full check
 Blocked by: 1 to 17

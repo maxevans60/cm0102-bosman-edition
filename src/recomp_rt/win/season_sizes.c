@@ -389,7 +389,8 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     if (rounds == have) return;
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
-    if (season_template_plan(base, days, have, rounds, mode, plan, why, sizeof why) != rounds) {
+    if (season_template_plan_from(base, days, have, rounds, mode, season_sizes_bra_earlier(file), plan, why,
+                                  sizeof why) != rounds) {
         keep(self, 1);
         wr16(g_mem, self + COMP_MEETINGS, (uint16_t)class_meetings);   /* the class's template: its meetings */
         wr16(g_mem, self + COMP_MATCHES, 0xffffu);    /* check_complete counts the class's count again */
@@ -668,6 +669,7 @@ void season_sizes_rules(uint32_t obj)
     sizes_rules(obj);
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
+    if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
 }
 
 /* ---- Promotion and relegation of a size change ---- */
