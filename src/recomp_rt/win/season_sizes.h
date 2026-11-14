@@ -92,6 +92,10 @@ int season_sizes_plays_short(const char *file);
  * replaces the class's (the pointer in eax, the count at count_at). */
 void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
 
+/* 1 when the date template of a grown league object this edition is the engine's (a season game with the sizes on,
+ * and the template had room for the count): its +0x3c then holds the meetings of the row (slice 13: IreFirst). */
+int season_sizes_planned(uint32_t obj);
+
 /* The season of the rules row of a league object this edition (the row of the start season with changing rules off),
  * or -1. */
 int season_sizes_row_season(uint32_t obj, const char *file);

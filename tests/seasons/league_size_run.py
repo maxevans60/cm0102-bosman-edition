@@ -70,6 +70,11 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Slice 13: the NIFL Championship (the class holds 10 in 4 meetings on 36 dates) and the League of Ireland First
+    # Division (the class takes 9 to 12; rows are keyed one year before the real season, row 2013 is the 2014 season).
+    "nir_first": (2016, 2017, "NIFL Championship, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
+    "nir_first@2022": (2022, 2023, "NIFL Championship, 12 clubs: 33 rounds, then sections of 6 and 6 once more"),
+    "ire_first": (2013, 2014, "League of Ireland First Division, 8 clubs in four meetings: 28 dates (D5)"),
 }
 
 

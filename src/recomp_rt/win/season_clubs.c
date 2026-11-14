@@ -316,7 +316,8 @@ static int data_class_count(const char *name, int n)
 {
     if (n <= 0) return n;
     if (!strncmp(name, "Irish Premier Division", 52) && n < 12) return n <= 10 ? 10 : 12;
-    if (!strncmp(name, "Irish First Division", 52) && n < 9) return 9;
+    /* In a season game with the sizes on, IreFirst takes any count from 2 (0.7.2 slice 13, season_sizes_irl.c). */
+    if (!strncmp(name, "Irish First Division", 52) && n < 9 && !season_sizes_on()) return 9;
     if (!strncmp(name, "Norwegian First Division", 52) && n < 16 && n != 14) return n < 14 ? 14 : 16;
     return n;
 }

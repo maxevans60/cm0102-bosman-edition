@@ -259,6 +259,11 @@ static int grown_count(uint32_t obj, const char *file)
     return grown_of(file) && !kept_at(obj) ? league_count(obj, file, NULL, NULL) : 0;
 }
 
+int season_sizes_planned(uint32_t obj)
+{
+    return sizes_on() && readable(obj) && grown_of(season_change_file(obj)) && !kept_at(obj);
+}
+
 uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
 {
     if (!sizes_on() || !readable(obj)) return original;
