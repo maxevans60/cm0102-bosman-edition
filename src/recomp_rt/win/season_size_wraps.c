@@ -784,7 +784,7 @@ const int season_size_fixed[] = {
     0,       /* jap_j2 */
     0,       /* kor_league */
     10,       /* nir_first */
-    16,       /* nir_prm */
+    10,       /* nir_prm */
     0,       /* nor_first */
     0,       /* nor_prm */
     0,       /* pol_first */

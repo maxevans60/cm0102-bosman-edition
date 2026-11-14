@@ -36,13 +36,17 @@ int season_split_of(uint32_t obj, const char *file, int n, int meetings, SeasonS
 /* The matches after the split of the largest section (0 for none): season_sizes.c adds them to +0xa7. */
 int season_split_matches(uint32_t obj, const char *file, int n, int meetings);
 
-/* Before League::update_for_date 0x6847c0 of any league: makes the split on the first day that every club has
+/* After League::update_for_date 0x6847c0 of any league: makes the split on the first day that every club has
  * played N matches. */
 void season_split_update(uint32_t obj);
 
 /* After League::load_from_temp_file 0x687b10 (season_load.c): a league loaded after its split takes the table
  * order of its sections again (+0xa3 is not in the save, as ScoPrm's load sets it at 0x7f0bf1..0x7f0c08). */
 void season_split_loaded(uint32_t obj);
+
+/* The meetings of a league's table for the rules report (season_report.c): +0x3c, or after a split the meetings
+ * before it (+0x3c then holds the marker of the split). */
+int season_split_meetings(uint32_t obj);
 
 /* At each create_schedule of a grown league for stage -1 (a new edition): the table order of the original again. */
 void season_split_new_edition(uint32_t obj);

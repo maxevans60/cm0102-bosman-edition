@@ -251,8 +251,8 @@ FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
 # leagues: the Conference and League Two (a fixed exchange, D15, slice 8; 2 down and 1 back gave League Two 23), the
 # Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and the Welsh
-# Premier. file: the count of the old floor.
-FIXED_EXCHANGE = {f: CAPS[f] for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
+# Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7).
+FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
                                        "nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second", "sco_third")}
 assert not set(FIXED_EXCHANGE) & FLOORS
 

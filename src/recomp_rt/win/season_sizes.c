@@ -282,7 +282,8 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     /* A grown class: the matches of the count and the row's meetings (slice 2), as check_complete counts them
      * ((+0x3e - 1) x +0x3c, 0x689b27..0x689b36; an odd count plays the same, with a rest round). */
     if (grown_of(file) && meet > 0)
-        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet + season_split_matches(obj, file, n, meet)));
+        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet +
+                                                   (kept_at(obj) ? 0 : season_split_matches(obj, file, n, meet))));
     return (uint32_t)n;
 }
 
@@ -363,6 +364,7 @@ static void log_days(int base, const int *days, const int *added, int n)
 /* The split dates of season_sizes_split_dates: while it calls create_schedule, the wrap gives the dates after the
  * split in place of the template, for the row's meetings of the edition (0: not called). */
 static int probe_meetings;
+static int probe_made;      /* 1 when the probe's wrap gave the dates after the table's rounds */
 
 void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
 {
@@ -411,10 +413,24 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
      * the largest section of a split. */
     if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings + (split ? sp.matches_max : 0)));
     if (total == have && !split) return;
+    /* A class date on the day of an earlier one (NirPrm 2010/11: 15 January 2011 twice, a date that snaps to its
+     * Saturday) is left out of the plan, which never puts two rounds on one day (season_template.c). Not for a
+     * mirrored class: its halves are the halves of the class's dates. */
+    int uniq[SEASON_TEMPLATE_MAX], from_of[SEASON_TEMPLATE_MAX], count_u = 0;
+    for (int i = 0; i < have; i++) {
+        int seen = 0;
+        for (int j = 0; j < count_u && mode != SEASON_TEMPLATE_MIRRORED; j++) seen |= uniq[j] == days[i];
+        if (seen) continue;
+        from_of[count_u] = i;
+        uniq[count_u++] = days[i];
+    }
+    if (count_u < have && logging() && !probe)
+        fprintf(stderr, "recomp: league sizes: %s template %d: %d class dates on the day of another left out\n", file,
+                base, have - count_u);
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
     if (total > SEASON_TEMPLATE_MAX || mode == SEASON_TEMPLATE_MIRRORED && split ||
-        season_template_plan(base, days, have, total, mode, plan, why, sizeof why) != total) {
+        season_template_plan(base, uniq, count_u, total, mode, plan, why, sizeof why) != total) {
         if (total > SEASON_TEMPLATE_MAX || mode == SEASON_TEMPLATE_MIRRORED && split)
             snprintf(why, sizeof why, "%s", total > SEASON_TEMPLATE_MAX ? "too many rounds" : "a split of a mirrored class");
         if (probe) {
@@ -429,6 +445,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
                         "%d dates and count stay\n", file, total, n, record_name(self), base, why, have);
         return;
     }
+    for (int k = 0; k < total; k++) plan[k].from = from_of[plan[k].from];
     /* The table's template holds the first `rounds` dates; a probe gives the dates after them. */
     int first = probe ? rounds : 0, count = probe ? total - rounds : rounds;
     uint32_t tmpl = game_malloc((uint32_t)count * DATE_SIZE);
@@ -458,6 +475,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     game_free(old);
     wr16(g_mem, count_at, (uint16_t)count);
     cpu.eax = tmpl;
+    if (probe) probe_made = 1;
     if (logging() && probe) {
         fprintf(stderr, "recomp: league sizes: %s split dates %d: %d", file, base, count);
         log_days(base, new_days + first, added + first, count);
@@ -484,6 +502,7 @@ uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32
     uint32_t a[4] = {0xffffffffu, args, args + 4, 0};
     Cpu saved = cpu;
     probe_meetings = meetings;
+    probe_made = 0;
     cpu.ecx = obj;
     uint32_t t = rt_callback(fn, 4, a);
     probe_meetings = 0;
@@ -492,6 +511,11 @@ uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32
     int n = (int16_t)rd16(g_mem, args);
     *code = rd16(g_mem, args + 4);
     game_free(args);
+    /* A probe that gave no split dates leaves the class's template in t: it is no block of split dates. */
+    if (!probe_made) {
+        if (readable(t)) game_free(t);
+        return 0;
+    }
     if (!readable(t)) return 0;
     *count = n;
     return t;
