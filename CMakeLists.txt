@@ -211,6 +211,8 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Open item 233 (0.7.2): the year fix table matches docs/research/history-years/wrong-rows.tsv.
+    add_test(NAME season_history_years_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_years_table.py" --check)
     # International competitions (0.6.0 slice 27): the C table of the editions matches the rules table, and
     # the editions and the rules of the code sites.
     add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
