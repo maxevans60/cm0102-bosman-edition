@@ -3623,32 +3623,7 @@ static const SeasonYearFix fix_9[] = {    /* Autumn 2013 */
     {0, -1, 1931, 350, 16467},
     {0, -1, 1930, 350, 16468},
 };
-static const SeasonYearFix fix_10[] = {    /* December 2008 */
-    {0, 1, 1923, 16, 536},
-    {0, 1, 1924, 16, 537},
-    {0, 1, 1925, 16, 538},
-    {0, 1, 1926, 16, 539},
-    {0, 1, 1927, 16, 540},
-    {0, 1, 1928, 16, 541},
-    {0, 1, 1929, 16, 542},
-    {0, 1, 1930, 16, 543},
-    {0, 1, 1931, 16, 544},
-    {0, 1, 1932, 16, 545},
-    {0, 1, 1933, 16, 546},
-    {0, 1, 1934, 16, 547},
-    {0, 1, 1935, 16, 548},
-    {0, 1, 1936, 16, 549},
-    {0, 1, 1937, 16, 550},
-    {0, 1, 1938, 16, 551},
-    {0, 1, 1939, 16, 552},
-    {0, 1, 1940, 16, 553},
-    {0, 1, 1941, 16, 554},
-    {0, 1, 1942, 16, 555},
-    {0, 1, 1943, 16, 556},
-    {0, 0, 1944, 16, 557},
-    {0, 0, 1944, 16, 558},
-};
-static const SeasonYearFix fix_11[] = {    /* December 2010 SIM */
+static const SeasonYearFix fix_10[] = {    /* December 2010 SIM */
     {0, -1, 1895, 16, 4653},
     {0, -1, 1897, 16, 4654},
     {0, -1, 1898, 16, 4655},
@@ -4171,7 +4146,7 @@ static const SeasonYearFix fix_11[] = {    /* December 2010 SIM */
     {0, -1, 1998, 39, 7835},
     {0, -1, 1999, 39, 7836},
 };
-static const SeasonYearFix fix_12[] = {    /* December 2025 */
+static const SeasonYearFix fix_11[] = {    /* December 2025 */
     {0, -1, 1984, 101, 2110},
     {0, -1, 1983, 101, 2111},
     {0, -1, 1982, 101, 2112},
@@ -4474,7 +4449,7 @@ static const SeasonYearFix fix_12[] = {    /* December 2025 */
     {0, -1, 1919, 350, 8511},
     {0, -1, 1918, 350, 8512},
 };
-static const SeasonYearFix fix_13[] = {    /* February 2010 ODB */
+static const SeasonYearFix fix_12[] = {    /* February 2010 ODB */
     {0, -1, 1989, 114, 380},
     {0, -1, 1988, 114, 381},
     {0, -1, 1987, 114, 382},
@@ -4960,7 +4935,7 @@ static const SeasonYearFix fix_13[] = {    /* February 2010 ODB */
     {0, -1, 1992, 256, 8025},
     {0, -1, 1993, 256, 8026},
 };
-static const SeasonYearFix fix_14[] = {    /* February 2011 ODB */
+static const SeasonYearFix fix_13[] = {    /* February 2011 ODB */
     {0, -1, 1895, 16, 4654},
     {0, -1, 1897, 16, 4655},
     {0, -1, 1898, 16, 4656},
@@ -5495,7 +5470,7 @@ static const SeasonYearFix fix_14[] = {    /* February 2011 ODB */
     {0, 1, 1987, 342, 8147},
     {0, 1, 1986, 342, 8148},
 };
-static const SeasonYearFix fix_15[] = {    /* June 2010 */
+static const SeasonYearFix fix_14[] = {    /* June 2010 */
     {0, -1, 1950, 16, 293},
     {0, -1, 1949, 16, 294},
     {0, -1, 1945, 16, 295},
@@ -5978,7 +5953,7 @@ static const SeasonYearFix fix_15[] = {    /* June 2010 */
     {0, -1, 1959, 24, 8819},
     {0, -1, 1958, 24, 8820},
 };
-static const SeasonYearFix fix_16[] = {    /* March 2009 */
+static const SeasonYearFix fix_15[] = {    /* March 2009 */
     {0, -1, 1995, 16, 102},
     {0, -1, 1995, 114, 108},
     {0, -1, 1995, 118, 109},
@@ -6462,7 +6437,7 @@ static const SeasonYearFix fix_16[] = {    /* March 2009 */
     {0, -1, 1994, 315, 5325},
     {0, 1, 1994, 190, 5331},
 };
-static const SeasonYearFix fix_17[] = {    /* March 2012 ODB */
+static const SeasonYearFix fix_16[] = {    /* March 2012 ODB */
     {0, -1, 1894, 16, 4871},
     {0, -1, 1896, 16, 4872},
     {0, -1, 1897, 16, 4873},
@@ -6985,7 +6960,7 @@ static const SeasonYearFix fix_17[] = {    /* March 2012 ODB */
     {0, -1, 1997, 39, 8159},
     {0, -1, 1998, 39, 8160},
 };
-static const SeasonYearFix fix_18[] = {    /* March 2012 SIM */
+static const SeasonYearFix fix_17[] = {    /* March 2012 SIM */
     {0, -1, 1959, 308, 5219},
     {0, -1, 1960, 308, 5220},
     {0, -1, 1961, 308, 5221},
@@ -7506,7 +7481,7 @@ static const SeasonYearFix fix_18[] = {    /* March 2012 SIM */
     {0, -1, 1924, 16, 8046},
     {0, -1, 1925, 16, 8047},
 };
-static const SeasonYearFix fix_19[] = {    /* March 2013 */
+static const SeasonYearFix fix_18[] = {    /* March 2013 */
     {0, 1, 1926, 119, 1999},
     {0, 1, 1925, 119, 2000},
     {0, 1, 1924, 119, 2001},
@@ -7935,7 +7910,7 @@ static const SeasonYearFix fix_19[] = {    /* March 2013 */
     {0, -1, 1950, 39, 8366},
     {0, -1, 1949, 39, 8367},
 };
-static const SeasonYearFix fix_20[] = {    /* March 2014 */
+static const SeasonYearFix fix_19[] = {    /* March 2014 */
     {0, 1, 1948, 119, 1764},
     {0, 1, 1947, 119, 2863},
     {0, 1, 1946, 119, 2941},
@@ -8365,7 +8340,7 @@ static const SeasonYearFix fix_20[] = {    /* March 2014 */
     {0, -1, 1985, 39, 17345},
     {0, -1, 1984, 39, 17346},
 };
-static const SeasonYearFix fix_21[] = {    /* March 2018 */
+static const SeasonYearFix fix_20[] = {    /* March 2018 */
     {0, -1, 1992, 101, 4780},
     {0, -1, 1991, 101, 4814},
     {0, -1, 1990, 101, 4815},
@@ -8668,7 +8643,7 @@ static const SeasonYearFix fix_21[] = {    /* March 2018 */
     {0, 1, 1935, 119, 16485},
     {0, 1, 1934, 119, 16486},
 };
-static const SeasonYearFix fix_22[] = {    /* March 2019 */
+static const SeasonYearFix fix_21[] = {    /* March 2019 */
     {0, -1, 1952, 308, 6006},
     {0, -1, 1953, 308, 6007},
     {0, -1, 1954, 308, 6008},
@@ -8971,7 +8946,7 @@ static const SeasonYearFix fix_22[] = {    /* March 2019 */
     {0, -1, 1990, 350, 9991},
     {0, -1, 1991, 350, 9992},
 };
-static const SeasonYearFix fix_23[] = {    /* March 2020 */
+static const SeasonYearFix fix_22[] = {    /* March 2020 */
     {0, -1, 1927, 350, 26},
     {0, -1, 1926, 350, 27},
     {0, -1, 1925, 350, 28},
@@ -9274,7 +9249,7 @@ static const SeasonYearFix fix_23[] = {    /* March 2020 */
     {0, -1, 1951, 315, 10718},
     {0, -1, 1950, 315, 10719},
 };
-static const SeasonYearFix fix_24[] = {    /* May 2026 */
+static const SeasonYearFix fix_23[] = {    /* May 2026 */
     {0, -1, 1984, 345, 260},
     {0, -1, 1983, 345, 261},
     {0, -1, 1982, 345, 262},
@@ -9569,7 +9544,7 @@ static const SeasonYearFix fix_24[] = {    /* May 2026 */
     {0, 1, 1977, 120, 10716},
     {0, 1, 1976, 120, 10717},
 };
-static const SeasonYearFix fix_25[] = {    /* November 2007 */
+static const SeasonYearFix fix_24[] = {    /* November 2007 */
     {0, 1, 2000, 46, 555},
     {0, 1, 1999, 46, 760},
     {0, 1, 1998, 46, 761},
@@ -9579,7 +9554,7 @@ static const SeasonYearFix fix_25[] = {    /* November 2007 */
     {0, 1, 1994, 46, 931},
     {0, 1, 1993, 46, 932},
 };
-static const SeasonYearFix fix_26[] = {    /* November 2020 */
+static const SeasonYearFix fix_25[] = {    /* November 2020 */
     {0, 1, 1983, 119, 392},
     {0, 1, 1982, 119, 393},
     {0, 1, 1981, 119, 394},
@@ -9882,7 +9857,7 @@ static const SeasonYearFix fix_26[] = {    /* November 2020 */
     {0, -1, 1951, 308, 9761},
     {0, -1, 1950, 308, 9762},
 };
-static const SeasonYearFix fix_27[] = {    /* October 2014 */
+static const SeasonYearFix fix_26[] = {    /* October 2014 */
     {0, -1, 1905, 345, 256},
     {0, -1, 1904, 345, 257},
     {0, -1, 1976, 39, 9268},
@@ -10341,7 +10316,7 @@ static const SeasonYearFix fix_27[] = {    /* October 2014 */
     {0, 1, 1951, 1, 17787},
     {0, 1, 1950, 1, 17788},
 };
-static const SeasonYearFix fix_28[] = {    /* October 2015 */
+static const SeasonYearFix fix_27[] = {    /* October 2015 */
     {0, -1, 1951, 315, 210},
     {0, -1, 1950, 315, 2774},
     {0, -1, 1977, 101, 6383},
@@ -10693,7 +10668,7 @@ static const SeasonYearFix fix_28[] = {    /* October 2015 */
     {0, -1, 1990, 350, 18665},
     {0, -1, 1989, 350, 18666},
 };
-static const SeasonYearFix fix_29[] = {    /* October 2016 */
+static const SeasonYearFix fix_28[] = {    /* October 2016 */
     {0, -1, 1993, 101, 9225},
     {0, -1, 1992, 101, 9226},
     {0, -1, 1991, 101, 9227},
@@ -11044,7 +11019,7 @@ static const SeasonYearFix fix_29[] = {    /* October 2016 */
     {0, 1, 1955, 119, 18937},
     {0, 1, 1954, 119, 18938},
 };
-static const SeasonYearFix fix_30[] = {    /* October 2017 */
+static const SeasonYearFix fix_29[] = {    /* October 2017 */
     {0, 1, 1954, 119, 5056},
     {0, 1, 1986, 120, 6632},
     {0, 1, 1985, 120, 6633},
@@ -11347,7 +11322,7 @@ static const SeasonYearFix fix_30[] = {    /* October 2017 */
     {0, -1, 1953, 345, 16961},
     {0, -1, 1952, 345, 16968},
 };
-static const SeasonYearFix fix_31[] = {    /* October 2018 */
+static const SeasonYearFix fix_30[] = {    /* October 2018 */
     {0, -1, 1957, 345, 2005},
     {0, -1, 1956, 345, 4124},
     {0, 1, 1985, 120, 6967},
@@ -11650,7 +11625,7 @@ static const SeasonYearFix fix_31[] = {    /* October 2018 */
     {0, -1, 1948, 315, 19336},
     {0, -1, 1947, 315, 19337},
 };
-static const SeasonYearFix fix_32[] = {    /* October 2019 */
+static const SeasonYearFix fix_31[] = {    /* October 2019 */
     {0, -1, 1930, 306, 25},
     {0, 1, 1933, 119, 1392},
     {0, 1, 1932, 119, 1393},
@@ -11953,7 +11928,7 @@ static const SeasonYearFix fix_32[] = {    /* October 2019 */
     {0, -1, 1886, 345, 7901},
     {0, -1, 1885, 345, 7902},
 };
-static const SeasonYearFix fix_33[] = {    /* October 2021 */
+static const SeasonYearFix fix_32[] = {    /* October 2021 */
     {0, 1, 1944, 119, 368},
     {0, 1, 1943, 119, 369},
     {0, 1, 1942, 119, 370},
@@ -12256,7 +12231,7 @@ static const SeasonYearFix fix_33[] = {    /* October 2021 */
     {0, -1, 1945, 315, 10595},
     {0, -1, 1944, 315, 10596},
 };
-static const SeasonYearFix fix_34[] = {    /* October 2022 */
+static const SeasonYearFix fix_33[] = {    /* October 2022 */
     {0, -1, 1987, 350, 1121},
     {0, -1, 1986, 350, 1122},
     {0, -1, 1985, 350, 1123},
@@ -12559,7 +12534,7 @@ static const SeasonYearFix fix_34[] = {    /* October 2022 */
     {0, -1, 1949, 308, 5232},
     {0, -1, 1948, 308, 5233},
 };
-static const SeasonYearFix fix_35[] = {    /* October 2023 */
+static const SeasonYearFix fix_34[] = {    /* October 2023 */
     {0, 1, 1971, 120, 17560},
     {0, 1, 1970, 120, 17561},
     {0, 1, 1969, 120, 17562},
@@ -12862,7 +12837,7 @@ static const SeasonYearFix fix_35[] = {    /* October 2023 */
     {0, -1, 1921, 350, 21714},
     {0, -1, 1920, 350, 21715},
 };
-static const SeasonYearFix fix_36[] = {    /* October 2024 */
+static const SeasonYearFix fix_35[] = {    /* October 2024 */
     {0, -1, 1985, 350, 22885},
     {0, -1, 1984, 350, 22886},
     {0, -1, 1983, 350, 22887},
@@ -13165,7 +13140,7 @@ static const SeasonYearFix fix_36[] = {    /* October 2024 */
     {0, -1, 1947, 308, 27171},
     {0, -1, 1946, 308, 27172},
 };
-static const SeasonYearFix fix_37[] = {    /* October 2026 */
+static const SeasonYearFix fix_36[] = {    /* October 2026 */
     {0, 1, 1960, 120, 8460},
     {0, 1, 1961, 120, 8461},
     {0, 1, 1962, 120, 8462},
@@ -13445,7 +13420,7 @@ static const SeasonYearFix fix_37[] = {    /* October 2026 */
     {0, -1, 1982, 350, 12741},
     {0, -1, 1983, 350, 12742},
 };
-static const SeasonYearFix fix_38[] = {    /* September 2008 */
+static const SeasonYearFix fix_37[] = {    /* September 2008 */
     {0, -1, 1994, 16, 7},
     {0, 1, 1994, 190, 9},
     {0, -1, 1992, 114, 34},
@@ -13929,7 +13904,7 @@ static const SeasonYearFix fix_38[] = {    /* September 2008 */
     {0, -1, 1992, 113, 5483},
     {0, -1, 1992, 118, 5484},
 };
-static const SeasonYearFix fix_39[] = {    /* September 2009 */
+static const SeasonYearFix fix_38[] = {    /* September 2009 */
     {0, -1, 1933, 52, 186},
     {0, -1, 1932, 52, 187},
     {0, -1, 1931, 52, 188},
@@ -14407,7 +14382,7 @@ static const SeasonYearFix fix_39[] = {    /* September 2009 */
     {0, -1, 1957, 113, 5459},
     {0, -1, 1956, 113, 5460},
 };
-static const SeasonYearFix fix_40[] = {    /* September 2010 ODB */
+static const SeasonYearFix fix_39[] = {    /* September 2010 ODB */
     {0, -1, 1895, 16, 4636},
     {0, -1, 1897, 16, 4637},
     {0, -1, 1898, 16, 4638},
@@ -14912,7 +14887,7 @@ static const SeasonYearFix fix_40[] = {    /* September 2010 ODB */
     {0, -1, 1998, 39, 7971},
     {0, -1, 1999, 39, 7972},
 };
-static const SeasonYearFix fix_41[] = {    /* September 2011 ODB */
+static const SeasonYearFix fix_40[] = {    /* September 2011 ODB */
     {0, 1, 1969, 119, 310},
     {0, 1, 1968, 119, 311},
     {0, 1, 1967, 119, 312},
@@ -15398,7 +15373,7 @@ static const SeasonYearFix fix_41[] = {    /* September 2011 ODB */
     {0, -1, 1912, 24, 8003},
     {0, -1, 1913, 24, 8004},
 };
-static const SeasonYearFix fix_42[] = {    /* September 2012 */
+static const SeasonYearFix fix_41[] = {    /* September 2012 */
     {0, -1, 1893, 16, 4958},
     {0, -1, 1895, 16, 4959},
     {0, -1, 1896, 16, 4960},
@@ -15839,38 +15814,37 @@ const SeasonYearFixes season_year_fixes[] = {
     {"April 2023", fix_7, 301u},
     {"April 2024", fix_8, 301u},
     {"Autumn 2013", fix_9, 327u},
-    {"December 2008", fix_10, 23u},
-    {"December 2010 SIM", fix_11, 521u},
-    {"December 2025", fix_12, 301u},
-    {"February 2010 ODB", fix_13, 484u},
-    {"February 2011 ODB", fix_14, 533u},
-    {"June 2010", fix_15, 481u},
-    {"March 2009", fix_16, 482u},
-    {"March 2012 ODB", fix_17, 521u},
-    {"March 2012 SIM", fix_18, 519u},
-    {"March 2013", fix_19, 427u},
-    {"March 2014", fix_20, 428u},
-    {"March 2018", fix_21, 301u},
-    {"March 2019", fix_22, 301u},
-    {"March 2020", fix_23, 301u},
-    {"May 2026", fix_24, 293u},
-    {"November 2007", fix_25, 8u},
-    {"November 2020", fix_26, 301u},
-    {"October 2014", fix_27, 457u},
-    {"October 2015", fix_28, 350u},
-    {"October 2016", fix_29, 349u},
-    {"October 2017", fix_30, 301u},
-    {"October 2018", fix_31, 301u},
-    {"October 2019", fix_32, 301u},
-    {"October 2021", fix_33, 301u},
-    {"October 2022", fix_34, 301u},
-    {"October 2023", fix_35, 301u},
-    {"October 2024", fix_36, 301u},
-    {"October 2026", fix_37, 278u},
-    {"September 2008", fix_38, 482u},
-    {"September 2009", fix_39, 476u},
-    {"September 2010 ODB", fix_40, 503u},
-    {"September 2011 ODB", fix_41, 484u},
-    {"September 2012", fix_42, 427u},
+    {"December 2010 SIM", fix_10, 521u},
+    {"December 2025", fix_11, 301u},
+    {"February 2010 ODB", fix_12, 484u},
+    {"February 2011 ODB", fix_13, 533u},
+    {"June 2010", fix_14, 481u},
+    {"March 2009", fix_15, 482u},
+    {"March 2012 ODB", fix_16, 521u},
+    {"March 2012 SIM", fix_17, 519u},
+    {"March 2013", fix_18, 427u},
+    {"March 2014", fix_19, 428u},
+    {"March 2018", fix_20, 301u},
+    {"March 2019", fix_21, 301u},
+    {"March 2020", fix_22, 301u},
+    {"May 2026", fix_23, 293u},
+    {"November 2007", fix_24, 8u},
+    {"November 2020", fix_25, 301u},
+    {"October 2014", fix_26, 457u},
+    {"October 2015", fix_27, 350u},
+    {"October 2016", fix_28, 349u},
+    {"October 2017", fix_29, 301u},
+    {"October 2018", fix_30, 301u},
+    {"October 2019", fix_31, 301u},
+    {"October 2021", fix_32, 301u},
+    {"October 2022", fix_33, 301u},
+    {"October 2023", fix_34, 301u},
+    {"October 2024", fix_35, 301u},
+    {"October 2026", fix_36, 278u},
+    {"September 2008", fix_37, 482u},
+    {"September 2009", fix_38, 476u},
+    {"September 2010 ODB", fix_39, 503u},
+    {"September 2011 ODB", fix_40, 484u},
+    {"September 2012", fix_41, 427u},
 };
-const int season_year_fixes_count = 43;
+const int season_year_fixes_count = 42;

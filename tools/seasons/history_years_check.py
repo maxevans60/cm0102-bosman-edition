@@ -239,7 +239,9 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
     competition id, competition, data year, shown year, right year, first, second, reference).
 
     A row whose pair the list names as no real edition, or (in a competition with a full list) whose pair is no row of
-    the list, dated or not, and whose winner is no first or second of an edition within 2 years, is B: it moves inside a run, never
+    the list, dated or not, nor of the 3.9.68 or research references in any year (review: the 1948 final Nurnberg /
+    Kaiserslautern lies after the German list's 1944), and whose winner is no first or second of an edition within
+    2 years, is B: it moves inside a run, never
     joins one at an end, and is cleared (right year 0) when it stands on a year that a moved row takes.
     Each row is right (R), wrong (W, with its right year), near a reference with no other result on its year (S, with
     that year) or unchecked (U). A run is the rows of one competition from
@@ -282,6 +284,9 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
                 continue
             if comp in FULL and lo_full <= s <= hi_full and first and second and \
                     not any(same(a, first) and same(b, second) for L, a, b in PAIRS[comp]) and \
+                    not any(same(f, first) and same(sc, second) for L, f, sc in
+                            ref68.get(("club", comp), ()) or ref68.get(("nation", comp), ())) and \
+                    not any(same(f, first) and same(sc, second) for e, L, f, sc, src in res.get(comp, ())) and \
                     not any(same(a, first) or same(b, first) for L, a, b in PAIRS[comp] if L and abs(L - s) <= 2):
                 marks.append(("B", 0, ""))      # no real edition of the full list (Beveren / Beerschot 2013)
                 continue
