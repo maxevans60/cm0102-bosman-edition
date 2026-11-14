@@ -47,8 +47,9 @@ RUNS = {
     "w2012": (2012, "Welsh Premier of 12: the Welsh League Cup lends 6 lower clubs, the Welsh Cup takes 20 lower",
               {"wel_first": 12, "wel_lge_cup": 3, "wel_cup": 32, "eng_cc_cup": 92, "eng_fa_cup": 152,
                "nir_cup": 32, "sco_lge_cup": 42, "sco_chal_cup": 30}),
-    "c2015": (2015, "2015/16: the FA Cup with the Conference of its class (22 until slice 8)",
-              {"eng_conf": 22, "eng_fa_cup": 152, "eng_cc_cup": 92, "wel_first": 12, "sco_lge_cup": 42}),
+    # The Conference is no competition of the game in these runs (no line in the report): its clubs enter the FA Cup.
+    "c2015": (2015, "2015/16: the FA Cup with the Conference clubs of the database (22 until slice 8)",
+              {"eng_fa_cup": 152, "eng_cc_cup": 92, "wel_first": 12, "sco_lge_cup": 42}),
     "e2019": (2019, "2019/20 (Bury left League One): the League Cup of the four League divisions",
               {"eng_fa_cup": 152}),
     "n2002": (2002, "2002/03 on the base data: a Northern Irish First Division of 8, an Irish Cup of 18 top clubs",
