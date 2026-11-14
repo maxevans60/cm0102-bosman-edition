@@ -305,6 +305,10 @@ if(NOT WIN32)
     target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
     add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
+    # Russia and Turkey at their real counts (0.7.2 league sizes, slice 12): the RusFirst take loop.
+    add_executable(season_sizes_rus_test tests/seasons/test_season_sizes_rus.c)
+    target_include_directories(season_sizes_rus_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_sizes_rus COMMAND season_sizes_rus_test)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)

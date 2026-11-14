@@ -447,6 +447,9 @@ uint32_t rt_pol_lge_second(uint32_t cup);
 uint32_t rt_jap_j_cup_j2(uint32_t cup);
 uint32_t rt_jap_emp_lower(uint32_t pool);
 uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
+/* Russia and Turkey at their real counts (0.7.2 league sizes, slice 12, win/season_sizes_rus.c,
+ * tools/recomp/sizes_rus_tur.py): 18 in the base game. */
+uint32_t rt_rus_first_take(uint32_t obj);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);

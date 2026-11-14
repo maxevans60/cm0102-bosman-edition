@@ -42,6 +42,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "smoke"))
 sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "recomp"))
+sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
 import league_sizes  # noqa: E402
 
 ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encoded.tsv")
@@ -53,6 +54,12 @@ ROWS = {
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    # Slice 12: Russia and Turkey.
+    "rus_first": (2005, 2006, "Russian First Division, 22 clubs (the class holds 18 and takes at most 18)"),
+    "rus_first@2012": (2012, 2013, "Russian First Division, 17 clubs in 2012/13 (row of a two-year season)"),
+    "tur_first": (2020, 2021, "Süper Lig, 21 clubs in 2020/21 (the class holds 18), 42 rounds"),
+    "tur_first@2021": (2021, 2022, "Süper Lig, 20 clubs in 2021/22"),
+    "tur_second": (2023, 2024, "Turkish second tier, 18 clubs in 2023/24 (the class holds 20): fewer dates"),
 }
 
 
@@ -153,21 +160,48 @@ def played(log, file):
     return out
 
 
-def calendar_year(file):
-    """1 when the encoded rows of a file are of a calendar-year league (column calendar)."""
-    with open(ENCODED, encoding="utf-8") as f:
-        cols = f.readline().rstrip("\n").split("\t")
-        for line in f:
-            row = dict(zip(cols, line.rstrip("\n").split("\t")))
-            if row.get("comp_file") == file:
-                return row.get("calendar") == "calendar"
-    return False
+_REAL = {}
+
+
+def real_seasons(file):
+    """{season: real_season} of the rows of a file in the rules table (docs/research/rules-0.6.0)."""
+    if file not in _REAL:
+        import csv
+        import make_rules
+        out = {}
+        for path in make_rules.parts():
+            with open(path, newline="", encoding="utf-8") as f:
+                lines = list(csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE))
+            if not lines or lines[0] != make_rules.COLUMNS:
+                continue
+            for cells in lines[1:]:
+                r = dict(zip(make_rules.COLUMNS, cells))
+                if r.get("comp_file") == file and r.get("season", "")[:4].isdigit():
+                    out[int(r["season"][:4])] = r.get("real_season", "")
+        _REAL[file] = out
+    return _REAL[file]
+
+
+def edition_season(file, edition):
+    """The season of the row that an edition (+0x40) plays, as season_sizes.c season_sizes_edition: row Y when its
+    real season begins with Y ("2012–13"), else row Y - 1 when its real season begins with Y (a calendar-year league
+    holds the real season Y + 1 in row Y), else Y. The Russian First Division plays calendar years to 2010 and
+    two-year seasons from 2011–12, so one calendar flag for the file is not enough."""
+    rs = real_seasons(file)
+
+    def starts(row, y):
+        t = rs.get(row, "")
+        return t[:4] == str(y) and not t[4:5].isdigit()
+    if starts(edition, edition):
+        return edition
+    if starts(edition - 1, edition):
+        return edition - 1
+    return edition
 
 
 def edition_row(file, edition):
-    """(clubs, meetings) of the row that an edition (+0x40) plays: a calendar-year league plays edition Y by the
-    row of season Y - 1 (its real season is Y, season_sizes.c row_now), any other league by the row of season Y."""
-    return encoded_row(file, edition - 1 if calendar_year(file) else edition)
+    """(clubs, meetings) of the row that an edition (+0x40) plays (edition_season)."""
+    return encoded_row(file, edition_season(file, edition))
 
 
 def report_rows(report, file):
@@ -286,6 +320,12 @@ def self_test():
     if (encoded_row("nor_prm", 2009) != (16, 2) or encoded_row("por_second", 2014) != (24, 2) or
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
+        bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    # Slice 12: Russia changes from calendar years (edition 2006 plays row 2005, real season 2006) to two-year
+    # seasons (edition 2012 plays row 2012, real season 2012–13).
+    if (edition_row("rus_first", 2006) != (22, 2) or edition_row("rus_first", 2012) != (17, 2) or
+            edition_row("rus_first", 2013) != (19, 2) or edition_row("tur_first", 2020) != (21, 2) or
+            edition_row("tur_second", 2023) != (18, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
     for b in bad:
         print("FAIL self-test", b)
