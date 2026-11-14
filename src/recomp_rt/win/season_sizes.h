@@ -72,6 +72,10 @@ typedef struct {
 extern const SeasonGrown season_grown[];
 extern const int season_grown_count;
 
+/* 1 when a division of file's class plays with fewer clubs than its row (a size-table class with a cap and no floor,
+ * with the sizes on): the club moves of a new game then take no reserve side for it (D12). */
+int season_sizes_plays_short(const char *file);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */
