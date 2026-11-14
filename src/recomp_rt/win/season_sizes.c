@@ -11,6 +11,7 @@
 #include "season_divisions_ita.h"
 #include "season_league.h"
 #include "season_template.h"
+#include "season_cup_sizes_west.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -157,17 +158,6 @@ int season_sizes_clubs(const char *file, int season)
     const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
-}
-
-/* A division that a cup takes whole after a capped number of lower clubs keeps the clubs that the database gives
- * it, up to its class count, when its row has fewer (season_sizes.h). DenCup::collect_entrants 0x551240 wants 92
- * clubs (0x5c at 0x551254): lower clubs of [0x9cf764] up to the room of rt_cup_room (0x55131c), then every club of
- * [0x9cf5b4], [0x9cf5b0] and [0x9cf5ac]. A club that the club moves cut from the First Division goes to no
- * division, so the cup is short by that many and the constructor stops at den_cup.cpp 75 (push 0x4b at
- * 0x550a62). A 2020/21 start (November 2020 database: First Division 16, row 12) stopped there. */
-int season_sizes_keeps_database(const char *file)
-{
-    return sizes_on() && file && !strcmp(file, "den_first");
 }
 
 /* The clubs whose division is the record of the object. */
@@ -542,6 +532,7 @@ void o_005bd160(void);
  * 0x5bd4d5) plays a short cup, so it stays the original's. */
 RT_WRAP(005bd160, fra_lge_entrants)
 {
+    uint32_t cup = cpu.ecx;
     enum { MOST = 64 };
     uint32_t lent[MOST];
     int nlent = 0;
@@ -568,6 +559,7 @@ RT_WRAP(005bd160, fra_lge_entrants)
     }
     o_005bd160();
     for (int i = 0; i < nlent; i++) wr32(g_mem, lent[i] + 0x5bu, 0);
+    if (!cpu.eax && !rt_unwinding) cpu.eax = (uint32_t)season_cup_sizes_fra_lge(cup);   /* 0.7.2 slice 5 */
 }
 
 /* EngFaCup::collect_entrants 0x56fab0 (O294) puts the National League clubs ([0x9cf69c]) in a stack array at

@@ -691,7 +691,7 @@ const int season_size_caps[] = {
 const int season_size_floors[] = {
     0,       /* arg_prm */
     0,       /* aus_nsl */
-    18,       /* bel_first */
+    0,       /* bel_first */
     18,       /* bel_second */
     0,       /* bra_nat_first */
     0,       /* bra_nat_second */
@@ -708,13 +708,13 @@ const int season_size_floors[] = {
     0,       /* fin_prm */
     0,       /* fra_first */
     0,       /* fra_second */
-    20,       /* fra_third */
+    0,       /* fra_third */
     0,       /* ger_first */
     0,       /* ger_second */
     0,       /* gre_prm */
     14,       /* gre_second */
-    18,       /* hol_first */
-    18,       /* hol_prm */
+    0,       /* hol_first */
+    0,       /* hol_prm */
     0,       /* ire_first */
     0,       /* ire_prm */
     0,       /* ita_ser_a */

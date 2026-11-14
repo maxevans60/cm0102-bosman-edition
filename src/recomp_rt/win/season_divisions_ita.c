@@ -19,6 +19,7 @@
 #include "season_rules.h"
 #include "season_names.h"
 #include "season_divisions_ita.h"
+#include "season_cup_sizes_west.h"
 #include "season_ita_second.h"
 
 #include <stdio.h>
@@ -1529,6 +1530,7 @@ RT_WRAP(0063faf0, ita_cup_entrants)
         cpu.ecx = saved;
     }
     o_0063faf0();
+    if (!rt_unwinding && cpu.eax) season_cup_sizes_ita_cup(cup);     /* 0.7.2 slice 5: Serie A and B take part */
 }
 
 /* ---- The manager of the year of an ended C2 group ----

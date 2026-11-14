@@ -218,18 +218,19 @@ PATCHES = {
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
 # cups are slice 21). Each cup fills fixed places with every club of these divisions, or needs their sum:
-# BelFaCup 0x41d8d0 (a sort of 44 at 0x41d9e4), GreCup 0x5e9a80 (a sort of 16 at 0x5e9b60), CroCup 0x517bb0 (48, no
-# check), RusCup 0x7e99a0 (48, box rus_cup.cpp 78), TurCup 0x8fcb90 (64 from fixed places), ItaCCup 0x63dfe0 (90 C1
-# and C2 places), HolCup 0x5f4820 (86 places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0 (J1 16 sorted at
-# 0x6628af), KorLeagueCup 0x66cf20 (10 places, box line 703), PolLgeCup 0x7cad30 (Second + First = 34), FraCup
-# 0x5baa50 (the whole National, then lower clubs to 182: a National of 18 gave 2 more squadless lower clubs, and a
-# 2022/23 game stopped in January 2023 at virtual_staff.cpp 195, VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0).
+# GreCup 0x5e9a80 (a sort of 16 at 0x5e9b60), CroCup 0x517bb0 (48, no check), RusCup 0x7e99a0 (48, box
+# rus_cup.cpp 78), TurCup 0x8fcb90 (64 from fixed places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0
+# (J1 16 sorted at 0x6628af), KorLeagueCup 0x66cf20 (10 places, box line 703), PolLgeCup 0x7cad30 (Second + First
+# = 34).
 # The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14;
 # src/recomp_rt/win/season_cup_sizes_uk.c): EngCcCup 0x56ccc0, EngFaCup 0x56fab0, WelCup 0x924ab0, WelLgeCup
 # 0x927010, NirCup 0x78ac90, ScoLgeCup 0x7f0400 and ScoChalCup 0x7ed010. Their divisions have no floor.
-FLOORS = {"bel_first", "bel_second", "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first",
-          "tur_second", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm", "jap_j1", "jap_j2", "kor_league",
-          "pol_second", "fra_third"}
+# The cups of western Europe follow the divisions (slice 5, D14): BelFaCup 0x41d8d0, ItaCCup 0x63dfe0, HolCup
+# 0x5f4820, FraCup 0x5baa50 and DenCup. Slice 5 keeps the floors of bel_second and the Serie C1 groups.
+# A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5: the floors both
+# slices removed are gone).
+FLOORS = {"bel_second", "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first",
+          "tur_second", "ita_ser_c1a", "ita_ser_c1b", "jap_j1", "jap_j2", "kor_league", "pol_second"}
 # The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
 # after 2001, 0x7cad4f), else its largest count.
 FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
@@ -260,6 +261,20 @@ CUP_INSNS = {
     0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
     0x5BAC3C: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
     0x5BACF0: ("add eax, 0xb8", "eax = eax + rt_cup_add(0xb8u, eax, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
+    # Slice 5, the cups of western Europe (src/recomp_rt/win/season_cup_sizes_west.c, its module comment).
+    # BelFaCup::collect_entrants 0x41d8d0: the pool clubs (k of 0x4afbd0, the copy, edi is the pool's count at both)
+    # and the place of the first third-tier club (edx is the clubs copied).
+    0x41D9E4: ("push 0x2c", "t0 = rt_bel_cup_lower(0x2cu, edi); esp -= 4; W32(esp, t0);"),
+    0x41D9F4: ("mov edi, 0x2c", "edi = rt_bel_cup_lower(0x2cu, edi);"),
+    0x41DA43: ("mov eax, 0x108", "eax = rt_bel_cup_place(0x108u, edx);"),
+    # HolCup::collect_entrants 0x5f4820: the copy that makes the empty places, the pool pick and the fill (the pool's
+    # count is at [esp + 0x10] at all three).
+    0x5F49E1: ("mov edx, 0x32", "edx = rt_hol_cup_lower(0x32u, esp);"),
+    0x5F4A62: ("push 0x32", "t0 = rt_hol_cup_lower(0x32u, esp); esp -= 4; W32(esp, t0);"),
+    0x5F4A7C: ("mov ebp, 0x32", "ebp = rt_hol_cup_lower(0x32u, esp);"),
+    # ItaCCup::collect_entrants 0x63dfe0: the empty places take clubs before the second pass (esi the cup, edi the
+    # clubs placed).
+    0x63E109: ("mov eax, 0x50", "eax = rt_ita_c_cup_fill(0x50u, esi, edi);"),
     # FraLgeCup::collect_entrants: the limit of its first National loop (16 - 2 after 2001), raised by the
     # places that National clubs from the CFA cannot fill; `cmp edi, edx` at 0x5bd247 sets the flags again.
     0x5BD244: ("add edx, 0x10", "edx = edx + rt_fra_lge_first(0x10u, edx);"),
@@ -390,4 +405,9 @@ INSNS.update(DATES)
 INSNS[0x5B92E8] = ("cmp word ptr [esp + 0x10], 0x22",
                    "t0 = R16(esp + 0x10u); t1 = rt_fra_cfa_lower_cap(0x22u) & 0xffffu; t2 = ((t0 - t1 - 0) & 0xffffu); "
                    "SETF(K_SUB | SZ2, t0, t1, t2, 0);")
+# Slice 5 (season_cup_sizes_west.c, rt_fra_cfa_fill): after the loop, the places that the CFA zone cannot fill take
+# French clubs from below the National; edi is the count for the shuffle and the groups.
+INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu, edi); eax = esp + 0x21cu;")
+# The French Lower Division (constructor 0x5bd600): the same after its loop of the National and lower clubs (40).
+INSNS[0x5BD752] = ("lea edx, [esp + 0x1c]", "edi = rt_fra_lower_fill(esp + 0x1cu, edi); edx = esp + 0x1cu;")
 INSNS.update(CUP_INSNS)

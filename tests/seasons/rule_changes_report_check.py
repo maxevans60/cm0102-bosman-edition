@@ -39,7 +39,7 @@ rows = [
     row('21', '2014/15', '2015', 'SL2 South', '13', nation='Greece', comp='league group 2', comp_file='gre_second'),
     row('23', '2010/11', '2011', 'C2/B', '18', nation='Italy', comp='Serie C2 group B', comp_file='ita_ser_c2b'),
     row('24', '2011/12', '2012', 'C2/B', '21', nation='Italy', comp='Serie C2 group B', comp_file='ita_ser_c2b'),
-    # The Danish First Division keeps the clubs of the database up to 16 (season_sizes_keeps_database).
+    # The Danish First Division plays its row (0.7.2 slice 5: DenCup takes Danish clubs with no division).
     row('17', '2010/11', '2011', 'Danish First', '16', nation='Denmark', comp_file='den_first'),
     row('18', '2011/12', '2012', 'Danish First', '12', nation='Denmark', comp_file='den_first'),
 ]
@@ -56,7 +56,7 @@ assert 'clubs changes from "20" to "16".\n' in text            # Serie C era gro
 assert 'clubs changes from "14" to "13".\n' in text            # second Greek group: the game plays 13
 assert 'clubs changes from "18" to "21". The game keeps 20 clubs (league sizes).' in text
 assert '20 clubs at most in the Argentine Primera' in text      # the limits section names the league
-assert 'clubs changes from "16" to "12". The game keeps the clubs of the database, up to 16 (league sizes).' in text
+assert 'clubs changes from "16" to "12".\n' in text            # Danish First Division: the game plays 12
 assert text.count('clubs changes') == 11          # unknown skipped, 2026/27 cut off
 assert 'foreign players changes' not in text      # unknown and equal values are no change
 assert '—' not in text and '–' not in text
