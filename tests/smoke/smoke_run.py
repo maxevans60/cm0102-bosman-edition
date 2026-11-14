@@ -167,7 +167,7 @@ def scaled_steps(mode, shots, steps=STEPS):
         parts = step.format(d=shots).split()
         if mode in OWN_POSITIONS and len(own) > OWN_POSITIONS.index(mode):
             parts[2:4] = own[OWN_POSITIONS.index(mode)].split()
-        elif parts[0] != "wait" and parts[1] in ("click", "move", "down", "up", "rclick"):
+        elif parts[0] != "wait" and parts[1] in ("click", "move", "down", "up", "rclick", "tap", "sdldown", "sdlup"):
             parts[2] = str(int(parts[2]) * w // 800)
             parts[3] = str(int(parts[3]) * h // 600)
         out.append(" ".join(parts))
