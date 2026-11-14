@@ -136,8 +136,52 @@ static void result(void (*original)(void))
 
 void o_0042abc0(void);
 RT_WRAP(0042abc0, bra_first_result) { result(o_0042abc0); }
+
+/* The Série B play-off with fewer places than its 4 rows. In stage 0 the play-off winner (code 1) gets status 5
+ * (0x42d098..0x42d0ba: the row of 0x68ab70, 0x868c50 the title record), and League::update_positions_and_status
+ * 0x684cd0 gave the top +0xbe rows status 0. league_promote_and_relegate 0x689c80 moves up the rows of status 0 and 5
+ * (0x689d47..0x689d4e). The class has 4 places, so its winner is always one of them. The rows 2002 to 2004 give 2
+ * (Série B 2003 to 2005: the champion and the runner-up of the final group went up), so a winner from row 3 or 4
+ * made 3 promotions against 2 relegations, and Série A one club over its count. So the winner takes the place of the
+ * lowest row of status 0, which gets no status (0xff), and the promotions stay the places. */
+#define ROW_TABLE 0xb1u
+#define ROW_SIZE 0x3bu
+#define ROW_STATUS 0x37u
+#define COMP_CLUBS 0x3eu
+#define STATUS_UP 0
+#define STATUS_NONE 0xffu
+
+static void playoff_places(uint32_t self)
+{
+    int places = (int8_t)g_mem[self + UP];
+    uint32_t table = rd32(g_mem, self + ROW_TABLE);
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    if (places <= 0 || !readable(table) || n <= 0 || n > 200) return;
+    int moving = 0, last = -1;
+    for (int i = 0; i < n; i++) {
+        int st = g_mem[table + (uint32_t)i * ROW_SIZE + ROW_STATUS];
+        if (st == STATUS_UP || st == STATUS_CHAMPION) moving++;
+        if (st == STATUS_UP) last = i;
+    }
+    if (moving <= places || last < 0) return;
+    uint32_t row = table + (uint32_t)last * ROW_SIZE;
+    g_mem[row + ROW_STATUS] = STATUS_NONE;
+    if (getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: bra_nat_second %d: the play-off winner goes up in place of row %d "
+                        "(%.40s), %d places\n", (int16_t)rd16(g_mem, self + COMP_YEAR), last + 1,
+                readable(rd32(g_mem, row)) ? win_str(rd32(g_mem, row) + 4) : "?", places);
+}
+
 void o_0042d040(void);
-RT_WRAP(0042d040, bra_second_result) { result(o_0042d040); }
+RT_WRAP(0042d040, bra_second_result)
+{
+    uint32_t self = cpu.ecx;
+    int won = (rt_arg(1) & 0xff) == 1 && (rt_arg(2) & 0xff) == 0;
+    result(o_0042d040);
+    if (rt_unwinding || !won || !season_sizes_on() || !readable(self)) return;
+    const char *file = season_change_file(self);
+    if (file && !strcmp(file, "bra_nat_second")) playoff_places(self);
+}
 
 /* The honours. League::update_for_date 0x6847c0 calls vtable +0x30 when the season is complete (0x684a8f). The
  * Brazilian classes hold 0x408eb0 there, which jumps to +0x30 of stage 0 (0x408eb0..0x408eb7: [this+0xc][0]), the

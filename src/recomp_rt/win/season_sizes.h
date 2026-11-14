@@ -45,6 +45,8 @@ void season_sizes_rules(uint32_t obj);
  * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
 /* The most earlier starts of 7 days of a file's date template: 13 for the Brazilian Série A and B, else
  * SEASON_TEMPLATE_EARLIER (season_sizes_bra.c). */
+/* 1 in a season game with the size engine on (RECOMP_LEAGUE_SIZES=off turns it off). */
+int season_sizes_on(void);
 int season_sizes_bra_earlier(const char *file);
 void season_sizes_bra_rules(uint32_t obj, const char *file);
 

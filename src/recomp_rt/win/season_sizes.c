@@ -54,6 +54,8 @@ static int sizes_on(void)
     return !off && season_game_changes();
 }
 
+int season_sizes_on(void) { return sizes_on(); }
+
 static int logging(void)
 {
     static int on = -1;
