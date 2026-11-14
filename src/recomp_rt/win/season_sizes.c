@@ -99,14 +99,13 @@ static int cap_of(const char *file)
     return i >= 0 ? season_size_caps[i] : 0;
 }
 
-/* The smallest count of a file's class (0: any count from MIN_CLUBS). Q282 (the lead, 2026-10-18): a 2019/20
- * start plays League One with 23 clubs (Bury removed), so its floor is 23 in that season. */
+/* The smallest count of a file's class (0: any count from MIN_CLUBS). League One plays the count of its row in every
+ * season (slice 8): the floor of 23 in a 2019 start (Q282) went with the rows of the check, which give 24 (Bury was
+ * expelled after the season began, Q278). */
 static int floor_of(const char *file)
 {
     int i = size_index(file);
-    if (i < 0) return 0;
-    if (!strcmp(file, "eng_second") && season_start_year() == 2019) return 23;
-    return season_size_floors[i];
+    return i < 0 ? 0 : season_size_floors[i];
 }
 
 /* The smallest count of a file's exchange: its floor, or the count of FIXED_EXCHANGE (league_sizes.py) whose places
@@ -115,7 +114,6 @@ static int floor_of(const char *file)
 static int exchange_floor(const char *file)
 {
     int i = size_index(file), low = floor_of(file);
-    /* floor_of gives League One 23 in a 2019 start (Q282): that floor stays the bound, as before slice 4. */
     return low > 0 || i < 0 ? low : season_size_fixed[i];
 }
 
@@ -696,7 +694,9 @@ static void sizes_rules(uint32_t obj)
      * promotions left it short in June 2017). */
     if (open_neighbour(obj, ABOVE))
         set_places(obj, UP, UP_PLAYOFF, r->up + season_playoffs_winners_up(file, r->season), "promotion");
-    if (open_neighbour(obj, BELOW)) set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+    /* League Two: towards the Conference, played or not (season_sizes_eng.c, slice 8, D15). */
+    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file))
+        set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
 }
 
 void season_sizes_rules(uint32_t obj)

@@ -5,7 +5,7 @@ docs/specs/2026-11-13-league-sizes-0.7.2-spec.md, Testing seam 2, D4 and D5). Ma
 Usage:
     python3 tests/seasons/league_size_run.py <cm0102_recomp> <game folder> <file> [--year <season>]
         [--last <season> | --to <season>] [--nations all|<name,name,...>|all,-<name>,...] [--keep <folder>] [--reuse]
-        [--timeout <seconds>]
+        [--timeout <seconds>] [--extra conference,regional,c2]
     python3 tests/seasons/league_size_run.py --list
     python3 tests/seasons/league_size_run.py --self-test
 
@@ -53,7 +53,16 @@ ROWS = {
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    # Slice 8: England and France.
+    "eng_conf": (2010, 2011, "Conference, 24 clubs (the class holds 22): a template of 46 dates"),
+    "fra_third@2010": (2010, 2011, "National, 21 clubs (the class holds 20): a mirrored template of 42 dates"),
+    "fra_third": (2014, 2015, "National, 18 clubs: a mirrored template of 34 dates, the season ends on its usual day "
+                              "(D5)"),
 }
+
+# The extra divisions of the new game screen that a file needs (rules_report_check.EXTRA): the game plays the
+# Conference only when the screen selects it.
+EXTRA = {"eng_conf": ["conference"]}
 
 
 def encoded_row(file, season):
@@ -287,6 +296,9 @@ def self_test():
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    import rules_report_check as rrc
+    if any(f not in ROWS or x not in rrc.EXTRA for f, xs in EXTRA.items() for x in xs):
+        bad.append(("extra", EXTRA))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
@@ -319,7 +331,8 @@ def main(argv):
         nations = (["all"] + names) if words[0] == "all" else names
         if nations[0] != "all" and "England" not in nations:
             nations = ["England"] + nations
-        code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
+        extra = EXTRA.get(file, []) + [x for x in rrc.arg(argv, "--extra", "").split(",") if x]
+        code, _report = rrc.run(program, game, last, year, db, nations, extra, work, timeout,
                                 {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"}, stop_on_box=True)
         if code != 0:
             print(f"FAIL {file} {year}: the run ended with code {code} ({work})")

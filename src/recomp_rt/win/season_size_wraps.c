@@ -641,7 +641,7 @@ const int season_size_caps[] = {
     16,       /* cro_a2b */
     16,       /* den_first */
     12,       /* den_prm */
-    22,       /* eng_conf */
+    24,       /* eng_conf */
     24,       /* eng_first */
     20,       /* eng_prm */
     24,       /* eng_second */
@@ -649,7 +649,7 @@ const int season_size_caps[] = {
     12,       /* fin_prm */
     20,       /* fra_first */
     20,       /* fra_second */
-    20,       /* fra_third */
+    21,       /* fra_third */
     18,       /* ger_first */
     18,       /* ger_second */
     14,       /* gre_prm */
@@ -759,11 +759,11 @@ const int season_size_fixed[] = {
     0,       /* cro_a2b */
     0,       /* den_first */
     0,       /* den_prm */
-    22,       /* eng_conf */
-    24,       /* eng_first */
-    20,       /* eng_prm */
-    24,       /* eng_second */
-    24,       /* eng_third */
+    0,       /* eng_conf */
+    0,       /* eng_first */
+    0,       /* eng_prm */
+    0,       /* eng_second */
+    0,       /* eng_third */
     0,       /* fin_prm */
     0,       /* fra_first */
     0,       /* fra_second */
@@ -809,13 +809,37 @@ const int season_size_fixed[] = {
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
+    {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
+    {"fra_third", 20, 21, SEASON_TEMPLATE_MIRRORED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 3;
+const int season_grown_count = 5;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* EngConf::create_schedule */
+void o_0056de60(void);
+RT_WRAP(0056de60, schedule_56de60)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0056de60();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* FraThird::create_schedule */
+void o_005bfe30(void);
+RT_WRAP(005bfe30, schedule_5bfe30)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005bfe30();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* NorPrm::create_schedule */
 void o_007917c0(void);

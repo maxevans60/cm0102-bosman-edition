@@ -12,7 +12,6 @@
 2008	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-87: game 5, table 53 (53 entrants)
 2008	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-92: game 5, table 4 (4)
 2008	clubs	world_club_champ (FIFA Club World Cup), row club-world-135: game 0, table 7 (7)
-2008	down	eng_third (Football League Two), row eng-101: game 1 (+0 play-off places), table 2 (2)
 2008	down	ger_second (2. Bundesliga), row ger-93: game 4 (+0 play-off places), table 2 (2)
 2008	no_row	friendly (Friendly): no table row
 2008	no_row	record_utils ('B' International): no table row
@@ -40,7 +39,6 @@
 2009	clubs	wc_oceania_league (FIFA World Cup qualification (OFC)), row int-world-104: game 5, table 1 (1)
 2009	clubs	world_club_champ (FIFA Club World Cup), row club-world-154: game 0, table 7 (7)
 2009	clubs	world_cup (FIFA World Cup), row int-world-98: game 0/4, table 32 (32)
-2009	down	eng_third (Football League Two), row eng-111: game 1 (+0 play-off places), table 2 (2)
 2009	down	ger_second (2. Bundesliga), row ger-106: game 4 (+0 play-off places), table 2 (2)
 2009	format	uefa_cup, row uefa-69: game 40 clubs in the group stage and 32 in the knockout round after it, table 48 and 32
 2009	name	new_conf_cup (Conference League Cup (Setanta Shield)), row eng-351: game 'Conference League Cup (Setanta Shield)', table 'Conference League Cup'
