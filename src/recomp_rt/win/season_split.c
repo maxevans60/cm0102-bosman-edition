@@ -62,6 +62,8 @@
 #define ROW_POSITIONS 9u            /* the row's position after each match, a byte each (0x7f3227) */
 #define ROW_PLAYED 0x11u            /* s8: matches played (0x7f2d56, 0x689b51) */
 #define ROW_POINTS 0x19u            /* s16: points of the overall table (comparator 0x683466) */
+#define ROW_HOME_POINTS 0x27u       /* s16: points of the home table (0xe bytes a table) */
+#define ROW_AWAY_POINTS 0x35u       /* s16: points of the away table */
 #define DATE_SIZE 0x41u
 #define GAME_DATE 0xae2c90u         /* s16 day of the year, s16 year (testrun.c) */
 #define SORTED_LEAGUE 0xb679fcu     /* the league that the table sort sorts (0x68281e) */
@@ -164,13 +166,16 @@ static int section_of(uint32_t row, const SeasonSplit *sp)
 
 /* The table order after the split (cdecl: row a, row b): the section of a less that of b, 0 for one section (then
  * the points, 0x68345b). The league is the one the sort sorts. */
-static struct { uint32_t obj; int year; int state; SeasonSplit sp; } cache[8];
+/* Keyed by the object, its edition and its record: a display copy on the stack (match_screens_draw_live_league_table
+ * calls 0x682380 at 0x7281a0 with ecx = esp + 0x98) can sit at one address for two leagues. */
+static struct { uint32_t obj, record; int year; int state; SeasonSplit sp; } cache[8];
 
 static const SeasonSplit *cached(uint32_t obj)
 {
     int year = readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_YEAR) : 0, free_at = -1;
+    uint32_t record = readable(obj) ? rd32(g_mem, obj + COMP_RECORD) : 0;
     for (int k = 0; k < 8; k++) {
-        if (cache[k].obj == obj && cache[k].year == year)
+        if (cache[k].obj == obj && cache[k].year == year && cache[k].record == record)
             return cache[k].state == 2 ? &cache[k].sp : NULL;
         if (!cache[k].obj && free_at < 0) free_at = k;
     }
@@ -179,6 +184,7 @@ static const SeasonSplit *cached(uint32_t obj)
         free_at = next++ % 8;
     }
     cache[free_at].obj = obj;
+    cache[free_at].record = record;
     cache[free_at].year = year;
     cache[free_at].state = state(obj, &cache[free_at].sp);
     return cache[free_at].state == 2 ? &cache[free_at].sp : NULL;
@@ -213,9 +219,8 @@ static uint32_t order_fn(void)
 
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original)
 {
-    /* Only a league after its split holds the order (+0xa3): every other check_complete keeps the original. */
-    if (!order_addr || !readable(obj) || rd32(g_mem, obj + COMP_ORDER) != order_addr || !season_sizes_on())
-        return original;
+    /* The state of the league, not its order (+0xa3): a load whose order was not set yet still completes. */
+    if (!season_sizes_on() || !readable(obj)) return original;
     const SeasonSplit *sp = cached(obj);
     if (!sp) return original;
     uint32_t t = rd32(g_mem, obj + COMP_TABLE);
@@ -335,16 +340,25 @@ static void split(uint32_t obj, const SeasonSplit *sp)
     for (int k = 0; k < sp->parts; k++) {
         if (!make_section(obj, by_pos + first, sp->size[k], sp->meet[k], dates, sp->rounds[k], code)) {
             if (rt_unwinding) return;
+            /* Only when the game's allocator fails. The section's clubs then play no more matches and the table
+             * is never complete; the log names it and the test fails on it. */
             fprintf(stderr, "recomp: league sizes: %s split %d: section %d not made (%.50s)\n", file, year, k + 1,
                     record_name(obj));
         }
         first += sp->size[k];
     }
+    /* Halved points, rounded up. apply_result_to_table 0x685f60 sets the overall points to the home points (+0x27)
+     * plus the away points (+0x35) at each result (0x6864a5..0x6864b1, 0x68652a..0x686532), so the home and away
+     * points are halved too, and add up to the halved overall points. */
     if (sp->halved)
         for (int i = 0; i < n; i++) {
             uint32_t row = t + (uint32_t)i * ROW_SIZE;
-            int p = (int16_t)rd16(g_mem, row + ROW_POINTS);
-            wr16(g_mem, row + ROW_POINTS, (uint16_t)(p >= 0 ? (p + 1) / 2 : p / 2));   /* halved, rounded up */
+            int p = (int16_t)rd16(g_mem, row + ROW_POINTS), home = (int16_t)rd16(g_mem, row + ROW_HOME_POINTS);
+            int half = p >= 0 ? (p + 1) / 2 : p / 2, home_half = home >= 0 ? (home + 1) / 2 : home / 2;
+            if (home_half > half) home_half = half;
+            wr16(g_mem, row + ROW_POINTS, (uint16_t)half);
+            wr16(g_mem, row + ROW_HOME_POINTS, (uint16_t)home_half);
+            wr16(g_mem, row + ROW_AWAY_POINTS, (uint16_t)(half - home_half));
         }
     wr16(g_mem, obj + COMP_MEETINGS, (uint16_t)sp->marker);
     wr32(g_mem, obj + COMP_ORDER, order_fn());
@@ -383,7 +397,10 @@ void season_split_update(uint32_t obj)
 {
     if (!season_sizes_on()) return;
     SeasonSplit sp;
-    if (state(obj, &sp) != 1) return;
+    int st = state(obj, &sp);
+    /* After the split: the order again where a load left it unset (season_split_loaded found no state then). */
+    if (st == 2 && rd32(g_mem, obj + COMP_ORDER) != order_fn()) wr32(g_mem, obj + COMP_ORDER, order_fn());
+    if (st != 1) return;
     uint32_t t = rd32(g_mem, obj + COMP_TABLE);
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
     for (int i = 0; i < n; i++)
@@ -401,6 +418,21 @@ void season_split_loaded(uint32_t obj)
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s split %d: loaded after the split (%.50s)\n", season_change_file(obj),
                 (int16_t)rd16(g_mem, obj + COMP_YEAR), record_name(obj));
+}
+
+void season_split_log_end(uint32_t obj)
+{
+    SeasonSplit sp;
+    if (!season_sizes_on() || state(obj, &sp) != 2) return;
+    uint32_t t = rd32(g_mem, obj + COMP_TABLE);
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    fprintf(stderr, "recomp: league sizes: %s split end %d:", season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR));
+    for (int i = 0; i < n; i++) {
+        uint32_t row = t + (uint32_t)i * ROW_SIZE, at = rd32(g_mem, row + ROW_POSITIONS);
+        fprintf(stderr, " %d:%d", readable(at) ? (int8_t)g_mem[at + (uint32_t)(sp.after - 1)] : -1,
+                (int8_t)g_mem[row + ROW_PLAYED]);
+    }
+    fprintf(stderr, "\n");
 }
 
 int season_split_meetings(uint32_t obj)

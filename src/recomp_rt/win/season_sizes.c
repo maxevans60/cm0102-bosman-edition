@@ -537,6 +537,7 @@ RT_WRAP(00687970, league_free_table)
                 if (p < lo) lo = p;
                 if (p > hi) hi = p;
             }
+            season_split_log_end(self);
             fprintf(stderr, "recomp: league sizes: %s played %d: %d clubs, %d matches, played %d to %d (%.50s)\n",
                     season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR), n,
                     (int16_t)rd16(g_mem, self + COMP_MATCHES), lo, hi, record_name(self));

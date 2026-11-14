@@ -44,6 +44,10 @@ void season_split_update(uint32_t obj);
  * order of its sections again (+0xa3 is not in the save, as ScoPrm's load sets it at 0x7f0bf1..0x7f0c08). */
 void season_split_loaded(uint32_t obj);
 
+/* For the test log (RECOMP_SIZE_LOG) when a table ends (League::free_table, season_sizes.c): after a split, each row
+ * in table order as its place after match N and its matches played. */
+void season_split_log_end(uint32_t obj);
+
 /* The meetings of a league's table for the rules report (season_report.c): +0x3c, or after a split the meetings
  * before it (+0x3c then holds the marker of the split). */
 int season_split_meetings(uint32_t obj);

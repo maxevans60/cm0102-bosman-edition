@@ -31,8 +31,9 @@ the meetings m; the rounds are R = m x (n' - 1), n' the count rounded up to even
 A league whose row has a split (slice 7, D7; src/recomp_rt/win/season_split.c) plays its table to N matches a club,
 then sections of the row: its template holds R dates and the most rounds of a section, the matches per club are N
 and those of the largest section, every club of a finished table played N and the matches of its own section, and
-a split line names the row's sections and meetings, and the dates of the sections are the last dates of the template
-line. --save-in-split plays to the first split, saves after the first section date,
+a split line names the row's sections and meetings, the dates of the sections are the last dates of the template
+line, and at the end of the table (a split end line, in table order) the places after match N are each place once,
+each section's clubs stand together above the next section's, and each club played N and its own section's matches. --save-in-split plays to the first split, saves after the first section date,
 loads that save in a new program and plays on (leg0 and leg1 in the work folder): the loaded league goes on after
 its split and its table finishes.
 A message box ends the run at once (stop_on_box) and fails it. A run takes about 20 to 40 minutes a season. A two-year league ends its table after the end report of its season:
@@ -125,6 +126,40 @@ def split_dates(log, file):
             if head.isdigit():
                 out[int(head)] = [d for d, _a in parse_dates(rest.split()[1:])]
     return out
+
+
+def split_ends(log, file):
+    """{edition: [(place after match N, played)]} in table order, of the split end lines of a file."""
+    out = {}
+    tag = f"recomp: league sizes: {file} split end "
+    for line in log.split("\n"):
+        if line.startswith(tag):
+            head, _, rest = line[len(tag):].partition(": ")
+            try:
+                out[int(head)] = [tuple(int(x) for x in w.split(":")) for w in rest.split()]
+            except ValueError:
+                pass
+    return out
+
+
+def end_faults(name, rows, after, sp):
+    """The faults of a table at its end after a split: the places after match N are each place once, the table keeps
+    each section together and above the next, and each club played N and its own section's matches."""
+    fails = []
+    places = [p for p, _x in rows]
+    if sorted(places) != list(range(sum(n for n, _m in sp))):
+        return [f"{name}: the places after match {after} are not each place once: {places}"]
+    bounds, top = [], 0
+    for n, m in sp:
+        bounds.append((top, top + n, after + m * (n - 1)))
+        top += n
+    secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
+    if secs != sorted(secs):
+        fails.append(f"{name}: the table does not keep the sections in order: {secs}")
+    for (p, played), k in zip(rows, secs):
+        if played != bounds[k][2]:
+            fails.append(f"{name}: the club of place {p + 1} after match {after} played {played}, want {bounds[k][2]}")
+    return fails
 
 
 def splits(log, file):
@@ -343,6 +378,11 @@ def faults(work, file, year, last):
         want = (sp[0], [x for x, _m in sp[1]], [y for _x, y in sp[1]])
         if made.get(ed) != want:
             fails.append(f"{file} {ed}: split line {made.get(ed)}, want after, sections and meetings {want}")
+        ends = split_ends(log, file)
+        if ed not in ends:
+            fails.append(f"{file} {ed}: no split end line")
+        else:
+            fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -470,6 +510,15 @@ def self_test():
                 "split (Welsh Premier)", "wel_first")
     if sl != ({2026: (30, [6, 4, 6], [1, 1, 1])}, {2026}):
         bad.append(("splits", sl))
+    good_end = [(0, 35), (2, 35), (1, 35), (5, 35), (4, 35), (3, 35), (6, 33), (7, 33), (9, 33), (8, 33), (10, 35),
+                (11, 35), (12, 35), (13, 35), (15, 35), (14, 35)]
+    sp16 = [(6, 1), (4, 1), (6, 1)]
+    mixed = good_end[:5] + [(6, 33), (3, 35)] + good_end[7:]
+    short = good_end[:6] + [(6, 35)] + good_end[7:]
+    if (end_faults("good", good_end, 30, sp16) or not end_faults("mixed", mixed, 30, sp16) or
+            not end_faults("short", short, 30, sp16) or
+            split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
+        bad.append(("end", end_faults("good", good_end, 30, sp16)))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
