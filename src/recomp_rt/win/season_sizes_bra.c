@@ -33,8 +33,9 @@
  * manager's title record (0x868c50 at 0x686957), as the classes do for their play-off winner (0x42ac3d).
  *
  * With 1 meeting (the base game, the rows of 2001 and the Série B rows 2002 to 2004, or no room for the dates) the
- * class plays its play-off as the original. The base game and RECOMP_LEAGUE_SIZES=off never reach this file
- * (season_sizes_rules calls it only with the size engine on). */
+ * class plays its play-off as the original. The base game and RECOMP_LEAGUE_SIZES=off never change a league here
+ * (season_sizes_rules calls season_sizes_bra_rules only with the size engine on, and the wraps below act only on a
+ * Série A or B object whose stage count that function set to 0). */
 #include "win.h"
 #include "../rt_host.h"
 #include "season_change.h"
@@ -56,6 +57,7 @@
 #define FLAG_CHAMPION 0x01u
 #define FLAG_PLAYOFF_ROWS 0x08u
 #define F_BASE_RESULT 0x00686940u   /* League +0x44: code 5 the title record, 0 promotion, 3 relegation */
+#define F_LEAGUE_HONOURS 0x00684640u /* League::record_season_honours (League vtable 0x96d020 +0x30), thiscall () */
 #define STATUS_CHAMPION 5
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
@@ -124,8 +126,9 @@ static void result(void (*original)(void))
     if (rt_unwinding) return;
     cpu = saved;
     if (getenv("RECOMP_SIZE_LOG"))
-        fprintf(stderr, "recomp: league sizes: %s %d: champion club %u (the top of the table)\n",
-                season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR), a[0]);
+        fprintf(stderr, "recomp: league sizes: %s %d: champion club %.40s (the top of the table)\n",
+                season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR),
+                readable(a[0]) ? win_str(a[0] + 4) : "?");
     rt_ret_stdcall(0, 6);
 }
 
@@ -133,3 +136,19 @@ void o_0042abc0(void);
 RT_WRAP(0042abc0, bra_first_result) { result(o_0042abc0); }
 void o_0042d040(void);
 RT_WRAP(0042d040, bra_second_result) { result(o_0042d040); }
+
+/* The honours. League::update_for_date 0x6847c0 calls vtable +0x30 when the season is complete (0x684a8f). The
+ * Brazilian classes hold 0x408eb0 there, which jumps to +0x30 of stage 0 (0x408eb0..0x408eb7: [this+0xc][0]), the
+ * play-off; the base League holds record_season_honours 0x684640, which takes rows 0 and 1 of the table +0xb1
+ * (0x68465b..0x68465d). With no play-off stage 0 is not there (a jump to 0), so a Série A or B season with no
+ * play-off takes the League's, as the OFC Nations Cup with no stage (season_intl_ofc.c). Other classes that hold
+ * 0x408eb0 keep it. */
+void o_00408eb0(void);
+RT_WRAP(00408eb0, staged_honours)
+{
+    if (no_playoff(cpu.ecx)) {
+        rt_jump(F_LEAGUE_HONOURS);
+        return;
+    }
+    o_00408eb0();
+}
