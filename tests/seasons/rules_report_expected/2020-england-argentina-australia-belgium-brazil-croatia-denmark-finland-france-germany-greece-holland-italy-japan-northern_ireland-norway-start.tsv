@@ -35,7 +35,6 @@
 2020	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Aarhus Fremad, FC Roskilde, Naestved Boldklub, Nyköbing FC
 2020	club_list	Danish Second Division: 16 of 28 listed clubs that the database holds (28 listed), 0 other clubs, 16 in all; not in it: AB Taarnby, Aarhus Fremad, FC Roskilde, FC Sydvest 05, Holstebro Boldklub, Naesby Boldklub, Naestved Boldklub, Nyköbing FC, Roskilde KFUM, Skovshoved IF, Slagelse B&I, Svendborg fb - Oure FA; others: -
 2020	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AZ Alkmaar U21, FC Utrecht U21; others: -
-2020	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: AS Saint-Ouen-l'Aumône, Club Sportif Avionnais
 2020	club_list	Greek National B Division: 12 of 12 listed clubs that the database holds (12 listed), 2 other clubs, 14 in all; not in it: -; others: AO Egaleo, AO Platanias
 2020	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FC Crotone, Spezia Calcio; others: -
 2020	club_list	Japanese J-League 1: 16 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 16 in all; not in it: Avispa Fukuoka, Shonan Bellmare, Tokushima Vortis, Vegalta Sendai; others: -
@@ -87,7 +86,6 @@
 2020	down	cro_a2b (Druga HNL South), row gre-pol-cro-398: game 2 (+0 play-off places), table na (n/a)
 2020	down	den_first (Danish 1st Division), row den-swe-117: game 3 (+0 play-off places), table 2 (2)
 2020	down	den_second (Danish 2nd Divisions), row den-swe-118: game 4 (+0 play-off places), table 16 (16)
-2020	down	fra_second (Ligue 2), row fra-174: game 3 (+0 play-off places), table 2 (2)
 2020	down	ger_second (2. Bundesliga), row ger-249: game 4 (+0 play-off places), table 2 (2)
 2020	down	gre_prm (Super League 1), row gre-pol-cro-47: game 2 (+0 play-off places), table 1 (1 (14th))
 2020	down	ita_ser_b (Serie B), row ita-326: game 4 (+0 play-off places), table 3 (3 direct (18th-20th) + play-out 16th v 17th (two legs; not held if gap over 4 po)
@@ -165,7 +163,6 @@
 2020	rounds	den_first (Danish 1st Division), row den-swe-117: game 30, table 22 (2 meetings, zones -, extra 0)
 2020	rounds	den_prm (Danish Superliga), row den-swe-116: game 33, table 22 (2 meetings, zones -, extra 0)
 2020	rounds	fin_prm (Veikkausliiga), row nor-fin-197: game 33, table 22 (2 meetings, zones -, extra 0)
-2020	rounds	fra_third (Championnat National), row fra-175: game 38, table 34 (2 meetings, zones -, extra 0)
 2020	rounds	gre_second (Super League 2), row gre-pol-cro-74: game 26, table 22 (2 meetings, zones -, extra 0)
 2020	rounds	hol_first (Eerste Divisie), row hol-bel-250: game 34, table 38 (2 meetings, zones -, extra 0)
 2020	rounds	ita_ser_a (Serie A), row ita-325: game 34, table 38 (2 meetings, zones -, extra 0)
@@ -190,7 +187,6 @@
 2020	up	cro_a2a (Druga HNL), row gre-pol-cro-371: game 0 (+0 play-off places), table 1 (1 (1st))
 2020	up	den_second (Danish 2nd Divisions), row den-swe-118: game 3 (+0 play-off places), table 2 (2)
 2020	up	fin_first (Ykkönen), row nor-fin-198: game 2 (+0 play-off places), table 1 (1st (1))
-2020	up	fra_third (Championnat National), row fra-175: game 3 (+0 play-off places), table 2 (2)
 2020	up	gre_cup (Greek Football Cup), row gre-pol-cro-20: game 2 (+0 play-off places), table na (n/a)
 2020	up	gre_second (Super League 2), row gre-pol-cro-74: game 2 (+0 play-off places), table 1 (1 (1st of play-off round))
 2020	up	hol_first (Eerste Divisie), row hol-bel-250: game 1 (+0 play-off places), table 2 (2 (champion and runner-up; Jong teams cannot be promoted))

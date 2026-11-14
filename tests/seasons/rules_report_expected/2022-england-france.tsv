@@ -6,7 +6,6 @@
 2022	bench	uefa_cup (UEFA Europa League), row uefa-173: game 7/9, table 12 (12)
 2022	bench	world_club_champ (FIFA Club World Cup), row club-world-401: game 7/9, table 12 (12)
 2022	bench	world_cup (FIFA World Cup), row int-world-254: game 9, table 15 (15)
-2022	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: FC Mulhouse, Sporting Club de Toulon
 2022	clubs	african_nations (Africa Cup of Nations), row int-continental-238: game 0/4, table 24 (24)
 2022	clubs	asia_nations (AFC Asian Cup), row int-continental-240: game 0/4, table 24 (24)
 2022	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-233: game 5, table 53 (53)
@@ -14,7 +13,6 @@
 2022	clubs	new_concacaf_nations_league (2022-23 CONCACAF Nations League), row int-continental-237: game 3, table 41 (41)
 2022	clubs	world_club_champ (FIFA Club World Cup), row club-world-401: game 0, table 7 (7)
 2022	clubs	world_cup (FIFA World Cup), row int-world-254: game 4, table 32 (32)
-2022	down	fra_second (Ligue 2), row fra-192: game 3 (+0 play-off places), table 4 (4)
 2022	down	fra_third (Championnat National), row fra-193: game 4 (+0 play-off places), table 6 (6)
 2022	idle	new_uefa_nations_league (2022-23 UEFA Nations League), row int-continental-234: the game waits for 2024, the table holds it
 2022	no_row	friendly (Friendly): no table row
@@ -26,8 +24,6 @@
 2022	not_in_game	fra-194 fra_cfa 'National 2' (France)
 2022	not_in_game	fra-195 fra_lower 'National 3' (France)
 2022	not_in_game	uefa-169 uefa_seeding 'UEFA access list and seeding' (UEFA)
-2022	rounds	fra_third (Championnat National), row fra-193: game 38, table 34 (2 meetings, zones -, extra 0)
-2022	up	fra_third (Championnat National), row fra-193: game 3 (+0 play-off places), table 2 (2)
 2023	bench	eng_first (EFL Championship), row eng-249: game 7, table 9 (9)
 2023	bench	eur_super_cup (UEFA Super Cup), row uefa-184: game 9, table 12 (12)
 2023	bench	european_cup (UEFA Champions League), row uefa-178: game 9, table 12 (12)
@@ -47,7 +43,6 @@
 2023	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-269: game 24, table 32 (32 entrants (hosts exempt))
 2023	clubs	world_club_champ (FIFA Club World Cup), row club-world-420: game 0, table 7 (7)
 2023	down	fra_first (Ligue 1), row fra-200: game 4 (+0 play-off places), table 2 (2)
-2023	down	fra_second (Ligue 2), row fra-201: game 3 (+0 play-off places), table 4 (4)
 2023	down	fra_third (Championnat National), row fra-202: game 4 (+0 play-off places), table 6 (6)
 2023	name	new_concacaf_gold_cup (2023 CONCACAF Gold Cup), row int-continental-247: game '2023 CONCACAF Gold Cup', table 'CONCACAF Gold Cup'
 2023	name	new_concacaf_nations_league (2022-23 CONCACAF Nations League), row int-continental-248: game '2022-23 CONCACAF Nations League', table '2023-24 CONCACAF Nations League'
@@ -71,8 +66,6 @@
 2023	playoffs	fra_first (Ligue 1), row fra-200: game 0 up and 0 down play-off places, table 0 and 1 ('16th v winner of the Ligue 2 play-off, two legs')
 2023	playoffs	fra_second (Ligue 2), row fra-201: game 0 up and 0 down play-off places, table 3 and 0 ('4th v 5th, winner v 3rd, winner v Ligue 1 16th; no relegation play-off')
 2023	rounds	fra_first (Ligue 1), row fra-200: game 38, table 34 (2 meetings, zones -, extra 0)
-2023	rounds	fra_third (Championnat National), row fra-202: game 38, table 34 (2 meetings, zones -, extra 0)
-2023	up	fra_third (Championnat National), row fra-202: game 3 (+0 play-off places), table 2 (2)
 2024	bench	eng_first (EFL Championship), row eng-259: game 7, table 9 (9)
 2024	bench	eur_super_cup (UEFA Super Cup), row uefa-192: game 9, table 12 (12)
 2024	bench	european_cup (UEFA Champions League), row uefa-186: game 9, table 12 (12)
