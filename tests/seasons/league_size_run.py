@@ -70,7 +70,17 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Slice 14 (D8): calendar-year leagues, edition Y plays row Y - 1. J1 plays halves and the final only in the rows
+    # of two stages; its table holds both halves (season_sizes_asia.c).
+    "jap_j1": (2005, 2006, "J1, 18 clubs in one table: 34 dates, no halves and no final"),
+    "jap_j1@2015": (2015, 2016, "J1, 18 clubs in two halves of 17 rounds and the final"),
+    "jap_j2": (2010, 2011, "J2, 19 clubs in two meetings: 38 dates (the class plays 4 meetings of 12)"),
+    "kor_league": (2013, 2014, "K League, 14 clubs: 26 rounds, then sections of 7 and 7 that meet twice"),
 }
+
+# Files whose table holds both halves of a row of halves, so it plays twice the row's meetings (slice 14,
+# src/recomp_rt/win/season_sizes_asia.c): J1, and the K League stages as one table.
+HALVES_IN_TABLE = {"jap_j1", "kor_league"}
 
 
 def encoded_row(file, season):
@@ -84,7 +94,10 @@ def encoded_row(file, season):
                 continue
             s = int(row["season"])
             if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                best = (s, int(row["clubs"]), int(row["meetings"]) if row.get("meetings", "").isdigit() else 0)
+                m = int(row["meetings"]) if row.get("meetings", "").isdigit() else 0
+                if file in HALVES_IN_TABLE and row.get("halves") == "1":
+                    m *= 2
+                best = (s, int(row["clubs"]), m)
     return (best[1], best[2]) if best else (0, 0)
 
 
@@ -333,6 +346,50 @@ def no_playoff_faults(log, file, meetings):
     return fails
 
 
+def encoded_halves(file, season):
+    """1 when the encoded row of a file in a season (the after-table rule) plays two halves."""
+    best = None
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") != file or not row.get("season", "").isdigit():
+                continue
+            s = int(row["season"])
+            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
+                best = (s, row.get("halves") == "1")
+    return bool(best and best[1])
+
+
+def j1_faults(log, file, editions):
+    """J1 (slice 14, D8): an edition of a row of halves plays the halves of its count and their final or a double
+    winner; an edition of one table plays no half and its top club is the champion."""
+    if file != "jap_j1":
+        return []
+    lines = log.split("\n")
+    fails = []
+    for ed in sorted(editions):
+        tag = f"recomp: league sizes: jap_j1 {ed}: "
+        mine = [x[len(tag):] for x in lines if x.startswith(tag)]
+        clubs, m = edition_row(file, ed)
+        if encoded_halves(file, ed - 1 if calendar_year(file) else ed):
+            if not any(x.startswith("halves and the final") for x in mine):
+                fails.append(f"jap_j1 {ed}: no log line of a season of halves")
+            if any(x.startswith("one table") for x in mine):
+                fails.append(f"jap_j1 {ed}: a season of halves played one table")
+            half = m * (clubs - 1) // 2
+            if half != 15 and not any(x.startswith(f"half of {clubs} clubs, {half} matches") for x in mine):
+                fails.append(f"jap_j1 {ed}: no half of {clubs} clubs with {half} matches a club")
+        else:
+            if not any(x.startswith("one table, no halves and no final") for x in mine):
+                fails.append(f"jap_j1 {ed}: no log line of a season of one table")
+            if any(x.startswith(("half of", "final of the halves")) for x in mine):
+                fails.append(f"jap_j1 {ed}: a season of one table made a half or a final")
+            if not any(x.startswith("champion club ") for x in mine):
+                fails.append(f"jap_j1 {ed}: no champion of the table in the log")
+    return fails
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
@@ -416,6 +473,7 @@ def faults(work, file, year, last):
         else:
             fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
+    fails += j1_faults(log, file, {ed for ed, *_x in done})
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -569,6 +627,20 @@ def self_test():
     if no_playoff_faults(off, "bra_nat_first", 2) or len(no_playoff_faults("", "bra_nat_first", 2)) != 2 or \
             no_playoff_faults("", "bra_nat_first", 1) or no_playoff_faults("", "nor_prm", 2):
         bad.append(("no play-off", no_playoff_faults(off, "bra_nat_first", 2)))
+    # Slice 14: the table of a row of halves holds both halves (twice the row's meetings).
+    if (encoded_row("jap_j1", 2014) != (18, 2) or encoded_row("jap_j1", 2004) != (18, 2) or
+            encoded_row("kor_league", 2005) != (14, 2) or encoded_row("jap_j2", 2009) != (19, 2) or
+            edition_row("jap_j1", 2015) != (18, 2) or not encoded_halves("jap_j1", 2014) or
+            encoded_halves("jap_j1", 2004)):
+        bad.append(("encoded asia", encoded_row("jap_j1", 2014), encoded_row("kor_league", 2005)))
+    one = ("recomp: league sizes: jap_j1 2005: one table, no halves and no final (row 2004)\n"
+           "recomp: league sizes: jap_j1 2005: champion club 1234 (the top of the table)")
+    halves = ("recomp: league sizes: jap_j1 2015: halves and the final (row 2014), 3 stages\n"
+              "recomp: league sizes: jap_j1 2015: half of 18 clubs, 17 matches a club (the class makes 15)")
+    if (j1_faults(one, "jap_j1", {2005}) or j1_faults(halves, "jap_j1", {2015}) or
+            len(j1_faults(halves.replace("2015", "2005"), "jap_j1", {2005})) != 3 or
+            len(j1_faults(one.replace("2005", "2015"), "jap_j1", {2015})) != 3 or j1_faults("", "nor_prm", {2009})):
+        bad.append(("j1", j1_faults(one, "jap_j1", {2005}), j1_faults(halves, "jap_j1", {2015})))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")

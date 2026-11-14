@@ -364,7 +364,7 @@ static void game_free(uint32_t p)
 static int grown_meetings(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
-    int m = r ? season_league_meetings(file, r->season) : 0;
+    int m = r ? season_sizes_asia_meetings(file, r->season, season_league_meetings(file, r->season)) : 0;
     if (m >= 1 && m <= 4 && m != (int16_t)rd16(g_mem, obj + COMP_MEETINGS)) {
         if (logging())
             fprintf(stderr, "recomp: league sizes: %s meetings %d (%.50s %d, the class sets %d)\n", file, m,
@@ -797,6 +797,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
+    if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
 }
 
 /* ---- Promotion and relegation of a size change ---- */

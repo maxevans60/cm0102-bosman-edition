@@ -662,9 +662,9 @@ const int season_size_caps[] = {
     20,       /* ita_ser_b */
     18,       /* ita_ser_c1a */
     18,       /* ita_ser_c1b */
-    16,       /* jap_j1 */
-    12,       /* jap_j2 */
-    10,       /* kor_league */
+    20,       /* jap_j1 */
+    22,       /* jap_j2 */
+    16,       /* kor_league */
     10,       /* nir_first */
     16,       /* nir_prm */
     16,       /* nor_first */
@@ -811,13 +811,16 @@ const int season_size_fixed[] = {
 const SeasonGrown season_grown[] = {
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"jap_j1", 16, 20, SEASON_TEMPLATE_SHUFFLED},
+    {"jap_j2", 12, 22, SEASON_TEMPLATE_SHUFFLED},
+    {"kor_league", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 7;
+const int season_grown_count = 10;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -839,6 +842,39 @@ RT_WRAP(0042c140, schedule_42c140)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_0042c140();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* JapJ1::create_schedule */
+void o_00662e30(void);
+RT_WRAP(00662e30, schedule_662e30)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00662e30();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* JapJ2::create_schedule */
+void o_00664780(void);
+RT_WRAP(00664780, schedule_664780)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00664780();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* KorLeague::create_schedule */
+void o_0066b130(void);
+RT_WRAP(0066b130, schedule_66b130)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0066b130();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

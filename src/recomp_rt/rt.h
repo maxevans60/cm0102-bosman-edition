@@ -450,6 +450,10 @@ uint32_t rt_pol_lge_second(uint32_t cup);
 uint32_t rt_jap_j_cup_j2(uint32_t cup);
 uint32_t rt_jap_emp_lower(uint32_t pool);
 uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
+/* J1 halves of the row's count (0.7.2 league sizes, slice 14, D8; win/season_sizes_asia.c, tools/recomp/sizes_asia.py):
+ * the first round of the second half and the matches of a club in a half; the original in the base game. */
+uint32_t rt_jap_half_rounds(uint32_t league, uint32_t original);
+uint32_t rt_jap_half_matches(uint32_t league, uint32_t original);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
