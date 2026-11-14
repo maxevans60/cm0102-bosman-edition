@@ -59,10 +59,6 @@ PLACES = {
 }
 NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
 
-# Division differences of a start that slice 3 does not make (printed as KNOWN, not failed): open item 236, the slice
-# 2 date planner keeps the Segunda Liga's table at 18 at a 2013/14 start while the fill puts 22 clubs in it.
-KNOWN = {"portugal": {(2013, "por_second")}}
-
 MOVE_LINE = re.compile(r"recomp: league sizes: step: (.*) from (.*) to (.*)$")
 
 STEP_LINE = re.compile(r"recomp: league sizes: step: (\S+) \((.*?)\) (\d+): (\d+) clubs, the row (\d+)(.*)")
@@ -122,11 +118,7 @@ def faults(work, case):
         moves = [m.group(0) for m in map(MOVE_LINE.match, log.split("\n")) if m and
                  (m.group(2) in names or m.group(3) in names)]
         fails += [f"{file}: the step moved a club: {m}" for m in moves]
-    for d in sorted(rrc.division_differences(comps, clubs)):
-        if (d[0], d[2].split(" ")[0]) in KNOWN.get(case, set()):
-            print(f"KNOWN {d[0]} {d[2]} (open item 236)")
-        else:
-            fails.append(f"{d[0]} {d[2]}")
+    fails += [f"{d[0]} {d[2]}" for d in sorted(rrc.division_differences(comps, clubs))]
     return fails
 
 
