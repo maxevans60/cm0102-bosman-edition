@@ -197,8 +197,11 @@ without Web Locks starts as before.
 Two more holes are closed. A page loaded before this code takes no turn, so after a deploy a tab left open from the day
 before would go on removing a new tab's saves: the vault's database is now version 2 (`VAULT_VERSION`), and opening it
 asks the older page's version 1 connection to close (that page's code does, on `versionchange`); it cannot open version
-1 again, so each of its rounds fails ("The requested version (1) is less than the existing version (2)") and it removes
-nothing. A page older still, which keeps its connection, holds the opening up: the new page says "An older page of the
+1 again, so each of its vault rounds fails ("The requested version (1) is less than the existing version (2)") and it
+removes no saves from the vault. That fences the vault only: the older page's user folder sync (IDBFS, every 15 s)
+still runs, so until it is closed or loaded again it can remove the new tab's settings, tactics and data set notes,
+and with the Asyncify engine or the vault off, saves too. Its own game can no longer open its vault's saves (the open
+fails and the player is told nothing). A page older still, which keeps its connection, holds the opening up: the new page says "An older page of the
 game runs in another tab" and goes on by itself once that tab is closed or loaded again. (Checked on the real engine
 with the page of commit ce216d4 in one tab and this one in another: the new tab's save stayed whole.) And a tab whose
 turn was taken with Play here anyway learns it from its lock request only once it wakes, maybe after a timer of its

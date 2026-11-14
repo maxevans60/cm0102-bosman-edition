@@ -169,6 +169,12 @@ and copy the `[http_service.concurrency]` and `[[http_service.checks]]` parts of
 `fly launch` may have made two machines (`fly status` lists them). Both serve the same files, and the statistics
 add up across them (each write adds what its machine counted). One is enough: `fly scale count 1` leaves one.
 
+## No rollback past one tab at a time
+
+Since one tab at a time (November 2026) the saves' vault in each browser is IndexedDB version 2 (`web/vault.js`,
+`VAULT_VERSION`). A page of an earlier commit opens version 1, which the browser then refuses: that page turns the
+vault off and lists none of the player's saves. So do not deploy a commit from before it again; fix forward instead.
+
 ## If something goes wrong
 
 | What you see | What to do |
