@@ -381,6 +381,10 @@ static int zones_plan(const Form *f, const uint32_t *club, int n, int round[][SE
         fprintf(stderr, "; rivals");
         for (int c = 0; c < z; c++)
             fprintf(stderr, " %.30s~%.30s,", win_str(club[a[order[c]]] + CLUB_NAME), win_str(club[b[rival[c]]] + CLUB_NAME));
+        fprintf(stderr, "; not in the division:");
+        for (int k = 0; s >= 0 && k < season_arg_prm_zone_count; k++)
+            if (season_arg_prm_zones[k].season == s && index_of(club, n, season_arg_prm_zones[k].club) < 0)
+                fprintf(stderr, " %s,", season_arg_prm_zones[k].club);
         fprintf(stderr, "\n");
     }
     return rounds;
@@ -429,6 +433,13 @@ static int derby_plan(const Form *f, const uint32_t *club, int n, int year, int 
                 f->season, s, (n - nr) / 2, derby_at + 1);
         for (int i = 0; i < n; i++)
             if (i < derby[i]) fprintf(stderr, " %u-%u", rd32(g_mem, club[i]), rd32(g_mem, club[derby[i]]));
+        fprintf(stderr, "; not in the division:");
+        for (int k = 0; k < season_arg_pair_count; k++) {
+            const SeasonArgPair *p = &season_arg_pairs[k];
+            if (p->kind != SEASON_ARG_DERBY || p->season != s) continue;
+            if (index_of(club, n, p->home) < 0) fprintf(stderr, " %s,", p->home);
+            if (index_of(club, n, p->away) < 0) fprintf(stderr, " %s,", p->away);
+        }
         fprintf(stderr, ";");
         for (int i = 0; i < n; i++)
             if (i < derby[i])

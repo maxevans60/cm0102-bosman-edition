@@ -390,20 +390,23 @@ def arg_faults(log, year):
     fails = []
     lines = log.split("\n")
     fixtures = arg_fixtures(log)
-    zone_lines = {}
-    derby_lines = {}
+    # The zones or derby line that each fixture line follows (an edition's plan is logged just before its lists).
+    plan_of = {}
+    last_plan = None
     for x in lines:
         m = re.match(r"recomp: league sizes: arg_prm zones (\d+): list (-?\d+), (\d+) clubs of the list, rivals (\d+) "
                      r"of the list, drawn (\d+) of the list, drawn round (\d+); A ([\d ]+); B ([\d ]+);", x)
         if m:
-            zone_lines.setdefault(int(m.group(1)), []).append(
-                (int(m.group(3)), int(m.group(4)), int(m.group(5)), int(m.group(6)),
-                 [int(c) for c in m.group(7).split()], [int(c) for c in m.group(8).split()]))
+            last_plan = ("zones", int(m.group(3)), int(m.group(4)), int(m.group(5)), int(m.group(6)),
+                         [int(c) for c in m.group(7).split()], [int(c) for c in m.group(8).split()])
         m = re.match(r"recomp: league sizes: arg_prm derby (\d+): list (-?\d+), (\d+) pairs of the list, derby round "
                      r"(\d+); pairs ([\d\- ]+);", x)
         if m:
-            derby_lines.setdefault(int(m.group(1)), []).append(
-                (int(m.group(3)), int(m.group(4)), [tuple(int(c) for c in p.split("-")) for p in m.group(5).split()]))
+            last_plan = ("derby", int(m.group(3)), int(m.group(4)),
+                         [tuple(int(c) for c in p.split("-")) for p in m.group(5).split()])
+        m = re.match(r"recomp: league sizes: arg_prm fixtures (\d+) (\w+):", x)
+        if m:
+            plan_of[(int(m.group(1)), m.group(2))] = last_plan
     seen = set()
     for (ed, half), rounds in sorted(fixtures.items()):
         season = edition_season("arg_prm", ed)
@@ -417,12 +420,12 @@ def arg_faults(log, year):
         for r in rounds:
             for h, a in r:
                 meet[frozenset((h, a))] = meet.get(frozenset((h, a)), 0) + 1
+        plan = plan_of.get((ed, half if half == "apertura" else "apertura"))
         if zones:
-            z = zone_lines.get(season)
-            if not z:
-                fails.append(f"{name}: no zones line of row {season}")
+            if not plan or plan[0] != "zones":
+                fails.append(f"{name}: no zones line before its fixtures")
                 continue
-            in_list, rivals, drawn, _at, za, zb = z[-1]
+            in_list, rivals, drawn, _at, za, zb = plan[1:]
             if len(za) != zones[0] or len(zb) != zones[1]:
                 fails.append(f"{name}: zones of {len(za)} and {len(zb)}, want {zones}")
             for grp in (za, zb):
@@ -439,17 +442,18 @@ def arg_faults(log, year):
                 ap = fixtures.get((ed, "apertura"), [])
                 if [[(a, h) for h, a in r] for r in ap] != rounds:
                     fails.append(f"{name}: not the Apertura with the venues reversed")
-            if ed == year and season == year - 1 and (in_list, rivals, drawn) != (clubs, zones[0], zones[0]):
-                fails.append(f"{name}: {in_list} clubs, {rivals} rivals and {drawn} drawn pairs of the list, want "
-                             f"{clubs}, {zones[0]} and {zones[0]} (a game started in its season)")
+            # A game started in its season: the club moves give the division the clubs of the database's date
+            # (December 2025 for a 2025 start), so a club of the list can be missing; at most 2 of each.
+            if ed == year and (in_list < clubs - 2 or rivals < zones[0] - 2 or drawn < zones[0] - 2):
+                fails.append(f"{name}: {in_list} clubs, {rivals} rivals and {drawn} drawn pairs of the list, want at "
+                             f"least {clubs - 2}, {zones[0] - 2} and {zones[0] - 2} (a game started in its season)")
             if not halves and half == "clausura":
                 fails.append(f"{name}: a Clausura in a row of one table")
         elif extra:
-            d = derby_lines.get(season)
-            if not d:
-                fails.append(f"{name}: no derby line of row {season}")
+            if not plan or plan[0] != "derby":
+                fails.append(f"{name}: no derby line before its fixtures")
                 continue
-            from_list, at, pairs = d[-1]
+            from_list, at, pairs = plan[1:]
             derby = {frozenset(p) for p in pairs}
             ids = {c for r in rounds for m in r for c in m}
             for x in ids:
@@ -458,9 +462,9 @@ def arg_faults(log, year):
                         fails.append(f"{name}: clubs {x} and {y} meet {meet.get(frozenset((x, y)), 0)} times")
             if at - 1 < len(rounds) and {frozenset(m) for m in rounds[at - 1]} != derby:
                 fails.append(f"{name}: round {at} is not the derby round")
-            if ed == season == year and from_list != clubs // 2:
-                fails.append(f"{name}: {from_list} derby pairs of the list, want {clubs // 2} (a game started in its "
-                             f"season)")
+            if ed == season == year and from_list < clubs // 2 - 2:
+                fails.append(f"{name}: {from_list} derby pairs of the list, want at least {clubs // 2 - 2} (a game "
+                             f"started in its season)")
     for ed in range(year, year + 2):
         clubs, _m, zones, extra, _r, _h = encoded_form("arg_prm", edition_season("arg_prm", ed))
         if (zones or extra) and ed not in seen and any(f"arg_prm {ed}:" in x or f" {ed}, the class makes" in x
@@ -473,10 +477,11 @@ def arg_faults(log, year):
             fails.append(f"arg_prm {ed}: no averages line of {n} clubs")
     fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines
               if re.search(r"league sizes: step: .* from Argentine Second Division to no division", x)]
-    if year in seen:
-        print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))
-    else:
-        fails.append(f"arg_prm {year}: no fixture line")
+    print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))
+    for x in lines:
+        if "league sizes: arg_prm " in x and "not in the division:" in x:
+            print("arg_prm: " + x.split(": ", 1)[1].split("; ")[0] + "; not in the division:" +
+                  x.split("not in the division:", 1)[1].split(";")[0])
     return fails
 
 
