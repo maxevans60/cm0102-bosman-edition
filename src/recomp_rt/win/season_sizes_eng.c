@@ -22,7 +22,7 @@
  * exists (season_sizes_eng_below): the object of a played Conference can be made after League Two at a new game, and
  * an unplayed one has none. The wrap of 0x574e60 runs the original and then moves up as many more clubs of the
  * Conference record as went down beyond the one it moved, the best by reputation that may go up (0x599e00 as
- * 0x574f85..0x574fb7). The base game and a League Two of one relegation place keep the original alone.
+ * 0x574f85..0x574fb7); when none is left, the best placed of the clubs that went down stay in League Two. The base game and a League Two of one relegation place keep the original alone.
  *
  * Lead decision (sz08, 14 November 2026, Max away): the feeder exchange 0x5750a0 stays the class's 3 for 3. Its three
  * slots take one club from each of three feeder leagues (0x57520f..0x575245); the leagues below the Conference are
@@ -180,9 +180,17 @@ RT_WRAP(00574e60, eng_conf_unplayed)
             need--;
             if (logging()) fprintf(stderr, "recomp: league sizes: eng: %.51s goes up to League Two\n", name_of(club));
         }
-        if (need > 0 && !rt_unwinding)
-            fprintf(stderr, "recomp: league sizes: eng: %d places of League Two left with no Conference club that "
-                            "may go up\n", need);
+        /* No Conference club left that may go up: the best placed League Two clubs that went down stay up, as the
+         * original keeps its last row (0xfe at 0x574fcd) when its one club may not go up. League Two keeps its count
+         * also with changing rules off, where no size step runs. went[] is in the order of the table. */
+        for (int k = 0; k < nwent && need > 0 && !rt_unwinding; k++) {
+            if (!readable(went[k]) || !in_division(went[k], KEY_CONF)) continue;
+            uint32_t a[3] = {went[k], rd32(g_mem, RECORDS) + rec * RECORD_SIZE, 1};
+            call_this(F_MOVE_CLUB, self, 3, a);
+            need--;
+            fprintf(stderr, "recomp: league sizes: eng: %.51s stays in League Two (no Conference club may go up)\n",
+                    name_of(went[k]));
+        }
     }
     free(conf);
     free(went);

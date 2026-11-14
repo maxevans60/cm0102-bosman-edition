@@ -58,8 +58,10 @@ CASES = {
 EXTRA = {"conference": ["conference"]}
 
 # The exchanges of league_promote_and_relegate 0x689c80 between two leagues of a case (the log line of the wrap in
-# season_sizes.c): (upper, lower, clubs each way, the least count of such lines, one per season change).
-EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 2)}
+# season_sizes.c): (upper, lower, clubs each way, the least count of such lines). The chain body 0x5752f0 makes no
+# such call in a season whose Conference champion may not go up (0x57541a, return at 0x575468), so the least is 1 of
+# the 2 season changes of the case.
+EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 1)}
 EXCHANGE_LINE = re.compile(r"recomp: league sizes: (\S+) \(.*?\) down (-?\d+), (\S+) \(.*?\) up (-?\d+), pairs")
 
 # D23: the places of the season before a change (report season, up, down; None: not checked) and the files whose
@@ -210,7 +212,7 @@ def self_test():
         bad.append(("start_counts", c))
     x = ("recomp: league sizes: eng_third (Football League Two) down 2, eng_conf (Football Conference) up 2, pairs 1, "
          "expected -1 up -1 down\n")
-    if exchange_faults(x * 2, "conference") or not exchange_faults(x, "conference") or \
+    if exchange_faults(x * 2, "conference") or not exchange_faults("", "conference") or \
             not exchange_faults(x.replace("down 2", "down 1") * 2, "conference"):
         bad.append(("exchange_faults", exchange_faults(x, "conference")))
     for b in bad:
