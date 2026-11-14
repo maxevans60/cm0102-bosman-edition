@@ -119,7 +119,7 @@ Delivers: `GROWN` holds one row per class with the found table site and a genera
 Merge danger: one-way door for saves (a save holds the grown table). Blast radius: every league of a season game.
 - [x] `league_size_run.py` passes for nor_prm 2009 and por_second 2014, and swe_prm_run.py still passes
 - [x] A calendar-year league gets no round in its winter break, and a shrunk league ends on its usual date
-- [ ] The same-save set is equal with rules off
+- [x] The same-save set is equal with rules off
 
 ### 3. Club moves and the size step
 Blocked by: 2
