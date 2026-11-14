@@ -54,6 +54,8 @@ static int sizes_on(void)
     return !off && season_game_changes();
 }
 
+int season_sizes_on(void) { return sizes_on(); }
+
 static int logging(void)
 {
     static int on = -1;
@@ -86,6 +88,16 @@ static int floor_of(const char *file)
     if (i < 0) return 0;
     if (!strcmp(file, "eng_second") && season_start_year() == 2019) return 23;
     return season_size_floors[i];
+}
+
+/* The smallest count of a file's exchange: its floor, or the count of FIXED_EXCHANGE (league_sizes.py) whose places
+ * and exchange stay the class's until the league's own slice (0.7.2 slice 4: the floors of the cups of Britain and
+ * Ireland went, their exchanges stay). sizes_rules and the wrap of 0x689c80 read it, the club moves do not. */
+static int exchange_floor(const char *file)
+{
+    int i = size_index(file), low = floor_of(file);
+    /* floor_of gives League One 23 in a 2019 start (Q282): that floor stays the bound, as before slice 4. */
+    return low > 0 || i < 0 ? low : season_size_fixed[i];
 }
 
 /* A count within the class's floor and cap. */
@@ -638,7 +650,7 @@ static int open_neighbour(uint32_t obj, uint32_t at)
     uint32_t other = neighbour(obj, at);
     if (!other) return 0;
     const char *f = season_change_file(other);
-    return size_file(f) && floor_of(f) == 0;
+    return size_file(f) && exchange_floor(f) == 0;
 }
 
 static void sizes_rules(uint32_t obj)
@@ -647,7 +659,7 @@ static void sizes_rules(uint32_t obj)
     const char *file = season_change_file(obj);
     /* A floor division keeps its places too: its count must stay, and some of its exchanges are fixed code (League
      * Two with the Conference: 2 down and 1 back gave 23 clubs in 2023/24 of a 2022/23 game). */
-    if (!size_file(file) || floor_of(file) > 0) return;
+    if (!size_file(file) || exchange_floor(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
     /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
@@ -737,8 +749,8 @@ RT_WRAP(00689c80, promote_relegate)
     if (change && season_changing_rules()) {
         const char *fu_name = season_change_file(upper), *fl_name = season_change_file(lower);
         int cu = cap_of(fu_name), cl = cap_of(fl_name);
-        int lu = floor_of(fu_name) > MIN_CLUBS * 4 ? floor_of(fu_name) : MIN_CLUBS * 4;
-        int ll = floor_of(fl_name) > MIN_CLUBS * 4 ? floor_of(fl_name) : MIN_CLUBS * 4;
+        int lu = exchange_floor(fu_name) > MIN_CLUBS * 4 ? exchange_floor(fu_name) : MIN_CLUBS * 4;
+        int ll = exchange_floor(fl_name) > MIN_CLUBS * 4 ? exchange_floor(fl_name) : MIN_CLUBS * 4;
         int nu = clubs_in_division(upper) - down + up, nl = clubs_in_division(lower) + down - up;
         single = cu > 0 && cl > 0 && nu >= lu && nu <= cu && nl >= ll && nl <= cl;
         if (logging() && !single)

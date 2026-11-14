@@ -218,22 +218,31 @@ PATCHES = {
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
 # cups are slice 21). Each cup fills fixed places with every club of these divisions, or needs their sum:
-# EngCcCup 0x56ccc0 (92, the four League divisions), EngFaCup 0x56fab0 (22 Conference places), WelLgeCup 0x927010
-# (18 places, box wel_lge_cup.cpp 743), BelFaCup 0x41d8d0 (a sort of 44 at 0x41d9e4), GreCup 0x5e9a80 (a sort of 16
-# at 0x5e9b60), CroCup 0x517bb0 (48, no check), RusCup 0x7e99a0 (48, box rus_cup.cpp 78), TurCup 0x8fcb90 (64 from
-# fixed places), NirCup 0x78ac90 (Premier and First from place 12), ItaCCup 0x63dfe0 (90 C1 and C2 places), HolCup
-# 0x5f4820 (86 places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0 (J1 16 sorted at 0x6628af),
-# KorLeagueCup 0x66cf20 (10 places, box line 703), ScoLgeCup 0x7f0400 and ScoChalCup 0x7ed010 (sums of the four
-# divisions), PolLgeCup 0x7cad30 (Second + First = 34), FraCup 0x5baa50 (the whole National, then lower clubs to
-# 182: a National of 18 gave 2 more squadless lower clubs, and a 2022/23 game stopped in January 2023 at
-# virtual_staff.cpp 195, VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0).
-FLOORS = {"eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first", "bel_first", "bel_second",
-          "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first", "tur_second",
-          "nir_first", "nir_prm", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm", "jap_j1", "jap_j2",
-          "kor_league", "sco_first", "sco_prm", "sco_second", "sco_third", "pol_second", "fra_third"}
+# BelFaCup 0x41d8d0 (a sort of 44 at 0x41d9e4), GreCup 0x5e9a80 (a sort of 16 at 0x5e9b60), CroCup 0x517bb0 (48, no
+# check), RusCup 0x7e99a0 (48, box rus_cup.cpp 78), TurCup 0x8fcb90 (64 from fixed places), ItaCCup 0x63dfe0 (90 C1
+# and C2 places), HolCup 0x5f4820 (86 places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0 (J1 16 sorted at
+# 0x6628af), KorLeagueCup 0x66cf20 (10 places, box line 703), PolLgeCup 0x7cad30 (Second + First = 34), FraCup
+# 0x5baa50 (the whole National, then lower clubs to 182: a National of 18 gave 2 more squadless lower clubs, and a
+# 2022/23 game stopped in January 2023 at virtual_staff.cpp 195, VIRTUAL_STAFF::fill_fixture_squads 0x90d2f0).
+# The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14;
+# src/recomp_rt/win/season_cup_sizes_uk.c): EngCcCup 0x56ccc0, EngFaCup 0x56fab0, WelCup 0x924ab0, WelLgeCup
+# 0x927010, NirCup 0x78ac90, ScoLgeCup 0x7f0400 and ScoChalCup 0x7ed010. Their divisions have no floor.
+FLOORS = {"bel_first", "bel_second", "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first",
+          "tur_second", "ita_ser_c1a", "ita_ser_c1b", "hol_first", "hol_prm", "jap_j1", "jap_j2", "kor_league",
+          "pol_second", "fra_third"}
 # The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
 # after 2001, 0x7cad4f), else its largest count.
 FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
+# The divisions whose places and exchange stay the class's, though the club moves give them the count of their row
+# (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
+# of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
+# pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
+# leagues: the Conference and League Two (a fixed exchange, D15, slice 8; 2 down and 1 back gave League Two 23), the
+# Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and the Welsh
+# Premier. file: the count of the old floor.
+FIXED_EXCHANGE = {f: CAPS[f] for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
+                                       "nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second", "sco_third")}
+assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
 # The count of the file (+0x3e, the store of CLASSES) must reach the count here in every season, or the row holds no
@@ -266,6 +275,26 @@ CUP_INSNS = {
     # below it, and no copy takes more than its stack array holds (O294, season_sizes.c rt_fa_cup_takes).
     0x56FFE4: ("movsx di, byte ptr [esp + 0x1b]", "edi = (edi & 0xffff0000u) | (rt_fa_cup_takes(esp) & 0xffffu);"),
 }
+
+# The cups of Britain and Ireland that take every club of their divisions (0.7.2 league sizes, slice 4, D14;
+# season_cup_sizes_uk.c rt_cup_clubs): the list size and the count of the sum of the divisions, the original's
+# constant in the base game.
+_ENG_LEAGUE = "0x9cf5bcu, 0x9cf5c0u, 0x9cf5c4u, 0x9cf5c8u"
+_SCO_LEAGUE = "0x9cf5dcu, 0x9cf5e0u, 0x9cf5e4u, 0x9cf5e8u"
+_SCO_LOWER = "0x9cf5e0u, 0x9cf5e4u, 0x9cf5e8u, 0u"
+CUP_COUNTS = {
+    # EngCcCup::collect_entrants 0x56ccc0: 92 places of the four League divisions.
+    0x56CCCD: ("push 0x228", f"esp -= 4; W32(esp, rt_cup_clubs(0x5cu, {_ENG_LEAGUE}) * 6u);"),
+    0x56CCD4: ("mov word ptr [esi + 0x3e], 0x5c", f"W16(esi + 0x3eu, rt_cup_clubs(0x5cu, {_ENG_LEAGUE}));"),
+    # ScoLgeCup::collect_entrants 0x7f0400: 40 in 1999, else 42, the four divisions; the list comes from the count.
+    0x7F0417: ("mov word ptr [esi + 0x3e], 0x28", f"W16(esi + 0x3eu, rt_cup_clubs(0x28u, {_SCO_LEAGUE}));"),
+    0x7F041F: ("mov word ptr [esi + 0x3e], 0x2a", f"W16(esi + 0x3eu, rt_cup_clubs(0x2au, {_SCO_LEAGUE}));"),
+    # ScoChalCup::collect_entrants 0x7ed010: 30 places of the First, Second and Third Divisions.
+    0x7ED01B: ("push 0xb4", f"esp -= 4; W32(esp, rt_cup_clubs(0x1eu, {_SCO_LOWER}) * 6u);"),
+    0x7ED024: ("mov word ptr [esi + 0x3e], 0x1e", f"W16(esi + 0x3eu, rt_cup_clubs(0x1eu, {_SCO_LOWER}));"),
+}
+assert not set(CUP_COUNTS) & set(CUP_INSNS)
+CUP_INSNS.update(CUP_COUNTS)
 
 # The cup lists of the original (0.6.2 item 64; O151 before it for three cups). Each class takes a new list (6 bytes
 # a place) from the allocator 0x944e46, which does not clear the block, and stores it to +0xa7. Rows: the address of
@@ -340,6 +369,12 @@ LIST_STORES_LEFT = {0x523131: "Cup_Stage::Cup_Stage", 0x52095F: "Cup::load_from_
 for _at, (_reg, _bytes) in LIST_STORES.items():
     _size = f"{_bytes:#x}u" if _bytes is not None else f"(uint32_t)(int16_t)R16({_reg} + 0x3eu) * 6u"
     CUP_INSNS[_at] = (f"mov dword ptr [{_reg} + 0xa7], eax", f"W32({_reg} + 0xa7u, rt_cup_places_list(eax, {_size}));")
+# The lists of CUP_COUNTS: the count at +0x3e is set before the store (0x56ccd4 before 0x56ccea, 0x7ed024 before
+# 0x7ed034), so the clear takes the size of the count. LIST_STORES keeps the original's size for
+# tests/seasons/cup_list_clear_check.py.
+for _at in (0x56CCEA, 0x7ED034):
+    CUP_INSNS[_at] = ("mov dword ptr [esi + 0xa7], eax",
+                      "W32(esi + 0xa7u, rt_cup_places_list(eax, (uint32_t)(int16_t)R16(esi + 0x3eu) * 6u));")
 
 # address: (the instruction in the original, C code). The store keeps its width (W16) and its object register.
 INSNS = {}

@@ -301,6 +301,13 @@ if(NOT WIN32)
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
     target_include_directories(season_level_ties_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_level_ties COMMAND season_level_ties_test)
+    # The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14): the Irish Cup, the
+    # Welsh League Cup and the FA Cup take every club of a larger division, and the counts of the League Cup and the
+    # Scottish cups.
+    add_executable(season_cup_sizes_uk_test tests/seasons/test_season_cup_sizes_uk.c
+        src/recomp_rt/win/season_cup_sizes_uk.c)
+    target_include_directories(season_cup_sizes_uk_test PRIVATE src/recomp_rt/win src/recomp_rt include)
+    add_test(NAME season_cup_sizes_uk COMMAND season_cup_sizes_uk_test)
     # The rest of the domestic cups (0.6.0 slice 21c): four-club super cups, group stages and new cups.
     add_executable(season_cups_more_test tests/seasons/test_season_cups_more.c
         src/recomp_rt/win/season_cups_more.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)

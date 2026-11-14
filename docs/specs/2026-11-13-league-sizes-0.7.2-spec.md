@@ -133,9 +133,9 @@ Merge danger: one-way door for saves. Blast radius: club lists of every division
 Blocked by: 2
 Delivers: `EngFaCup` (the Conference array of 22), `EngCcCup`, `WelCup`, `WelLgeCup`, `NirCup` (exactly 20 today), `ScoLgeCup` and `ScoChalCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A 2012/13 game with a Welsh Premier of 12 and a 2015/16 game with a Conference of 24 play every cup round
-- [ ] A Northern Irish game with 24 to 29 clubs in the two divisions plays the Irish Cup
-- [ ] The same-save set is equal
+- [x] A 2012/13 game with a Welsh Premier of 12 and a 2015/16 game with a Conference of 24 play every cup round (live: Welsh Premier 12 and the 2015/16 Conference of the database, `tests/seasons/cup_sizes_uk_run.py`; a Conference of 24: host test `season_cup_sizes_uk`, the cap holds it at 22 until slice 8)
+- [x] A Northern Irish game with 24 to 29 clubs in the two divisions plays the Irish Cup (host test `season_cup_sizes_uk` at 24 and 29; live n2002 at 18, the caps hold 10 and 10 until slice 13)
+- [x] The same-save set is equal (rules off, against the lead-072-base build e27b094e)
 
 ### 5. Cups of western Europe follow the divisions
 Blocked by: 2
