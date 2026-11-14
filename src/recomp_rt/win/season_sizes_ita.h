@@ -7,7 +7,8 @@
 
 /* Around the original's ita_ser_a_regroup_serie_c1_clubs 0x642630 (the wrap in season_divisions_ita.c, outside the
  * Serie C era): the regroup takes every club of C1/A and C1/B and gives C1/B the count of its next row. */
-void season_sizes_ita_regroup_begin(uint32_t serie_a);
+/* Returns 0 when the regroup has nothing to do (no club in C1/A or C1/B): the wrap then skips the original. */
+int season_sizes_ita_regroup_begin(uint32_t serie_a);
 void season_sizes_ita_regroup_end(void);
 
 #endif

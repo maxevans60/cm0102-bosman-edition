@@ -46,6 +46,7 @@
 #define COMP_RECORD_SIZE 0x6bu
 #define COMP_OBJECTS 0xadadfcu
 #define KEY_A 0x9cf570u
+#define KEY_C1A 0x9cf578u
 #define KEY_C1B 0x9cf57cu
 #define ROW_SIZE 0x3bu
 #define ROW_STATUS 0x37u
@@ -92,7 +93,7 @@ uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at)
 uint32_t rt_ita_c1_row(uint32_t obj, uint32_t original)
 {
     int n = count_of(obj), row = (int)(original / ROW_SIZE) + n - C1_CLASS;
-    if (n == C1_CLASS || n < 6 || row < 0 || row >= n) return original;
+    if (!season_sizes_on() || n == C1_CLASS || n < 6 || row < 0 || row >= n) return original;
     return (uint32_t)row * ROW_SIZE;
 }
 
@@ -100,7 +101,7 @@ uint32_t rt_ita_c1_row(uint32_t obj, uint32_t original)
 uint32_t rt_ita_c1_seed(uint32_t obj, uint32_t original)
 {
     int n = count_of(obj), row = (int)original + n - C1_CLASS;
-    if (n == C1_CLASS || n < 6 || row < 0 || row >= n) return original;
+    if (!season_sizes_on() || n == C1_CLASS || n < 6 || row < 0 || row >= n) return original;
     return (uint32_t)row;
 }
 
@@ -114,7 +115,7 @@ static void c1_progress(void (*original)(void))
 {
     uint32_t self = cpu.ecx;
     int d = count_of(self) - C1_CLASS;
-    if (!d || count_of(self) < 6) {
+    if (!d || count_of(self) < 6 || !season_sizes_on()) {
         original();
         return;
     }
@@ -177,33 +178,44 @@ static int clubs_in(uint32_t rec)
     return n;
 }
 
-void season_sizes_ita_regroup_begin(uint32_t serie_a)
+int season_sizes_ita_regroup_begin(uint32_t serie_a)
 {
     rg.on = 0;
-    if (!season_sizes_on() || !readable(serie_a)) return;
+    if (!season_sizes_on() || !readable(serie_a)) return 1;
+    /* No club in C1/A or C1/B: the loop of 0x6426d4..0x64276a runs at least once and would write through an empty
+     * slot (0x642763), so the regroup does nothing. */
+    if (!clubs_in(record_of(KEY_C1A)) && !clubs_in(record_of(KEY_C1B))) return 0;
     if (!rg.block) {
         Cpu saved = cpu;
         uint32_t a[1] = {REGROUP_MAX * 4u};
         uint32_t p = rt_callback(0x00944e46u, 1, a);     /* the game's allocator (0x944e46) */
-        if (rt_unwinding) return;
+        if (rt_unwinding) return 0;
         cpu = saved;
-        if (!readable(p)) return;
+        if (!readable(p)) return 1;
         rg.block = p;
     }
     memset(g_mem + rg.block, 0, REGROUP_MAX * 4u);
     /* C1/B's clubs for the season that ItaSerA starts (start_new_season adds 1 to +0x40 at 0x641789, after the
-     * regroup at 0x641743): its row with changing rules on, else the clubs it holds now (the start season's count,
-     * Q232). */
+     * regroup at 0x641743): its row with changing rules on, else the count of its last table (+0x3e of the C1/B
+     * object: the start season's count, Q232). Not the clubs it holds now: the C2 exchange before the regroup
+     * (0x64173c) relegates C1/B's clubs and puts all 6 C2 clubs into C1/A (0x6420db..0x642104). */
     int year = (int16_t)rd16(g_mem, serie_a + 0x40) + 1;
     int b = season_changing_rules() ? season_sizes_clubs("ita_ser_c1b", year) : -1;
-    if (b < 0) b = clubs_in(record_of(KEY_C1B));
+    if (b < 0) {
+        uint32_t objs = rd32(g_mem, COMP_OBJECTS), c1b = readable(objs) ? rd32(g_mem, objs + rd32(g_mem, KEY_C1B) * 4u) : 0;
+        b = count_of(c1b);
+    }
     rg.to_b = b > 0 ? b : C1_CLASS;
     rg.collected = 0;
     rg.on = 1;
+    return 1;
 }
 
 void season_sizes_ita_regroup_end(void)
 {
+    if (rg.on && rg.collected >= REGROUP_MAX)
+        fprintf(stderr, "recomp: league sizes: ita regroup: %d clubs of Serie C1 or more, any others keep their "
+                        "group\n", REGROUP_MAX);
     if (rg.on && season_sizes_on())
         fprintf(stderr, "recomp: league sizes: ita regroup: %d clubs of Serie C1, %d to C1/B\n", rg.collected,
                 rg.collected < rg.to_b ? rg.collected : rg.to_b);

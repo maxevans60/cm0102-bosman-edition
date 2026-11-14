@@ -1027,8 +1027,10 @@ RT_WRAP(00641fc0, ita_exchange_c2)
 RT_WRAP(00642630, ita_regroup_c1)
 {
     if (!era_code(cpu.ecx)) {
-        season_sizes_ita_regroup_begin(cpu.ecx);      /* 0.7.2 slice 9: the counts of the C1 groups */
-        if (!rt_unwinding) o_00642630();
+        int run = season_sizes_ita_regroup_begin(cpu.ecx);     /* 0.7.2 slice 9: the counts of the C1 groups */
+        if (rt_unwinding) return;
+        if (run) o_00642630();
+        else rt_ret_cdecl(cpu.eax);
         season_sizes_ita_regroup_end();
     } else rt_ret_cdecl(cpu.eax);
 }
