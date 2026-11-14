@@ -844,3 +844,9 @@ int season_pol_first_honours(uint32_t obj)
     rt_jump(F_HONOURS);
     return 1;
 }
+
+int season_pol_first_own_playoff(uint32_t obj)
+{
+    Exchange x;
+    return second_exchange(obj, &x) && x.own;
+}

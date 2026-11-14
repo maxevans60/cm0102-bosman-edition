@@ -21,4 +21,7 @@ int season_pol_first_honours(uint32_t obj);
  * season_pol_playoff.c): 2 teams and 1 tie when 1 pair plays. */
 void season_pol_first_playoff_round(uint32_t obj, uint32_t t);
 
+/* 1 when the I liga object plays its own play-off (3rd to 6th, two rounds) in its season, with changing rules on. */
+int season_pol_first_own_playoff(uint32_t obj);
+
 #endif
