@@ -101,4 +101,14 @@ int season_sizes_row_season(uint32_t obj, const char *file);
  * block (count to *count, the class's name code to *code). 0 when the plan gives none. */
 uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32_t *code);
 
+/* The periods of the Eerste Divisie and the Belgian Second Division (slice 10, D6, season_sizes_periods.c): before
+ * the class's update_positions_and_status (vtable +0x94), a row with no periods sets every period flag, so no club
+ * wins a period; the target of check_complete for a period stage of an odd count (0 when its matches are played). */
+void season_periods_winners(uint32_t obj);
+uint32_t season_periods_played_target(uint32_t obj, uint32_t original);
+
+/* The row of the Belgian Second Division that the third tier's promotion play-off takes: the count less 3, row 15 in
+ * the base game (slice 10, season_sizes_bel.c). */
+int season_sizes_bel_third_row(uint32_t second);
+
 #endif

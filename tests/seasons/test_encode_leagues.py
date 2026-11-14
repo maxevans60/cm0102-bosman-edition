@@ -73,7 +73,14 @@ check(po("aus_nsl", 2005) == ("-", "-", "title"), "A-League finals series")
 
 # --- splits
 check(by[("sco_prm", 2001)]["split"] == "after 33: 6+6, points unknown", "Scottish split")
-check(by[("bel_first", 2009)]["split"] == "after 30: 6+8, points halved", "Belgian Play-off I, points halved")
+_bel_text = {(x["comp_file"], x["season"]): x for x in e.make_rules.read_rows()}[("bel_first", 2009)]
+check(e.encode_split(_bel_text) == "after 30: 6+8, points halved", "Belgian Play-off I, points halved (the text)")
+# Slice 10: the nearest form of Play-off I, Play-off II and the relegation play-off (SPLIT_BY_HAND).
+check(by[("bel_first", 2009)]["split"] == "after 30: 6+8+2, points halved" and
+      by[("bel_first", 2009)]["split_meet"] == "2+1+2", "Belgian play-offs by hand: 6+8+2, meetings 2+1+2")
+check(by[("den_prm", 2017)]["split_meet"] == "2+1" and by[("bel_first", 2024)]["split_meet"] == "2+2+2" and
+      by[("bel_second", 2016)]["meetings"] == 4 and by[("bel_second", 2016)]["rounds"] == 28,
+      "Superliga 2+1, Pro League 2+2+2, First Division B four meetings")
 check(by[("pol_first", 2013)]["split"] == "after 30: 8+8, points halved", "Polish split 2013/14")
 check(by[("pol_first", 2017)]["split"] == "after 30: 8+8, points kept", "Polish split 2017/18")
 check(by[("den_prm", 2020)]["split"] == "after 22: 6+6, points kept", "Danish split from 2020/21")

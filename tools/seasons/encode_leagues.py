@@ -112,6 +112,39 @@ MEETINGS_FIX = {
     # standings (33 matches)": three meetings, the third set by the standings.
     ("cro_a1", 2006): (3, "33 matches of 12 clubs in the format cell"),
 }
+# First Division B 2016/17 to 2019/20: two periods of 14 rounds, each a double round robin of 8, so each pair meets four
+# times in a season of 28 rounds (check of 13 November 2026, sizes-check-north line 230; RSSSF belg2017 to belg2020).
+# The row has no halves: the season's meetings are 4 (lead decision, slice 10).
+for _y in range(2016, 2020):
+    MEETINGS_FIX[("bel_second", _y)] = (4, "two periods of 14 rounds of 8 clubs: four meetings (sizes-check-north 230)")
+
+# Splits that the size engine (slice 7, D7) cannot play as the text gives them, in their nearest form (D2; lead
+# decisions of slice 10, 13 November 2026): {(comp_file, first, last): (split, split_meet, evidence)}. The sections
+# add up to the count and each has its meetings.
+SPLIT_BY_HAND = {
+    # Pro League 2009/10 to 2018/19 (16 clubs): Play-off I of the top 6 (points halved, a double round robin of 10
+    # rounds), Play-off II of 7th to 14th in two groups of four (2016/17 to 2018/19: 7th to 15th with First Division B
+    # clubs in two groups of six) and the 15th v 16th relegation play-off (from 2010/11; 2016/17 on the 16th went
+    # down). Nearest form: sections 6, 8 and 2, meeting twice, once and twice, points halved (RSSSF belg2010 to
+    # belg2019, sizes-check-north lines 207 to 210).
+    ("bel_first", 2009, 2018): ("after 30: 6+8+2, points halved", "2+1+2",
+                                "Play-off I, Play-off II and the relegation play-off in their nearest form"),
+    # Pro League 2023/24 to 2025/26: champions', Europe and relegation play-offs of 6, 6 and 4, each a double round
+    # robin of 10, 10 and 6 rounds, points halved (sizes-check-north line 214).
+    ("bel_first", 2023, 2025): ("after 30: 6+6+4, points halved", "2+2+2", "10, 10 and 6 rounds: two meetings each"),
+    # Superliga 2016/17 to 2019/20 (14 clubs): a championship round of 6 (a double round robin, 10 rounds) and two
+    # qualification groups of 4 (7th to 14th, 6 rounds) with play-offs after them. Nearest form: sections 6 and 8,
+    # meeting twice and once (sizes-check-north line 55).
+    ("den_prm", 2016, 2019): (None, "2+1", "a championship round of 6 in two meetings, 7th to 14th in one"),
+}
+
+
+def split_by_hand(r):
+    """(split, split_meet) of SPLIT_BY_HAND for a row, None for the others; split None keeps the text's."""
+    for (file, first, last), (split, meet, _why) in SPLIT_BY_HAND.items():
+        if r["comp_file"] == file and first <= r["season"] <= last:
+            return split, meet
+    return None
 
 # The period titles of rows whose texts do not give them: {(comp_file, first, last): (periods, evidence)}.
 PERIODS_BY_HAND = {
@@ -730,6 +763,9 @@ def encode():
             continue
         last[r["comp_file"]] = po
         split = encode_split(r)
+        hand = split_by_hand(r)
+        if hand and hand[0]:
+            split = hand[0]
         e = {"id": r["id"], "season": r["season"], "comp_file": r["comp_file"], "tier": r["tier"],
              "clubs": r["clubs"] if isinstance(r["clubs"], int) else -1, "po_up": po[0], "po_down": po[1],
              "po_other": po[2], "po_status": po[3], "split": split, "calendar": encode_calendar(r),
@@ -743,7 +779,8 @@ def encode():
                 continue
             zones, extra = encode_zones(r), encode_extra(r)
             e.update(meetings=meet[0], halves=encode_halves(split), zones=zones, extra=extra,
-                     periods=encode_periods(r), split_meet=encode_split_meetings(r, split),
+                     periods=encode_periods(r),
+                     split_meet=hand[1] if hand else encode_split_meetings(r, split),
                      rounds=encode_rounds(r, meet[0], zones, extra, split))
             if r["clubs"] == "unknown":
                 # A future row with no announcement: its structure is the last known row's (D20, the after-table

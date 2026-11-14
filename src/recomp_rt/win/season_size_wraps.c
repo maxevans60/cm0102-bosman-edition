@@ -633,20 +633,20 @@ const int season_size_caps[] = {
     20,       /* arg_prm */
     13,       /* aus_nsl */
     18,       /* bel_first */
-    18,       /* bel_second */
+    19,       /* bel_second */
     28,       /* bra_nat_first */
     28,       /* bra_nat_second */
     16,       /* cro_a1 */
     16,       /* cro_a2a */
     16,       /* cro_a2b */
     16,       /* den_first */
-    12,       /* den_prm */
+    14,       /* den_prm */
     22,       /* eng_conf */
     24,       /* eng_first */
     20,       /* eng_prm */
     24,       /* eng_second */
     24,       /* eng_third */
-    12,       /* fin_prm */
+    14,       /* fin_prm */
     20,       /* fra_first */
     20,       /* fra_second */
     20,       /* fra_third */
@@ -654,7 +654,7 @@ const int season_size_caps[] = {
     18,       /* ger_second */
     14,       /* gre_prm */
     14,       /* gre_second */
-    18,       /* hol_first */
+    20,       /* hol_first */
     18,       /* hol_prm */
     0,       /* ire_first */
     0,       /* ire_prm */
@@ -692,7 +692,7 @@ const int season_size_floors[] = {
     0,       /* arg_prm */
     0,       /* aus_nsl */
     0,       /* bel_first */
-    18,       /* bel_second */
+    0,       /* bel_second */
     0,       /* bra_nat_first */
     0,       /* bra_nat_second */
     0,       /* cro_a1 */
@@ -809,17 +809,44 @@ const int season_size_fixed[] = {
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
+    {"bel_first", 18, 18, SEASON_TEMPLATE_SEQUENTIAL},
+    {"bel_second", 18, 19, SEASON_TEMPLATE_SEQUENTIAL},
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"den_prm", 12, 14, SEASON_TEMPLATE_SHUFFLED},
+    {"fin_prm", 12, 14, SEASON_TEMPLATE_SHUFFLED},
+    {"hol_first", 18, 20, SEASON_TEMPLATE_SHUFFLED},
     {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 7;
+const int season_grown_count = 12;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* BelFirst::create_schedule */
+void o_0041e010(void);
+RT_WRAP(0041e010, schedule_41e010)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0041e010();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* BelSecond::create_schedule */
+void o_0041f340(void);
+RT_WRAP(0041f340, schedule_41f340)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0041f340();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* BraNatFirst::create_schedule */
 void o_00429b50(void);
@@ -839,6 +866,39 @@ RT_WRAP(0042c140, schedule_42c140)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_0042c140();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* DenPrm::create_schedule */
+void o_00552900(void);
+RT_WRAP(00552900, schedule_552900)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00552900();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* FinPrm::create_schedule */
+void o_005954b0(void);
+RT_WRAP(005954b0, schedule_5954b0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005954b0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* HolFirst::create_schedule */
+void o_005f5790(void);
+RT_WRAP(005f5790, schedule_5f5790)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005f5790();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

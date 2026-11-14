@@ -221,6 +221,9 @@ uint32_t rt_league_played_target(uint32_t obj, uint32_t original)
 {
     /* The state of the league, not its order (+0xa3): a load whose order was not set yet still completes. */
     if (!season_sizes_on() || !readable(obj)) return original;
+    /* A period stage of an odd count (slice 10, season_sizes_periods.c). */
+    uint32_t period = season_periods_played_target(obj, original);
+    if (period != original) return period;
     const SeasonSplit *sp = cached(obj);
     if (!sp) return original;
     uint32_t t = rd32(g_mem, obj + COMP_TABLE);

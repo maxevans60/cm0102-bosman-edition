@@ -400,6 +400,14 @@ uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
 /* The matches that League::check_complete 0x689ad0 wants of every row (0x689b47), the original's +0xa7 except in a
  * league whose sections of a split play different matches (0.7.2 slice 7, win/season_split.c). */
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original);
+/* The periods of the Eerste Divisie and the Belgian Second Division at the rounds of the season (0.7.2 slice 10, D6,
+ * win/season_sizes_periods.c): the round where a period begins (HolFirst 0x5f65b0, BelSecond 0x420110) and the matches
+ * of a period stage (HolFirst 0x5f6ad0, BelSecond 0x4204d0). */
+uint32_t rt_league_period_bound(uint32_t obj, uint32_t original);
+uint32_t rt_league_period_length(uint32_t obj, uint32_t period, uint32_t original);
+/* The byte offset of the Second Division row that BelThird's promotion play-off reads (0x423a80): the count less 3
+ * (0.7.2 slice 10, win/season_sizes_bel.c). */
+uint32_t rt_bel_third_row(uint32_t third, uint32_t original);
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
 uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);

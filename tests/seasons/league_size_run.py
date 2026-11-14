@@ -70,7 +70,20 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Slice 10: the Netherlands, Belgium, Denmark and Finland. Periods scale to the rounds (D6): a periods line each
+    # edition. The calendar-year leagues (fin_prm) play edition Y by the row of season Y - 1.
+    "hol_first": (2005, 2006, "Eerste Divisie, 20 clubs (the class holds 18): 38 rounds, its four periods scaled"),
+    "hol_first@2010": (2010, 2011, "Eerste Divisie, 18 clubs: the class's 34 rounds and periods"),
+    "bel_second": (2008, 2009, "Second Division, 19 clubs: 38 rounds, no period winners, an odd count with periods"),
+    "bel_second@2016": (2016, 2017, "First Division B, 8 clubs that meet four times: 28 rounds, periods scaled"),
+    "bel_first": (2010, 2011, "Pro League, 16 clubs: 30 rounds, then sections of 6, 8 and 2, points halved"),
+    "den_prm": (2017, 2018, "Superliga, 14 clubs in two meetings (the class holds 12 in three): 26 rounds, then 6 and 8"),
+    "fin_prm": (2005, 2006, "Veikkausliiga, 14 clubs in two meetings (the class holds 12 in three), 13 in 2006"),
+    "fin_prm@2019": (2019, 2020, "Veikkausliiga, 12 clubs: 22 rounds, then 6 and 6 that meet once; 2020 one table"),
 }
+
+# Slice 10 (D6, src/recomp_rt/win/season_sizes_periods.c): leagues whose class plays periods.
+PERIOD_FILES = {"hol_first": 4, "bel_second": 3}
 
 
 def encoded_row(file, season):
@@ -299,6 +312,59 @@ def edition_split(file, edition):
     return encoded_split(file, edition - 1 if calendar_year(file) else edition)
 
 
+def encoded_periods(file, season):
+    """The periods column of the encoded row of a file in a season (the after-table rule): an int, -1 unknown."""
+    best = None
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") != file or not row.get("season", "").isdigit():
+                continue
+            s = int(row["season"])
+            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
+                best = (s, row.get("periods", "-"))
+    return int(best[1]) if best and best[1].isdigit() else -1
+
+
+def period_lines(log, file):
+    """{edition: (rounds, [lengths], winners)} of the periods lines of a file (season_sizes_periods.c)."""
+    out = {}
+    tag = f"recomp: league sizes: {file} periods "
+    for line in log.split("\n"):
+        if not line.startswith(tag):
+            continue
+        try:
+            ed, rest = line[len(tag):].split(": ", 1)
+            rounds, lengths, winners = rest.split(", ")
+            out[int(ed)] = (int(rounds.split()[1]), [int(x) for x in lengths.split()[1].split("+")], winners.split()[1])
+        except (ValueError, IndexError):
+            pass
+    return out
+
+
+def period_faults(log, file, editions):
+    """Each edition of a period class has a periods line: as many periods as the class, each of at least one round,
+    adding up to the rounds of its row, and the winners off when its row has no periods (D6)."""
+    if file not in PERIOD_FILES:
+        return []
+    fails, seen = [], period_lines(log, file)
+    for ed in sorted(editions):
+        if ed not in seen:
+            fails.append(f"{file} {ed}: no periods line")
+            continue
+        rounds, lengths, winners = seen[ed]
+        clubs, m = edition_row(file, ed)
+        want = rounds_of(clubs, m or 2)
+        row = encoded_periods(file, ed - 1 if calendar_year(file) else ed)
+        if rounds != want or sum(lengths) != rounds or len(lengths) != PERIOD_FILES[file] or min(lengths) < 1:
+            fails.append(f"{file} {ed}: periods of {lengths} in {rounds} rounds, want {PERIOD_FILES[file]} periods "
+                         f"adding up to {want}")
+        if winners != ("off" if row == 0 else "on"):
+            fails.append(f"{file} {ed}: period winners {winners}, the row has {row} periods")
+    return fails
+
+
 def report_rows(report, file):
     """The rows of a file in the rules report: [(season, phase, edition, clubs, meetings, matches)]."""
     out, cols = [], None
@@ -416,6 +482,7 @@ def faults(work, file, year, last):
         else:
             fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
+    fails += period_faults(log, file, {ed for ed, _n, _x, _l, _h in done})
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -548,6 +615,25 @@ def self_test():
             encoded_split("wel_first", 2012) != (22, [(6, 2), (6, 2)]) or encoded_split("wel_first", 2005) is not None or
             split_numbers([(6, 1), (4, 1), (6, 1)]) != (5, 3, 5) or split_numbers([(6, 2), (6, 2)]) != (10, 10, 10)):
         bad.append(("split", encoded_split("nir_prm", 2010), encoded_split("wel_first", 2026)))
+    # Slice 10: the rows, the splits of the hand rows and the periods lines.
+    if (edition_row("hol_first", 2005) != (20, 2) or edition_row("bel_second", 2016) != (8, 4) or
+            edition_row("fin_prm", 2006) != (13, 2) or edition_row("den_prm", 2017) != (14, 2) or
+            encoded_split("bel_first", 2010) != (30, [(6, 2), (8, 1), (2, 2)]) or
+            encoded_split("den_prm", 2017) != (26, [(6, 2), (8, 1)]) or
+            edition_split("fin_prm", 2019) != (22, [(6, 1), (6, 1)]) or edition_split("fin_prm", 2020) is not None or
+            encoded_periods("bel_second", 2008) != 0 or encoded_periods("hol_first", 2005) != 6):
+        bad.append(("slice 10 rows", edition_row("hol_first", 2005), edition_row("bel_second", 2016),
+                    encoded_split("bel_first", 2010), encoded_split("den_prm", 2017)))
+    plog = ("recomp: league sizes: hol_first periods 2005: rounds 38, lengths 9+9+11+9, winners on\n"
+            "recomp: league sizes: bel_second periods 2008: rounds 38, lengths 11+14+13, winners off\n"
+            "recomp: league sizes: bel_second periods 2009: rounds 38, lengths 11+14+12, winners on")
+    if (period_lines(plog, "hol_first") != {2005: (38, [9, 9, 11, 9], "on")} or
+            period_faults(plog, "hol_first", {2005}) or period_faults(plog, "bel_second", {2008}) or
+            len(period_faults(plog, "bel_second", {2009})) != 1 or period_faults(plog, "den_prm", {2017}) or
+            period_faults("recomp: league sizes: hol_first periods 2001: rounds 34, lengths 8+8+10+8, winners on",
+                          "hol_first", {2001}) != ["hol_first 2001: period winners on, the row has 0 periods"] or
+            period_faults(plog, "hol_first", {2006}) != ["hol_first 2006: no periods line"]):
+        bad.append(("periods", period_lines(plog, "hol_first"), period_faults(plog, "bel_second", {2009})))
     sl = splits("recomp: league sizes: wel_first split 2026: after 30, sections 6+4+6, meetings 1+1+1, rounds 5+3+5, "
                 "5 dates, points kept (Welsh Premier)\nrecomp: league sizes: wel_first split 2026: loaded after the "
                 "split (Welsh Premier)", "wel_first")

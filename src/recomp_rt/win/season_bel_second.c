@@ -89,6 +89,7 @@
 #include "season_change.h"
 #include "season_clubs.h"
 #include "season_names.h"
+#include "season_sizes.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,7 +120,8 @@
 #define ROW_POS 0x39u                   /* s8: the place, from 1 (0x685225) */
 #define DOWN_PLAYOFF 0xc0u              /* s8: relegation play-off places of a league (0x6852b3) */
 #define DOWN_PLACES 0xc1u               /* s8: relegation places (League::has_relegation 0x6847b0, 0x6852d4) */
-#define PLAYOFF_ROW 15                  /* the Second Division row that 0x423880 reads (+0x375, 0x423a80) */
+/* The Second Division row that 0x423880 reads (+0x375, 0x423a80): row 15, the count less 3 with the size engine
+ * (0.7.2 slice 10, season_sizes_bel_third_row). */
 #define GAME_DATE 0xae2c90u             /* s16 day of the year (0 = 1 January), s16 year */
 #define ST_TITLE 5
 #define ST_UP 0
@@ -419,6 +421,7 @@ RT_WRAP(00420680, bel_second_status)
     if (self && self == league_of(KEY_SECOND) && season_game_changes()) {
         test_points(self);
         if (rule_on() && season_now() >= BAR_FROM) mark(self, 2);
+        season_periods_winners(self);   /* 0.7.2 slice 10: a row with no periods */
     }
     o_00420680();
 }
@@ -579,7 +582,8 @@ RT_WRAP(00423880, bel_third_playoff)
     }
     int ns, na, nb;
     uint32_t st = table_of(second, &ns), ta = table_of(self, &na), tb = table_of(b, &nb);
-    uint32_t slot = ns > PLAYOFF_ROW ? row_at(st, PLAYOFF_ROW) : 0, sixteenth = slot ? rd32(g_mem, slot) : 0;
+    int playoff_row = season_sizes_bel_third_row(second);
+    uint32_t slot = ns > playoff_row ? row_at(st, playoff_row) : 0, sixteenth = slot ? rd32(g_mem, slot) : 0;
     if (!rule_on() || season < DIRECT_FROM || !slot || !ta || !tb) {
         if (log_on() && slot)
             fprintf(stderr, "recomp: bel second: %.51s (status %d) plays the third tier's promotion play-off\n",
@@ -603,15 +607,18 @@ RT_WRAP(00423880, bel_third_playoff)
     }
     uint32_t club = rd32(g_mem, next);
     /* The place of the relegation play-off: 2, or 0xfc for a U23 side, which that zone never gives 2 (0x685274..
-     * 0x68527f: only a row of 0xff or 0xfe). */
+     * 0x68527f: only a row of 0xff or 0xfe). With the size engine (0.7.2 slice 10) the row of the season may give
+     * that place no relegation play-off (+0xc0 0: 0xff) or a direct relegation (3): the club keeps its status and the
+     * third-tier club still takes its place in the play-off. A title, promotion or period row is a fault. */
     int s15 = g_mem[slot + ROW_STATUS];
-    if (s15 != ST_DOWN_PLAYOFF && s15 != ST_BARRED) {
-        fprintf(stderr, "recomp: bel second: fault: %.51s (row 16) has status %d, not the place of the relegation "
-                        "play-off; it plays as in the original\n", name_of(sixteenth), s15);
+    int sized = season_sizes_on() && (s15 == ST_NONE || s15 == ST_DOWN || s15 == ST_STAYS);
+    if (s15 != ST_DOWN_PLAYOFF && s15 != ST_BARRED && !sized) {
+        fprintf(stderr, "recomp: bel second: fault: %.51s (row %d) has status %d, not the place of the relegation "
+                        "play-off; it plays as in the original\n", name_of(sixteenth), playoff_row + 1, s15);
         o_00423880();
         return;
     }
-    g_mem[slot + ROW_STATUS] = ST_DOWN;
+    if (!sized) g_mem[slot + ROW_STATUS] = ST_DOWN;
     if (log_on())
         fprintf(stderr, "recomp: bel second: %.51s goes down directly (status %d), %.51s (%d points) takes its "
                         "play-off place\n", name_of(sixteenth), g_mem[slot + ROW_STATUS], name_of(club),

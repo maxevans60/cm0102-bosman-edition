@@ -127,6 +127,22 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   allocates 18 rows (push 0x426 at 0x925b3b); create_schedule 0x9250f0 makes 34 dates for stage -1 only (D 0x22 at
 #   0x92512a, 0x8a2 bytes at 0x925125); set_up_rules 0x925c50 sets 2 meetings (0x925c9b) and does not write +0xd9:
 #   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
+# Slice 10. The table allocations are the pushes of 18 or 12 rows before the stores of CLASSES (sizes-check-north).
+# - HolFirst (Eerste Divisie, 18 to 20): create_schedule 0x5f5790 (HolFirst vtable 0x96b86c +0x3c) makes 34 dates for
+#   stage -1 (D 0x22 at 0x5f57ca); set_up_rules 0x5f6340 sets 2 meetings (0x5f6350) and does not write +0xd9:
+#   shuffled. Its four periods scale to the rounds (PERIOD_PATCHES).
+# - BelFirst (First Division, 16 and 18): create_schedule 0x41e010 (vtable 0x967940 +0x3c), 34 dates (0x41e04a);
+#   set_up_rules 0x41e9e0 writes +0xd9 0x43 (0x41ea6b): sequential. The cap is the class's 18: the row gives 16 and
+#   the split of Play-off I (slice 7, D7) with halved points.
+# - BelSecond (Second Division, 8 to 19): create_schedule 0x41f340 (vtable 0x9679f4 +0x3c), 34 dates (0x41f37e);
+#   set_up_rules 0x41fea0 writes +0xd9 0x43 (0x41ff34): sequential. Its three periods scale (PERIOD_PATCHES), and
+#   BelThird reads its row count - 3 (BEL_THIRD_ROW).
+# - DenPrm (Superliga, 12 and 14): create_schedule 0x552900 (vtable 0x9696e4 +0x3c), 33 dates (0x55293a);
+#   set_up_rules 0x553a00 sets 3 meetings (0x553a0d) and writes no +0xd9: shuffled. The rows give 2 meetings and the
+#   split after 26 or 22.
+# - FinPrm (Veikkausliiga, 12 to 14): create_schedule 0x5954b0 (vtable 0x96a4c0 +0x3c), 33 dates (0x5954ea);
+#   set_up_rules 0x595c90 sets 3 meetings (0x595ca2) and +0xd9 3 (0x595c94, 0x595cf3): shuffled. The rows give 2
+#   meetings from 2003 and the split after 22.
 GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
@@ -136,6 +152,12 @@ GROWN = {
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
+    # Slice 10 (Netherlands, Belgium, Denmark, Finland; periods D6, src/recomp_rt/win/season_sizes_periods.c).
+    "hol_first": (20, 0x5F5790, "shuffled"),
+    "bel_first": (18, 0x41E010, "sequential"),
+    "bel_second": (19, 0x41F340, "sequential"),
+    "den_prm": (14, 0x552900, "shuffled"),
+    "fin_prm": (14, 0x5954B0, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
@@ -247,7 +269,7 @@ PATCHES = {
 # 0x5f4820, FraCup 0x5baa50 and DenCup. Slice 5 keeps the floors of bel_second and the Serie C1 groups.
 # A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5, and the merge of
 # slice 6: the floors any slice removed are gone).
-FLOORS = {"bel_second", "ita_ser_c1a", "ita_ser_c1b"}
+FLOORS = {"ita_ser_c1a", "ita_ser_c1b"}
 # The floor is the class's largest count.
 FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # The divisions whose places and exchange stay the class's, though the club moves give them the count of their row
@@ -271,7 +293,8 @@ assert not set(FIXED_EXCHANGE) & FLOORS
 # gives the clubs of the division there, up to the cap, with no floor. The floor keeps that number of clubs: it is the
 # target of the club moves at a new game (season_clubs.c class_size) and holds the exchange of the wrap of 0x689c80
 # (season_sizes.c). So with a floor of 16 or more, row 15 holds a club. tools/seasons/make_size_wraps.py checks it.
-ROW_READS = {"bel_second": (16, "BelThird::create_promotion_playoff_stage 0x423880 reads row 15 (0x423a6a..0x423a80)")}
+# Slice 10 (D22): BelThird reads the row count - 3 (BEL_THIRD_ROW below), so bel_second needs no floor; none is left.
+ROW_READS = {}
 
 CUP_INSNS = {
     0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
@@ -435,6 +458,26 @@ INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu
 # The French Lower Division (constructor 0x5bd600): the same after its loop of the National and lower clubs (40).
 INSNS[0x5BD752] = ("lea edx, [esp + 0x1c]", "edi = rt_fra_lower_fill(esp + 0x1cu, edi); edx = esp + 0x1cu;")
 INSNS.update(CUP_INSNS)
+# Slice 10 (D22, src/recomp_rt/win/season_sizes_bel.c): BelThird::create_promotion_playoff_stage 0x423880 puts the
+# club of row 15 of the Second Division (+0x375, the table in ecx from 0x423a78) into the third tier's promotion
+# play-off; the third from the bottom is the row count - 3. esi is BelThird (+0x1c the id of the division above).
+BEL_THIRD_ROW = {0x423A80: ("mov edx, dword ptr [ecx + 0x375]", "edx = R32(ecx + rt_bel_third_row(esi, 0x375u));")}
+INSNS.update(BEL_THIRD_ROW)
+# Slice 10 (D6, src/recomp_rt/win/season_sizes_periods.c): the period bounds of add_result (the object in esi) and the
+# matches of each period stage (create_period_stage, the object in esi, the period in bl or al) scale to the rounds.
+PERIOD_PATCHES = {
+    0x5F65CE: (0x8, "rt_league_period_bound(esi, 0x8u)"),       # HolFirst::add_result 0x5f65b0: cmp ax, 8
+    0x5F65DA: (0x10, "rt_league_period_bound(esi, 0x10u)"),     # cmp ax, 0x10
+    0x5F65E6: (0x1A, "rt_league_period_bound(esi, 0x1au)"),     # cmp ax, 0x1a
+    0x5F6BD6: (0xA, "rt_league_period_length(esi, ebx & 0xffu, 0xau)"),   # create_period_stage 0x5f6ad0: period 2
+    0x5F6BE2: (0x8, "rt_league_period_length(esi, ebx & 0xffu, 0x8u)"),   # periods 0, 1 and 3
+    0x42012E: (0xA, "rt_league_period_bound(esi, 0xau)"),       # BelSecond::add_result 0x420110: cmp ax, 0xa
+    0x42013A: (0x16, "rt_league_period_bound(esi, 0x16u)"),     # cmp ax, 0x16
+    0x4205B9: (0xA, "rt_league_period_length(esi, eax & 0xffu, 0xau)"),   # create_period_stage 0x4204d0: period 0
+    0x4205CB: (0xC, "rt_league_period_length(esi, eax & 0xffu, 0xcu)"),   # periods 1 and 2
+}
+assert not set(PERIOD_PATCHES) & set(PATCHES)
+PATCHES.update(PERIOD_PATCHES)
 # 0.7.2 slice 6: the cups of eastern Europe and Asia (cup_sizes_east.py).
 import os as _os  # noqa: E402
 import sys as _sys  # noqa: E402

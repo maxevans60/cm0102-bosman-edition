@@ -611,16 +611,16 @@ den-swe-82	2014	den_second	3	32	-	11	-	partial: the places of each group	groups	
 den-swe-86	2015	den_prm	1	12	-	-	-	ok	-	split	3	0	-	0	0	-	33
 den-swe-87	2015	den_first	2	12	-	-	-	ok	-	split	3	0	-	0	0	-	33
 den-swe-88	2015	den_second	3	24	-	-	-	ok	groups	split	2	0	-	0	0	-	-
-den-swe-92	2016	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
+den-swe-92	2016	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points kept	split	2	0	-	0	0	2+1	26
 den-swe-93	2016	den_first	2	12	2-3	-	-	ok	-	split	3	0	-	0	0	-	33
 den-swe-94	2016	den_second	3	24	-	-	-	ok	groups	split	2	0	-	0	0	-	-
-den-swe-98	2017	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
+den-swe-98	2017	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points kept	split	2	0	-	0	0	2+1	26
 den-swe-99	2017	den_first	2	12	2-3	-	-	ok	-	split	3	0	-	0	0	-	33
 den-swe-100	2017	den_second	3	24	-	-	-	ok	groups	split	2	0	-	0	0	-	-
-den-swe-104	2018	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
+den-swe-104	2018	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points kept	split	2	0	-	0	0	2+1	26
 den-swe-105	2018	den_first	2	12	2-3	-	-	ok	-	split	3	0	-	0	0	-	33
 den-swe-106	2018	den_second	3	24	-	-	-	ok	groups	split	2	0	-	0	0	-	-
-den-swe-110	2019	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points unknown	split	2	0	-	0	0	?	26
+den-swe-110	2019	den_prm	1	14	-	-	europe	partial: the relegation play-off of the split groups (needs the split kind)	after 26: 6+8, points unknown	split	2	0	-	0	0	2+1	26
 den-swe-111	2019	den_first	2	12	-	-	-	ok	-	split	3	0	-	0	0	-	33
 den-swe-112	2019	den_second	3	24	-	-	-	ok	groups	split	2	0	-	0	0	-	-
 den-swe-116	2020	den_prm	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
@@ -1486,58 +1486,58 @@ hol-bel-100	2008	bel_second	2	19	2-5	-	-	ok	-	split	2	0	-	0	0	-	38
 hol-bel-101	2008	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-106	2009	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-107	2009	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-112	2009	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-112	2009	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-113	2009	bel_second	2	19	2-4	-	-	ok	-	split	2	0	-	0	?	-	38
 hol-bel-114	2009	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-119	2010	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-120	2010	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
-hol-bel-125	2010	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-125	2010	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-126	2010	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-127	2010	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-132	2011	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-133	2011	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
-hol-bel-138	2011	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-138	2011	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-139	2011	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-140	2011	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-145	2012	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-146	2012	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
-hol-bel-151	2012	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-151	2012	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-152	2012	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-153	2012	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-158	2013	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-159	2013	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-164	2013	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-164	2013	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-165	2013	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-166	2013	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-171	2014	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-172	2014	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-177	2014	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-177	2014	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-178	2014	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-179	2014	bel_third	3	36	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-184	2015	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-185	2015	hol_first	2	19	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-190	2015	bel_first	1	16	-	-	-	ok	after 30: 6+8, points halved	split	2	0	-	0	0	?	30
+hol-bel-190	2015	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
 hol-bel-191	2015	bel_second	2	17	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-192	2015	bel_third	3	37	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	-
 hol-bel-197	2016	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-198	2016	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-203	2016	bel_first	1	16	-	-	-	ok	after 30: 6+9, points halved	split	2	0	-	0	0	?	30
-hol-bel-204	2016	bel_second	2	8	-	-	europe	ok	-	split	2	0	-	0	2	-	14
+hol-bel-203	2016	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
+hol-bel-204	2016	bel_second	2	8	-	-	europe	ok	-	split	4	0	-	0	2	-	28
 hol-bel-205	2016	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-210	2017	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-211	2017	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-216	2017	bel_first	1	16	-	-	-	ok	after 30: 6+9, points halved	split	2	0	-	0	0	?	30
-hol-bel-217	2017	bel_second	2	8	-	-	europe	ok	-	split	2	0	-	0	2	-	14
+hol-bel-216	2017	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
+hol-bel-217	2017	bel_second	2	8	-	-	europe	ok	-	split	4	0	-	0	2	-	28
 hol-bel-218	2017	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-223	2018	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-224	2018	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-229	2018	bel_first	1	16	-	-	-	ok	after 30: 6+9, points halved	split	2	0	-	0	0	?	30
-hol-bel-230	2018	bel_second	2	8	-	-	europe	ok	-	split	2	0	-	0	2	-	14
+hol-bel-229	2018	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
+hol-bel-230	2018	bel_second	2	8	-	-	europe	ok	-	split	4	0	-	0	2	-	28
 hol-bel-231	2018	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-236	2019	hol_prm	1	18	-	16	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-237	2019	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-242	2019	bel_first	1	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
-hol-bel-243	2019	bel_second	2	8	1-2	-	-	partial: the winners of the two stages, not table places	-	split	2	0	-	0	2	-	14
+hol-bel-243	2019	bel_second	2	8	1-2	-	-	partial: the winners of the two stages, not table places	-	split	4	0	-	0	2	-	28
 hol-bel-244	2019	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-249	2020	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-250	2020	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
@@ -1556,17 +1556,17 @@ hol-bel-282	2022	bel_second	2	12	-	-	-	ok	after 22: 6+6, points kept	split	2	0	-
 hol-bel-283	2022	bel_third	3	20	-	-	-	ok	-	split	2	0	-	0	0	-	38
 hol-bel-288	2023	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-289	2023	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
-hol-bel-294	2023	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	?	30
+hol-bel-294	2023	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	2+2+2	30
 hol-bel-295	2023	bel_second	2	16	3-6	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-296	2023	bel_third	3	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-301	2024	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-302	2024	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
-hol-bel-307	2024	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	?	30
+hol-bel-307	2024	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	2+2+2	30
 hol-bel-308	2024	bel_second	2	16	3-6	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-309	2024	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	-
 hol-bel-314	2025	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-315	2025	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
-hol-bel-320	2025	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	?	30
+hol-bel-320	2025	bel_first	1	16	-	-	-	ok	after 30: 6+6+4, points halved	split	2	0	-	0	0	2+2+2	30
 hol-bel-321	2025	bel_second	2	17	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	34
 hol-bel-322	2025	bel_third	3	28	-	-	-	ok	-	split	2	0	-	0	0	-	-
 hol-bel-327	2026	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
