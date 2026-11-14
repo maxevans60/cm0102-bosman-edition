@@ -12,6 +12,12 @@
 #include "season_league.h"
 #include "season_template.h"
 #include "season_split.h"
+#include "season_size_step.h"
+#include "season_clubs.h"
+#include "season_second_teams.h"
+#include "season_fin_second.h"
+#include "season_bel_second.h"
+#include "season_esp_second.h"
 #include "season_cup_sizes_west.h"
 
 #include <stdio.h>
@@ -39,6 +45,18 @@
 #define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each competition record */
 #define COMP_SLOTS 0xadadf8u        /* its slot count, one per club competition record (0x8386f0) */
 #define STATUS_DOWN 3               /* league_promote_and_relegate 0x689c80: moves down a row of 3 (0x689d26) */
+#define CLUB_NAME 4u                /* long name, 52 bytes */
+#define CLUB_NATION 0x53u           /* nation pointer */
+#define CLUB_LAST_DIVISION 0x5bu    /* club_comp pointer: the division of the last season (0x689d99) */
+#define CLUB_REPUTATION 0x80u       /* s16 */
+#define NATION_COUNT 0xae2350u      /* the last 2 x nations rows of the club table are national teams (0x53b900) */
+#define REC_NATION 0x5du            /* club_comp record: nation pointer */
+#define ROW_POS 0x39u               /* s8: the place in the table, from 1 (0x685225) */
+#define F_MOVE_CLUB 0x006830b0u     /* League::move_club_to_division (club, record, vacancy), ret 0xc */
+#define F_RELEGATION_CLAUSES 0x004cd030u    /* CONTRACT_MANAGER::trigger_relegation_clauses, thiscall (club, old) */
+#define CONTRACTS 0xae1050u         /* the contract manager (0x689da0) */
+#define F_IS_HUMAN 0x007875e0u      /* thiscall on [HUMANS] (club): 1 for a club with a human manager (0x6426ec) */
+#define HUMANS 0xb7431cu
 #define DATE_SIZE 0x41u             /* a date of the template: +0 s16 day of the year, +2 s16 year (0x68a1a5..0x68a1b7) */
 #define F_MALLOC 0x00944e46u        /* cdecl (size) */
 #define F_FREE 0x009452cau          /* cdecl (block) */
@@ -184,6 +202,11 @@ static const char *record_name(uint32_t obj)
     return readable(rec) ? win_str(rec + 4) : "?";
 }
 
+/* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
+static void size_step_run(uint32_t trigger);
+static void step_note_pair(uint32_t upper, uint32_t lower);
+static int row_reachable(uint32_t obj, const char *file);
+
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
  * original's count stays. */
 static int league_count(uint32_t obj, const char *file, int *have_out, int *cap_out)
@@ -239,6 +262,7 @@ static int grown_count(uint32_t obj, const char *file)
 uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
 {
     if (!sizes_on() || !readable(obj)) return original;
+    size_step_run(obj);
     const char *file = season_change_file(obj);
     int n = grown_count(obj, file);
     if (n * (int)ROW_SIZE <= (int)original) return original;
@@ -251,6 +275,7 @@ uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
 {
     if (!sizes_on() || !readable(obj)) return original;
+    size_step_run(obj);
     const char *file = season_change_file(obj);
     int have = 0, cap = 0, n = league_count(obj, file, &have, &cap);
     if (!n) return original;
@@ -300,6 +325,15 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original)
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s): %d dates for %d clubs\n", file, record_name(obj), rounds, n);
     return (uint32_t)rounds;
+}
+
+static uint32_t call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
 }
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
@@ -369,6 +403,7 @@ static int probe_made;      /* 1 when the probe's wrap gave the dates after the 
 void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
 {
     if (stage != -1 || !sizes_on() || !readable(self)) return;
+    size_step_run(self);
     const char *file = season_change_file(self);
     const SeasonGrown *g = grown_of(file);
     if (!g) return;
@@ -430,7 +465,8 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
     if (total > SEASON_TEMPLATE_MAX || mode == SEASON_TEMPLATE_MIRRORED && split ||
-        season_template_plan(base, uniq, count_u, total, mode, plan, why, sizeof why) != total) {
+        season_template_plan_from(base, uniq, count_u, total, mode, season_sizes_bra_earlier(file), plan, why,
+                                  sizeof why) != total) {
         if (total > SEASON_TEMPLATE_MAX || mode == SEASON_TEMPLATE_MIRRORED && split)
             snprintf(why, sizeof why, "%s", total > SEASON_TEMPLATE_MAX ? "too many rounds" : "a split of a mirrored class");
         if (probe) {
@@ -528,6 +564,7 @@ void o_00687970(void);
 RT_WRAP(00687970, league_free_table)
 {
     uint32_t self = cpu.ecx, table = rt_arg(0);
+    if (!table && readable(self)) size_step_run(self);
     if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self))) {
         uint32_t t = rd32(g_mem, self + COMP_TABLE);
         int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), lo = 999, hi = -1;
@@ -755,9 +792,11 @@ static void sizes_rules(uint32_t obj)
 
 void season_sizes_rules(uint32_t obj)
 {
+    if (readable(obj)) size_step_run(obj);
     sizes_rules(obj);
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
+    if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
 }
 
 /* ---- Promotion and relegation of a size change ---- */
@@ -818,23 +857,30 @@ RT_WRAP(00689c80, promote_relegate)
     /* Only a pair of two size-table classes: only there can the places of this slice differ. Any other pair keeps
      * the original's call. */
     int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
+    /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
+    if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
-    /* When the places of the two divisions differ, the clubs move on their own only with changing rules on, between
-     * two classes of the size table, and when both divisions hold counts within their floor and cap after the moves:
-     * the upper the clubs it holds now less down and plus up, the lower the clubs it holds now plus down and less up
-     * (before its own exchange with the division below, the next call of the chain). Else the clubs move in pairs,
-     * so no size changes (with changing rules off the start season's sizes stay, Q232). So a change that needs a
-     * division above its cap for a moment stays in pairs: Ligue 1 from 20 to 18 in 2023/24 would put 22 in Ligue 2
-     * until its exchange with the National, which holds 20. The
-     * French chain passes no pairs (FraFirst::start_new_season pushes 0 at 0x5bc4f1, League::process_promotion_
-     * relegation_chain passes it at 0x689c59), so pairs are set here. */
+    /* When the places of the two divisions differ, the clubs move on their own only with changing rules on and
+     * between two classes of the size table. Else the clubs move in pairs, so no size changes (with changing rules
+     * off the start season's sizes stay, Q232). The French chain passes no pairs (FraFirst::start_new_season pushes
+     * 0 at 0x5bc4f1, League::process_promotion_relegation_chain passes it at 0x689c59), so pairs are set here.
+     * D23 (slice 3): the real places of the season before a change move the clubs, so the count changes in its own
+     * season. A division may hold a count outside its floor and cap for a moment (Ligue 1 from 20 to 18 in 2023/24
+     * puts 22 in Ligue 2 until its exchange with the National): the size step (D13, noted above) runs after the whole
+     * chain and before any new table, and brings each division within its cap and floor to its row. Without the step
+     * (a chain while the game is made) the moves stay in pairs unless both counts fit. A class that counts the clubs
+     * of its data (cap 0) takes only some counts, so its moves stay in pairs. */
     if (change && season_changing_rules()) {
         const char *fu_name = season_change_file(upper), *fl_name = season_change_file(lower);
         int cu = cap_of(fu_name), cl = cap_of(fl_name);
         int lu = exchange_floor(fu_name) > MIN_CLUBS * 4 ? exchange_floor(fu_name) : MIN_CLUBS * 4;
         int ll = exchange_floor(fl_name) > MIN_CLUBS * 4 ? exchange_floor(fl_name) : MIN_CLUBS * 4;
         int nu = clubs_in_division(upper) - down + up, nl = clubs_in_division(lower) + down - up;
-        single = cu > 0 && cl > 0 && nu >= lu && nu <= cu && nl >= ll && nl <= cl;
+        int fits = nu >= lu && nu <= cu && nl >= ll && nl <= cl;
+        /* Only when both new rows are counts that the classes hold: a row above the cap (Serie A 20 in 2004/05 with a
+         * class of 18) would leave the step to send down clubs that finished safe (review 2). */
+        int reach = row_reachable(upper, fu_name) && row_reachable(lower, fl_name);
+        single = cu > 0 && cl > 0 && (fits || (reach && !season_change_is_creating()));
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
                             "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
@@ -866,6 +912,252 @@ RT_WRAP(00689c80, promote_relegate)
         if (exp_down != -1 && exp_down != moved_down) wr32(g_mem, cpu.esp + 4 + 4 * 5, 0xffu);
     }
     o_00689c80();
+}
+
+/* ---- The size step (0.7.2 league sizes, slice 3, D13 and D18; season_size_step.h) ----
+ *
+ * The step needs the last tables of the divisions and the clubs that the chain moved, and must run before the first
+ * division of the chain makes its new table and its date template. The chain runs in the start_new_season of its
+ * top league before anything else of the new edition: EngPrm::start_new_season 0x574c10 calls the chain (vtable
+ * +0xb0, 0x574c23), the Conference exchanges (0x574c3e, 0x574c45), League::free_table 0x687970 (0x574c4d), adds 1 to
+ * the edition (0x574c7b), then set_up_rules (vtable +0x8c, 0x574c81: create_schedule) and create_table (0x574cbf).
+ * The chain takes its pairs from the top down (League::process_promotion_relegation_chain 0x689c20 at 0x689c42..
+ * 0x689c6c; ItaSerA 0x642410 and EngPrm 0x5752f0 call 0x689c80 for each pair in the order of the tiers). So the
+ * wrap of 0x689c80 notes each pair with the tables of both divisions (the clubs in the order of their places, row
+ * +0x39), and the first of free_table, set_up_rules, create_schedule and create_table that follows runs the step on
+ * every noted division. A division whose edition moved on since the chain made its new table, so the step leaves it
+ * (the division that runs the step is the one that is making its table now). A loaded game of 0.7.1 holds its old
+ * counts, and reaches the rows at its next season change in the same way (D18). */
+#define STEP_DIVS 48
+static struct {
+    uint32_t obj, rec;
+    int year, nlower, nrows;
+    int lower[STEP_MAX_LOWER];
+    uint32_t club[STEP_MAX_ROWS];
+} step_seen[STEP_DIVS];
+static int nstep_seen, step_running;
+
+static int step_index(uint32_t obj)
+{
+    for (int i = 0; i < nstep_seen; i++)
+        if (step_seen[i].obj == obj) return i;
+    if (nstep_seen >= STEP_DIVS || !readable(obj)) return -1;
+    uint32_t table = rd32(g_mem, obj + COMP_TABLE), rec = rd32(g_mem, obj + COMP_RECORD);
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    if (!readable(rec)) return -1;
+    int i = nstep_seen++;
+    memset(&step_seen[i], 0, sizeof step_seen[i]);
+    step_seen[i].obj = obj;
+    step_seen[i].rec = rec;
+    step_seen[i].year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (!readable(table) || n <= 0) return i;
+    if (n > STEP_MAX_ROWS) n = STEP_MAX_ROWS;
+    int pos[STEP_MAX_ROWS];
+    for (int r = 0; r < n; r++) {
+        uint32_t row = table + (uint32_t)r * ROW_SIZE, c = rd32(g_mem, row);
+        if (!readable(c)) continue;
+        /* Insertion by place, a row with no place last, in the table's order. */
+        int p = (int8_t)g_mem[row + ROW_POS], k = step_seen[i].nrows;
+        if (p <= 0) p = 1000 + r;
+        while (k > 0 && pos[k - 1] > p) {
+            pos[k] = pos[k - 1];
+            step_seen[i].club[k] = step_seen[i].club[k - 1];
+            k--;
+        }
+        pos[k] = p;
+        step_seen[i].club[k] = c;
+        step_seen[i].nrows++;
+    }
+    return i;
+}
+
+static void step_note_pair(uint32_t upper, uint32_t lower)
+{
+    if (step_running) return;
+    int u = step_index(upper), l = step_index(lower);
+    if (u < 0 || l < 0 || u == l) return;
+    for (int k = 0; k < step_seen[u].nlower; k++)
+        if (step_seen[u].lower[k] == l) return;
+    if (step_seen[u].nlower < STEP_MAX_LOWER) step_seen[u].lower[step_seen[u].nlower++] = l;
+}
+
+/* The count of a division's row in an edition (within the class's cap and floor), or -1: no part in the step (a
+ * class that counts the clubs of its data, cap 0, takes only some counts: IrePrm 10 or 12, 0x63a79f..0x63a7c6). */
+static int step_want(uint32_t obj, const char *file, int year)
+{
+    int cap = season_ita_cap(obj, cap_of(file));     /* slice 20b: Serie C */
+    if (cap <= 0) return -1;
+    const SeasonRule *r = row_of_edition(file, year);
+    if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS) return -1;
+    int n = r->clubs, low = floor_of(file);
+    if (n > cap) n = cap;
+    if (low > 0 && n < low) n = low;
+    return n;
+}
+
+/* 1 when the row of the next edition of a division is a count that its class holds (within its cap and floor). */
+static int row_reachable(uint32_t obj, const char *file)
+{
+    int cap = season_ita_cap(obj, cap_of(file));
+    const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
+    return cap > 0 && r && r->clubs >= MIN_CLUBS && r->clubs <= cap && r->clubs >= floor_of(file);
+}
+
+int season_sizes_plays_short(const char *file)
+{
+    return sizes_on() && size_file(file) && cap_of(file) > 0 && floor_of(file) == 0;
+}
+
+static uint32_t current_division(uint32_t club) { return rd32(g_mem, club + CLUB_DIVISION); }
+
+static int is_human(uint32_t club)
+{
+    uint32_t a[1] = {club};
+    uint32_t humans = rd32(g_mem, HUMANS);
+    return readable(humans) && call_this(F_IS_HUMAN, humans, 1, a) != 0;
+}
+
+/* 1 when a club may go up into the division of record rec by the step: no reserve or B side (D12), and no club
+ * that a second-team rule bars from it (the rules of the club moves, season_clubs.c fill_takes). */
+static int up_ok(uint32_t club, uint32_t rec)
+{
+    if (season_clubs_reserve_name(win_str(club + CLUB_NAME))) return 0;
+    if (season_second_barred(club, rec) || season_fin_barred(club, rec) || season_bel_barred(club, rec)) return 0;
+    return !season_esp_barred(club, rec, current_division);
+}
+
+static void size_step_run(uint32_t trigger)
+{
+    if (!nstep_seen || step_running || rt_unwinding) return;
+    if (!sizes_on() || !season_changing_rules()) {
+        nstep_seen = 0;
+        return;
+    }
+    step_running = 1;
+    int ndiv = nstep_seen;
+    StepDivision div[STEP_DIVS];
+    memset(div, 0, sizeof div);
+    uint32_t table = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), national_from = count - 2 * (int)rd32(g_mem, NATION_COUNT);
+    int nmax = ndiv * STEP_MAX_ROWS + (readable(table) && count > 0 ? count : 0);
+    StepClub *club = calloc((size_t)nmax, sizeof *club);
+    uint32_t *at = calloc((size_t)nmax, sizeof *at);
+    StepMove *moves = calloc((size_t)nmax, sizeof *moves);
+    int nclub = 0;
+    if (!club || !at || !moves) goto done;
+    for (int d = 0; d < ndiv; d++) {
+        uint32_t obj = step_seen[d].obj;
+        const char *file = season_change_file(obj);
+        int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+        div[d].want = step_want(obj, file, step_seen[d].year + 1);
+        div[d].started = obj != trigger && year != step_seen[d].year;
+        div[d].nation = (int)(rd32(g_mem, step_seen[d].rec + REC_NATION) & 0x7fffffff);
+        div[d].nlower = step_seen[d].nlower;
+        memcpy(div[d].lower, step_seen[d].lower, sizeof div[d].lower);
+    }
+    /* The clubs of the last tables. */
+    for (int d = 0; d < ndiv; d++)
+        for (int r = 0; r < step_seen[d].nrows; r++) {
+            uint32_t c = step_seen[d].club[r];
+            int k = 0;
+            while (k < nclub && at[k] != c) k++;
+            if (k == nclub) at[nclub++] = c;
+            div[d].rows[div[d].nrows++] = k;
+        }
+    int from_tables = nclub;
+    /* Every other club of a noted division (a club that joined it outside the noted pairs, such as the Conference
+     * club that EngPrm::exchange_conference_feeder_clubs 0x5750a0 moves up through 0x6830b0 at 0x575268, so the plan
+     * counts what the division holds), and the clubs with no division of the nation of a lowest division (no club
+     * of a national side, no club with no nation: season_clubs.c, the shells). A club of a spare division (A Lower
+     * Division, A Premier Division: the small clubs of every nation) counts as a club with no division, as the fill
+     * of a new game takes it (season_clubs.c group 2): the Portuguese clubs below the Segunda Liga sit there. */
+    for (int i = 0; readable(table) && i < count && i < national_from; i++) {
+        uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION), now = current_division(c);
+        if (now && season_clubs_in_spare(c)) now = 0;
+        int wanted = 0;
+        if (now) {
+            for (int d = 0; d < ndiv && !wanted; d++) wanted = now == step_seen[d].rec;
+        } else if (nation) {
+            for (int d = 0; d < ndiv && !wanted; d++)
+                wanted = !div[d].nlower && div[d].want >= 0 && rd32(g_mem, step_seen[d].rec + REC_NATION) == nation;
+        }
+        if (!wanted) continue;
+        int k = 0;
+        while (k < from_tables && at[k] != c) k++;
+        if (k == from_tables) at[nclub++] = c;
+    }
+    for (int k = 0; k < nclub; k++) {
+        uint32_t c = at[k], now = current_division(c);
+        if (now && season_clubs_in_spare(c)) now = 0;
+        club[k].div = now ? -3 : STEP_NONE;     /* -3: a division outside the step */
+        for (int d = 0; d < ndiv; d++)
+            if (now == step_seen[d].rec) club[k].div = d;
+        club[k].nation = (int)(rd32(g_mem, c + CLUB_NATION) & 0x7fffffff);
+        club[k].rep = (int16_t)rd16(g_mem, c + CLUB_REPUTATION);
+        club[k].up_ok = 1;
+        club[k].down_ok = 1;
+    }
+    /* up_ok depends on the division that the club would join: the plan takes a club only into a division of its own
+     * chain, the one above its own or, for a club with no division, the lowest of its nation. */
+    for (int k = 0; k < nclub; k++) {
+        int d = club[k].div, to = -1;
+        if (d == STEP_NONE) {
+            for (int e = 0; e < ndiv && to < 0; e++)
+                if (!div[e].nlower && div[e].nation == club[k].nation) to = e;
+        } else if (d >= 0) {
+            for (int e = 0; e < ndiv && to < 0; e++)
+                for (int j = 0; j < div[e].nlower; j++)
+                    if (div[e].lower[j] == d) to = e;
+        }
+        club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
+        if (rt_unwinding) goto done;
+    }
+    /* The step never sends down a club with a human manager (review 2: a club that finished safe). */
+    for (int d = 0; d < ndiv; d++)
+        for (int r = 0; r < div[d].nrows; r++) {
+            club[div[d].rows[r]].down_ok = !is_human(at[div[d].rows[r]]);
+            if (rt_unwinding) goto done;
+        }
+    int n = season_size_step_plan(div, ndiv, club, nclub, moves, nmax);
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        uint32_t c = at[moves[i].club], old = current_division(c);
+        uint32_t to = moves[i].to >= 0 ? step_seen[moves[i].to].rec : 0;
+        int up = moves[i].from == STEP_NONE;
+        for (int j = 0; moves[i].to >= 0 && j < div[moves[i].to].nlower; j++)
+            up |= div[moves[i].to].lower[j] == moves[i].from;
+        if (up) {
+            /* Up: as a promotion of 0x689c80 (0x689d68..0x689d83). */
+            uint32_t a[3] = {c, to, 0};
+            call_this(F_MOVE_CLUB, step_seen[moves[i].to].obj, 3, a);
+        } else {
+            /* Down: as a relegation of 0x689c80 (0x689e58..0x689e70). */
+            wr32(g_mem, c + CLUB_LAST_DIVISION, old);
+            wr32(g_mem, c + CLUB_DIVISION, to);
+            uint32_t a[2] = {c, old};
+            call_this(F_RELEGATION_CLAUSES, rd32(g_mem, CONTRACTS), 2, a);
+        }
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: step: %.50s from %.50s to %.50s\n", win_str(c + CLUB_NAME),
+                    old ? win_str(old + 4) : "no division", to ? win_str(to + 4) : "no division");
+    }
+    for (int d = 0; d < ndiv && !rt_unwinding; d++) {
+        if (div[d].want < 0) continue;
+        uint32_t obj = step_seen[d].obj;
+        int have = clubs_in_division(obj);
+        if (logging() || have != div[d].want)
+            fprintf(stderr, "recomp: league sizes: step: %s (%.50s) %d: %d clubs, the row %d%s\n",
+                    season_change_file(obj), record_name(obj), step_seen[d].year + 1, have, div[d].want,
+                    div[d].started ? " (its new table is made: no step)"
+                    : have < div[d].want ? (div[d].nlower ? ": the division below has no club to give"
+                                                          : ": no club of its nation with no division or in a spare division")
+                    : have > div[d].want ? ": no club can go down" : "");
+    }
+done:
+    free(club);
+    free(at);
+    free(moves);
+    nstep_seen = 0;
+    step_running = 0;
 }
 
 /* ---- News (rule kind "sizes") ---- */
@@ -922,6 +1214,7 @@ static void sizes_after(const SeasonChange *c)
 static void sizes_new_game(int start_year)
 {
     (void)start_year;
+    nstep_seen = 0;
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
@@ -944,6 +1237,7 @@ static void sizes_loaded(int start_year)
 {
     (void)start_year;
     nseen = 0;
+    nstep_seen = 0;
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);

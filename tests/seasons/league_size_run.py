@@ -65,6 +65,11 @@ ROWS = {
     "nir_prm": (2010, 2011, "IFA Premiership, 12 clubs (the class holds 10): 33 rounds, then sections of 6 and 6"),
     "wel_first": (2012, 2013, "Welsh Premier, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
     "wel_first@2026": (2026, 2027, "Welsh Premier, 16 clubs: 30 rounds, then sections of 6, 4 and 6"),
+    # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
+    # before the real season (row 2003 is the 2004 Série A).
+    "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
+    "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
+    "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
 }
 
 
@@ -215,8 +220,14 @@ def templates(log, file):
     return out
 
 
-def template_faults(name, cls, new, rounds):
-    """The faults of a new template (D4, D5) against the class's dates."""
+# Earlier starts of 7 days a class may take (season_template.h SEASON_TEMPLATE_EARLIER, season_sizes_bra.c BRA_EARLIER).
+EARLIER = 4
+EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13}
+
+
+def template_faults(name, cls, new, rounds, earlier=EARLIER):
+    """The faults of a new template (D4, D5) against the class's dates. A template with no gap over 7 days has no
+    winter break (season_template.c)."""
     fails = []
     if len(new) != rounds:
         return [f"{name}: {len(new)} dates, want {rounds}"]
@@ -225,13 +236,15 @@ def template_faults(name, cls, new, rounds):
         fails.append(f"{name}: the dates do not ascend, or two rounds share a date")
     gaps = [(a, b) for a, b in zip(cls, cls[1:])]
     largest = max(((b - a).days for a, b in gaps), default=0)
+    if largest <= 7:
+        largest = 0
     for d, added in new:
         if not added:
             if d not in cls:
                 fails.append(f"{name}: {d} is not a date of the class")
             continue
         if d < cls[0]:
-            if (cls[0] - d).days % 7 or (cls[0] - d).days > 28:
+            if (cls[0] - d).days % 7 or (cls[0] - d).days > 7 * earlier:
                 fails.append(f"{name}: earlier start {d} is not a week step before {cls[0]}")
             continue
         if d.weekday() != 2:
@@ -302,6 +315,24 @@ def report_rows(report, file):
     return out
 
 
+# Slice 17 (D11): leagues whose class plays a play-off that the row's meetings leave out (season_sizes_bra.c).
+NO_PLAYOFF = {"bra_nat_first", "bra_nat_second"}
+
+
+def no_playoff_faults(log, file, meetings):
+    """With two meetings: the log says the play-off is off, and the club on top of the table gets the title (code 5
+    in the league stage, the base handler 0x686940)."""
+    if file not in NO_PLAYOFF or meetings < 2:
+        return []
+    lines = log.split("\n")
+    fails = []
+    if not any(x.startswith(f"recomp: league sizes: {file} ") and x.endswith("no play-off") for x in lines):
+        fails.append(f"{file}: no log line of a season with no play-off")
+    if not any(x.startswith(f"recomp: league sizes: {file} ") and " champion " in x for x in lines):
+        fails.append(f"{file}: no champion of the table in the log")
+    return fails
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
@@ -346,7 +377,8 @@ def faults(work, file, year, last):
         if new is None:
             fails.append(f"{file} template {base}: the class's {len(cls)} dates stay, want {rounds}")
         else:
-            fails += template_faults(f"{file} template {base}", cls, new, rounds)
+            fails += template_faults(f"{file} template {base}", cls, new, rounds,
+                                     EARLIER_BY_FILE.get(file, EARLIER))
         if clubs > held and not any(x.startswith(f"recomp: league sizes: {file} table of {clubs} rows") and
                                     f" {base}, the class makes" in x for x in lines):
             fails.append(f"{file} {base}: no log line of a table of {clubs} rows (the class allocates {held})")
@@ -383,6 +415,7 @@ def faults(work, file, year, last):
             fails.append(f"{file} {ed}: no split end line")
         else:
             fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
+    fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -486,6 +519,16 @@ def self_test():
         (template_faults("late", cls, late, 6), True),
         (template_faults("count", cls, good, 8), True),
     ]
+    # A template of 7-day gaps only (the Brazilian classes) has no winter break: a Wednesday in a gap is good, and the
+    # earlier starts go up to the class's limit.
+    week = [d(2010, 8, 1), d(2010, 8, 8), d(2010, 8, 15)]
+    wed = [(d(2010, 7, 4), True), (d(2010, 8, 1), False), (d(2010, 8, 4), True), (d(2010, 8, 8), False),
+           (d(2010, 8, 11), True), (d(2010, 8, 15), False)]
+    checks += [
+        (template_faults("weeks", week, wed, 6, 13), False),
+        (template_faults("weeks limit", week, wed, 6), False),
+        (template_faults("weeks far", week, [(d(2010, 4, 25), True)] + wed[1:], 6, 13), True),
+    ]
     bad = [(i, f) for i, (f, want) in enumerate(checks) if bool(f) != want]
     line = "recomp: league sizes: nor_prm template 2009: class 2 2009-04-05 2009-04-12"
     line2 = "recomp: league sizes: nor_prm template 2009: new 3 2009-04-05 2009-04-08+ 2009-04-12"
@@ -519,6 +562,13 @@ def self_test():
             not end_faults("short", short, 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
+    if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
+        bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
+    off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"
+           "recomp: league sizes: bra_nat_first 2011: champion club 1234 (Série A)")
+    if no_playoff_faults(off, "bra_nat_first", 2) or len(no_playoff_faults("", "bra_nat_first", 2)) != 2 or \
+            no_playoff_faults("", "bra_nat_first", 1) or no_playoff_faults("", "nor_prm", 2):
+        bad.append(("no play-off", no_playoff_faults(off, "bra_nat_first", 2)))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
