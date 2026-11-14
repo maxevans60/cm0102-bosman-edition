@@ -113,17 +113,28 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
 #   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+# Slice 7 (the split engine, D7; src/recomp_rt/win/season_split.c): the pilots of the runtime split.
+# - NirPrm (IFA Premiership, 10 in the class, 16 in 2003/04 to 2007/08, 12 with a split after 33 from 2008/09):
+#   create_table allocates 10 rows (push 0x24e at 0x78ec6b) and stores 10 at 0x78ec72; create_schedule 0x78e330
+#   makes 36 dates for stage -1 only (D 0x24 at 0x78e36a, 0x924 bytes at 0x78e365; any other stage returns 0,
+#   0x78e33a); set_up_rules 0x78ed80 sets 4 meetings (0x78ed92) and +0xd9 = 3 (0x78edfd): shuffled.
+# - WelFirst (Welsh Premier, 18 to 2009/10, 12 with a split after 22 from 2010/11, 16 from 2026/27): create_table
+#   allocates 18 rows (push 0x426 at 0x925b3b); create_schedule 0x9250f0 makes 34 dates for stage -1 only (D 0x22 at
+#   0x92512a, 0x8a2 bytes at 0x925125); set_up_rules 0x925c50 sets 2 meetings (0x925c9b) and does not write +0xd9:
+#   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
 GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    "nir_prm": (16, 0x78E330, "shuffled"),
+    "wel_first": (18, 0x9250F0, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
 # The rows that the class allocates: its largest original count (before the cap of GROWN).
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
     assert _mode in GROWN_MODES, _f
-    assert _n > CAPS[_f], _f
+    assert _n >= CAPS[_f], _f
     HELD[_f] = CAPS[_f]
     CAPS[_f] = _n
 
@@ -398,6 +409,14 @@ for _cls, _file, _rules, _stores in CLASSES:
         INSNS[_at] = (f"mov word ptr [{_reg} + 0x3e], {_imm(_n)}",
                       f"W16({_reg} + 0x3eu, rt_league_clubs({_reg}, {_n:#x}u));")
 INSNS.update(DATES)
+# The split engine (0.7.2 slice 7, D7; src/recomp_rt/win/season_split.c). League::check_complete 0x689ad0 calls a table
+# complete when every row's matches (s8 +0x11) reach +0xa7 (`mov di, word ptr [esi + 0xa7]` at 0x689b47, compared at
+# 0x689b51..0x689b58; di is not read after the loop, 0x689b66). +0xa7 holds the most matches of a club of the season
+# (it also sizes each row's array of positions, init_table_row 0x687570). Sections of a split that play different
+# matches (6, 4 and 6 clubs that meet once) would never all reach it: rt_league_played_target gives 0 when every row
+# reached the matches of its own section, else the original.
+INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
+                   "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and
