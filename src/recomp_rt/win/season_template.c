@@ -55,7 +55,7 @@ static int prototype(int base_year, const int *days, int lo, int hi, int i)
 
 /* The plan of the part [lo, hi) of the class's days for `want` dates; returns the dates written, or -1. */
 static int plan_part(int base_year, const int *days, int lo, int hi, int want, int largest, int earlier,
-                     SeasonTemplateDate *out, char *why, int why_size)
+                     int earlier_max, SeasonTemplateDate *out, char *why, int why_size)
 {
     int count = hi - lo, n = 0;
     if (want <= count) {
@@ -74,10 +74,12 @@ static int plan_part(int base_year, const int *days, int lo, int hi, int want, i
         wed[gaps++] = w;
     }
     int use = extra < gaps ? extra : gaps, rest = extra - use;
-    if (rest > 0 && (!earlier || rest > SEASON_TEMPLATE_EARLIER || days[lo] - 7 * rest < 0)) {
+    if (rest > 0 && (!earlier || rest > earlier_max || days[lo] - 7 * rest < 0)) {
+        char more[48];
+        snprintf(more, sizeof more, "more than %d earlier starts", earlier_max);
         snprintf(why, (size_t)why_size, "%d gaps of 7 to 14 days for %d new dates, %s", gaps, extra,
-                 !earlier ? "no earlier start in the second half" : rest > SEASON_TEMPLATE_EARLIER ?
-                 "more than 4 earlier starts" : "an earlier start before 1 January");
+                 !earlier ? "no earlier start in the second half" : rest > earlier_max ? more :
+                 "an earlier start before 1 January");
         return -1;
     }
     char take[SEASON_TEMPLATE_MAX] = {0};
@@ -95,6 +97,12 @@ static int plan_part(int base_year, const int *days, int lo, int hi, int want, i
 
 int season_template_plan(int base_year, const int *days, int count, int rounds, int mode, SeasonTemplateDate *out,
                       char *why, int why_size)
+{
+    return season_template_plan_from(base_year, days, count, rounds, mode, SEASON_TEMPLATE_EARLIER, out, why, why_size);
+}
+
+int season_template_plan_from(int base_year, const int *days, int count, int rounds, int mode, int earlier_max,
+                              SeasonTemplateDate *out, char *why, int why_size)
 {
     if (why && why_size > 0) why[0] = 0;
     char none[1];
@@ -133,6 +141,9 @@ int season_template_plan(int base_year, const int *days, int count, int rounds, 
     int largest = 0;
     for (int i = 0; i + 1 < count; i++)
         if (days[i + 1] - days[i] > largest) largest = days[i + 1] - days[i];
+    /* A template with no gap over 7 days has no winter break: its 7-day gaps are its weeks (the Brazilian classes,
+     * Sundays and Wednesdays from August to December, 0x429b50 and 0x42c140; 0.7.2 slice 17, lead decision). */
+    if (largest <= 7) largest = 0;
     int n;
     if (mode == SEASON_TEMPLATE_MIRRORED) {
         if (count % 2 || rounds % 2) {
@@ -140,13 +151,13 @@ int season_template_plan(int base_year, const int *days, int count, int rounds, 
                      rounds);
             return 0;
         }
-        int a = plan_part(base_year, days, 0, count / 2, rounds / 2, largest, 1, out, why, why_size);
+        int a = plan_part(base_year, days, 0, count / 2, rounds / 2, largest, 1, earlier_max, out, why, why_size);
         if (a < 0) return 0;
-        int b = plan_part(base_year, days, count / 2, count, rounds / 2, largest, 0, out + a, why, why_size);
+        int b = plan_part(base_year, days, count / 2, count, rounds / 2, largest, 0, earlier_max, out + a, why, why_size);
         if (b < 0) return 0;
         n = a + b;
     } else {
-        n = plan_part(base_year, days, 0, count, rounds, largest, 1, out, why, why_size);
+        n = plan_part(base_year, days, 0, count, rounds, largest, 1, earlier_max, out, why, why_size);
         if (n < 0) return 0;
     }
     if (n != rounds) return 0;

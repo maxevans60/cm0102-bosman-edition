@@ -47,7 +47,7 @@ static void check_plan(const char *name, int base, const int *days, int count, i
         for (int i = 0; i + 1 < count; i++)
             if (days[i] < p[k].day && p[k].day < days[i + 1]) {
                 int gap = days[i + 1] - days[i];
-                CHECK(gap >= 7 && gap <= 14 && gap != largest, "%s: new date %d in a gap of %d days (largest %d)",
+                CHECK(gap >= 7 && gap <= 14 && (largest <= 7 || gap != largest), "%s: new date %d in a gap of %d days (largest %d)",
                       name, p[k].day, gap, largest);
                 CHECK(p[k].day - days[i] >= 2 && days[i + 1] - p[k].day >= 2, "%s: new date %d too near %d or %d",
                       name, p[k].day, days[i], days[i + 1]);
@@ -215,6 +215,42 @@ static void test_no_room(void)
     CHECK(r == 0, "no room before 1 January: %d dates", r);
 }
 
+/* BraNatFirst::create_schedule 0x429b50 in 2003: Sundays and Wednesdays from 3 August to 30 November, no gap over
+ * 7 days, so no winter break; its 8 week gaps take a Wednesday each. Série A of 24 clubs in two meetings (46 rounds)
+ * then starts 11 weeks earlier, within the 13 of season_sizes_bra_earlier; 20 clubs (38 rounds) 3 weeks. */
+static void test_brazil(void)
+{
+    static const int md[][2] = {{8, 3}, {8, 6}, {8, 10}, {8, 13}, {8, 17}, {8, 24}, {8, 27}, {8, 31}, {9, 3},
+                                {9, 7}, {9, 14}, {9, 17}, {9, 21}, {9, 28}, {10, 1}, {10, 5}, {10, 8}, {10, 12},
+                                {10, 19}, {10, 26}, {11, 2}, {11, 5}, {11, 9}, {11, 12}, {11, 16}, {11, 23}, {11, 30}};
+    int d[27];
+    for (int i = 0; i < 27; i++) d[i] = day(2003, md[i][0], md[i][1]);
+    SeasonTemplateDate p[SEASON_TEMPLATE_MAX];
+    char why[128] = "";
+    int r = season_template_plan(2003, d, 27, 38, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
+    CHECK(r == 38, "Brazil 20 clubs: %d dates (%s)", r, why);
+    if (r == 38) {
+        check_plan("Brazil 20 clubs", 2003, d, 27, r, p);
+        CHECK(count_added(p, r) == 11 && p[0].day == d[0] - 21, "Brazil 20 clubs: %d new, first %d (class %d)",
+              count_added(p, r), p[0].day, d[0]);
+    }
+    why[0] = 0;
+    r = season_template_plan(2003, d, 27, 46, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
+    CHECK(r == 0 && why[0], "Brazil 24 clubs with 4 earlier starts: %d dates", r);
+    why[0] = 0;
+    r = season_template_plan_from(2003, d, 27, 46, SEASON_TEMPLATE_SHUFFLED, 13, p, why, sizeof why);
+    CHECK(r == 46, "Brazil 24 clubs: %d dates (%s)", r, why);
+    if (r == 46) {
+        CHECK(p[0].day == d[0] - 77 && p[11].day == d[0] && p[45].day == d[26], "Brazil 24 clubs: first %d, class %d",
+              p[0].day, d[0]);
+        int wed = 0;
+        for (int k = 11; k < 46; k++) wed += p[k].added;
+        CHECK(wed == 8, "Brazil 24 clubs: %d gap Wednesdays, want 8", wed);
+    }
+    r = season_template_plan_from(2003, d, 27, 54, SEASON_TEMPLATE_SHUFFLED, 13, p, why, sizeof why);
+    CHECK(r == 0, "Brazil 28 clubs in two meetings: %d dates, want no room", r);
+}
+
 /* Open item 236: a class date that snaps to its weekday can fall before the date ahead of it. PorSecond 2013/14
  * (the game's log of the 2013 start, run-logs/0.7.2-sz03/run-portugal) makes Sunday 2 March 2014 and then
  * Saturday 1 March 2014; the plan of 42 rounds for 22 clubs failed with "class date 23 is not after date 22". */
@@ -267,6 +303,7 @@ static void test_out_of_order(void)
 
 int main(void)
 {
+    test_brazil();
     test_weekday();
     test_calendar_year();
     test_two_years();

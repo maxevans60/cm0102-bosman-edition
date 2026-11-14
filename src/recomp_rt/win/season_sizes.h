@@ -41,6 +41,17 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* After set_up_rules of a league class: the promotion and relegation places of the season. */
 void season_sizes_rules(uint32_t obj);
 
+/* 1 in a season game with the size engine on (RECOMP_LEAGUE_SIZES=off turns it off). */
+int season_sizes_on(void);
+
+/* The most earlier starts of 7 days of a file's date template: 13 for the Brazilian Série A and B, else
+ * SEASON_TEMPLATE_EARLIER (season_sizes_bra.c). */
+int season_sizes_bra_earlier(const char *file);
+
+/* After the places of season_sizes_rules, with the size engine on: Série A and B with the row's two meetings play
+ * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
+void season_sizes_bra_rules(uint32_t obj, const char *file);
+
 /* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
  * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
 int season_sizes_edition(const char *file, int year);
