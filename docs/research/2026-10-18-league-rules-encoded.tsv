@@ -1455,7 +1455,7 @@ hol-bel-21	2002	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-22	2002	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-23	2002	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-28	2003	hol_prm	1	18	-	16-17	-	ok	-	split	2	0	-	0	0	-	34
-hol-bel-29	2003	hol_first	2	19	2-7	-	-	ok	-	split	2	0	-	0	?	-	38
+hol-bel-29	2003	hol_first	2	19	2-7	-	-	ok	-	split	2	0	-	0	0	-	38
 hol-bel-34	2003	bel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-35	2003	bel_second	2	18	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	3	-	34
 hol-bel-36	2003	bel_third	3	32	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
@@ -1487,7 +1487,7 @@ hol-bel-101	2008	bel_third	3	32	-	-	-	gap: the period winners of a season of per
 hol-bel-106	2009	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-107	2009	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
 hol-bel-112	2009	bel_first	1	16	-	-	-	ok	after 30: 6+8+2, points halved	split	2	0	-	0	0	2+1+2	30
-hol-bel-113	2009	bel_second	2	19	2-4	-	-	ok	-	split	2	0	-	0	?	-	38
+hol-bel-113	2009	bel_second	2	19	2-4	-	-	ok	-	split	2	0	-	0	0	-	38
 hol-bel-114	2009	bel_third	3	37	-	-	-	gap: the period winners of a season of periods: the game has no periods	-	split	2	0	-	0	0	-	-
 hol-bel-119	2010	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-120	2010	hol_first	2	18	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	34
@@ -1552,7 +1552,7 @@ hol-bel-270	2021	bel_third	3	15	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-275	2022	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-276	2022	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38
 hol-bel-281	2022	bel_first	1	18	-	-	-	ok	after 34: 4+4, points halved	split	2	0	-	0	0	?	34
-hol-bel-282	2022	bel_second	2	12	-	-	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+hol-bel-282	2022	bel_second	2	12	-	-	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
 hol-bel-283	2022	bel_third	3	20	-	-	-	ok	-	split	2	0	-	0	0	-	38
 hol-bel-288	2023	hol_prm	1	18	-	16	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-289	2023	hol_first	2	20	3-8	-	-	partial: the period winners take places of 3rd to 8th	-	split	2	0	-	0	4	-	38

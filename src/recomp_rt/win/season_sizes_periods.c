@@ -36,12 +36,22 @@
  *   2001/02 places 2 to 7, bel_second 2007/08 places 2 to 5). A row with periods (or unknown periods) plays the
  *   class's periods, scaled. The stages are still made, so the season's stage count and the save stay the class's.
  *
+ * - A split (slice 7, D7: the Second Division 2022/23, 12 clubs, 22 rounds then 6 and 6). The section fixtures stay
+ *   with the parent (season_split.c) and their round (+0x34) is the section's own date index from 0 (League::
+ *   create_fixtures 0x6838fe), so add_result would put them in periods 0 and 1, whose stages hold the matches of
+ *   those periods only: a club's results past +0xa7 write past its row's position array. After the split (the
+ *   marker in +0x3c, season_split_meetings) the wraps of add_result below give a result to the table only, through
+ *   League::add_result 0x685d30, as the class does first (0x5f65bf, 0x42011f). The periods are those of the rounds
+ *   before the split, so the rounds use the row's meetings, not the marker.
+ *
  * The base game and RECOMP_LEAGUE_SIZES=off: every function returns the original (season_sizes_on). */
 #include "win.h"
+#include "../rt_host.h"
 #include "season_change.h"
 #include "season_league.h"
 #include "season_periods.h"
 #include "season_sizes.h"
+#include "season_split.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -106,7 +116,7 @@ static const PeriodClass *class_of(uint32_t obj)
 /* The rounds of the season of the object: meetings x (count rounded up to even - 1). */
 static int rounds_of(uint32_t obj)
 {
-    int m = (int16_t)rd16(g_mem, obj + COMP_MEETINGS), n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    int m = season_split_meetings(obj), n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
     if (m < 1 || m > 4 || n < 2 || n > 60) return CLASS_ROUNDS;
     return m * (n + (n & 1) - 1);
 }
@@ -187,3 +197,36 @@ RT_WRAP(005f6d20, hol_first_status)
     season_periods_winners(cpu.ecx);
     o_005f6d20();
 }
+
+/* 1 for a HolFirst or BelSecond object after its split (the marker in +0x3c). */
+static int after_split(uint32_t obj)
+{
+    return season_sizes_on() && class_of(obj) &&
+           season_split_meetings(obj) != (int16_t)rd16(g_mem, obj + COMP_MEETINGS);
+}
+
+#define F_LEAGUE_ADD_RESULT 0x00685d30u   /* League::add_result, thiscall (fixture, result), ret 8 */
+
+/* HolFirst::add_result 0x5f65b0 and BelSecond::add_result 0x420110, thiscall (fixture, result), ret 8, return 1
+ * (0x5f6638, 0x42018a). */
+static void add_result(void (*original)(void))
+{
+    uint32_t self = cpu.ecx;
+    if (!after_split(self)) {
+        original();
+        return;
+    }
+    uint32_t a[2] = {rt_arg(0), rt_arg(1)};
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    rt_callback(F_LEAGUE_ADD_RESULT, 2, a);
+    if (rt_unwinding) return;
+    cpu = saved;
+    rt_ret_stdcall(1, 2);
+}
+
+void o_005f65b0(void);
+RT_WRAP(005f65b0, hol_first_add_result) { add_result(o_005f65b0); }
+
+void o_00420110(void);
+RT_WRAP(00420110, bel_second_add_result) { add_result(o_00420110); }

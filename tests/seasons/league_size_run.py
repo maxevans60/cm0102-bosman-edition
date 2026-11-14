@@ -76,6 +76,8 @@ ROWS = {
     "hol_first@2010": (2010, 2011, "Eerste Divisie, 18 clubs: the class's 34 rounds and periods"),
     "bel_second": (2008, 2009, "Second Division, 19 clubs: 38 rounds, no period winners, an odd count with periods"),
     "bel_second@2016": (2016, 2017, "First Division B, 8 clubs that meet four times: 28 rounds, periods scaled"),
+    "bel_second@2022": (2022, 2023, "Challenger Pro League, 12 clubs: 22 rounds, then 6 and 6; the periods take no "
+                                     "result after the split"),
     "bel_first": (2010, 2011, "Pro League, 16 clubs: 30 rounds, then sections of 6, 8 and 2, points halved"),
     "den_prm": (2017, 2018, "Superliga, 14 clubs in two meetings (the class holds 12 in three): 26 rounds, then 6 and 8"),
     "fin_prm": (2005, 2006, "Veikkausliiga, 14 clubs in two meetings (the class holds 12 in three), 13 in 2006"),
@@ -629,7 +631,7 @@ def self_test():
             "recomp: league sizes: bel_second periods 2009: rounds 38, lengths 11+14+12, winners on")
     if (period_lines(plog, "hol_first") != {2005: (38, [9, 9, 11, 9], "on")} or
             period_faults(plog, "hol_first", {2005}) or period_faults(plog, "bel_second", {2008}) or
-            len(period_faults(plog, "bel_second", {2009})) != 1 or period_faults(plog, "den_prm", {2017}) or
+            len(period_faults(plog, "bel_second", {2009})) != 2 or period_faults(plog, "den_prm", {2017}) or
             period_faults("recomp: league sizes: hol_first periods 2001: rounds 34, lengths 8+8+10+8, winners on",
                           "hol_first", {2001}) != ["hol_first 2001: period winners on, the row has 0 periods"] or
             period_faults(plog, "hol_first", {2006}) != ["hol_first 2006: no periods line"]):

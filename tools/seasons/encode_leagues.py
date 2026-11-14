@@ -136,6 +136,9 @@ SPLIT_BY_HAND = {
     # qualification groups of 4 (7th to 14th, 6 rounds) with play-offs after them. Nearest form: sections 6 and 8,
     # meeting twice and once (sizes-check-north line 55).
     ("den_prm", 2016, 2019): (None, "2+1", "a championship round of 6 in two meetings, 7th to 14th in one"),
+    # Challenger Pro League 2022/23 (12 clubs): 22 rounds, then the top six and the bottom six play 10 more rounds
+    # each, points kept (sizes-check-north line 232: 32 matches): two meetings in each section.
+    ("bel_second", 2022, 2022): (None, "2+2", "22 rounds, then sections of 6 that play 10 more rounds"),
 }
 
 
@@ -150,6 +153,11 @@ def split_by_hand(r):
 PERIODS_BY_HAND = {
     ("bel_second", 2016, 2019): (2, "First Division B: an opening and a closing period of 14 rounds (check of 13 "
                                     "November 2026, sizes-check-north line 230)"),
+    # Slice 10 review: rows of unknown periods that the research settles (lead decision, closest to real life).
+    ("hol_first", 2003, 2003): (0, "no period winners in 2001/02 to 2003/04: the nacompetitie took places 2 to 7 "
+                                   "(sizes-check-north line 83)"),
+    ("bel_second", 2009, 2009): (0, "spec D6: the Second Division has no periods in 2007/08 to 2009/10 (RSSSF "
+                                    "belg2010 and nl Wikipedia name none)"),
 }
 
 ORD = r"(\d+)(?:st|nd|rd|th)"
