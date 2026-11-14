@@ -109,17 +109,17 @@ Shared files: `tools/recomp/league_sizes.py`, `tools/seasons/make_size_wraps.py`
 Blocked by: none
 Delivers: the encoded rules give `meetings`, halves, zones, splits and periods for every league row. The rules table cells of the check are corrected. The game reads `meetings` from the row. The rules report prints meetings and rounds, and the check compares them.
 Merge danger: two-way door. Blast radius: the rules table and the expected files. No game change without a later slice.
-- [ ] `encode_leagues.py` writes `meetings` for every league row, with hand rows where the text is unclear, and its test covers each form
-- [ ] The cells of "Rules table cells to correct" are fixed with sources and `rules_lint.py` passes
-- [ ] The rules report shows meetings and rounds, the check compares them, and the expected files are made again and read
+- [x] `encode_leagues.py` writes `meetings` for every league row, with hand rows where the text is unclear, and its test covers each form
+- [x] The cells of "Rules table cells to correct" are fixed with sources and `rules_lint.py` passes
+- [x] The rules report shows meetings and rounds, the check compares them, and the expected files are made again and read
 
 ### 2. Shared engine: table and dates of any size
 Blocked by: 1, and issue 106 on main
 Delivers: `GROWN` holds one row per class with the found table site and a generated `create_schedule` wrap. The engine builds the table and the template of D4 and D5 for shuffled, sequential and mirrored classes, sets +0xa7 to the real matches, and takes the meetings of the row. The Allsvenskan moves into the row form. Pilots: the Eliteserien (16) and the Portuguese Segunda Liga (up to 24, D also at 0x7d16bb).
 Merge danger: one-way door for saves (a save holds the grown table). Blast radius: every league of a season game.
-- [ ] `league_size_run.py` passes for nor_prm 2009 and por_second 2014, and swe_prm_run.py still passes
-- [ ] A calendar-year league gets no round in its winter break, and a shrunk league ends on its usual date
-- [ ] The same-save set is equal with rules off
+- [x] `league_size_run.py` passes for nor_prm 2009 and por_second 2014, and swe_prm_run.py still passes
+- [x] A calendar-year league gets no round in its winter break, and a shrunk league ends on its usual date
+- [x] The same-save set is equal with rules off
 
 ### 3. Club moves and the size step
 Blocked by: 2

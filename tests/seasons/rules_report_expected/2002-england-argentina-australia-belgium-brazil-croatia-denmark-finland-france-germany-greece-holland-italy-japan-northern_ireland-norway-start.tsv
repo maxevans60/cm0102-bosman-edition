@@ -49,6 +49,7 @@
 2002	clubs	oceania_nations (OFC Nations Cup), row int-continental-21: game 4, table 8 (8)
 2002	down	arg_prm (Primera División), row arg-usa-2: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2002	down	arg_second (Primera B Nacional), row arg-usa-29: game 0 (+0 play-off places), table 2 (2 (by affiliation relegation tables; infobox))
+2002	down	bel_second (Belgian Second Division), row hol-bel-22: game 2 (+1 play-off places), table 0 (0 (no sporting relegation; clubs went down for licence reasons only: RFC Liège i)
 2002	down	bra_nat_second (Campeonato Brasileiro Série B), row bra-56: game 4 (+0 play-off places), table 2 (2)
 2002	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-83: game 2 (+0 play-off places), table na (n/a)
 2002	down	cro_a1 (Prva HNL), row gre-pol-cro-326: game 2 (+0 play-off places), table 1 (1 (12th))
@@ -59,6 +60,12 @@
 2002	down	ita_ser_c1a (Serie C1 girone A), row ita-21: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	ita_ser_c1b (Serie C1 girone B), row ita-22: game 1 (+4 play-off places), table 3 (3: last direct + two play-out losers)
 2002	down	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 1 (+1 play-off places), table 0 (0)
+2002	meetings	aus_nsl (National Soccer League), row aus-jap-kor-106: game 3, table 2
+2002	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-29: game 1, table 2
+2002	meetings	fin_first (Ykkönen), row nor-fin-18: game 3, table 2
+2002	meetings	fin_prm (Veikkausliiga), row nor-fin-17: game 3, table 2
+2002	meetings	jap_j1 (J.League Division 1), row aus-jap-kor-191: game 2, table 1
+2002	meetings	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 4, table 3
 2002	no_row	friendly (Friendly): no table row
 2002	no_row	record_utils ('B' International): no table row
 2002	no_row	record_utils (Reserve): no table row
@@ -95,9 +102,21 @@
 2002	playoffs	fin_first (Ykkönen), row nor-fin-18: game 0 up and 1 down play-off places, table 1 and 2 ('2nd v Veikkausliiga 13th, two legs; 11th-12th v Kakkonen clubs')
 2002	playoffs	gre_prm (Alpha Ethniki), row gre-pol-cro-29: game 0 up and 0 down play-off places, table 0 and 1 ('14th: relegation play-off v Beta Ethniki 3rd')
 2002	playoffs	gre_second (Beta Ethniki), row gre-pol-cro-56: game 0 up and 0 down play-off places, table 1 and 1 ('3rd: promotion play-off; 14th: relegation play-off')
+2002	playoffs	hol_first (Eerste Divisie), row hol-bel-16: game 0 up and 0 down play-off places, table 6 and 0 ('2nd to 7th join the Eredivisie 16th and 17th in two groups of four (no period wi')
 2002	playoffs	ita_ser_c1a (Serie C1 girone A), row ita-21: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
 2002	playoffs	ita_ser_c1b (Serie C1 girone B), row ita-22: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
 2002	playoffs	nir_first (Irish League First Division), row wal-nir-irl-36: game 1 up and 0 down play-off places, table 0 and 1 ('pos 5: promotion/relegation play-off')
+2002	rounds	aus_nsl (National Soccer League), row aus-jap-kor-106: game 39, table 26 (2 meetings, zones -, extra 0)
+2002	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-29: game 23, table 46 (2 meetings, zones -, extra 0)
+2002	rounds	cro_a1 (Prva HNL), row gre-pol-cro-326: game 30, table 22 (2 meetings, zones -, extra 0)
+2002	rounds	cro_a2a (Druga HNL North), row gre-pol-cro-353: game 30, table 22 (2 meetings, zones -, extra 0)
+2002	rounds	cro_a2b (Druga HNL South), row gre-pol-cro-380: game 30, table 22 (2 meetings, zones -, extra 0)
+2002	rounds	fin_first (Ykkönen), row nor-fin-18: game 27, table 26 (2 meetings, zones -, extra 0)
+2002	rounds	fin_prm (Veikkausliiga), row nor-fin-17: game 33, table 26 (2 meetings, zones -, extra 0)
+2002	rounds	gre_prm (Alpha Ethniki), row gre-pol-cro-29: game 26, table 30 (2 meetings, zones -, extra 0)
+2002	rounds	gre_second (Beta Ethniki), row gre-pol-cro-56: game 26, table 30 (2 meetings, zones -, extra 0)
+2002	rounds	nir_first (Irish League First Division), row wal-nir-irl-36: game 36, table 28 (4 meetings, zones -, extra 0)
+2002	rounds	nir_prm (Irish League Premier Division), row wal-nir-irl-35: game 36, table 33 (3 meetings, zones -, extra 0)
 2002	up	arg_second (Primera B Nacional), row arg-usa-29: game 1 (+0 play-off places), table 2 (2 (final of Apertura and Clausura winners; second promotion play-off))
 2002	up	aus_nsl (National Soccer League), row aus-jap-kor-106: game 6 (+0 play-off places), table na (n/a)
 2002	up	bel_third (Belgian Third Division), row hol-bel-23: game 1 (+0 play-off places), table 2 (2 (group champions))

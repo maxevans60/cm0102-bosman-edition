@@ -103,11 +103,22 @@ int season_template_plan(int base_year, const int *days, int count, int rounds, 
         snprintf(why, (size_t)why_size, "%d class dates for %d rounds", count, rounds);
         return 0;
     }
+    /* The class's dates in the order of the calendar. A class date snaps to its weekday (Date 0x54a2d0), so it can
+     * fall before the date ahead of it: PorSecond 2013/14 makes Sunday 2 March 2014 and then Saturday 1 March. The
+     * plan works on the sorted dates; "from" names the class's own index again at the end. */
+    int order[SEASON_TEMPLATE_MAX], sorted[SEASON_TEMPLATE_MAX];
+    for (int i = 0; i < count; i++) {
+        int j = i;
+        for (; j > 0 && days[order[j - 1]] > days[i]; j--) order[j] = order[j - 1];
+        order[j] = i;
+    }
+    for (int i = 0; i < count; i++) sorted[i] = days[order[i]];
     for (int i = 0; i + 1 < count; i++)
-        if (days[i + 1] <= days[i]) {
-            snprintf(why, (size_t)why_size, "class date %d is not after date %d", i + 1, i);
+        if (sorted[i + 1] == sorted[i]) {   /* two rounds on one day: the plan could keep both */
+            snprintf(why, (size_t)why_size, "class dates %d and %d are on one day", order[i], order[i + 1]);
             return 0;
         }
+    days = sorted;
     int largest = 0;
     for (int i = 0; i + 1 < count; i++)
         if (days[i + 1] - days[i] > largest) largest = days[i + 1] - days[i];
@@ -127,5 +138,7 @@ int season_template_plan(int base_year, const int *days, int count, int rounds, 
         n = plan_part(base_year, days, 0, count, rounds, largest, 1, out, why, why_size);
         if (n < 0) return 0;
     }
-    return n == rounds ? n : 0;
+    if (n != rounds) return 0;
+    for (int k = 0; k < n; k++) out[k].from = order[out[k].from];
+    return n;
 }

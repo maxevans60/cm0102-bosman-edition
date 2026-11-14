@@ -109,6 +109,15 @@
 2018	down	nir_first (NIFL Championship), row wal-nir-irl-436: game 0 (+0 play-off places), table 1 (1 (pos 12))
 2018	down	nor_first (OBOS-ligaen), row nor-fin-173: game 4 (+0 play-off places), table 2 (15th-16th (2))
 2018	idle	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-211: the game waits for 2020, the table holds it
+2018	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-45: game 1, table 2
+2018	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-72: game 1, table 2
+2018	meetings	cro_a1 (Prva HNL), row gre-pol-cro-342: game 2, table 4
+2018	meetings	den_first (Danish 1st Division), row den-swe-105: game 2, table 3
+2018	meetings	den_prm (Danish Superliga), row den-swe-104: game 3, table 2
+2018	meetings	fin_prm (Veikkausliiga), row nor-fin-177: game 3, table 2
+2018	meetings	jap_j2 (J2 League), row aus-jap-kor-234: game 4, table 2
+2018	meetings	nir_first (NIFL Championship), row wal-nir-irl-436: game 4, table 2
+2018	meetings	nir_prm (NIFL Premiership), row wal-nir-irl-435: game 4, table 3
 2018	no_row	friendly (Friendly): no table row
 2018	no_row	record_utils ('B' International): no table row
 2018	no_row	record_utils (Reserve): no table row
@@ -159,6 +168,26 @@
 2018	playoffs	jap_j2 (J2 League), row aus-jap-kor-234: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th play-off; winner plays J1 16th in one match (J1 entry play-off)')
 2018	playoffs	nir_first (NIFL Championship), row wal-nir-irl-436: game 1 up and 0 down play-off places, table 2 and 1 ('pos 2,3: promotion play-off; pos 11: relegation play-off')
 2018	playoffs	nor_first (OBOS-ligaen), row nor-fin-173: game 1 up and 0 down play-off places, table 4 and 1 ('3rd-6th single-leg knockout; winner v top-flight 14th, two legs. 14th v 2. divis')
+2018	rounds	arg_prm (Superliga Argentina), row arg-usa-18: game 19, table 25 (1 meetings, zones -, extra 0)
+2018	rounds	bel_first (Belgian First Division A), row hol-bel-229: game 34, table 30 (2 meetings, zones -, extra 0)
+2018	rounds	bel_second (Belgian First Division B), row hol-bel-230: game 34, table 14 (2 meetings, zones -, extra 0)
+2018	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-45: game 19, table 38 (2 meetings, zones -, extra 0)
+2018	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-72: game 19, table 38 (2 meetings, zones -, extra 0)
+2018	rounds	cro_a1 (Prva HNL), row gre-pol-cro-342: game 30, table 36 (4 meetings, zones -, extra 0)
+2018	rounds	cro_a2a (Druga HNL), row gre-pol-cro-369: game 30, table 26 (2 meetings, zones -, extra 0)
+2018	rounds	den_first (Danish 1st Division), row den-swe-105: game 30, table 33 (3 meetings, zones -, extra 0)
+2018	rounds	den_prm (Danish Superliga), row den-swe-104: game 33, table 26 (2 meetings, zones -, extra 0)
+2018	rounds	fin_prm (Veikkausliiga), row nor-fin-177: game 33, table 22 (2 meetings, zones -, extra 0)
+2018	rounds	fra_third (Championnat National), row fra-157: game 38, table 34 (2 meetings, zones -, extra 0)
+2018	rounds	gre_prm (Super League Greece), row gre-pol-cro-45: game 26, table 30 (2 meetings, zones -, extra 0)
+2018	rounds	gre_second (Football League), row gre-pol-cro-72: game 26, table 30 (2 meetings, zones -, extra 0)
+2018	rounds	hol_first (Eerste Divisie), row hol-bel-224: game 34, table 38 (2 meetings, zones -, extra 0)
+2018	rounds	ita_ser_a (Serie A), row ita-291: game 34, table 38 (2 meetings, zones -, extra 0)
+2018	rounds	jap_j1 (J1 League), row aus-jap-kor-207: game 30, table 34 (2 meetings, zones -, extra 0)
+2018	rounds	jap_j2 (J2 League), row aus-jap-kor-234: game 44, table 42 (2 meetings, zones -, extra 0)
+2018	rounds	nir_first (NIFL Championship), row wal-nir-irl-436: game 36, table 22 (2 meetings, zones -, extra 0)
+2018	rounds	nir_prm (NIFL Premiership), row wal-nir-irl-435: game 36, table 33 (3 meetings, zones -, extra 0)
+2018	rounds	nor_prm (Eliteserien), row nor-fin-172: game 26, table 30 (2 meetings, zones -, extra 0)
 2018	subs_used	ita_c1_super (Supercoppa Serie C), row ita-305: game 3, table 5 (5)
 2018	subs_used	new_suruga_bank (Suruga Bank Championship), row club-world-530: game 3, table 6 (6)
 2018	up	arg_second (Primera B Nacional), row arg-usa-45: game 1 (+0 play-off places), table 2 (2 (champion; Torneo Reducido winner))

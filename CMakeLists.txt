@@ -143,7 +143,8 @@ if(NOT WIN32)
         src/recomp_rt/host/posix.c)
     target_include_directories(seasons_db_test PRIVATE src/recomp_rt/win tests/seasons)
     target_compile_definitions(seasons_db_test PRIVATE
-        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv")
+        SIGNATURES_TSV="${CMAKE_SOURCE_DIR}/docs/research/rules-0.6.0/databases-signatures.tsv"
+        MANIFEST_DIR="${CMAKE_SOURCE_DIR}/tools/clean_files")
     add_test(NAME seasons_db COMMAND seasons_db_test)
     # The heap of the recompiled game: the join of the free blocks at the end of the arena (decision O121).
     add_executable(heap_test tests/recomp/test_heap.c src/recomp_rt/heap.c)
@@ -210,6 +211,8 @@ if(NOT WIN32)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
+    # Open item 233 (0.7.2): the year fix table matches docs/research/history-years/wrong-rows.tsv.
+    add_test(NAME season_history_years_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_years_table.py" --check)
     # International competitions (0.6.0 slice 27): the C table of the editions matches the rules table, and
     # the editions and the rules of the code sites.
     add_test(NAME season_intl_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_intl.py" --check)
@@ -511,6 +514,9 @@ if(NOT WIN32)
     add_executable(winscale_test tests/winscale/test_winscale.c)
     target_include_directories(winscale_test PRIVATE src/recomp_rt/win)
     add_test(NAME winscale COMMAND winscale_test)
+    add_executable(press_hold_test tests/winscale/test_press_hold.c)
+    target_include_directories(press_hold_test PRIVATE src/recomp_rt/win)
+    add_test(NAME press_hold COMMAND press_hold_test)
     add_executable(savename_test tests/savename/test_cp1252.c)
     target_include_directories(savename_test PRIVATE src/recomp_rt/win)
     add_test(NAME savename COMMAND savename_test)
