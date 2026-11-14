@@ -594,7 +594,12 @@ static void averages_fit(uint32_t self, int n)
         if (id == -1) continue;
         if (in_division(self, id)) keep++; else stale++;
     }
-    if (have == n && !stale) return;
+    if (have == n && !stale) {
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_prm %d: averages of %d clubs (%d held, %d kept, 0 left the "
+                            "division)\n", (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep);
+        return;
+    }
     uint32_t block = season_sizes_game_malloc((uint32_t)n * AVG_SIZE);
     if (!block) return;
     int k = 0;
@@ -655,6 +660,13 @@ RT_WRAP(00405ef0, arg_init_averages)
     rt_ret_stdcall(cpu.eax, 0);
 }
 
+uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original)
+{
+    if (!season_sizes_on() || !is_prm(obj) || season_sizes_kept(obj)) return original;
+    int d = (int16_t)rd16(g_mem, obj + COMP_DATES);
+    return d >= 1 ? (uint32_t)d : original;
+}
+
 uint32_t rt_arg_count(uint32_t original)
 {
     if (!season_sizes_on()) return original;
@@ -680,6 +692,14 @@ RT_WRAP(004067f0, arg_chain)
     int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
     uint32_t second = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
     if (readable(second)) season_sizes_step_note(self, second);
+}
+
+uint32_t season_arg_third_record(void)
+{
+    /* The record of a key id: [0xae23d0] + id x 0x6b, as 0x40689d..0x4068b6. */
+    int32_t id = (int32_t)rd32(g_mem, 0x9cf688u);
+    uint32_t table = rd32(g_mem, 0xae23d0u);
+    return season_sizes_on() && id >= 0 && readable(table) ? table + (uint32_t)id * 0x6bu : 0;
 }
 
 int season_arg_third(uint32_t record)

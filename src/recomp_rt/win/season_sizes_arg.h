@@ -59,9 +59,15 @@ uint32_t season_arg_fixtures(uint32_t league);
  * arg_prm_swap_second_and_third_division_clubs 0x4068d0 exchanges with the second division, 0x4069a6..0x4069ae): the
  * size step takes its clubs as clubs with no division, so the second division can refill to its 25. */
 int season_arg_third(uint32_t record);
+/* That record (0 outside a season game): the clubs that the step sends down from the second division go there, where
+ * the swap 0x4068d0 finds them again. */
+uint32_t season_arg_third_record(void);
 
 /* tools/recomp/arg_prm.py: a constant of the class for 20 clubs plus (count - 20) in a season game. */
 uint32_t rt_arg_count(uint32_t original);
+
+/* tools/recomp/arg_prm.py: the Apertura's date count that create_schedule(0) checks (0x4054a8), 19 in the base game. */
+uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original);
 
 /* Pure, for the test (tests/seasons/arg_prm_plan_test.c): the rounds of two zones of z clubs (z odd), one meeting,
  * the rival of each club of zone A at rival[i] (an index of zone B) played in the round where both rest, and a full

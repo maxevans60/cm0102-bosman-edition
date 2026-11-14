@@ -1099,7 +1099,10 @@ static void size_step_run(uint32_t trigger)
             uint32_t a[3] = {c, to, 0};
             call_this(F_MOVE_CLUB, step_seen[moves[i].to].obj, 3, a);
         } else {
-            /* Down: as a relegation of 0x689c80 (0x689e58..0x689e70). */
+            /* Down: as a relegation of 0x689c80 (0x689e58..0x689e70). The Argentine second division sends its
+             * surplus to the third division, not out of the league system (slice 15). */
+            if (!to && moves[i].from >= 0 && !strcmp(season_change_file(step_seen[moves[i].from].obj), "arg_second"))
+                to = season_arg_third_record();
             wr32(g_mem, c + CLUB_LAST_DIVISION, old);
             wr32(g_mem, c + CLUB_DIVISION, to);
             uint32_t a[2] = {c, old};

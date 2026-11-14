@@ -433,6 +433,13 @@ def arg_faults(log, year):
         if (zones or extra) and ed not in seen and any(f"arg_prm {ed}:" in x or f" {ed}, the class makes" in x
                                                          for x in lines if "league sizes: arg_prm" in x):
             fails.append(f"arg_prm {ed}: no fixture line of its zones or derby round")
+    fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines if "arg_prm fixed list not played" in x]
+    # The averages hold the clubs of each finished edition (ArgPrm::update_relegation_averages 0x406570 at its end).
+    for ed, n, _x, _lo, _hi in played(log, "arg_prm"):
+        if not re.search(rf"recomp: league sizes: arg_prm {ed}: averages of {n} clubs", log):
+            fails.append(f"arg_prm {ed}: no averages line of {n} clubs")
+    fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines
+              if re.search(r"league sizes: step: .* from Argentine Second Division to no division", x)]
     if year in seen:
         print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))
     else:
