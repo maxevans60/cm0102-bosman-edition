@@ -10,8 +10,9 @@ Usage:
 wrong-rows.tsv (tools/seasons/history_years_check.py --write) lists each competition history row of a database
 whose year is wrong after the shift of its database, with the right year and its reference. The C table holds,
 per database, each such row of its file (club or nation history, the row, its competition id and its year in the
-file) and the years to add on top of the shift (right year minus shown year). A database name that
-databases-signatures.tsv does not know, a row without a reference, or a difference of 0 or more than 3 years stops
+file) and the years to add on top of the shift (right year minus shown year), or 0 for a row to clear (right
+year 0 in wrong-rows.tsv: a row that matches no real edition, on a year that a corrected row takes). A database name that
+databases-signatures.tsv does not know, a row without a reference, or a difference of 0 (without right year 0) or more than 3 years stops
 the tool with exit code 1.
 """
 import collections
@@ -43,8 +44,9 @@ def text():
             fail(f"{r['database']!r} is not in databases-signatures.tsv")
         if not r["reference"]:
             fail(f"{r['database']} {r['competition']} {r['data_year']}: no reference")
-        delta = int(r["right_year"]) - int(r["shown_year"])
-        if not delta or abs(delta) > 3:
+        clear = r["right_year"] == "0"                  # a row of no real edition: cleared (delta 0)
+        delta = 0 if clear else int(r["right_year"]) - int(r["shown_year"])
+        if not clear and (not delta or abs(delta) > 3):
             fail(f"{r['database']} {r['competition']} {r['data_year']}: difference {delta}")
         by[r["database"]].append((r["kind"] == "nation", int(r["file_row"]), int(r["competition_id"]),
                                   int(r["data_year"]), delta))
