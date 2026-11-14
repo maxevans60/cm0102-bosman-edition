@@ -249,11 +249,20 @@ static void test_out_of_order(void)
     for (int k = 0; k + 1 < r; k++)
         if (p[k].from == 23 && !p[k].added) CHECK(p[k + 1].from == 22 && !p[k + 1].added, "out of order: 1 March "
                                                   "is not followed by 2 March");
-    /* Two class dates on one day: no plan (two rounds on one day). */
+    /* Two class dates on one day: the plan uses one of them and never plays two rounds on one day. */
     d[23] = d[22];
+    for (int want = 30; want <= 42; want += 12) {
+        why[0] = 0;
+        r = season_template_plan(2013, d, 34, want, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
+        CHECK(r == want, "one day: %d dates, want %d (%s)", r, want, why);
+        for (int k = 1; k < r; k++) CHECK(p[k].day > p[k - 1].day, "one day: dates %d and %d on day %d", k - 1, k,
+                                          p[k].day);
+        for (int k = 0; k < r; k++) CHECK(p[k].from != 23 || p[k].added, "one day: the dropped record 23 is taken");
+    }
+    /* A mirrored template keeps its halves: no plan. */
     why[0] = 0;
-    r = season_template_plan(2013, d, 34, 42, SEASON_TEMPLATE_SHUFFLED, p, why, sizeof why);
-    CHECK(r == 0 && why[0], "one day: %d dates, reason '%s'", r, why);
+    r = season_template_plan(2013, d, 34, 42, SEASON_TEMPLATE_MIRRORED, p, why, sizeof why);
+    CHECK(r == 0 && why[0], "one day mirrored: %d dates, reason '%s'", r, why);
 }
 
 int main(void)

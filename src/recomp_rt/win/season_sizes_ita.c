@@ -26,6 +26,15 @@
  * - The C2 exchange. ItaSerA::exchange_serie_c2_clubs_unplayed 0x641fc0 reads the rows of C1/A and C1/B to C1/A's
  *   count (movsx edi, word ptr [ecx + 0x3e] at 0x64210c; status at 0x642122 and 0x642161; League::get_table_row
  *   0x6826d0 has no bound). Here it reads each table to its own count.
+ * - The fixed fixture lists. ItaSerA::create_fixed_fixtures 0x642a70, ItaSerB::set_up_fixed_fixtures 0x647230 and
+ *   set_up_fixed_fixtures of C1/A 0x64be90 and C1/B 0x650100 allocate (clubs / 2) x match days entries of 16 bytes
+ *   into +0xea (0x642a90..0x642aae, 0x647250..0x64726e, 0x64beb9, 0x650120..0x650130) and write the real 2001/02
+ *   fixtures by club name (fixed_fixture_set_by_club_names 0x68aff0): 306, 380, 306 and 306 entries at fixed offsets
+ *   (the last at +0x1310, +0x17b0). A Serie B of 19 (9 x 38 = 342 entries) wrote 38 entries past its block: a 2018
+ *   game overwrote the heap header of the club records pool and stopped at file_llist.CPP 101. create_fixtures uses
+ *   the list only when the year of its first date is the league's (0x68382e..0x68383d), a 2001 game at the real
+ *   counts. Here a block too small for the list makes none (+0xea 0, as the builders leave it when a club is missing),
+ *   as season_divisions_ita.c does for C2/B and C2/C.
  *
  * The base game and a table at the class's count (18 in Serie A and C1, 20 in Serie B) keep the original's bytes
  * and paths (rule Q152). The regroup and the C2 exchange take the new code only in a season game with the sizes on. */
@@ -154,6 +163,36 @@ void o_0064bd80(void);
 void o_0064ff40(void);
 RT_WRAP(0064bd80, c1a_progress) { c1_progress(o_0064bd80); }
 RT_WRAP(0064ff40, c1b_progress) { c1_progress(o_0064ff40); }
+
+/* ---- Fixed fixture lists ---- */
+
+#define MATCH_DAYS 0xa9u                /* s16: the match days of the template (the builders' 0x642a99, 0x647259) */
+#define FIXED_LIST 0xeau                /* the fixed fixture list (0x642aea) */
+
+static void fixed_list(void (*original)(void), int writes)
+{
+    uint32_t self = cpu.ecx;
+    int n = count_of(self), days = readable(self) ? (int16_t)rd16(g_mem, self + MATCH_DAYS) : 0;
+    int room = n / 2 * days;           /* as cdq, sub, sar, imul */
+    if (!season_sizes_on() || room >= writes) {
+        original();
+        return;
+    }
+    wr32(g_mem, self + FIXED_LIST, 0);
+    fprintf(stderr, "recomp: league sizes: %.50s %d: no fixed fixture list (%d clubs and %d match days hold %d of its "
+                    "%d)\n", win_str(rd32(g_mem, self + 4) + 4), (int16_t)rd16(g_mem, self + 0x40), n, days,
+            room < 0 ? 0 : room, writes);
+    rt_ret_cdecl(cpu.eax);
+}
+
+void o_00642a70(void);
+void o_00647230(void);
+void o_0064be90(void);
+void o_00650100(void);
+RT_WRAP(00642a70, ita_a_fixed_list) { fixed_list(o_00642a70, 306); }
+RT_WRAP(00647230, ita_b_fixed_list) { fixed_list(o_00647230, 380); }
+RT_WRAP(0064be90, c1a_fixed_list) { fixed_list(o_0064be90, 306); }
+RT_WRAP(00650100, c1b_fixed_list) { fixed_list(o_00650100, 306); }
 
 /* ---- C1 regroup ---- */
 
