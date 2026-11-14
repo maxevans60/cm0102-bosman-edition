@@ -734,6 +734,49 @@ const PORT = 8097;
       await ctx.close();
     }
 
+    // A hand-over whose store takes long (a large folder on a phone): the asking tab starts only once it is done, not
+    // after a fixed wait, or it reads the storage while the first tab still writes it.
+    {
+      const ctx = await b.newContext({ viewport: { width: 1000, height: 700 } });
+      const one = await ctx.newPage(), two = await ctx.newPage();
+      await one.goto(`http://127.0.0.1:${PORT}/`);
+      await one.waitForSelector('#go');
+      await one.click('#go');
+      await one.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+      await one.evaluate(() => { window.__slowStore = 70000; });
+      await two.goto(`http://127.0.0.1:${PORT}/`);
+      await two.waitForSelector('#turn-take', { timeout: 30000 });
+      await two.click('#turn-take');
+      await two.waitForFunction(() => window.__fake, null, { timeout: 100000 }).catch(() => {});
+      await one.waitForFunction(() => window.__storeDoneAt, null, { timeout: 30000 }).catch(() => {});
+      const [doneAt, startedAt] = [await one.evaluate(() => window.__storeDoneAt), await two.evaluate(() => window.__fakeAt)];
+      check('a slow store at a hand-over: the asking tab starts only after it is done', Boolean(doneAt && startedAt) && startedAt >= doneAt,
+        `store done ${doneAt}, the other tab started ${startedAt} (${startedAt && doneAt ? Math.round((startedAt - doneAt) / 1000) : '?'} s)`);
+      await ctx.close();
+    }
+
+    // A hand-over while the first tab is still starting (its folder not yet read from IndexedDB): the first tab must
+    // not store its empty folder, which would remove every stored file (a review of the two-tab code, 14 November 2026).
+    {
+      const ctx = await b.newContext({ viewport: { width: 1000, height: 700 } });
+      const one = await ctx.newPage(), two = await ctx.newPage();
+      await one.addInitScript(() => { window.__slowRead = 8000; });
+      await one.goto(`http://127.0.0.1:${PORT}/`);
+      await one.waitForSelector('#go');
+      await one.click('#go');
+      await one.waitForFunction(() => (window.__syncLog ?? []).includes('read'), null, { timeout: 120000 });
+      await two.goto(`http://127.0.0.1:${PORT}/`);
+      await two.waitForSelector('#turn-take', { timeout: 30000 });
+      await two.click('#turn-take');
+      await two.waitForFunction(() => window.__fake, null, { timeout: 60000 }).catch(() => {});
+      await one.waitForTimeout(9000);                    // past the slow read
+      const order = await one.evaluate(() => window.__syncLog.join(', '));
+      const firstStore = order.indexOf('store'), readDone = order.indexOf('read done');
+      check('a hand-over while the first tab still reads its folder: it stores nothing before the read is done (no wipe)',
+        firstStore === -1 || (readDone !== -1 && firstStore > readDone), order);
+      await ctx.close();
+    }
+
     // A flight: one start with a connection, then none. The service worker gives the page, files.json and the engine,
     // the browser's cache the game files, and the saves are there (checked with the real engine too, 14 November 2026:
     // the start took 4 s offline).
@@ -788,6 +831,34 @@ const PORT = 8097;
         r.onerror = () => ok(r.error.name);
       }));
       check('and a page of the earlier code cannot open the saves\' storage again (version 1), so it removes nothing', shutOut === 'VersionError', shutOut);
+      await ctx.close();
+    }
+    // A tab that waits for an older page and is then asked to hand over: it stays handed over (it starts nothing and its
+    // box keeps saying the game moved) when the older page lets go.
+    {
+      const ctx = await b.newContext({ viewport: { width: 1000, height: 700 } });
+      const old = await ctx.newPage(), one = await ctx.newPage(), two = await ctx.newPage();
+      await old.goto(`http://127.0.0.1:${PORT}/privacy`);
+      await old.evaluate(() => new Promise((ok) => {
+        const r = indexedDB.open('cm0102-vault', 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('files');
+        r.onsuccess = () => { window.__old = r.result; ok(); };
+      }));
+      await one.goto(`http://127.0.0.1:${PORT}/`);
+      await one.waitForSelector('#go');
+      await one.click('#go');
+      await one.waitForFunction(() => /An older page of the game/.test(document.getElementById('overlay').textContent), null, { timeout: 60000 }).catch(() => {});
+      await two.goto(`http://127.0.0.1:${PORT}/`);
+      await two.waitForSelector('#turn-take', { timeout: 30000 }).catch(() => {});
+      await two.click('#turn-take');
+      await one.waitForFunction(() => /The game moved to another tab/.test(document.getElementById('overlay').textContent), null, { timeout: 30000 }).catch(() => {});
+      await old.evaluate(() => window.__old.close());
+      await two.waitForFunction(() => window.__fake, null, { timeout: 60000 }).catch(() => {});
+      await one.waitForTimeout(3000);
+      const oneBox = (await one.textContent('#overlay')).replace(/\s+/g, ' ').trim();
+      const oneStarted = await one.evaluate(() => Boolean(window.__fake));
+      check('a tab that handed over while it waited for an older page stays handed over when that page lets go',
+        /The game moved to another tab/.test(oneBox) && !oneStarted && await two.evaluate(() => Boolean(window.__fake)), oneBox.slice(0, 120));
       await ctx.close();
     }
     if (process.argv[2]) await p.screenshot({ path: process.argv[2] });

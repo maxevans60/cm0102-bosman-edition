@@ -44,15 +44,21 @@
       mounts.push(point);
     },
     // As IDBFS: a write keeps its connection in IDBFS.dbs; one the browser closed fails as Chrome's does.
+    // The order of the folder's syncs in window.__syncLog: 'read' and 'read done' (IDBFS into memory), 'store' (memory
+    // into IDBFS, which removes from IndexedDB what memory lacks). window.__slowRead (ms) makes the read slow, as a
+    // large folder's is.
     syncfs(populate, cb) {
       window.__syncs[populate ? 'load' : 'store']++;
+      (window.__syncLog ??= []).push(populate ? 'read' : 'store');
+      if (populate) { setTimeout(() => { window.__syncLog.push('read done'); cb(null); }, window.__slowRead ?? 5); return; }
       const dbs = M.IDBFS.dbs;
       if (!populate && dbs['/user']?.closed) {
         setTimeout(() => cb(new DOMException("Failed to execute 'transaction' on 'IDBDatabase': The database connection is closing.", 'InvalidStateError')), 5);
         return;
       }
       if (!populate && !dbs['/user']) { dbs['/user'] = { closed: false, close() { this.closed = true; } }; window.__syncs.opened++; }
-      setTimeout(() => cb(null), 5);
+      // window.__slowStore (ms): a store as slow as a large folder's on a phone; window.__storeDoneAt says when it ended.
+      setTimeout(() => { window.__syncLog.push('store done'); window.__storeDoneAt = Date.now(); cb(null); }, window.__slowStore ?? 5);
     },
   };
   // As newer Emscripten: IDBFS is an exported runtime method (web/web.cmake), and FS has no filesystems table.
@@ -62,6 +68,7 @@
   M.addRunDependency = () => { deps++; };
   M.removeRunDependency = () => { if (--deps === 0) init(); };
   M.callMain = (args) => {
+    window.__fakeAt = Date.now();
     const all = [...files.values()];
     window.__fake = {
       args, files: files.size, bytes: all.reduce((a, f) => a + f.size, 0), owned: all.every((f) => f.own),

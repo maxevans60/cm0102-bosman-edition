@@ -431,6 +431,11 @@ function forgetUserStorage() {
 // those for its next round otherwise): for Restart Game and Exit, after which the page goes or the game is over. The
 // promise ends when both writes did (or failed: the log says so). Leaving the page meanwhile asks first (storing).
 let storing = 0;
+// The user folder was read from IndexedDB (preRun). Until then the folder in memory is empty or half read, and a write
+// of it would remove from IndexedDB every file it lacks (IDBFS's reconcile): a hand-over while a tab was still starting
+// did that (a review, 14 November 2026). After a read that failed it stays false: nothing of this visit is written
+// there, so the stored files stay.
+let folderRead = false;
 function storeEverything() {
   const FS = window.Module?.FS;
   if (!FS || handedOver) return Promise.resolve();
@@ -443,7 +448,7 @@ function storeEverything() {
 }
 function storeAll(FS) {
   const vaultDone = vault?.active ? vaultRound({ force: true }) : null;
-  const folderDone = new Promise((done) => FS.syncfs(false, (err) => {
+  const folderDone = !folderRead ? null : new Promise((done) => FS.syncfs(false, (err) => {
     if (err && closedStorage(err) && forgetUserStorage()) {
       FS.syncfs(false, (again) => { if (again) log(`page: the user folder was not saved: ${again}`); done(); });
       return;
@@ -477,7 +482,7 @@ async function vaultRound(options) {
 let syncing = false, syncAgain = false, reopened = false;
 function sync() {
   const FS = window.Module?.FS;
-  if (!FS || handedOver) return;
+  if (!FS || handedOver || !folderRead) return;
   if (vault?.active) vaultRound();
   if (syncing) { syncAgain = true; return; }
   syncing = true;
@@ -512,6 +517,7 @@ async function prepareVault(hooked) {
     await vault.open();
     vaultOpened = true;
     if (!hooked) { vaultMode = 'restore'; return; }
+    if (turnGone) return;                                // handed over while it started: it moves nothing
     const moved = await vault.migrateFrom('/user');
     if (moved) log(`page: ${moved} files of the user folder moved to the browser's storage (the vault)`);
     vault.wrapFS();
@@ -524,7 +530,7 @@ async function prepareVault(hooked) {
 }
 
 async function finishVault(FS) {
-  if (!vault) return;
+  if (!vault || turnGone) return;                      // handed over while it started: it writes nothing
   if (vaultMode === 'on') {
     try {
       const m = await vault.mount();
@@ -543,7 +549,8 @@ async function finishVault(FS) {
       const n = await vault.materialize();
       if (n) {
         log(`page: ${n} files came back from the vault into the user folder (this engine cannot open them from there)`);
-        FS.syncfs(false, (err) => { if (!err) vault.clear(); });
+        // Only over a folder that was read (folderRead): the vault empties once they are stored.
+        if (folderRead) FS.syncfs(false, (err) => { if (!err) vault.clear(); });
       }
     } catch (e) { log(`page: the vault's files did not come back: ${e?.message ?? e}`); }
   }
@@ -662,7 +669,9 @@ function runEngine(files, info) {
       M.ENV.HOME = '/user';
       M.addRunDependency('user-folder');
       prepareVault(hooked).then(() => FS.syncfs(true, async (err) => {   // the saves of earlier visits, back from the browser
-        if (err) log(`page: the user folder was not read: ${err}`);
+        if (err) log(`page: the user folder was not read (${err}): nothing of this visit is written to it, so the stored files stay`);
+        else folderRead = true;
+        if (turnGone) return;                            // handed over while it started: the start ends here
         await finishVault(FS);                           // the placeholders, before the cloud sync and the game list them
         // The display mode of the settings file, for an engine that does not tell the size of its picture.
         try { if (/^\s*display\s*=\s*classic\b/m.test(FS.readFile('/user/settings.txt', { encoding: 'utf8' }))) layout.setPicture(800, 600); }
@@ -899,7 +908,10 @@ async function stopHere(store) {
   status('The game moved to another tab');
   overlay(`<h1>The game moves to another tab</h1><div class="row"><i class="spin"></i>${store ? 'Your saves go to this browser\'s storage first.' : 'The game here stops.'}</div>`);
   await within(letEngineGo(), 10000);
-  if (store) await within(storeEverything(), 60000);
+  // The lock stays until the store is done, however long it takes: the asking tab must not read the storage while this
+  // one still writes it (a review found the 60 s cap that was here). A store that never ends: the asking tab offers
+  // Play here anyway after its own wait.
+  if (store) await storeEverything().catch((e) => log(`page: the store before the hand-over: ${e?.message ?? e}`));
   handedOver = true;
   turnRelease?.();
   turnRelease = null;
@@ -927,6 +939,7 @@ async function stillMine() {
 // A page of the game from before one tab at a time runs in another tab and keeps the saves' storage open (vault.js,
 // VAULT_VERSION): this one waits until that tab is closed or loaded again, and says so.
 function olderPageBlocks(on) {
+  if (turnGone) return;                                // this tab handed over meanwhile: its box says so
   if (on) {
     log('page: an older page of the game, in another tab, keeps the saves\' storage open: waiting until it is closed or loaded again');
     status('The game is open in another tab');
