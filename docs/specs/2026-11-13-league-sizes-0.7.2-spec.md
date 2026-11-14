@@ -141,8 +141,8 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 Blocked by: 2
 Delivers: `FraCup`, `FraLgeCup`, the CFA fill, `ItaCCup`, the Coppa Italia positions (Serie A 20 leaves 15th to 17th out today), `HolCup`, `BelFaCup` (112 today) and `DenCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A season game per nation with a grown and a shrunk division plays every cup round
-- [ ] The same-save set is equal
+- [x] A season game per nation with a grown and a shrunk division plays every cup round (`tests/seasons/cup_size_run.py` runs the shrunk divisions: bel2016, den2020, fra2024, ita2018, hol2005. The grown divisions need slices 8, 9 and 10. `test_season_cup_west.c` checks their cup counts, and those slices' runs check the cups.)
+- [x] The same-save set is equal
 
 ### 6. Cups of eastern Europe and Asia follow the divisions
 Blocked by: 2
