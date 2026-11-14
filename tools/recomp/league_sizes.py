@@ -218,10 +218,8 @@ PATCHES = {
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
 # cups are slice 21). Each cup fills fixed places with every club of these divisions, or needs their sum:
-# GreCup 0x5e9a80 (a sort of 16 at 0x5e9b60), CroCup 0x517bb0 (48, no check), RusCup 0x7e99a0 (48, box
-# rus_cup.cpp 78), TurCup 0x8fcb90 (64 from fixed places), JapJCup 0x665a00 (28 = J2 + J1), JapEmpCup 0x6624f0
-# (J1 16 sorted at 0x6628af), KorLeagueCup 0x66cf20 (10 places, box line 703), PolLgeCup 0x7cad30 (Second + First
-# = 34).
+# 0.7.2 slice 6: the cups of Greece, Croatia, Russia, Turkey, Poland, Japan and South Korea take the divisions of
+# the season (cup_sizes_east.py, season_cup_sizes_east.c), so their floors are gone.
 # The cups of Britain and Ireland follow the divisions (0.7.2 league sizes, slice 4, D14;
 # src/recomp_rt/win/season_cup_sizes_uk.c): EngCcCup 0x56ccc0, EngFaCup 0x56fab0, WelCup 0x924ab0, WelLgeCup
 # 0x927010, NirCup 0x78ac90, ScoLgeCup 0x7f0400 and ScoChalCup 0x7ed010. Their divisions have no floor.
@@ -229,11 +227,9 @@ PATCHES = {
 # 0x5f4820, FraCup 0x5baa50 and DenCup. Slice 5 keeps the floors of bel_second and the Serie C1 groups.
 # A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5: the floors both
 # slices removed are gone).
-FLOORS = {"bel_second", "gre_second", "cro_a1", "cro_a2a", "cro_a2b", "rus_first", "rus_prm", "tur_first",
-          "tur_second", "ita_ser_c1a", "ita_ser_c1b", "jap_j1", "jap_j2", "kor_league", "pol_second"}
-# The floor is the class's count after 2001 where it has two (PolSecond 18 at 0x7cbe14; PolLgeCup takes 34 = 18 + 16
-# after 2001, 0x7cad4f), else its largest count.
-FLOOR_COUNT = {f: (18 if f == "pol_second" else CAPS[f]) for f in FLOORS}
+FLOORS = {"bel_second", "ita_ser_c1a", "ita_ser_c1b"}
+# The floor is the class's largest count.
+FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # The divisions whose places and exchange stay the class's, though the club moves give them the count of their row
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
@@ -411,3 +407,12 @@ INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu
 # The French Lower Division (constructor 0x5bd600): the same after its loop of the National and lower clubs (40).
 INSNS[0x5BD752] = ("lea edx, [esp + 0x1c]", "edi = rt_fra_lower_fill(esp + 0x1cu, edi); edx = esp + 0x1cu;")
 INSNS.update(CUP_INSNS)
+# 0.7.2 slice 6: the cups of eastern Europe and Asia (cup_sizes_east.py).
+import os as _os  # noqa: E402
+import sys as _sys  # noqa: E402
+
+if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
+    _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import cup_sizes_east  # noqa: E402
+
+INSNS.update(cup_sizes_east.INSNS)
