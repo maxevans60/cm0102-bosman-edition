@@ -213,7 +213,9 @@ def faults(work, file, year, last):
               if x.startswith(f"recomp: league sizes: {file} template mode ")]
     fails += [f"{file}: {x.split(': ', 1)[1]}" for x in log.split("\n")
               if x.startswith(f"recomp: league sizes: {file} dates: no room")]
-    tmpl = templates(log, file)
+    # The templates of the run's seasons: the run's last day makes the template of the season after --last, whose row
+    # may give another count (Série A 2005: 22 clubs, row 2004).
+    tmpl = [t for t in templates(log, file) if t[0] <= last]
     want = [t for t in tmpl if len(t[1]) != rounds]
     if not tmpl:
         fails.append(f"{file} {year}: no template line")
