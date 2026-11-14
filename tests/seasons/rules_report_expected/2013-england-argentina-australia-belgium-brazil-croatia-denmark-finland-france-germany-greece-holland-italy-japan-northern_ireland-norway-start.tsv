@@ -71,7 +71,7 @@
 2013	clubs	nir_prm (NIFL Premiership), row wal-nir-irl-310: game 10, table 12 (12)
 2013	clubs	nor_prm (Tippeligaen), row nor-fin-122: game 14, table 16 (16)
 2013	clubs	uefa_cup (UEFA Europa League), row uefa-101: game 161, table 194 (194 (161 entered + 33 from the Champions League); 48 in the group stage (+8 Cham)
-2013	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-150: game 50, table 10 (10)
+2013	clubs	wc_african_cup (FIFA World Cup qualification (CAF)), row int-world-150: game 44, table 10 (10)
 2013	clubs	wc_asia_league (FIFA World Cup qualification (AFC)), row int-world-151: game 4, table 2 (2)
 2013	clubs	wc_concacaf_cup (FIFA World Cup qualification (CONCACAF)), row int-world-149: game 24, table 6 (6)
 2013	clubs	wc_europe_league (FIFA World Cup qualification (UEFA)), row int-world-147: game 0, table 53 (53 entrants)
@@ -96,6 +96,15 @@
 2013	down	jap_j1 (J.League Division 1), row aus-jap-kor-202: game 2 (+0 play-off places), table 3 (3)
 2013	down	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 0 (+0 play-off places), table 1 (1; 21st v J3 runner-up in a promotion/relegation series)
 2013	down	nir_first (NIFL Championship 1), row wal-nir-irl-311: game 0 (+0 play-off places), table 2 (2 (pos 13,14))
+2013	meetings	arg_second (Primera B Nacional), row arg-usa-40: game 1, table 2
+2013	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-40: game 1, table 2
+2013	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-67: game 1, table 2
+2013	meetings	cro_a1 (Prva HNL), row gre-pol-cro-337: game 2, table 4
+2013	meetings	cro_a2a (Druga HNL), row gre-pol-cro-364: game 2, table 3
+2013	meetings	den_first (Danish 1st Division), row den-swe-75: game 2, table 3
+2013	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 4, table 2
+2013	meetings	nir_first (NIFL Championship 1), row wal-nir-irl-311: game 4, table 2
+2013	meetings	nir_prm (NIFL Premiership), row wal-nir-irl-310: game 4, table 3
 2013	no_row	friendly (Friendly): no table row
 2013	no_row	record_utils ('B' International): no table row
 2013	no_row	record_utils (Reserve): no table row
@@ -138,6 +147,24 @@
 2013	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-209: game 4 up and 4 down play-off places, table 8 and 0 ('2nd to 9th: quarter-finals one leg (2v9, 3v8, 4v7, 5v6) with extra time and pena')
 2013	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
 2013	playoffs	nor_first (1. divisjon), row nor-fin-123: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
+2013	rounds	arg_second (Primera B Nacional), row arg-usa-40: game 25, table 42 (2 meetings, zones -, extra 0)
+2013	rounds	bel_first (Belgian Pro League), row hol-bel-164: game 34, table 30 (2 meetings, zones -, extra 0)
+2013	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-40: game 19, table 38 (2 meetings, zones -, extra 0)
+2013	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-67: game 19, table 38 (2 meetings, zones -, extra 0)
+2013	rounds	cro_a1 (Prva HNL), row gre-pol-cro-337: game 30, table 36 (4 meetings, zones -, extra 0)
+2013	rounds	cro_a2a (Druga HNL), row gre-pol-cro-364: game 30, table 33 (3 meetings, zones -, extra 0)
+2013	rounds	den_first (Danish 1st Division), row den-swe-75: game 30, table 33 (3 meetings, zones -, extra 0)
+2013	rounds	fra_third (Championnat National), row fra-112: game 38, table 34 (2 meetings, zones -, extra 0)
+2013	rounds	gre_prm (Super League Greece), row gre-pol-cro-40: game 26, table 34 (2 meetings, zones -, extra 0)
+2013	rounds	hol_first (Eerste Divisie), row hol-bel-159: game 34, table 38 (2 meetings, zones -, extra 0)
+2013	rounds	ita_ser_a (Serie A), row ita-206: game 34, table 38 (2 meetings, zones -, extra 0)
+2013	rounds	ita_ser_b (Serie B), row ita-207: game 38, table 42 (2 meetings, zones -, extra 0)
+2013	rounds	ita_ser_c1a (Lega Pro Prima Divisione girone A), row ita-208: game 34, table 30 (2 meetings, zones -, extra 0)
+2013	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-202: game 30, table 34 (2 meetings, zones -, extra 0)
+2013	rounds	jap_j2 (J.League Division 2), row aus-jap-kor-229: game 44, table 42 (2 meetings, zones -, extra 0)
+2013	rounds	nir_first (NIFL Championship 1), row wal-nir-irl-311: game 36, table 26 (2 meetings, zones -, extra 0)
+2013	rounds	nir_prm (NIFL Premiership), row wal-nir-irl-310: game 36, table 33 (3 meetings, zones -, extra 0)
+2013	rounds	nor_prm (Tippeligaen), row nor-fin-122: game 26, table 30 (2 meetings, zones -, extra 0)
 2013	subs_used	new_suruga_bank (Suruga Bank Championship), row club-world-525: game 3, table 7 (7)
 2013	up	arg_second (Primera B Nacional), row arg-usa-40: game 1 (+0 play-off places), table 3 (3 (champion, runner-up, winner of a tie-breaker for 3rd))
 2013	up	aus_nsl (A-League), row aus-jap-kor-36: game 6 (+0 play-off places), table na (n/a)

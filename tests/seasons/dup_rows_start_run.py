@@ -17,7 +17,7 @@ One new game: 2001, England, seed 1, changing rules on (default), the option dat
 RECOMP_DATA_DIR at the data folder (default /Users/max/Projects/cm0102/data-3960 or data-3965), as run_set.py of the
 release tests loads these data sets, 10 days, a save. The checks: the run ends with code 0 and shows
 no message box; the save holds no history row twice; the African Super Cup and the Merconorte Cup hold one row of
-2000 each.
+2000 each; the load line names the data set (open item 230: the signature table knows the shipped folders).
 """
 import collections
 import os
@@ -85,6 +85,16 @@ def main(argv):
     fails = []
     if code != 0 or box:
         fails.append(f"the run ended with code {code}{', box ' + box if box else ''} ({work})")
+    want = f"recomp: season dates: data loaded from a database folder ({db}) in 2001"
+    try:
+        with open(os.path.join(work, "stderr.txt"), errors="replace") as f:
+            named = any(want in line for line in f)
+    except OSError:
+        named = False
+    if named:
+        print(f"ok    the game knows the data set: {want}")
+    else:
+        fails.append(f"no line '{want}': the data set is not known (open item 230)")
     save = os.path.join(work, "user", "samesave.sav")
     if not os.path.exists(save):
         fails.append("no save after the days")

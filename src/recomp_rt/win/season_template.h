@@ -36,8 +36,9 @@ int season_template_year_days(int year);
 int season_template_day(int base_year, int year_offset, int day_of_year);
 void season_template_split(int base_year, int day, int *year_offset, int *day_of_year);
 
-/* The plan of a template of `rounds` dates from the class's `count` days (ascending, days from 1 January of
- * base_year). Mode SEASON_TEMPLATE_MIRRORED plans each half of the template on its own.
+/* The plan of a template of `rounds` dates from the class's `count` days (days from 1 January of
+ * base_year, in any order: a class date that snaps to its weekday can come before the one ahead of it). Mode
+ * SEASON_TEMPLATE_MIRRORED plans each half of the template on its own.
  * - More rounds (D4): the class's dates stay; each extra round goes on the Wednesday of a gap of 7 to 14 days that
  *   is not the largest gap of the template (the winter break), at most one in a gap, spread evenly over the gaps.
  *   When the gaps run out, the season starts earlier in steps of 7 days (at most SEASON_TEMPLATE_EARLIER, and not
