@@ -147,7 +147,7 @@ Blocked by: 2
 Delivers: `GreCup`, `CroCup` (48, no bound), `RusCup`, `TurCup`, `PolLgeCup`, `JapJCup`, `JapEmpCup` and `KorLeagueCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
 - [x] A season game per nation with a grown and a shrunk division plays every cup round (`tests/seasons/cup_sizes_run.py`: grown-2010, shrunk-2012, poland-2007, mixed-2020; sizes above the class caps through the seam `RECOMP_CUP_SIZE_TEST` until slices 11, 12 and 14; no K League under 10 in the rules)
-- [ ] The same-save set is equal
+- [x] The same-save set is equal (start.sav, prematch.sav, new game and match pass on 2d203e4e; the reference build is this branch without slice 6, because main lacks the lead base)
 
 ### 7. Split engine
 Blocked by: 2, 4
