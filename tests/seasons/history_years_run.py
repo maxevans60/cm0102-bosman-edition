@@ -20,7 +20,8 @@ game, before the game keeps the rows of the selected nations. The checks: each e
 of real results, sources below) is at its year, and no row of the same first club and second club is at another
 year next to it; the log line of the year fix names the database and finds every row of its table.
 
-Sources of the expected rows: Norwegian champions, RSSSF https://www.rsssf.org/tablesn/noorkamp.html; Swedish Cup
+A row with no year (Belgian Second Division KSK Beveren / Beerschot, which no season had) must be gone: the load
+clears it. Sources of the expected rows: Belgian Second Division, RSSSF https://www.rsssf.org/tablesb/belg2champ.html; Norwegian champions, RSSSF https://www.rsssf.org/tablesn/noorkamp.html; Swedish Cup
 finals, RSSSF https://www.rsssf.org/tabless/zwedcuphist.html; League of Ireland champions and runners-up,
 https://en.wikipedia.org/wiki/List_of_League_of_Ireland_champions (2000/01 Bohemians, 2001/02 Shelbourne); World
 Cup finals, https://www.rsssf.org/tablesw/worldcup.html.
@@ -36,7 +37,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import season_dates_run as sdr  # noqa: E402
 
-NOR, SWE, IRL, WC = ("Norwegian Premier Division", "Swedish Cup", "Irish Premier Division", "FIFA World Cup")
+NOR, SWE, IRL, WC, BEL = ("Norwegian Premier Division", "Swedish Cup", "Irish Premier Division", "FIFA World Cup",
+                          "Belgian Second Division")
 # (competition, year, first, second): names as the database writes them (first word enough, see match()).
 RUNS = {
     "October 2018": (2018, [
@@ -51,6 +53,10 @@ RUNS = {
         (WC, 2022, "Argentina", "France"),
         (NOR, 2005, "lerenga", "IK Start"), (NOR, 2007, "SK Brann", "Stab"),
         (IRL, 2001, "Bohemian", "Shelbourne"), (IRL, 2002, "Shelbourne", "Shamrock"),
+    ]),
+    "October 2014": (2014, [
+        (BEL, 2009, "Sint", "Lierse"), (BEL, 2010, "Lierse", "Lommel"), (BEL, 2012, "Charleroi", "Waasland"),
+        (BEL, 2013, "Oostende", "Mouscron"), (BEL, None, "KSK Beveren", "Beerschot"),
     ]),
     "October 2026": (2026, [
         (WC, 2022, "Argentina", "France"),
@@ -82,6 +88,10 @@ def check(db, log, want):
     got = parse(log)
     for comp, year, a, b in want:
         rows = got.get(comp, [])
+        if year is None:            # a row of no real edition: cleared at the load
+            if any(match(a, r[1]) and match(b, r[2]) for r in rows):
+                fails.append(f"{comp} {a} / {b}: still there")
+            continue
         here = [r for r in rows if r[0] == year and match(a, r[1]) and match(b, r[2])]
         off = [r for r in rows if r[0] != year and abs(r[0] - year) == 1 and match(a, r[1]) and match(b, r[2])]
         if not here or off:
@@ -106,7 +116,7 @@ def main(argv):
         if os.path.isdir(p) and not os.path.exists(os.path.join(p, "index.dat")):
             for name, v in sdr.databases(p).items():
                 dbs.setdefault(name, v)
-    env = {"RECOMP_HISTORY_LOG": ";".join((NOR, SWE, IRL, WC))}
+    env = {"RECOMP_HISTORY_LOG": ";".join((NOR, SWE, IRL, WC, BEL))}
     failed = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
         futs = {}
