@@ -5,7 +5,7 @@ docs/specs/2026-11-13-league-sizes-0.7.2-spec.md, Testing seam 2, D4 and D5). Ma
 Usage:
     python3 tests/seasons/league_size_run.py <cm0102_recomp> <game folder> <file> [--year <season>]
         [--last <season> | --to <season>] [--nations all|<name,name,...>|all,-<name>,...] [--keep <folder>] [--reuse]
-        [--timeout <seconds>]
+        [--timeout <seconds>] [--save-in-split]
     python3 tests/seasons/league_size_run.py --list
     python3 tests/seasons/league_size_run.py --self-test
 
@@ -28,6 +28,14 @@ the meetings m; the rounds are R = m x (n' - 1), n' the count rounded up to even
              m x (n - 1) matches, the matches per club (+0xa7);
     expect   the rules report check lists no clubs difference of the file (the first season);
     box      no message box.
+A league whose row has a split (slice 7, D7; src/recomp_rt/win/season_split.c) plays its table to N matches a club,
+then sections of the row: its template holds R dates and the most rounds of a section, the matches per club are N
+and those of the largest section, every club of a finished table played N and the matches of its own section, and
+a split line names the row's sections and meetings, the dates of the sections are the last dates of the template
+line, and at the end of the table (a split end line, in table order) the places after match N are each place once,
+each section's clubs stand together above the next section's, and each club played N and its own section's matches. --save-in-split plays to the first split, saves after the first section date,
+loads that save in a new program and plays on (leg0 and leg1 in the work folder): the loaded league goes on after
+its split and its table finishes.
 A message box ends the run at once (stop_on_box) and fails it. A run takes about 20 to 40 minutes a season. A two-year league ends its table after the end report of its season:
 use --last <year + 1> for its played check. --reuse checks the logs in --keep again. Exit code 1 on a failure.
 """
@@ -53,6 +61,10 @@ ROWS = {
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    # Slice 7, the split engine (D7): the table to N matches, then sections of the row.
+    "nir_prm": (2010, 2011, "IFA Premiership, 12 clubs (the class holds 10): 33 rounds, then sections of 6 and 6"),
+    "wel_first": (2012, 2013, "Welsh Premier, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
+    "wel_first@2026": (2026, 2027, "Welsh Premier, 16 clubs: 30 rounds, then sections of 6, 4 and 6"),
     # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
     # before the real season (row 2003 is the 2004 Série A).
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
@@ -80,6 +92,102 @@ def rounds_of(clubs, meetings):
     return meetings * (clubs + (clubs & 1) - 1)
 
 
+def encoded_split(file, season):
+    """The split of the encoded row of a file in a season (the after-table rule): (after, [(size, meetings)]) or
+    None for one table or a split the engine does not play (unknown section meetings)."""
+    best = None
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") != file or not row.get("season", "").isdigit():
+                continue
+            s = int(row["season"])
+            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
+                best = (s, row.get("split", "-"), row.get("split_meet", "-"))
+    if not best or not best[1].startswith("after "):
+        return None
+    head, sizes = best[1].split(",")[0][len("after "):].split(": ")
+    meet = best[2].split("+")
+    if not all(m.isdigit() for m in meet):
+        return None
+    return int(head), list(zip(map(int, sizes.split("+")), map(int, meet)))
+
+
+def split_numbers(sp):
+    """(rounds after the split: the most of a section, the fewest and the most matches of a club after it)."""
+    rounds = max(m * (n + (n & 1) - 1) for n, m in sp)
+    matches = [m * (n - 1) for n, m in sp]
+    return rounds, min(matches), max(matches)
+
+
+def split_dates(log, file):
+    """{edition: [dates]} of the split dates lines of a file (the probe at the split, season_sizes.c)."""
+    out = {}
+    tag = f"recomp: league sizes: {file} split dates "
+    for line in log.split("\n"):
+        if line.startswith(tag):
+            head, _, rest = line[len(tag):].partition(": ")
+            if head.isdigit():
+                out[int(head)] = [d for d, _a in parse_dates(rest.split()[1:])]
+    return out
+
+
+def split_ends(log, file):
+    """{edition: [(place after match N, played)]} in table order, of the split end lines of a file."""
+    out = {}
+    tag = f"recomp: league sizes: {file} split end "
+    for line in log.split("\n"):
+        if line.startswith(tag):
+            head, _, rest = line[len(tag):].partition(": ")
+            try:
+                out[int(head)] = [tuple(int(x) for x in w.split(":")) for w in rest.split()]
+            except ValueError:
+                pass
+    return out
+
+
+def end_faults(name, rows, after, sp):
+    """The faults of a table at its end after a split: the places after match N are each place once, the table keeps
+    each section together and above the next, and each club played N and its own section's matches."""
+    fails = []
+    places = [p for p, _x in rows]
+    if sorted(places) != list(range(sum(n for n, _m in sp))):
+        return [f"{name}: the places after match {after} are not each place once: {places}"]
+    bounds, top = [], 0
+    for n, m in sp:
+        bounds.append((top, top + n, after + m * (n - 1)))
+        top += n
+    secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
+    if secs != sorted(secs):
+        fails.append(f"{name}: the table does not keep the sections in order: {secs}")
+    for (p, played), k in zip(rows, secs):
+        if played != bounds[k][2]:
+            fails.append(f"{name}: the club of place {p + 1} after match {after} played {played}, want {bounds[k][2]}")
+    return fails
+
+
+def splits(log, file):
+    """{edition: (after, [sizes], [meetings])} of the split lines of a file, and the editions loaded after one."""
+    out, loaded = {}, set()
+    tag = f"recomp: league sizes: {file} split "
+    for line in log.split("\n"):
+        if not line.startswith(tag):
+            continue
+        head, _, rest = line[len(tag):].partition(": ")
+        if not head.isdigit():
+            continue
+        if rest.startswith("after "):
+            p = rest.replace(",", "").split()
+            try:
+                out[int(head)] = (int(p[1]), [int(x) for x in p[3].split("+")], [int(x) for x in p[5].split("+")])
+            except (ValueError, IndexError):
+                pass
+        elif rest.startswith("loaded"):
+            loaded.add(int(head))
+    return out, loaded
+
+
 def parse_dates(words):
     """[(date, added)] of the words of a template line."""
     out = []
@@ -100,7 +208,10 @@ def templates(log, file):
         words = rest.split()
         if len(words) < 2 or not head.isdigit():
             continue
-        kind, dates = words[0], parse_dates(words[2:])
+        kind = words[0]
+        if kind not in ("class", "new"):
+            continue
+        dates = parse_dates(words[2:])
         if kind == "class":
             last = [int(head), [d for d, _a in dates], None]
             out.append(last)
@@ -183,6 +294,11 @@ def edition_row(file, edition):
     return encoded_row(file, edition - 1 if calendar_year(file) else edition)
 
 
+def edition_split(file, edition):
+    """The split of the row that an edition plays (edition_row), or None."""
+    return encoded_split(file, edition - 1 if calendar_year(file) else edition)
+
+
 def report_rows(report, file):
     """The rows of a file in the rules report: [(season, phase, edition, clubs, meetings, matches)]."""
     out, cols = [], None
@@ -238,19 +354,25 @@ def faults(work, file, year, last):
         if (n, meet) != (clubs, m):
             fails.append(f"{file}: report {season} {phase}, edition {ed}: clubs and meetings {(n, meet)}, want "
                          f"{(clubs, m)}")
-        elif matches != -1 and matches != m * (n - 1):
-            fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {m * (n - 1)}")
+        else:
+            sp = edition_split(file, ed)
+            want = m * (n - 1) + (split_numbers(sp[1])[2] if sp else 0)
+            if matches != -1 and matches != want:
+                fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {want}")
     fails += [f"{file}: {x.split(': ', 1)[1]}" for x in lines
               if x.startswith(f"recomp: league sizes: {file} template mode ")
-              or x.startswith(f"recomp: league sizes: {file} dates: no room")]
+              or x.startswith(f"recomp: league sizes: {file} dates: no room")
+              or (x.startswith(f"recomp: league sizes: {file} split") and
+                  any(w in x for w in ("no dates", "not made", "not each place")))]
     # The templates of each edition.
     tmpl = templates(log, file)
     if not tmpl:
         fails.append(f"{file} {year}: no template line")
     for base, cls, new in tmpl:
         clubs, m = edition_row(file, base)
-        rounds = rounds_of(clubs, m or 2)
-        if rounds == len(cls):
+        sp = edition_split(file, base)
+        rounds = rounds_of(clubs, m or 2) + (split_numbers(sp[1])[0] if sp else 0)
+        if rounds == len(cls) and not sp:
             continue
         if new is None:
             fails.append(f"{file} template {base}: the class's {len(cls)} dates stay, want {rounds}")
@@ -264,12 +386,35 @@ def faults(work, file, year, last):
     done = played(log, file)
     if not done:
         fails.append(f"{file}: no finished table in the run (a two-year league needs --last {year + 1})")
+    made, loaded = splits(log, file)
+    news = {base: new for base, _c, new in tmpl if new}
+    for base, dates in split_dates(log, file).items():
+        tail = [d for d, _a in news.get(base, [])][-len(dates):] if dates else []
+        if dates != tail:
+            fails.append(f"{file} {base}: the section dates {dates} are not the last dates of the template {tail}")
     for ed, n, matches, lo, hi in done:
         clubs, m = edition_row(file, ed)
         m = m or 2
-        if n != clubs or not (matches == lo == hi == m * (n - 1)):
-            fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs with "
-                         f"{m * (clubs - 1)} each")
+        sp = edition_split(file, ed)
+        if not sp:
+            if n != clubs or not (matches == lo == hi == m * (n - 1)):
+                fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs "
+                             f"with {m * (clubs - 1)} each")
+            continue
+        # A split: every club played the table's matches and those of its section (the fewest and the most).
+        after = m * (clubs - 1)
+        _r, few, most = split_numbers(sp[1])
+        if n != clubs or (matches, lo, hi) != (after + most, after + few, after + most):
+            fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs, "
+                         f"{after + most} matches, played {after + few} to {after + most}")
+        want = (sp[0], [x for x, _m in sp[1]], [y for _x, y in sp[1]])
+        if made.get(ed) != want:
+            fails.append(f"{file} {ed}: split line {made.get(ed)}, want after, sections and meetings {want}")
+        ends = split_ends(log, file)
+        if ed not in ends:
+            fails.append(f"{file} {ed}: no split end line")
+        else:
+            fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
     if os.path.exists(report):
         rep_clubs = []
@@ -279,7 +424,75 @@ def faults(work, file, year, last):
         diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
         fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs]
     print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
-          "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done))
+          "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done) +
+          "; splits " + ", ".join(f"{ed}:{'+'.join(map(str, v[1]))}" for ed, v in sorted(made.items())) +
+          ("; loaded after a split " + ", ".join(map(str, sorted(loaded))) if loaded else ""))
+    return fails
+
+
+def save_in_split(program, game, year, last, db, nations, work, timeout):
+    """--save-in-split: leg 0 plays to the first split of a league and saves after the first section date
+    (RECOMP_SAVE_AFTER_SPLIT=1, src/recomp_rt/win/season_split.c and testrun.c); leg 1 loads that save (soak_run.load_leg) and plays to
+    the end of --last. The logs and reports of both legs join in work for the checks of faults. The exit code of
+    the first leg that fails, else 0."""
+    import rules_report_check as rrc
+    import smoke_run
+    import soak_run
+    leg0, leg1 = os.path.join(work, "leg0"), os.path.join(work, "leg1")
+    code, _r = rrc.run(program, game, last, year, db, nations, [], leg0, timeout, {"changing_rules": "on"},
+                       {"RECOMP_SIZE_LOG": "1", "RECOMP_SAVE_AFTER_SPLIT": "1"}, stop_on_box=True)
+    save = os.path.join(leg0, "user", smoke_run.SAVE_NAME)
+    if code != 0 or not os.path.exists(save):
+        print(f"FAIL leg 0: code {code}, save {os.path.exists(save)} ({leg0})")
+        return code or 1
+    soak_run.LEG_ENV["RECOMP_SIZE_LOG"] = "1"
+    o = {"program": program, "game": game, "rules": "on", "database": db, "nations": nations, "extra": [],
+         "start": year, "last": last, "seed": 1, "timeout": timeout}
+    code, _took, box = soak_run.load_leg(o, leg1, save, 0)
+    if box:
+        print(f"FAIL leg 1: {box}")
+        return code or 1
+    with open(os.path.join(work, "stderr.txt"), "w", encoding="latin-1") as out:
+        for leg in (leg0, leg1):
+            out.write(open(os.path.join(leg, "stderr.txt"), encoding="latin-1").read())
+    # The report: leg 1 writes a start report of the season it loads in, which leg 0 already wrote. Its lines of a
+    # season and phase that leg 0 holds stay out, so no club counts twice.
+    with open(os.path.join(work, "report.tsv"), "w", encoding="latin-1") as out:
+        seen = set()
+        for k, leg in enumerate((leg0, leg1)):
+            path = os.path.join(leg, "report.tsv")
+            if not os.path.exists(path):
+                continue
+            mine = set()
+            for line in open(path, encoding="latin-1"):
+                p = line.split("\t")
+                key = (p[1], p[2]) if len(p) > 2 and p[1].isdigit() else None
+                if k and (key in seen or (key is None and line.startswith(("#", "columns")))):
+                    continue
+                if key:
+                    mine.add(key)
+                out.write(line)
+            seen |= mine
+    return code
+
+
+def save_faults(work, file):
+    """The checks of --save-in-split: leg 0 split and saved, leg 1 loaded the league after its split, and a table
+    of that edition finished in leg 1 (the played check of faults reads it)."""
+    leg0 = open(os.path.join(work, "leg0", "stderr.txt"), encoding="latin-1").read()
+    leg1 = open(os.path.join(work, "leg1", "stderr.txt"), encoding="latin-1").read()
+    made, _l = splits(leg0, file)
+    _m, loaded = splits(leg1, file)
+    fails = []
+    if not made:
+        fails.append(f"{file}: no split in leg 0")
+    if "recomp: saved " not in leg0 or f"recomp: league sizes: {file} split " not in leg0 or \
+            "a test save after section date 1" not in leg0:
+        fails.append(f"{file}: leg 0 did not save after the first section date")
+    if not loaded or not set(made) & loaded:
+        fails.append(f"{file}: leg 1 loaded no edition after its split (split {sorted(made)}, loaded {sorted(loaded)})")
+    if not any(ed in made for ed, *_x in played(leg1, file)):
+        fails.append(f"{file}: no table of the split edition finished in leg 1")
     return fails
 
 
@@ -330,6 +543,25 @@ def self_test():
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    if (encoded_split("nir_prm", 2010) != (33, [(6, 1), (6, 1)]) or
+            encoded_split("wel_first", 2026) != (30, [(6, 1), (4, 1), (6, 1)]) or
+            encoded_split("wel_first", 2012) != (22, [(6, 2), (6, 2)]) or encoded_split("wel_first", 2005) is not None or
+            split_numbers([(6, 1), (4, 1), (6, 1)]) != (5, 3, 5) or split_numbers([(6, 2), (6, 2)]) != (10, 10, 10)):
+        bad.append(("split", encoded_split("nir_prm", 2010), encoded_split("wel_first", 2026)))
+    sl = splits("recomp: league sizes: wel_first split 2026: after 30, sections 6+4+6, meetings 1+1+1, rounds 5+3+5, "
+                "5 dates, points kept (Welsh Premier)\nrecomp: league sizes: wel_first split 2026: loaded after the "
+                "split (Welsh Premier)", "wel_first")
+    if sl != ({2026: (30, [6, 4, 6], [1, 1, 1])}, {2026}):
+        bad.append(("splits", sl))
+    good_end = [(0, 35), (2, 35), (1, 35), (5, 35), (4, 35), (3, 35), (6, 33), (7, 33), (9, 33), (8, 33), (10, 35),
+                (11, 35), (12, 35), (13, 35), (15, 35), (14, 35)]
+    sp16 = [(6, 1), (4, 1), (6, 1)]
+    mixed = good_end[:5] + [(6, 33), (3, 35)] + good_end[7:]
+    short = good_end[:6] + [(6, 35)] + good_end[7:]
+    if (end_faults("good", good_end, 30, sp16) or not end_faults("mixed", mixed, 30, sp16) or
+            not end_faults("short", short, 30, sp16) or
+            split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
+        bad.append(("end", end_faults("good", good_end, 30, sp16)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"
@@ -369,12 +601,17 @@ def main(argv):
         nations = (["all"] + names) if words[0] == "all" else names
         if nations[0] != "all" and "England" not in nations:
             nations = ["England"] + nations
-        code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
-                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"}, stop_on_box=True)
+        if "--save-in-split" in argv:
+            code = save_in_split(program, game, year, last, db, nations, work, timeout)
+        else:
+            code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
+                                    {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"}, stop_on_box=True)
         if code != 0:
             print(f"FAIL {file} {year}: the run ended with code {code} ({work})")
             return 1
     fails = faults(work, file, year, last)
+    if "--save-in-split" in argv:
+        fails += save_faults(work, file)
     for f in fails:
         print("FAIL", f)
     print(("FAIL" if fails else "PASS") + f" {file} {year} to {last} ({work})")

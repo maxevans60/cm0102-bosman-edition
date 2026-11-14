@@ -118,10 +118,21 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   0x429b8d and 0x42c17d) and the play-off for stage 0. set_up_rules 0x42a5a0 and 0x42cb70 set 1 meeting (+0x3c at
 #   0x42a5af, 0x42cb83) and +0xd9 8 and 2 (0x42a618, 0x42cbd8): neither 0x40 nor 0x80, so shuffled. Two meetings
 #   from the 2003 Série A and the 2006 Série B; season_sizes_bra.c then plays no play-off.
+# Slice 7 (the split engine, D7; src/recomp_rt/win/season_split.c): the pilots of the runtime split.
+# - NirPrm (IFA Premiership, 10 in the class, 16 in 2003/04 to 2007/08, 12 with a split after 33 from 2008/09):
+#   create_table allocates 10 rows (push 0x24e at 0x78ec6b) and stores 10 at 0x78ec72; create_schedule 0x78e330
+#   makes 36 dates for stage -1 only (D 0x24 at 0x78e36a, 0x924 bytes at 0x78e365; any other stage returns 0,
+#   0x78e33a); set_up_rules 0x78ed80 sets 4 meetings (0x78ed92) and +0xd9 = 3 (0x78edfd): shuffled.
+# - WelFirst (Welsh Premier, 18 to 2009/10, 12 with a split after 22 from 2010/11, 16 from 2026/27): create_table
+#   allocates 18 rows (push 0x426 at 0x925b3b); create_schedule 0x9250f0 makes 34 dates for stage -1 only (D 0x22 at
+#   0x92512a, 0x8a2 bytes at 0x925125); set_up_rules 0x925c50 sets 2 meetings (0x925c9b) and does not write +0xd9:
+#   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
 GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    "nir_prm": (16, 0x78E330, "shuffled"),
+    "wel_first": (18, 0x9250F0, "shuffled"),
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
@@ -245,8 +256,8 @@ FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
 # leagues: the Conference and League Two (a fixed exchange, D15, slice 8; 2 down and 1 back gave League Two 23), the
 # Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and the Welsh
-# Premier. file: the count of the old floor.
-FIXED_EXCHANGE = {f: CAPS[f] for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
+# Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7).
+FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
                                        "nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second", "sco_third")}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
@@ -403,6 +414,14 @@ for _cls, _file, _rules, _stores in CLASSES:
         INSNS[_at] = (f"mov word ptr [{_reg} + 0x3e], {_imm(_n)}",
                       f"W16({_reg} + 0x3eu, rt_league_clubs({_reg}, {_n:#x}u));")
 INSNS.update(DATES)
+# The split engine (0.7.2 slice 7, D7; src/recomp_rt/win/season_split.c). League::check_complete 0x689ad0 calls a table
+# complete when every row's matches (s8 +0x11) reach +0xa7 (`mov di, word ptr [esi + 0xa7]` at 0x689b47, compared at
+# 0x689b51..0x689b58; di is not read after the loop, 0x689b66). +0xa7 holds the most matches of a club of the season
+# (it also sizes each row's array of positions, init_table_row 0x687570). Sections of a split that play different
+# matches (6, 4 and 6 clubs that meet once) would never all reach it: rt_league_played_target gives 0 when every row
+# reached the matches of its own section, else the original.
+INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
+                   "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and

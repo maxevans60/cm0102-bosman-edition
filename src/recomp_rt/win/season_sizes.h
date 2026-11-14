@@ -92,4 +92,13 @@ int season_sizes_plays_short(const char *file);
  * replaces the class's (the pointer in eax, the count at count_at). */
 void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
 
+/* The season of the rules row of a league object this edition (the row of the start season with changing rules off),
+ * or -1. */
+int season_sizes_row_season(uint32_t obj, const char *file);
+
+/* The dates of a split league after its split (slice 7, season_split.c): create_schedule of the object for stage -1
+ * with the row's meetings, whose wrap plans the season again and gives the dates after the table's rounds in a new
+ * block (count to *count, the class's name code to *code). 0 when the plan gives none. */
+uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32_t *code);
+
 #endif
