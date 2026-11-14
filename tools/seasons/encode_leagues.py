@@ -699,6 +699,8 @@ def encode_split_meetings(r, split):
 def encode_rounds(r, meetings, zones, extra, split):
     if not isinstance(meetings, int) or extra == "?" or split == "groups" or (split == "zones" and zones == "-"):
         return "-"
+    if r["comp_file"] == "usa_mls":
+        return "-"                       # conferences and an unbalanced schedule: no one table (D17)
     if zones not in ("-", "gap"):
         n = max(int(x) for x in zones.split("+"))
     elif (zones == "-" and isinstance(r["clubs"], int) and "group" not in (r["clubs_text"] + r["format_text"]).lower()

@@ -156,6 +156,7 @@ check(st("swe_second", 2001, "rounds") == "-" and st("tur_second_b", 2003, "roun
       "divisions of regional groups have no one table")
 check(st("bel_third", 2001, "rounds") == "-" and st("bra_nat_third", 2001, "rounds") == "-",
       "groups in the clubs cell (A 16, B 16) or the format (regional groups): no one table")
+check(st("usa_mls", 2026, "meetings") == 1 and st("usa_mls", 2026, "rounds") == "-", "MLS 2026: conferences, no one table")
 check(st("tur_second", 2023, "rounds") == 34, "18 (19 entered; ...): one table of 18")
 check(st("arg_second", 2001, "zones") == "gap", "ZONES_FIX: the Apertura of 25, then zones")
 check(st("den_prm", 2020, "split_meet") == "2+2", "home and away (10 rounds) in sixes")

@@ -193,6 +193,8 @@ The season rules come from a table with one row per competition and season. `too
 
 The duplicate check, `tests/seasons/history_duplicates_check.py`, lists the history rows that a season database holds twice. The game clears the extra copies when it loads the database. `tests/seasons/season_history_run.py --duplicates` checks that no copy is left in the game.
 
+Some history rows of the season databases are one year off against the other rows of their competition (open item 233: the Norwegian league before 2008, the Irish league before 2003, the Swedish Cup 2002 to 2007 and others). `tools/seasons/history_years_check.py` lists them with a reference each in `docs/research/history-years/wrong-rows.tsv`, and the game corrects them at the database load (`ctest -R season_history_years_table` checks the C table). `tests/seasons/history_years_run.py` starts the October 2018, December 2025 and October 2026 databases and checks rows of the Norwegian league, the Swedish Cup, the Irish league and the World Cup.
+
 Our own season databases have two more checks. `tools/seasons/own_db/duplicates.py check <database>` fails while any player is listed twice (same nation, matching names and birth dates, or the same full name at one club). `tools/seasons/own_db/long_test.py` plays a holiday from July 2001 to 1 September 2004 on the database, with a save each 1 July that the next step loads. `tools/seasons/own_db/save_check.py` then checks each save: big clubs keep full squads, and no player or name appears twice. The pass rule is no error box and every check passes.
 
 We also check nation names in every database, such as Yugoslavia, the Netherlands Antilles and Kosovo. Draws and qualifying pools must pick only nations that exist in that season.
