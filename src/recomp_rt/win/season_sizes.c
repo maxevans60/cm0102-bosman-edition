@@ -374,7 +374,8 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     if (rounds == have) return;
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
-    if (season_template_plan(base, days, have, rounds, mode, plan, why, sizeof why) != rounds) {
+    if (season_template_plan_from(base, days, have, rounds, mode, season_sizes_bra_earlier(file), plan, why,
+                                  sizeof why) != rounds) {
         keep(self, 1);
         wr16(g_mem, self + COMP_MEETINGS, (uint16_t)class_meetings);   /* the class's template: its meetings */
         wr16(g_mem, self + COMP_MATCHES, 0xffffu);    /* check_complete counts the class's count again */

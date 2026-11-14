@@ -39,6 +39,7 @@
 #include "../rt_host.h"
 #include "season_change.h"
 #include "season_sizes.h"
+#include "season_template.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -82,6 +83,19 @@ void season_sizes_bra_rules(uint32_t obj, const char *file)
      * (a loaded game of a two-meeting season has none, League::load 0x688e49, and keeps the table's end). The
      * original's set_up_rules writes +0xbe 4 again. */
     if (count == 0 && readable(rd32(g_mem, obj + COMP_STAGES))) wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
+}
+
+/* The dates. The classes play Sundays and Wednesdays from the first Sunday of August to early December (27 dates,
+ * 0x429b50 and 0x42c140), with no gap over 7 days, so its 8 gaps of a week take the first new dates
+ * (season_template.c). The real seasons begin in late March to May (Série A 2003 on 29 March, Série B 2006 in
+ * April), so the earlier starts go back up to 13 weeks, to early May: Série A of 24 clubs (46 rounds) takes 11,
+ * Série A and B of 20 (38 rounds) 3 (lead decision, slice 17). */
+#define BRA_EARLIER 13
+
+int season_sizes_bra_earlier(const char *file)
+{
+    return file && (!strcmp(file, "bra_nat_first") || !strcmp(file, "bra_nat_second")) ? BRA_EARLIER
+                                                                                        : SEASON_TEMPLATE_EARLIER;
 }
 
 /* 1 for a Série A or B object that plays no play-off this season (season_sizes_bra_rules set its stage count 0). */

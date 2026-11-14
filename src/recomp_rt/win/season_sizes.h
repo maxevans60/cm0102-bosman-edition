@@ -43,6 +43,9 @@ void season_sizes_rules(uint32_t obj);
 
 /* After the places of season_sizes_rules, with the size engine on: Série A and B with the row's two meetings play
  * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
+/* The most earlier starts of 7 days of a file's date template: 13 for the Brazilian Série A and B, else
+ * SEASON_TEMPLATE_EARLIER (season_sizes_bra.c). */
+int season_sizes_bra_earlier(const char *file);
 void season_sizes_bra_rules(uint32_t obj, const char *file);
 
 /* The club count of a division of a league class in the row of a season (the club moves of a new game), or -1
