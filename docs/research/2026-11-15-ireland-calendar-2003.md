@@ -36,17 +36,26 @@ Wikipedia season pages named in rows wal-nir-irl-41, 41b, 42 and 42b.
    its dates, the Munster and Leinster Cups (August to May) move back about 13 weeks in calendar seasons, and in
    2002-03, which is too short for them, each date moves by its own whole weeks into the season. The League Cup plays
    in September and is not held in 2002-03 by its row. The Super Cup is not held from 2002/03.
-6. Cup rows. A cup of two-year seasons whose later rows hold calendar years (the Irish cups from 2003/04) plays
-   edition Y in the row that holds the real season Y (`season_cup_breaks.c`).
+6. Rows of every reader. While the move can happen in a game (league sizes on, and changing rules on or a start in
+   2003 or later), a file of Ireland (ire_*) plays edition Y, or the season S of the February change of Y, in the row
+   that holds the real season Y (`season_rules_row_of`). The cup breaks, the substitutes, the nation rules and the
+   play-offs read through it; `tests/seasons/rules_readers_check.py` lists every reader of the table. Off, the rows
+   of a season stand: a winter Ireland reads row Y.
 7. Awards on 16 February in both new states, after the season and its play-off and before the update day (the real
    2003 awards were on 22 February 2004, after our update day).
 8. Labels. Seasons up to 2002/03 keep their two-year labels after the flag flips (the wraps of 0x669630 and
-   0x6697c0). A league or cup that moves (the two leagues, the FAI Cup, the League Cup) writes its edition as the
-   history label in a calendar season, so 2002-03 and 2003 are both under 2003, as the season databases hold them, and
-   no later label moves by one.
+   0x6697c0). The history screens pass a row's label to 0x6697c0 (0x499c5b..0x499c77). A league or cup that moves
+   (the two leagues, the FAI Cup, the League Cup) writes its edition as the label in the short and calendar seasons:
+   the short season 2002, shown "2002/03", the 2003 season 2003, shown "2003", and no later label moves by one. The
+   2001/02 row keeps the original's label, the year it ends (2002).
 9. A game that starts in 2003 or later with Ireland as the main nation starts on 1 March of the start year, the start
    of the entry's calendar season.
 10. Transfer windows keep the original's (open item 258: no source for 2003 and 2004).
+
+## Notes
+
+- A 2002 start with changing rules off stays winter and keeps the start season's row 42 (2 meetings, 22 matches) in
+  every season. That follows the rule that the start season's rules hold with changing rules off (Q232).
 
 ## Open risks
 

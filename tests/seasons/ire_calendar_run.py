@@ -16,8 +16,9 @@ RECOMP_SEASON_CHANGE_LOG and RECOMP_SIZE_LOG write the lines that the checks rea
     calendar  the 2003 and 2004 templates of ire_prm hold 36 dates of 10 clubs from March or April to November;
     played    each finished edition of ire_prm played its row's matches (27 in 2002, 36 in 2003);
     news      one news item a season;
-    labels    the history rows of ire_prm and ire_first: 2002 (2001/02), 2003 (2002-03), 2003 (2003), 2004 (2004),
-              and no second-edition label of an Irish competition;
+    labels    the history rows of ire_prm and ire_first: 2002 (2001/02), 2002 (2002-03, shown "2002/03"), 2003 (2003),
+              2004 (2004), and no second-edition label (RECOMP_HISTORY_LOG names the Irish competitions, so the
+              history wrap logs each second-edition label);
     save      each load gives the entry fields of its save (edition, update day, two years, start, end, years);
     soak      no box, no season change net, every division moves on (soak_run.py).
 --reuse checks the logs in --keep again. Exit code 1 on a failure.
@@ -33,6 +34,7 @@ sys.path.insert(0, HERE)
 import soak_run  # noqa: E402
 
 WAIT_DIR = "/Users/max/Projects/cm0102/run-logs/samesave-wait"
+HISTORY = ";".join(["Irish Premier Division", "Irish First Division", "Irish Senior Challenge Cup", "Irish League Cup"])
 
 
 def wait_for_room():
@@ -95,7 +97,7 @@ def faults(keep):
     rows = re.findall(r"recomp: calendar: history row of (ire_prm|ire_first) edition (\d+): label (\d+)", text)
     for f in ("ire_prm", "ire_first"):
         got = [(int(e), int(lab)) for ff, e, lab in rows if ff == f]
-        for ed, lab in ((2001, 2002), (2002, 2003), (2003, 2003), (2004, 2004)):
+        for ed, lab in ((2001, 2002), (2002, 2002), (2003, 2003), (2004, 2004)):
             if (ed, lab) not in got and any(e == ed for e, _l in got):
                 out.append(f"labels: {f} edition {ed}: labels {[l for e, l in got if e == ed]}, want {lab}")
         if not any(e == 2003 for e, _l in got):
@@ -126,7 +128,8 @@ def main(argv):
                               "--leg-days", soak_run.arg(argv, "--leg-days", "450"),
                               "--timeout", soak_run.arg(argv, "--timeout", "14400"),
                               "--env", "RECOMP_TIER_A=1", "--env", "RECOMP_CALENDAR_LOG=1",
-                              "--env", "RECOMP_SEASON_CHANGE_LOG=1", "--env", "RECOMP_SIZE_LOG=1"])
+                              "--env", "RECOMP_SEASON_CHANGE_LOG=1", "--env", "RECOMP_SIZE_LOG=1",
+                              "--env", "RECOMP_HISTORY_LOG=" + HISTORY])
     fails = faults(keep)
     for f in fails:
         print("FAIL", f)
