@@ -344,6 +344,28 @@ test('direct: a save goes to the store with a link, is checked, and takes its pl
   assert.equal((await ask('Big.sav', 'put', { size: 65 << 20, rawSize: 1000, base: 'none' })).status, 413);
 });
 
+test('direct: the server tries the way a page would go (a signed upload link, the browser\'s preflight from the site), and goes through itself when it fails', async () => {
+  // On the live site the pages' uploads to the store failed ("the connection to the store failed") where the server had
+  // set the rules (15 November 2026); the page cannot tell why. The server now finds out at its start, and says.
+  const s3 = createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
+  const said = [];
+  const make = (extra = {}) => createCloud({ s3, clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'x'.repeat(40),
+    cloudFor: 'everyone', google: google.google, log: (t) => said.push(t), origins: ['https://cm.example'], ...extra });
+  assert.equal(await make().directReady, true, 'the rules set, the link taken');
+  assert.match(said.join(' '), /checked from https:\/\/cm\.example: a signed upload link and the browser's preflight work/);
+  said.length = 0;
+  s3fake.faults.corsGone = true;                      // rules that no longer let the site in (set by hand, CM_DIRECT=on)
+  assert.equal(await make({ direct: 'given' }).directReady, false, 'CM_DIRECT=on with rules that do not let the site in');
+  assert.match(said.join(' '), /the bucket's CORS rules do not let https:\/\/cm\.example send .*go through this server/);
+  s3fake.faults.corsGone = false;
+  said.length = 0;
+  s3fake.faults.rejectLinks = true;                   // a store that refuses the link's signature
+  assert.equal(await make().directReady, false);
+  assert.match(said.join(' '), /the store refused a signed upload link \(HTTP 403.*SignatureDoesNotMatch.*go through this server/);
+  s3fake.faults.rejectLinks = false;
+  assert.equal([...s3fake.objects.keys()].filter((k) => k.startsWith('meta/direct-check')).length, 0, 'the check leaves nothing in the store');
+});
+
 test('direct off: a store that takes no CORS rules, or CM_DIRECT=off: the page is told to go through the server', async () => {
   s3fake.faults.noCors = true;
   const s3 = createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });

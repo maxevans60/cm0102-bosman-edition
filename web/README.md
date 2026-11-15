@@ -275,7 +275,9 @@ checks it is there), as `reports/<day>/<time>-<random>.sav.gz` beside the report
 add its save (a token in the report file, gone once the save is there). When the bucket does not let the page in (its
 CORS rules missing or wrong: on the live site the first try failed so, "the connection to the store failed", where Cloud
 Saves had gone through the server unnoticed), the page sends the packed save through the server instead
-(`/api/report/save-body`, at most 150 MB packed, one at a time in memory), and the engine log says why. A server without
+(`/api/report/save-body`), and the engine log says why. The server writes it to a file on its disk with its sha256
+and streams it to the store (`s3.putFile`), so a large save (a player's was 446 MB, more than 150 MB packed, which
+the server once held in memory and refused) needs no memory; at most two such files at once. A server without
 a bucket takes the log only, and the dialog says to send the save another way. When the save did not go (the server
 busy, the store failing), Send the save again sends it to the same report. The page cuts each log line to the 400
 characters the server keeps, so a log of long lines still fits. A save may be 400 MB packed straight to the bucket; a

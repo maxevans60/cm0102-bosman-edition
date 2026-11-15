@@ -9,6 +9,7 @@
 //
 // Keys are made only of A-Z a-z 0-9 - _ . / (cloud.mjs), so a path needs no encoding in the signature.
 import { createHash, createHmac } from 'node:crypto';
+import { createReadStream } from 'node:fs';
 import http from 'node:http';
 import https from 'node:https';
 
@@ -90,12 +91,15 @@ export function createS3({ endpoint, bucket, accessKeyId, secretAccessKey, regio
     }
   }
 
-  function requestOnce(method, key, { query = {}, headers = {}, body, stream = false } = {}) {
+  // file: { path, size, sha256 }, a body on disk (a sent save the server took itself): signed with its hash as a body in
+  // memory is, and read from disk at each try, so it is never in memory whole.
+  function requestOnce(method, key, { query = {}, headers = {}, body, file = null, stream = false } = {}) {
     const path = `${prefix}/${key}`;
-    const payloadHash = body ? sha256(body) : EMPTY_SHA256;
+    const payloadHash = file ? file.sha256 : body ? sha256(body) : EMPTY_SHA256;
     const all = { host, 'x-amz-date': amzNow(), 'x-amz-content-sha256': payloadHash, ...headers };
     all.authorization = signV4({ method, path, query, headers: all, payloadHash, accessKeyId, secretAccessKey, region, alsoSign: ['content-type'] });
-    if (body) all['content-length'] = body.length;
+    if (file) all['content-length'] = file.size;
+    else if (body) all['content-length'] = body.length;
     const qs = canonicalQueryOf(query);
     return new Promise((resolveRequest, reject) => {
       const req = lib.request({ method, hostname, port: base.port || undefined,
@@ -108,7 +112,8 @@ export function createS3({ endpoint, bucket, accessKeyId, secretAccessKey, regio
       });
       req.on('timeout', () => req.destroy(new Error(`S3 ${method} ${key}: no answer in ${timeoutMs} ms`)));
       req.on('error', reject);
-      req.end(body);
+      if (file) createReadStream(file.path).on('error', (err) => req.destroy(err)).pipe(req);
+      else req.end(body);
     });
   }
 
@@ -120,6 +125,12 @@ export function createS3({ endpoint, bucket, accessKeyId, secretAccessKey, regio
 
   return {
     host,
+    // A file on disk ({ path, size, sha256 }) as the object, streamed. Resolves to the new ETag.
+    async putFile(key, file, { type = 'application/octet-stream' } = {}) {
+      const r = await request('PUT', key, { headers: { 'content-type': type }, file });
+      if (r.status !== 200) throw fail(r, `put ${key}`);
+      return r.headers.etag;
+    },
     // metadata: { name: ASCII value } as x-amz-meta-<name>. Resolves to the new ETag.
     async put(key, body, { type = 'application/octet-stream', metadata = {} } = {}) {
       const headers = { 'content-type': type, ...Object.fromEntries(Object.entries(metadata).map(([k, v]) => [`x-amz-meta-${k}`, String(v)])) };

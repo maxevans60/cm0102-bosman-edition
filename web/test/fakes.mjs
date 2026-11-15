@@ -17,7 +17,9 @@ export async function fakeS3({ bucket = 'cm-test', accessKeyId = 'tid_test', sec
   // failPuts: the next n PUTs (of keys that match failMatch) answer 500 InternalError, as a store that has a bad moment.
   // noCors: the store takes no CORS rules (as one that does not have them), so a page cannot reach it directly.
   // corsGone: the rules it took no longer let any page in (as a bucket whose rules someone changed).
-  const faults = { failPuts: 0, failMatch: /./, noCors: false, corsGone: false };
+  // rejectLinks: the store refuses the signature of every signed link (other Fly users saw Tigris answer so for a link
+  // that signs content-type).
+  const faults = { failPuts: 0, failMatch: /./, noCors: false, corsGone: false, rejectLinks: false };
   let cors = null;                            // the bucket's CORS rules: { origins }
   const server = http.createServer(async (req, res) => {
     const data = await body(req);
@@ -47,7 +49,7 @@ export async function fakeS3({ bucket = 'cm-test', accessKeyId = 'tid_test', sec
       const { 'X-Amz-Signature': sig, ...rest } = query;
       const want = signatureV4({ method: req.method, path: url.pathname, query: rest, lower, signed: signedNames, payloadHash: 'UNSIGNED-PAYLOAD',
         amzDate: query['X-Amz-Date'], secretAccessKey, region });
-      if (want !== sig) return error(403, 'SignatureDoesNotMatch');
+      if (want !== sig || faults.rejectLinks) return error(403, 'SignatureDoesNotMatch');
       return objectRequest(url, query, data, req, res, reply, error, corsHeaders);
     }
     // The signature, as S3 checks it.

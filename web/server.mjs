@@ -17,11 +17,13 @@
 // request whose ?v= names the file's version (files.json) may be kept by the browser for good: the version changes
 // when the file does.
 import http from 'node:http';
-import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { createHash, randomBytes } from 'node:crypto';
+import { createReadStream, createWriteStream, existsSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cloudFromEnv, paddleFromEnv } from './cloud.mjs';
-import { MAX_SENT_THROUGH, createStats, statsStore } from './stats.mjs';
+import { MAX_SENT_SAVE, createStats, statsStore } from './stats.mjs';
 import { s3FromEnv } from './s3.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -124,17 +126,22 @@ function readJson(req, limit) {
     req.on('error', bad);
   });
 }
-// The bytes of a request (a sent save through the server), at most limit.
-function readRaw(req, limit) {
+// The body of a request (a sent save through the server) into a file on disk, with its sha256 for the store's
+// signature: { path, size, sha256 }. At most limit bytes. The caller removes the file.
+function spool(req, limit) {
+  const path = join(tmpdir(), `cm0102-sent-${randomBytes(8).toString('hex')}.gz`);
   return new Promise((ok, bad) => {
-    const parts = [];
+    const hash = createHash('sha256'), out = createWriteStream(path);
     let n = 0;
-    req.on('data', (c) => { n += c.length; if (n > limit) { bad(Object.assign(new Error('too large'), { status: 413 })); req.destroy(); } else parts.push(c); });
-    req.on('end', () => ok(Buffer.concat(parts)));
-    req.on('error', bad);
+    const fail = (err) => { req.destroy(); out.destroy(); rmSync(path, { force: true }); bad(err); };
+    req.on('data', (c) => { n += c.length; if (n > limit) fail(Object.assign(new Error('too large'), { status: 413 })); else hash.update(c); });
+    req.on('error', fail);
+    out.on('error', fail);
+    out.on('finish', () => ok({ path, size: n, sha256: hash.digest('hex') }));
+    req.pipe(out);
   });
 }
-let reportHeld = 0;                                  // bytes of sent saves in memory now (save-body), at most MAX_SENT_THROUGH
+let reportSpooled = 0;                               // bytes of sent saves on disk now (save-body), at most two of the largest
 const json = (res, status, body) => {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
   res.end(status === 204 ? undefined : JSON.stringify(body));
@@ -162,22 +169,27 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
     if (req.headers['x-cm'] !== '1' || (from && new URL(from).host !== req.headers.host)) { req.resume(); json(res, 403, { error: 'not from this site' }); return; }
     if (path === '/api/report/save-body') {
       const length = Number(req.headers['content-length']);
-      if (!(length > 0) || length > MAX_SENT_THROUGH) { req.resume(); json(res, 413, { error: `a save may be ${MAX_SENT_THROUGH >> 20} MB at most, packed, through the server` }); return; }
-      // The bytes are read (and held in memory) only after the report, its token and the length were checked.
-      let held = 0;
+      if (!(length > 0) || length > MAX_SENT_SAVE) { req.resume(); json(res, 413, { error: `a save may be ${MAX_SENT_SAVE >> 20} MB at most, packed` }); return; }
+      // The bytes go to a file on disk (spool) only after the report, its token and the length were checked, and from
+      // there to the store; the machine's memory holds none of it.
+      let held = 0, file = null;
       try {
-        const { status = 200, ...r } = await stats.saveBody({ key: url.searchParams.get('key'), token: url.searchParams.get('token') }, () => {
-          if (reportHeld + length > MAX_SENT_THROUGH) throw Object.assign(new Error('the server is taking another save: try again in a minute'), { status: 503 });
-          reportHeld += length;
+        const { status = 200, ...r } = await stats.saveBody({ key: url.searchParams.get('key'), token: url.searchParams.get('token') }, async () => {
+          if (reportSpooled + length > 2 * MAX_SENT_SAVE) throw Object.assign(new Error('the server is taking other saves: try again in a minute'), { status: 503 });
+          reportSpooled += length;
           held = length;
-          return readRaw(req, length);
+          file = await spool(req, length);
+          return file;
         }, length);
         if (!held) req.resume();
         json(res, status, r);
       } catch (err) {
         if (!held) req.resume();                         // refused before the body was read
         throw err;
-      } finally { reportHeld -= held; }
+      } finally {
+        reportSpooled -= held;
+        if (file) rmSync(file.path, { force: true });
+      }
       return;
     }
     const body = await readJson(req, path === '/api/report/send' ? 2 << 20 : 4 << 10);

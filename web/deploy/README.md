@@ -148,6 +148,19 @@ may; the key that `fly storage create` makes may not, and `fly logs` then says `
 If the rule is missing or wrong, a page finds out at its first save (its engine log says `did not answer this page
 directly`) and goes through the server for that visit, so a mistake costs speed, not saves.
 
+The server now finds out first, at each start: it makes a signed upload link as the pages get them, sends the
+browser's preflight for it from the site's address, and puts a small file with it (then removes it). `fly logs` then
+says one of:
+- `saves and data sets go straight between the browser and the store (…; checked from https://…: a signed upload
+  link and the browser's preflight work)`: all is well.
+- `the bucket's CORS rules do not let https://… send (the preflight: HTTP …)`: the rule is missing, or names another
+  address; fix it as above.
+- `the store refused a signed upload link (HTTP 403: …)`: the rule is fine, but the store does not take the link's
+  signature (other Fly users saw Tigris refuse links that sign content-type). Send me that line.
+In the last two cases the pages go through the server from the start. Saves a player sends with Send to the developer
+then go through the server too: it writes each to a file on its disk (at most two of 400 MB at once) and streams it
+to the store, so the machine's memory holds none of it.
+
 ## Size of the machine
 
 One shared-CPU machine with 512 MB (`fly.toml`), which stops when nobody is visiting. The server streams the files

@@ -125,21 +125,46 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   // direct: true (set the rules, and go direct when that works), 'given' (the rules were set by hand in the store's
   // console: CM_DIRECT=on) or false (CM_DIRECT=off).
   let direct = false;
+  // The way a page would go, tried by this server at its start: a signed upload link as the pages get them (content-type
+  // and content-length signed), and first the browser's preflight for it from the site's own address. On the live site
+  // the pages' uploads to the store failed, "the connection to the store failed", where the server had set the rules
+  // (15 November 2026): a page cannot tell a refused preflight from a refused signature. null: both work; else why not.
+  async function checkDirect() {
+    const key = `meta/direct-check-${randomBytes(6).toString('hex')}.txt`, body = Buffer.from('ok');
+    const link = s3.presign('PUT', key, { headers: { 'content-type': 'text/plain', 'content-length': body.length } });
+    const { 'content-length': _, ...headers } = link.headers;
+    const origin = origins.find((o) => o !== '*') ?? null;
+    if (origin) {
+      const pre = await fetch(link.url, { method: 'OPTIONS', headers: { origin, 'access-control-request-method': 'PUT',
+        'access-control-request-headers': Object.keys(headers).join(',') } });
+      const allow = pre.headers.get('access-control-allow-origin');
+      if (!pre.ok || !(allow === '*' || allow === origin))
+        return `the bucket's CORS rules do not let ${origin} send (the preflight: HTTP ${pre.status}, ${allow ? `allowed ${allow}` : 'no Access-Control-Allow-Origin'})`;
+    }
+    const put = await fetch(link.url, { method: 'PUT', body, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])) });
+    if (!put.ok) return `the store refused a signed upload link (HTTP ${put.status}: ${(await put.text()).replace(/\s+/g, ' ').slice(0, 200)})`;
+    await s3.delete(key).catch(() => {});
+    return null;
+  }
   const directReady = (async () => {
     if (!directWanted || !s3.presign) return;
-    if (directWanted === 'given') {
-      direct = true;
-      log('cloud: saves and data sets go straight between the browser and the store (CORS rules set in the store\'s console, CM_DIRECT=on)');
+    if (directWanted !== 'given') {
+      try { await s3.putCors(origins); } catch (err) {
+        log(`cloud: the store's CORS rules were not set (${err.message}): saves and data sets go through this server. Set them in the`
+          + ` store's console and CM_DIRECT=on (web/deploy/README.md, "Straight to Tigris")`);
+        return;
+      }
+    }
+    let why;
+    try { why = await checkDirect(); } catch (err) { why = `the check of a signed upload link failed (${err.message})`; }
+    if (why) {
+      log(`cloud: ${why}: saves and data sets go through this server (web/deploy/README.md, "Straight to Tigris")`);
       return;
     }
-    try {
-      await s3.putCors(origins);
-      direct = true;
-      log(`cloud: saves and data sets go straight between the browser and the store (CORS for ${origins.join(', ')})`);
-    } catch (err) {
-      log(`cloud: the store's CORS rules were not set (${err.message}): saves and data sets go through this server. Set them in the`
-        + ` store's console and CM_DIRECT=on (web/deploy/README.md, "Straight to Tigris")`);
-    }
+    direct = true;
+    const from = origins.find((o) => o !== '*');
+    log(`cloud: saves and data sets go straight between the browser and the store (${directWanted === 'given' ? 'CORS rules set in the store\'s console, CM_DIRECT=on' : `CORS for ${origins.join(', ')}`}; checked${
+      from ? ` from ${from}` : ''}: a signed upload link and the browser's preflight work)`);
   })();
   // The store's own id (meta/store.json, made at the first start on a bucket): the lists name it, so a page whose saves
   // went to another bucket (BUCKET_NAME or the key changed) sends them again instead of taking them as removed.

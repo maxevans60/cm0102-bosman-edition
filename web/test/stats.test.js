@@ -297,3 +297,40 @@ test('sent reports: at most 200 a day on a machine, then refused until the next 
   t += 86400000;
   assert.ok((await s.send({ log: [] }, null, '')).key, 'a new day');
 });
+
+test('a sent save through the server goes by way of a file on disk: one larger than the memory allows is taken', async () => {
+  // The live site's store does not let the page in, so a 446 MB save (Hertha BSC 2011-12-11.sav, 15 November 2026) went
+  // through the server, which held it in memory and took 150 MB at most.
+  const tmp = mkdtempSync(join(tmpdir(), 'cm0102-stats-test-'));
+  const gameDir = join(tmp, 'game'), buildDir = join(tmp, 'build');
+  mkdirSync(gameDir); mkdirSync(buildDir);
+  writeFileSync(join(gameDir, 'cm0102.exe'), 'MZ');
+  const manifestPath = join(tmp, 'm.tsv');
+  writeFileSync(manifestPath, 'x\t2\tcm0102.exe\n');
+  const { readFileSync, readdirSync } = await import('node:fs');
+  const store = memoryStore();
+  store.head = async (k) => (store.m.has(k) ? { size: store.m.get(k).length } : null);
+  store.putFile = async (k, v) => { store.m.set(k, v?.path ? readFileSync(v.path) : v); };
+  const stats = createStats({ store });
+  const server = createApp({ gameDir, buildDir, manifestPath, stats });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const post = (path, body, headers = { 'content-type': 'application/json' }) => fetch(`${base}${path}`, { method: 'POST', headers: { ...headers, 'x-cm': '1' }, body });
+  const spooled = () => readdirSync(tmpdir()).filter((n) => n.startsWith('cm0102-sent-')).length;
+  try {
+    const before = spooled();
+    const sent = await (await post('/api/report/send', JSON.stringify({ log: ['x'], note: 'Unable to upload save to cloud' }))).json();
+    const size = (150 << 20) + 4096;
+    const link = await (await post('/api/report/save', JSON.stringify({ key: sent.key, token: sent.token, name: 'Hertha BSC 2011-12-11.sav', size, rawSize: 446 << 20 }))).json();
+    assert.deepEqual(link, { direct: false }, 'no direct uploads here: through the server');
+    const r = await post(`/api/report/save-body?key=${encodeURIComponent(sent.key)}&token=${sent.token}`, Buffer.alloc(size, 7), { 'content-type': 'application/gzip' });
+    assert.equal(r.status, 200, await r.text());
+    const saved = store.m.get(sent.key.replace(/\.json$/, '.sav.gz'));
+    assert.equal(saved?.length, size);
+    assert.equal(saved[size - 1], 7);
+    assert.equal(spooled(), before, 'the file on disk goes once the save is in the store');
+  } finally {
+    server.close();
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});

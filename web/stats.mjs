@@ -22,8 +22,7 @@ const KEEP_DAYS = 400;              // daily totals and people idle this long go
 const KEEP_REPORTS = 200;           // reports listed in the object
 const REPORT_DAYS = 90;             // report files older than this go (the privacy page says so)
 const MAX_SENT_LOG = 2000;          // lines of the log in a report the player sent
-const MAX_SENT_SAVE = 400 << 20;    // a save the player sent, packed (gzip)
-export const MAX_SENT_THROUGH = 150 << 20;   // one sent through this server (saveBody): it is held in memory while it goes
+export const MAX_SENT_SAVE = 400 << 20;   // a save the player sent, packed (gzip), straight or through this server (on disk)
 const SENT_REPORTS_A_DAY = 200;    // reports sent a day, on this machine (each up to about 800 KB of log)
 const SENT_SAVES_A_DAY = 40;        // saves sent a day, on this machine: a bound on what the store takes
 const SENT_BYTES_A_DAY = 4 * 2 ** 30;           // and their packed bytes (4 GB)
@@ -266,10 +265,11 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     if (!r) return { status, error };
     if (!r.save) return { status: 400, error: 'no save was announced' };
     if (length !== r.save.size) return { status: 400, error: `the save was announced as ${r.save.size} bytes, packed` };
-    const buf = await read();
-    if (buf.length !== r.save.size) return { status: 400, error: `the save came with ${buf.length} of its ${r.save.size} bytes` };
-    await (store.putFile ?? store.put)(r.save.key, buf, 'application/gzip');
-    return finishSave(body.key, r, buf.length);
+    const got = await read();                           // its bytes, or the file on disk it went to ({ path, size, sha256 })
+    const size = got.path ? got.size : got.length;
+    if (size !== r.save.size) return { status: 400, error: `the save came with ${size} of its ${r.save.size} bytes` };
+    await (store.putFile ?? store.put)(r.save.key, got, 'application/gzip');
+    return finishSave(body.key, r, size);
   }
 
   // The save reached the store ({ key, token }): the report says so, and its token goes.
@@ -417,6 +417,6 @@ export function statsStore(s3) {
   if (!s3) return null;
   return { get: (key) => s3.getBuffer(key), put: (key, buf) => s3.put(key, buf, { type: 'application/json' }),
     list: (prefix) => s3.list(prefix), delete: (key) => s3.delete(key), head: (key) => s3.head(key),
-    putFile: (key, buf, type) => s3.put(key, buf, { type }),
+    putFile: (key, v, type) => (v?.path ? s3.putFile(key, v, { type }) : s3.put(key, v, { type })),
     ...(s3.presign ? { presign: (method, key, opts) => s3.presign(method, key, opts) } : {}) };
 }
