@@ -966,13 +966,14 @@ static int rows_with(uint32_t league, int a, int b)
 /* The rows that the places of a league send up (up 1) or down at the season change. League::update_positions_and_
  * status 0x684cd0 gives the +0xbe rows from the top status 5 or 0 and the +0xc1 rows from the bottom status 3
  * (0x684e11..0x684ef5, 0x685149..0x68525e). A play-off of +0xbf (+0xc0) places sends its one winner up (its loser
- * down), the reading of set_places. -1 for no league. */
+ * down), the reading of set_places, or 2 for the Série B play-offs of season_sizes_bra.c. -1 for no league. */
 static int place_moves(uint32_t league, int up)
 {
     if (!readable(league)) return -1;
     int direct = (int8_t)g_mem[league + (up ? UP : DOWN)];
     int playoff = (int8_t)g_mem[league + (up ? UP_PLAYOFF : DOWN_PLAYOFF)];
-    return direct < 0 ? -1 : direct + (playoff > 0 ? 1 : 0);
+    int winners = playoff > 0 && up ? season_sizes_bra_playoff_winners(league) : 0;  /* Série B: 2 go up */
+    return direct < 0 ? -1 : direct + (playoff > 0 ? (winners ? winners : 1) : 0);
 }
 
 /* The expected count of a call of league_promote_and_relegate 0x689c80: up 1 the clubs that the lower league sends

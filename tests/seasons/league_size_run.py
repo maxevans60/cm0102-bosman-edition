@@ -110,6 +110,11 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Gap rows 56 and 57: the Série B play-offs of the rules table (season_sizes_bra.c).
+    "bra_nat_second@2003": (2003, 2004, "Série B 2003 and 2004, 24 clubs: a play-off of the top 8, the two finalists "
+                                        "go up"),
+    "bra_nat_second@2025": (2025, 2026, "Série B 2025 (4 up), then 2026: 2 up and the ties 3rd v 6th and 4th v 5th, "
+                                        "both winners go up"),
 }
 
 # Files whose table holds both halves of a row of halves, so it plays twice the row's meetings (slice 14,
@@ -458,6 +463,34 @@ def no_playoff_faults(log, file, meetings):
     return fails
 
 
+def bra_playoff(file, ed):
+    """Gap rows 56 and 57: the Série B play-off of edition ed (row ed - 1): "top8" for rows 2001 to 2004 (the two
+    finalists of the top 8 go up), "ties" from row 2025 (3rd v 6th and 4th v 5th, both winners go up), else None."""
+    if file != "bra_nat_second":
+        return None
+    row = ed - 1
+    return "top8" if 2001 <= row <= 2004 else "ties" if row >= 2025 else None
+
+
+def playoff_faults(log, file, editions):
+    """Each finished edition with a Série B play-off of the rules table: the play-off was drawn on its places, and two
+    clubs went up from it (season_sizes_bra.c log lines)."""
+    lines = log.split("\n")
+    fails = []
+    for ed in sorted(editions):
+        kind = bra_playoff(file, ed)
+        if not kind:
+            continue
+        head = f"recomp: league sizes: {file} {ed}: "
+        drawn = head + "play-off of places " + ("1 to 8" if kind == "top8" else "3 to 6") + " drawn"
+        if not any(x.startswith(drawn) for x in lines):
+            fails.append(f"{file} {ed}: no play-off of places {'1 to 8' if kind == 'top8' else '3 to 6'}")
+        ups = [x for x in lines if x.startswith(head) and " goes up" in x and "no play-off" not in x]
+        if len(ups) != 2:
+            fails.append(f"{file} {ed}: {len(ups)} clubs went up from the play-off, want 2")
+    return fails
+
+
 def encoded_halves(file, season):
     """1 when the encoded row of a file in a season (the after-table rule) plays two halves."""
     best = None
@@ -634,6 +667,7 @@ def faults(work, file, year, last):
     if file == "arg_prm":
         fails += arg_faults(log, year)
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
+    fails += playoff_faults(log, file, {ed for ed, *_x in done})
     fails += j1_faults(log, file, {ed for ed, *_x in done})
     fails += exchange_faults(log, file, year)
     if os.path.exists(report):
@@ -952,6 +986,22 @@ def self_test():
     if no_playoff_faults(off, "bra_nat_first", 2) or len(no_playoff_faults("", "bra_nat_first", 2)) != 2 or \
             no_playoff_faults("", "bra_nat_first", 1) or no_playoff_faults("", "nor_prm", 2):
         bad.append(("no play-off", no_playoff_faults(off, "bra_nat_first", 2)))
+    top8 = ("recomp: league sizes: bra_nat_second 2003: play-off of places 1 to 8 drawn on day 335, the two finalists\n"
+            "recomp: league sizes: bra_nat_second 2003: Club A wins the play-off final and goes up\n"
+            "recomp: league sizes: bra_nat_second 2003: place 5 (Club B) goes up, the loser of the play-off final")
+    ties = ("recomp: league sizes: bra_nat_second 2026: play-off of places 3 to 6 drawn on day 330, 3rd v 6th\n"
+            "recomp: league sizes: bra_nat_second 2026: place 3 (Club C) goes up, the winner of its play-off tie")
+    late = ("recomp: league sizes: bra_nat_second 2004: 9 days to the season change, no time for the play-off; places "
+            "1 and 2 go up\n"
+            "recomp: league sizes: bra_nat_second 2004: place 1 (Club D) goes up, no play-off\n"
+            "recomp: league sizes: bra_nat_second 2004: place 2 (Club E) goes up, no play-off")
+    if (playoff_faults(top8, "bra_nat_second", {2003}) or len(playoff_faults(ties, "bra_nat_second", {2026})) != 1 or
+            len(playoff_faults(late, "bra_nat_second", {2004})) != 2 or
+            playoff_faults(top8, "bra_nat_second", {2006, 2025}) or playoff_faults("", "bra_nat_first", {2003}) or
+            [bra_playoff("bra_nat_second", y) for y in (2001, 2002, 2005, 2006, 2025, 2026, 2030)] !=
+            [None, "top8", "top8", None, None, "ties", "ties"]):
+        bad.append(("bra play-off", playoff_faults(top8, "bra_nat_second", {2003}),
+                    playoff_faults(ties, "bra_nat_second", {2026})))
     # Slice 14: the table of a row of halves holds both halves (twice the row's meetings).
     if (encoded_row("jap_j1", 2014) != (18, 2) or encoded_row("jap_j1", 2004) != (18, 2) or
             encoded_row("kor_league", 2005) != (14, 2) or encoded_row("jap_j2", 2009) != (19, 2) or
