@@ -415,6 +415,17 @@ uint32_t rt_tur_stage_bytes(uint32_t obj, uint32_t original);
 /* A constant of ArgPrm for 20 clubs plus (count - 20) in a season game (win/season_sizes_arg.c, tools/recomp/arg_prm.py). */
 uint32_t rt_arg_count(uint32_t original);
 uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original);
+/* The Ekstraklasa in one table (win/season_pol_first.c, GitHub issue 92): the 16 club slots of the constructor's
+ * predicted positions (0x7c8ce5, 0x7c8d09) and of set_predicted_positions (0x7ca264, 0x7ca288), tools/recomp/pol_first.py. */
+uint32_t rt_pol_first_slots(uint32_t obj, uint32_t original);
+/* The exchange of the Ekstraklasa and the I liga of each season (win/season_pol_first.c): the clubs of the play-off
+ * (0x7cc3d1), the chain's pairs (0x7ca4cc) and the clubs that come from the third tier (0x7ca132, 0x7ca13c, 0x7ca14a). */
+uint32_t rt_pol_playoff_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_pol_first_pairwise(uint32_t obj, uint32_t original);
+uint32_t rt_pol_lower_intake(uint32_t obj, uint32_t original);
+uint32_t rt_pol_history_index(uint32_t table, uint32_t original);
+uint32_t rt_pol_split_index(uint32_t table, uint32_t original);
+uint32_t rt_pol_played_before(uint32_t table, uint32_t original);
 /* 1 when the Portuguese Cup takes a club with no division (0x7ce37d): a Portuguese club in a game with Liga 3. */
 uint32_t rt_por_cup_none(uint32_t club);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
@@ -444,6 +455,7 @@ uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  
  * count it takes (0x63596f) and its meetings for a count (0x63598f, 0x635997), the original's outside the engine. */
 uint32_t rt_ire_first_least(uint32_t obj, uint32_t original);
 uint32_t rt_ire_first_meetings(uint32_t obj, uint32_t original);
+uint32_t rt_ire_prm_down(uint32_t obj, uint32_t original);
 /* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
  * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
 uint32_t rt_gre_cup_lower(uint32_t pool);
@@ -460,6 +472,10 @@ uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
 /* Russia and Turkey at their real counts (0.7.2 league sizes, slice 12, win/season_sizes_rus.c,
  * tools/recomp/sizes_rus_tur.py): 18 in the base game. */
 uint32_t rt_rus_first_take(uint32_t obj);
+/* J1 halves of the row's count (0.7.2 league sizes, slice 14, D8; win/season_sizes_asia.c, tools/recomp/sizes_asia.py):
+ * the first round of the second half and the matches of a club in a half; the original in the base game. */
+uint32_t rt_jap_half_rounds(uint32_t league, uint32_t original);
+uint32_t rt_jap_half_matches(uint32_t league, uint32_t original);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
 /* Italy at its real sizes (0.7.2 league sizes slice 9, season_sizes_ita.c, tools/recomp/league_sizes_ita.py). */

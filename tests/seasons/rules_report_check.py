@@ -251,6 +251,10 @@ def row_files(r):
 
 _LEAGUE_PLAYOFFS = {}
 
+# Files whose table holds both halves of a row of halves (0.7.2 league sizes, slice 14): it plays twice the meetings of
+# the row's halves. Also tests/seasons/league_size_run.py HALVES_IN_TABLE.
+HALVES_IN_TABLE = {"jap_j1", "kor_league"}
+
 
 def league_playoffs():
     """{row id: encoded league row} of tools/seasons/encode_leagues.py (slice 19)."""
@@ -444,11 +448,14 @@ def differences(seasons, comps, rows):
             # 0.7.2 league sizes, slice 1: the meetings of each pair (+0x3c, the report's rounds column of a league)
             # and the rounds of the table, meetings x (n' - 1) with n' the game's count rounded up to even, against
             # the encoded row (meetings; rounds = meetings x (n' - 1) + extra of the row's count).
+            # A row of halves gives the meetings of each half; the table of J1 and of the K League holds both halves
+            # (0.7.2 slice 14, src/recomp_rt/win/season_sizes_asia.c), so it plays twice them.
             if e is not None and isinstance(e["meetings"], int):
                 meet = sorted({x["rounds"] for x in both if x["rounds"] > 0})
-                if meet and meet != [e["meetings"]]:
+                table_meet = e["meetings"] * (2 if e["halves"] == 1 and c["file"] in HALVES_IN_TABLE else 1)
+                if meet and meet != [table_meet]:
                     out.add((season, "meetings", f"{label}: game {'/'.join(map(str, meet))}, table "
-                                                 f"{e['meetings']}"))
+                                                 f"{table_meet}"))
             # Rounds only for one table with no derby round: the game's object of a season of halves or zones
             # holds other counts.
             if e is not None and isinstance(e["rounds"], int) and e["zones"] == "-" and not e["extra"] \

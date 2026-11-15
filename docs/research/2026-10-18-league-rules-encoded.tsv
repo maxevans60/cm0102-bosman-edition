@@ -1246,7 +1246,7 @@ gre-pol-cro-204	2015	pol_first	1	16	-	-	-	ok	after 30: 8+8, points halved	split	
 gre-pol-cro-205	2016	pol_first	1	16	-	-	-	ok	after 30: 8+8, points halved	split	2	0	-	0	0	1+1	30
 gre-pol-cro-206	2017	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
 gre-pol-cro-207	2018	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
-gre-pol-cro-208	2019	pol_first	1	16	-	-	-	ok	after 30: 8+8, points unknown	split	2	0	-	0	0	1+1	30
+gre-pol-cro-208	2019	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
 gre-pol-cro-209	2020	pol_first	1	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-210	2021	pol_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-211	2022	pol_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
@@ -2458,7 +2458,7 @@ wal-nir-irl-466	2019	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-467	2019	ire_first	2	10	2-5	-	-	ok	-	calendar	3	0	-	0	0	-	27
 wal-nir-irl-479	2020	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-485	2020	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-486	2020	nir_first	2	12	2	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
+wal-nir-irl-486	2020	nir_first	2	12	2	11	-	ok	-	split	2	0	-	0	0	-	22
 wal-nir-irl-491	2020	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-492	2020	ire_first	2	10	2-5	-	-	ok	-	calendar	3	0	-	0	0	-	27
 wal-nir-irl-504	2021	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22

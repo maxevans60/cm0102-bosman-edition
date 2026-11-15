@@ -286,6 +286,13 @@ if(NOT WIN32)
     target_include_directories(season_league_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_league COMMAND season_league_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_league PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The meetings of the J1 and K League tables (0.7.2 league sizes, slice 14).
+    add_executable(season_sizes_asia_test tests/seasons/test_season_sizes_asia.c
+        src/recomp_rt/win/season_sizes_asia_rows.c src/recomp_rt/win/season_league.c src/recomp_rt/win/season_rules.c
+        src/recomp_rt/win/season_league_table.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_sizes_asia_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_sizes_asia COMMAND season_sizes_asia_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_sizes_asia PROPERTIES FIXTURES_REQUIRED rules_table)
     # Domestic cups that the rules table does not hold in some seasons (0.6.0 slice 21b).
     add_executable(season_cup_breaks_test tests/seasons/test_season_cup_breaks.c
         src/recomp_rt/win/season_cup_breaks.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
