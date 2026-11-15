@@ -440,6 +440,62 @@ def no_playoff_faults(log, file, meetings):
     return fails
 
 
+_DOWN = {}
+
+
+def row_down(file, season):
+    """The relegation places of the rules row of a file and season (the leading number of its down text), or -1."""
+    if not _DOWN:
+        sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
+        import make_rules
+        for r in make_rules.read_rows():
+            if r.get("comp_file") and str(r.get("season", ""))[:4].isdigit():
+                m = re.match(r"\s*(\d+)", str(r.get("down", "")))
+                _DOWN[(r["comp_file"], int(str(r["season"])[:4]))] = int(m.group(1)) if m else -1
+    return _DOWN.get((file, season), -1)
+
+
+# A division with no chain (open item 250, season_sizes.c lone_exchange): its row's relegation places go to no
+# division at its season change.
+LONE = {"wel_first"}
+
+
+def lone_downs(log, file):
+    """{edition: clubs} of the lines of a file's clubs that went down to no division."""
+    out = {}
+    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): .* goes down to no division" % re.escape(file), log):
+        out[int(m.group(1))] = out.get(int(m.group(1)), 0) + 1
+    return out
+
+
+def split_bounds(log, file):
+    """{edition: [[(best, worst)] in table order]} of the split bounds lines of a file (season_split.c rt_split_bounds:
+    the best and worst places that each row can still reach after the split)."""
+    out = {}
+    for m in re.finditer(r"recomp: league sizes: %s split bounds (\d+) \d+:((?: \d+-\d+)+)" % re.escape(file), log):
+        out.setdefault(int(m.group(1)), []).append([tuple(int(x) for x in w.split("-")) for w in m.group(2).split()])
+    return out
+
+
+def bounds_faults(name, lines, sizes):
+    """The faults of the bounds lines of a split: each row's best and worst places lie in the places of its section
+    (the rows are in table order, so the sections are the runs of the sizes)."""
+    fails = []
+    for rows in lines:
+        if len(rows) != sum(sizes):
+            fails.append(f"{name}: bounds of {len(rows)} rows, want {sum(sizes)}")
+            continue
+        top = 0
+        for size in sizes:
+            for i in range(top, top + size):
+                best, worst = rows[i]
+                if not top + 1 <= best <= worst <= top + size:
+                    fails.append(f"{name}: row {i + 1} may reach places {best} to {worst}, its section holds "
+                                 f"{top + 1} to {top + size}")
+            top += size
+    return fails
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
@@ -525,8 +581,19 @@ def faults(work, file, year, last):
             fails.append(f"{file} {ed}: no split end line")
         else:
             fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
+        bounds = split_bounds(log, file)
+        if ed not in bounds:
+            fails.append(f"{file} {ed}: no split bounds line")
+        else:
+            fails += bounds_faults(f"{file} {ed}", bounds[ed], [x for x, _m in sp[1]])
     if file == "arg_prm":
         fails += arg_faults(log, year)
+    if file in LONE:
+        downs = lone_downs(log, file)
+        for ed in range(year, last):
+            want = row_down(file, edition_season(file, ed))
+            if want >= 0 and downs.get(ed, 0) != want:
+                fails.append(f"{file} {ed}: {downs.get(ed, 0)} clubs down to no division, want {want}")
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
     if os.path.exists(report):
         rep_clubs = []
@@ -818,6 +885,16 @@ def self_test():
     if no_playoff_faults(off, "bra_nat_first", 2) or len(no_playoff_faults("", "bra_nat_first", 2)) != 2 or \
             no_playoff_faults("", "bra_nat_first", 1) or no_playoff_faults("", "nor_prm", 2):
         bad.append(("no play-off", no_playoff_faults(off, "bra_nat_first", 2)))
+    bl = split_bounds("recomp: league sizes: wel_first split bounds 2026 120: 1-2 1-3 3-3 4-5 4-5\n", "wel_first")
+    if (bl != {2026: [[(1, 2), (1, 3), (3, 3), (4, 5), (4, 5)]]} or bounds_faults("b", bl[2026], [3, 2]) or
+            len(bounds_faults("b", [[(1, 2), (1, 4), (3, 3), (4, 5), (3, 5)]], [3, 2])) != 2 or
+            not bounds_faults("b", [[(1, 1)]], [3, 2])):
+        bad.append(("bounds", bl))
+    ld = lone_downs("recomp: league sizes: wel_first (Welsh Premier League) 2009: Club A goes down to no division\n"
+                    "recomp: league sizes: wel_first (Welsh Premier League) 2009: Club B goes down to no division\n",
+                    "wel_first")
+    if ld != {2009: 2} or row_down("wel_first", 2009) != 6 or row_down("wel_first", 2025) != 2:
+        bad.append(("lone", ld, row_down("wel_first", 2009), row_down("wel_first", 2025)))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
