@@ -74,6 +74,9 @@ int main(void)
     check(ita_cup_b_count(19, 2019, 2018), 19, "19 played in 2018/19");
     check(ita_cup_b_count(22, 2006, 2005), 22, "22 played in 2005/06");
     check(ita_cup_b_count(0, 2006, 2005), 0, "no Serie B clubs");
+    check(ita_cup_b_count(20, 2004, 2004), 20, "20 from a database");
+    check(ita_cup_b_count(18, 2003, 2004), 0, "a season before the start");
+    check(ita_cup_b_count(19, 2019, 2019), 0, "19 from a 2019 database keeps the original");
 
     /* Row 31. The play-out ties of the original (rows 16 v 13, 15 v 14) as places (1st = 1) at the real counts. */
     const int real[5][5] = {{18, 17, 14, 16, 15}, {19, 18, 15, 17, 16}, {17, 16, 13, 15, 14}, {16, 15, 12, 14, 13},
