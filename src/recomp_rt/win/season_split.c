@@ -216,14 +216,18 @@ static void order_probe(uint32_t obj, const SeasonSplit *sp, uint32_t a, uint32_
             sp ? section_of(b, sp) : -9, readable(obj) ? record_name(obj) : "");
 }
 
+static uint32_t order_calls, order_apart;   /* probe: calls of split_order, and those with rows of two sections */
+
 static void split_order(void)
 {
     uint32_t a = rt_arg(0), b = rt_arg(1), obj = rd32(g_mem, SORTED_LEAGUE);
     const SeasonSplit *sp = cached(obj);
     int r = 0;
+    order_calls++;
     if (sp) {
         int x = section_of(a, sp), y = section_of(b, sp);
         if (x >= 0 && y >= 0) r = x - y;
+        if (r) order_apart++;
         else order_probe(obj, sp, a, b);
     } else {
         order_probe(obj, sp, a, b);
@@ -489,9 +493,10 @@ void season_split_log_end(uint32_t obj)
     if (!season_sizes_on() || state(obj, &sp) != 2) return;
     uint32_t t = rd32(g_mem, obj + COMP_TABLE);
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
-    /* The points (+0x19) and status (+0x37) of each row, in table order. */
-    fprintf(stderr, "recomp: league sizes: %s split points %d:", season_change_file(obj),
-            (int16_t)rd16(g_mem, obj + COMP_YEAR));
+    /* The points (+0x19) and status (+0x37) of each row, in table order, the order field and the order calls. */
+    fprintf(stderr, "recomp: league sizes: %s split points %d (order 0x%x, split_order 0x%x, %u calls, %u apart):",
+            season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), rd32(g_mem, obj + COMP_ORDER), order_addr,
+            order_calls, order_apart);
     for (int i = 0; i < n; i++) {
         uint32_t row = t + (uint32_t)i * ROW_SIZE;
         fprintf(stderr, " %d/%d", (int16_t)rd16(g_mem, row + ROW_POINTS), (int8_t)g_mem[row + 0x37u]);

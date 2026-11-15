@@ -32,8 +32,11 @@
  *   then the South's by theirs (its best fill the North's free places). The South is not held (open item 255):
  *   the clubs after the North go to A Lower Division, which stands for the third level (3. HNL) that the 2006/07
  *   restructure sent them to; the South does not start its season (season_sizes_cro_south_before) and keeps its
- *   last table with the year 2998; after such a season the chain and 0x514ed0 leave it out (rt_cro_south_idle). A
- *   new game in such a season starts the South's clubs in A Lower Division and the South makes an empty table.
+ *   last table with the year 2998; after such a season the chain and 0x514ed0 leave it out (rt_cro_south_idle).
+ *   A new game in such a season makes the South with its clubs of the database, which play the start season: a
+ *   table of no club fails in League::calc_prize_fund 0x682f70 ("league..cpp 532" from CroA2b::create_table at
+ *   0x516ed3), and League::create_fixtures 0x6835c0 builds its grid from the count; the class is made with the
+ *   nation (CroA1::start_new_season and 0x514ed0 read its object). The first change empties it.
  * The clubs after North + South go to A Lower Division [0x9cf764], the spare division that the club
  * moves and the size step take clubs from (season_clubs.c), through the same store and news of the regroup
  * (0x5152be, 0x515251..0x5152a1: the news reads the target's id, so the target is a record).
@@ -63,10 +66,6 @@
 #define ROW_POS 0x39u              /* s8: the place in the table, from 1 */
 #define CRO_A2A 0x009cf8a8u        /* the division index of the North */
 #define CRO_A2B 0x009cf8acu        /* the division index of the South */
-#define CLUBS 0x00ae23b4u          /* the club table, 0x245 bytes a club */
-#define CLUB_COUNT 0x00ae235cu
-#define CLUB_SIZE 0x245u
-#define CLUB_DIVISION 0x57u        /* club_comp pointer */
 
 static uint32_t list;              /* the list in the game's memory, made at the first table of more than 16 */
 static uint32_t regroup;           /* the list of the regroup, made at the first regroup of a season game */
@@ -269,25 +268,26 @@ uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place)
     return key >= 0 && readable(comps) ? comps + (uint32_t)key * COMP_SIZE : chosen;
 }
 
-/* 1 when the season that ends had one group, so the South did not play (it kept its last table, see
- * season_sizes_cro_south_before): the chain 0x5150f0 leaves out its record_final_positions (vtable +0xa4 at
- * 0x51512f) and its exchange with the First Division (0x689c80 at 0x515180), and 0x514ed0 leaves its relegated rows
- * (0x51509a), which all read that old table. */
+/* 1 when the South waits (season_sizes_cro_south_before set its year to 2998): it did not play the season that
+ * ends, so the chain 0x5150f0 leaves out its record_final_positions (vtable +0xa4 at 0x51512f) and 0x514ed0 its
+ * relegated rows (0x515097), which would read its old table. */
 uint32_t rt_cro_south_idle(void)
 {
-    if (!season_sizes_on()) return 0;
-    int year = rules_year(0);
-    if (!one_group(year)) return 0;
-    static int told = -1;
-    if (getenv("RECOMP_SIZE_LOG") && told != year) {
-        told = year;
-        fprintf(stderr, "recomp: league sizes: cro_a2b %d: not held, no exchange with the First Division\n", year);
-    }
-    return 1;
+    uint32_t south = season_sizes_on() ? league_at(CRO_A2B) : 0;
+    return south && (int16_t)rd16(g_mem, south + COMP_YEAR) >= 2998;
 }
 
-/* The exchange of the South with the First Division at 0x515180: 1 for the original's call. */
-uint32_t rt_cro_south_swap(void) { return !rt_cro_south_idle(); }
+/* The exchange of the South with the First Division at 0x515180 (1: the original's call): none after a season of
+ * one group, when the South was not held (it waited, or played the start season of a new game). */
+uint32_t rt_cro_south_swap(void)
+{
+    if (!season_sizes_on()) return 1;
+    int year = rules_year(0);
+    if (!one_group(year)) return 1;
+    if (getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: cro_a2b %d: not held, no exchange with the First Division\n", year);
+    return 0;
+}
 
 /* The before hook of a season start (season_divisions.c divisions_before): in a season of one group the South is
  * not held. Its clubs left at the regroup (plan: all but the North's to A Lower Division, as the 2006/07
@@ -301,33 +301,6 @@ int season_sizes_cro_south_before(uint32_t comp, int season)
     if (getenv("RECOMP_SIZE_LOG"))
         fprintf(stderr, "recomp: league sizes: cro_a2b %d: not held, the South waits\n", season);
     return 1;
-}
-
-/* A new game in a season of one group (season_clubs.c, after the club moves and before the competitions are made):
- * the South's clubs start in A Lower Division, and the South makes an empty table (season_sizes_empty_ok). */
-void season_sizes_cro_new_game(int start)
-{
-    if (!season_sizes_on() || !one_group(start)) return;
-    uint32_t clubs = rd32(g_mem, CLUBS), comps = rd32(g_mem, COMPS);
-    int count = (int)rd32(g_mem, CLUB_COUNT), key = (int32_t)rd32(g_mem, CRO_A2B), lower = (int32_t)rd32(g_mem, KEY_LOWER);
-    if (!readable(clubs) || !readable(comps) || key < 0 || lower < 0) return;
-    uint32_t south = comps + (uint32_t)key * COMP_SIZE, to = comps + (uint32_t)lower * COMP_SIZE;
-    int moved = 0;
-    for (int i = 0; i < count; i++) {
-        uint32_t club = clubs + (uint32_t)i * CLUB_SIZE;
-        if (rd32(g_mem, club + CLUB_DIVISION) != south) continue;
-        wr32(g_mem, club + CLUB_DIVISION, to);
-        moved++;
-    }
-    if (getenv("RECOMP_SIZE_LOG"))
-        fprintf(stderr, "recomp: league sizes: cro_a2b %d: not held, the South's %d clubs start in A Lower Division\n",
-                start, moved);
-}
-
-/* 1 for the South of a season of one group with no club: its table has 0 rows (rt_league_clubs). */
-int season_sizes_cro_empty(uint32_t obj, const char *file, int season)
-{
-    return season_sizes_on() && file && !strcmp(file, "cro_a2b") && one_group(season) && readable(obj);
 }
 
 /* The count that fix_division_club_count 0x839920 gives a Greek division at a new game (0x8283c0 National A,
