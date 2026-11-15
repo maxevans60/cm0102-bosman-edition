@@ -14,7 +14,7 @@ static int fails;
 
 static StepClub club[200];
 static int nclub;
-static StepDivision div[8];
+static StepDivision div[16];
 static StepMove mv[200];
 
 static void reset(void)
@@ -195,6 +195,43 @@ static void outsiders_and_pool(void)
     CHECK(div[0].short_by == 0 && div[1].short_by == 1, "pool: short %d %d", div[0].short_by, div[1].short_by);
 }
 
+/* Gap row 8: the lowest division of the size table over a division outside it (want: the count that it holds). A
+ * surplus goes down into that division, which sends as many of its own worst clubs to no division; a lack takes its
+ * best clubs, which it replaces with clubs of its nation with no division. */
+static void outside(void)
+{
+    reset();
+    int u = add_division(0, 22, 24), l = add_division(1, 20, 20);
+    below(0, 1);
+    int n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(moved(n, u + 23, 0, 1) && moved(n, u + 22, 0, 1), "outside: the worst two go down");
+    CHECK(moved(n, l + 19, 1, STEP_NONE) && moved(n, l + 18, 1, STEP_NONE), "outside: the division below sends two out");
+    CHECK(count_in(0) == 22 && count_in(1) == 20 && n == 4, "outside: %d and %d, %d moves", count_in(0), count_in(1), n);
+
+    reset();
+    u = add_division(0, 24, 22);
+    l = add_division(1, 20, 20);
+    below(0, 1);
+    int f1 = add_free(1, 700, 1), f2 = add_free(1, 600, 1);
+    n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(moved(n, l, 1, 0) && moved(n, l + 1, 1, 0), "outside: the best two of the division below go up");
+    CHECK(moved(n, f1, STEP_NONE, 1) && moved(n, f2, STEP_NONE, 1), "outside: it takes two clubs with no division");
+    CHECK(count_in(0) == 24 && count_in(1) == 20 && div[1].short_by == 0, "outside: %d and %d", count_in(0),
+          count_in(1));
+
+    /* Eight groups below (the Serie C under the Serie B): each takes one of a surplus of 8. */
+    reset();
+    add_division(0, 20, 28);
+    for (int g = 1; g <= STEP_MAX_LOWER; g++) {
+        add_division(g, 4, 4);
+        below(0, g);
+    }
+    n = season_size_step_plan(div, 1 + STEP_MAX_LOWER, club, nclub, mv, 200);
+    int each = 1;
+    for (int g = 1; g <= STEP_MAX_LOWER; g++) each &= count_in(g) == 4;
+    CHECK(count_in(0) == 20 && each && n == 16, "outside groups: %d clubs, %d moves", count_in(0), n);
+}
+
 /* The plan stops at max moves and says how many it lacks. */
 static void truncated(void)
 {
@@ -216,6 +253,7 @@ int main(void)
     started();
     two_below();
     steady();
+    outside();
     printf("%s season_size_step (%d failures)\n", fails ? "FAIL" : "PASS", fails);
     return fails != 0;
 }

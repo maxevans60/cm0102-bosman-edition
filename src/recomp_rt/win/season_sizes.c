@@ -218,6 +218,7 @@ static const char *record_name(uint32_t obj)
 /* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
 static void size_step_run(uint32_t trigger);
 static void step_note_pair(uint32_t upper, uint32_t lower);
+static void step_note_outside(uint32_t upper, uint32_t lower);
 static int row_reachable(uint32_t obj, const char *file);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
@@ -1022,6 +1023,9 @@ RT_WRAP(00689c80, promote_relegate)
     int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
+    else if (season_changing_rules() && !season_change_is_creating() && size_file(season_change_file(upper)) &&
+             !size_file(season_change_file(lower)) && readable(rd32(g_mem, lower + COMP_RECORD)))
+        step_note_outside(upper, lower);
     /* D23 (slice 3): a division whose relegation places towards a division outside the size table this slice set
      * sends its clubs in pairs, so the division below keeps its count. Most classes pass pairs already (0x7cfcbf,
      * 0x42afe3); the Turkish chain 0x8fe2d4..0x8fe38b pushes 0 and the base chain 0x689c60 passes the class's flag.
@@ -1107,6 +1111,7 @@ RT_WRAP(00689c80, promote_relegate)
 static struct {
     uint32_t obj, rec;
     int year, nlower, nrows;
+    int keep;               /* gap row 8: a division outside the size table below a lowest one; it keeps its count */
     int lower[STEP_MAX_LOWER];
     uint32_t club[STEP_MAX_ROWS];
 } step_seen[STEP_DIVS];
@@ -1147,6 +1152,19 @@ static int step_index(uint32_t obj)
 }
 
 void season_sizes_step_note(uint32_t upper, uint32_t lower) { step_note_pair(upper, lower); }
+
+/* Gap row 8 (lead-notes/sizes-gaps.md): a lowest division of the size table trades its surplus and its lack with the
+ * real tier below it, a division outside the table, as the chain does. That division keeps its count: the plan sends
+ * its worst clubs that stayed to no division for each club that comes down, and fills it from its nation's clubs with
+ * no division for each club that goes up, so a class of groups with fixed arrays (PorSecondB 0x7d2870, the
+ * Regionalliga of exactly 36, cmp 0x24 at 0x5dbc3b) holds the clubs that it held after the chain. */
+static void step_note_outside(uint32_t upper, uint32_t lower)
+{
+    if (step_running) return;
+    step_note_pair(upper, lower);
+    for (int i = 0; i < nstep_seen; i++)
+        if (step_seen[i].obj == lower) step_seen[i].keep = 1;
+}
 
 static void step_note_pair(uint32_t upper, uint32_t lower)
 {
@@ -1206,6 +1224,27 @@ static int up_ok(uint32_t club, uint32_t rec)
     return !season_esp_barred(club, rec, current_division);
 }
 
+/* up_ok depends on the division that the club would join: the plan takes a club only into a division of its own
+ * chain, the one above its own or, for a club with no division, the lowest of its nation that takes part. 0 when the
+ * game unwinds. */
+static int step_up_ok(const StepDivision *div, int ndiv, StepClub *club, int nclub, const uint32_t *at)
+{
+    for (int k = 0; k < nclub; k++) {
+        int d = club[k].div, to = -1;
+        if (d == STEP_NONE) {
+            for (int e = 0; e < ndiv && to < 0; e++)
+                if (!div[e].nlower && div[e].want >= 0 && div[e].nation == club[k].nation) to = e;
+        } else if (d >= 0) {
+            for (int e = 0; e < ndiv && to < 0; e++)
+                for (int j = 0; j < div[e].nlower; j++)
+                    if (div[e].lower[j] == d) to = e;
+        }
+        club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
+        if (rt_unwinding) return 0;
+    }
+    return 1;
+}
+
 static void size_step_run(uint32_t trigger)
 {
     if (!nstep_seen || step_running || rt_unwinding) return;
@@ -1229,7 +1268,7 @@ static void size_step_run(uint32_t trigger)
         uint32_t obj = step_seen[d].obj;
         const char *file = season_change_file(obj);
         int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
-        div[d].want = step_want(obj, file, step_seen[d].year + 1);
+        div[d].want = step_seen[d].keep ? clubs_in_division(obj) : step_want(obj, file, step_seen[d].year + 1);
         div[d].started = obj != trigger && year != step_seen[d].year;
         div[d].nation = (int)(rd32(g_mem, step_seen[d].rec + REC_NATION) & 0x7fffffff);
         div[d].nlower = step_seen[d].nlower;
@@ -1277,28 +1316,45 @@ static void size_step_run(uint32_t trigger)
         club[k].up_ok = 1;
         club[k].down_ok = 1;
     }
-    /* up_ok depends on the division that the club would join: the plan takes a club only into a division of its own
-     * chain, the one above its own or, for a club with no division, the lowest of its nation. */
-    for (int k = 0; k < nclub; k++) {
-        int d = club[k].div, to = -1;
-        if (d == STEP_NONE) {
-            for (int e = 0; e < ndiv && to < 0; e++)
-                if (!div[e].nlower && div[e].nation == club[k].nation) to = e;
-        } else if (d >= 0) {
-            for (int e = 0; e < ndiv && to < 0; e++)
-                for (int j = 0; j < div[e].nlower; j++)
-                    if (div[e].lower[j] == d) to = e;
-        }
-        club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
-        if (rt_unwinding) goto done;
-    }
+    if (!step_up_ok(div, ndiv, club, nclub, at)) goto done;
     /* The step never sends down a club with a human manager (review 2: a club that finished safe). */
     for (int d = 0; d < ndiv; d++)
         for (int r = 0; r < div[d].nrows; r++) {
             club[div[d].rows[r]].down_ok = !is_human(at[div[d].rows[r]]);
             if (rt_unwinding) goto done;
         }
-    int n = season_size_step_plan(div, ndiv, club, nclub, moves, nmax);
+    /* A division outside the table that cannot keep its count (no row of its last table to send out, no club of its
+     * nation to take in) takes no part, and the plan runs again: the lowest division of the table then trades with
+     * no division as before. */
+    StepClub *start = malloc((size_t)nclub * sizeof *start + 1);
+    if (!start) goto done;
+    memcpy(start, club, (size_t)nclub * sizeof *club);
+    int n = 0;
+    for (int pass = 0; pass <= ndiv; pass++) {
+        n = season_size_step_plan(div, ndiv, club, nclub, moves, nmax);
+        int again = 0;
+        for (int d = 0; d < ndiv; d++)
+            if (step_seen[d].keep && div[d].want >= 0 && div[d].short_by != 0) {
+                if (logging())
+                    fprintf(stderr, "recomp: league sizes: step: %.50s (outside the size table) cannot keep its %d "
+                                    "clubs: it takes no part\n", record_name(step_seen[d].obj), div[d].want);
+                div[d].want = -1;
+                for (int e = 0; e < ndiv; e++) {
+                    int k = 0;
+                    for (int j = 0; j < div[e].nlower; j++)
+                        if (div[e].lower[j] != d) div[e].lower[k++] = div[e].lower[j];
+                    div[e].nlower = k;
+                }
+                again = 1;
+            }
+        if (!again) break;
+        memcpy(club, start, (size_t)nclub * sizeof *club);
+        if (!step_up_ok(div, ndiv, club, nclub, at)) {
+            free(start);
+            goto done;
+        }
+    }
+    free(start);
     for (int i = 0; i < n && !rt_unwinding; i++) {
         uint32_t c = at[moves[i].club], old = current_division(c);
         uint32_t to = moves[i].to >= 0 ? step_seen[moves[i].to].rec : 0;

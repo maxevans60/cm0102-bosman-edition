@@ -18,7 +18,7 @@
 #define RECOMP_SEASON_SIZE_STEP_H
 
 #define STEP_MAX_ROWS 64
-#define STEP_MAX_LOWER 4
+#define STEP_MAX_LOWER 8     /* the Serie C below the Serie B: the division and its 7 groups (0x42afe3..0x42b124) */
 #define STEP_NONE (-1)          /* no division */
 
 typedef struct {
