@@ -303,7 +303,24 @@ static int class_size(const char *name, int season)
     /* A class that counts the clubs of its data plays the count of its row with the sizes on (0.7.2 slice 13): the
      * 2013 list holds 8 Irish First Division clubs, and the 3.9.68 data 10. Off, the data's count stays. */
     if (!strncmp(name, "Irish First Division", 52)) return season_sizes_data_clubs("ire_first", season);
+    /* Item 260: the Irish Premier Division too (IrePrm takes 10 or 12). Without a count the division kept the
+     * database's 12 after its list of 10, in a 2003 or 2004 start. */
+    if (!strncmp(name, "Irish Premier Division", 52)) return season_sizes_data_clubs("ire_prm", season);
     return -1;
+}
+
+/* Item 260: the season of the lists of a division in a start season. The lists are kept by the season of the rules
+ * table row ("2004 Irish Premier Division" holds the clubs of the real 2005, row 2004 of ire_prm), and a League of
+ * Ireland edition plays the row whose real season begins in its year (season_sizes_edition: edition 2004 plays row
+ * 2003, real 2004). So an Irish division takes the list of its edition's row; any other division the list of the
+ * season. With the sizes off the season stays. The club records of a division follow the same season
+ * (season_records_merge). */
+int season_clubs_list_season(const char *division, int season)
+{
+    if (!season_sizes_on()) return season;
+    if (!strncmp(division, "Irish Premier Division", 52)) return season_sizes_edition("ire_prm", season);
+    if (!strncmp(division, "Irish First Division", 52)) return season_sizes_edition("ire_first", season);
+    return season;
 }
 
 /* The file of a division's class, or NULL. */
@@ -566,7 +583,7 @@ static void move_clubs(int season)
 {
     int first = -1, last = -1;
     for (int i = 0; i < nrows; i++)
-        if (rows[i].season == season) {
+        if (rows[i].season == season_clubs_list_season(rows[i].division, season)) {
             if (first < 0) first = i;
             last = i;
         }
@@ -650,7 +667,7 @@ static void move_clubs(int season)
     for (int r = first; r <= last; r++) {
         by_list[r - first] = -1;
         to_div[r - first] = -1;
-        if (rows[r].season != season) continue;
+        if (rows[r].season != season_clubs_list_season(rows[r].division, season)) continue;
         if (!season_divisions_list_on(rows[r].division, season)) continue;     /* slice 20 */
         int t = find_division(div, ncomps, rows[r].division);
         if (t < 0) {

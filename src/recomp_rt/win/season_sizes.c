@@ -174,6 +174,13 @@ static const SeasonRule *row_now(uint32_t obj, const char *file)
 int season_sizes_row_down(uint32_t obj, const char *file)
 {
     const SeasonRule *r = readable(obj) && sizes_on() ? row_now(obj, file) : NULL;
+    /* An Irish row of another real season gives no places (edition 2003 plays row 2003, the real 2004), as in
+     * sizes_rules: the class's places stand. */
+    if (r && file && !strncmp(file, "ire_", 4)) {
+        int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                         : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+        if (!real_starts(r, year)) return -1;
+    }
     return r && r->down >= 0 ? r->down : -1;
 }
 
@@ -184,6 +191,15 @@ const char *season_sizes_row_playoffs(uint32_t obj, const char *file)
     int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
                                                                      : (int16_t)rd16(g_mem, obj + COMP_YEAR);
     return real_starts(r, year) ? r->playoffs : NULL;
+}
+
+int season_sizes_row_up(uint32_t obj, const char *file)
+{
+    if (!readable(obj) || !sizes_on()) return -1;
+    const SeasonRule *r = row_now(obj, file);
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                     : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    return real_starts(r, year) && r->up >= 0 ? r->up : -1;
 }
 
 int season_sizes_row_season(uint32_t obj, const char *file)
@@ -208,10 +224,16 @@ int season_sizes_clubs(const char *file, int season)
 int season_sizes_data_clubs(const char *file, int season)
 {
     const SeasonGrown *g = grown_of(file);
-    if (!sizes_on() || !g || g->held) return -1;
+    /* Item 260: IrePrm counts the clubs of its data too (IrePrm::create_table 0x63a740 counts the clubs of division
+     * [0x9cf80c] at 0x63a779..0x63a783, and takes 10 or 12 at 0x63a79f..0x63a7a9), but it is not grown: its row's
+     * count when the class takes it. Without it the moves kept the database's count, so a 2003 or 2004 start held 12
+     * where the row gives 10. */
+    int prm = file && !strcmp(file, "ire_prm");
+    if (!sizes_on() || (!prm && (!g || g->held))) return -1;
     const SeasonRule *r = row_of_edition(file, season);
-    if (!r || r->clubs < MIN_CLUBS || r->clubs > g->cap) return -1;
-    return r->clubs;
+    if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS) return -1;
+    if (prm) return season_sizes_irl_takes(file, r->clubs) ? r->clubs : -1;
+    return r->clubs <= g->cap ? r->clubs : -1;
 }
 
 /* The clubs whose division is the record of the object. */
@@ -239,7 +261,7 @@ static void step_note_pair(uint32_t upper, uint32_t lower);
 static int step_index(uint32_t obj);
 static int step_running;
 static int row_reachable(uint32_t obj, const char *file);
-static int data_next_count(uint32_t obj, const char *file, int n);
+static int data_takes_count(const char *file, int n);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
  * original's count stays. */
@@ -939,6 +961,13 @@ static void sizes_rules(uint32_t obj)
     if (!size_file(file) || exchange_floor(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
+    /* An Irish edition that plays a row of another real season keeps the class's places: editions 2003 and 2004 both
+     * play row 2003 (the real 2004, 3 up and no play-off), and the real 2003 (row 2002) had 1 up and the play-off.
+     * The row's places belong to edition 2004 (item 251b review; season_sizes_irl.c does the same for the play-off
+     * and the direct places up). */
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                     : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (!strncmp(file, "ire_", 4) && !real_starts(r, year)) return;
     /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
      * with fixed counts (the German Regionalliga split needs exactly 36 clubs, cmp bl, 0x24 at 0x5dbc3b, box
      * ger_first.cpp 1049 at 0x5dbcd9: the 2. Bundesliga with 2 relegation places against the Regionalliga's 4
@@ -1055,11 +1084,15 @@ RT_WRAP(00689c80, promote_relegate)
          * class of 18) would leave the step to send down clubs that finished safe (review 2). */
         int reach = row_reachable(upper, fu_name) && row_reachable(lower, fl_name);
         single = cu > 0 && cl > 0 && (fits || (reach && !season_change_is_creating()));
-        /* Item 251: two classes that count the clubs of their data (cap 0) make their next tables of the clubs that
-         * the chain leaves them, so each club moves on its own when both counts are those of the next rows and
-         * counts that the classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10). */
-        if (!single && cu == 0 && cl == 0 && !season_change_is_creating())
-            single = data_next_count(upper, fu_name, nu) && data_next_count(lower, fl_name, nl);
+        /* Items 251 and 251b: two classes that count the clubs of their data (cap 0) make their next tables of the
+         * clubs that the chain leaves them, so each club moves on its own when both new counts are counts that the
+         * classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10), in a game of any start. Only in an
+         * edition that plays its row's own real season: editions 2003 and 2004 both play row 2003 (real 2004), and
+         * its 1 down and 3 up belong to edition 2004 only. */
+        int ed = (int16_t)rd16(g_mem, upper + COMP_YEAR);
+        if (!single && cu == 0 && cl == 0 && !season_change_is_creating() &&
+            real_starts(row_of_edition(fu_name, ed), ed) && real_starts(row_of_edition(fl_name, ed), ed))
+            single = data_takes_count(fu_name, nu) && data_takes_count(fl_name, nl);
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
                             "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
@@ -1163,15 +1196,23 @@ static void step_note_pair(uint32_t upper, uint32_t lower)
 }
 
 /* The count of a division's row in an edition (within the class's cap and floor), or -1: no part in the step (a
- * class that counts the clubs of its data, cap 0, takes only some counts: IrePrm 10 or 12, 0x63a79f..0x63a7c6). */
+ * class with no cap, or a row that its class cannot hold). The Irish classes, which count the clubs of their data,
+ * take the row's count when the class takes it (item 260, below). */
 static int step_want(uint32_t obj, const char *file, int year)
 {
     /* The Argentine second division takes exactly 25 (ArgSecond::fill_league_table 0x407ce2) and gives the Primera
      * its clubs (slice 15; its own row is slice 16's). */
     if (!strcmp(file, "arg_second")) return 25;
+    const SeasonRule *r = row_of_edition(file, year);
+    /* Item 260: the two Irish classes count the clubs of their data (cap 0) and take some counts only (IrePrm 10 or
+     * 12, IreFirst 2 to 12: season_sizes_irl_takes). With no part in the step, a 2001 game kept the Premier
+     * Division at 12 and the First Division at 9 in 2002, where the rows give 10 and 12: the First Division never
+     * took a club of its nation with no division (D12). They take part with their row's count when the class takes
+     * it. The Premier Division takes its clubs from the First Division, so it always reaches a count it takes. */
+    if (!strcmp(file, "ire_prm") || !strcmp(file, "ire_first"))
+        return r && season_sizes_irl_takes(file, r->clubs) ? r->clubs : -1;
     int cap = season_ita_cap(obj, cap_of(file));     /* slice 20b: Serie C */
     if (cap <= 0) return -1;
-    const SeasonRule *r = row_of_edition(file, year);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS) return -1;
     int n = r->clubs, low = floor_of(file);
     if (n > cap) n = cap;
@@ -1187,12 +1228,14 @@ static int row_reachable(uint32_t obj, const char *file)
     return cap > 0 && r && r->clubs >= MIN_CLUBS && r->clubs <= cap && r->clubs >= floor_of(file);
 }
 
-/* 1 when n is the count of the next edition's row of a class that counts the clubs of its data, and a count that
- * its create_table takes (season_sizes_irl_takes). */
-static int data_next_count(uint32_t obj, const char *file, int n)
+/* 1 when n is a count that the create_table of a class that counts the clubs of its data takes
+ * (season_sizes_irl_takes). Item 251 also needed the count of the next edition's row, so a game whose counts
+ * differed from the rows moved in pairs (a game started before 2011 in 2017). The real places now move the clubs
+ * whenever the new counts are ones the classes take, and the size step then brings both divisions to their rows
+ * (step_want, item 260). */
+static int data_takes_count(const char *file, int n)
 {
-    const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
-    return r && r->clubs == n && season_sizes_irl_takes(file, n);
+    return season_sizes_irl_takes(file, n);
 }
 
 int season_sizes_plays_short(const char *file)
