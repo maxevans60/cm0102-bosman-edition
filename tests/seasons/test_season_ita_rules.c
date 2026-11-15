@@ -37,6 +37,23 @@ int main(void)
     check(ita_serie_b_zone(2019, 20, 2, 3, 0), 0, "2019/20 at 20");
     check(ita_serie_b_zone(2003, 24, 5, 3, 24), 0, "a row past the table");
 
+    /* Open item 254. Serie A: to 2004/05 the class's zones (title, European places, relegation); 2005/06 to
+     * 2021/22 none (head-to-head table); from 2022/23 the title and the relegation line only. */
+    check(ita_serie_a_zone(2003, 18, 3, 0, 1), 1, "2003/04 title keeps the class");
+    check(ita_serie_a_zone(2004, 20, 3, 3, 2), 2, "2004/05 European place keeps the class");
+    check(ita_serie_a_zone(2004, 20, 3, 17, 0), 5, "2004/05 18th is relegated");
+    check(ita_serie_a_zone(2004, 20, 3, 16, 0), 0, "2004/05 17th is safe");
+    check(ita_serie_a_zone(2004, 20, 3, 18, 5), 5, "2004/05 a class 5 in the relegation rows");
+    check(ita_serie_a_zone(2004, 20, 3, 14, 5), 0, "2004/05 a class 5 above the line goes to 0");
+    check(ita_serie_a_zone(2004, 20, 3, 19, 0), 5, "2004/05 20th is relegated");
+    for (int y = 2005; y <= 2021; y++)
+        for (int i = 0; i < 20; i++) check(ita_serie_a_zone(y, 20, 3, i, i < 4 ? 2 : 0), 0, "no Serie A zone 2005 to 2021");
+    for (int y = 2022; y <= 2030; y++)
+        for (int i = 0; i < 20; i++)
+            check(ita_serie_a_zone(y, 20, 3, i, i == 0 ? 1 : i < 4 ? 2 : 0), i == 0 ? 1 : i >= 17 ? 5 : 0,
+                  "Serie A title and relegation from 2022");
+    check(ita_serie_a_zone(2022, 20, 3, 20, 0), 0, "a row past the table");
+
     /* Row 32. compare_clubs_by_seeding_pot 0x640590 at 20 clubs: B 3rd to 6th pot 4, 7th to 14th 3, 15th to 18th 2. */
     const ItaCupClub base = {1, 1, 0, 1, 1, 0};
     ItaCupClub c = base;

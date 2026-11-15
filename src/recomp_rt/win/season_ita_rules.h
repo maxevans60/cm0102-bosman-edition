@@ -14,6 +14,18 @@
  * start a tie-break when two rows with equal points have different zones. From 2005/06 every row has 0. */
 int ita_serie_b_zone(int year, int clubs, int up, int down, int row);
 
+/* The first season in which Serie A again plays a tie-break match, for the title and the relegation line only
+ * (open item 254). */
+#define ITA_SERIE_A_SPAREGGIO_BACK 2022
+
+/* The tie-break zone of row `row` of a Serie A table of `clubs` rows with `down` direct relegation places (+0xc1) in
+ * the season of `year`. `class_zone` is the byte the original wrote for the row (1 the title, 2 and 3 the European
+ * places, 4 after them, 5 the relegation places of its 18; ItaSerA::update_for_date 0x642880 and
+ * create_tiebreak_playoffs 0x641a70). To 2004/05 the class's title and European zones stay and the relegation zone
+ * 5 is the last `down` rows. From 2005/06 to 2021/22 every row has 0 (the head-to-head table). From 2022/23 only
+ * row 0 has 1 and the last `down` rows have 5. A row outside the table has 0. */
+int ita_serie_a_zone(int year, int clubs, int down, int row, int class_zone);
+
 /* A club as compare_clubs_by_seeding_pot 0x640590 reads it: its last division (+0x5b), that division against Serie B
  * ([0x9cf574]) and Serie A ([0x9cf570]), its division now (+0x57) against Serie B, whether the two divisions are one
  * record, and its last place (+0x5f, s8). */

@@ -85,12 +85,17 @@ static int count_of(uint32_t obj) { return readable(obj) ? (int16_t)rd16(g_mem, 
 uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at)
 {
     int n = count_of(obj), cls = serie_b ? SERIE_B_CLASS : SERIE_A_CLASS, i = (int)row;
-    /* Serie B with the sizes on: the zones of the season's places to 2004/05, none from 2005/06, when the head-to-head
-     * table settles a tie (season_ita_rules.h; gap row 30). At 20 clubs with 4 up and 4 down (2001/02 and 2002/03)
-     * these are the original's bytes. */
-    if (serie_b && season_sizes_on() && n >= 2 && i >= 0 && i < n)
-        return (uint32_t)ita_serie_b_zone((int16_t)rd16(g_mem, obj + YEAR), n, (int8_t)g_mem[obj + UP],
-                                          (int8_t)g_mem[obj + DOWN], i);
+    /* With the sizes on, the zones of the season's rules (season_rule_year: the start season's with changing rules
+     * off). Serie B: the zones of the season's places to 2004/05, none from 2005/06, when the head-to-head table
+     * settles a tie (season_ita_rules.h; gap row 30). At 20 clubs with 4 up and 4 down (2001/02 and 2002/03) these
+     * are the original's bytes. Serie A: open item 254. */
+    if (season_sizes_on() && n >= 2 && i >= 0 && i < n) {
+        int year = season_rule_year((int16_t)rd16(g_mem, obj + YEAR));
+        if (serie_b) return (uint32_t)ita_serie_b_zone(year, n, (int8_t)g_mem[obj + UP], (int8_t)g_mem[obj + DOWN], i);
+        /* Serie A with the sizes on: the zones of its era (open item 254). The original wrote bytes for its 18 rows
+         * only, so a row past them has no class byte. */
+        return (uint32_t)ita_serie_a_zone(year, n, (int8_t)g_mem[obj + DOWN], i, i < SERIE_A_CLASS ? g_mem[at] : 0);
+    }
     if (n == cls || n < 2 || i < 0 || i >= n) return g_mem[at];
     if (!serie_b) {
         /* Serie A: the European entries of the original stay (rows 0 to 8 at most), the relegation entries count up

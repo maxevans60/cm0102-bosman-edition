@@ -35,3 +35,12 @@ int ita_c1_playout_row(int clubs, int row18)
     if (clubs < 6 || row < 0 || row >= clubs) return row18;
     return row;
 }
+
+int ita_serie_a_zone(int year, int clubs, int down, int row, int class_zone)
+{
+    if (row < 0 || row >= clubs) return 0;
+    int relegated = down > 0 && row >= clubs - down;
+    if (year <= ITA_SPAREGGIO_LAST) return relegated ? 5 : class_zone == 5 ? 0 : class_zone;
+    if (year < ITA_SERIE_A_SPAREGGIO_BACK) return 0;
+    return row == 0 ? 1 : relegated ? 5 : 0;
+}
