@@ -609,7 +609,12 @@ RT_WRAP(00423880, bel_third_playoff)
     /* The place of the relegation play-off: 2, or 0xfc for a U23 side, which that zone never gives 2 (0x685274..
      * 0x68527f: only a row of 0xff or 0xfe). With the size engine (0.7.2 slice 10) the row of the season may give
      * that place no relegation play-off (+0xc0 0: 0xff) or a direct relegation (3): the club keeps its status and the
-     * third-tier club still takes its place in the play-off. A title, promotion or period row is a fault. */
+     * third-tier club still takes its place in the play-off. A title, promotion or period row is a fault. This is
+     * real life in every season from 2015/16 (gap 36 of the 0.7.2 sizes, checked 15 November 2026): no second-tier
+     * club played the third tier's promotion play-off (2015/16 none was played; 2016/17 to 2018/19 the bottom four
+     * of First Division B played a relegation play-off among themselves; 2019/20 none, COVID; from 2020/21 the last
+     * one or two went down directly; the Division 1 play-offs list third-tier clubs only: en.wikipedia.org pages
+     * 2015-16_Belgian_Second_Division, Challenger_Pro_League and Belgian_Division_1). */
     int s15 = g_mem[slot + ROW_STATUS];
     int sized = season_sizes_on() && (s15 == ST_NONE || s15 == ST_DOWN || s15 == ST_STAYS);
     if (s15 != ST_DOWN_PLAYOFF && s15 != ST_BARRED && !sized) {
