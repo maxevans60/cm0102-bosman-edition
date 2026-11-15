@@ -22,6 +22,11 @@ int season_playoffs_shape(const char *file, int season, int *direct);
  * season_playoff_winners.c, host code only. */
 int season_playoffs_winners_up(const char *file, int season);
 
+/* 2 when the rules row of file and season sends the two finalists of a play-off of its top 8 up and has no direct
+ * places beyond them (Série B 2002 to 2005, rows 2001 to 2004: "top 8 ... finalists promoted" or "top 2 promoted",
+ * up 2, play-off places 1 to 8), else 0. season_sizes_bra.c plays it. Host code only. */
+int season_playoffs_finalists_up(const char *file, int season);
+
 /* After set_up_rules of a league (season_sizes_rules calls it): the places and the stage count of the play-off
  * of the season, or none. */
 void season_playoffs_rules(uint32_t obj);

@@ -332,6 +332,9 @@ PATCHES = {
     # set_up_rules (0x639c3c, then 0x639c77) and again at each start_new_season (0x63aa3d), so every 12-club season
     # sends 3 down. A season game with the sizes on takes the direct places of the row (season_sizes_irl.c).
     0x63A8B5: (3, "rt_ire_prm_down(esi, 3u)"),
+    # Item 251: the relegation play-off place of the same branch (mov byte [esi + 0xc0], 1 at 0x63a8ae): 0 in a season
+    # whose row has no play-off (season_sizes_irl.c).
+    0x63A8AE: (1, "rt_ire_prm_playoff(esi, 1u)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the

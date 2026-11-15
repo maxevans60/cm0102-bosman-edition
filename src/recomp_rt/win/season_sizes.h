@@ -114,6 +114,16 @@ int season_sizes_data_clubs(const char *file, int season);
  * sizes off or no count (gap 43, season_sizes_irl.c). */
 int season_sizes_row_down(uint32_t obj, const char *file);
 
+/* The play-off code of the row of the object's edition ("none", "text", ...) when that row's real season begins in the
+ * edition's year; NULL with the sizes off, no row, or a row of another real season (edition 2003 plays row 2003,
+ * whose real season is 2004). */
+const char *season_sizes_row_playoffs(uint32_t obj, const char *file);
+
+/* Item 251 (season_sizes_irl.c): in the set_up_rules wrap of IrePrm and IreFirst, the season's play-off between the
+ * divisions; and 1 when the create_table of an Irish class takes n clubs. */
+void season_sizes_irl_rules(uint32_t obj, const char *file);
+int season_sizes_irl_takes(const char *file, int n);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */

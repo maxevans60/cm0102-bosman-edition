@@ -178,6 +178,15 @@ int season_sizes_row_down(uint32_t obj, const char *file)
     return r && r->down >= 0 ? r->down : -1;
 }
 
+const char *season_sizes_row_playoffs(uint32_t obj, const char *file)
+{
+    if (!readable(obj) || !sizes_on()) return NULL;
+    const SeasonRule *r = row_now(obj, file);
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                     : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    return real_starts(r, year) ? r->playoffs : NULL;
+}
+
 int season_sizes_row_season(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
@@ -229,6 +238,7 @@ static void step_note_pair(uint32_t upper, uint32_t lower);
 static int step_index(uint32_t obj);
 static int step_running;
 static int row_reachable(uint32_t obj, const char *file);
+static int data_next_count(uint32_t obj, const char *file, int n);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
  * original's count stays. */
@@ -948,6 +958,8 @@ static void sizes_rules(uint32_t obj)
 void season_sizes_rules(uint32_t obj)
 {
     if (readable(obj)) size_step_run(obj);
+    /* Item 251: the Irish seasons with no play-off between the divisions, before the places (season_sizes_irl.c). */
+    if (!rt_unwinding && readable(obj)) season_sizes_irl_rules(obj, season_change_file(obj));
     sizes_rules(obj);
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
@@ -1039,6 +1051,11 @@ RT_WRAP(00689c80, promote_relegate)
          * class of 18) would leave the step to send down clubs that finished safe (review 2). */
         int reach = row_reachable(upper, fu_name) && row_reachable(lower, fl_name);
         single = cu > 0 && cl > 0 && (fits || (reach && !season_change_is_creating()));
+        /* Item 251: two classes that count the clubs of their data (cap 0) make their next tables of the clubs that
+         * the chain leaves them, so each club moves on its own when both counts are those of the next rows and
+         * counts that the classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10). */
+        if (!single && cu == 0 && cl == 0 && !season_change_is_creating())
+            single = data_next_count(upper, fu_name, nu) && data_next_count(lower, fl_name, nl);
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
                             "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
@@ -1161,6 +1178,14 @@ static int row_reachable(uint32_t obj, const char *file)
     int cap = season_ita_cap(obj, cap_of(file));
     const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
     return cap > 0 && r && r->clubs >= MIN_CLUBS && r->clubs <= cap && r->clubs >= floor_of(file);
+}
+
+/* 1 when n is the count of the next edition's row of a class that counts the clubs of its data, and a count that
+ * its create_table takes (season_sizes_irl_takes). */
+static int data_next_count(uint32_t obj, const char *file, int n)
+{
+    const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
+    return r && r->clubs == n && season_sizes_irl_takes(file, n);
 }
 
 int season_sizes_plays_short(const char *file)
