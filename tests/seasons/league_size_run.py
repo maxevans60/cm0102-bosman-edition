@@ -412,7 +412,7 @@ def shortages(log, file):
     too few clubs, the division plays with the clubs it has, and the log names it)."""
     out = {}
     pat = re.compile(rf"recomp: league sizes: step: {re.escape(file)} \(.*\) (\d+): (\d+) clubs, the row (\d+): "
-                     r"(no club of its nation with no division|the division below has no club to give)")
+                     r"no club of its nation with no division")
     for line in log.split("\n"):
         m = pat.match(line)
         if m and int(m.group(2)) < int(m.group(3)):
@@ -516,9 +516,11 @@ def faults(work, file, year, last):
                  | rrc.division_differences(comps, rep_clubs))
         diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
         # A short edition (shortages) differs from its row by the clubs the database lacks, and the log names it.
-        named = {f"game {have}, table {want} " for have, want in short.values()}
-        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs
-                  if not any(x in d[2] + " " for x in named)]
+        # The report's season of a calendar-year league is the edition before (edition_row).
+        def named(d):
+            ed = d[0] + (1 if calendar_year(file) else 0)
+            return ed in short and f"game {short[ed][0]}, table {short[ed][1]} " in d[2] + " "
+        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs if not named(d)]
     print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
           "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done) +
           "; splits " + ", ".join(f"{ed}:{'+'.join(map(str, v[1]))}" for ed, v in sorted(made.items())) +
@@ -661,7 +663,8 @@ def self_test():
     sh = shortages("recomp: league sizes: step: kor_league (K League) 2004: 12 clubs, the row 13: no club of its "
                    "nation with no division or in a spare division\nrecomp: league sizes: step: kor_league (K League) "
                    "2005: 12 clubs, the row 13\nrecomp: league sizes: step: jap_j2 (J2) 2006: 12 clubs, the row 13: no "
-                   "club of its nation with no division or in a spare division", "kor_league")
+                   "club of its nation with no division or in a spare division\nrecomp: league sizes: step: kor_league (K League) "
+                   "2006: 12 clubs, the row 13: the division below has no club to give", "kor_league")
     if sh != {2004: (12, 13)}:
         bad.append(("shortages", sh))
     # Odd sections (the K League 2013 log): a place written again inside its own section passes, one across fails.
