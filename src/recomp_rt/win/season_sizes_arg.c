@@ -696,8 +696,8 @@ RT_WRAP(00405950, arg_create_stages)
 void o_00684640(void);
 RT_WRAP(00684640, league_record_honours)
 {
-    uint32_t self = cpu.ecx, prm = season_sizes_on() ? prm_object() : 0;
-    uint32_t stages = readable(prm) ? rd32(g_mem, prm + STAGES) : 0;
+    uint32_t self = cpu.ecx, prm = prm_object();
+    uint32_t stages = readable(prm) && season_sizes_on() ? rd32(g_mem, prm + STAGES) : 0;
     if (readable(stages) && self == rd32(g_mem, stages) && (int16_t)rd16(g_mem, self + COMP_DATES) <= 1 &&
         rd32(g_mem, self + COMP_COMPLETE) == 1)
     {
@@ -705,10 +705,10 @@ RT_WRAP(00684640, league_record_honours)
         return;
     }
     /* A half with a title knockout: its winner and finalist are the champion and the runner-up. */
-    uint32_t rows[3];
+    uint32_t rows[SEASON_ARG_HONOURS_ROWS];
     if (prm && season_arg_honours_swap(self, rows)) {
         o_00684640();
-        if (!rt_unwinding) season_arg_honours_restore(self, rows);
+        season_arg_honours_restore(self, rows);     /* also when the call unwinds */
         return;
     }
     o_00684640();
@@ -932,10 +932,10 @@ RT_WRAP(00405ca0, arg_record_honours)
                     uint32_t bits = rd32(g_mem, recs + (uint32_t)k * AVG_SIZE + 4);
                     memcpy(&a, &bits, sizeof a);
                 }
-            fprintf(stderr, " %d:%.4f", down[i], (double)a);
+            fprintf(stderr, " %u:%.4f", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), (double)a);
         }
         fprintf(stderr, "; lowest average kept %.4f; %d by the annual table:", (double)worst_kept, nd - by_avg);
-        for (int i = by_avg; i < nd; i++) fprintf(stderr, " %d:%d", down[i], worst_pos);
+        for (int i = by_avg; i < nd; i++) fprintf(stderr, " %u:%d", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), worst_pos);
         fprintf(stderr, " of %d\n", rows_n);
     }
     call_this(F_RECORD_HONOURS, self, 0, NULL);

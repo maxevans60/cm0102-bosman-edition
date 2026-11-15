@@ -114,9 +114,11 @@ int season_arg_advance(uint32_t obj);
 /* League's +0x44 base 0x686940 (season_playoffs.c): 1 when the result is of a knockout stage of the Primera. */
 int season_arg_ko_result(uint32_t obj, int stage);
 /* League::record_season_honours 0x684640 of the Primera or its Clausura: the winner and the finalist of the half's
- * knockout take rows 0 and 1 for the call; restore puts the rows back. */
-int season_arg_honours_swap(uint32_t league, uint32_t saved[3]);
-void season_arg_honours_restore(uint32_t league, const uint32_t saved[3]);
+ * knockout take rows 0 and 1 for the call (their pointers swap with those rows'); restore puts every row back. saved
+ * holds SEASON_ARG_HONOURS_ROWS. */
+#define SEASON_ARG_HONOURS_ROWS 64
+int season_arg_honours_swap(uint32_t league, uint32_t *saved);
+void season_arg_honours_restore(uint32_t league, const uint32_t *saved);
 /* The round name wrap (season_round_names_game.c): the names of the zone tables of the Primera, or NULL. */
 const char *season_arg_stage_name(uint32_t context, int id);
 

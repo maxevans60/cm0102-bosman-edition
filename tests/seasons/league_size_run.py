@@ -669,7 +669,7 @@ def arg_down(row):
 
 def arg_title_faults(lines, year):
     fails = []
-    stages, kos, champs, ended = {}, {}, {}, set()
+    stages, kos, champs, ended, ko_ids, played = {}, {}, {}, set(), {}, {}
     for x in lines:
         m = re.match(r"recomp: league sizes: arg_prm stages (\d+): row (\d+), (\d+) zone tables of (\d+)", x)
         if m:
@@ -678,8 +678,14 @@ def arg_title_faults(lines, year):
                      r"stage (\d+) drawn on day \d+ of \d+, a round every (\d+) days:([^;]*);", x)
         if m:
             # Each tie is "home id:seed-away id:seed".
-            kos[(int(m.group(2)), m.group(1))] = [(int(t.split("-")[0].split(":")[1]), int(t.split("-")[1].split(":")[1]))
-                                                  for t in m.group(5).split()]
+            ties = [((int(t.split("-")[0].split(":")[0]), int(t.split("-")[0].split(":")[1])),
+                     (int(t.split("-")[1].split(":")[0]), int(t.split("-")[1].split(":")[1]))) for t in m.group(5).split()]
+            kos[(int(m.group(2)), m.group(1))] = [(h[1], w[1]) for h, w in ties]
+            ko_ids[(int(m.group(2)), int(m.group(3)))] = (m.group(1), ties)
+        m = re.match(r"recomp: league sizes: arg_prm knockout match (\d+): stage (\d+) round (\d+): (\d+)-(\d+)$", x)
+        if m:
+            played.setdefault((int(m.group(1)), int(m.group(2))), []).append(
+                (int(m.group(3)), int(m.group(4)), int(m.group(5))))
         m = re.match(r"recomp: league sizes: arg_prm champion (\d+) (apertura|clausura): .* \(the (knockout|final)\)", x)
         if m:
             champs[(int(m.group(1)), m.group(2))] = m.group(3)
@@ -689,6 +695,23 @@ def arg_title_faults(lines, year):
         if "league sizes: arg_prm " in x and ("not played" in x or "no knockout" in x or "no final" in x or
                                                "no title stages" in x):
             fails.append("arg_prm: " + x.split("arg_prm ", 1)[1])
+    # The matches the knockouts played: round 0 is the drawn ties with the drawn home clubs, the later rounds before
+    # the neutral ones have the better seed at home, and a complete knockout of 16 plays 15 matches.
+    for (ed, at), (what, ties) in sorted(ko_ids.items()):
+        seed = {c: s for t in ties for c, s in t}
+        got = played.get((ed, at), [])
+        drawn = {(h[0], w[0]) for h, w in ties}
+        first = {(h, w) for code, h, w in got if len(ties) == 1 or code == 20}
+        if first != drawn:
+            fails.append(f"arg_prm {ed} {what}: first round played {sorted(first)}, drawn {sorted(drawn)}")
+        table_form = not encoded_form("arg_prm", edition_season("arg_prm", ed))[2]
+        home_rule = (120,) if table_form else (120, 130)
+        for code, h, w in got:
+            if code in home_rule and seed.get(h, 99) > seed.get(w, 99):
+                fails.append(f"arg_prm {ed} {what}: round {code} {h} (seed {seed.get(h)}) at home to {w} "
+                             f"(seed {seed.get(w)})")
+        if ed in ended and len(got) != len(ties) * 2 - 1:
+            fails.append(f"arg_prm {ed} {what}: {len(got)} matches, want {len(ties) * 2 - 1}")
     for ed in sorted(ended):
         row = edition_season("arg_prm", ed)
         _c, _m, zones, _e, _r, halves = encoded_form("arg_prm", row)
@@ -870,6 +893,15 @@ def arg_faults(log, year):
         fails += check_block()
     # Gap row 54: the clubs of each row's real relegation go down, the worst averages first, then the worst club of
     # the annual table that the averages kept (season_sizes_arg.c arg_down).
+    # The clubs sent down are not in the division of the next edition (its zones or derby line, which lists every id).
+    next_ids = {}
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm zones (\d+): .*?; A ([\d ]+); B ([\d ]+);", x)
+        if m:
+            next_ids[int(m.group(1))] = {int(c) for c in (m.group(2) + " " + m.group(3)).split()}
+        m = re.match(r"recomp: league sizes: arg_prm derby (\d+): .*?; pairs ([\d\- ]+);", x)
+        if m:
+            next_ids[int(m.group(1))] = {int(c) for p in m.group(2).split() for c in p.split("-")}
     for x in lines:
         m = re.match(r"recomp: league sizes: arg_prm relegation (\d+): row (\d+), (\d+) by the averages:([^;]*); "
                      r"lowest average kept (\S+); (\d+) by the annual table:([^;]*) of (\d+)$", x)
@@ -880,6 +912,10 @@ def arg_faults(log, year):
         if (n_avg, n_tab) != want:
             fails.append(f"arg_prm {ed}: {n_avg} down by the averages and {n_tab} by the annual table, want {want} "
                          f"(row {row})")
+        gone = [int(w.split(":")[0]) for w in (m.group(4) + " " + m.group(7)).split()]
+        stay = [c for c in gone if c in next_ids.get(ed + 1, set())]
+        if stay:
+            fails.append(f"arg_prm {ed}: {stay} sent down but in the division of {ed + 1}")
         kept = float(m.group(5))
         for w in m.group(4).split():
             if float(w.split(":")[1]) > kept + 1e-6:
