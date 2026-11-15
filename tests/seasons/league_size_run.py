@@ -41,6 +41,7 @@ use --last <year + 1> for its played check. --reuse checks the logs in --keep ag
 """
 import datetime
 import os
+import re
 import sys
 import tempfile
 
@@ -78,7 +79,7 @@ ROWS = {
     "jap_j2": (2010, 2011, "J2, 19 clubs in two meetings: 38 dates (the class plays 4 meetings of 12)"),
     "kor_league": (2013, 2014, "K League, 14 clubs: 26 rounds, then sections of 7 and 7 that meet twice"),
     "kor_league@2003": (2003, 2004, "K League, 12 clubs in four meetings: 44 dates, 17 weeks earlier at most, "
-                                    "then two stages as one table of 13 in two meetings"),
+                                    "then two stages as one table in two meetings, 12 of the row's 13 (no club to add, D12)"),
 }
 
 # Files whose table holds both halves of a row of halves, so it plays twice the row's meetings (slice 14,
@@ -406,6 +407,19 @@ def j1_faults(log, file, editions):
     return fails
 
 
+def shortages(log, file):
+    """{edition: clubs} of the editions that the size step left short with a reason (D12: when the database holds
+    too few clubs, the division plays with the clubs it has, and the log names it)."""
+    out = {}
+    pat = re.compile(rf"recomp: league sizes: step: {re.escape(file)} \(.*\) (\d+): (\d+) clubs, the row (\d+): "
+                     r"(no club of its nation with no division|the division below has no club to give)")
+    for line in log.split("\n"):
+        m = pat.match(line)
+        if m and int(m.group(2)) < int(m.group(3)):
+            out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
+    return out
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
@@ -414,6 +428,11 @@ def faults(work, file, year, last):
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
     lines = log.split("\n")
     fails = [f"{x.strip()}" for x in lines if "recomp: message box from" in x]
+    short = shortages(log, file)
+
+    def row(ed):
+        clubs, m = edition_row(file, ed)
+        return (short[ed][0], m) if ed in short else (clubs, m)
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
     held = league_sizes.HELD.get(file, 0)
@@ -422,7 +441,7 @@ def faults(work, file, year, last):
     if not any(r[0] == year and r[1] == "start" for r in rows):
         fails.append(f"{file} {year}: no row in the start report")
     for season, phase, ed, n, meet, matches in rows:
-        clubs, m = edition_row(file, ed)
+        clubs, m = row(ed)
         m = m or meet
         if (n, meet) != (clubs, m):
             fails.append(f"{file}: report {season} {phase}, edition {ed}: clubs and meetings {(n, meet)}, want "
@@ -442,7 +461,7 @@ def faults(work, file, year, last):
     if not tmpl:
         fails.append(f"{file} {year}: no template line")
     for base, cls, new in tmpl:
-        clubs, m = edition_row(file, base)
+        clubs, m = row(base)
         sp = edition_split(file, base)
         rounds = rounds_of(clubs, m or 2) + (split_numbers(sp[1])[0] if sp else 0)
         if rounds == len(cls) and not sp:
@@ -466,7 +485,7 @@ def faults(work, file, year, last):
         if dates != tail:
             fails.append(f"{file} {base}: the section dates {dates} are not the last dates of the template {tail}")
     for ed, n, matches, lo, hi in done:
-        clubs, m = edition_row(file, ed)
+        clubs, m = row(ed)
         m = m or 2
         sp = edition_split(file, ed)
         if not sp:
@@ -496,7 +515,10 @@ def faults(work, file, year, last):
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
                  | rrc.division_differences(comps, rep_clubs))
         diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
-        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs]
+        # A short edition (shortages) differs from its row by the clubs the database lacks, and the log names it.
+        named = {f"game {have}, table {want} " for have, want in short.values()}
+        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs
+                  if not any(x in d[2] + " " for x in named)]
     print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
           "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done) +
           "; splits " + ", ".join(f"{ed}:{'+'.join(map(str, v[1]))}" for ed, v in sorted(made.items())) +
@@ -636,6 +658,12 @@ def self_test():
             not end_faults("short", short, 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
+    sh = shortages("recomp: league sizes: step: kor_league (K League) 2004: 12 clubs, the row 13: no club of its "
+                   "nation with no division or in a spare division\nrecomp: league sizes: step: kor_league (K League) "
+                   "2005: 12 clubs, the row 13\nrecomp: league sizes: step: jap_j2 (J2) 2006: 12 clubs, the row 13: no "
+                   "club of its nation with no division or in a spare division", "kor_league")
+    if sh != {2004: (12, 13)}:
+        bad.append(("shortages", sh))
     # Odd sections (the K League 2013 log): a place written again inside its own section passes, one across fails.
     sp7 = [(7, 2), (7, 2)]
     kor_end = [(p, 38) for p in (0, 2, 3, 2, 4, 5, 5, 8, 9, 11, 10, 9, 12, 13)]
