@@ -1,4 +1,4 @@
-/* The Croatian second tier at 18 clubs (0.7.2 league sizes, slice 11, D22; spec
+/* The Croatian second tier at 18 clubs and the Greek divisions at a new game (0.7.2 league sizes, slice 11, D22; spec
  * docs/specs/2026-11-13-league-sizes-0.7.2-spec.md).
  *
  * CroA2a::create_tiebreak_playoff_stage 0x5160f0 runs when the table is complete. It walks the rows of the table
@@ -150,4 +150,19 @@ uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place)
     int32_t key = (int32_t)rd32(g_mem, KEY_LOWER);
     uint32_t comps = rd32(g_mem, COMPS);
     return key >= 0 && readable(comps) ? comps + (uint32_t)key * COMP_SIZE : chosen;
+}
+
+/* The count that fix_division_club_count 0x839920 gives a Greek division at a new game (0x8283c0 National A,
+ * 0x8283ce National B; the original pushes 14): in a season game with the sizes on, the row of the start season
+ * (season_sizes_clubs: the first row of the file, the National B Division for gre_second). The base game,
+ * RECOMP_LEAGUE_SIZES=off and a season with no row keep 14. */
+uint32_t rt_gre_fix_count(uint32_t original, uint32_t second)
+{
+    const char *file = second ? "gre_second" : "gre_prm";
+    int n = season_sizes_clubs(file, season_start_year());
+    if (n < 2) return original;
+    if (getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: %s %d: the new game fixes the division at %d clubs (the original %u)\n",
+                file, season_start_year(), n, original);
+    return (uint32_t)n;
 }

@@ -360,6 +360,8 @@ def faults(work, file, year, last):
     if not any(r[0] == year and r[1] == "start" for r in rows):
         fails.append(f"{file} {year}: no row in the start report")
     for season, phase, ed, n, meet, matches in rows:
+        if ed > season + 1:
+            continue    # an idle group that waits for its next edition (season_divisions.c gre_swap: year edition - 1)
         clubs, m = edition_row(file, ed)
         m = m or meet
         if (n, meet) != (clubs, m):

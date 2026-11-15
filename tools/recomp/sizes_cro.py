@@ -10,6 +10,13 @@ The regroup of the second tier, 0x515190 (called by CroA1::start_new_season at 0
 North and South groups in a stack array of 32 at esp+0x14 and gives the first 16 the North, for 32 slots. In a season
 game it uses a list of the runtime, walks the clubs it found, and gives the North the count of its row when the South
 is not held (2006/07 on).
+
+The Greek divisions at a new game. create_game 0x828110 calls fix_division_club_count 0x839920 (record id, count) for
+the National A [0x9cf86c] and National B [0x9cf870] divisions with 14 (0x8283c0, 0x8283ce), when Greece is selected
+(0x8283b0). It keeps the first count clubs of the division, sends the others to A Lower Division (0x83995a..0x839978)
+and fills a short division from the nation's clubs of A Lower Division, A Premier Division or a lower rank
+(0x839a19..0x839a5e). In a season game the count is the row of the start season, so the start season plays its real
+count (the club moves of season_clubs.c run before, at 0x524d70).
 """
 
 def _cmp(width_mask, size, left, right):
@@ -18,6 +25,10 @@ def _cmp(width_mask, size, left, right):
 
 
 INSNS = {
+    # The Greek National A Division count at a new game (record id in eax, 0x8283bb).
+    0x8283C0: ("push 0xe", "esp -= 4; W32(esp, rt_gre_fix_count(0xeu, 0u));"),
+    # The Greek National B Division count (record id in ecx, 0x8283c8).
+    0x8283CE: ("push 0xe", "esp -= 4; W32(esp, rt_gre_fix_count(0xeu, 1u));"),
     # The first club of a tied pair (index in edi, from bp at 0x516164).
     0x51616A: ("mov dword ptr [esp + edi*4 + 0x1c], ebp", "W32(rt_cro_tiebreak_slot(esi, esp + 0x1cu, edi), ebp);"),
     # The second club (index in edi, from di at 0x516181).
