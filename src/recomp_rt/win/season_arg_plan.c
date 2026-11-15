@@ -15,12 +15,16 @@ int season_arg_zone_plan(int z, const int *rival, const int *draw, int draw_at,
 {
     if (z < 3 || z % 2 == 0 || z > MAX_CLUBS / 2 || draw_at < 0 || draw_at > z || z + 1 > SEASON_ARG_MAX_ROUNDS)
         return 0;
+    /* The drawn round meets other clubs (2025, 2026), or every club's rival again with the venues reversed (2016: the
+     * rival twice); a mix of both is no plan. */
     char seen_r[MAX_CLUBS / 2] = {0}, seen_d[MAX_CLUBS / 2] = {0};
+    int same = 0;
     for (int i = 0; i < z; i++) {
-        if (rival[i] < 0 || rival[i] >= z || draw[i] < 0 || draw[i] >= z || seen_r[rival[i]]++ || seen_d[draw[i]]++ ||
-            draw[i] == rival[i])
+        if (rival[i] < 0 || rival[i] >= z || draw[i] < 0 || draw[i] >= z || seen_r[rival[i]]++ || seen_d[draw[i]]++)
             return 0;
+        same += draw[i] == rival[i];
     }
+    if (same && same != z) return 0;
     /* Zone B in the order of its rest rounds: club rival[r] rests in round r, as club r of zone A. */
     for (int c = 0; c < z; c++) {
         int r = c < draw_at ? c : c + 1, k = 0;     /* the circle's round c is the plan's round r */

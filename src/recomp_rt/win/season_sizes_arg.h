@@ -63,6 +63,12 @@ int season_arg_third(uint32_t record);
  * the swap 0x4068d0 finds them again. */
 uint32_t season_arg_third_record(void);
 
+/* The order of the Primera's clubs for the size step (season_sizes.c step_index, D13): best first by the relegation
+ * averages (the records of ArgPrm::update_relegation_averages 0x406570, sorted at 0x40671b; ArgPrm::
+ * record_season_honours 0x405ca0 sends down the last two), so the step sends down the worst averages. A club with no
+ * record keeps its table order after those with one. */
+void season_arg_step_order(uint32_t obj, uint32_t *club, int n);
+
 /* tools/recomp/arg_prm.py: a constant of the class for 20 clubs plus (count - 20) in a season game. */
 uint32_t rt_arg_count(uint32_t original);
 

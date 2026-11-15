@@ -91,10 +91,15 @@ ROWS = {
     # (season_sizes_edition): editions 2014 and 2015 play row 2014, 2016 row 2016, 2025 row 2024 (the 2025 season).
     "arg_prm@2013": (2013, 2014, "Primera 2013/14 (row 2013, 20 in two halves), then 30 in 2014/15: the size step "
                                  "takes 10 clubs of the second division, which takes clubs of the third"),
-    "arg_prm": (2014, 2015, "Primera 2014/15 (row 2014): one table of 30, 29 rounds and the derby round"),
-    "arg_prm@2016": (2016, 2017, "Primera 2016/17 (row 2016): one table of 30 and the derby round, then 28 (the step)"),
-    "arg_prm@2025": (2025, 2026, "Primera row 2024 (the 2025 season): Apertura and Clausura of two zones of 15 with "
-                                 "the rival and drawn inter-zone rounds"),
+    "arg_prm": (2014, 2015, "Primera 2014/15 (row 2014, the 2015 season): one table of 30, 29 rounds and the derby "
+                            "round, then row 2015"),
+    "arg_prm@2015": (2015, 2016, "Primera 2015/16 (row 2015, the 2016 season): one tournament of two zones of 15, each "
+                                 "club's rival twice"),
+    "arg_prm@2016": (2016, 2017, "Primera 2016/17 (row 2016): one table of 30 and the derby round, then 28 (the step "
+                                 "by the averages)"),
+    "arg_prm@2024": (2024, 2025, "Primera 2024/25 (row 2024, the 2025 season): Apertura and Clausura of two zones of "
+                                 "15 with the rival and drawn inter-zone rounds"),
+    "arg_prm@2025": (2025, 2026, "Primera 2025/26 (row 2025, the 2026 season): the clubs and zones of its list"),
     # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
     # before the real season (row 2003 is the 2004 Série A).
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
@@ -278,9 +283,17 @@ def real_season(file, season):
     return _REAL.get((file, season), "")
 
 
+# Classes that play over two years (August to June) whose rows hold calendar-year seasons from some year: edition Y
+# plays row Y, the real season that ends in it (season_sizes.c season_sizes_edition).
+TWO_YEAR_CLASSES = {"arg_prm"}
+
+
 def edition_season(file, edition):
     """The season of the row that an edition (+0x40) plays (season_sizes.c season_sizes_edition): row Y when its real
-    season begins with Y, else row Y - 1 when its real season begins with Y, else Y."""
+    season begins with Y, else row Y - 1 when its real season begins with Y, else Y. A class of TWO_YEAR_CLASSES
+    plays row Y."""
+    if file in TWO_YEAR_CLASSES:
+        return edition
     def starts(season):
         t = real_season(file, season)
         return t[:4] == str(edition) and not t[4:5].isdigit()
@@ -684,18 +697,18 @@ def arg_faults(log, year):
                             fails.append(f"{name}: zone clubs {x} and {y} meet {meet.get(frozenset((x, y)), 0)} times")
             for x in za + zb:
                 other = zb if x in za else za
-                inter = [y for y in other if meet.get(frozenset((x, y)))]
-                if len(inter) != extra or any(meet[frozenset((x, y))] != 1 for y in inter):
-                    fails.append(f"{name}: club {x} meets {len(inter)} clubs of the other zone, want {extra} once each")
+                inter = sum(meet.get(frozenset((x, y)), 0) for y in other)
+                if inter != extra:
+                    fails.append(f"{name}: club {x} plays {inter} matches against the other zone, want {extra}")
             if half == "clausura":
                 ap = fixtures.get((ed, "apertura"), [])
                 if [[(a, h) for h, a in r] for r in ap] != rounds:
                     fails.append(f"{name}: not the Apertura with the venues reversed")
-            # A game started in its season: the club moves give the division the clubs of the database's date
-            # (December 2025 for a 2025 start), so a club of the list can be missing; at most 2 of each.
-            if ed == year and (in_list < clubs - 2 or rivals < zones[0] - 2 or drawn < zones[0] - 2):
-                fails.append(f"{name}: {in_list} clubs, {rivals} rivals and {drawn} drawn pairs of the list, want at "
-                             f"least {clubs - 2}, {zones[0] - 2} and {zones[0] - 2} (a game started in its season)")
+            # A game started in its season: the club moves give the division the clubs of the row's list (D12), so
+            # every club, rival and drawn pair comes from the list.
+            if ed == year and (in_list, rivals, drawn) != (clubs, zones[0], zones[0]):
+                fails.append(f"{name}: {in_list} clubs, {rivals} rivals and {drawn} drawn pairs of the list, want "
+                             f"{clubs}, {zones[0]} and {zones[0]} (a game started in its season)")
             if not halves and half == "clausura":
                 fails.append(f"{name}: a Clausura in a row of one table")
         elif extra:
@@ -711,15 +724,33 @@ def arg_faults(log, year):
                         fails.append(f"{name}: clubs {x} and {y} meet {meet.get(frozenset((x, y)), 0)} times")
             if at - 1 < len(rounds) and {frozenset(m) for m in rounds[at - 1]} != derby:
                 fails.append(f"{name}: round {at} is not the derby round")
-            if ed == season == year and from_list < clubs // 2 - 2:
-                fails.append(f"{name}: {from_list} derby pairs of the list, want at least {clubs // 2 - 2} (a game "
-                             f"started in its season)")
+            if ed == season == year and from_list != clubs // 2:
+                fails.append(f"{name}: {from_list} derby pairs of the list, want {clubs // 2} (a game started in its "
+                             f"season)")
     for ed in range(year, year + 2):
         clubs, _m, zones, extra, _r, _h = encoded_form("arg_prm", edition_season("arg_prm", ed))
         if (zones or extra) and ed not in seen and any(f"arg_prm {ed}:" in x or f" {ed}, the class makes" in x
                                                          for x in lines if "league sizes: arg_prm" in x):
             fails.append(f"arg_prm {ed}: no fixture line of its zones or derby round")
     fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines if "arg_prm fixed list not played" in x]
+    # The size step sends down the clubs with the worst averages (promedios), the last of the order line.
+    order = None
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm step order \d+ by the averages: (.*)$", x)
+        if m:
+            order = [w.split(":", 1)[1] for w in m.group(1).split("|") if ":" in w]
+            continue
+        m = re.match(r"recomp: league sizes: step: (.*) from Argentine Premier Division to ", x)
+        if m:
+            if not order:
+                fails.append(f"arg_prm: step: {m.group(1)} goes down with no order by the averages")
+            else:
+                down = [y for y in lines if re.match(r"recomp: league sizes: step: .* from Argentine Premier Division to ",
+                                                    y)]
+                worst = [n.strip() for n in order[-len(down):]]
+                if m.group(1).strip()[:50] not in [w[:50] for w in worst]:
+                    fails.append(f"arg_prm: step: {m.group(1)} goes down, not one of the {len(down)} worst averages "
+                                 f"{worst}")
     # The averages hold the clubs of each finished edition (ArgPrm::update_relegation_averages 0x406570 at its end).
     for ed, n, _x, _lo, _hi in played(log, "arg_prm"):
         if not re.search(rf"recomp: league sizes: arg_prm {ed}: averages of {n} clubs", log):
@@ -778,6 +809,7 @@ def self_test():
     if p != [(2009, 16, 30, 30, 30)]:
         bad.append(("played", p))
     if (encoded_row("nor_prm", 2009) != (16, 2) or encoded_row("por_second", 2014) != (24, 2) or
+            edition_season("arg_prm", 2015) != 2015 or edition_season("arg_prm", 2024) != 2024 or
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))

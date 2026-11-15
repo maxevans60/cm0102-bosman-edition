@@ -153,6 +153,11 @@ static int real_starts(const SeasonRule *r, int year)
  * (jap_j1 row 2025 "2026", row 2026 "2026/27") plays its two-year season in the year of the change. */
 int season_sizes_edition(const char *file, int year)
 {
+    /* The Argentine Primera plays over two years (August to June, ArgPrm::create_schedule 0x404570: the Apertura from
+     * August at 0x404609, the Clausura from February at 0x404e34), while its rows hold calendar-year seasons from
+     * 2014 (row 2014 "2015", row 2015 "2016"). Edition Y plays row Y, the real season that ends in it, so every row
+     * plays once: the 2016 tournament is edition 2015 (slice 15 fix, lead 15 November 2026). */
+    if (!strcmp(file, "arg_prm")) return year;
     if (real_starts(season_rules_find(year, file, 0), year)) return year;
     if (real_starts(season_rules_find(year - 1, file, 0), year)) return year - 1;
     return year;
@@ -1080,6 +1085,9 @@ static int step_index(uint32_t obj)
         step_seen[i].club[k] = c;
         step_seen[i].nrows++;
     }
+    /* The Argentine Primera sends down by its averages (promedios), not by its table (slice 15 fix). */
+    if (!strcmp(season_change_file(obj), "arg_prm"))
+        season_arg_step_order(obj, step_seen[i].club, step_seen[i].nrows);
     return i;
 }
 

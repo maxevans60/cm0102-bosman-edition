@@ -103,8 +103,32 @@ static void derby(int n, int derby_at)
               home[c], rounds);
 }
 
+/* The 2016 form (row 2015): each club meets its rival twice, in its rest round and in the derby round, once at home. */
+static void rival_twice(int z, int draw_at)
+{
+    int rival[SEASON_ARG_MAX_CLUBS / 2];
+    for (int i = 0; i < z; i++) rival[i] = (i * 2 + 1) % z;
+    char what[64];
+    snprintf(what, sizeof what, "zones of %d, the rival twice, round %d", z, draw_at + 1);
+    int rounds = season_arg_zone_plan(z, rival, rival, draw_at, round);
+    CHECK(rounds == z + 1, "%s: %d rounds", what, rounds);
+    if (rounds != z + 1) return;
+    static int meet[SEASON_ARG_MAX_CLUBS][SEASON_ARG_MAX_CLUBS];
+    int home[SEASON_ARG_MAX_CLUBS];
+    count(2 * z, rounds, meet, home, what);
+    for (int i = 0; i < z; i++) {
+        CHECK(meet[i][z + rival[i]] == 2, "%s: club %d meets its rival %d times", what, i, meet[i][z + rival[i]]);
+        int at_home = 0;
+        for (int r = 0; r < rounds; r++)
+            for (int k = 0; k < z; k++) at_home += round[r][k][0] == i && round[r][k][1] == z + rival[i];
+        CHECK(at_home == 1, "%s: club %d is at home to its rival %d times", what, i, at_home);
+    }
+}
+
 int main(void)
 {
+    rival_twice(15, 7);
+    rival_twice(15, 15);
     zones(15, 7, 1);        /* 2025: the drawn round is fecha 8 */
     zones(15, 5, 4);        /* 2026: fecha 6 */
     zones(15, 0, 2);
@@ -121,11 +145,8 @@ int main(void)
     CHECK(season_arg_zone_plan(4, r2, d2, 0, round) == 0, "an even zone gives a plan");
     CHECK(season_arg_zone_plan(3, r2, d2, 0, round) == 0, "a rival twice gives a plan");
     CHECK(season_arg_derby_plan(4, p3, 0, round) == 0, "a derby that is not a pairing gives a plan");
-    int r5[5] = {0, 1, 2, 3, 4}, d5[5] = {1, 2, 3, 4, 4};
-    d5[4] = 0;
-    d5[0] = 0;
-    d5[1] = 2;
-    CHECK(season_arg_zone_plan(5, r5, d5, 0, round) == 0, "a drawn opponent that is the rival gives a plan");
+    int r5[5] = {0, 1, 2, 3, 4}, d5[5] = {0, 2, 3, 4, 1};     /* club 0 meets its rival twice, the others not */
+    CHECK(season_arg_zone_plan(5, r5, d5, 0, round) == 0, "one drawn opponent that is the rival gives a plan");
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;
