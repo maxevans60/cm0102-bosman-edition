@@ -7,13 +7,9 @@
 2009	bench	ger_cup (DFB-Pokal), row ger-114: game 6, table 7 (7)
 2009	bench	world_club_champ (FIFA Club World Cup), row club-world-154: game 7, table 12 (12)
 2009	bench	world_cup (FIFA World Cup), row int-world-98: game 7, table 12 (12)
-2009	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: AFC Tubize, ROC Charleroi - Marchienne
-2009	club_list	Belgian Second Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: AFC Tubize; others: -
 2009	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all; not in it: -; others: Alagoinhas Atlético Clube, Americano FC (RJ), Associação Atlética Anapolina, Associação Cultural e Desportiva Potiguar, Brasília Futebol Clube, Brusque Futebol Clube, Central Sport Club, Centro Sportivo Alagoano, Clube Náutico Marcílio Dias, Clube Recreativo e Atlético Catalano, Clube Rio Branco, Clube do Remo, Cristal Atlético Clube, ECPP Vitória da Conquista, Esporte Clube Flamengo, Esporte Clube Pelotas, Ferroviário Atlético Clube, Fluminense de Feira Futebol Clube, Friburguense Atlético Clube, Iraty Sport Club, Ituano Futebol Clube, Joinville Esporte Clube, Londrina Esporte Clube, Madureira Esporte Clube, Mesquita Futebol Clube, Mirassol Futebol Clube, Mogi Mirim Esporte Clube, Moto Clube de São Luís, Nacional Atlético Clube, Nacional Futebol Clube (AM), Oeste Futebol Clube, Paulista Futebol Clube, Rio Branco Atlético Clube, Sport Club Corinthians Paranaense, Vilhena Esporte Clube, Ypiranga Futebol Clube
 2009	club_list	Croatian Second Division North: 14 of 14 listed clubs that the database holds (14 listed), 2 other clubs, 16 in all; not in it: -; others: NK Belisce, NK Ðakovo
 2009	club_list	Danish Second Division: 16 of 22 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Boldklubben af 1908, Greve Idrætsforening, Hobro IK, Otterup Boldklub, Stenløse Boldklub, Tjørring Idrætsforening; others: -
-2009	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FC Eindhoven, FC Omniworld; others: -
-2009	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: AC Oulu, Jyväskylän Jalkapalloklubi; others: -
 2009	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: A.O Kavalas, Panipeirotikos Athlitikos Syllogos Giannina; others: -
 2009	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Doxa Dramas, GS Ilioupolis, Panaitolikos, Rodos A.S; others: -
 2009	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Bologna F.C. 1909, Chievo Verona; others: -
@@ -26,7 +22,6 @@
 2009	clubs	african_nations (Africa Cup of Nations), row int-continental-95: game 0, table 16 (16 (15 played))
 2009	clubs	arg_second (Primera B Nacional), row arg-usa-36: game 25, table 20 (20)
 2009	clubs	asia_club_champ (AFC Champions League), row club-world-165: game 16, table 32 (32)
-2009	clubs	bel_second (Belgian Second Division), row hol-bel-113: game 18, table 19 (19)
 2009	clubs	bel_third (Belgian Third Division), row hol-bel-114: game 16, table 37 (37 (A 19, B 18))
 2009	clubs	bra_cup (Copa do Brasil), row bra-144: game 71, table 64 (64)
 2009	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-90: game 7, table 20 (20)
@@ -42,11 +37,9 @@
 2009	clubs	cro_a2a (Druga HNL), row gre-pol-cro-360: game 16, table 14 (14)
 2009	clubs	den_second (Danish 2nd Divisions), row den-swe-52: game 16, table 32 (32)
 2009	clubs	fin_first (Ykkönen), row nor-fin-88: game 10, table 14 (14)
-2009	clubs	fin_prm (Veikkausliiga), row nor-fin-87: game 12, table 14 (14)
 2009	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-9: game 4, table 70 (70)
 2009	clubs	gre_prm (Super League Greece), row gre-pol-cro-36: game 14, table 16 (16)
 2009	clubs	gre_second (Beta Ethniki), row gre-pol-cro-63: game 14, table 18 (18)
-2009	clubs	hol_first (Eerste Divisie), row hol-bel-107: game 18, table 20 (20)
 2009	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-150: game 5, table 90 (90)
 2009	clubs	ita_cup (Coppa Italia), row ita-149: game 4, table 78 (78)
 2009	clubs	ita_ser_a (Serie A), row ita-138: game 18, table 20 (20)
@@ -73,7 +66,6 @@
 2009	clubs	world_cup (FIFA World Cup), row int-world-98: game 0, table 32 (32)
 2009	down	arg_prm (Primera División), row arg-usa-9: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2009	down	arg_second (Primera B Nacional), row arg-usa-36: game 0 (+0 play-off places), table 2 (2 direct (bottom two of the average table); 2 relegated in total (infobox))
-2009	down	bel_first (Belgian Pro League), row hol-bel-112: game 2 (+0 play-off places), table 1 (1 (16th); 15th to the second division final round)
 2009	down	bel_third (Belgian Third Division), row hol-bel-114: game 2 (+1 play-off places), table text (bottom clubs of each group (more in 2009/10); play-off for the rest)
 2009	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-90: game 2 (+0 play-off places), table 4 (4)
 2009	down	cro_a2b (Druga HNL South), row gre-pol-cro-387: game 2 (+0 play-off places), table na (n/a)
@@ -91,7 +83,6 @@
 2009	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-36: game 1, table 2
 2009	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-63: game 1, table 2
 2009	meetings	fin_first (Ykkönen), row nor-fin-88: game 3, table 2
-2009	meetings	fin_prm (Veikkausliiga), row nor-fin-87: game 3, table 2
 2009	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-225: game 4, table 2
 2009	meetings	nir_first (IFA Championship 1), row wal-nir-irl-211: game 4, table 2
 2009	meetings	nir_prm (IFA Premiership), row wal-nir-irl-210: game 4, table 3
@@ -134,15 +125,11 @@
 2009	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-141: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
 2009	playoffs	nor_first (Adeccoligaen), row nor-fin-83: game 1 up and 0 down play-off places, table 3 and 0 ('3rd, 4th, 5th play off with Tippeligaen 14th for one place')
 2009	rounds	arg_second (Primera B Nacional), row arg-usa-36: game 25, table 38 (2 meetings, zones -, extra 0)
-2009	rounds	bel_first (Belgian Pro League), row hol-bel-112: game 34, table 30 (2 meetings, zones -, extra 0)
-2009	rounds	bel_second (Belgian Second Division), row hol-bel-113: game 34, table 38 (2 meetings, zones -, extra 0)
 2009	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-36: game 19, table 38 (2 meetings, zones -, extra 0)
 2009	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-63: game 19, table 38 (2 meetings, zones -, extra 0)
 2009	rounds	cro_a2a (Druga HNL), row gre-pol-cro-360: game 30, table 26 (2 meetings, zones -, extra 0)
 2009	rounds	fin_first (Ykkönen), row nor-fin-88: game 27, table 26 (2 meetings, zones -, extra 0)
-2009	rounds	fin_prm (Veikkausliiga), row nor-fin-87: game 33, table 26 (2 meetings, zones -, extra 0)
 2009	rounds	gre_prm (Super League Greece), row gre-pol-cro-36: game 26, table 30 (2 meetings, zones -, extra 0)
-2009	rounds	hol_first (Eerste Divisie), row hol-bel-107: game 34, table 38 (2 meetings, zones -, extra 0)
 2009	rounds	ita_ser_a (Serie A), row ita-138: game 34, table 38 (2 meetings, zones -, extra 0)
 2009	rounds	ita_ser_b (Serie B), row ita-139: game 38, table 42 (2 meetings, zones -, extra 0)
 2009	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-198: game 30, table 34 (2 meetings, zones -, extra 0)

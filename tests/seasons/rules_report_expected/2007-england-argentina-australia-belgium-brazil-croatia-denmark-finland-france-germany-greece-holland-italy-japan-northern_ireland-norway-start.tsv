@@ -4,12 +4,9 @@
 2007	bench	fra_lge_cup (Coupe de la Ligue), row fra-62: game 3, table 7 (7)
 2007	bench	world_club_champ (FIFA Club World Cup), row club-world-116: game 7, table 12 (12)
 2007	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: All Boys, Deportivo Morón, Estudiantes de Buenos Aires, Los Andes, Racing de Córdoba
-2007	club_list	Belgian Second Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: Union Royale Namur; others: -
 2007	club_list	Brazilian National Third Division: 52 of 52 listed clubs that the database holds (63 listed), 4 other clubs, 56 in all; not in it: -; others: Americano Futebol Clube (RJ), América Futebol Clube, Associação Desportiva Comercial Bandeirante, Sertãozinho Futebol Clube
 2007	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK Bjelovar, NK Graficar Vodovod, NK Koprivnica, NK Metalac
 2007	club_list	Danish Second Division: 16 of 25 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Amager Boldklub af 1970, Boldklubben af 1908, Greve Idrætsforening, Skovlunde Idrætsforening, Stenløse Boldklub, Vanløse Idræts Forening, Varde Idrætsforening, Vedbæk Boldklub, Værløse Boldklub; others: -
-2007	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AGOVV Apeldoorn, FC Omniworld; others: -
-2007	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: Kuopion Palloseura, Rovaniemen Palloseura; others: -
 2007	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Asteras Tripolis, Levadiakos; others: -
 2007	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Agios Dimitrios, Agrotikos Asteras, Chaidari, Ethnikos Piraeus; others: -
 2007	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Livorno, Reggina; others: -
@@ -22,7 +19,6 @@
 2007	clubs	arg_second (Primera B Nacional), row arg-usa-34: game 25, table 20 (20)
 2007	clubs	asia_club_champ (AFC Champions League), row club-world-127: game 16, table 29 (29)
 2007	clubs	asia_nations (AFC Asian Cup), row int-continental-75: game 4, table 16 (16)
-2007	clubs	bel_second (Belgian Second Division), row hol-bel-87: game 18, table 19 (19)
 2007	clubs	bel_third (Belgian Third Division), row hol-bel-88: game 16, table 31 (31 (A 16, B 15))
 2007	clubs	bra_cup (Copa do Brasil), row bra-142: game 71, table 64 (64)
 2007	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-88: game 7, table 63 (63)
@@ -43,11 +39,9 @@
 2007	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-68: game 0, table 50 (50)
 2007	clubs	european_cup (UEFA Champions League), row uefa-50: game 55, table 76 (76 (32 in the group stage))
 2007	clubs	fin_first (Ykkönen), row nor-fin-68: game 10, table 14 (14)
-2007	clubs	fin_prm (Veikkausliiga), row nor-fin-67: game 12, table 14 (14)
 2007	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-7: game 4, table 69 (69)
 2007	clubs	gre_prm (Super League Greece), row gre-pol-cro-34: game 14, table 16 (16)
 2007	clubs	gre_second (Beta Ethniki), row gre-pol-cro-61: game 14, table 18 (18)
-2007	clubs	hol_first (Eerste Divisie), row hol-bel-81: game 18, table 20 (20)
 2007	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-55: game 60, table 50 (50)
 2007	clubs	ita_c_cup (Coppa Italia Serie C), row ita-116: game 5, table 110 (110)
 2007	clubs	ita_cup (Coppa Italia), row ita-115: game 4, table 42 (42)
@@ -87,7 +81,6 @@
 2007	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-61: game 1, table 2
 2007	meetings	cro_a1 (Prva HNL), row gre-pol-cro-331: game 2, table 3
 2007	meetings	fin_first (Ykkönen), row nor-fin-68: game 3, table 2
-2007	meetings	fin_prm (Veikkausliiga), row nor-fin-67: game 3, table 2
 2007	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-223: game 4, table 3
 2007	meetings	nir_first (Irish First Division), row wal-nir-irl-161: game 4, table 2
 2007	meetings	nir_prm (Irish Premier League), row wal-nir-irl-160: game 4, table 2
@@ -135,15 +128,12 @@
 2007	playoffs	nir_first (Irish First Division), row wal-nir-irl-161: game 1 up and 0 down play-off places, table 0 and 0 ('none')
 2007	playoffs	nir_prm (Irish Premier League), row wal-nir-irl-160: game 0 up and 1 down play-off places, table 0 and 0 ('none')
 2007	rounds	arg_second (Primera B Nacional), row arg-usa-34: game 25, table 38 (2 meetings, zones -, extra 0)
-2007	rounds	bel_second (Belgian Second Division), row hol-bel-87: game 34, table 38 (2 meetings, zones -, extra 0)
 2007	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-34: game 19, table 38 (2 meetings, zones -, extra 0)
 2007	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-61: game 19, table 38 (2 meetings, zones -, extra 0)
 2007	rounds	cro_a1 (Prva HNL), row gre-pol-cro-331: game 30, table 33 (3 meetings, zones -, extra 0)
 2007	rounds	fin_first (Ykkönen), row nor-fin-68: game 27, table 26 (2 meetings, zones -, extra 0)
-2007	rounds	fin_prm (Veikkausliiga), row nor-fin-67: game 33, table 26 (2 meetings, zones -, extra 0)
 2007	rounds	gre_prm (Super League Greece), row gre-pol-cro-34: game 26, table 30 (2 meetings, zones -, extra 0)
 2007	rounds	gre_second (Beta Ethniki), row gre-pol-cro-61: game 26, table 34 (2 meetings, zones -, extra 0)
-2007	rounds	hol_first (Eerste Divisie), row hol-bel-81: game 34, table 38 (2 meetings, zones -, extra 0)
 2007	rounds	ita_ser_a (Serie A), row ita-104: game 34, table 38 (2 meetings, zones -, extra 0)
 2007	rounds	ita_ser_b (Serie B), row ita-105: game 38, table 42 (2 meetings, zones -, extra 0)
 2007	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-196: game 30, table 34 (2 meetings, zones -, extra 0)
