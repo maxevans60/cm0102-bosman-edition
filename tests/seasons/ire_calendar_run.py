@@ -4,7 +4,11 @@ src/recomp_rt/win/season_calendar.h).
 
 Usage:
     python3 tests/seasons/ire_calendar_run.py <cm0102_recomp> <game folder> --keep <folder> [--leg-days 450]
-        [--timeout 14400] [--reuse]
+        [--start 2001] [--last 2004] [--database <folder>] [--saves <days,days,...>] [--timeout 14400] [--reuse]
+
+--start 2002 or 2003 starts there (a 2003 start needs --database, the October 2003 folder); the checks follow the
+start. --saves 572,15 plays legs that save after those game days (from 12 July 2001: 4 February 2003, in the
+short season's play-off, then 20 February 2003, the change day), each loaded by the next leg.
 
 A season game from 2001 with changing rules on, England and the Republic of Ireland, as the soak (soak_run.py: the
 season jump, Tier A) to the end of 2004/05, in 4 legs of --leg-days game days: a save in October 2002 (the short
@@ -58,13 +62,13 @@ def logs(keep):
     return out
 
 
-def faults(keep):
+def faults(keep, start=2001, last=2004):
     legs = logs(keep)
     text = "\n".join(t for _n, t in legs)
     out = []
     changes = [(int(d), int(y)) for d, y in
                re.findall(r"recomp: season change: entry 20 starts \d+/\d+ on day (\d+) of (\d+)", text)]
-    want = [(170, 2002), (50, 2003), (50, 2004), (50, 2005)]
+    want = ([(170, 2002)] if start == 2001 else []) + [(50, y) for y in range(max(start, 2002) + 1, last + 2)]
     for w in want:
         if changes.count(w) != 1:
             out.append(f"changes: entry 20 on day {w[0]} of {w[1]}: {changes.count(w)} changes, want 1")
@@ -75,11 +79,11 @@ def faults(keep):
     for f, base, kind, n, dates in re.findall(r"recomp: league sizes: (ire_prm|ire_first) template (\d+): (class|new) "
                                               r"(\d+)((?: \d{4}-\d\d-\d\d\+?)*)", text):
         tmpl.setdefault((f, int(base), kind), (int(n), dates.split()))
-    for f, n in (("ire_prm", 27), ("ire_first", 22)):
+    for f, n in ((("ire_prm", 27), ("ire_first", 22)) if start <= 2002 else ()):
         t = tmpl.get((f, 2002, "new"))
         if not t or t[0] != n or any(d.rstrip("+") >= "2003-02-01" for d in t[1]):
             out.append(f"short: {f} 2002: {t[0] if t else 'no'} dates, want {n} before 1 February 2003")
-    for base in (2003, 2004):
+    for base in range(2003, last + 1):
         t = tmpl.get(("ire_prm", base, "new"))
         if not t or t[0] != 36 or not (f"{base}-03-01" <= t[1][0].rstrip("+") <= f"{base}-04-30") or \
                 not (f"{base}-11-15" <= t[1][-1].rstrip("+") <= f"{base}-12-07"):
@@ -87,7 +91,9 @@ def faults(keep):
                        "want 36 from March or April to late November")
     played = {int(e): (int(c), int(m)) for e, c, m in
               re.findall(r"recomp: league sizes: ire_prm played (\d+): (\d+) clubs, (\d+) matches", text)}
-    for ed, want_m in ((2002, 27), (2003, 36)):
+    for ed, want_m in ((2002, 27), (2003, 36), (2004, 36)):
+        if ed < start or ed >= last + 1:
+            continue
         if played.get(ed, (0, 0))[1] != want_m or played.get(ed, (0, 0))[0] != 10:
             out.append(f"played: ire_prm {ed}: {played.get(ed)}, want 10 clubs and {want_m} matches")
     items = re.findall(r"recomp: season change: news item for (\d+)/\d+ part 1 sent", text)
@@ -100,7 +106,7 @@ def faults(keep):
         for ed, lab in ((2001, 2002), (2002, 2002), (2003, 2003), (2004, 2004)):
             if (ed, lab) not in got and any(e == ed for e, _l in got):
                 out.append(f"labels: {f} edition {ed}: labels {[l for e, l in got if e == ed]}, want {lab}")
-        if not any(e == 2003 for e, _l in got):
+        if not any(e == 2003 for e, _l in got) and start <= 2003:
             out.append(f"labels: no history row of {f} 2003")
     bumps = re.findall(r"recomp: season history: a second edition in (\d+) gets the label (\d+)", text)
     if bumps:
@@ -115,22 +121,53 @@ def faults(keep):
     return out
 
 
+def run_legs(o, keep, saves):
+    """Legs with the given save days (--saves): leg 0 makes the game and saves after saves[0] game days, each next leg
+    loads the save before and saves after its own days; the last leg plays to the end of --last."""
+    os.makedirs(keep, exist_ok=True)
+    save = None
+    for leg in range(len(saves) + 1):
+        work = os.path.join(keep, f"leg{leg:02d}")
+        days = saves[leg] if leg < len(saves) else 0
+        wait_for_room()
+        if leg == 0:
+            code, took, box = soak_run.new_game_leg(o, work, days)
+        else:
+            code, took, box = soak_run.load_leg(o, work, save, days)
+        net = soak_run.first_net(os.path.join(work, "stderr.txt"))
+        save = os.path.join(work, "user", soak_run.smoke_run.SAVE_NAME)
+        print(f"leg {leg}: code {code} after {took:.0f} s{': ' + (box or net) if box or net else ''}", flush=True)
+        if box or net or code != 0 or (days and not os.path.exists(save)):
+            return 1
+    return 0
+
+
 def main(argv):
     if len(argv) < 3 or "--keep" not in argv:
         print(__doc__)
         return 2
     keep = os.path.abspath(soak_run.arg(argv, "--keep"))
+    start, last = int(soak_run.arg(argv, "--start", "2001")), int(soak_run.arg(argv, "--last", "2004"))
+    env = ["--env", "RECOMP_TIER_A=1", "--env", "RECOMP_CALENDAR_LOG=1", "--env", "RECOMP_SEASON_CHANGE_LOG=1",
+           "--env", "RECOMP_SIZE_LOG=1", "--env", "RECOMP_HISTORY_LOG=" + HISTORY]
     code = 0
-    if "--reuse" not in argv:
+    if "--reuse" not in argv and "--saves" in argv:
+        for i in range(0, len(env), 2):
+            name, value = env[i + 1].split("=", 1)
+            soak_run.LEG_ENV[name] = value
+        db = soak_run.arg(argv, "--database")
+        o = {"program": os.path.abspath(argv[0]), "game": os.path.abspath(argv[1]), "start": start, "last": last,
+             "seed": 1, "nations": ["England", "Republic of Ireland"], "database": os.path.abspath(db) if db else None,
+             "rules": "on", "timeout": int(soak_run.arg(argv, "--timeout", "14400")), "extra": []}
+        code = run_legs(o, keep, [int(x) for x in soak_run.arg(argv, "--saves").split(",") if x])
+    elif "--reuse" not in argv:
         soak_run.wait_for_room = wait_for_room
-        code = soak_run.main(["soak_run.py", argv[0], argv[1], "--keep", keep, "--start", "2001", "--last", "2004",
-                              "--nations", "England,Republic of Ireland", "--changing-rules", "on",
+        code = soak_run.main(["soak_run.py", argv[0], argv[1], "--keep", keep, "--start", str(start), "--last",
+                              str(last), "--nations", "England,Republic of Ireland", "--changing-rules", "on",
                               "--leg-days", soak_run.arg(argv, "--leg-days", "450"),
-                              "--timeout", soak_run.arg(argv, "--timeout", "14400"),
-                              "--env", "RECOMP_TIER_A=1", "--env", "RECOMP_CALENDAR_LOG=1",
-                              "--env", "RECOMP_SEASON_CHANGE_LOG=1", "--env", "RECOMP_SIZE_LOG=1",
-                              "--env", "RECOMP_HISTORY_LOG=" + HISTORY])
-    fails = faults(keep)
+                              "--timeout", soak_run.arg(argv, "--timeout", "14400")] +
+                             (["--database", soak_run.arg(argv, "--database")] if "--database" in argv else []) + env)
+    fails = faults(keep, start, last)
     for f in fails:
         print("FAIL", f)
     ok = not fails and code == 0
