@@ -11,6 +11,7 @@
 #include "season_divisions_ita.h"
 #include "season_league.h"
 #include "season_template.h"
+#include "season_cup_sizes_west.h"
 #include "season_split.h"
 #include "season_size_step.h"
 #include "season_clubs.h"
@@ -18,7 +19,6 @@
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
-#include "season_cup_sizes_west.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -100,14 +100,13 @@ static int cap_of(const char *file)
     return i >= 0 ? season_size_caps[i] : 0;
 }
 
-/* The smallest count of a file's class (0: any count from MIN_CLUBS). Q282 (the lead, 2026-10-18): a 2019/20
- * start plays League One with 23 clubs (Bury removed), so its floor is 23 in that season. */
+/* The smallest count of a file's class (0: any count from MIN_CLUBS). League One plays the count of its row in every
+ * season (slice 8): the floor of 23 in a 2019 start (Q282) went with the rows of the check, which give 24 (Bury was
+ * expelled after the season began, Q278). */
 static int floor_of(const char *file)
 {
     int i = size_index(file);
-    if (i < 0) return 0;
-    if (!strcmp(file, "eng_second") && season_start_year() == 2019) return 23;
-    return season_size_floors[i];
+    return i < 0 ? 0 : season_size_floors[i];
 }
 
 /* The smallest count of a file's exchange: its floor, or the count of FIXED_EXCHANGE (league_sizes.py) whose places
@@ -116,7 +115,6 @@ static int floor_of(const char *file)
 static int exchange_floor(const char *file)
 {
     int i = size_index(file), low = floor_of(file);
-    /* floor_of gives League One 23 in a 2019 start (Q282): that floor stays the bound, as before slice 4. */
     return low > 0 || i < 0 ? low : season_size_fixed[i];
 }
 
@@ -177,12 +175,26 @@ int season_sizes_row_season(uint32_t obj, const char *file)
     return r ? r->season : -1;
 }
 
+static const SeasonGrown *grown_of(const char *file);
+
 int season_sizes_clubs(const char *file, int season)
 {
     if (!sizes_on() || !size_file(file)) return -1;
     const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
+}
+
+/* The count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT, held 0:
+ * IreFirst::create_table 0x635910 counts division [0x9cf810] and allocates count x 0x3b): its row's count, so that
+ * the club moves of a new game give the division that many clubs. -1 for any other class or with the sizes off. */
+int season_sizes_data_clubs(const char *file, int season)
+{
+    const SeasonGrown *g = grown_of(file);
+    if (!sizes_on() || !g || g->held) return -1;
+    const SeasonRule *r = row_of_edition(file, season);
+    if (!r || r->clubs < MIN_CLUBS || r->clubs > g->cap) return -1;
+    return r->clubs;
 }
 
 /* The clubs whose division is the record of the object. */
@@ -259,6 +271,11 @@ static void keep(uint32_t obj, int on)
 static int grown_count(uint32_t obj, const char *file)
 {
     return grown_of(file) && !kept_at(obj) ? league_count(obj, file, NULL, NULL) : 0;
+}
+
+int season_sizes_planned(uint32_t obj)
+{
+    return sizes_on() && readable(obj) && grown_of(season_change_file(obj)) && !kept_at(obj);
 }
 
 uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
@@ -422,6 +439,17 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     if (n < MIN_CLUBS || !readable(old) || have < 1 || have > SEASON_TEMPLATE_MAX ||
         !readable(old + (uint32_t)have * DATE_SIZE))
         return;
+    /* A class that sets its meetings by its count in create_table (IreFirst, slice 13): a row with no meetings value
+     * takes the class's meetings for this count, not the value set_up_rules wrote for another count. */
+    if (!probe) {
+        const SeasonRule *r = row_now(self, file);
+        int row_m = r ? season_league_meetings(file, r->season) : 0;
+        int m = season_sizes_irl_class_meetings(file, n, row_m >= 1 && row_m <= 4 ? row_m : 0);
+        if (m && m != meetings) {
+            meetings = m;
+            wr16(g_mem, self + COMP_MEETINGS, (uint16_t)m);
+        }
+    }
     int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
     /* A split (slice 7, D7): the template plans the rounds before the split and the most rounds of a section after
      * it. The table plays the first; the sections take the rest when the split comes (season_split.c), through
@@ -789,7 +817,9 @@ static void sizes_rules(uint32_t obj)
      * promotions left it short in June 2017). */
     if (open_neighbour(obj, ABOVE))
         set_places(obj, UP, UP_PLAYOFF, r->up + season_playoffs_winners_up(file, r->season), "promotion");
-    if (open_neighbour(obj, BELOW)) set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+    /* League Two: towards the Conference, played or not (season_sizes_eng.c, slice 8, D15). */
+    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file))
+        set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
 }
 
 void season_sizes_rules(uint32_t obj)

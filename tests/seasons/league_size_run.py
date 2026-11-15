@@ -5,7 +5,7 @@ docs/specs/2026-11-13-league-sizes-0.7.2-spec.md, Testing seam 2, D4 and D5). Ma
 Usage:
     python3 tests/seasons/league_size_run.py <cm0102_recomp> <game folder> <file> [--year <season>]
         [--last <season> | --to <season>] [--nations all|<name,name,...>|all,-<name>,...] [--keep <folder>] [--reuse]
-        [--timeout <seconds>] [--save-in-split]
+        [--timeout <seconds>] [--extra conference,regional,c2] [--save-in-split]
     python3 tests/seasons/league_size_run.py --list
     python3 tests/seasons/league_size_run.py --self-test
 
@@ -61,6 +61,17 @@ ROWS = {
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    # Slice 9: Italy. All four classes are sequential (flag 0x40): the template holds exactly the rounds.
+    "ita_ser_a": (2005, 2006, "Serie A, 20 clubs (the class holds 18): 38 dates of a template of 34"),
+    "ita_ser_b@2003": (2003, 2004, "Serie B, 24 clubs (the class holds 20): 46 dates of a template of 38"),
+    "ita_ser_b": (2018, 2019, "Serie B, 19 clubs: 38 dates, a rest round each round"),
+    "ita_ser_c1a": (2004, 2005, "Serie C1/A, 19 clubs (the class holds 18): 38 dates of a template of 34"),
+    "ita_ser_c1a@2012": (2012, 2013, "Serie C1/A 17 and C1/B 16: 34 and 30 dates, the play-out rows of the count"),
+    # Slice 8: England and France.
+    "eng_conf": (2010, 2011, "Conference, 24 clubs (the class holds 22): a template of 46 dates"),
+    "fra_third@2010": (2010, 2011, "National, 21 clubs (the class holds 20): a mirrored template of 42 dates"),
+    "fra_third": (2014, 2015, "National, 18 clubs: a mirrored template of 34 dates, the season ends on its usual day "
+                              "(D5)"),
     # Slice 7, the split engine (D7): the table to N matches, then sections of the row.
     "nir_prm": (2010, 2011, "IFA Premiership, 12 clubs (the class holds 10): 33 rounds, then sections of 6 and 6"),
     "wel_first": (2012, 2013, "Welsh Premier, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
@@ -82,10 +93,19 @@ ROWS = {
     "den_prm": (2017, 2018, "Superliga, 14 clubs in two meetings (the class holds 12 in three): 26 rounds, then 6 and 8"),
     "fin_prm": (2005, 2006, "Veikkausliiga, 14 clubs in two meetings (the class holds 12 in three), 13 in 2006"),
     "fin_prm@2019": (2019, 2020, "Veikkausliiga, 12 clubs: 22 rounds, then 6 and 6 that meet once; 2020 one table"),
+    # Slice 13: the NIFL Championship (the class holds 10 in 4 meetings on 36 dates) and the League of Ireland First
+    # Division (the class takes 9 to 12; rows are keyed one year before the real season, row 2013 is the 2014 season).
+    "nir_first": (2016, 2017, "NIFL Championship, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
+    "nir_first@2022": (2022, 2023, "NIFL Championship, 12 clubs: 33 rounds, then sections of 6 and 6 once more"),
+    "ire_first": (2013, 2014, "League of Ireland First Division, 8 clubs in four meetings: 28 dates (D5)"),
 }
 
 # Slice 10 (D6, src/recomp_rt/win/season_sizes_periods.c): leagues whose class plays periods.
 PERIOD_FILES = {"hol_first": 4, "bel_second": 3}
+
+# The extra divisions of the new game screen that a file needs (rules_report_check.EXTRA): the game plays the
+# Conference only when the screen selects it.
+EXTRA = {"eng_conf": ["conference"]}
 
 
 def encoded_row(file, season):
@@ -163,17 +183,26 @@ def split_ends(log, file):
 
 
 def end_faults(name, rows, after, sp):
-    """The faults of a table at its end after a split: the places after match N are each place once, the table keeps
-    each section together and above the next, and each club played N and its own section's matches."""
+    """The faults of a table at its end after a split: each section holds its count of clubs by their places after
+    match N, the table keeps each section together and above the next, and each club played N and its own section's
+    matches. The places after match N need not be each place once at the end: League::sort_table 0x6827d0 writes
+    each row's place again at index played - 1 at every sort (0x682ada..0x682b0f), so a club that has not yet played
+    its first section match (a later kick-off on the day, or a postponed match) gets its place within its section
+    at match N again. That place stays in its section, as the order sorts by section first (season_split.c)."""
     fails = []
     places = [p for p, _x in rows]
-    if sorted(places) != list(range(sum(n for n, _m in sp))):
-        return [f"{name}: the places after match {after} are not each place once: {places}"]
+    total = sum(n for n, _m in sp)
+    if len(places) != total or any(not 0 <= p < total for p in places):
+        return [f"{name}: the places after match {after} are not places of a table of {total}: {places}"]
     bounds, top = [], 0
     for n, m in sp:
         bounds.append((top, top + n, after + m * (n - 1)))
         top += n
     secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
+    counts = [secs.count(k) for k in range(len(sp))]
+    if counts != [n for n, _m in sp]:
+        return [f"{name}: the sections hold {counts} clubs by the places after match {after}, want "
+                f"{[n for n, _m in sp]}: {places}"]
     if secs != sorted(secs):
         fails.append(f"{name}: the table does not keep the sections in order: {secs}")
     for (p, played), k in zip(rows, secs):
@@ -414,7 +443,9 @@ def faults(work, file, year, last):
     fails = [f"{x.strip()}" for x in lines if "recomp: message box from" in x]
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
-    held = league_sizes.HELD.get(file, 0)
+    # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
+    # writes no table line.
+    held = league_sizes.DATA_COUNT.get(file, league_sizes.HELD.get(file, 0))
     # The report: every edition of the run holds the clubs and meetings of its row, and the matches of the count.
     rows = report_rows(report, file) if os.path.exists(report) else []
     if not any(r[0] == year and r[1] == "start" for r in rows):
@@ -620,6 +651,15 @@ def self_test():
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    # Slice 9: the Italian rows of the runs.
+    for file, season, want in (("ita_ser_a", 2005, (20, 2)), ("ita_ser_b", 2003, (24, 2)), ("ita_ser_b", 2018, (19, 2)),
+                               ("ita_ser_c1a", 2004, (19, 2)), ("ita_ser_c1a", 2012, (17, 2)),
+                               ("ita_ser_c1b", 2012, (16, 2)), ("ita_ser_a", 2003, (18, 2))):
+        if edition_row(file, season) != want:
+            bad.append(("encoded", file, season, edition_row(file, season), want))
+    import rules_report_check as rrc
+    if any(f not in ROWS or x not in rrc.EXTRA for f, xs in EXTRA.items() for x in xs):
+        bad.append(("extra", EXTRA))
     if (encoded_split("nir_prm", 2010) != (33, [(6, 1), (6, 1)]) or
             encoded_split("wel_first", 2026) != (30, [(6, 1), (4, 1), (6, 1)]) or
             encoded_split("wel_first", 2012) != (22, [(6, 2), (6, 2)]) or encoded_split("wel_first", 2005) is not None or
@@ -656,6 +696,8 @@ def self_test():
     short = good_end[:6] + [(6, 35)] + good_end[7:]
     if (end_faults("good", good_end, 30, sp16) or not end_faults("mixed", mixed, 30, sp16) or
             not end_faults("short", short, 30, sp16) or
+            end_faults("again", good_end[:7] + [(6, 33)] + good_end[8:], 30, sp16) or
+            not end_faults("crossed", good_end[:5] + [(6, 35)] + good_end[6:], 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
@@ -697,10 +739,11 @@ def main(argv):
         nations = (["all"] + names) if words[0] == "all" else names
         if nations[0] != "all" and "England" not in nations:
             nations = ["England"] + nations
+        extra = EXTRA.get(file, []) + [x for x in rrc.arg(argv, "--extra", "").split(",") if x]
         if "--save-in-split" in argv:
             code = save_in_split(program, game, year, last, db, nations, work, timeout)
         else:
-            code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
+            code, _report = rrc.run(program, game, last, year, db, nations, extra, work, timeout,
                                     {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"}, stop_on_box=True)
         if code != 0:
             print(f"FAIL {file} {year}: the run ended with code {code} ({work})")

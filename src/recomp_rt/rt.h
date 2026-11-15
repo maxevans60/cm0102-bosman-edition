@@ -447,6 +447,10 @@ uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);   /* FraCfa empty plac
 uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count); /* French Lower Division places (0x5bd752) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
+/* IreFirst::create_table 0x635910 at its real count (0.7.2 league sizes, slice 13, win/season_sizes_irl.c): the least
+ * count it takes (0x63596f) and its meetings for a count (0x63598f, 0x635997), the original's outside the engine. */
+uint32_t rt_ire_first_least(uint32_t obj, uint32_t original);
+uint32_t rt_ire_first_meetings(uint32_t obj, uint32_t original);
 /* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
  * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
 uint32_t rt_gre_cup_lower(uint32_t pool);
@@ -462,6 +466,17 @@ uint32_t rt_jap_emp_lower(uint32_t pool);
 uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
+/* Italy at its real sizes (0.7.2 league sizes slice 9, season_sizes_ita.c, tools/recomp/league_sizes_ita.py). */
+uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at);
+uint32_t rt_ita_c1_row(uint32_t obj, uint32_t original);
+uint32_t rt_ita_c1_seed(uint32_t obj, uint32_t original);
+uint32_t rt_ita_regroup_max(uint32_t original);
+uint32_t rt_ita_regroup_buf(uint32_t stack);
+uint32_t rt_ita_regroup_count(uint32_t n);
+uint32_t rt_ita_regroup_split(uint32_t original);
+uint32_t rt_ita_regroup_end(uint32_t original);
+uint32_t rt_ita_c1_rows(uint32_t c1a, uint32_t c1b);
+uint32_t rt_ita_row_status(uint32_t obj, uint32_t i, uint32_t row);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_none(uint32_t group);

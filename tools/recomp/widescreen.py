@@ -169,6 +169,12 @@ assert not set(SIZE_INSNS) & (set(INSNS) | set(PATCHES)) and not set(SIZE_PATCHE
 INSNS.update(SIZE_INSNS)
 PATCHES.update(SIZE_PATCHES)
 
+# Italy at its real league sizes (0.7.2 slice 9): the fixed counts of the Italian classes (league_sizes_ita.py).
+from league_sizes_ita import INSNS as ITA_SIZE_INSNS  # noqa: E402
+
+assert not set(ITA_SIZE_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(ITA_SIZE_INSNS)
+
 # New divisions (0.6.0 slice 20): the club count of the 3. Liga in the German Regional object (new_divisions.py).
 from new_divisions import INSNS as DIVISION_INSNS, PATCHES as DIVISION_PATCHES  # noqa: E402
 

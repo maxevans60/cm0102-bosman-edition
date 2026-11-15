@@ -2453,17 +2453,17 @@ wal-nir-irl-441	2018	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-442	2018	ire_first	2	10	2-4	-	-	ok	-	calendar	3	0	-	0	0	-	27
 wal-nir-irl-454	2019	wel_first	1	12	-	-	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-460	2019	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-461	2019	nir_first	2	12	2	11	-	ok	-	split	2	0	-	0	0	-	22
+wal-nir-irl-461	2019	nir_first	2	12	2	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-466	2019	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-467	2019	ire_first	2	10	2-5	-	-	ok	-	calendar	3	0	-	0	0	-	27
 wal-nir-irl-479	2020	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-485	2020	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-486	2020	nir_first	2	12	2	11	-	ok	-	split	-	0	-	0	0	-	-
+wal-nir-irl-486	2020	nir_first	2	12	2	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-491	2020	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-492	2020	ire_first	2	10	2-5	-	-	ok	-	calendar	3	0	-	0	0	-	27
 wal-nir-irl-504	2021	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-510	2021	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-511	2021	nir_first	2	12	2	11	-	ok	groups	split	3	0	-	0	0	-	-
+wal-nir-irl-511	2021	nir_first	2	12	2	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
 wal-nir-irl-516	2021	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-517	2021	ire_first	2	9	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-529	2022	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
@@ -2478,12 +2478,12 @@ wal-nir-irl-566	2023	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-567	2023	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-579	2024	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-585	2024	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-586	2024	nir_first	2	12	2	11	-	ok	gap	split	3	0	-	0	0	-	33
+wal-nir-irl-586	2024	nir_first	2	12	2	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
 wal-nir-irl-591	2024	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-592	2024	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-604	2025	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-610	2025	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-611	2025	nir_first	2	12	2	-	-	ok	gap	split	3	0	-	0	0	-	33
+wal-nir-irl-611	2025	nir_first	2	12	2	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
 wal-nir-irl-616	2025	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-617	2025	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-629	2026	wel_first	1	16	-	14	europe	ok	after 30: 6+4+6, points unknown	split	2	0	-	0	0	1+1+1	30

@@ -739,6 +739,9 @@ if(EXISTS "${CM0102_EXE}")
     # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
     add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
         --self-test)
+    # The checks of the size step runs (slice 3) and of the English exchange (slice 8, D15) on made-up logs.
+    add_test(NAME size_step_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/size_step_run.py"
+        --self-test)
     # The cups of western Europe take the real divisions (0.7.2 league sizes, slice 5): the counts with grown and
     # shrunk divisions on a made-up club table, and the run list of the season runs (tests/seasons/cup_size_run.py).
     add_executable(season_cup_west_test tests/seasons/test_season_cup_west.c src/recomp_rt/win/season_cup_sizes_west.c)
