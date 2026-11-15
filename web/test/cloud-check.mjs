@@ -40,7 +40,7 @@ const google = await fakeGoogle();
 const s3 = createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
 const logs = [];
 const cloud = createCloud({ s3, clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'z'.repeat(40),
-  cloudUsers: ['player@example.com'], maxSaves: 10, google: google.google, log: (t) => logs.push(t), price: '$5 a month',
+  cloudUsers: ['player@example.com'], maxSaves: 10, maxPacked: 2 << 20, google: google.google, log: (t) => logs.push(t), price: '$5 a month',
   isAdmin: (email) => email === 'player@example.com', storeTtl: 0,
   paddle: { env: 'sandbox', clientToken: 'test_token', priceIds: ['pri_cloud_month'], webhookSecret: 'pdl_ntfset_check', apiKey: null, apiBase: null } });
 // Paddle.js, as far as the page uses it: Initialize, and a checkout that completes at once. The test then sends the
@@ -446,6 +446,33 @@ try {
     /The log was sent, but Harbour City 2001-07-14\.sav was not/.test(failedOnce) && againLabel === 'Send the save again'
       && /^Sent, with Harbour City 2001-07-14\.sav\./.test(retried) && afterRetry.length === sentBefore && afterRetry[0].save?.name === 'Harbour City 2001-07-14.sav',
     `${failedOnce} | ${againLabel} | ${retried} | ${afterRetry.length} vs ${sentBefore}`);
+
+  // ---- A save too large for the cloud (a player's log, 15 November 2026: "Hertha BSC 2011-12-11.sav up: HTTP 413"):
+  // the 413 stopped the whole sync, so the saves after it never went up, and it was packed and sent again each minute.
+  // This server takes 2 MB packed (maxPacked): the big save is not sent at all, the others go, Saved games says so. ----
+  const bigRequests = [];
+  a.on('request', (r) => { if (/Big%202011/.test(r.url()) && r.method() !== 'GET') bigRequests.push(`${r.method()} ${r.url().slice(-40)}`); });
+  await a.evaluate(async () => {
+    const names = (await (await fetch('/api/saves')).json()).saves.map((s) => s.name).filter((n) => !/^Harbour City/.test(n));
+    for (const n of names.slice(0, Math.max(0, names.length - 3))) await fetch(`/api/saves/${encodeURIComponent(n)}`, { method: 'DELETE', headers: { 'x-cm': '1' } });
+    const FS = window.Module.FS;
+    const save = (n) => { const s = new Uint8Array(0x416ec + n), dv = new DataView(s.buffer); dv.setInt32(0, 2, true); dv.setInt32(8, 1, true); dv.setUint32(12, 0x416ec, true); return s; };
+    FS.writeFile('/user/Small after big.sav', save(1000));
+    const big = save(3 << 20);
+    for (let i = 0x416ec; i < big.length; i += 65536) crypto.getRandomValues(big.subarray(i, Math.min(i + 65536, big.length)));
+    FS.writeFile('/user/Big 2011-12-11.sav', big);                 // the newest: the first of the sync's jobs
+  });
+  const inCloud = async (name) => (await a.evaluate(async () => (await (await fetch('/api/saves')).json()).saves.map((s) => s.name))).includes(name);
+  await waitFor('the small save in the cloud', () => inCloud('Small after big.sav'), 30000);
+  await a.evaluate(() => { const s = new Uint8Array(0x416ec + 500), dv = new DataView(s.buffer); dv.setInt32(0, 2, true); dv.setInt32(8, 1, true); dv.setUint32(12, 0x416ec, true); window.Module.FS.writeFile('/user/Another after big.sav', s); });
+  await waitFor('the next save in the cloud', () => inCloud('Another after big.sav'), 30000);
+  await a.click('#saves-open');
+  const bigRow = (await a.locator('#saves-list tr', { hasText: 'Big 2011-12-11' }).innerText()).replace(/\s+/g, ' ');
+  await a.click('#saves-close');
+  check('a save too large for the cloud: the others still go up, it is not sent, and Saved games and a message say so',
+    await inCloud('Small after big.sav') && await inCloud('Another after big.sav') && !(await inCloud('Big 2011-12-11.sav'))
+      && bigRequests.length === 0 && /Too large for the cloud/.test(bigRow) && /Big 2011-12-11\.sav is too large for Cloud Saves/.test(await toasts(a)),
+    `${bigRow} | requests: ${bigRequests.join(', ')} | ${await toasts(a)}`);
 
   check('no page errors', errors.length === 0, errors.join('; '));
   check('the server logged no failure', !logs.some((l) => /fail|not written|not read/.test(l)), logs.join('; '));

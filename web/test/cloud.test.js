@@ -172,7 +172,8 @@ test('cloud saves: store, list, fetch, conflicts, limits and checks', async () =
   assert.equal(me.user.admin, false, 'not an admin: no Admin panel button');
   assert.equal(me.user.cloudFrom, 'given');
   const empty = await (await b.get('/api/saves')).json();
-  assert.deepEqual({ ...empty, store: undefined }, { saves: [], maxSaves: 3, store: undefined });
+  assert.deepEqual({ ...empty, store: undefined }, { saves: [], maxSaves: 3, maxPacked: 64 << 20, maxRaw: 256 << 20, store: undefined },
+    'the list tells the page what one save may be, so it sends none larger');
   assert.match(empty.store, /^[0-9a-f]{18}$/, 'the store\'s id (meta/store.json), the same in each list');
   assert.equal(JSON.parse(s3fake.objects.get('meta/store.json').body).id, empty.store);
 

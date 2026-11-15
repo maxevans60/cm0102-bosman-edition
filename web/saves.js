@@ -159,7 +159,7 @@ const saveLink = (blob, name) => {
 
 async function download(FS, f) { saveLink(new Blob([await readBlob(FS, f.path)], { type: 'application/octet-stream' }), f.name); }
 
-const CLOUD = { cloud: 'In the cloud', up: 'Saving…', here: 'Only here', waiting: 'Not yet' };
+const CLOUD = { cloud: 'In the cloud', up: 'Saving…', here: 'Only here', waiting: 'Not yet', big: 'Too large for the cloud' };
 
 // What the browser may do to the saves on its own. kept: the answer of navigator.storage.persist (loader.js): 'kept'
 // when the browser agreed to keep the site's storage when the disk runs low. It still deletes it when the player

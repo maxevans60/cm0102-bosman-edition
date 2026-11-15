@@ -405,7 +405,11 @@ deleted until the subscription is canceled. In Paddle (start in the sandbox, `sa
 | `CM_UPLOAD_BUDGET_MB` | the uploads the server holds in memory at once, through the server (default 160) |
 
 A good start prints `accounts and cloud saves: on`. Each save is gzip-compressed by the browser; the server checks that
-it is a saved game of CM 01/02 (64 MB compressed at most) before it stores it.
+it is a saved game of CM 01/02 (64 MB compressed at most, 256 MB as it is) before it stores it. The saves list tells
+the page both limits (`maxPacked`, `maxRaw`), so a larger save is not sent at all: it stays in the browser, Saved games
+says "Too large for the cloud", a message says so once, and the sync goes on with the other saves. It goes again only
+when it changes. Before (a player's log, 15 November 2026: "Hertha BSC 2011-12-11.sav up: HTTP 413"), the 413 stopped
+the whole sync, so the saves after it never went up, and the failed sync packed and sent that save again each minute.
 
 ## Edit a saved game
 

@@ -77,6 +77,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     if (kept.account === account && kept.saves) state = kept;
   } catch { /* the first sync on this browser */ }
   let chain = Promise.resolve(), busy = new Set(), stopped = false, full = false, last = null, count = null, max = null;
+  let limits = { packed: 0, raw: 0 };            // what the cloud takes of one save (the saves list), 0: not told
   const listeners = new Set();
   const changed = () => { for (const f of listeners) f(); };
   const keep = () => { FS.writeFile(STATE, JSON.stringify(state)); sync(); };
@@ -107,16 +108,38 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     }
   }
 
+  // A save the cloud does not take for its size: it stays here, the sync goes on with the others, and it is not sent
+  // again until it changes (state: tooBig with its size and time; planSync then leaves it). A player's log had a 413
+  // that stopped the whole sync, so the saves after it never went up, and the sync, failed as a whole, packed and sent
+  // that save again each minute (15 November 2026).
+  function tooBig(name, before, why) {
+    const e = state.saves[name];
+    if (!(e?.tooBig && e.size === before.size && e.mtime === before.mtime)) {
+      toast(`${name} is too large for Cloud Saves (${why}): it stays in this browser. Download it in Saved games to keep a copy.`, { kind: 'bad', ms: 12000 });
+      log(`page: cloud saves: ${name} is too large for the cloud (${why}): it stays here`);
+    }
+    state.saves[name] = { etag: e?.etag ?? null, size: before.size, mtime: before.mtime, tooBig: true };
+    return { tooBig: true };
+  }
+
   async function up(name, base, signal) {
     const before = stat(name);
     let bytes = readBlobNow(FS, `${SAVE_DIR}/${name}`);       // with the stat above: the same version of the file
     if (bytes instanceof Promise) bytes = await bytes;          // a placeholder: from the browser's storage
+    const rawSize = bytes.size ?? bytes.length;
+    const mb = (n) => `${(n / 1048576).toFixed(0)} MB`;
+    if (limits.raw && rawSize > limits.raw) return tooBig(name, before, `${mb(rawSize)}; the cloud takes ${mb(limits.raw)}`);
     const body = await gzip(bytes);                             // a Blob: the same body for each try
+    if (limits.packed && body.size > limits.packed) return tooBig(name, before, `${mb(body.size)} packed; the cloud takes ${mb(limits.packed)}`);
     // Straight to the store (direct.js), or through the server when that is off.
     const r = await retrying(`${name} up`, async () => (await upDirect({ url: at(name), body, base, signal, log,
       fields: { rawSize: bytes.size ?? bytes.length, saved: before.mtime } }))
       ?? fetch(at(name), { method: 'PUT', body, signal, headers: { ...CHANGE, 'x-base-etag': base, 'x-save-time': String(before.mtime) } }), signal);
     if (r.status === 409) return { conflict: (await r.json()).cloud };
+    if (r.status === 413 || r.status === 422) {                 // the server's own word on its size (an older page's limit)
+      const why = (await r.json().catch(() => ({}))).error ?? `HTTP ${r.status}`;
+      if (r.status === 413 || /larger than/.test(why)) return tooBig(name, before, why);
+    }
     if (r.status === 507) {
       if (!full) toast((await r.json()).error, { kind: 'bad', ms: 8000 });
       full = true;
@@ -171,7 +194,8 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const r = await fetch('/api/saves', { cache: 'no-store', signal });
     if (r.status === 401 || r.status === 403) { stopped = true; changed(); return; }
     if (!r.ok) throw fail('the cloud list', r);
-    const { saves, maxSaves, store } = await r.json();
+    const { saves, maxSaves, store, maxPacked = 0, maxRaw = 0 } = await r.json();
+    limits = { packed: maxPacked, raw: maxRaw };
     // Another store than the last sync's (its bucket changed): what went up before is not there, and it goes up again
     // rather than count as removed from the cloud ("Only here").
     if (store && state.store !== store) {
@@ -247,6 +271,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
       if (busy.has(name)) return 'up';
       const e = state.saves[name];
       if (!e) return 'waiting';
+      if (e.tooBig && e.size === file.size && e.mtime === +file.mtime) return 'big';
       if (e.removed) return 'here';
       return e.size === file.size && e.mtime === +file.mtime ? 'cloud' : 'waiting';
     },

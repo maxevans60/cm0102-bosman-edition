@@ -109,10 +109,14 @@ ${ok ? 'setTimeout(() => window.close(), 300);' : ''}</script>`;
 // paddle: { env, clientToken, priceIds, webhookSecret, apiKey, apiBase } to sell Cloud Saves with Paddle, or null.
 // price: how the page names the price ("$5 a month").
 export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicUrl = null, cloudFor = 'listed', cloudUsers = [],
-  upgradeUrl = null, maxSaves = 30, maxSets = 5, google = GOOGLE, paddle = null, price = '$5 a month', log = (t) => console.log(t),
+  upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, google = GOOGLE, paddle = null, price = '$5 a month', log = (t) => console.log(t),
   onAccountDeleted = () => {}, uploadBudget = 160 << 20, isAdmin = () => false, direct: directWanted = true, origins = ['*'],
   storeTtl = 10 * 60e3 }) {
   const seal = sealer(sessionSecret);
+  // A save may be maxPacked bytes, compressed (MAX_GZ unless a test sets less); the saves list tells the page, so a save
+  // larger than that is not sent at all (account.js).
+  const mbOf = (n) => Math.round(n / 1048576);
+  const tooPacked = `a save may be ${mbOf(maxPacked)} MB at most, compressed`;
   // Direct: the page sends a save or a data set to the store, and gets one from it, with a link that this server signs
   // (s3.presign), so the files do not pass this machine. An upload goes to incoming/<account>/ first; the server then
   // checks it and copies it to its place (the store copies; the bytes do not come here). The store must let the page's
@@ -373,14 +377,14 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
 
   async function putSave(req, res, user, name) {
     const length = Number(req.headers['content-length']);
-    if (length > MAX_GZ) { req.resume(); send(res, 413, { error: `a save may be ${MAX_GZ >> 20} MB at most, compressed` }); return; }
-    const free = hold(req, res, MAX_GZ);
+    if (length > maxPacked) { req.resume(); send(res, 413, { error: tooPacked }); return; }
+    const free = hold(req, res, maxPacked);
     if (!free) return;
     try { await storeSave(req, res, user, name); } finally { free(); }
   }
 
   async function storeSave(req, res, user, name) {
-    const body = await readBody(req, MAX_GZ);
+    const body = await readBody(req, maxPacked);
     const { why, total } = await inspectSave(body);
     if (why) { send(res, 422, { error: `${name} was not stored: ${why}` }); return; }
     const key = saveKey(user.sub, name);
@@ -432,7 +436,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     if (how === 'put') {
       const size = Math.floor(Number(body.size)), rawSize = Math.floor(Number(body.rawSize));
       const saved = Number.isFinite(Number(body.saved)) && Number(body.saved) > 0 ? Math.floor(Number(body.saved)) : Date.now();
-      if (!(size > 0) || size > MAX_GZ) { send(res, 413, { error: `a save may be ${MAX_GZ >> 20} MB at most, compressed` }); return; }
+      if (!(size > 0) || size > maxPacked) { send(res, 413, { error: tooPacked }); return; }
       if (!(rawSize > 0) || rawSize > MAX_RAW) { send(res, 422, { error: `${name} was not stored: it is larger than ${MAX_RAW >> 20} MB` }); return; }
       if (await conflict(body.base ?? undefined)) return;
       const upload = incomingKey(user.sub, 'gz');
@@ -448,8 +452,8 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       const h = await s3.head(upload);
       if (!h) { send(res, 404, { error: 'the upload did not reach the cloud' }); return; }
       const total = Number(h.metadata['raw-size']), saved = Number(h.metadata.saved) || Date.now();
-      const head = h.size <= MAX_GZ ? await gzipHead(upload, SAVE_HEADER) : null;
-      const why = h.size > MAX_GZ ? `it is larger than ${MAX_GZ >> 20} MB, compressed` : head === null ? 'the upload is not gzip data'
+      const head = h.size <= maxPacked ? await gzipHead(upload, SAVE_HEADER) : null;
+      const why = h.size > maxPacked ? `it is larger than ${mbOf(maxPacked)} MB, compressed` : head === null ? 'the upload is not gzip data'
         : checkSave(new Uint8Array(head.buffer, head.byteOffset, head.length), total);
       if (why) { await s3.delete(upload); send(res, 422, { error: `${name} was not stored: ${why}` }); return; }
       if (await conflict(body.base ?? undefined)) { await s3.delete(upload); return; }
@@ -638,7 +642,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       if (!(await hasCloud(user))) { req.resume(); send(res, 403, { error: 'cloud saves are not on this account\'s plan' }); return; }
       if (path === '/api/saves') {
         if (method !== 'GET') { send(res, 405, { error: 'GET only' }); return; }
-        send(res, 200, { saves: await listSaves(user), maxSaves, store: await theStore() });
+        send(res, 200, { saves: await listSaves(user), maxSaves, maxPacked, maxRaw: MAX_RAW, store: await theStore() });
         return;
       }
       let name;
@@ -666,7 +670,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
         await handle(req, res, url);
       } catch (err) {
         if (res.headersSent) { res.destroy(err); return; }
-        if (err.status === 413) { send(res, 413, { error: url.pathname.startsWith('/api/datasets') ? `a data set may be ${MAX_SET_ZIP >> 20} MB at most, zipped` : `a save may be ${MAX_GZ >> 20} MB at most, compressed` }); return; }
+        if (err.status === 413) { send(res, 413, { error: url.pathname.startsWith('/api/datasets') ? `a data set may be ${MAX_SET_ZIP >> 20} MB at most, zipped` : tooPacked }); return; }
         log(`cloud: ${req.method} ${url.pathname}: ${err.message}`);
         send(res, err instanceof S3Error || err.code === 'ECONNREFUSED' || /S3/.test(err.message) ? 502 : 500,
           { error: err instanceof S3Error ? 'the cloud store did not take the request: try again later' : 'the server failed: try again later' });
