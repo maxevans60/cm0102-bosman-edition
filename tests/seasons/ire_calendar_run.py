@@ -36,12 +36,12 @@ WAIT_DIR = "/Users/max/Projects/cm0102/run-logs/samesave-wait"
 
 
 def wait_for_room():
-    """The lead's rule: a test game starts while the 1-minute load is under 10 when a same-save check waits, else
+    """The lead's rule: a test game starts while the 1-minute load is under 16 when a same-save check waits, else
     under 20, and while fewer than 15 games run."""
     while True:
         waiting = os.path.isdir(WAIT_DIR) and any(os.scandir(WAIT_DIR))
         games = subprocess.run(["pgrep", "-x", "cm0102_recomp"], capture_output=True, text=True).stdout.split()
-        if os.getloadavg()[0] < (10 if waiting else 20) and len(games) < 15:
+        if os.getloadavg()[0] < (16 if waiting else 20) and len(games) < 15:
             return
         time.sleep(30)
 
