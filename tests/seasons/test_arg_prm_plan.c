@@ -125,8 +125,30 @@ static void rival_twice(int z, int draw_at)
     }
 }
 
+/* The derby partners: the real pairs, then a club of no list takes the partner of the club it replaced. */
+static void derby_pairs(void)
+{
+    /* 8 clubs. Real pairs 0-1, 2-3. Club 4's partner and club 6's partner are not in the division. Clubs 5 and 7 are of
+     * no list (5 has the better reputation). */
+    int listed[8] = {1, 0, 3, 2, -2, -1, -2, -1}, rep[8] = {50, 50, 50, 50, 40, 90, 70, 30}, derby[8];
+    int made = season_arg_derby_pairs(8, listed, rep, derby);
+    CHECK(made == 2, "derby pairs: %d by replacement, want 2", made);
+    CHECK(derby[0] == 1 && derby[1] == 0 && derby[2] == 3 && derby[3] == 2, "derby pairs: a real pair changed");
+    /* The orphans by reputation (6, then 4) take the clubs of no list by reputation (5, then 7). */
+    CHECK(derby[6] == 5 && derby[5] == 6 && derby[4] == 7 && derby[7] == 4, "derby pairs: replacement %d %d %d %d",
+          derby[4], derby[5], derby[6], derby[7]);
+    /* A pair with both clubs gone: its two replacements and any left over meet by reputation. */
+    int l2[6] = {1, 0, -1, -1, -1, -1}, r2[6] = {9, 9, 10, 40, 30, 20}, d2[6];
+    made = season_arg_derby_pairs(6, l2, r2, d2);
+    CHECK(made == 0, "derby pairs: %d by replacement with no orphan, want 0", made);
+    CHECK(d2[3] == 4 && d2[4] == 3 && d2[5] == 2 && d2[2] == 5, "derby pairs: left over %d %d %d %d", d2[2], d2[3],
+          d2[4], d2[5]);
+    for (int i = 0; i < 6; i++) CHECK(d2[d2[i]] == i, "derby pairs: %d is not a pairing", i);
+}
+
 int main(void)
 {
+    derby_pairs();
     rival_twice(15, 7);
     rival_twice(15, 15);
     zones(15, 7, 1);        /* 2025: the drawn round is fecha 8 */

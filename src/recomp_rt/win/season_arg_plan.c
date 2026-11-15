@@ -65,3 +65,36 @@ int season_arg_derby_plan(int n, const int *derby, int derby_at, int round[][SEA
     return n;
 }
 
+
+/* Sorts idx[0..k) by rep, best first; equal reputations keep their order. */
+static void by_reputation(int *idx, int k, const int *rep)
+{
+    for (int i = 1; i < k; i++) {
+        int v = idx[i], j = i;
+        for (; j > 0 && rep[idx[j - 1]] < rep[v]; j--) idx[j] = idx[j - 1];
+        idx[j] = v;
+    }
+}
+
+int season_arg_derby_pairs(int n, const int *listed, const int *rep, int *derby)
+{
+    int orphan[SEASON_ARG_MAX_CLUBS], extra[SEASON_ARG_MAX_CLUBS], no = 0, ne = 0, made = 0;
+    for (int i = 0; i < n; i++) {
+        derby[i] = listed[i] >= 0 ? listed[i] : -1;
+        if (listed[i] == -2) orphan[no++] = i;
+        if (listed[i] == -1) extra[ne++] = i;
+    }
+    by_reputation(orphan, no, rep);
+    by_reputation(extra, ne, rep);
+    for (int k = 0; k < no && k < ne; k++, made++) {
+        derby[orphan[k]] = extra[k];
+        derby[extra[k]] = orphan[k];
+    }
+    /* Left over: the clubs of no pair yet meet the club next to them by reputation. */
+    int rest[SEASON_ARG_MAX_CLUBS], nr = 0;
+    for (int i = 0; i < n; i++)
+        if (derby[i] < 0) rest[nr++] = i;
+    by_reputation(rest, nr, rep);
+    for (int j = 0; j + 1 < nr; j += 2) derby[rest[j]] = rest[j + 1], derby[rest[j + 1]] = rest[j];
+    return made;
+}

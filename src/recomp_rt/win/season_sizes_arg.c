@@ -451,26 +451,28 @@ static int derby_plan(const Form *f, const uint32_t *club, int n, int year, int 
                       int *ids_at)
 {
     int s = list_season(f->season, SEASON_ARG_DERBY), derby[MAX_CLUBS], derby_at = -1, perm[MAX_CLUBS];
-    for (int i = 0; i < n; i++) derby[i] = -1;
+    int listed[MAX_CLUBS], rep[MAX_CLUBS];
+    for (int i = 0; i < n; i++) {
+        listed[i] = -1;
+        rep[i] = (int16_t)rd16(g_mem, club[i] + CLUB_REPUTATION);
+    }
     for (int k = 0; k < season_arg_pair_count; k++) {
         const SeasonArgPair *p = &season_arg_pairs[k];
         if (p->kind != SEASON_ARG_DERBY || p->season != s) continue;
         if (derby_at < 0) derby_at = p->round - 1;
         int h = index_of(club, n, p->home), w = index_of(club, n, p->away);
-        if (h < 0 || w < 0 || h == w || derby[h] >= 0 || derby[w] >= 0) continue;
-        derby[h] = w;
-        derby[w] = h;
-    }
-    /* The clubs of no pair meet the club next to them by reputation. */
-    int rest[MAX_CLUBS], nr = 0;
-    for (int i = 0; i < n; i++)
-        if (derby[i] < 0) {
-            int j = nr++;
-            int rep = (int16_t)rd16(g_mem, club[i] + CLUB_REPUTATION);
-            for (; j > 0 && (int16_t)rd16(g_mem, club[rest[j - 1]] + CLUB_REPUTATION) < rep; j--) rest[j] = rest[j - 1];
-            rest[j] = i;
+        if (h >= 0 && w >= 0 && h != w && listed[h] < 0 && listed[w] < 0) {
+            listed[h] = w;
+            listed[w] = h;
+        } else if (h >= 0 && w < 0 && listed[h] == -1) {
+            listed[h] = -2;
+        } else if (w >= 0 && h < 0 && listed[w] == -1) {
+            listed[w] = -2;
         }
-    for (int j = 0; j + 1 < nr; j += 2) derby[rest[j]] = rest[j + 1], derby[rest[j + 1]] = rest[j];
+    }
+    /* A club of no list takes the partner of the club it replaced; any left over meet by reputation. */
+    int nr = 0, orphans = 0, replaced = season_arg_derby_pairs(n, listed, rep, derby);
+    for (int i = 0; i < n; i++) nr += listed[i] < 0, orphans += listed[i] == -2;
     if (derby_at < 0 || derby_at > n - 1) derby_at = (n - 1) / 2;
     /* The order of the circle: a shuffle of the table order by the edition (no draw of the game's random numbers). */
     for (int i = 0; i < n; i++) perm[i] = i;
@@ -486,8 +488,8 @@ static int derby_plan(const Form *f, const uint32_t *club, int n, int year, int 
     for (int i = 0; i < n; i++) pd[i] = inv[derby[perm[i]]];
     for (int i = 0; i < n; i++) ids_at[i] = perm[i];
     if (logging()) {
-        fprintf(stderr, "recomp: league sizes: arg_prm derby %d: list %d, %d pairs of the list, derby round %d; pairs",
-                f->season, s, (n - nr) / 2, derby_at + 1);
+        fprintf(stderr, "recomp: league sizes: arg_prm derby %d: list %d, %d pairs of the list, %d by replacement of %d, "
+                        "derby round %d; pairs", f->season, s, (n - nr) / 2, replaced, orphans, derby_at + 1);
         for (int i = 0; i < n; i++)
             if (i < derby[i]) fprintf(stderr, " %u-%u", rd32(g_mem, club[i]), rd32(g_mem, club[derby[i]]));
         fprintf(stderr, "; not in the division:");

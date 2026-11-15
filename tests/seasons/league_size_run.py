@@ -672,11 +672,12 @@ def arg_faults(log, year):
         if m:
             last_plan = ("zones", int(m.group(3)), int(m.group(4)), int(m.group(5)), int(m.group(6)),
                          [int(c) for c in m.group(7).split()], [int(c) for c in m.group(8).split()])
-        m = re.match(r"recomp: league sizes: arg_prm derby (\d+): list (-?\d+), (\d+) pairs of the list, derby round "
-                     r"(\d+); pairs ([\d\- ]+);", x)
+        m = re.match(r"recomp: league sizes: arg_prm derby (\d+): list (-?\d+), (\d+) pairs of the list, (\d+) by "
+                     r"replacement of (\d+), derby round (\d+); pairs ([\d\- ]+);", x)
         if m:
-            last_plan = ("derby", int(m.group(3)), int(m.group(4)),
-                         [tuple(int(c) for c in p.split("-")) for p in m.group(5).split()])
+            last_plan = ("derby", int(m.group(3)), int(m.group(6)),
+                         [tuple(int(c) for c in p.split("-")) for p in m.group(7).split()],
+                         int(m.group(4)), int(m.group(5)))
         m = re.match(r"recomp: league sizes: arg_prm fixtures (\d+) (\w+):", x)
         if m:
             plan_of[(int(m.group(1)), m.group(2))] = last_plan
@@ -729,8 +730,13 @@ def arg_faults(log, year):
             if not plan or plan[0] != "derby":
                 fails.append(f"{name}: no derby line before its fixtures")
                 continue
-            from_list, at, pairs = plan[1:]
+            from_list, at, pairs, replaced, orphans = plan[1:]
             derby = {frozenset(p) for p in pairs}
+            # A club of no list takes the partner of the club it replaced (gap row 50): each listed club whose
+            # partner is not in the division gets a club of no list.
+            if replaced != orphans:
+                fails.append(f"{name}: {replaced} derby pairs by replacement, want {orphans} (one for each listed club "
+                             f"whose partner is not in the division)")
             ids = {c for r in rounds for m in r for c in m}
             for x in ids:
                 for y in ids:

@@ -88,4 +88,11 @@ int season_arg_zone_plan(int z, const int *rival, const int *draw, int draw_at,
  * i) at round derby_at. Returns the rounds (n), or 0. */
 int season_arg_derby_plan(int n, const int *derby, int derby_at, int round[][SEASON_ARG_MAX_CLUBS / 2][2]);
 
+/* Pure: the derby partners of n clubs (n even). listed[i] is the index of club i's partner in the research list when
+ * that partner is in the division, -2 when the list pairs club i with a club not in the division, -1 when club i is
+ * not in the list. A club of no list takes the partner of a listed club whose partner is not in the division (the
+ * place of the club it replaced), the best reputation (rep[i]) first. Clubs left over meet the club next to them by
+ * reputation. derby[i] gets the partner of club i. Returns the pairs made by replacement. */
+int season_arg_derby_pairs(int n, const int *listed, const int *rep, int *derby);
+
 #endif
