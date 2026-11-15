@@ -262,7 +262,12 @@ def encoded_form(file, season):
 def want_counts(file, season):
     """(rounds of the template, matches of a club) of a file's row: m x (n' - 1) and m x (n - 1), plus the derby or
     inter-zone rounds of the row; with zones, those of a zone (each half the same)."""
-    clubs, m, zones, extra, rounds, _h = encoded_form(file, season)
+    clubs, m, zones, extra, rounds, halves = encoded_form(file, season)
+    if halves and not zones and extra == 1 and m == 1 and clubs % 2 == 0:
+        # The split form (arg_prm from 2027, season_sizes_arg.c form_of): one table of n in two halves of n/2 fechas,
+        # the derby repeat inside the second. The league is the first half, a League_Stage the second; each has its
+        # own template of n/2 dates, and a club plays n/2 matches in each (arg_title_faults checks both together).
+        return (clubs // 2, clubs // 2)
     m = m or 2
     if zones:
         return (rounds or m * (max(zones) + (max(zones) & 1) - 1) + extra, m * (max(zones) - 1) + extra)
@@ -893,9 +898,15 @@ def arg_faults(log, year):
         fails += check_block()
     # Gap row 54: the clubs of each row's real relegation go down, the worst averages first, then the worst club of
     # the annual table that the averages kept (season_sizes_arg.c arg_down).
-    # The clubs sent down are not in the division of the next edition (its zones or derby line, which lists every id).
-    next_ids = {}
+    # The clubs sent down are not in the division of the next edition (its zones or derby line, which lists every id),
+    # unless the next edition grows: then the size step fills it from the Nacional B by the averages, and a club sent
+    # down may come back at once (real life: Argentinos Juniors and Colon, down in 2013/14, played the Primera of 30 in
+    # 2015). The size of an edition is the length of its step order line, which lists every club.
+    next_ids, size = {}, {}
     for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm step order (\d+) by the averages: (.*)$", x)
+        if m:
+            size[int(m.group(1))] = len([w for w in m.group(2).split("|") if w.strip().count(":") >= 2])
         m = re.match(r"recomp: league sizes: arg_prm zones (\d+): .*?; A ([\d ]+); B ([\d ]+);", x)
         if m:
             next_ids[int(m.group(1))] = {int(c) for c in (m.group(2) + " " + m.group(3)).split()}
@@ -914,7 +925,8 @@ def arg_faults(log, year):
                          f"(row {row})")
         gone = [int(w.split(":")[0]) for w in (m.group(4) + " " + m.group(7)).split()]
         stay = [c for c in gone if c in next_ids.get(ed + 1, set())]
-        if stay:
+        grows = ed in size and len(next_ids.get(ed + 1, ())) > size[ed]
+        if stay and not grows:
             fails.append(f"arg_prm {ed}: {stay} sent down but in the division of {ed + 1}")
         kept = float(m.group(5))
         for w in m.group(4).split():
