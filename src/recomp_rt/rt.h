@@ -416,6 +416,8 @@ uint32_t rt_tur_stage_bytes(uint32_t obj, uint32_t original);
 /* A constant of ArgPrm for 20 clubs plus (count - 20) in a season game (win/season_sizes_arg.c, tools/recomp/arg_prm.py). */
 uint32_t rt_arg_count(uint32_t original);
 uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original);
+/* The count at which ArgSecond adds its fixed 25th club (win/season_sizes_arg_second.c, tools/recomp/arg_second.py). */
+uint32_t rt_arg_second_fixed_at(uint32_t obj, uint32_t original);
 /* The Ekstraklasa in one table (win/season_pol_first.c, GitHub issue 92): the 16 club slots of the constructor's
  * predicted positions (0x7c8ce5, 0x7c8d09) and of set_predicted_positions (0x7ca264, 0x7ca288), tools/recomp/pol_first.py. */
 uint32_t rt_pol_first_slots(uint32_t obj, uint32_t original);

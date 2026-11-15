@@ -18,6 +18,16 @@ RT_WRAP(00405670, rules_405670)
     season_sizes_rules(self);
 }
 
+/* ArgSecond::set_up_rules */
+void o_00407e50(void);
+RT_WRAP(00407e50, rules_407e50)
+{
+    uint32_t self = cpu.ecx;
+    o_00407e50();
+    if (rt_unwinding) return;
+    season_sizes_rules(self);
+}
+
 /* AusNsl::set_up_rules */
 void o_00411ce0(void);
 RT_WRAP(00411ce0, rules_411ce0)
@@ -571,6 +581,7 @@ RT_WRAP(00925c50, rules_925c50)
 /* The source files of these classes (season_sizes.h). */
 const char *const season_size_files[] = {
     "arg_prm",
+    "arg_second",
     "aus_nsl",
     "bel_first",
     "bel_second",
@@ -627,10 +638,11 @@ const char *const season_size_files[] = {
     "tur_second",
     "wel_first",
 };
-const int season_size_file_count = 56;
+const int season_size_file_count = 57;
 /* The largest count of each file (0: the class counts the clubs of the data). */
 const int season_size_caps[] = {
     30,       /* arg_prm */
+    38,       /* arg_second */
     13,       /* aus_nsl */
     18,       /* bel_first */
     18,       /* bel_second */
@@ -690,6 +702,7 @@ const int season_size_caps[] = {
 /* The smallest count of each file: the largest where a cup of the nation needs it (league_sizes.py FLOORS). */
 const int season_size_floors[] = {
     0,       /* arg_prm */
+    0,       /* arg_second */
     0,       /* aus_nsl */
     0,       /* bel_first */
     18,       /* bel_second */
@@ -749,6 +762,7 @@ const int season_size_floors[] = {
 /* The count whose places and exchange stay the class's (league_sizes.py FIXED_EXCHANGE). */
 const int season_size_fixed[] = {
     0,       /* arg_prm */
+    0,       /* arg_second */
     0,       /* aus_nsl */
     0,       /* bel_first */
     0,       /* bel_second */
@@ -810,6 +824,7 @@ const int season_size_fixed[] = {
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
     {"arg_prm", 20, 30, SEASON_TEMPLATE_HALVES},
+    {"arg_second", 25, 38, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
@@ -829,7 +844,7 @@ const SeasonGrown season_grown[] = {
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 19;
+const int season_grown_count = 20;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -840,6 +855,17 @@ RT_WRAP(00404570, schedule_404570)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_00404570();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* ArgSecond::create_schedule */
+void o_00406f00(void);
+RT_WRAP(00406f00, schedule_406f00)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00406f00();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

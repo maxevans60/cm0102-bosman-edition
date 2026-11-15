@@ -136,6 +136,12 @@ ROWS = {
     "arg_prm@2025": (2025, 2026, "Primera 2025/26 (row 2025, the 2026 season): the clubs and zones of its list"),
     "arg_prm@2026": (2026, 2027, "Primera 2026/27 (row 2026, the 2027 season): one table of 30 and the derby round in "
                                  "two halves, each with a knockout of 16"),
+    # Slice 16 (D10): the Argentine second division. The class plays 25 clubs: an Apertura of one meeting, then three
+    # Clausura zones of 8 and a Reducido. Every row but 2001/02 plays one table of its count and meetings, on the dates
+    # of both class halves (25 and 14).
+    "arg_second": (2010, 2011, "Primera B Nacional 2010/11, 20 clubs in two meetings: 38 dates, no class stages"),
+    "arg_second@2016": (2016, 2017, "Primera B Nacional 2016/17, 23 clubs in two meetings: 46 dates, then 25 in one "
+                                    "meeting (the size step)"),
     # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
     # before the real season (row 2003 is the 2004 Série A).
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),

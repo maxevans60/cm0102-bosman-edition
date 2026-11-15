@@ -17,14 +17,14 @@ class takes 16 in every season (CLASS_SIZE of season_clubs.c). set_up_rules (vta
 places of the season after it. Evidence: docs/research/2026-10-18-league-sizes.md.
 
 The group classes (BelThird, FraLower, SpaLower, SpaSecondB, PorSecondB, SweSecond, TurSecondB, ItaSerC2a..c,
-BraNatThird, GerRegional), ArgSecond (25 clubs with a fix-up of the 25th at 0x407dc0 and zones that read
-fixed rows, 0x4082fd and 0x4083d5: a 2010/11 start with 20 stopped at arg_second.cpp 85), DenSecond (one division of 16, while the real 2nd Divisions
+BraNatThird, GerRegional), DenSecond (one division of 16, while the real 2nd Divisions
 are groups from 2005/06 with rows of 28 to 32 clubs and the places of the groups), FinFirst (the North and South groups are two objects of one class, 0x593a82, while
 the table holds one division from 2002) and UsaMls (three groups of 4, season_mls.c) are not here: their sizes are groups.
 """
 
 CLASSES = [
     ("ArgPrm", "arg_prm", 0x405670, [(0x405552, "esi", 20)]),
+    ("ArgSecond", "arg_second", 0x407E50, [(0x407CE2, "esi", 25)]),
     ("AusNsl", "aus_nsl", 0x411CE0, [(0x411B82, "edi", 13)]),
     ("BelFirst", "bel_first", 0x41E9E0, [(0x41E8C2, "esi", 18)]),
     ("BelSecond", "bel_second", 0x41FEA0, [(0x41FD82, "esi", 18)]),
@@ -142,6 +142,13 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
 GROWN = {
     "arg_prm": (30, 0x404570, "halves"),
+    # - ArgSecond (second division, 25 in 2001/02 and 2017/18 to 2018/19, 20 to 2012/13, 22, 23, then 32 to 38; slice
+    #   16, D10): fill_league_table 0x407cd0 allocates 25 rows (push 0x5c3 at 0x407cdb, the object in esi from
+    #   0x407cd9) and stores 25 at 0x407ce2; create_schedule 0x406f00 makes 25 dates for the Apertura (stage -1, D 0x19
+    #   at 0x406f36) and 14 for each Clausura zone (stages 0 to 2, D 0xe at 0x407530); set_up_rules 0x407e50 sets one
+    #   meeting (0x407e62) and +0xd9 = 3 (0x407ec0): shuffled. Every row but 2001/02 plays one table of the row
+    #   (season_sizes_arg_second.c): its template takes the dates of both halves, and the class's stages are not played.
+    "arg_second": (38, 0x406F00, "shuffled"),
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),

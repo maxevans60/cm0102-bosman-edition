@@ -223,8 +223,9 @@ Merge danger: one-way door for saves (zone stages in the save). Blast radius: Ar
 Blocked by: 15
 Delivers: the second division at its row's count and form (D10) with the zone code of slice 15, and the functions that need 25 taking the count.
 Merge danger: two-way door. Blast radius: Argentina's second tier and its promotion.
-- [ ] `league_size_run.py` passes for arg_second 2010 and 2016
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for arg_second 2010 and 2016
+  Halves and zones rows play as one table (no zone lists in any source), open item 252.
+- [x] The same-save set is equal
 
 ### 17. Brazil
 Blocked by: 2

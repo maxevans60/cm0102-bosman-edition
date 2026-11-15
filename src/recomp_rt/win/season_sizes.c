@@ -21,6 +21,7 @@
 #include "season_bel_second.h"
 #include "season_esp_second.h"
 #include "season_sizes_arg.h"
+#include "season_sizes_arg_second.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -433,6 +434,7 @@ static int grown_meetings(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
     int m = r ? season_sizes_asia_meetings(file, r->season, season_league_meetings(file, r->season)) : 0;
+    m = season_arg_second_meetings(obj, m);     /* slice 16: halves and zones as one table */
     if (m >= 1 && m <= 4 && m != (int16_t)rd16(g_mem, obj + COMP_MEETINGS)) {
         if (logging())
             fprintf(stderr, "recomp: league sizes: %s meetings %d (%.50s %d, the class sets %d)\n", file, m,
@@ -556,6 +558,9 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     }
     int class_meetings = (int16_t)rd16(g_mem, self + COMP_MEETINGS);
     int meetings = probe ? probe : grown_meetings(self, file);
+    /* The Argentine second division: one table takes the dates of both class halves (slice 16). */
+    if (!probe) season_arg_second_join(self, count_at);
+    if (rt_unwinding) return;
     uint32_t old = cpu.eax;
     int have = readable(count_at) ? (int16_t)rd16(g_mem, count_at) : 0;
     int n = league_count(self, file, NULL, NULL);
@@ -964,6 +969,9 @@ static void sizes_rules(uint32_t obj)
     /* A floor division keeps its places too: its count must stay, and some of its exchanges are fixed code (League
      * Two with the Conference: 2 down and 1 back gave 23 clubs in 2023/24 of a 2022/23 game). */
     if (!size_file(file) || exchange_floor(file) > 0) return;
+    /* The Argentine second division keeps the class's places in the class's form (2001/02: the Apertura winner up,
+     * the Reducido and the promotion ties of its stages; slice 16). */
+    if (!strcmp(file, "arg_second") && !season_arg_second_one_table(obj)) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
     /* An Irish edition that plays a row of another real season keeps the class's places: editions 2003 and 2004 both
@@ -1004,6 +1012,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
+    if (!rt_unwinding) season_arg_second_rules(obj);  /* 0.7.2 slice 16 */
 }
 
 /* ---- Promotion and relegation of a size change ---- */
@@ -1208,9 +1217,6 @@ static void step_note_pair(uint32_t upper, uint32_t lower)
  * take the row's count when the class takes it (item 260, below). */
 static int step_want(uint32_t obj, const char *file, int year)
 {
-    /* The Argentine second division takes exactly 25 (ArgSecond::fill_league_table 0x407ce2) and gives the Primera
-     * its clubs (slice 15; its own row is slice 16's). */
-    if (!strcmp(file, "arg_second")) return 25;
     const SeasonRule *r = row_of_edition(file, year);
     /* Item 260: the two Irish classes count the clubs of their data (cap 0) and take some counts only (IrePrm 10 or
      * 12, IreFirst 2 to 12: season_sizes_irl_takes). With no part in the step, a 2001 game kept the Premier

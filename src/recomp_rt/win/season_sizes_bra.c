@@ -41,6 +41,7 @@
 #include "season_change.h"
 #include "season_playoffs.h"
 #include "season_sizes.h"
+#include "season_sizes_arg_second.h"
 #include "season_template.h"
 
 #include <stdio.h>
@@ -537,11 +538,13 @@ RT_WRAP(0042d0d0, bra_second_news)
  * play-off; the base League holds record_season_honours 0x684640, which takes rows 0 and 1 of the table +0xb1
  * (0x68465b..0x68465d). With no play-off stage 0 is not there (a jump to 0), so a Série A or B season with no
  * play-off takes the League's, as the OFC Nations Cup with no stage (season_intl_ofc.c). Série B from row 2025 has
- * a play-off for places only, so its honours are the League's too. Other classes that hold 0x408eb0 keep it. */
+ * a play-off for places only, so its honours are the League's too. So does an edition of one table of the Argentine
+ * second division (ArgSecond holds 0x408eb0 too, slice 16). Other classes that hold 0x408eb0 keep it. */
 void o_00408eb0(void);
 RT_WRAP(00408eb0, staged_honours)
 {
-    if (no_playoff(cpu.ecx) || playoff_now(cpu.ecx) == PO_TIES) {     /* the champion is the top of the table */
+    if (no_playoff(cpu.ecx) || season_arg_second_no_stage(cpu.ecx)    /* slice 16: one table, no stage */
+        || playoff_now(cpu.ecx) == PO_TIES) {                          /* the champion is the top of the table */
         rt_jump(F_LEAGUE_HONOURS);
         return;
     }
