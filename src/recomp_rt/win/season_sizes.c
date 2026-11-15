@@ -914,6 +914,8 @@ static int is_outside(uint32_t obj)
 /* 1 when the division below is a league outside the size table and the row's count changes after this edition. */
 static int outside_change(uint32_t obj, const char *file, const SeasonRule *r)
 {
+    /* With changing rules off the start season's places stay (Q232; review 1 of the D23 fix). */
+    if (!season_changing_rules() || season_change_is_creating()) return 0;
     uint32_t below = neighbour(obj, BELOW);
     if (!below || size_file(season_change_file(below))) return 0;
     const SeasonRule *next = row_of_season(file, r->season + 1);
@@ -937,7 +939,10 @@ static void sizes_rules(uint32_t obj)
      * Two with the Conference: 2 down and 1 back gave 23 clubs in 2023/24 of a 2022/23 game). */
     if (!size_file(file) || exchange_floor(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
-    if (!r) return;
+    if (!r) {
+        note_outside(obj, 0);
+        return;
+    }
     /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
      * with fixed counts (the German Regionalliga split needs exactly 36 clubs, cmp bl, 0x24 at 0x5dbc3b, box
      * ger_first.cpp 1049 at 0x5dbcd9: the 2. Bundesliga with 2 relegation places against the Regionalliga's 4
@@ -951,10 +956,11 @@ static void sizes_rules(uint32_t obj)
      * wrap of 0x689c80 below keeps the original's call for a pair with a class outside the table), so the division
      * below keeps its count, and the size step (D13) moves the clubs of the relegation places that did not move. */
     int outside = !open_neighbour(obj, BELOW) && !season_sizes_eng_below(file) && outside_change(obj, file, r);
-    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file) || outside) {
-        int changed = set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
-        note_outside(obj, outside && changed);
-    }
+    int changed = 0;
+    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file) || outside)
+        changed = set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+    /* Each edition: the set holds a division only in the edition whose places this slice set (review 1). */
+    note_outside(obj, outside && changed);
 }
 
 /* Gap row 9 (lead-notes/sizes-gaps.md): a row whose play-off cell says "none" plays no play-off. Here the pairs whose
@@ -996,7 +1002,9 @@ static void class_playoff_rules(uint32_t obj, const char *file)
         const SeasonRule *r = row_now(obj, file);
         if (is_lower) {
             int count = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT);
-            if (off && count == 1) {
+            /* Every edition with no play-off: set_up_rules writes the class's places again each edition (SweFirst
+             * 0x88f0dc..0x88f0ee), also when the stage count is 0 already (review 1). */
+            if (off && (count == 1 || count == 0)) {
                 wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
                 g_mem[obj + UP_PLAYOFF] = 0;
                 if (!fixed && r && r->up >= 0 && r->up <= 30) g_mem[obj + UP] = (uint8_t)r->up;
@@ -1397,6 +1405,19 @@ static void size_step_run(uint32_t trigger)
     /* A division outside the table that cannot keep its count (no row of its last table to send out, no club of its
      * nation to take in) takes no part, and the plan runs again: the lowest division of the table then trades with
      * no division as before. */
+    /* An outside division that made its new table already gives and takes nothing (review 1): it leaves the lists of
+     * the divisions above, which then trade with no division as before. */
+    for (int d = 0; d < ndiv; d++)
+        if (step_seen[d].keep && div[d].started) {
+            div[d].want = -1;
+            for (int e = 0; e < ndiv; e++) {
+                int k = 0;
+                for (int j = 0; j < div[e].nlower; j++)
+                    if (div[e].lower[j] != d) div[e].lower[k++] = div[e].lower[j];
+                div[e].nlower = k;
+            }
+        }
+    if (!step_up_ok(div, ndiv, club, nclub, at)) goto done;
     StepClub *start = malloc((size_t)nclub * sizeof *start + 1);
     if (!start) goto done;
     memcpy(start, club, (size_t)nclub * sizeof *club);
