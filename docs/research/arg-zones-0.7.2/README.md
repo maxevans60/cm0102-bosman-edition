@@ -1,0 +1,15 @@
+primera.tsv holds zone and derby facts of the Argentine Primera División for release 0.7.2. Columns: season, kind, club, zone, partner, db_club_id, db_club, source1, source2, note.
+Kind zone: 30 clubs of the Torneo Apertura 2025 (season 2024/25), the Torneo Apertura 2026 (2025/26) and the Torneo Clausura 2026 (2025/26-clausura). The Torneo Clausura 2025 has the same zones as the Apertura 2025, so it has no zone rows.
+Kind interzone: 30 matches per tournament, for the four tournaments 2025 Apertura, 2025 Clausura, 2026 Apertura and 2026 Clausura. Club is the home side. Each club plays two different interzonal opponents: its rival (fecha varies by pair) and a drawn opponent in fecha 8 (2025) or fecha 6 (2026). The Clausura reverses the venues of the Apertura.
+Kind derby: 15 pairs for the 2015 season (season 2014/15) and 15 pairs for the 2016/17 season. The derby round is fecha 24 of 30 in both seasons. The note gives the fecha of the first meeting.
+db_club_id and db_club come from docs/research/rules-0.6.0/arg-usa-clubs.tsv, same season, Primera División rows. Every club has a row, so no cell is empty.
+Sources read on 14 November 2026: en.wikipedia 2025 and 2026 AFA Liga Profesional de Fútbol (raw wikitext), es.wikipedia Campeonato de Primera División 2025, 2026, 2015 and 2016-17 (raw), RSSSF arg2025, arg2026, arg2015a and arg2017.
+Zones: en and es Wikipedia agree for every club. RSSSF does not label zones, so it checks them only through the fixtures (each club plays 14 distinct zone mates).
+Interzonals: the pairs, home sides and the fecha come from RSSSF. en Wikipedia gives the same 30 pairs and home sides for each tournament. es Wikipedia only describes the format and gives no list.
+Derbies: RSSSF round 24 and the es Wikipedia fecha 24 table list the same 15 pairs. en Wikipedia only states the format and gives no round number.
+Open points
+No source disagreement was found.
+The RSSSF page for the Torneo Clausura 2026 lacks 6 same-zone matches that en Wikipedia shows. I don't know why. Those 6 pairs have one source for the zone check.
+I don't know whether the Torneo Clausura 2026 is finished. The en Wikipedia page was last edited on 13 November 2026.
+The es Wikipedia fecha 24 tables for 2015 and 2016-17 were compared with RSSSF by eye, not by script.
+Zone letters A and B come from en and es Wikipedia only. I did not find a third source such as AFA or Promiedos.

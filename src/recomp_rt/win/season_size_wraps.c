@@ -630,7 +630,7 @@ const char *const season_size_files[] = {
 const int season_size_file_count = 56;
 /* The largest count of each file (0: the class counts the clubs of the data). */
 const int season_size_caps[] = {
-    20,       /* arg_prm */
+    30,       /* arg_prm */
     13,       /* aus_nsl */
     18,       /* bel_first */
     18,       /* bel_second */
@@ -809,6 +809,7 @@ const int season_size_fixed[] = {
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
  * mode of the date template. */
 const SeasonGrown season_grown[] = {
+    {"arg_prm", 20, 30, SEASON_TEMPLATE_HALVES},
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
@@ -828,9 +829,20 @@ const SeasonGrown season_grown[] = {
     {"tur_second", 20, 20, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 18;
+const int season_grown_count = 19;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* ArgPrm::create_schedule */
+void o_00404570(void);
+RT_WRAP(00404570, schedule_404570)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00404570();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* BraNatFirst::create_schedule */
 void o_00429b50(void);

@@ -128,6 +128,11 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   the object in esi from 0x8ff159) and stores 20 at 0x8ff162; its take loop ends at +0x3e (0x8ff21b) and fails
 #   unless it took exactly +0x3e (0x8ff235). create_schedule 0x8fe9b0 makes 38 dates (D 0x26 at 0x8fe9ea); set_up_rules
 #   0x8ff280 sets 2 meetings (0x8ff28d), no +0xd9. The cap stays 20: the row only makes it smaller (D5).
+# - ArgPrm (Primera, 20 to 2013/14, then 30, 28, 26, 24 and 30; slice 15): create_table 0x405540 allocates 20 rows
+#   (push 0x49c at 0x40554b, the object in esi from 0x405549) and stores 20 at 0x405552; create_schedule 0x404570
+#   makes 19 dates for the Apertura (stage -1, D at 0x4045aa) and 19 for the Clausura (stage 0, D at 0x404d9a), none
+#   for the aggregate table (stage 1). Mode halves: the runtime of the class (season_sizes_arg.c) makes the dates of
+#   each half, or of one table over both halves, and the fixed fixture lists of the zones and the derby round.
 # - EngConf (Conference, 22 to 2005/06, 24 from 2006/07, 23 in 2020/21 and 2021/22; slice 8): create_table 0x56ecb0
 #   allocates 22 rows (push 0x512 at 0x56ecbb, the object in esi) and stores 22 at 0x56ecc2; create_schedule 0x56de60
 #   makes 42 dates (D 0x2a at 0x56de9d, 0xaaa bytes at 0x56de98) for stage -1; set_up_rules 0x56ede0 sets 2 meetings
@@ -151,6 +156,7 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   0x92512a, 0x8a2 bytes at 0x925125); set_up_rules 0x925c50 sets 2 meetings (0x925c9b) and does not write +0xd9:
 #   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
 GROWN = {
+    "arg_prm": (30, 0x404570, "halves"),
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
@@ -192,7 +198,7 @@ GROWN = {
     # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
     "ire_first": (12, 0x634F40, "shuffled"),
 }
-GROWN_MODES = ("shuffled", "sequential", "mirrored")
+GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 # Grown classes whose create_table allocates the table from the count (+0x3e) after the count store, so the table
 # has the rows of the season with no patch: file: (address of `movsx eax, word ptr [reg + 0x3e]`, its bytes). The
 # tool checks the bytes (table_sites).
