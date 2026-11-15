@@ -288,6 +288,27 @@ static int list_season(int season, int kind)
     return best;
 }
 
+/* 1 when every drawn pair of a list is one of its rival pairs (2016: the rivals meet again in fecha 12), read from the
+ * list alone, not from the clubs that a game holds. */
+static int list_twice(int season)
+{
+    int draws = 0;
+    for (int k = 0; k < season_arg_pair_count; k++) {
+        const SeasonArgPair *d = &season_arg_pairs[k];
+        if (d->kind != SEASON_ARG_DRAW || d->season != season) continue;
+        int found = 0;
+        for (int j = 0; j < season_arg_pair_count && !found; j++) {
+            const SeasonArgPair *r = &season_arg_pairs[j];
+            found = r->kind == SEASON_ARG_RIVAL && r->season == season &&
+                    ((!strcmp(r->home, d->home) && !strcmp(r->away, d->away)) ||
+                     (!strcmp(r->home, d->away) && !strcmp(r->away, d->home)));
+        }
+        if (!found) return 0;
+        draws++;
+    }
+    return draws > 0;
+}
+
 static int index_of(const uint32_t *club, int n, const char *name)
 {
     for (int i = 0; i < n; i++)
@@ -369,8 +390,7 @@ static int zones_plan(const Form *f, const uint32_t *club, int n, int round[][SE
     /* Drawn opponents for the clubs of no pair: a club of zone B not drawn yet and not the rival. When the last
      * clubs are left with their rivals only, every club of the zone takes the club after its rival instead (a
      * matching apart from the rivals). */
-    int ok = 1, twice = 0;
-    for (int i = 0; i < z; i++) twice |= draw_b[i] >= 0 && draw_b[i] == rival_b[i];
+    int ok = 1, twice = rs >= 0 && ds == rs && list_twice(ds);
     if (twice)      /* the list meets each rival twice (2016, fecha 12): every club does */
         for (int i = 0; i < z; i++) draw_b[i] = rival_b[i];
     for (int i = 0; i < z && ok && !twice; i++) {
@@ -672,10 +692,34 @@ static void averages_fit(uint32_t self, int n)
  * ArgPrm::record_season_honours 0x405cac) the records first take the count of the division: the original keeps the
  * count of its first season (+0x34 at 0x405f02), so the clubs of a grown division found no record and the last two
  * records were not the last two clubs. */
+/* The averages of the season just played, as ArgPrm::update_relegation_averages(0) left them at its end (each record's
+ * +4, points over matches of three seasons, 0x4066dc..0x4066f8): start_new_season 0x405720 calls update(1) (0x40572e)
+ * before the chain, which drops the oldest season (0x406669..0x4066a0) and sorts on the other two. The size step
+ * (season_arg_step_order) ranks by these. */
+#define SNAP_MAX (4 * MAX_CLUBS)
+static struct { uint32_t obj; int year, n; int32_t id[SNAP_MAX]; float avg[SNAP_MAX]; } snap;
+
 void o_00406570(void);
 RT_WRAP(00406570, arg_update_averages)
 {
     uint32_t self = cpu.ecx;
+    if (rt_arg(0) == 1 && season_sizes_on() && is_prm(self)) {
+        uint32_t avg = rd32(g_mem, self + AVERAGES);
+        int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
+        snap.obj = self;
+        snap.year = (int16_t)rd16(g_mem, self + COMP_YEAR);
+        snap.n = 0;
+        for (int k = 0; readable(avg) && k < have && snap.n < SNAP_MAX; k++) {
+            uint32_t r = avg + (uint32_t)k * AVG_SIZE;
+            int32_t id = (int32_t)rd32(g_mem, r);
+            if (id < 0) continue;
+            uint32_t bits = rd32(g_mem, r + 4);
+            float f;
+            memcpy(&f, &bits, sizeof f);
+            snap.id[snap.n] = id;
+            snap.avg[snap.n++] = f;
+        }
+    }
     if (rt_arg(0) == 0 && season_sizes_on() && is_prm(self)) {
         int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
         if (n >= MIN_CLUBS && n <= MAX_CLUBS) averages_fit(self, n);
@@ -717,31 +761,42 @@ uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original)
 
 void season_arg_step_order(uint32_t obj, uint32_t *club, int n)
 {
-    if (!season_sizes_on() || !readable(obj) || n < 1 || n > 4 * MAX_CLUBS) return;
-    uint32_t avg = rd32(g_mem, obj + AVERAGES), clubs = rd32(g_mem, CLUBS);
-    int have = (int16_t)rd16(g_mem, obj + AVERAGE_COUNT);
-    if (!readable(avg) || !readable(clubs) || have < 1 || have > 4 * MAX_CLUBS) return;
-    int rank[4 * MAX_CLUBS];
+    if (!season_sizes_on() || !readable(obj) || n < 1 || n > SNAP_MAX) return;
+    uint32_t clubs = rd32(g_mem, CLUBS);
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (!readable(clubs) || snap.obj != obj || snap.year != year) {
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: no averages of the season for the step; the table's order\n",
+                year);
+        return;
+    }
+    /* Best first: the highest average; a club with none (it never played the division) after them, in table order. */
+    float key[SNAP_MAX];
+    int has[SNAP_MAX];
     for (int i = 0; i < n; i++) {
-        rank[i] = have + i;
-        for (int k = 0; k < have; k++) {
-            int32_t id = (int32_t)rd32(g_mem, avg + (uint32_t)k * AVG_SIZE);
-            if (id >= 0 && clubs + (uint32_t)id * CLUB_SIZE == club[i]) {
-                rank[i] = k;
+        has[i] = 0;
+        key[i] = 0;
+        for (int k = 0; k < snap.n; k++)
+            if (clubs + (uint32_t)snap.id[k] * CLUB_SIZE == club[i]) {
+                has[i] = 1;
+                key[i] = snap.avg[k];
                 break;
             }
-        }
     }
     for (int i = 1; i < n; i++) {       /* insertion: stable */
         uint32_t c = club[i];
-        int r = rank[i], j = i;
-        for (; j > 0 && rank[j - 1] > r; j--) club[j] = club[j - 1], rank[j] = rank[j - 1];
+        float kv = key[i];
+        int hv = has[i], j = i;
+        for (; j > 0 && (has[j - 1] < hv || (has[j - 1] == hv && hv && key[j - 1] < kv)); j--)
+            club[j] = club[j - 1], key[j] = key[j - 1], has[j] = has[j - 1];
         club[j] = c;
-        rank[j] = r;
+        key[j] = kv;
+        has[j] = hv;
     }
     if (logging()) {
-        fprintf(stderr, "recomp: league sizes: arg_prm step order %d by the averages:", (int16_t)rd16(g_mem, obj + COMP_YEAR));
-        for (int i = 0; i < n; i++) fprintf(stderr, " %u:%.50s|", rd32(g_mem, club[i]), win_str(club[i] + CLUB_NAME));
+        fprintf(stderr, "recomp: league sizes: arg_prm step order %d by the averages:", year);
+        for (int i = 0; i < n; i++)
+            fprintf(stderr, " %u:%.50s:%s%.4f|", rd32(g_mem, club[i]), win_str(club[i] + CLUB_NAME), has[i] ? "" : "none ",
+                    (double)key[i]);
         fprintf(stderr, "\n");
     }
 }

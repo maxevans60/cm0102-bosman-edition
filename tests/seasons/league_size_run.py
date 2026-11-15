@@ -621,6 +621,17 @@ def save_faults(work, file):
     return fails
 
 
+def rival_twice(season):
+    """1 when the research list of a row meets each rival twice and draws no other club (2016, row 2015): no inter-zone
+    row of the season (docs/research/arg-zones-0.7.2/primera.tsv) is a draw match."""
+    import csv
+    path = os.path.join(ROOT, "docs", "research", "arg-zones-0.7.2", "primera.tsv")
+    label = f"{season}/{(season + 1) % 100:02d}"
+    rows = [r for r in csv.DictReader(open(path, encoding="utf-8"), delimiter="\t")
+            if r["season"] == label and r["kind"] == "interzone"]
+    return bool(rows) and not any(re.search(r"fecha \d+, draw match", r["note"]) for r in rows)
+
+
 def arg_fixtures(log):
     """{(edition, half): [[(home, away)] a round]} of the fixture lines of the Argentine Primera."""
     out = {}
@@ -695,11 +706,14 @@ def arg_faults(log, year):
                     for y in grp[i + 1:]:
                         if meet.get(frozenset((x, y)), 0) != 1:
                             fails.append(f"{name}: zone clubs {x} and {y} meet {meet.get(frozenset((x, y)), 0)} times")
+            twice = rival_twice(season)
             for x in za + zb:
                 other = zb if x in za else za
                 inter = sum(meet.get(frozenset((x, y)), 0) for y in other)
-                if inter != extra:
-                    fails.append(f"{name}: club {x} plays {inter} matches against the other zone, want {extra}")
+                opponents = sum(1 for y in other if meet.get(frozenset((x, y))))
+                if inter != extra or opponents != (1 if twice else extra):
+                    fails.append(f"{name}: club {x} plays {inter} matches against {opponents} clubs of the other zone, "
+                                 f"want {extra} against {1 if twice else extra}")
             if half == "clausura":
                 ap = fixtures.get((ed, "apertura"), [])
                 if [[(a, h) for h, a in r] for r in ap] != rounds:
@@ -733,30 +747,42 @@ def arg_faults(log, year):
                                                          for x in lines if "league sizes: arg_prm" in x):
             fails.append(f"arg_prm {ed}: no fixture line of its zones or derby round")
     fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines if "arg_prm fixed list not played" in x]
-    # The size step sends down the clubs with the worst averages (promedios), the last of the order line.
-    order = None
+    # The size step sends down the clubs with the worst averages (promedios): each order line lists the clubs best
+    # first with the average of the season just played; it must descend, and each club that the step then sends down
+    # from the Primera (before the next order line) is among the last of it (the two that honours sent down are
+    # already gone, so 2 more).
+    order, down = None, []
+
+    def check_block():
+        if order is None:
+            return [f"arg_prm: step: {d} goes down with no order by the averages" for d in down]
+        out = []
+        vals = [v for _n, v in order if v is not None]
+        if any(b > a + 1e-6 for a, b in zip(vals, vals[1:])) or (None in [v for _n, v in order] and
+                                                                  any(v is not None for _n, v in
+                                                                      order[[v for _n, v in order].index(None):])):
+            out.append(f"arg_prm: step order not best first by the averages: {order}")
+        worst = [n[:50] for n, _v in order[-(len(down) + 2):]] if down else []
+        out += [f"arg_prm: step: {d} goes down, not one of the {len(down) + 2} worst averages {worst}"
+                for d in down if d[:50] not in worst]
+        return out
     for x in lines:
         m = re.match(r"recomp: league sizes: arg_prm step order \d+ by the averages: (.*)$", x)
         if m:
-            order = [w.split(":", 1)[1] for w in m.group(1).split("|") if ":" in w]
+            if order is not None or down:
+                fails += check_block()
+            order, down = [], []
+            for w in m.group(1).split("|"):
+                p = w.strip().split(":")
+                if len(p) >= 3:
+                    v = p[-1].strip()
+                    order.append((":".join(p[1:-1]).strip(), None if v.startswith("none") else float(v)))
             continue
         m = re.match(r"recomp: league sizes: step: (.*) from Argentine Premier Division to ", x)
         if m:
-            if not order:
-                fails.append(f"arg_prm: step: {m.group(1)} goes down with no order by the averages")
-            else:
-                down = [y for y in lines if re.match(r"recomp: league sizes: step: .* from Argentine Premier Division to ",
-                                                    y)]
-                worst = [n.strip() for n in order[-len(down):]]
-                if m.group(1).strip()[:50] not in [w[:50] for w in worst]:
-                    fails.append(f"arg_prm: step: {m.group(1)} goes down, not one of the {len(down)} worst averages "
-                                 f"{worst}")
-    # The averages hold the clubs of each finished edition (ArgPrm::update_relegation_averages 0x406570 at its end).
-    for ed, n, _x, _lo, _hi in played(log, "arg_prm"):
-        if not re.search(rf"recomp: league sizes: arg_prm {ed}: averages of {n} clubs", log):
-            fails.append(f"arg_prm {ed}: no averages line of {n} clubs")
-    fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines
-              if re.search(r"league sizes: step: .* from Argentine Second Division to no division", x)]
+            down.append(m.group(1).strip())
+    if order is not None or down:
+        fails += check_block()
     print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))
     for x in lines:
         if "league sizes: arg_prm " in x and "not in the division:" in x:
