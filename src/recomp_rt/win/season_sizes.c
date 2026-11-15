@@ -262,6 +262,7 @@ static const char *record_name(uint32_t obj)
 static void size_step_run(uint32_t trigger);
 static int lone_file(const char *file);
 static void lone_exchange(uint32_t self);
+static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r);
 static void step_note_pair(uint32_t upper, uint32_t lower);
 static int step_index(uint32_t obj);
 static int step_running;
@@ -985,12 +986,15 @@ static void sizes_rules(uint32_t obj)
     /* A division with no chain (open item 250, below): the row's places go to no division at the season change. The
      * class writes none (WelFirst::set_up_rules 0x925c50), so set_places would keep its 0. */
     /* Only with changing rules on: only then do the clubs go down (lone_exchange; review of 15 November). */
-    if (lone_file(file) && season_changing_rules() && r->down >= 0 && r->down <= 30 &&
-        (int8_t)g_mem[obj + DOWN] != r->down) {
+    /* Lead decision of 15 November: only the places that the exchange will use (lone_shown, the guard of gap 47). */
+    if (lone_file(file) && season_changing_rules() && r->down >= 0 && r->down <= 30) {
+        int shown = lone_shown(obj, file, r);
+        /* A line every time (the class keeps the byte from the last edition), so the run test reads each edition. */
         if (logging())
-            fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d to no division, the class gave %d\n",
-                    file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), r->down, (int8_t)g_mem[obj + DOWN]);
-        g_mem[obj + DOWN] = (uint8_t)r->down;
+            fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d to no division, the class "
+                    "gave %d (the row %d)\n", file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), shown,
+                    (int8_t)g_mem[obj + DOWN], r->down);
+        if ((int8_t)g_mem[obj + DOWN] != shown) g_mem[obj + DOWN] = (uint8_t)shown;
     }
 }
 
@@ -1312,6 +1316,50 @@ static int lone_pool(uint32_t rec)
     return n;
 }
 
+/* Test switch RECOMP_TEST_LONE_HUMAN=1 (tests/seasons/league_size_run.py): the worst club of a lone exchange counts as
+ * a club with a human manager. A test switch only. */
+static int lone_test_human(void)
+{
+    static int on = -1;
+    if (on < 0) {
+        const char *v = getenv("RECOMP_TEST_LONE_HUMAN");
+        on = v && !strcmp(v, "1");
+    }
+    return on;
+}
+
+/* The clubs that stayed at a lone exchange, for the news of the league's after hook (sizes_after): the exchange runs
+ * in start_new_season, outside the hooks, where season_change_news writes nothing. */
+#define MAX_STAYS 8
+static struct { uint32_t obj; char club[52], went[52]; } stays[MAX_STAYS];
+static int nstays;
+
+static void lone_stay_note(uint32_t obj, uint32_t club, uint32_t went)
+{
+    if (nstays >= MAX_STAYS) return;
+    stays[nstays].obj = obj;
+    snprintf(stays[nstays].club, sizeof stays[nstays].club, "%.50s", win_str(club + CLUB_NAME));
+    snprintf(stays[nstays].went, sizeof stays[nstays].went, "%.50s", went ? win_str(went + CLUB_NAME) : "");
+    nstays++;
+}
+
+static void lone_stay_news(uint32_t comp)
+{
+    int k = 0;
+    for (int j = 0; j < nstays; j++) {
+        if (stays[j].obj != comp) {
+            stays[k++] = stays[j];
+            continue;
+        }
+        if (stays[j].went[0])
+            season_change_news("%s stays in the %.50s: its manager is a player. %s goes down to no division in its "
+                               "place.", stays[j].club, record_name(comp), stays[j].went);
+        else
+            season_change_news("%s stays in the %.50s: its manager is a player.", stays[j].club, record_name(comp));
+    }
+    nstays = k;
+}
+
 static void lone_exchange(uint32_t self)
 {
     if (step_running || !sizes_on() || !season_changing_rules() || season_change_is_creating()) return;
@@ -1325,14 +1373,29 @@ static void lone_exchange(uint32_t self)
     int pool = places ? lone_pool(rec) : 0, want = step_want(self, file, step_seen[i].year + 1);
     /* Gap 47: only as many as the pool can replace, so the division keeps the count of its next row. */
     int down = season_size_lone_down(places, pool, have, want);
+    /* Lead decision of 15 November: never more than the table showed (sizes_rules, lone_shown), so the places the
+     * player saw are the places used, also when the pool grew during the season. */
+    int shown = (int8_t)g_mem[self + DOWN];
+    if (shown >= 0 && shown < down) down = shown;
     if (down < places && logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d, %d go down: %d clubs with no "
-                "division can come up, %d clubs to %d\n", file, record_name(self), step_seen[i].year, places, down,
-                pool, have, want);
+                "division can come up, %d clubs to %d, the table showed %d\n", file, record_name(self),
+                step_seen[i].year, places, down, pool, have, want, shown);
     nlone_down = 0;
-    for (int k = step_seen[i].nrows - 1; k >= 0 && nlone_down < down && !rt_unwinding; k--) {
+    /* Lead decision of 15 November: a club with a human manager keeps its league. It stays, and the next worst club
+     * with no human manager goes in its place (season_size_lone_pick). */
+    uint32_t club[STEP_MAX_ROWS];
+    int human[STEP_MAX_ROWS], out[STEP_MAX_ROWS], kept[STEP_MAX_ROWS], n = 0, nkept = 0;
+    for (int k = 0; k < step_seen[i].nrows && !rt_unwinding; k++) {
         uint32_t c = step_seen[i].club[k];
         if (current_division(c) != rec) continue;
+        club[n] = c;
+        human[n++] = is_human(c);
+    }
+    if (n && lone_test_human()) human[n - 1] = 1;
+    int picks = down > 0 ? season_size_lone_pick(human, n, down, out, kept, &nkept) : 0;
+    for (int j = 0; j < picks && !rt_unwinding; j++) {
+        uint32_t c = club[out[j]];
         wr32(g_mem, c + CLUB_LAST_DIVISION, rec);
         wr32(g_mem, c + CLUB_DIVISION, 0);
         uint32_t a[2] = {c, rec};
@@ -1342,6 +1405,30 @@ static void lone_exchange(uint32_t self)
             fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %.50s goes down to no division\n", file,
                     record_name(self), step_seen[i].year, win_str(c + CLUB_NAME));
     }
+    /* Each club that stays is paired with a club above the places that went in its place, in order. */
+    int repl[STEP_MAX_ROWS], nrepl = 0;
+    for (int j = 0; j < picks; j++)
+        if (out[j] < n - down) repl[nrepl++] = out[j];
+    for (int j = 0; j < nkept && !rt_unwinding; j++) {
+        uint32_t c = club[kept[j]], went = j < nrepl ? club[repl[j]] : 0;
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %.50s stays, its manager is a player: %.50s goes "
+                    "down in its place\n", file, record_name(self), step_seen[i].year, win_str(c + CLUB_NAME),
+                    went ? win_str(went + CLUB_NAME) : "no club");
+        lone_stay_note(self, c, went);
+    }
+}
+
+/* The places that the exchange of a lone division will use at the end of the edition that starts: the row's places
+ * as far as the clubs with no division can replace them (season_size_lone_down, as lone_exchange works it out). */
+static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r)
+{
+    int places = r->down > 0 ? r->down : 0;
+    if (!places) return 0;
+    uint32_t rec = rd32(g_mem, obj + COMP_RECORD);
+    if (!readable(rec)) return places;
+    int year = season_change_is_creating() ? season_start_year() : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    return season_size_lone_down(places, lone_pool(rec), clubs_in_division(obj), step_want(obj, file, year + 1));
 }
 
 static void size_step_run(uint32_t trigger)
@@ -1515,6 +1602,7 @@ static void note(uint32_t obj)
 
 static void sizes_after(const SeasonChange *c)
 {
+    if (nstays && readable(c->comp)) lone_stay_news(c->comp);
     if (!sizes_on() || !c->started || !size_file(c->file) || !readable(c->comp)) return;
     int i = seen_at(c->comp, 0);
     if (i >= 0 && seen[i].clubs >= 0 && !c->start) {
@@ -1541,6 +1629,7 @@ static void sizes_new_game(int start_year)
     (void)start_year;
     nstep_seen = 0;
     nlone_down = 0;
+    nstays = 0;
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
@@ -1565,6 +1654,7 @@ static void sizes_loaded(int start_year)
     nseen = 0;
     nstep_seen = 0;
     nlone_down = 0;
+    nstays = 0;
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);

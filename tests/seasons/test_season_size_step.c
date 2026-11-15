@@ -222,8 +222,44 @@ static void lone_guard(void)
     CHECK(season_size_lone_down(6, 9, 18, 12) == 6, "guard: Wales 2009, 18 to 12");
 }
 
+/* Lead decision of 15 November: a club with a human manager never goes to no division; the next worst club with no
+ * human manager goes in its place. Rows are the best place first. */
+static void lone_human(void)
+{
+    int out[16], kept[16], nk = -1;
+    int none[12] = {0};
+    int n = season_size_lone_pick(none, 12, 2, out, kept, &nk);
+    CHECK(n == 2 && out[0] == 11 && out[1] == 10 && nk == 0, "pick: no human, %d picks %d %d, %d kept", n, out[0],
+          out[1], nk);
+    int worst[12] = {0};
+    worst[11] = 1;
+    n = season_size_lone_pick(worst, 12, 2, out, kept, &nk);
+    CHECK(n == 2 && out[0] == 10 && out[1] == 9 && nk == 1 && kept[0] == 11, "pick: human last, %d picks %d %d, "
+          "%d kept %d", n, out[0], out[1], nk, kept[0]);
+    int above[12] = {0};
+    above[10] = 1;
+    n = season_size_lone_pick(above, 12, 1, out, kept, &nk);
+    CHECK(n == 1 && out[0] == 11 && nk == 0, "pick: human above the places, %d picks %d, %d kept", n, out[0], nk);
+    int two[12] = {0};
+    two[11] = two[10] = 1;
+    n = season_size_lone_pick(two, 12, 1, out, kept, &nk);
+    CHECK(n == 1 && out[0] == 9 && nk == 1 && kept[0] == 11, "pick: two humans last, 1 place, %d picks %d, %d kept",
+          n, out[0], nk);
+    int gap[12] = {0};
+    gap[11] = gap[9] = 1;
+    n = season_size_lone_pick(gap, 12, 2, out, kept, &nk);
+    CHECK(n == 2 && out[0] == 10 && out[1] == 8 && nk == 1 && kept[0] == 11, "pick: humans 12th and 10th, 2 places, "
+          "%d picks %d %d, %d kept", n, out[0], out[1], nk);
+    int all[3] = {1, 1, 1};
+    n = season_size_lone_pick(all, 3, 1, out, kept, &nk);
+    CHECK(n == 0 && nk == 1 && kept[0] == 2, "pick: only humans (the one in the place stays), %d picks, %d kept", n, nk);
+    n = season_size_lone_pick(none, 12, 0, out, kept, &nk);
+    CHECK(n == 0 && nk == 0, "pick: no places, %d picks", n);
+}
+
 int main(void)
 {
+    lone_human();
     lone_guard();
     outsiders_and_pool();
     truncated();

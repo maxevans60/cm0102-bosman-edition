@@ -566,14 +566,53 @@ def lone_downs(log, file):
     return out
 
 
+def lone_places(log, file):
+    """{edition: relegation places} that sizes_rules wrote for a lone file (the last line of each edition). The class
+    writes none (0), so an edition with no line shows 0."""
+    out = {}
+    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): relegation places (\d+) to no division"
+                         % re.escape(file), log):
+        out[int(m.group(1))] = int(m.group(2))
+    return out
+
+
+# Test switch RECOMP_TEST_LONE_HUMAN=1 (season_sizes.c lone_exchange): the worst club of a lone exchange counts as a
+# club with a human manager. It stays, the next worst club goes in its place, and the news says so.
+def lone_human_faults(log, file, year, last):
+    fails = []
+    stays = {}
+    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): (.+?) stays, its manager is a player: (.+?) goes "
+                         r"down in its place" % re.escape(file), log):
+        stays.setdefault(int(m.group(1)), []).append((m.group(2), m.group(3)))
+    downs = {}
+    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): (.+?) goes down to no division" % re.escape(file),
+                         log):
+        downs.setdefault(int(m.group(1)), []).append(m.group(2))
+    for ed in range(year, last):
+        if not downs.get(ed):
+            continue
+        if not stays.get(ed):
+            fails.append(f"{file} {ed}: no club stayed with the test switch RECOMP_TEST_LONE_HUMAN")
+            continue
+        for kept, went in stays[ed]:
+            if kept in downs[ed] or went not in downs[ed]:
+                fails.append(f"{file} {ed}: {kept} stays and {went} goes, but the clubs down are {downs[ed]}")
+            if not re.search(r"recomp: season change: news \d+/\d+: %s stays in the " % re.escape(kept), log):
+                fails.append(f"{file} {ed}: no news line that {kept} stays")
+    return fails
+
+
 def lone_guards(log, file):
     """{edition: clubs that go down} of the guard lines of a file (fewer than its relegation places). The count is
     worked out again from the line's places, pool and counts (season_size_lone_down), so a wrong guard fails: -1."""
     out = {}
     for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): relegation places (\d+), (\d+) go down: "
-                         r"(\d+) clubs with no division can come up, (\d+) clubs to (-?\d+)" % re.escape(file), log):
+                         r"(\d+) clubs with no division can come up, (\d+) clubs to (-?\d+)"
+                         r"(?:, the table showed (-?\d+))?" % re.escape(file), log):
         places, down, pool, have, want = (int(m.group(k)) for k in range(2, 7))
         most = 0 if want < 0 else max(0, pool + have - want)
+        if m.group(7) is not None and 0 <= int(m.group(7)) < most:
+            most = int(m.group(7))     # never more than the table showed (lead decision of 15 November)
         out[int(m.group(1))] = down if down == min(places, most) else -1
     return out
 
@@ -881,6 +920,12 @@ def faults(work, file, year, last):
             want = guards.get(ed, row_down(file, edition_season(file, ed)))
             if want >= 0 and downs.get(ed, 0) != want:
                 fails.append(f"{file} {ed}: {downs.get(ed, 0)} clubs down to no division, want {want}")
+            # Lead decision of 15 November: the table shows only the places that the exchange uses.
+            shown = lone_places(log, file).get(ed, 0)
+            if want >= 0 and shown != downs.get(ed, 0):
+                fails.append(f"{file} {ed}: the table shows {shown} relegation places, {downs.get(ed, 0)} go down")
+        if os.environ.get("RECOMP_TEST_LONE_HUMAN") == "1":
+            fails += lone_human_faults(log, file, year, last)
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
     fails += playoff_faults(log, file, {ed for ed, *_x in done})
     fails += j1_faults(log, file, {ed for ed, *_x in done})
@@ -1451,8 +1496,22 @@ def self_test():
         bad.append(("lone", ld, row_down("wel_first", 2009), row_down("wel_first", 2025)))
     lg = lone_guards("recomp: league sizes: kor_league (K League) 2012: relegation places 2, 1 go down: 0 clubs with "
                      "no division can come up, 13 clubs to 12\nrecomp: league sizes: kor_league (K League) 2013: "
-                     "relegation places 2, 2 go down: 0 clubs with no division can come up, 12 clubs to 12\n", "kor_league")
-    if (lg != {2012: 1, 2013: -1} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
+                     "relegation places 2, 2 go down: 0 clubs with no division can come up, 12 clubs to 12\nrecomp: league "
+                     "sizes: kor_league (K League) 2014: relegation places 1, 0 go down: 3 clubs with no division can "
+                     "come up, 12 clubs to 12, the table showed 0\n", "kor_league")
+    lp = lone_places("recomp: league sizes: kor_league (K League 1) 2024: relegation places 1 to no division, the class "
+                     "gave 0\nrecomp: league sizes: kor_league (K League 1) 2024: relegation places 0 to no division, "
+                     "the class gave 1\n", "kor_league")
+    hf = lone_human_faults("recomp: league sizes: kor_league (K League) 2013: A stays, its manager is a player: C goes "
+                           "down in its place\nrecomp: league sizes: kor_league (K League) 2013: B goes down to no "
+                           "division\nrecomp: league sizes: kor_league (K League) 2013: C goes down to no division\n"
+                           "recomp: season change: news 2014/15: A stays in the K League: its manager is a player.\n",
+                           "kor_league", 2013, 2014)
+    hf2 = lone_human_faults("recomp: league sizes: kor_league (K League) 2013: A goes down to no division\n",
+                            "kor_league", 2013, 2014)
+    if lp != {2024: 0} or hf or len(hf2) != 1:
+        bad.append(("lone places and humans", lp, hf, hf2))
+    if (lg != {2012: 1, 2013: -1, 2014: 0} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
             row_down("kor_league", 2025) != 0 or edition_season("kor_league", 2024) != 2023):
         bad.append(("lone kor", lg, row_down("kor_league", 2012), row_down("kor_league", 2023),
                     row_down("kor_league", 2025), edition_season("kor_league", 2024)))
@@ -1493,6 +1552,8 @@ def main(argv):
         print(__doc__)
         return 2
     import rules_report_check as rrc
+    if os.environ.get("RECOMP_TEST_LONE_HUMAN") == "1":
+        os.environ["RECOMP_SEASON_CHANGE_LOG"] = "1"    # the news lines of lone_human_faults (season_change.c)
     program, game, file = os.path.abspath(argv[0]), os.path.abspath(argv[1]), argv[2]
     year0, last0, _w = ROWS.get(file, (2025, None, ""))
     year = int(rrc.arg(argv, "--year", str(year0)))
