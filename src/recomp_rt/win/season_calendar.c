@@ -147,6 +147,6 @@ int season_calendar_cup(const char *file)
 
 int season_calendar_label(const char *file, int state, int edition)
 {
-    if (state != SEASON_CAL_YEAR || !file) return 0;
+    if (state == SEASON_CAL_WINTER || !file) return 0;
     return season_calendar_league(file) || !strcmp(file, "ire_chal_cup") || !strcmp(file, "ire_lge_cup") ? edition : 0;
 }

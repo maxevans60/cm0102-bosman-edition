@@ -72,7 +72,10 @@ void season_calendar_award(int state, int *day, int *month0);
 int season_calendar_two_years(int state, int year);
 
 /* The history label of an edition of a league or cup that moves to calendar years (ire_prm, ire_first, ire_chal_cup,
- * ire_lge_cup) in a calendar season: the edition. 0 elsewhere: the game's own label. */
+ * ire_lge_cup) in the short or a calendar season: the edition, 2002 for the short season and 2003 for the first
+ * calendar season. The history screens pass the label to key_nation_format_comp_season 0x6697c0 (0x499c5b..0x499c77),
+ * which shows 2002 "2002/03" by season_calendar_two_years and 2003 "2003". 0 elsewhere: the game's own label (the
+ * year the edition ends, so 2001/02 keeps 2002 as in the original). */
 int season_calendar_label(const char *file, int state, int edition);
 
 /* 1 for the files of the entry's leagues (ire_prm, ire_first) and of its cups with a date plan (season_calendar_game.c:

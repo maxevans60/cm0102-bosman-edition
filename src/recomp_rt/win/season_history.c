@@ -600,9 +600,9 @@ RT_WRAP(004afce0, comp_util_add_history_record)
      * year in most of the 10 years before the start, or in the year before. */
     int label = year;
     /* The Irish calendar move (gap row 2 of 0.7.2, season_calendar.h): a league or cup that moves to calendar years
-     * writes its edition in a calendar season. The short 2002-03 season and the 2003 season both end in 2003 (real
-     * life: the databases hold both under 2003), so the second-edition rule would give 2003 the label 2004 and move
-     * every later label by one. */
+     * writes its edition in the short and the calendar seasons, so the short season shows "2002/03", the 2003 season
+     * "2003", and no later label moves by one (the second-edition rule would give the 2003 season 2004 and each later
+     * season the year after its own). */
     int fixed = obj ? season_calendar_history_label(obj) : 0;
     if (fixed) label = fixed;
     else if (on && !split_season(hist, count, comp, S) && rows_of_label(hist, count, comp, year - 1) < 2) {
