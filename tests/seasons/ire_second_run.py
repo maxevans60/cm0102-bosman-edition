@@ -7,25 +7,27 @@ Usage:
         [--keep <folder>]
 
 Each run is a season jump of tests/seasons/rules_report_check.py with the Republic of Ireland alone on the March 2014
-database (changing rules off), whose First Division holds Shamrock Rovers B, from the 2013 start to 1 June 2015 (a
-jump to 1 June 2014 ends before the Irish season change). The game's 2013/14 holds the League of Ireland season 2014,
-in which Shamrock Rovers B was not eligible for promotion. In that season the game's Premier Division has a relegation
-play-off place and no direct one, so only the play-off (IreFirst::create_promotion_playoff_stage 0x635dc0, the First
-Division row of status 1) sends a club up. The test switch RECOMP_TEST_IRE_SECOND_TOP=2 gives each reserve side of the
-First Division the leader's points less 1 before each update, so it holds the play-off place. RECOMP_IRE_SECOND_LOG=1
-logs the marks, the hand-ons, the club of the play-off, the places up at the season change and a census before and
+database (changing rules off, so the rule of the start year, League of Ireland 2014, holds in each season), whose
+First Division holds Shamrock Rovers B, from the 2013 start to 1 June 2016 (two Irish season changes). In League of
+Ireland 2014 Shamrock Rovers B was not eligible for promotion. With the league sizes of 0.7.2 the game's First
+Division has 8 clubs, the title (status 5) and the play-off (IreFirst::create_promotion_playoff_stage 0x635dc0, the
+First Division row of status 1). At the first change (2013/14) the Premier Division has no row of status 3, so the
+chain (0x689c20, rows in pairs) moves no club; at the second change (2014/15) it has three, so the club of the title
+goes up. The test switch RECOMP_TEST_IRE_SECOND_TOP=1 gives each reserve side of the First Division 300 more points
+before each update, so it takes the title in both seasons. RECOMP_IRE_SECOND_LOG=1 logs the marks, the hand-ons, the
+club of the play-off, the places up at the season change, the clubs that change division and a census before and
 after each change (IrePrm::start_new_season 0x63a9b0). The runs:
-    on      the shipped code: Shamrock Rovers B gets the mark, the play-off takes another club, no reserve side holds
-            a place up at the change and none plays the Premier Division after it
-    off     RECOMP_IRE_SECOND=off, the original: the play-off takes the reserve side (proves that the test sees the
-            fault)
+    on      the shipped code: Shamrock Rovers B gets the mark, another club takes the title, no reserve side holds a
+            place up at a change, the play-off takes no reserve side and none plays the Premier Division after a change
+    off     RECOMP_IRE_SECOND=off, the original: Shamrock Rovers B holds the title and goes up to the Premier Division
+            at the second change (proves that the test sees the fault)
     free    the shipped code with RECOMP_TEST_IRE_SECOND_YEAR=2014 (a season with no source, the game kept): the
-            play-off takes the reserve side as in the original
+            reserve side goes up as in the original
     nomark  RECOMP_TEST_IRE_SECOND_NO_MARK=1, as a save made after the table was complete: the reserve side holds the
-            play-off place, the wrap of 0x635dc0 hands it on, and the play-off takes another club
-    old     RECOMP_TEST_IRE_SECOND_OLD=1 and RECOMP_TEST_IRE_SECOND_PLACE=1, to 1 June 2016: the first change plays as
-            the original and the reserve side goes up in place of the last club, as an old save; at the second change
-            (2014/15, three places down) the reserve side goes down and a club of status 3 stays up
+            title, the wrap of 0x635dc0 hands it on, and no reserve side goes up
+    old     RECOMP_TEST_IRE_SECOND_TOP=2, RECOMP_TEST_IRE_SECOND_OLD=1 and RECOMP_TEST_IRE_SECOND_PLACE=1: the first
+            change plays as the original and the reserve side goes up in place of the last club, as an old save; at
+            the second change (2014/15, three places down) the reserve side goes down and a club of status 3 stays up
 All runs end with code 0 and show no message box of the game.
 """
 import concurrent.futures
@@ -40,15 +42,16 @@ import rules_report_check as rrc  # noqa: E402
 import uefa_formats_run as ufr  # noqa: E402
 
 DB = "/Users/max/Projects/cm0102/test-fixtures/databases"
-ENV = {"RECOMP_TEST_IRE_SECOND_TOP": "2", "RECOMP_IRE_SECOND_LOG": "1"}
+ENV = {"RECOMP_TEST_IRE_SECOND_TOP": "1", "RECOMP_IRE_SECOND_LOG": "1"}
 CENSUS = re.compile(r"recomp: ire second: census (before|after) \(season (\d+), rule (bars|keeps the game)\): Premier "
                     r"Division (\d+) clubs, (\d+) reserve sides; First Division (\d+) clubs, (\d+) reserve sides")
 PLAYOFF = re.compile(r"recomp: ire second: the play-off takes (.*) of the First Division( \(a reserve side\))?$", re.M)
+UP = re.compile(r"recomp: ire second: (.*) goes up to the Premier Division \(a reserve side\)$", re.M)
 PLACE = re.compile(r"recomp: ire second: the First Division position (\d+): (.*) status (-?\d+)( \(a reserve side\))?$",
                    re.M)
 
 
-def jump(name, program, game, work, env, last=2014):
+def jump(name, program, game, work, env, last=2015):
     code, _ = rrc.run(program, game, last, 2013, os.path.join(DB, "March 2014"), ["Republic of Ireland"], [], work,
                       7200, None, dict(ENV, **env))
     fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
@@ -73,38 +76,46 @@ def changes(log):
     return out
 
 
-def check_first(name, log, want_reserve):
-    """The first season: the club of the play-off and the places up at the first change."""
+def check(name, log, want_reserve):
+    """Both changes: the places up, the clubs that go up and the club of each play-off. want_reserve: the original's
+    path (a reserve side goes up); else the rule's (none holds a place up, none goes up, none plays the play-off)."""
     seen = changes(log)
-    playoff = PLAYOFF.findall(log.split("census before")[0])
-    print(f"{name}: play-off {playoff}")
-    if not seen:
-        return [f"{name}: no Irish season change seen"]
-    before, after, lines = seen[0]
-    places = PLACE.findall("\n".join(lines))
-    print(f"{name}: change 1: before {before}, after {after}; places up {places}")
+    playoff = PLAYOFF.findall(log)
+    print(f"{name}: play-offs {playoff}")
     fails = []
-    if int(before[5]) == 0:
-        fails.append(f"{name}: no reserve side in the First Division before the change (the test sees no case)")
-    if not playoff:
-        fails.append(f"{name}: no play-off of the First Division seen")
+    if len(seen) < 2:
+        return [f"{name}: {len(seen)} Irish season changes seen, want 2"]
+    held, up = [], []
+    for k, (before, after, lines) in enumerate(seen[:2]):
+        text = "\n".join(lines)
+        places = PLACE.findall(text)
+        print(f"{name}: change {k + 1}: before {before}, after {after}; places up {places}; reserve sides up "
+              f"{UP.findall(text)}")
+        if int(before[5]) == 0:
+            fails.append(f"{name}: no reserve side in the First Division before change {k + 1} (the test sees no case)")
+        held += [p[1] for p in places if p[3] and p[2] in ("5", "0", "1")]
+        up += UP.findall(text)
+        if not want_reserve and int(after[3]):
+            fails.append(f"{name}: {after[3]} reserve sides in the Premier Division after change {k + 1}")
+    if len(playoff) < 2:
+        fails.append(f"{name}: {len(playoff)} play-offs of the First Division seen, want 2")
     reserve = [p[0] for p in playoff if p[1]]
-    if want_reserve and not reserve:
-        fails.append(f"{name}: the play-off took no reserve side (the test does not see the fault)")
-    if not want_reserve:
-        if reserve:
-            fails.append(f"{name}: the play-off took a reserve side: {reserve}")
-        held = [p[1] for p in places if p[3] and p[2] in ("5", "0", "1")]
-        if held:
-            fails.append(f"{name}: reserve sides hold a place up at the change: {held}")
-        if int(after[3]):
-            fails.append(f"{name}: {after[3]} reserve sides in the Premier Division after the change")
+    if want_reserve:
+        if not up or not int(seen[1][1][3]):
+            fails.append(f"{name}: no reserve side went up to the Premier Division (the test does not see the fault)")
+        return fails
+    if reserve:
+        fails.append(f"{name}: the play-off took a reserve side: {reserve}")
+    if held:
+        fails.append(f"{name}: reserve sides hold a place up at a change: {held}")
+    if up:
+        fails.append(f"{name}: reserve sides went up to the Premier Division: {up}")
     return fails
 
 
 def run_on(program, game, work):
     fails, log = jump("on", program, game, work, {})
-    fails += check_first("on", log, False)
+    fails += check("on", log, False)
     if "may not go up from the First Division" not in log:
         fails.append("on: Shamrock Rovers B never got the mark")
     if "rule bars" not in log:
@@ -114,7 +125,7 @@ def run_on(program, game, work):
 
 def run_off(program, game, work):
     fails, log = jump("off", program, game, work, {"RECOMP_IRE_SECOND": "off"})
-    fails += check_first("off", log, True)
+    fails += check("off", log, True)
     if "may not go up" in log or "in place of a second team" in log:
         fails.append("off: the rule acted with the switch off")
     return fails
@@ -122,7 +133,7 @@ def run_off(program, game, work):
 
 def run_free(program, game, work):
     fails, log = jump("free", program, game, work, {"RECOMP_TEST_IRE_SECOND_YEAR": "2014"})
-    fails += check_first("free", log, True)
+    fails += check("free", log, True)
     if "may not go up" in log or "rule keeps the game" not in log:
         fails.append("free: the rule acted in a season with no source")
     return fails
@@ -130,15 +141,15 @@ def run_free(program, game, work):
 
 def run_nomark(program, game, work):
     fails, log = jump("nomark", program, game, work, {"RECOMP_TEST_IRE_SECOND_NO_MARK": "1"})
-    fails += check_first("nomark", log, False)
+    fails += check("nomark", log, False)
     if "in place of a second team before the play-off" not in log:
         fails.append("nomark: no place was handed on before the play-off (the old-save path is not seen)")
     return fails
 
 
 def run_old(program, game, work):
-    fails, log = jump("old", program, game, work, {"RECOMP_TEST_IRE_SECOND_OLD": "1",
-                                                   "RECOMP_TEST_IRE_SECOND_PLACE": "1"}, last=2015)
+    fails, log = jump("old", program, game, work, {"RECOMP_TEST_IRE_SECOND_TOP": "2", "RECOMP_TEST_IRE_SECOND_OLD": "1",
+                                                   "RECOMP_TEST_IRE_SECOND_PLACE": "1"})
     seen = changes(log)
     if len(seen) < 2:
         return fails + [f"old: {len(seen)} Irish season changes seen, want 2"]

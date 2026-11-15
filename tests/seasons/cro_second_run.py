@@ -12,7 +12,7 @@ the Third Divisions into the Second Division. RECOMP_CRO_SECOND_LOG=1 logs a cen
 the clubs held and moved. The runs:
     on      October 2023, 2023 to 1 June 2025 (the change of July 2024, rule of 2023: no reserve side above the third
             tier). RECOMP_TEST_CRO_SECOND_REP=1 gives each reserve side of the list the highest reputation. No reserve
-            side goes up, each stays in its division, and the Second Division keeps 32 clubs
+            side goes up, each stays in its division, and the list still sends 4 clubs up (sizes_kept)
     off     the same with RECOMP_CRO_SECOND=off: a reserve side goes up (the test sees the fault)
     allowed March 2019, 2019 to 1 June 2021 (the change of July 2020, rule of 2019). The club moves of the new game
             put Dinamo Zagreb II, Hajduk Split II and Osijek II into the Second Division (as 2019/20): they get the mark
@@ -25,14 +25,16 @@ the clubs held and moved. The runs:
     a1-off  the same with RECOMP_CRO_SECOND=off: a reserve side goes up into the First Division
     rule2022 November 2020, 2020 to 1 June 2023, changing rules on: at the change of July 2022 the rule of 2022 holds
             (no reserve side above the third tier), so every reserve side leaves the Second Division (as Dinamo II and
-            Osijek II did) and the sizes stay
+            Osijek II did) and a club stays up in each place
     rule2022-off the same with RECOMP_CRO_SECOND=off: the reserve sides stay in the Second Division
     start2022 October 2022, the new game of 2022 only (the run ends after the start report): the club moves of the
             new game bar every reserve side from the Second Division (barred_at_start, "new game" log lines)
     old     November 2020, 2020 to 1 June 2023, RECOMP_TEST_CRO_SECOND_OLD=1 with _UP=1: the original until the
             change of July 2021 sends a reserve side up into the First Division (an old save, in memory); at the
             change of July 2022 (rule of 2020) it goes to A Lower Division, the next club of the groups takes its
-            place, and the division sizes stay
+            place, and the fix's moves keep the sizes
+sizes_kept counts the fix's own moves: the league sizes of 0.7.2 change the size of the groups at a change by the
+original's own path (the switch off shows the same change), so the test does not compare the sizes before and after.
 All runs end with code 0 and show no message box of the game, other than the known box of open item 79.
 """
 import concurrent.futures
@@ -106,11 +108,30 @@ def one_change(name, log, k=0, season=None, rule=None):
     return (before, after, "\n".join(lines)), fails
 
 
-def sizes_kept(name, before, after):
-    if (before[0], before[2] + before[4]) != (after[0], after[2] + after[4]):
-        return [f"{name}: division sizes changed: First {before[0]} to {after[0]}, Second {before[2] + before[4]} to "
-                f"{after[2] + after[4]}"]
-    return []
+def sizes_kept(name, before, after, lines):
+    """The fix's own moves keep the sizes. Since the league sizes of 0.7.2 the original's own path changes the size
+    of the groups at a change (as the switch off shows), so the test counts the moves of the fix in the change: each
+    club the fix takes out of a division (a reserve side sent down, a club of the groups that goes up into the First
+    Division in its place) has a club put back (a club of status 3 that stays up, a club of the list that goes up in
+    place of a reserve side), and the list of 0x514ed0 still sends its 4 clubs up. The original's call does not
+    touch the First Division, so its size stays."""
+    count = lambda text: sum(1 for line in lines.splitlines() if text in line)
+    down1, in1 = count("goes down from the First Division"), count("goes up to the First Division in place of")
+    down2, stay = count("goes down from the Second Division (rule of"), count("stays up in the Second Division")
+    in2 = count("goes up to the Second Division in place of a reserve side")
+    listed = len(UP2.findall(lines)) - in2
+    print(f"{name}: moves of the fix: First out {down1} in {in1}; Second out {down2 + in1} in {stay + in2}; "
+          f"the list sends up {listed}")
+    fails = []
+    if before[0] != after[0]:
+        fails.append(f"{name}: the First Division changed size in the change: {before[0]} to {after[0]}")
+    if down1 != in1:
+        fails.append(f"{name}: {down1} reserve sides left the First Division, {in1} clubs took their places")
+    if down2 + in1 != stay + in2:
+        fails.append(f"{name}: the fix took {down2 + in1} clubs out of the Second Division and put {stay + in2} back")
+    if listed != 4:
+        fails.append(f"{name}: the list sent {listed} clubs up to the Second Division, the original sends 4")
+    return fails
 
 
 def run_on(program, game, work, name="on", env=None):
@@ -136,7 +157,7 @@ def run_on(program, game, work, name="on", env=None):
         fails.append(f"{name}: no reserve side was held in its division (the test sees no case)")
     if after[1] or after[3] or after[5]:
         fails.append(f"{name}: reserve sides in the First or Second Division after the change: {after}")
-    return fails + sizes_kept(name, before, after)
+    return fails + sizes_kept(name, before, after, lines)
 
 
 def run_allowed(program, game, work):
@@ -160,7 +181,7 @@ def run_allowed(program, game, work):
         fails.append(f"{name}: the rule of 2019 moved or held reserve sides it allows: {down} {STAYS.findall(lines)}")
     if not after[3] + after[5]:
         fails.append(f"{name}: no reserve side left in the Second Division after the change")
-    return fails + sizes_kept(name, before, after)
+    return fails + sizes_kept(name, before, after, lines)
 
 
 def run_a1(program, game, work, name="a1"):
@@ -184,10 +205,10 @@ def run_a1(program, game, work, name="a1"):
     if "in place of a second team at the season change" not in log:
         fails.append(f"{name}: no place was handed on at the season change")
     if got:
-        before, after, _ = got
+        before, after, lines = got
         if after[1]:
             fails.append(f"{name}: {after[1]} reserve sides in the First Division after the change")
-        fails += sizes_kept(name, before, after)
+        fails += sizes_kept(name, before, after, lines)
     return fails
 
 
@@ -209,7 +230,7 @@ def run_rule2022(program, game, work, name="rule2022"):
         fails.append(f"{name}: reserve sides in the First or Second Division after the change: {after}")
     if "goes down from the Second Division (rule of 2022" not in lines:
         fails.append(f"{name}: no reserve side went down by the rule of 2022")
-    return fails + sizes_kept(name, before, after)
+    return fails + sizes_kept(name, before, after, lines)
 
 
 def run_start2022(program, game, work, name="start2022"):
@@ -243,7 +264,7 @@ def run_old(program, game, work, name="old"):
         fails.append(f"{name}: {after[1]} reserve sides still in the First Division after change 2")
     if "goes down from the First Division" not in lines or "in place of a reserve side" not in lines:
         fails.append(f"{name}: no reserve side went down from the First Division with a club in its place")
-    return fails + sizes_kept(name, before, after)
+    return fails + sizes_kept(name, before, after, lines)
 
 
 RUNS = {"on": run_on,
