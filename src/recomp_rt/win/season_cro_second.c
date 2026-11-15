@@ -70,7 +70,9 @@
  * RECOMP_TEST_CRO_SECOND_OLD=<n> (the original, and no barred_at_start, until n Croatian season changes are done, as
  * a game of an older build), RECOMP_TEST_CRO_SECOND_UP=1 (before the chain the best placed reserve side of each group
  * takes the title or promotion status, so the original would send it up), RECOMP_TEST_CRO_SECOND_NO_MARK=1 (no 0xfc,
- * as a save made after the table was complete). */
+ * as a save made after the table was complete), RECOMP_TEST_CRO_SECOND_HOLD=1 (before each update each reserve side of
+ * the First Division gets the points of the middle club, so an old save's reserve side is still there at the next
+ * change). */
 #include "win.h"
 #include "season.h"
 #include "season_clubs.h"
@@ -210,8 +212,10 @@ static int season_of(uint32_t league) { return (int16_t)rd16(g_mem, league + LEA
 
 static void cro_before_status(uint32_t league)
 {
-    static int no_mark = -1;
+    static int no_mark = -1, hold = -1;
     if (no_mark < 0) no_mark = st_env_is("RECOMP_TEST_CRO_SECOND_NO_MARK", "1");
+    if (hold < 0) hold = st_env_is("RECOMP_TEST_CRO_SECOND_HOLD", "1");
+    if (hold && season_game_changes() && league == st_league_of(KEY_A1)) st_test_mid_table(league, reserve_side);
     if (no_mark || !rule_on()) return;
     if (league == st_league_of(KEY_NORTH) || league == st_league_of(KEY_SOUTH)) {
         cur_year = season_of(league);

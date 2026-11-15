@@ -19,7 +19,9 @@ the picks, the clubs that go up at the season start (0x890b40) and a census of t
           barred club after the start
     off   RECOMP_SWE_SECOND=off, the original's list: a barred club is picked (proves that the test sees the fault;
           the checks of "on" must fail on this log)
-    old   RECOMP_TEST_SWE_SECOND_OLD=2, to 1 June 2013: the original until the season start of 2012 is done (a game of
+    old   RECOMP_TEST_SWE_SECOND_OLD=2 and RECOMP_TEST_SWE_SECOND_HOLD=1 (a barred club takes the middle club's points
+          in its group, so the table does not send it down), to 1 June 2013: the original until the season start of
+          2012 is done (a game of
           an older build, so a barred club goes up when it is picked for the direct places or wins the play-off),
           then the fix: at the season start of 2013 every barred club of the Second Division goes down and a club of
           its group stays up, so the Second Division keeps its size
@@ -110,7 +112,8 @@ def run_off(program, game, work):
 
 
 def run_old(program, game, work):
-    fails, log = jump("old", program, game, work, {"RECOMP_TEST_SWE_SECOND_OLD": "2"}, 2012)
+    env = {"RECOMP_TEST_SWE_SECOND_OLD": "2", "RECOMP_TEST_SWE_SECOND_HOLD": "1"}
+    fails, log = jump("old", program, game, work, env, 2012)
     seen = starts(log)
     if len(seen) < 3:
         return fails + [f"old: {len(seen)} Swedish season starts seen, want 3"]

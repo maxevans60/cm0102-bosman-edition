@@ -29,7 +29,9 @@ the clubs held and moved. The runs:
     rule2022-off the same with RECOMP_CRO_SECOND=off: the reserve sides stay in the Second Division
     start2022 October 2022, the new game of 2022 only (the run ends after the start report): the club moves of the
             new game bar every reserve side from the Second Division (barred_at_start, "new game" log lines)
-    old     November 2020, 2020 to 1 June 2023, RECOMP_TEST_CRO_SECOND_OLD=1 with _UP=1: the original until the
+    old     November 2020, 2020 to 1 June 2023, RECOMP_TEST_CRO_SECOND_OLD=1 with _UP=1 and _HOLD=1 (the reserve
+            side takes the middle club's points in the First Division, so the table does not send it down): the
+            original until the
             change of July 2021 sends a reserve side up into the First Division (an old save, in memory); at the
             change of July 2022 (rule of 2020) it goes to A Lower Division, the next club of the groups takes its
             place, and the fix's moves keep the sizes
@@ -249,7 +251,7 @@ def run_start2022(program, game, work, name="start2022"):
 
 
 def run_old(program, game, work, name="old"):
-    env = {"RECOMP_TEST_CRO_SECOND_OLD": "1", "RECOMP_TEST_CRO_SECOND_UP": "1"}
+    env = {"RECOMP_TEST_CRO_SECOND_OLD": "1", "RECOMP_TEST_CRO_SECOND_UP": "1", "RECOMP_TEST_CRO_SECOND_HOLD": "1"}
     fails, log = jump(name, program, game, work, env, "November 2020", 2020, 2022)
     first, more = one_change(name, log, 0)
     fails += more

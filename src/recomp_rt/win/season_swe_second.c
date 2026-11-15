@@ -65,7 +65,8 @@
  * RECOMP_TEST_SWE_SECOND_REP=1 (tests only) gives each barred club of the Lower Division the highest reputation before
  * 0x892bb0, so the original would pick it. RECOMP_TEST_SWE_SECOND_OLD=<n> (tests only) plays as the original until n
  * Swedish season starts (0x890b40) are done, as a game of an older build. RECOMP_TEST_SWE_SECOND_YEAR=<y> (tests only)
- * takes the rule of year y. */
+ * takes the rule of year y. RECOMP_TEST_SWE_SECOND_HOLD=1 (tests only): before each update each barred club of a group
+ * gets the points of the middle club, so an old save's barred club is still in the Second Division at the next start. */
 #include "win.h"
 #include "season.h"
 #include "season_clubs.h"
@@ -386,12 +387,17 @@ RT_WRAP(00890b40, swe_second_season)
 /* Before 0x684cd0 (season_second_teams.c): the barred rows of the six groups get 0xfc. */
 static void swe_before_status(uint32_t league)
 {
-    if (!rule_on()) return;
+    static int hold = -1;
+    if (hold < 0) hold = st_env_is("RECOMP_TEST_SWE_SECOND_HOLD", "1");
+    if (!season_game_changes()) return;
     uint32_t second = st_league_of(KEY_SECOND), st[GROUPS];
     int ns = group_stages(second, st);
-    for (int s = 0; s < ns; s++)
-        if (league == st[s] && year_bars(rule_year_of(season_of(second))))
+    for (int s = 0; s < ns; s++) {
+        if (league != st[s]) continue;
+        if (hold) st_test_mid_table(league, barred_club);
+        if (rule_on() && year_bars(rule_year_of(season_of(second))))
             st_mark(league, barred_club, "swe second", "the Second Division", log_on());
+    }
 }
 
 static const SecondTeamHooks swe_hooks = {swe_before_status, NULL, NULL, season_swe_barred};

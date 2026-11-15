@@ -38,6 +38,7 @@ int season_second_barred(uint32_t club, uint32_t div);
 #define ST_CLUB_REPUTATION 0x80u
 #define ST_ROW_SIZE 0x3bu              /* a row of a league table: +0 the club, +0x37 the status */
 #define ST_ROW_STATUS 0x37u
+#define ST_ROW_POINTS 0x19u            /* s16 (season_bel_second.c) */
 #define ST_TITLE 5                     /* the statuses that 0x684cd0 sets */
 #define ST_UP 0
 #define ST_PLAYOFF 1
@@ -74,5 +75,9 @@ void st_mark(uint32_t league, StBarred barred, const char *tag, const char *what
 /* A complete table where a barred club holds the title, promotion or the play-off (a save of an older build): the
  * clubs below take the places in table order, and each barred club gets 0xfc. Runs again with no change. */
 void st_shift_up(uint32_t league, StBarred barred, const char *tag, const char *when, int log);
+
+/* Tests only: each row of the league where side(club) holds gets the points of the middle club of the others, so a
+ * planted case (an old save) does not go down or up by the table before the step under test. Call before 0x684cd0. */
+void st_test_mid_table(uint32_t league, StBarred side);
 
 #endif

@@ -11,16 +11,17 @@ database (changing rules off, so the rule of the start year, League of Ireland 2
 First Division holds Shamrock Rovers B, from the 2013 start to 1 June 2016 (two Irish season changes). In League of
 Ireland 2014 Shamrock Rovers B was not eligible for promotion. With the league sizes of 0.7.2 the game's First
 Division has 8 clubs, the title (status 5) and the play-off (IreFirst::create_promotion_playoff_stage 0x635dc0, the
-First Division row of status 1). At the first change (2013/14) the Premier Division has no row of status 3, so the
-chain (0x689c20, rows in pairs) moves no club; at the second change (2014/15) it has three, so the club of the title
-goes up. The test switch RECOMP_TEST_IRE_SECOND_TOP=1 gives each reserve side of the First Division 300 more points
+First Division row of status 1). The chain (0x689c20, rows in pairs) sends the club of the title up at a change where
+the Premier Division has rows of status 3. With the league sizes of lead-072-base c2d8b0db that is already the first
+change (2013/14), so the runs of the original's path (off, free) need a reserve side in the First Division before the
+first change only. The test switch RECOMP_TEST_IRE_SECOND_TOP=1 gives each reserve side of the First Division 300 more points
 before each update, so it takes the title in both seasons. RECOMP_IRE_SECOND_LOG=1 logs the marks, the hand-ons, the
 club of the play-off, the places up at the season change, the clubs that change division and a census before and
 after each change (IrePrm::start_new_season 0x63a9b0). The runs:
     on      the shipped code: Shamrock Rovers B gets the mark, another club takes the title, no reserve side holds a
             place up at a change, the play-off takes no reserve side and none plays the Premier Division after a change
     off     RECOMP_IRE_SECOND=off, the original: Shamrock Rovers B holds the title and goes up to the Premier Division
-            at the second change (proves that the test sees the fault)
+            at a change (proves that the test sees the fault)
     free    the shipped code with RECOMP_TEST_IRE_SECOND_YEAR=2014 (a season with no source, the game kept): the
             reserve side goes up as in the original
     nomark  RECOMP_TEST_IRE_SECOND_NO_MARK=1, as a save made after the table was complete: the reserve side holds the
@@ -91,7 +92,7 @@ def check(name, log, want_reserve):
         places = PLACE.findall(text)
         print(f"{name}: change {k + 1}: before {before}, after {after}; places up {places}; reserve sides up "
               f"{UP.findall(text)}")
-        if int(before[5]) == 0:
+        if int(before[5]) == 0 and (k == 0 or not want_reserve):
             fails.append(f"{name}: no reserve side in the First Division before change {k + 1} (the test sees no case)")
         held += [p[1] for p in places if p[3] and p[2] in ("5", "0", "1")]
         up += UP.findall(text)
