@@ -117,6 +117,31 @@ const WEB = path.resolve(__dirname, '..');
         const w3 = vault.openForGame(node, 2);
         if (w3) await w3;
         out.forWriting = { state: node.vault, inMemory: node.contents.length };
+        // An upload or a cloud download goes straight into the storage (adopt, and storeSave of saves.js): the page
+        // once read the whole file into memory and copied it into the user folder (690 MB: 3.4 GB in the tab).
+        const { storeSave, useVault, SAVE_HEADER } = await import('/saves.js');
+        const save = (n, fill) => { const b = new Uint8Array(SAVE_HEADER + n), dv = new DataView(b.buffer); dv.setInt32(0, 2, true); dv.setInt32(8, 1, true); dv.setUint32(12, SAVE_HEADER, true); b.fill(fill, SAVE_HEADER); return b; };
+        const big = save(9 * MB, 5);
+        useVault(vault);
+        reads.length = 0;
+        const why = await storeSave(FS, 'Uploaded 2002-01-05.sav', new Blob([big]), { mtime: 1762770000000 });
+        const up = FS.lookupPath('/user/Uploaded 2002-01-05.sav').node;
+        out.upload = { why, largestRead: Math.max(0, ...reads), state: up.vault, inMemory: up.contents.length, size: FS.stat('/user/Uploaded 2002-01-05.sav').size,
+          mtime: +FS.stat('/user/Uploaded 2002-01-05.sav').mtime };
+        out.uploadKept = (await vault.persist()).removed;
+        const back = new Uint8Array(await (await vault.blob('/user/Uploaded 2002-01-05.sav')).arrayBuffer());
+        out.uploadSame = back.length === big.length && back[SAVE_HEADER + 5] === 5 && back[back.length - 1] === 5;
+        out.junk = await storeSave(FS, 'Junk.sav', new Blob([new Uint8Array(3 * MB)]));
+        out.junkStored = Boolean(nodes.get('/user/Junk.sav'));
+        out.empty = await storeSave(FS, 'Empty.sav', new Blob([]));
+        const other = createVault({ FS: (() => { const n2 = new Map(); return { ...FS, lookupPath(p) { if (n2.has(p)) return { node: n2.get(p) }; if (dirs.has(p)) return { node: { path: p } }; throw enoent(p); },
+          writeFile(p, data) { const n = n2.get(p) ?? { path: p }; n2.set(p, n); n.contents = data; n.usedBytes = data.length; n.mtime = Date.now(); }, stat(p) { return { mode: 0o100644, size: n2.get(p).usedBytes, mtime: new Date(n2.get(p).mtime) }; } }; })(), stable: 0 });
+        await other.open(); other.active = true;
+        out.nextVisit = (await other.mount()).files;
+        // Without the vault (an Asyncify engine): the file is in the user folder, in memory, as before.
+        useVault(null);
+        out.plainWhy = await storeSave(FS, 'Plain.sav', new Blob([save(1000, 1)]));
+        out.plain = { inMemory: nodes.get('/user/Plain.sav')?.contents.length, state: nodes.get('/user/Plain.sav')?.vault ?? null };
       } catch (e) { out.error = e.stack ?? String(e); }
       Blob.prototype.arrayBuffer = realBuffer;
       return out;
@@ -133,6 +158,13 @@ const WEB = path.resolve(__dirname, '..');
     check('the whole file reads right through the pieces, never more than 4 MB at once', r.whole?.all && r.whole.largest <= 4 * MB, JSON.stringify(r.whole));
     check('a new version of the save: its bytes, not the old pieces', r.newVersion?.n === 1000 && r.newVersion.same, JSON.stringify(r.newVersion));
     check('opened to be written: the whole file is in memory', r.forWriting?.state === 'in' && r.forWriting.inMemory === SIZE, JSON.stringify(r.forWriting));
+    check('an upload goes into the storage as it is: only its header is read, the user folder gets a placeholder',
+      r.upload?.why === null && r.upload.largestRead <= 0x416ec && r.upload.state === 'out' && r.upload.inMemory === 0
+        && r.upload.size === 0x416ec + 9 * MB && r.upload.mtime === 1762770000000, JSON.stringify(r.upload));
+    check('it stays through the vault\'s round, reads back the same, and the next visit lists it', r.uploadKept === 0 && r.uploadSame && r.nextVisit >= 2, JSON.stringify([r.uploadKept, r.uploadSame, r.nextVisit]));
+    check('a file that is not a save is refused and not stored; an empty one says so',
+      /not a saved game/.test(r.junk ?? '') && r.junkStored === false && /empty \(0 bytes\)/.test(r.empty ?? ''), JSON.stringify([r.junk, r.junkStored, r.empty]));
+    check('without the vault a save goes into the user folder in memory, as before', r.plainWhy === null && r.plain?.inMemory === 0x416ec + 1000 && r.plain.state === null, JSON.stringify([r.plainWhy, r.plain]));
   } finally {
     await browser.close();
     server.close();

@@ -35,6 +35,8 @@ jobs:
         run: |
           npm install -g playwright@1.63.0
           npx --yes playwright@1.63.0 install --with-deps chromium
+      - name: Vault check (a save read from the browser's storage in pieces)
+        run: NODE_PATH="$(npm root -g)" node web/test/vault-check.cjs
       - name: Page check (the load, the engine choice, Saved games, a second start)
         run: NODE_PATH="$(npm root -g)" node web/test/page-check.cjs
       - name: Editor check (the save and data set editors)

@@ -157,7 +157,10 @@ and `fd_read` Suspending imports, through `Module.instantiateWasm`, so they can 
 an open read the whole Blob in and a close dropped it, and the game opens a save about 100 times during a load: with
 four saves of 690 MB (a player's size; a real 46 MB save padded, 15 November 2026) the Load Game list took 4.1 s and a
 load 99 s with 5.6 GB of memory in the tab. In pieces: 0.04 s, and 7 s with 0.9 GB. A file opened to be written (and
-not emptied) still comes into memory whole. A file the game or the page writes goes into the vault once it is closed and has
+not emptied) still comes into memory whole. A save from outside, an upload or a cloud download, goes into the vault as
+it is (`storeSave` in `saves.js`, `vault.adopt`): only its header is read for the check, and the browser copies the
+file, not the page. The page once read the whole file and copied it into the user folder: uploading one 690 MB save
+took the tab to 3.4 GB; now it stays under 1 GB and takes about a second. A file the game or the page writes goes into the vault once it is closed and has
 not changed for 1.5 seconds, and becomes a placeholder; a renamed file keeps its record (an older copy of the save
 renaming keeps the old save's bytes), a deleted one loses it. At the first start with the vault the files move from
 IDBFS's store, one at a time. The page reads placeholders with `readBytes`, `readView` and `readBlob` (`saves.js`);

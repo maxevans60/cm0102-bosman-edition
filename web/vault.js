@@ -235,22 +235,38 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
 
   // A placeholder for each record: the game sees the file, its size and its time; its contents stay in the vault.
+  // The placeholder of a record in the user folder: the file's name, size and time, no contents.
+  function placeholder(key, size, mtime) {
+    FS.mkdirTree(key.slice(0, key.lastIndexOf('/')));
+    FS.writeFile(key, new Uint8Array(0));
+    const node = lookup(key);
+    node.usedBytes = size;
+    node.mtime = node.atime = node.ctime = mtime;
+    node.vaultKey = key; node.vaultMtime = mtime; node.vaultSize = size;
+    evict(node);
+    managed.add(node);
+  }
   async function mount() {
     let n = 0, bytes = 0;
     for (const r of await records()) {
       mine.add(r.key);
       if (lookup(r.key)) continue;              // a file there already (an older page put it in IDBFS): it wins
-      FS.mkdirTree(r.key.slice(0, r.key.lastIndexOf('/')));
-      FS.writeFile(r.key, new Uint8Array(0));
-      const node = lookup(r.key);
-      node.usedBytes = r.size;
-      node.mtime = node.atime = node.ctime = r.mtime;
-      node.vaultKey = r.key; node.vaultMtime = r.mtime; node.vaultSize = r.size;
-      evict(node);
-      managed.add(node);
+      placeholder(r.key, r.size, r.mtime);
       n++; bytes += r.size;
     }
     return { files: n, bytes };
+  }
+  // A file from outside (an upload, a cloud download) straight into the vault: its Blob is stored as it is (the browser
+  // copies it, not the page) and the user folder gets its placeholder, so it is never in the page's memory. A file of
+  // that name there is replaced. In one step of the vault's queue: a round between the two would remove the record.
+  function adopt(path, blob, mtime = Date.now()) {
+    return serial(async () => {
+      await put(path, { size: blob.size, mtime, blob });
+      mine.add(path);
+      const old = lookup(path);
+      if (old) managed.delete(old);
+      placeholder(path, blob.size, mtime);
+    });
   }
 
   // Without JSPI: the records become files of the user folder again (in memory, as before the vault).
@@ -473,7 +489,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     stop,
     set active(on) { active = Boolean(on); },
     open, migrateFrom, mount, materialize, clear, instantiate, wrapFS, persist, bytes, view, blob, owns, records,
-    openForGame, readForGame, settle,
+    openForGame, readForGame, settle, adopt,
     held: () => [...managed].filter((n) => n.vault === 'in').length,
   };
 }

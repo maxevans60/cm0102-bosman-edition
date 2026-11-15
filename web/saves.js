@@ -85,6 +85,22 @@ export function checkSave(bytes, total = bytes.length) {
   return null;
 }
 
+// A save from outside (an uploaded File, a cloud download: a Blob) into the save folder under name. It is checked by its
+// header alone. With the vault it goes to the browser's storage as it is (vault.adopt) and is never in the page's memory:
+// the page once read the whole file and copied it into the user folder, 3.4 GB in the tab for a save of 690 MB (15
+// November 2026). Without the vault it is a file in memory, as before. Resolves to null, or to why it is not a save.
+export async function storeSave(FS, name, blob, { mtime = Date.now() } = {}) {
+  const why = checkSave(new Uint8Array(await blob.slice(0, HEADER).arrayBuffer()), blob.size);
+  if (why) return why;
+  const path = `${SAVE_DIR}/${name}`;
+  if (vaultRef?.active) await vaultRef.adopt(path, blob, mtime);
+  else {
+    FS.writeFile(path, new Uint8Array(await blob.arrayBuffer()));
+    try { FS.utime(path, mtime, mtime); } catch { /* an older file system: the time of the copy */ }
+  }
+  return null;
+}
+
 // The name an uploaded file gets in the save folder, or null when it is not a .sav file.
 export function saveName(fileName, taken) {
   let base = String(fileName).split(/[\\/]/).pop().replace(/[\u0000-\u001f:*?"<>|]/g, '_').trim();
@@ -292,12 +308,12 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
       const taken = new Set(listSaves(FS).saves.map((f) => f.name.toLowerCase()));
       const name = saveName(file.name, taken);
       if (!name) { refused.push(`${file.name}: only .sav files are saved games`); refusedFiles.push(file); continue; }
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      const why = checkSave(bytes);
+      if (file.size > 50 << 20) say(`Storing ${file.name} (${mb(file.size)})…`);
+      let why;
+      try { why = await storeSave(FS, name, file); } catch (err) { why = `it was not stored: ${err.message}`; }
       if (why) { refused.push(`${file.name}: ${why}`); refusedFiles.push(file); continue; }
-      FS.writeFile(`${SAVE_DIR}/${name}`, bytes);
       done.push(name);
-      log(`page: uploaded the save ${name} (${mb(bytes.length)})`);
+      log(`page: uploaded the save ${name} (${mb(file.size)})`);
     }
     input.value = '';
     if (done.length) sync();

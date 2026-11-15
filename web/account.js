@@ -11,7 +11,7 @@
 //
 // What was last the same is kept in the user folder itself (.cloud-sync.json): per save, the cloud's ETag and the size
 // and time of the local file at that moment.
-import { SAVE_DIR, checkSave, listSaves, readBlobNow, saveName } from './saves.js';
+import { SAVE_DIR, listSaves, readBlobNow, saveName, storeSave } from './saves.js';
 import { downDirect, upDirect } from './direct.js';
 
 const STATE = `${SAVE_DIR}/.cloud-sync.json`;
@@ -34,7 +34,6 @@ export async function fetchMe(timeoutMs = 8000) {
 
 const PAUSES = [3000, 10000];   // the pauses before a request of the cloud saves is tried again
 const gzip = (bytes) => new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip'))).blob();
-const gunzip = async (stream) => new Uint8Array(await new Response(stream.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
 
 // A name for the other device's version of name, free among the names taken (lower case).
 export function otherDeviceName(name, taken) {
@@ -162,14 +161,12 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     }, signal);
     if (!r.ok) throw fail(`${name} down`, r);
     const etag = link?.etag ?? r.headers.get('etag'), saved = Number(link?.saved ?? r.headers.get('x-saved')) || Date.now();
-    const bytes = await gunzip(r.body);
-    const why = checkSave(bytes);
+    // Unpacked as a Blob (the browser keeps a large one on disk) and stored as it is: not in the page's memory whole.
+    const blob = await new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).blob();
+    const why = await storeSave(FS, file, blob, { mtime: saved });
     if (why) { log(`page: ${name} from the cloud was not taken: ${why}`); return null; }
-    const path = `${SAVE_DIR}/${file}`;
-    FS.writeFile(path, bytes);
-    try { FS.utime(path, saved, saved); } catch { /* an older file system: the time of the copy */ }
     onWrote();
-    return { etag, bytes, saved, ...stat(file) };
+    return { etag, saved, ...stat(file) };
   }
 
   // Changed on both sides: the cloud's version comes in under another name and goes up under it, then this device's
