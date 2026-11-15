@@ -305,6 +305,8 @@ if(NOT WIN32)
     target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
     add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
+    # Gap rows 19 and 20 of slice 6: no rules row or season database reaches the Croatian, Korean or Greek fallback.
+    add_test(NAME cup_east_reach COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_east_reach_check.py")
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
