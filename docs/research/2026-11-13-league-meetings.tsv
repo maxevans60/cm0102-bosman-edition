@@ -4,7 +4,7 @@
 # (the class's meetings stay, and the gaps file lists it). Evidence: sizes-check-<group>.md are the notes of the
 # check of 13 November 2026 (docs/research/2026-11-13-league-sizes-check.md), the rules table cells, and the pages named.
 comp_file	first_season	last_season	meetings	evidence
-arg_prm	2026	2027	-	unknown: clubs unknown (rows arg-usa-26 and arg-usa-27; sizes-check-americas.md lines 33-34)
+arg_prm	2026	2027	1	one round-robin of 30 plus a derby round (rows arg-usa-26 and arg-usa-27: LPF format of 29 October 2026, eleconomista.com.ar and diariopanorama.com)
 arg_second	2001	2001	1	sizes-check-americas.md line 95 (and line 72): Apertura one table of 25, one meeting, 24 MP, before the Clausura zones; first stage 24 / (25 - 1) = 1 (from matches)
 arg_second	2002	2006	1	sizes-check-americas.md lines 73 and 96: Apertura and Clausura of 19 rounds each, 20 clubs, 19 MP; halves, 19 / (20 - 1) = 1 per half (from matches)
 arg_second	2019	2019	2	sizes-check-americas.md line 102 (and line 82): 2 zones of 16, double round robin in the zone, stopped after 21 rounds (planned format counted)

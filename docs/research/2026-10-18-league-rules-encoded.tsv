@@ -24,8 +24,8 @@ arg-usa-22	2022	arg_prm	1	28	-	-	tiebreak	ok	-	calendar	1	0	-	0	0	-	27
 arg-usa-23	2023	arg_prm	1	28	-	-	-	ok	-	calendar	1	0	-	0	0	-	27
 arg-usa-24	2024	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	15+15	2	0	-	16
 arg-usa-25	2025	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	15+15	2	0	-	16
-arg-usa-26	2026	arg_prm	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
-arg-usa-27	2027	arg_prm	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
+arg-usa-26	2026	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	-	1	0	-	30
+arg-usa-27	2027	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	-	1	0	-	30
 arg-usa-28	2001	arg_second	2	25	-	-	-	partial: a final of the tournament winners (stages)	stages	split	1	1	gap	0	0	-	-
 arg-usa-29	2002	arg_second	2	20	-	-	-	partial: a final of the tournament winners (stages)	stages	split	1	1	-	0	0	-	19
 arg-usa-30	2003	arg_second	2	20	-	-	-	partial: a final of the tournament winners (stages)	stages	split	1	1	-	0	0	-	19

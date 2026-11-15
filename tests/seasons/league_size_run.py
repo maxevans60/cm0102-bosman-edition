@@ -87,8 +87,8 @@ ROWS = {
     "nir_first": (2016, 2017, "NIFL Championship, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
     "nir_first@2022": (2022, 2023, "NIFL Championship, 12 clubs: 33 rounds, then sections of 6 and 6 once more"),
     "ire_first": (2013, 2014, "League of Ireland First Division, 8 clubs in four meetings: 28 dates (D5)"),
-    # Slice 15: the Argentine Primera. Edition Y plays the row whose real season begins with Y, else row Y - 1
-    # (season_sizes_edition): editions 2014 and 2015 play row 2014, 2016 row 2016, 2025 row 2024 (the 2025 season).
+    # Slice 15: the Argentine Primera. Edition Y plays row Y (season_sizes_edition): row 2014 is the 2015 season, row
+    # 2015 the 2016 tournament, row 2016 the 2016/17 season, row 2024 the 2025 season.
     "arg_prm@2013": (2013, 2014, "Primera 2013/14 (row 2013, 20 in two halves), then 30 in 2014/15: the size step "
                                  "takes 10 clubs of the second division, which takes clubs of the third"),
     "arg_prm": (2014, 2015, "Primera 2014/15 (row 2014, the 2015 season): one table of 30, 29 rounds and the derby "
@@ -100,6 +100,8 @@ ROWS = {
     "arg_prm@2024": (2024, 2025, "Primera 2024/25 (row 2024, the 2025 season): Apertura and Clausura of two zones of "
                                  "15 with the rival and drawn inter-zone rounds"),
     "arg_prm@2025": (2025, 2026, "Primera 2025/26 (row 2025, the 2026 season): the clubs and zones of its list"),
+    "arg_prm@2026": (2026, 2027, "Primera 2026/27 (row 2026, the 2027 season): one table of 30 and the derby round in "
+                                 "two halves, each with a knockout of 16"),
     # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
     # before the real season (row 2003 is the 2004 Série A).
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
@@ -665,6 +667,63 @@ def arg_down(row):
             2021: (2, 0), 2023: (0, 0)}.get(row, (1, 1))
 
 
+def arg_title_faults(lines, year):
+    fails = []
+    stages, kos, champs, ended = {}, {}, {}, set()
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm stages (\d+): row (\d+), (\d+) zone tables of (\d+)", x)
+        if m:
+            stages[int(m.group(1))] = (int(m.group(2)), int(m.group(3)), int(m.group(4)))
+        m = re.match(r"recomp: league sizes: arg_prm (knockout apertura|knockout clausura|final|runners-up match) (\d+): "
+                     r"stage (\d+) drawn on day \d+ of \d+, a round every (\d+) days:([^;]*);", x)
+        if m:
+            # Each tie is "home id:seed-away id:seed".
+            kos[(int(m.group(2)), m.group(1))] = [(int(t.split("-")[0].split(":")[1]), int(t.split("-")[1].split(":")[1]))
+                                                  for t in m.group(5).split()]
+        m = re.match(r"recomp: league sizes: arg_prm champion (\d+) (apertura|clausura): .* \(the (knockout|final)\)", x)
+        if m:
+            champs[(int(m.group(1)), m.group(2))] = m.group(3)
+        m = re.match(r"recomp: league sizes: arg_prm relegation (\d+):", x)
+        if m:
+            ended.add(int(m.group(1)))
+        if "league sizes: arg_prm " in x and ("not played" in x or "no knockout" in x or "no final" in x or
+                                               "no title stages" in x):
+            fails.append("arg_prm: " + x.split("arg_prm ", 1)[1])
+    for ed in sorted(ended):
+        row = edition_season("arg_prm", ed)
+        _c, _m, zones, _e, _r, halves = encoded_form("arg_prm", row)
+        if not zones and halves and _e:
+            want = [(1, 16), (8, 9), (4, 13), (5, 12), (2, 15), (7, 10), (3, 14), (6, 11)]
+            if ed not in stages or stages[ed][1] != 0:
+                fails.append(f"arg_prm {ed}: stages {stages.get(ed)}, want no zone tables")
+            for half in ("apertura", "clausura"):
+                if kos.get((ed, "knockout " + half)) != want:
+                    fails.append(f"arg_prm {ed} {half}: knockout seeds {kos.get((ed, 'knockout ' + half))}, want {want}")
+                if champs.get((ed, half)) != "knockout":
+                    fails.append(f"arg_prm {ed} {half}: no champion of the knockout")
+            continue
+        if not zones:
+            if ed in stages:
+                fails.append(f"arg_prm {ed}: zone tables in a season of one table")
+            continue
+        if ed not in stages or stages[ed][1] != (4 if halves else 2):
+            fails.append(f"arg_prm {ed}: zone tables {stages.get(ed)}, want {4 if halves else 2}")
+        want_pairs = [(1, 8), (4, 5), (2, 7), (3, 6)] * 2
+        for half in (("apertura", "clausura") if halves else ()):
+            got = kos.get((ed, "knockout " + half))
+            if got != want_pairs:
+                fails.append(f"arg_prm {ed} {half}: knockout seeds {got}, want {want_pairs}")
+            if champs.get((ed, half)) != "knockout":
+                fails.append(f"arg_prm {ed} {half}: no champion of the knockout")
+        if not halves:
+            if kos.get((ed, "final")) != [(1, 1)] or kos.get((ed, "runners-up match")) != [(2, 2)]:
+                fails.append(f"arg_prm {ed}: final {kos.get((ed, 'final'))}, runners-up match "
+                             f"{kos.get((ed, 'runners-up match'))}")
+            if champs.get((ed, "apertura")) != "final":
+                fails.append(f"arg_prm {ed}: no champion of the final")
+    return fails
+
+
 def arg_faults(log, year):
     """The Argentine Primera (slice 15): each edition with a fixed list plays the form of its row. Zones: the clubs of
     each zone of the zones line meet once in a half, each club meets two clubs of the other zone (its rival and a
@@ -693,13 +752,20 @@ def arg_faults(log, year):
         if m:
             plan_of[(int(m.group(1)), m.group(2))] = last_plan
     seen = set()
+    # Halves of one table (2027 on, gap row 49): the Apertura plays the first rounds of the plan and the Clausura the
+    # rest, so the season's two lists make the one table and its derby round.
+    for (ed, half) in list(fixtures):
+        _c, _m, zones_e, extra_e, _r, halves_e = encoded_form("arg_prm", edition_season("arg_prm", ed))
+        if half == "clausura" and halves_e and not zones_e and extra_e and (ed, "apertura") in fixtures:
+            fixtures[(ed, "apertura")] = fixtures[(ed, "apertura")] + fixtures.pop((ed, "clausura"))
     for (ed, half), rounds in sorted(fixtures.items()):
         season = edition_season("arg_prm", ed)
         clubs, _m, zones, extra, want_rounds, halves = encoded_form("arg_prm", season)
         name = f"arg_prm {ed} {half}"
         seen.add(ed)
         fails += arg_round_faults(name, rounds, clubs)
-        if len(rounds) != want_counts("arg_prm", season)[0]:
+        split = halves and not zones and extra
+        if not split and len(rounds) != want_counts("arg_prm", season)[0]:
             fails.append(f"{name}: {len(rounds)} rounds, want {want_counts('arg_prm', season)[0]}")
         meet = {}
         for r in rounds:
@@ -738,6 +804,8 @@ def arg_faults(log, year):
             if not halves and half == "clausura":
                 fails.append(f"{name}: a Clausura in a row of one table")
         elif extra:
+            if split and len(rounds) != clubs:
+                fails.append(f"{name}: {len(rounds)} rounds in both halves, want {clubs}")
             if not plan or plan[0] != "derby":
                 fails.append(f"{name}: no derby line before its fixtures")
                 continue
@@ -819,6 +887,9 @@ def arg_faults(log, year):
         for w in m.group(7).split():
             if int(w.split(":")[1]) < int(m.group(8)) - 1 - n_avg:
                 fails.append(f"arg_prm {ed}: {w} goes down by the annual table, not one of its last places")
+    # Gap row 48: a zone season has the zone tables of each half and a knockout of 16 after each half (2025 and 2026),
+    # or a final of the zone winners and a match of the runners-up (2016); the knockout's winner is the champion.
+    fails += arg_title_faults(lines, year)
     if not any("league sizes: arg_prm relegation " in x for x in lines):
         fails.append("arg_prm: no relegation line (the end of a season)")
     print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))

@@ -40,6 +40,7 @@
  * The base game and RECOMP_SEASON_CODE=off: the rule kinds do not run (season_change.c), so no league gets a
  * stage count, and both wraps pass to the original (a league with +0x2c 0 is never marked). The test switch
  * RECOMP_PLAYOFFS=off turns the kind off. */
+#include "season_sizes_arg.h"
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
@@ -513,6 +514,11 @@ int season_playoffs_advance(uint32_t obj)
 void o_00686940(void);
 RT_WRAP(00686940, playoff_result)
 {
+    /* The Argentine Primera's knockouts (season_arg_stages.c): no news of promotion or relegation for their results. */
+    if (season_arg_ko_result(cpu.ecx, (int8_t)g_mem[cpu.esp + 0xc])) {
+        rt_ret_stdcall(0, 6);
+        return;
+    }
     if (marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
         if (getenv("RECOMP_PLAYOFF_LOG"))
             fprintf(stderr, "recomp: playoffs: %s: result club %x (%.30s) code %d stage %d, day %d of %d\n",

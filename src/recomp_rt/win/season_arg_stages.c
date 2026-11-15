@@ -1,0 +1,760 @@
+/* The title stages of the Argentine Primera in its zone seasons (0.7.2 league sizes, gap row 48; research notes of
+ * 15 November 2026: LPF reglamentos 2025 and 2026, RSSSF arg2016, arg2025, arg2026, es and en Wikipedia; code notes
+ * docs/research/2026-11-15-arg-zone-stages.md).
+ *
+ * Real life:
+ * - 2025 and 2026 (rows 2024 and 2025): each half has two zone tables of 15. The first 8 of each zone play a knockout
+ *   of one match a round: 1A v 8B, 4B v 5A, 2B v 7A, 3A v 6B (one side of the bracket), 1B v 8A, 4A v 5B, 2A v 7B,
+ *   3B v 6A (the other), a fixed bracket, the better zone place at home, the final at a neutral ground. A level match
+ *   goes to extra time and penalties, except the Apertura 2025 before its final: penalties at once. The winner is the
+ *   champion of the half.
+ * - 2016 (row 2015): two zone tables of 15, then a final of the zone winners and a match of the runners-up, one match
+ *   each at a neutral ground. The final's winner is the champion.
+ *
+ * How (the model is BelThird, 0x4216f0..0x4242e0):
+ * - The zone tables are League_Stages of 15 clubs with no dates (League_Stage::League_Stage 0x68b100, as the period
+ *   tables of BelThird::find_or_create_period_stage 0x422e8d..0x422ed4). ArgPrm::add_result 0x405c50 gives each league
+ *   match of a half to the zone tables of that half (League::add_result 0x685d30 with match +0x42 the stage index and
+ *   no stats, as 0x422ca6); a table updates only the row of its own club (0x685faf..0x6864cf).
+ * - The knockouts are Cup_Stages (Cup_Stage::Cup_Stage 0x522e00, tree mode 1: Cup_Stage::map_fixture_tree 0x5241e0
+ *   puts entrant i in tie i / 2, home first, and the winner of tie t in tie t / 2 of the next round). The round table
+ *   is made here (0x68 bytes a round, the fields of docs/research/2026-10-17-cup-round-record.md): codes 20, 120, 130,
+ *   150, flags 0x200 (fixed bracket) and 0x3 (extra time and penalties) or 0x1 (penalties), the home rule bit 0x1 of
+ *   +0xb, the final at venue 4 (the nation's ground, 0x85c727). Cup_Stage +0x90 0x522360 decides the home club of a
+ *   tie: here the better seed (the zone place).
+ * - The stage array (+0xc, +0x2c stages of the season, +0x30 the last one made): [0] the Clausura, [1] the aggregate
+ *   table, then the zone tables, then the knockouts. Save, load, the destructor and start_new_season walk 0..+0x30
+ *   (League save 0x6891c0, load 0x687b10, 0x404500, 0x4057b5), so a stage is in the array before +0x30 counts it.
+ *   League::update_for_date 0x6847c0 closes the season only when +0x30 = +0x2c - 1 and every stage is complete
+ *   (0x6849aa..0x6849e3); before that it calls advance_stage, the empty 0x5a8f60, where the last stages are made.
+ *   The Apertura's knockout is made after the update of the day its table is complete.
+ * - The champion of each half: League::record_season_honours 0x684640 reads the clubs of rows 0, 1 and 2
+ *   (0x68464b..0x684663); for the call they are the winner, the finalist and the row 2 club of the table.
+ * The base game and RECOMP_LEAGUE_SIZES=off: no stage is added and every wrap passes to the original. */
+#include "win.h"
+#include "season.h"
+#include "season_change.h"
+#include "season_sizes.h"
+#include "season_sizes_arg.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define F_NEW 0x00944cf1u               /* operator new, cdecl (size) */
+#define F_LEAGUE_STAGE 0x0068b100u      /* League_Stage::League_Stage, thiscall, 22 arguments */
+#define F_CUP_STAGE 0x00522e00u         /* Cup_Stage::Cup_Stage, thiscall, 15 arguments */
+#define F_SET_UP_ROUND 0x0051c800u      /* Cup::set_up_round, thiscall (round) */
+#define F_ADD_RESULT 0x00685d30u        /* League::add_result, thiscall (match, update_stats) */
+#define F_SORT_TABLE 0x006827d0u        /* League::sort_table, thiscall (rows or 0) */
+#define F_DRAW_DATE 0x00521e60u         /* cdecl (table, round, day, month, year+, weekday, year) */
+#define F_MATCH_DATE 0x00521eb0u        /* cdecl (table, round, day, month, year+, weekday, a7, year, venue) */
+#define NO_WEEKDAY 0xffffffffu
+
+#define GAME_DATE 0x00ae2c90u           /* s16 day of the year, +2 s16 year */
+#define ENTRIES 0x00b63d60u
+#define ENTRY_SIZE 0x48u
+#define ENTRY_COUNT 35
+#define ENTRY_UPDATE_DAY 0x15u
+#define COMPS_MAX 256
+
+#define COMP_RECORD 4u
+#define STAGES 0xcu
+#define STAGE_COUNT 0x2cu               /* s32: the stages of the season */
+#define STAGE_LAST 0x30u                /* s32: the last stage made */
+#define COMP_MEETINGS 0x3cu
+#define COMP_CLUBS 0x3eu
+#define COMP_YEAR 0x40u
+#define STAGE_TYPE 0x43u                /* 1 Cup_Stage, 2 League_Stage */
+#define STAGE_INDEX 0x44u
+#define COMP_MATCHES 0xa7u              /* League: s16 matches of a club; Cup_Stage: the team entries (6 bytes) */
+#define COMP_DATES 0xa9u
+#define COMP_TABLE 0xb1u
+#define CUP_COMPLETE 0xb1u              /* Cup: set when the last round is played (Cup::check_complete 0x521e00) */
+#define COMP_TEMPLATE 0xbau
+#define ROW_SIZE 0x3bu
+#define ROW_POSITION 4u
+#define ROW_PLAYED 0x11u
+#define MATCH_STAGE 0x42u               /* s8: the stage of a match, 0xff the league */
+#define DATE_SIZE 0x41u
+#define ROUND_SIZE 0x68u
+#define CLUB_NAME 4u
+
+#define FIRST_ZONE 2                    /* stages[2..]: the zone tables */
+#define ZONE_MAX 15
+#define TABLE_MAX 60
+#define KO_CLUBS 16
+#define NAME_APERTURA 0x434             /* "Opening Stage" (ArgPrm::create_schedule 0x4045af) */
+#define NAME_CLAUSURA 0x435             /* "Closing Stage" (0x404d9f) */
+#define NAME_ZONE_A1 0x43d              /* "Phase 1 Group A", parent 0x449 (comp_util_get_parent_stage_id 0x4b01d0) */
+#define NAME_ZONE_A2 0x445              /* "Phase 2 Group A", parent 0x44a */
+#define NAME_GROUP_A 0x41f              /* "Group A", parent 0x41c */
+#define NAME_CHAMPIONSHIP 0x46b         /* "Championship" */
+#define CODE_R16 20
+#define CODE_QF 120
+#define CODE_SF 130
+#define CODE_FINAL 150
+#define CODE_PLAYOFF 160
+#define VENUE_HOME 0
+#define VENUE_NEUTRAL 4
+
+static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
+
+static int logging(void)
+{
+    const char *v = getenv("RECOMP_SIZE_LOG");
+    return v && *v && strcmp(v, "0");
+}
+
+static uint32_t call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+/* ---- The plan of a season's stages ---- */
+
+typedef struct {
+    int kind, season;
+    int count;                          /* the stages of the season */
+    int zones;                          /* the zone tables (2 a half, or 2) */
+    int ko_a, ko_c;                     /* the knockout of the Apertura and of the Clausura, -1 none */
+    int final_at, third_at;             /* the final and the runners-up match (2016), -1 none */
+} Plan;
+
+static int plan_of(uint32_t obj, Plan *p)
+{
+    memset(p, 0, sizeof *p);
+    p->ko_a = p->ko_c = p->final_at = p->third_at = -1;
+    p->kind = season_arg_stage_kind(obj, &p->season);
+    if (p->kind == SEASON_ARG_KO_ZONES) {
+        p->zones = 4;
+        p->ko_a = FIRST_ZONE + 4;
+        p->ko_c = FIRST_ZONE + 5;
+        p->count = FIRST_ZONE + 6;
+    } else if (p->kind == SEASON_ARG_KO_FINAL) {
+        p->zones = 2;
+        p->final_at = FIRST_ZONE + 2;
+        p->third_at = FIRST_ZONE + 3;
+        p->count = FIRST_ZONE + 4;
+    } else if (p->kind == SEASON_ARG_KO_TABLE) {
+        p->ko_a = FIRST_ZONE;
+        p->ko_c = FIRST_ZONE + 1;
+        p->count = FIRST_ZONE + 2;
+    } else {
+        p->count = FIRST_ZONE;
+    }
+    return p->kind != SEASON_ARG_KO_NONE;
+}
+
+/* The plan of a Primera whose stages exist (a loaded game): from the stage count and the stages, as made here. */
+static int plan_live(uint32_t obj, Plan *p)
+{
+    if (!readable(obj) || !season_sizes_on()) return 0;
+    uint32_t prm = obj;
+    if (strcmp(season_change_file(prm), "arg_prm")) return 0;
+    int count = (int32_t)rd32(g_mem, prm + STAGE_COUNT);
+    memset(p, 0, sizeof *p);
+    p->ko_a = p->ko_c = p->final_at = p->third_at = -1;
+    if (count == FIRST_ZONE + 6) {
+        p->kind = SEASON_ARG_KO_ZONES;
+        p->zones = 4;
+        p->ko_a = FIRST_ZONE + 4;
+        p->ko_c = FIRST_ZONE + 5;
+    } else if (count == FIRST_ZONE + 4) {
+        p->kind = SEASON_ARG_KO_FINAL;
+        p->zones = 2;
+        p->final_at = FIRST_ZONE + 2;
+        p->third_at = FIRST_ZONE + 3;
+    } else if (count == FIRST_ZONE + 2) {
+        p->kind = SEASON_ARG_KO_TABLE;
+        p->ko_a = FIRST_ZONE;
+        p->ko_c = FIRST_ZONE + 1;
+    } else {
+        return 0;
+    }
+    p->count = count;
+    return 1;
+}
+
+static uint32_t stage_at(uint32_t prm, int i)
+{
+    uint32_t stages = rd32(g_mem, prm + STAGES);
+    if (!readable(stages) || i < 0 || i > (int32_t)rd32(g_mem, prm + STAGE_LAST)) return 0;
+    uint32_t s = rd32(g_mem, stages + 4u * (uint32_t)i);
+    return readable(s) ? s : 0;
+}
+
+/* ---- Zone tables ---- */
+
+/* A League_Stage of the clubs of a zone with no dates: it takes the results that add_result gives it. */
+static uint32_t zone_stage(uint32_t self, const uint32_t *club, int z, int index, int name, int matches)
+{
+    uint32_t list = season_sizes_game_malloc(4u * (uint32_t)z);
+    if (!list) return 0;
+    for (int i = 0; i < z; i++) wr32(g_mem, list + 4u * (uint32_t)i, club[i]);
+    uint32_t sz[1] = {0xee};
+    uint32_t stage = call_cdecl(F_NEW, 1, sz);
+    if (rt_unwinding || !readable(stage)) {
+        season_sizes_game_free(list);
+        return 0;
+    }
+    /* As the period tables of BelThird (0x422e8d..0x422ed4), with the parent's rule bytes, tie-break codes and
+     * places (+0xc2..+0xc4, +0xc5, +0xbe) and the matches of a zone club. */
+    uint32_t a[22] = {self, (uint32_t)z, list, 1, rd32(g_mem, self + COMP_RECORD), 0, 0, g_mem[self + 0xc2],
+                      g_mem[self + 0xc3], g_mem[self + 0xc4], self + 0xc5, self + 0xbe,
+                      (uint32_t)(int16_t)rd16(g_mem, self + COMP_YEAR), (uint32_t)index, (uint32_t)name, 0, 1, 0, 2,
+                      (uint32_t)matches, 0, 2};
+    call_this(F_LEAGUE_STAGE, stage, 22, a);
+    season_sizes_game_free(list);
+    return rt_unwinding ? 0 : stage;
+}
+
+void season_arg_stages_made(uint32_t self)
+{
+    Plan p;
+    int any = plan_of(self, &p);
+    uint32_t old = rd32(g_mem, self + STAGES);
+    if (!readable(old)) return;
+    wr32(g_mem, self + STAGE_COUNT, (uint32_t)p.count);
+    if (!any) return;
+    if (p.kind == SEASON_ARG_KO_TABLE) {
+        /* No zone tables; the array holds the two knockouts (made later). */
+        uint32_t arr = season_sizes_game_malloc(4u * (uint32_t)p.count);
+        if (!arr) {
+            wr32(g_mem, self + STAGE_COUNT, FIRST_ZONE);
+            return;
+        }
+        for (int i = 0; i < p.count; i++)
+            wr32(g_mem, arr + 4u * (uint32_t)i, i < FIRST_ZONE ? rd32(g_mem, old + 4u * (uint32_t)i) : 0);
+        wr32(g_mem, self + STAGES, arr);
+        season_sizes_game_free(old);
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_prm stages %d: row %d, 0 zone tables of 0 (%d matches), %d stages "
+                            "in the season\n", (int16_t)rd16(g_mem, self + COMP_YEAR), p.season,
+                    (int16_t)rd16(g_mem, self + COMP_MATCHES), p.count);
+        return;
+    }
+    uint32_t a[ZONE_MAX], b[ZONE_MAX];
+    int z = season_arg_zone_lists(self, a, b);
+    if (z < 2 || z > ZONE_MAX) {
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: no zones for the zone tables; no title stages\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR));
+        wr32(g_mem, self + STAGE_COUNT, FIRST_ZONE);
+        return;
+    }
+    /* The array of the season's stages (the constructor's holds 2, 0x4042b2): the Clausura and the aggregate move. */
+    uint32_t arr = season_sizes_game_malloc(4u * (uint32_t)p.count);
+    if (!arr) {
+        wr32(g_mem, self + STAGE_COUNT, FIRST_ZONE);
+        return;
+    }
+    for (int i = 0; i < p.count; i++) wr32(g_mem, arr + 4u * (uint32_t)i, i < FIRST_ZONE ? rd32(g_mem, old + 4u * (uint32_t)i) : 0);
+    wr32(g_mem, self + STAGES, arr);
+    season_sizes_game_free(old);
+    int matches = (int16_t)rd16(g_mem, self + COMP_MATCHES);
+    for (int k = 0; k < p.zones; k++) {
+        int half = k / 2, zone = k % 2, index = FIRST_ZONE + k;
+        int name = p.kind == SEASON_ARG_KO_FINAL ? NAME_GROUP_A + zone : (half ? NAME_ZONE_A2 : NAME_ZONE_A1) + zone;
+        uint32_t s = zone_stage(self, zone ? b : a, z, index, name, matches);
+        if (rt_unwinding) return;
+        if (!s) {
+            /* No table: the season has the stages made so far and no title stages. */
+            wr32(g_mem, self + STAGE_COUNT, (uint32_t)index);
+            fprintf(stderr, "recomp: league sizes: arg_prm %d: zone table %d not made; no title stages\n",
+                    (int16_t)rd16(g_mem, self + COMP_YEAR), index);
+            return;
+        }
+        wr32(g_mem, arr + 4u * (uint32_t)index, s);
+        wr32(g_mem, self + STAGE_LAST, (uint32_t)index);
+    }
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: arg_prm stages %d: row %d, %d zone tables of %d (%d matches), %d stages "
+                        "in the season\n", (int16_t)rd16(g_mem, self + COMP_YEAR), p.season, p.zones, z, matches,
+                p.count);
+}
+
+/* ArgPrm::add_result 0x405c50 (thiscall (match, update_stats), ret 8, returns 1): League::add_result for the match,
+ * then again with match +0x42 = 1 and no stats for the aggregate table (0x405c65..0x405c8f). A knockout match goes to
+ * its stage only; a league match of a zone season goes to the zone tables of its half too. */
+void o_00405c50(void);
+RT_WRAP(00405c50, arg_add_result)
+{
+    uint32_t self = cpu.ecx, match = rt_arg(0), stats = rt_arg(1);
+    Plan p;
+    if (!readable(match) || !plan_live(self, &p)) {
+        o_00405c50();
+        return;
+    }
+    int at = (int8_t)g_mem[match + MATCH_STAGE];
+    int first_ko = FIRST_ZONE + p.zones;
+    if (at >= first_ko) {
+        uint32_t a[2] = {match, stats};
+        uint32_t r = call_this(F_ADD_RESULT, self, 2, a);
+        if (!rt_unwinding) rt_ret_stdcall(r, 2);
+        return;
+    }
+    o_00405c50();
+    if (rt_unwinding) return;
+    g_mem[match + MATCH_STAGE] = (uint8_t)at;
+    int half = at == -1 ? 0 : at == 0 ? 1 : -1;
+    if (half < 0 || (p.kind == SEASON_ARG_KO_FINAL && half)) return;
+    int last = (int32_t)rd32(g_mem, self + STAGE_LAST);
+    Cpu saved = cpu;
+    for (int zone = 0; zone < 2; zone++) {
+        int index = FIRST_ZONE + 2 * half + zone;
+        uint32_t s = stage_at(self, index);
+        if (!s || index > last) continue;
+        g_mem[match + MATCH_STAGE] = (uint8_t)index;
+        uint32_t a[2] = {match, 0};
+        call_this(F_ADD_RESULT, self, 2, a);
+        if (rt_unwinding) return;
+        uint32_t z[1] = {0};
+        call_this(F_SORT_TABLE, s, 1, z);
+        if (rt_unwinding) return;
+    }
+    g_mem[match + MATCH_STAGE] = (uint8_t)at;
+    cpu = saved;
+}
+
+/* ---- Knockouts ---- */
+
+static int leap(int y) { return (y % 4 == 0 && y % 100 != 0) || y % 400 == 0; }
+static int year_days(int y) { return leap(y) ? 366 : 365; }
+
+static void day_month(int doy, int year, int *day, int *month)
+{
+    static const int len[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int m = 0;
+    while (m < 11) {
+        int n = len[m] + (m == 1 && leap(year));
+        if (doy < n) break;
+        doy -= n;
+        m++;
+    }
+    *day = doy + 1;
+    *month = m;
+}
+
+static void date_plus(int n, int *doy, int *year)
+{
+    int d = (int16_t)rd16(g_mem, GAME_DATE), y = (int16_t)rd16(g_mem, GAME_DATE + 2);
+    d += n;
+    while (d >= year_days(y)) d -= year_days(y), y++;
+    *doy = d;
+    *year = y;
+}
+
+static int days_until(int doy, int year)
+{
+    int d = (int16_t)rd16(g_mem, GAME_DATE), y = (int16_t)rd16(g_mem, GAME_DATE + 2), n = 0;
+    while (y < year) n += year_days(y) - d, d = 0, y++;
+    return n + doy - d;
+}
+
+/* The days to the update day of the Primera's table entry (its season change), or -1. */
+static int days_to_change(uint32_t obj)
+{
+    uint32_t buf[COMPS_MAX];
+    for (int e = 0; e < ENTRY_COUNT; e++) {
+        int n = season_change_entry_comps(e, buf, COMPS_MAX);
+        for (int i = 0; i < n; i++) {
+            if (buf[i] != obj) continue;
+            int upd = (int16_t)rd16(g_mem, ENTRIES + (uint32_t)e * ENTRY_SIZE + ENTRY_UPDATE_DAY);
+            int today = (int16_t)rd16(g_mem, GAME_DATE), y = (int16_t)rd16(g_mem, GAME_DATE + 2);
+            int left = upd - today;
+            if (left < 0) left += year_days(y);
+            return left;
+        }
+    }
+    return -1;
+}
+
+/* The days to the first date of a league's template, or -1. */
+static int days_to_first_date(uint32_t league)
+{
+    uint32_t t = readable(league) ? rd32(g_mem, league + COMP_TEMPLATE) : 0;
+    int n = readable(league) ? (int16_t)rd16(g_mem, league + COMP_DATES) : 0, best = -1;
+    for (int i = 0; readable(t) && i < n; i++) {
+        int doy = (int16_t)rd16(g_mem, t + (uint32_t)i * DATE_SIZE), y = (int16_t)rd16(g_mem, t + (uint32_t)i * DATE_SIZE + 2);
+        int left = days_until(doy, y);
+        if (left > 0 && (best < 0 || left < best)) best = left;
+    }
+    return best;
+}
+
+static void set_dates(uint32_t table, int round, int draw_in, int match_in, uint32_t venue, uint32_t year)
+{
+    int doy, y, day, month;
+    date_plus(draw_in, &doy, &y);
+    day_month(doy, y, &day, &month);
+    uint32_t d[7] = {table, (uint32_t)round, (uint32_t)day, (uint32_t)month, (uint32_t)(y - (int)year), NO_WEEKDAY,
+                     year};
+    call_cdecl(F_DRAW_DATE, 7, d);
+    if (rt_unwinding) return;
+    date_plus(match_in, &doy, &y);
+    day_month(doy, y, &day, &month);
+    uint32_t m[9] = {table, (uint32_t)round, (uint32_t)day, (uint32_t)month, (uint32_t)(y - (int)year), NO_WEEKDAY,
+                     1, year, venue};
+    call_cdecl(F_MATCH_DATE, 9, m);
+}
+
+/* A knockout stage at index of n clubs (16 or 2) in the list order of the tree (club 2i at home to club 2i + 1 in
+ * round 0), seeds the zone places, a round every step days from today. pens: penalties at once before the final. */
+static uint32_t ko_stage(uint32_t self, int index, const uint32_t *club, const uint8_t *seed, int n, int code_one,
+                         int name, int step, int pens, int neutral_from)
+{
+    int rounds = n == KO_CLUBS ? 4 : 1;
+    static const int codes[4] = {CODE_R16, CODE_QF, CODE_SF, CODE_FINAL};
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, self + COMP_YEAR);
+    uint32_t table = season_sizes_game_malloc(ROUND_SIZE * (uint32_t)rounds);
+    if (!table) return 0;
+    memset(g_mem + table, 0, ROUND_SIZE * (size_t)rounds);
+    for (int r = 0; r < rounds; r++) {
+        uint32_t t = table + ROUND_SIZE * (uint32_t)r;
+        int last = r == rounds - 1, teams = n >> r, neutral = last || r >= neutral_from;
+        wr16(g_mem, t + 7, (uint16_t)(rounds == 1 ? code_one : codes[r]));
+        wr16(g_mem, t + 9, (uint16_t)r);
+        wr16(g_mem, t + 0xb, neutral ? 0 : 1);                 /* the home rule: the better seed (0x51e8b2) */
+        wr16(g_mem, t + 0xd, (uint16_t)(0x200 | (pens && !last ? 0x1 : 0x3)));
+        g_mem[t + 0x17] = (uint8_t)(r == 0 && rounds > 1 ? 4 : 6);
+        wr16(g_mem, t + 0x18, (uint16_t)teams);
+        wr16(g_mem, t + 0x1a, (uint16_t)(teams / 2));
+        wr16(g_mem, t + 0x1c, (uint16_t)(r == 0 ? n : 0));
+        wr16(g_mem, t + 0x1e, 0);
+        g_mem[t + 0x21] = 1;
+        /* The draw the day after the round before, the matches step - 1 days later. */
+        set_dates(table, r, r == 0 ? 1 : step * r, step * (r + 1) - 1, neutral ? VENUE_NEUTRAL : VENUE_HOME, year);
+        if (rt_unwinding) return 0;
+    }
+    uint32_t list = season_sizes_game_malloc(4u * (uint32_t)n), seeds = season_sizes_game_malloc((uint32_t)n);
+    uint32_t sz[1] = {0xb2};
+    uint32_t stage = list && seeds ? call_cdecl(F_NEW, 1, sz) : 0;
+    if (rt_unwinding) return 0;
+    if (!readable(stage)) {
+        season_sizes_game_free(list);
+        season_sizes_game_free(seeds);
+        season_sizes_game_free(table);
+        return 0;
+    }
+    for (int i = 0; i < n; i++) {
+        wr32(g_mem, list + 4u * (uint32_t)i, club[i]);
+        g_mem[seeds + (uint32_t)i] = seed[i];
+    }
+    uint32_t a[15] = {self, (uint32_t)n, list, (uint32_t)rounds, rd32(g_mem, self + COMP_RECORD), table, year,
+                      (uint32_t)index, 1, (uint32_t)name, 0x14, 1, 0, 0, seeds};
+    call_this(F_CUP_STAGE, stage, 15, a);
+    season_sizes_game_free(list);
+    season_sizes_game_free(seeds);
+    season_sizes_game_free(table);
+    if (rt_unwinding) return 0;
+    wr32(g_mem, rd32(g_mem, self + STAGES) + 4u * (uint32_t)index, stage);
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, stage, 1, r0);
+    if (rt_unwinding) return 0;
+    wr32(g_mem, self + STAGE_LAST, (uint32_t)index);           /* only now: save reads stages[0..+0x30] */
+    return stage;
+}
+
+/* The clubs of a zone table in the order of their places (rows by +4). */
+static int zone_order(uint32_t s, uint32_t *club)
+{
+    if (!readable(s)) return 0;
+    uint32_t z[1] = {0};
+    call_this(F_SORT_TABLE, s, 1, z);
+    if (rt_unwinding) return 0;
+    uint32_t rows = rd32(g_mem, s + COMP_TABLE);
+    int n = (int16_t)rd16(g_mem, s + COMP_CLUBS);
+    if (!readable(rows) || n < 1 || n > TABLE_MAX) return 0;
+    int pos[TABLE_MAX];
+    for (int i = 0; i < n; i++) {
+        club[i] = rd32(g_mem, rows + (uint32_t)i * ROW_SIZE);
+        pos[i] = g_mem[rows + (uint32_t)i * ROW_SIZE + ROW_POSITION];
+    }
+    for (int i = 1; i < n; i++) {
+        uint32_t c = club[i];
+        int v = pos[i], j = i;
+        for (; j > 0 && pos[j - 1] > v; j--) club[j] = club[j - 1], pos[j] = pos[j - 1];
+        club[j] = c;
+        pos[j] = v;
+    }
+    return n;
+}
+
+/* Every row of a league or zone table has played its matches. */
+static int table_done(uint32_t league)
+{
+    uint32_t rows = readable(league) ? rd32(g_mem, league + COMP_TABLE) : 0;
+    int n = readable(league) ? (int16_t)rd16(g_mem, league + COMP_CLUBS) : 0;
+    int want = readable(league) ? (int16_t)rd16(g_mem, league + COMP_MATCHES) : 0;
+    if (!readable(rows) || n < 1 || want < 1) return 0;
+    for (int i = 0; i < n; i++)
+        if (g_mem[rows + (uint32_t)i * ROW_SIZE + ROW_PLAYED] < want) return 0;
+    return 1;
+}
+
+static void log_ko(uint32_t self, const char *what, int index, const uint32_t *club, const uint8_t *seed, int n,
+                   int step)
+{
+    if (!logging()) return;
+    fprintf(stderr, "recomp: league sizes: arg_prm %s %d: stage %d drawn on day %d of %d, a round every %d days:",
+            what, (int16_t)rd16(g_mem, self + COMP_YEAR), index, (int16_t)rd16(g_mem, GAME_DATE),
+            (int16_t)rd16(g_mem, GAME_DATE + 2), step);
+    uint32_t clubs = rd32(g_mem, 0xae23b4u);
+    for (int i = 0; i + 1 < n; i += 2)
+        fprintf(stderr, " %u:%d-%u:%d", (club[i] - clubs) / 0x245u, seed[i], (club[i + 1] - clubs) / 0x245u,
+                seed[i + 1]);
+    fprintf(stderr, ";");
+    for (int i = 0; i + 1 < n; i += 2)
+        fprintf(stderr, " %.30s v %.30s,", win_str(club[i] + CLUB_NAME), win_str(club[i + 1] + CLUB_NAME));
+    fprintf(stderr, "\n");
+}
+
+/* The knockout of a half from its two zone tables: 1A v 8B, 4B v 5A, 2B v 7A, 3A v 6B, 1B v 8A, 4A v 5B, 2A v 7B,
+ * 3B v 6A (LPF reglamento 2025 and 2026: ties 1 to 8 and quarter-finals 1 v 8, 2 v 7, 3 v 6, 4 v 5, semi-finals of
+ * the first and fourth against the second and third). limit: the days it may take. */
+static int build_table_ko(uint32_t self, const Plan *p, int half, int limit);
+
+static int build_ko(uint32_t self, const Plan *p, int half, int limit)
+{
+    if (p->kind == SEASON_ARG_KO_TABLE) return build_table_ko(self, p, half, limit);
+    uint32_t a[TABLE_MAX], b[TABLE_MAX];
+    int na = zone_order(stage_at(self, FIRST_ZONE + 2 * half), a);
+    if (rt_unwinding) return 0;
+    int nb = zone_order(stage_at(self, FIRST_ZONE + 2 * half + 1), b);
+    if (rt_unwinding) return 0;
+    int index = half ? p->ko_c : p->ko_a;
+    if (na < 8 || nb < 8) return 0;
+    static const struct { char zone; int place; } order[KO_CLUBS] = {
+        {'A', 1}, {'B', 8}, {'B', 4}, {'A', 5}, {'B', 2}, {'A', 7}, {'A', 3}, {'B', 6},
+        {'B', 1}, {'A', 8}, {'A', 4}, {'B', 5}, {'A', 2}, {'B', 7}, {'B', 3}, {'A', 6}};
+    uint32_t club[KO_CLUBS];
+    uint8_t seed[KO_CLUBS];
+    for (int i = 0; i < KO_CLUBS; i++) {
+        club[i] = order[i].zone == 'A' ? a[order[i].place - 1] : b[order[i].place - 1];
+        seed[i] = (uint8_t)order[i].place;
+    }
+    /* A round a week, as the real dates; closer when the next stage comes sooner (at least every 3 days). */
+    int step = limit > 0 && limit < 29 ? (limit - 1) / 4 : 7;
+    if (step < 3) {
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: %d days for the knockout of the %s; it is not played\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), limit, half ? "Clausura" : "Apertura");
+        return 0;
+    }
+    int pens = !half && p->season == 2024;      /* Apertura 2025: penalties at once before the final */
+    uint32_t s = ko_stage(self, index, club, seed, KO_CLUBS, 0, half ? NAME_CLAUSURA : NAME_APERTURA, step, pens, 99);
+    if (rt_unwinding || !s) return 0;
+    log_ko(self, half ? "knockout clausura" : "knockout apertura", index, club, seed, KO_CLUBS, step);
+    return 1;
+}
+
+/* 2027 on: the first 16 of the half's table, 1 v 16, 8 v 9, 4 v 13, 5 v 12, 2 v 15, 7 v 10, 3 v 14, 6 v 11 (the
+ * sources give 1 v 16, 2 v 15 and so on, and no bracket: the bracket of the seeds), the better place at home in the
+ * round of 16 and the quarter-finals, the semi-finals and the final at a neutral ground. */
+static int build_table_ko(uint32_t self, const Plan *p, int half, int limit)
+{
+    uint32_t t[TABLE_MAX];
+    int n = zone_order(half ? stage_at(self, 0) : self, t);
+    if (rt_unwinding || n < KO_CLUBS) return 0;
+    static const int place[KO_CLUBS] = {1, 16, 8, 9, 4, 13, 5, 12, 2, 15, 7, 10, 3, 14, 6, 11};
+    uint32_t club[KO_CLUBS];
+    uint8_t seed[KO_CLUBS];
+    for (int i = 0; i < KO_CLUBS; i++) {
+        club[i] = t[place[i] - 1];
+        seed[i] = (uint8_t)place[i];
+    }
+    int step = limit > 0 && limit < 29 ? (limit - 1) / 4 : 7;
+    if (step < 3) {
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: %d days for the knockout of the %s; it is not played\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), limit, half ? "Clausura" : "Apertura");
+        return 0;
+    }
+    int index = half ? p->ko_c : p->ko_a;
+    if (!ko_stage(self, index, club, seed, KO_CLUBS, 0, half ? NAME_CLAUSURA : NAME_APERTURA, step, 0, 2) || rt_unwinding)
+        return 0;
+    log_ko(self, half ? "knockout clausura" : "knockout apertura", index, club, seed, KO_CLUBS, step);
+    return 1;
+}
+
+/* 2016: the final of the zone winners and the match of the runners-up, one match each at a neutral ground. */
+static int build_final(uint32_t self, const Plan *p, int limit)
+{
+    uint32_t a[TABLE_MAX], b[TABLE_MAX];
+    int na = zone_order(stage_at(self, FIRST_ZONE), a);
+    if (rt_unwinding) return 0;
+    int nb = zone_order(stage_at(self, FIRST_ZONE + 1), b);
+    if (rt_unwinding || na < 2 || nb < 2) return 0;
+    int step = limit > 0 && limit < 8 ? limit - 1 : 7;
+    if (step < 2) return 0;
+    uint32_t fin[2] = {a[0], b[0]}, thr[2] = {a[1], b[1]};
+    uint8_t s1[2] = {1, 1}, s2[2] = {2, 2};
+    if (!ko_stage(self, p->final_at, fin, s1, 2, CODE_FINAL, NAME_CHAMPIONSHIP, step, 0, 0)) return 0;
+    log_ko(self, "final", p->final_at, fin, s1, 2, step);
+    if (!ko_stage(self, p->third_at, thr, s2, 2, CODE_PLAYOFF, 0, step, 0, 0)) return 0;
+    log_ko(self, "runners-up match", p->third_at, thr, s2, 2, step);
+    return 1;
+}
+
+/* Gives up the stages from the next one on: the season can close. */
+static void no_more(uint32_t self, const char *why)
+{
+    int last = (int32_t)rd32(g_mem, self + STAGE_LAST);
+    fprintf(stderr, "recomp: league sizes: arg_prm %d: %s; the season has %d stages\n",
+            (int16_t)rd16(g_mem, self + COMP_YEAR), why, last + 1);
+    wr32(g_mem, self + STAGE_COUNT, (uint32_t)(last + 1));
+}
+
+void season_arg_update(uint32_t obj)
+{
+    Plan p;
+    if (!plan_live(obj, &p) || p.ko_a < 0 || g_mem[obj + STAGE_INDEX] != 0xff) return;
+    if ((int32_t)rd32(g_mem, obj + STAGE_LAST) != p.ko_a - 1 || !table_done(obj)) return;
+    uint32_t clausura = stage_at(obj, 0);
+    int limit = days_to_first_date(clausura);
+    if (!build_ko(obj, &p, 0, limit)) {
+        if (!rt_unwinding) no_more(obj, "no knockout of the Apertura");
+    }
+}
+
+int season_arg_advance(uint32_t obj)
+{
+    Plan p;
+    if (!plan_live(obj, &p) || g_mem[obj + STAGE_INDEX] != 0xff) return 0;
+    int last = (int32_t)rd32(g_mem, obj + STAGE_LAST), left = days_to_change(obj);
+    if ((p.kind == SEASON_ARG_KO_ZONES || p.kind == SEASON_ARG_KO_TABLE) && last == p.ko_c - 1) {
+        if (!build_ko(obj, &p, 1, left) && !rt_unwinding) no_more(obj, "no knockout of the Clausura");
+        return 1;
+    }
+    if ((p.kind == SEASON_ARG_KO_ZONES || p.kind == SEASON_ARG_KO_TABLE) && last == p.ko_a - 1) {
+        /* The Apertura's knockout was not made (a save of an older build): the season closes as it is. */
+        no_more(obj, "no knockout of the Apertura made");
+        return 1;
+    }
+    if (p.kind == SEASON_ARG_KO_FINAL && last == p.final_at - 1) {
+        if (!build_final(obj, &p, left) && !rt_unwinding) no_more(obj, "no final");
+        return 1;
+    }
+    return 0;
+}
+
+static int is_ko(uint32_t obj, int stage)
+{
+    Plan p;
+    if (!plan_live(obj, &p)) return 0;
+    return stage == p.ko_a || stage == p.ko_c || stage == p.final_at || stage == p.third_at;
+}
+
+int season_arg_ko_result(uint32_t obj, int stage)
+{
+    return stage >= FIRST_ZONE && is_ko(obj, stage);
+}
+
+/* The winner (result 1) and the finalist (2) of a complete knockout stage. */
+static int ko_winners(uint32_t s, uint32_t *win, uint32_t *second)
+{
+    if (!readable(s) || g_mem[s + STAGE_TYPE] != 1 || !g_mem[s + CUP_COMPLETE]) return 0;
+    uint32_t e = rd32(g_mem, s + COMP_MATCHES);
+    int n = (int16_t)rd16(g_mem, s + COMP_CLUBS);
+    *win = *second = 0;
+    for (int i = 0; readable(e) && i < n && i < KO_CLUBS; i++) {
+        uint8_t res = g_mem[e + 6u * (uint32_t)i + 5];
+        if (res == 1) *win = rd32(g_mem, e + 6u * (uint32_t)i);
+        if (res == 2) *second = rd32(g_mem, e + 6u * (uint32_t)i);
+    }
+    return readable(*win) && readable(*second);
+}
+
+/* The Primera's object: g_comp_object_table [0xadadfc] at the key [0x9cf654] (0x405765..0x405775). */
+static uint32_t the_prm(void)
+{
+    uint32_t objects = rd32(g_mem, 0xadadfcu);
+    int32_t key = (int32_t)rd32(g_mem, 0x9cf654u);
+    uint32_t o = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+    return readable(o) ? o : 0;
+}
+
+int season_arg_honours_swap(uint32_t league, uint32_t saved[3])
+{
+    if (!season_sizes_on() || !readable(league)) return 0;
+    /* The Apertura (the league) or the Clausura (stages[0] of the Primera, found through its record). */
+    uint32_t prm = the_prm();
+    int half = 0;
+    if (!prm) return 0;
+    if (league == prm) half = 0;
+    else if (league == stage_at(prm, 0)) half = 1;
+    else return 0;
+    Plan p;
+    if (!plan_live(prm, &p)) return 0;
+    int index = p.kind == SEASON_ARG_KO_FINAL ? (half ? -1 : p.final_at) : half ? p.ko_c : p.ko_a;
+    uint32_t win, second;
+    if (index < 0 || !ko_winners(stage_at(prm, index), &win, &second)) return 0;
+    uint32_t rows = rd32(g_mem, league + COMP_TABLE);
+    if (!readable(rows)) return 0;
+    for (int i = 0; i < 3; i++) saved[i] = rd32(g_mem, rows + (uint32_t)i * ROW_SIZE);
+    wr32(g_mem, rows, win);
+    wr32(g_mem, rows + ROW_SIZE, second);
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: arg_prm champion %d %s: %.30s, runner-up %.30s (the %s)\n",
+                (int16_t)rd16(g_mem, league + COMP_YEAR), half ? "clausura" : "apertura", win_str(win + CLUB_NAME),
+                win_str(second + CLUB_NAME), p.kind == SEASON_ARG_KO_FINAL ? "final" : "knockout");
+    return 1;
+}
+
+void season_arg_honours_restore(uint32_t league, const uint32_t saved[3])
+{
+    uint32_t rows = rd32(g_mem, league + COMP_TABLE);
+    if (!readable(rows)) return;
+    for (int i = 0; i < 3; i++) wr32(g_mem, rows + (uint32_t)i * ROW_SIZE, saved[i]);
+}
+
+/* Cup_Stage +0x90 0x522360 (thiscall (home club, away club), ret 8): the club of the lower division record, else 0;
+ * Cup::set_home_teams_for_round 0x51e870 puts the club it returns at home. In a knockout of the Primera: the better
+ * seed (the zone place). */
+void o_00522360(void);
+RT_WRAP(00522360, arg_ko_home)
+{
+    uint32_t s = cpu.ecx, h = rt_arg(0), w = rt_arg(1);
+    uint32_t prm = season_sizes_on() ? the_prm() : 0;
+    int at = readable(s) ? (int8_t)g_mem[s + STAGE_INDEX] : -1;
+    if (!prm || !is_ko(prm, at) || stage_at(prm, at) != s) {
+        o_00522360();
+        return;
+    }
+    uint32_t e = rd32(g_mem, s + COMP_MATCHES);
+    int n = (int16_t)rd16(g_mem, s + COMP_CLUBS), sh = 99, sw = 99;
+    for (int i = 0; readable(e) && i < n && i < KO_CLUBS; i++) {
+        uint32_t c = rd32(g_mem, e + 6u * (uint32_t)i);
+        if (c == h) sh = g_mem[e + 6u * (uint32_t)i + 4];
+        if (c == w) sw = g_mem[e + 6u * (uint32_t)i + 4];
+    }
+    rt_ret_stdcall(sh < sw ? h : sw < sh ? w : 0, 2);
+}
+
+/* The names of the zone tables (season_round_names_game.c): the original has no "Zone A". */
+const char *season_arg_stage_name(uint32_t context, int id)
+{
+    if (!readable(context) || !season_sizes_on() || strcmp(season_change_file(context), "arg_prm")) return NULL;
+    switch (id) {
+    case NAME_ZONE_A1: return "Apertura Zone A";
+    case NAME_ZONE_A1 + 1: return "Apertura Zone B";
+    case NAME_ZONE_A2: return "Clausura Zone A";
+    case NAME_ZONE_A2 + 1: return "Clausura Zone B";
+    case 0x449: return "Apertura Zones";
+    case 0x44a: return "Clausura Zones";
+    case NAME_GROUP_A: return "Zone A";
+    case NAME_GROUP_A + 1: return "Zone B";
+    case 0x41c: return "Zones";
+    default: return NULL;
+    }
+}

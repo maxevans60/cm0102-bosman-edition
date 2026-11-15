@@ -44,8 +44,11 @@ int main(int argc, char **argv)
     meet("gre_cup", 2010, 0);           /* a cup */
     meet("no_such_file", 2010, 0);
 
-    CHECK(season_league_row("arg_prm", 2026) == season_league_rule("arg_prm", 2025),
-          "arg_prm 2026 (unknown clubs): the structure of 2025");
+    CHECK(season_league_row("arg_second", 2026) == season_league_rule("arg_second", 2025),
+          "arg_second 2026 (unknown clubs): the structure of 2025");
+    const SeasonLeagueRule *f27 = season_league_rule("arg_prm", 2026);  /* 2027: halves of one table of 30 */
+    CHECK(f27 && f27->halves == 1 && f27->zones == 0 && f27->extra_rounds == 1 && f27->meetings == 1,
+          "arg_prm 2026: halves of one table with a derby round");
     CHECK(season_league_row("eng_prm", 2400) == season_league_rule("eng_prm", 2027), "eng_prm 2400: the last row");
     CHECK(!season_league_row("no_such_file", 2010), "no row");
     const SeasonLeagueRule *a = season_league_rule("arg_prm", 2024);

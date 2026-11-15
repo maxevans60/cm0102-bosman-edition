@@ -108,7 +108,7 @@ check(st("cro_a1", 2002, "meetings") == 2, "22 rounds then split, 12 clubs: 2")
 check(st("bra_nat_third", 2008, "meetings") == 2, "groups of 5 (home and away)")
 check(st("cro_a1", 2006, "meetings") == 3, "MEETINGS_FIX: a third game set by the standings")
 check(st("jap_j2", 2001, "meetings") == 4 and st("jap_j2", 2010, "meetings") == 2, "MEETINGS_BY_HAND: J2")
-check(st("arg_prm", 2026, "meetings") == "-", "unknown clubs: the class's meetings stay")
+check(st("arg_second", 2026, "meetings") == "-", "unknown clubs: the class's meetings stay")
 check(st("gre_cup", 2010, "meetings") == "-", "a cup has no structure")
 check(all(r["meetings"] in (1, 2, 3, 4, "-") for r in rows), "meetings 1 to 4 or -")
 held = [r for r in rows if r["comp_file"] not in e.LEAGUE_NOT and r["clubs"] > 0]
@@ -149,7 +149,7 @@ check(st("kor_league", 2012, "split") == "after 26: 7+7, points kept", "K League
 check(st("fin_prm", 2020, "split") == "-", "Veikkausliiga 2020: the split was cancelled")
 check(st("bel_first", 2022, "split").endswith("points halved"), "Pro League 2022/23: points halved")
 check(st("bel_second", 2007, "po_up") == "2-5", "Belgian second tier 2007/08: a final round of 2nd to 5th")
-check(st("arg_prm", 2026, "halves") == "?" and st("arg_prm", 2026, "zones") == "?", "a future row: structure unknown")
+check(st("arg_second", 2026, "halves") == "?" and st("arg_second", 2026, "zones") == "?", "a future row: structure unknown")
 check(st("usa_mls", 2008, "meetings") == "-", "MLS 2008: 30 games of 15 clubs is unbalanced (matches over clubs - 1)")
 check(st("jap_j1", 2025, "zones") == "10+10" and st("jap_j1", 2025, "rounds") == 18, "J1 2025: two regions of 10")
 check(st("swe_second", 2001, "rounds") == "-" and st("tur_second_b", 2003, "rounds") == "-",

@@ -11,6 +11,7 @@
  *
  * The text goes into the caller's buffer with its size, as the original's (no buffer of the runtime). The base
  * game (start 2001, changing rules off) and RECOMP_SEASON_CODE=off get the original's text. */
+#include "season_sizes_arg.h"
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
@@ -75,6 +76,10 @@ RT_WRAP(004b4850, round_name)
      * "League Phase" in a season with a league phase (season_uefa.c). */
     if (!name && season && readable(buf) && size >= 2 && size <= 0x1000) {
         name = season_uefa_stage_name(context, season, code);
+        if (name) part = 0;
+    }
+    if (!name && readable(buf) && size >= 2 && size <= 0x1000) {
+        name = season_arg_stage_name(context, code);     /* 0.7.2 gap row 48: the Argentine zones */
         if (name) part = 0;
     }
     if (!name) {
