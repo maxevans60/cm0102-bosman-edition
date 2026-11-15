@@ -39,7 +39,8 @@ Each download is ready to play. It holds the game files of the free release that
 - An Assistant menu on the squad screen picks the best team, the fittest team or an under-21 team, scored by the key attributes of each position.
 - Clickable player and club names, coloured attributes, condition and morale.
 - Holiday until the next match, faster days on holiday and a Fastest commentary speed.
-- Save names with your club and the date, and the last three copies of each save in a backups folder.
+- Save names with your club and the date for a new game's first save (later saves keep their name), and the last
+  three copies of each save in a backups folder.
 - Keyboard shortcuts, and a window that opens where you left it.
 
 Each feature is a line in `settings.txt` in the save folder and can be switched off. In the base game (2001/02, 3.9.68, changing rules off) no feature changes a match result. The [site](https://maxevans60.github.io/cm0102-bosman-edition/#questions) lists every setting with its default.

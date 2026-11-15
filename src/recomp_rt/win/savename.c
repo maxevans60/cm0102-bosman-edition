@@ -1,11 +1,17 @@
-/* Save names (#34): Save Game suggests "Club YYYY-MM-DD" from the player's club and the game date.
- * The player can edit the name in the text entry as before.
+/* Save names (#34): Save Game suggests "Club YYYY-MM-DD" from the player's club and the game date, for the first
+ * save of a game; after that it offers the name of the save in play, as the original does. The player can edit the
+ * name in the text entry as before.
  *
  * Save Game (side bar handler, menu item 0x3fe at 0x763eda) copies the last save name, game options
- * + 0x113, into the name buffer 0xdd6ed4 (0x763f2d..0x763f5f). It then calls the file dialog
+ * + 0x113 (g_config at 0xae3138), into the name buffer 0xdd6ed4 (0x763f2d..0x763f5f). It then calls the file dialog
  * FUN_0058f500 (cdecl, 14 arguments) at 0x763fb3 with the buffer as argument 5 and the save routine
- * 0x838e10 as argument 6. The wrap writes the suggested name into the buffer when the dialog is
- * opened with that buffer and that routine. Other dialogs (printouts, scout searches) do not change.
+ * 0x838e10 as argument 6. That name is the save loaded or saved last: a native run (15 November 2026) loaded
+ * "My Career.sav" and Save Game held "My Career", and after a save it held the name saved (load_game_data 0x82a9c0
+ * and save_game_data 0x82e430 set the flag 0xdd7130 of a game with a save file, create_game 0x828110 clears it:
+ * docs/research/data-map/Setup.cpp.md). A new game's first Save Game held an empty name. The wrap once wrote the
+ * suggestion over it every time, so each save on a new game date was another file (a player's browser held 99 saves,
+ * 3.4 GB). It now writes the suggestion only when the buffer is empty: a game not yet loaded or saved. Other dialogs
+ * (printouts, scout searches) do not change.
  *
  * The club: the manager of the player slot that has the turn (0xb74c26 + slot * 0x300, slot at
  * 0xb77c7a), club pointer at manager + 0x39, short name at club + 0x38, long name at club + 4. The side
@@ -66,7 +72,7 @@ void o_0058f500(void);
 RT_WRAP(0058f500, file_dialog)
 {
     char name[80];
-    if (rt_arg(5) == NAME_BUFFER && rt_arg(6) == SAVE_ROUTINE && suggest(name, sizeof name))
+    if (rt_arg(5) == NAME_BUFFER && rt_arg(6) == SAVE_ROUTINE && !g_mem[NAME_BUFFER] && suggest(name, sizeof name))
         memcpy(g_mem + NAME_BUFFER, name, strlen(name) + 1);
     o_0058f500();
 }
