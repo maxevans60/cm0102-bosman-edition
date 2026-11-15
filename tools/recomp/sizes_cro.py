@@ -9,7 +9,8 @@ stack array of the original (Q152).
 The regroup of the second tier, 0x515190 (called by CroA1::start_new_season at 0x5149c2), sorts the clubs of the
 North and South groups in a stack array of 32 at esp+0x14 and gives the first 16 the North, for 32 slots. In a season
 game it uses a list of the runtime, walks the clubs it found, and gives the North the count of its row when the South
-is not held (2006/07 on).
+is not held (2006/07 on). With one group the order is by results and the South does not go up to the First
+Division (gap row 40); with two groups (2002/03 to 2005/06) each takes its row (gap row 38).
 
 The Greek divisions at a new game. create_game 0x828110 calls fix_division_club_count 0x839920 (record id, count) for
 the National A [0x9cf86c] and National B [0x9cf870] divisions with 14 (0x8283c0, 0x8283ce), when Greece is selected
@@ -25,6 +26,10 @@ def _cmp(width_mask, size, left, right):
 
 
 INSNS = {
+    # The chain 0x5150f0: the South's exchange with the First Division (league_promote_and_relegate 0x689c80, six
+    # arguments, ret 0x18). None when the season that ends had one group (season_sizes_cro.c rt_cro_south_swap).
+    0x515180: ("call 0x689c80", "if (rt_cro_south_swap()) { esp -= 4; W32(esp, 0x515185u); SYNC(); f_00689c80(); "
+                                "LOAD(); RT_AFTER_CALL(); } else { esp += 0x18u; }"),
     # The Greek National A Division count at a new game (record id in eax, 0x8283bb).
     0x8283C0: ("push 0xe", "esp -= 4; W32(esp, rt_gre_fix_count(0xeu, 0u));"),
     # The Greek National B Division count (record id in ecx, 0x8283c8).
@@ -41,6 +46,8 @@ INSNS = {
     0x5151FF: ("mov dword ptr [esp + esi*4 + 0x14], eax", "W32(rt_cro_regroup_slot(esp + 0x14u, esi), eax);"),
     # The array of the sort 0x945333 (esp+0x14 two pushes later), with the count it found in eax (0x51520f).
     0x515219: ("lea ecx, [esp + 0x1c]", "ecx = rt_cro_regroup_list(esp + 0x1cu, eax);"),
+    # The count of the sort by latitude: none when the second tier is one group (the list is in order of results).
+    0x51521D: ("push eax", "esp -= 4; W32(esp, rt_cro_regroup_sort_count(eax));"),
     # The array of the walk.
     0x51522D: ("lea esi, [esp + 0x14]", "esi = rt_cro_regroup_list(esp + 0x14u, 0xffffffffu);"),
     # The North's count: the first 16 go North (jl 0x51523a), the others South.

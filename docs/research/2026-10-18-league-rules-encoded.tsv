@@ -1136,8 +1136,8 @@ gre-pol-cro-47	2020	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points unknown	split	2
 gre-pol-cro-48	2021	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points unknown	split	2	0	-	0	0	2+1	26
 gre-pol-cro-49	2022	gre_prm	1	14	-	-	-	ok	after 26: 6+8, points unknown	split	2	0	-	0	0	2+1	26
 gre-pol-cro-50	2023	gre_prm	1	14	-	-	-	ok	after 26: 6+8, points kept	split	2	0	-	0	0	2+1	26
-gre-pol-cro-51	2024	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points kept	split	2	0	-	0	0	2+2+2	26
-gre-pol-cro-52	2025	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points kept	split	2	0	-	0	0	2+2+2	26
+gre-pol-cro-51	2024	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points kept+halved+kept	split	2	0	-	0	0	2+2+2	26
+gre-pol-cro-52	2025	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points kept+halved+kept	split	2	0	-	0	0	2+2+2	26
 gre-pol-cro-53	2026	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points unknown	split	2	0	-	0	0	2+2+2	26
 gre-pol-cro-54	2027	gre_prm	1	14	-	-	-	ok	gap	split	2	0	-	0	0	-	26
 gre-pol-cro-55	2001	gre_second	2	14	-	-	-	ok	-	split	2	0	-	0	0	-	26
@@ -1162,9 +1162,9 @@ gre-pol-cro-73	2019	gre_second	2	12	2	-	-	ok	-	split	2	0	-	0	0	-	22
 gre-pol-cro-74	2020	gre_second	2	12	2	-	-	partial: the 2nd of the play-off round of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	1+1	22
 gre-pol-cro-75	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	-
 gre-pol-cro-76	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	-
-gre-pol-cro-77	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
-gre-pol-cro-78	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
-gre-pol-cro-79	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
+gre-pol-cro-77	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	after 22: 5+6+1, points halved	split	2	0	-	0	0	2+2+0	-
+gre-pol-cro-78	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	after 18: 5+5, points halved	split	2	0	-	0	0	2+2	-
+gre-pol-cro-79	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	after 18: 4+6, points halved	split	2	0	-	0	0	2+2	-
 gre-pol-cro-80	2026	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-81	2027	gre_second	2	16	-	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-82	2001	gre_super	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
@@ -1198,9 +1198,9 @@ gre-pol-cro-121	2013	gre_second	2	14	1-4	-	-	partial: the places of each group	-
 gre-pol-cro-122	2014	gre_second	2	13	1-3	5-10	-	partial: the places of each group	-	split	2	0	-	0	0	-	-
 gre-pol-cro-129	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	-
 gre-pol-cro-130	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	-
-gre-pol-cro-131	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
-gre-pol-cro-132	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
-gre-pol-cro-133	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
+gre-pol-cro-131	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	after 22: 5+6+1, points halved	split	2	0	-	0	0	2+2+0	-
+gre-pol-cro-132	2024	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	after 18: 5+5, points halved	split	2	0	-	0	0	2+2	-
+gre-pol-cro-133	2025	gre_second	2	10	-	-	-	partial: split rounds (needs the split kind)	after 18: 4+6, points halved	split	2	0	-	0	0	2+2	-
 gre-pol-cro-163	2001	pol_cup	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-164	2002	pol_cup	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-165	2003	pol_cup	0	-1	-	-	-	ok	-	split	-	-	-	-	-	-	-
@@ -1364,10 +1364,10 @@ gre-pol-cro-349	2025	cro_a1	1	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 gre-pol-cro-350	2026	cro_a1	1	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 gre-pol-cro-351	2027	cro_a1	1	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 gre-pol-cro-352	2001	cro_a2a	2	16	1	10	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-353	2002	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-354	2003	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-355	2004	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-356	2005	cro_a2a	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
+gre-pol-cro-353	2002	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-354	2003	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-355	2004	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-356	2005	cro_a2a	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
 gre-pol-cro-357	2006	cro_a2a	2	16	2	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-358	2007	cro_a2a	2	16	2	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-359	2008	cro_a2a	2	16	6	-	-	ok	-	split	2	0	-	0	0	-	30
@@ -1391,10 +1391,10 @@ gre-pol-cro-376	2025	cro_a2a	2	12	-	-	-	ok	-	split	3	0	-	0	0	-	33
 gre-pol-cro-377	2026	cro_a2a	2	16	-	15	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-378	2027	cro_a2a	2	16	-	15	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-379	2001	cro_a2b	2	16	1	10	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-380	2002	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-381	2003	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-382	2004	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-383	2005	cro_a2b	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
+gre-pol-cro-380	2002	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-381	2003	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-382	2004	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-383	2005	cro_a2b	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
 gre-pol-cro-384	2006	cro_a2b	2	-1	-	-	-	ok	-	split	-	0	-	0	0	-	-
 gre-pol-cro-385	2007	cro_a2b	2	-1	-	-	-	ok	-	split	-	0	-	0	0	-	-
 gre-pol-cro-386	2008	cro_a2b	2	-1	-	-	-	ok	-	split	-	0	-	0	0	-	-

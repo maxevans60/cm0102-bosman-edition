@@ -24,7 +24,8 @@ typedef struct {
     int rounds_max;                         /* the dates after the split */
     int matches_max;                        /* the most matches of a club after the split */
     int marker;                             /* +0x3c once the split is made: meetings + the most section meetings */
-    int halved;                             /* 1: the points are halved at the split */
+    int halved;                             /* 1: some section halves its points at the split */
+    int halve[SEASON_LEAGUE_PARTS];         /* 1: the section halves its points (rounded up) */
 } SeasonSplit;
 
 /* 1 when a league object of a grown file with n clubs and the row's meetings plays a split this edition (the row

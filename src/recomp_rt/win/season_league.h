@@ -19,7 +19,7 @@ typedef struct {
     int split_after;        /* a split after this many matches, 0 for none */
     int split_top;          /* the clubs of the top group of the split */
     int calendar;           /* 0 a season over two years, 1 a calendar year, 2 a transition row */
-    int split_points;       /* 0 points kept, 1 halved, 2 unknown */
+    int split_points;       /* 0 points kept, 1 halved, 2 unknown, 3 by section (split_halved) */
     /* The structure of the row (0.7.2 league sizes, slice 1). 0 for a row of a file that is not a league. */
     int meetings;           /* times each pair meets in the table (in each half, zone, group, before a split);
                              * 0: the class's own meetings stay */
@@ -34,6 +34,7 @@ typedef struct {
     int split_meetings[SEASON_LEAGUE_PARTS]; /* the meetings in each section; 0 unknown */
     int rounds;             /* rounds of the table (of a half, of a zone): meetings x (n' - 1) + extra_rounds, n'
                              * the count (the largest zone) rounded up to even; 0 unknown */
+    int split_halved[SEASON_LEAGUE_PARTS];   /* 1: the section halves its points at the split (rounded up) */
 } SeasonLeagueRule;
 
 extern const SeasonLeagueRule season_league_rules[];

@@ -158,23 +158,15 @@ gre-pol-cro-131	2023	gre_second	playoffs	partial: split rounds (needs the split 
 gre-pol-cro-132	2024	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-10th: play-out round
 gre-pol-cro-133	2025	gre_second	playoffs	partial: split rounds (needs the split kind)	top 4 of each group: play-off round; 5th-10th: play-out round
 gre-pol-cro-190	2001	pol_first	playoffs	partial: the 5th and 6th of the relegation group of 8	5th-6th of relegation group: relegation play-offs
-gre-pol-cro-353	2002	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-353	2002	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-354	2003	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-354	2003	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off
-gre-pol-cro-355	2004	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-355	2004	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-356	2005	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-356	2005	cro_a2a	playoffs	partial: the 1st of the play-off group of the split	1st of play-off group: promotion play-off
 gre-pol-cro-368	2017	cro_a2a	playoffs	partial: the next club when a B team is 1st or 2nd	2nd (next club if a B team is 1st or 2nd): promotion play-off v HNL 9th; 11th: relegation play-off v third-level South runner-up
 gre-pol-cro-370	2019	cro_a2a	playoffs	partial: the first club after the champion that is not a reserve team	promotion play-off (first eligible non-reserve club after the champion); 14th: relegation play-off
-gre-pol-cro-380	2002	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-380	2002	cro_a2b	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-381	2003	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-381	2003	cro_a2b	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off
-gre-pol-cro-382	2004	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-382	2004	cro_a2b	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-383	2005	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6
 gre-pol-cro-383	2005	cro_a2b	playoffs	partial: the 1st of the play-off group of the split	1st of play-off group: promotion play-off
 hol-bel-9	2001	bel_second	playoffs	gap: the period winners of a season of periods: the game has no periods	final round: three period winners (four clubs before 2005/06) and, from 2005/06, the top-flight 17th (2005/06 and 2006/07 only; none in 2007/08; in 2008/09 the top-flight 15th and 16th, see that row) or the relegation play-off winner (2009/10 to 2014/15); double round robin; winner in the top flight
 hol-bel-10	2001	bel_third	playoffs	gap: the period winners of a season of periods: the game has no periods	third division play-off: three period winners per group plus the second division 16th; winner up
