@@ -27,6 +27,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_rules.h"
 #include "season_calendar.h"
 #include "season_sizes.h"
 #include "season_template.h"
@@ -122,10 +123,18 @@ static void write_entry(int state, int y, const char *why)
                 season_calendar_update_doy());
 }
 
+/* The rows of the moved files follow the move while it can happen in this game (season_rules_row_of). */
+static void set_moved(void)
+{
+    season_rules_set_moved(season_sizes_on() &&
+                           (season_start_year() >= SEASON_CAL_FIRST || season_changing_rules()));
+}
+
 /* key_nation_create_all_comps, cdecl (): a new game and a load (0x8295f5, 0x82c5aa). */
 void o_00669180(void);
 RT_WRAP(00669180, create_all_comps)
 {
+    set_moved();
     o_00669180();
     if (rt_unwinding) return;
     uint32_t p = ire_prm();
@@ -142,6 +151,7 @@ void o_00830520(void);
 RT_WRAP(00830520, set_game_start_date)
 {
     int y = season_start_year();
+    set_moved();
     if (state_of(y) != SEASON_CAL_YEAR) {
         o_00830520();
         return;
