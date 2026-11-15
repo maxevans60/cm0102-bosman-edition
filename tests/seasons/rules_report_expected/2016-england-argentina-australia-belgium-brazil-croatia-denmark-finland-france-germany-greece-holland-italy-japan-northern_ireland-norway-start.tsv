@@ -30,7 +30,6 @@
 2016	club_list	Danish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: AC Horsens, Silkeborg IF; others: -
 2016	club_list	Danish Second Division: 16 of 23 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: Brabrand IF, Dalum IF, FC Sydvest 05, Fredensborg BI, Greve Fodbold, Kjellerup IF, Vejgaard Boldspilklub; others: -
 2016	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong FC Utrecht, Jong PSV; others: -
-2016	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Sports Réunis de Colmar, Vendée Luçon Football
 2016	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: AO Kerkyra, APO Levadiakos; others: -
 2016	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AO Acharnaikos, GAS Eginiakos, GS Panegialios, Panelefsiniakos; others: -
 2016	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Crotone, Delfino Pescara; others: -
@@ -97,8 +96,6 @@
 2016	down	cro_a1 (Prva HNL), row gre-pol-cro-340: game 2 (+0 play-off places), table 1 (1 (10th))
 2016	down	cro_a2b (Druga HNL South), row gre-pol-cro-394: game 2 (+0 play-off places), table na (n/a)
 2016	down	den_first (Danish 1st Division), row den-swe-93: game 3 (+0 play-off places), table 2 (2)
-2016	down	eng_third (EFL League Two), row eng-181: game 1 (+0 play-off places), table 2 (2)
-2016	down	fra_second (Ligue 2), row fra-138: game 3 (+0 play-off places), table 2 (2)
 2016	down	ger_second (2. Bundesliga), row ger-197: game 4 (+0 play-off places), table 2 (2)
 2016	down	gre_second (Football League), row gre-pol-cro-70: game 2 (+0 play-off places), table 4 (4 (bottom four))
 2016	down	hol_first (Eerste Divisie), row hol-bel-198: game 0 (+0 play-off places), table 1 (1 (20th) only if the Tweede Divisie champion is eligible and applies)
@@ -173,7 +170,6 @@
 2016	rounds	cro_a2a (Druga HNL), row gre-pol-cro-367: game 30, table 33 (3 meetings, zones -, extra 0)
 2016	rounds	den_first (Danish 1st Division), row den-swe-93: game 30, table 33 (3 meetings, zones -, extra 0)
 2016	rounds	den_prm (Danish Superliga), row den-swe-92: game 33, table 26 (2 meetings, zones -, extra 0)
-2016	rounds	fra_third (Championnat National), row fra-139: game 38, table 34 (2 meetings, zones -, extra 0)
 2016	rounds	gre_prm (Super League Greece), row gre-pol-cro-43: game 26, table 30 (2 meetings, zones -, extra 0)
 2016	rounds	gre_second (Football League), row gre-pol-cro-70: game 26, table 34 (2 meetings, zones -, extra 0)
 2016	rounds	hol_first (Eerste Divisie), row hol-bel-198: game 34, table 38 (2 meetings, zones -, extra 0)
@@ -193,5 +189,4 @@
 2016	up	cro_a2a (Druga HNL), row gre-pol-cro-367: game 0 (+0 play-off places), table 1 (1 (1st))
 2016	up	den_second (Danish 2nd Divisions), row den-swe-94: game 3 (+0 play-off places), table 2 (2)
 2016	up	fin_first (Ykkönen), row nor-fin-158: game 2 (+0 play-off places), table 1 (1st (1))
-2016	up	fra_third (Championnat National), row fra-139: game 3 (+0 play-off places), table 2 (2)
 2016	up	gre_cup (Greek Football Cup), row gre-pol-cro-16: game 2 (+0 play-off places), table na (n/a)

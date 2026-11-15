@@ -71,6 +71,11 @@ extern const int season_size_fixed[];        /* the count whose exchange stays t
 /* 1 in a season game with the sizes on (not RECOMP_LEAGUE_SIZES=off): the cups of season_cup_sizes_uk.c. */
 int season_sizes_on(void);
 
+/* 1 for League Two (eng_third): it takes the relegation places of its row towards the Conference, whether the game
+ * plays the Conference or not; the wrap of EngPrm::exchange_conference_clubs_unplayed 0x574e60 moves up as many
+ * Conference clubs (season_sizes_eng.c, 0.7.2 league sizes slice 8, D15). */
+int season_sizes_eng_below(const char *file);
+
 /* The grown classes of tools/recomp/league_sizes.py GROWN (0.7.2 league sizes, slice 2, D21; season_size_wraps.c):
  * create_table allocates the rows of the season's count up to the cap (rt_league_table_bytes), and the wrap of
  * create_schedule gives the date template exactly the rounds of the count (season_template.h, D4 and D5). */

@@ -113,6 +113,14 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
 #   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+# - EngConf (Conference, 22 to 2005/06, 24 from 2006/07, 23 in 2020/21 and 2021/22; slice 8): create_table 0x56ecb0
+#   allocates 22 rows (push 0x512 at 0x56ecbb, the object in esi) and stores 22 at 0x56ecc2; create_schedule 0x56de60
+#   makes 42 dates (D 0x2a at 0x56de9d, 0xaaa bytes at 0x56de98) for stage -1; set_up_rules 0x56ede0 sets 2 meetings
+#   (+0x3c at 0x56edf0) and does not write +0xd9: shuffled.
+# - FraThird (National, 20, 21 in 2010/11, 18 from 2013/14, 17 in 2017/18 and 2024/25; slice 8): create_table 0x5c05d0
+#   allocates 20 rows (push 0x49c at 0x5c05db) and stores 20 at 0x5c05e2; create_schedule 0x5bfe30 makes 38 dates (D
+#   0x26 at 0x5bfe6a, 0x9a6 bytes at 0x5bfe65); set_up_rules 0x5c0700 sets flag 0x83 (0x5c0798): mirrored. Its D is
+#   no longer in DATES: the wrap makes the template of any count, and a smaller count drops dates evenly (D5).
 # - BraNatFirst, BraNatSecond (Série A and B, slice 17, D11): create_table 0x42a480 and 0x42ca70 allocate 28 rows (the
 #   cap stays 28: no row holds more). create_schedule 0x429b50 and 0x42c140 make 27 dates for stage -1 (D 0x1b at
 #   0x429b8d and 0x42c17d) and the play-off for stage 0. set_up_rules 0x42a5a0 and 0x42cb70 set 1 meeting (+0x3c at
@@ -131,6 +139,8 @@ GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    "eng_conf": (24, 0x56DE60, "shuffled"),
+    "fra_third": (21, 0x5BFE30, "mirrored"),
     "nir_prm": (16, 0x78E330, "shuffled"),
     "wel_first": (18, 0x9250F0, "shuffled"),
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
@@ -201,10 +211,10 @@ def table_insns(read, taken=()):
 # The French classes play the second half from the middle of their date template (league_next_schedule_round
 # 0x68a030, flag 0x80 at 0x68a090; the classes set flag 0x83 at 0x5bc480, 0x5bf138, 0x5c0798), so the template
 # must have exactly the rounds of the count: 34 dates for 18 clubs, as FraFirst's own 2001 path (0x5bb6ad).
+# FraThird (D at 0x5bfe6a) is a grown class (GROWN, slice 8): its wrap of create_schedule makes the template.
 DATES = {
     0x5BB6B4: ("mov ebp, 0x26", "ebp = rt_league_dates(ebx, 0x26u);"),             # FraFirst::create_schedule
     0x5BE65A: ("mov word ptr [eax], 0x26", "W16(eax, rt_league_dates(edi, 0x26u));"),  # FraSecond
-    0x5BFE6A: ("mov word ptr [eax], 0x26", "W16(eax, rt_league_dates(edi, 0x26u));"),  # FraThird
 }
 
 # Cups with a fixed entrant count that take a capped number of lower clubs and then every club of the top
@@ -254,11 +264,12 @@ FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
-# leagues: the Conference and League Two (a fixed exchange, D15, slice 8; 2 down and 1 back gave League Two 23), the
-# Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and the Welsh
-# Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7).
-FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
-                                       "nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second", "sco_third")}
+# leagues: the Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and
+# the Welsh Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7). The
+# English divisions left in slice 8 (D15): the exchange of League Two and the Conference takes the places of the rows
+# (season_sizes_eng.c).
+FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("wel_first", "nir_first", "nir_prm", "sco_first", "sco_prm",
+                                                    "sco_second", "sco_third")}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
