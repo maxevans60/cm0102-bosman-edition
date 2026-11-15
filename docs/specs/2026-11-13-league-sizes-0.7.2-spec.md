@@ -154,7 +154,7 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 
 ### 7. Split engine
 Blocked by: 2, 4
-Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 33 + 6 and 6, 2 meetings in place of 4) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
+Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 3 meetings in place of 4: 33 matches, then sections of 6 and 6 that meet once more, 38 matches; gap fix, sources in docs/research/2026-11-15-split-points.md) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
 Merge danger: one-way door for saves (a save holds the section stages). Blast radius: leagues with a split row.
 - [x] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
 - [x] A save during the split loads and the season completes
