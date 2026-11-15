@@ -1,7 +1,7 @@
 // Tests of the Saved games logic (web/saves.js): which files are saves, the check of an upload, its name.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { checkSave, fileView, isWorkFile, listSaves, saveName, savesSignature, skipWorkFiles } from '../saves.js';
+import { checkSave, fileView, isWorkFile, listSaves, lowOnSpace, saveName, savesSignature, skipWorkFiles, spaceText, zipParts } from '../saves.js';
 
 // A save container as tools/save/savfile.py reads it: version, count, the entries, then the parts.
 function save(parts = 1, extra = 16) {
@@ -104,4 +104,27 @@ test('fileView gives the file without a copy, or FS.readFile without a memory fi
   assert.deepEqual([...v], [1, 2, 3, 4]);
   assert.equal(v.buffer, contents.buffer);               // the same memory: no copy
   assert.deepEqual([...fileView({ readFile: () => new Uint8Array([9]) }, '/x')], [9]);
+});
+
+test('zipParts: Download all in parts that a zip can hold (4 GB), in order', () => {
+  const GB = 2 ** 30, f = (name, size) => ({ name, size });
+  const six = [1, 2, 3, 4, 5, 6].map((i) => f(`Career ${i}.sav`, 690 * 2 ** 20));     // 4.04 GB: one zip refused it
+  const parts = zipParts(six);
+  assert.deepEqual(parts.map((p) => p.map((x) => x.name.slice(7, 8)).join('')), ['12345', '6'], 'five of 690 MB fit under 3.5 GB');
+  assert.ok(parts.every((p) => p.reduce((a, x) => a + x.size, 0) <= 3.5 * GB));
+  assert.deepEqual(zipParts([f('a', 10), f('b', 20)]).length, 1, 'small folders stay one zip');
+  assert.deepEqual(zipParts([f('a', 3 * GB), f('huge', 3.8 * GB), f('c', 1 * GB)]).map((p) => p.map((x) => x.name)), [['a'], ['huge'], ['c']],
+    'a file larger than a part goes alone');
+  assert.deepEqual(zipParts([]), []);
+});
+
+test('space: what the saves take, the room left, and when it is low', () => {
+  const GB = 2 ** 30, MB = 2 ** 20;
+  assert.equal(spaceText({ usage: 3.3 * GB, quota: 15 * GB }, 2.76 * GB, 4), '4 saves, 2.8 GB · this browser allows about 11.7 GB more');
+  assert.equal(spaceText(null, 46 * MB, 1), '1 save, 46 MB', 'a browser that does not tell');
+  assert.equal(spaceText({ usage: 1 * GB, quota: 1.2 * GB }, 690 * MB, 1), '1 save, 690 MB · this browser allows about 205 MB more');
+  assert.equal(lowOnSpace({ usage: 1 * GB, quota: 1.2 * GB }, 690 * MB), true, 'less than twice the largest save: the next save may not fit');
+  assert.equal(lowOnSpace({ usage: 3.3 * GB, quota: 15 * GB }, 690 * MB), false);
+  assert.equal(lowOnSpace({ usage: 9.9 * GB, quota: 10 * GB }, 1 * MB), true, 'under 300 MB left');
+  assert.equal(lowOnSpace(null, 690 * MB), false, 'not told: no warning');
 });

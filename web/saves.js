@@ -16,6 +16,42 @@ const HEADER = 0x416ec, ENTRY = 0x10c, MAX_ENTRIES = 1000;     // the save conta
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const mb = (n) => `${(n / 1048576).toFixed(n < 10485760 ? 1 : 0)} MB`;
 const when = (d) => d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+const size = (n) => (n >= 2 ** 30 ? `${(n / 2 ** 30).toFixed(1)} GB` : `${Math.max(1, Math.round(n / 2 ** 20))} MB`);
+
+// Download all in parts. A zip holds 4 GB (zip.js), and six saves of 690 MB pass that: one zip was refused, with no way
+// to take fewer. The files in their order, in groups of at most limit bytes; a file larger than that goes alone.
+export const PART_LIMIT = 3.5 * 2 ** 30;
+export function zipParts(files, limit = PART_LIMIT) {
+  const parts = [];
+  let sum = 0;
+  for (const f of files) {
+    if (!parts.length || sum + f.size > limit) { parts.push([]); sum = 0; }
+    parts.at(-1).push(f);
+    sum += f.size;
+  }
+  return parts;
+}
+
+// What the saves take and the room left. estimate: navigator.storage.estimate()'s answer ({ usage, quota }: what the
+// browser allows this site, which a nearly full disk can still refuse), or null when the browser does not tell.
+const roomLeft = (estimate) => (estimate && estimate.quota > 0 ? Math.max(0, estimate.quota - (estimate.usage ?? 0)) : null);
+export function spaceText(estimate, bytes, count) {
+  const head = `${count} ${count === 1 ? 'save' : 'saves'}, ${size(bytes)}`, room = roomLeft(estimate);
+  return room === null ? head : `${head} · this browser allows about ${size(room)} more`;
+}
+// Low: less room than two saves of the largest size (a save is written beside the one it replaces), or than 300 MB.
+export function lowOnSpace(estimate, biggest) {
+  const room = roomLeft(estimate);
+  return room !== null && room < Math.max(2 * biggest, 300 * 2 ** 20);
+}
+// The saves and older copies of the user folder against the browser's room: { count, bytes, biggest, estimate, low }.
+export async function spaceState(FS) {
+  const { saves, backups } = listSaves(FS), all = [...saves, ...backups];
+  let estimate = null;
+  try { estimate = await navigator.storage.estimate(); } catch { /* not told */ }
+  const biggest = Math.max(0, ...all.map((f) => f.size));
+  return { count: saves.length, bytes: all.reduce((a, f) => a + f.size, 0), biggest, estimate, low: lowOnSpace(estimate, biggest) };
+}
 
 function files(FS, dir) {
   let names;
@@ -231,8 +267,17 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
     list.innerHTML = shown.saves.length
       ? `<table><tr><th>Save</th><th class="num">Size</th><th>Saved</th>${c ? '<th>Cloud</th>' : ''}<th></th></tr>${shown.saves.map((f, i) => row(f, i, 'save')).join('')}</table>`
       : '<p class="small">No saved games yet. Save in the game (Game Options, Save Game), or upload one.</p>';
-    if (shown.backups.length) list.innerHTML += `<details><summary>Older copies (${shown.backups.length})</summary><table>
+    // The older copies with what they take: the game keeps three of each save, 2 GB for one save of 690 MB.
+    if (shown.backups.length) list.innerHTML += `<details><summary>Older copies (${shown.backups.length}, ${size(shown.backups.reduce((a, f) => a + f.size, 0))})</summary>
+      <p class="small">The game keeps the last three copies of each save here, in case a save goes wrong.
+      <button class="link" id="backups-remove">Remove all older copies</button></p><table>
       ${shown.backups.map((f, i) => row(f, i, 'backup')).join('')}</table></details>`;
+    spaceState(FS).then((sp) => {
+      const el = document.getElementById('saves-space');
+      el.textContent = sp.count || sp.bytes ? `${spaceText(sp.estimate, sp.bytes, sp.count)}${sp.low
+        ? '. That is little: a save may not fit. Download the saves you want to keep, then delete some here or remove the older copies.' : ''}` : '';
+      el.className = sp.low ? 'small warn' : 'small';
+    });
     if (c && c !== watched) { watched = c; c.onChange(() => { if (dialog.open) render(); }); }
   }
 
@@ -240,10 +285,14 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
   document.getElementById('saves-close').onclick = () => dialog.close();
   document.getElementById('saves-upload').onclick = () => input.click();
   // One zip of everything (zipOfBlobs: the files of the vault go from disk, not through memory).
+  // More than a zip holds: a part at each press (zipParts), the button says which is next.
+  let nextPart = 0;
   document.getElementById('saves-all').onclick = async (e) => {
     const b = e.currentTarget;
-    let files = allFiles(FS);
-    if (!files.length) { say('There is nothing to download yet.'); return; }
+    const everything = allFiles(FS);
+    if (!everything.length) { say('There is nothing to download yet.'); return; }
+    const parts = zipParts(everything), part = Math.min(nextPart, parts.length - 1), of = parts.length > 1 ? ` (${part + 1} of ${parts.length})` : '';
+    let files = parts[part];
     b.disabled = true;
     let done = 0, shown = -1;
     try {
@@ -262,14 +311,28 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
         if (pct !== shown) { shown = pct; say(`Packing ${files.length} files (${mb(total)}): ${pct}%`); }
       } });
       const day = new Date().toISOString().slice(0, 10);
-      saveLink(zip, `CM 01-02 saves ${day}.zip`);
-      say(`Downloaded ${files.length} files (${mb(total)}) as one zip: the saves, the older copies (backups), the tactics and the data sets (Databases), as the save folder holds them.${
+      saveLink(zip, `CM 01-02 saves ${day}${of}.zip`);
+      nextPart = part + 1 < parts.length ? part + 1 : 0;
+      say(`Downloaded ${files.length} files (${mb(total)}) as ${parts.length > 1 ? `part ${part + 1} of ${parts.length}` : 'one zip'}: the saves, the older copies (backups), the tactics and the data sets (Databases), as the save folder holds them.${
+        nextPart ? `\nA zip holds 4 GB: press Download part ${nextPart + 1} of ${parts.length} for the next one.` : ''}${
         lost.length ? `\nLeft out, because the browser's storage no longer has them: ${lost.join(', ')}.` : ''}`, lost.length > 0);
-      log(`page: downloaded all: ${files.length} files, ${mb(total)}`);
+      log(`page: downloaded all${of}: ${files.length} files, ${mb(total)}`);
     } catch (err) { say(`The zip was not made: ${err.message}`, true); }
+    b.textContent = nextPart ? `Download part ${nextPart + 1} of ${parts.length}` : 'Download all';
     b.disabled = false;
   };
   list.addEventListener('click', async (e) => {
+    if (e.target.closest('#backups-remove')) {
+      const old = shown.backups, bytes = old.reduce((a, f) => a + f.size, 0);
+      if (!confirm(`Remove all ${old.length} older copies (${size(bytes)})? The saves themselves stay. This cannot be undone.`)) return;
+      let gone = 0;
+      for (const f of old) { try { FS.unlink(f.path); gone++; } catch (err) { log(`page: ${f.path} was not removed: ${err.message}`); } }
+      sync();
+      say(`Removed ${gone} older copies: ${size(bytes)} free again.`);
+      log(`page: removed ${gone} older copies (${size(bytes)})`);
+      render();
+      return;
+    }
     const ed = e.target.closest('button[data-edit]');
     if (ed && edit) { dialog.close(); edit(shown.saves[Number(ed.dataset.edit)].name); return; }
     const r = e.target.closest('button[data-remove]');

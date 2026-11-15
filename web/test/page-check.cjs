@@ -821,6 +821,63 @@ const PORT = 8097;
       await ctx.close();
     }
 
+    // Large saves (a player has several of 690 MB): Saved games says what they take and the room left, marks the bar's
+    // button when that is little, shows about six rows of the list, sums the older copies and removes them at one
+    // press, and Download all goes in parts when a zip (4 GB) cannot hold everything.
+    {
+      const ctx = await b.newContext({ viewport: { width: 1100, height: 760 }, acceptDownloads: true });
+      await ctx.addInitScript(() => { navigator.storage.estimate = async () => ({ usage: 9.9 * 2 ** 30, quota: 10 * 2 ** 30 }); });
+      const pg = await ctx.newPage();
+      const errs = [];
+      pg.on('pageerror', (e) => errs.push(e.message));
+      pg.on('dialog', (d) => d.accept().catch(() => {}));
+      await pg.goto(`http://127.0.0.1:${PORT}/`);
+      await pg.waitForSelector('#go');
+      await pg.click('#go');
+      await pg.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+      await pg.evaluate(() => {
+        const FS = window.Module.FS, s = FS.readFile('/user/Harbour City 2001-07-14.sav');
+        FS.mkdirTree('/user/backups');
+        for (const n of [1, 2]) FS.writeFile(`/user/backups/Harbour City 2001-07-14.${n}.sav`, s);
+        for (const n of [1, 2, 3, 4, 5, 6, 7]) FS.writeFile(`/user/Career ${n}.sav`, s);
+      });
+      await pg.waitForSelector('#saves-open.low', { timeout: 15000 }).catch(() => {});
+      const lowToast = await pg.evaluate(() => [...document.querySelectorAll('#toasts .toast')].map((t) => t.textContent).join(' | '));
+      check('little room left in the browser: a mark on the Saved games button, and the player is told',
+        await pg.locator('#saves-open.low').count() === 1 && /Little room is left in this browser for saves/.test(lowToast), lowToast.slice(0, 160));
+      await pg.click('#saves-open');
+      await pg.waitForFunction(() => document.getElementById('saves-space').textContent, null, { timeout: 5000 }).catch(() => {});
+      const space = await pg.textContent('#saves-space');
+      check('Saved games says what the saves take, the room left, and that it is little',
+        /^8 saves, 3 MB · this browser allows about 102 MB more\. That is little: a save may not fit\./.test(space), space);
+      const rows = await pg.evaluate(() => {
+        const list = document.getElementById('saves-list').getBoundingClientRect();
+        return [...document.querySelectorAll('#saves-list > table tr')].filter((tr) => tr.querySelector('td') && tr.getBoundingClientRect().bottom <= list.bottom + 1).length;
+      });
+      check('the list shows six rows or more at once (it showed two or three)', rows >= 6, `${rows} rows`);
+      const summary = await pg.textContent('#saves-list details summary');
+      await pg.click('#saves-list details summary');
+      await pg.click('#backups-remove');
+      await pg.waitForFunction(() => /Removed/.test(document.getElementById('saves-note').textContent), null, { timeout: 5000 }).catch(() => {});
+      check('the older copies say what they take, and Remove all older copies removes them (the saves stay)',
+        /^Older copies \(2, 1 MB\)$/.test(summary.trim()) && /Removed 2 older copies: 1 MB free again/.test(await pg.textContent('#saves-note'))
+          && await pg.evaluate(() => window.Module.FS.readdir('/user/backups').filter((n) => /\.sav$/.test(n)).length === 0 && window.Module.FS.readdir('/user').filter((n) => /^Career/.test(n)).length === 7),
+        `${summary.trim()} | ${await pg.textContent('#saves-note')}`);
+      // Two files that say they are 3 GB each (the stand-in's file system takes the length it is given): two parts.
+      await pg.evaluate(() => { for (const n of [1, 2]) window.Module.FS.writeFile(`/user/Huge ${n}.sav`, { length: 3 * 2 ** 30 }); });
+      const [first] = await Promise.all([pg.waitForEvent('download', { timeout: 20000 }), pg.click('#saves-all')]);
+      await pg.waitForFunction(() => /part 2/.test(document.getElementById('saves-all').textContent), null, { timeout: 10000 }).catch(() => {});
+      const label = await pg.textContent('#saves-all'), partNote = await pg.textContent('#saves-note');
+      const [second] = await Promise.all([pg.waitForEvent('download', { timeout: 20000 }), pg.click('#saves-all')]);
+      await pg.waitForFunction(() => document.getElementById('saves-all').textContent === 'Download all', null, { timeout: 10000 }).catch(() => {});
+      check('Download all of more than a zip holds: a part at each press, the button says which is next',
+        / \(1 of 2\)\.zip$/.test(first.suggestedFilename()) && label === 'Download part 2 of 2' && /A zip holds 4 GB: press Download part 2 of 2/.test(partNote)
+          && / \(2 of 2\)\.zip$/.test(second.suggestedFilename()) && (await pg.textContent('#saves-all')) === 'Download all',
+        `${first.suggestedFilename()} | ${label} | ${second.suggestedFilename()}`);
+      check('no page errors with large saves', errs.length === 0, errs.join('; '));
+      await ctx.close();
+    }
+
     // A flight: one start with a connection, then none. The service worker gives the page, files.json and the engine,
     // the browser's cache the game files, and the saves are there (checked with the real engine too, 14 November 2026:
     // the start took 4 s offline).

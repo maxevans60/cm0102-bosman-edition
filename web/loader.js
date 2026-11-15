@@ -5,7 +5,7 @@
 // Around the game: layout.js sizes the canvas, touch.js turns touches into the mouse, keyboard.js routes the keys and
 // runs the on-screen keyboard, saves.js is the Saved games panel, account.js the account and the cloud saves, ui.js
 // has the messages and the small helpers.
-import { SAVE_DIR, listSaves, mountSavesPanel, savesSignature, setStorageKept, skipWorkFiles, storageWarning, useVault } from './saves.js';
+import { SAVE_DIR, listSaves, mountSavesPanel, savesSignature, setStorageKept, skipWorkFiles, spaceState, storageWarning, useVault } from './saves.js';
 import { needsChoice, setStatsAllowed, startStats, statsAllowed } from './stats.js';
 import { createVault, isAway } from './vault.js';
 import { engineUrl, hasJspi, pickEngine } from './engine.js';
@@ -459,6 +459,23 @@ function storeAll(FS) {
   return Promise.all([vaultDone, folderDone]);
 }
 
+// Little room left in the browser for saves (saves.js, lowOnSpace): the Saved games button gets a mark, and the player
+// is told once a visit, before a save fails for it. Checked at the start and after each save.
+let toldLowSpace = false;
+function checkSpace() {
+  const FS = window.Module?.FS;
+  if (!FS) return;
+  spaceState(FS).then((sp) => {
+    $('saves-open').classList.toggle('low', sp.low);
+    $('saves-open').title = sp.low ? 'Little room left in this browser for saves' : '';
+    if (sp.low && !toldLowSpace) {
+      toldLowSpace = true;
+      log(`page: little room left for saves: ${sp.estimate.quota - sp.estimate.usage} bytes allowed, the largest save has ${sp.biggest}`);
+      toast('Little room is left in this browser for saves. Saved games shows what they take: download the ones to keep, then delete some.', { kind: 'bad', ms: 12000 });
+    }
+  }).catch(() => {});
+}
+
 // One round of the vault (vault.persist). A save it could not store stays in this tab's memory and is tried again at
 // the next round; the player is told once, until a round works again: the next visit would not have that save.
 let vaultFailing = false;
@@ -721,6 +738,7 @@ function runEngine(files, info) {
         const now = savesSignature(FS);
         if (now !== lastSaves && now === seen) {
           if (now.length >= lastSaves.length) { toast('Saved in this browser'); if (!cloud) cloudHintOnce(); }
+          checkSpace();
           lastSaves = now;
           sync();
           cloudAfterSave();
@@ -739,6 +757,7 @@ function runEngine(files, info) {
       mountSavesPanel({ FS, sync, log, report: () => report, cloud: () => cloud, promo: () => (cloud ? null : account.promo()),
         openPromo: () => { $('saves').close(); account.open(); }, edit: (name) => editor.openSave(name) });
       mountTacticsPanel({ FS, sync, log });
+      checkSpace();
       keyboard = mountKeyboard({ log, layout, toast });
       // What the engine says about itself, a few times a second: the size of its picture, and the text entry that takes
       // keys (user32.c). An engine built before these calls has neither; the page then works without them.

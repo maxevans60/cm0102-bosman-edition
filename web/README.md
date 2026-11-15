@@ -220,8 +220,16 @@ site's storage, `navigator.storage.persist`), when browsing data is cleared, whe
 Safari after 7 days without a visit unless the page is on the home screen. Saved games and Help say so
 (`storageWarning`, `saves.js`), with the advice to download the saves to keep or to use Cloud Saves.
 
+Saved games says what the saves and older copies take and what the browser allows more (`spaceState` in `saves.js`,
+`navigator.storage.estimate`; a nearly full disk can still refuse what the browser allows). When that is less than two
+saves of the largest size, or than 300 MB, the line says so, the bar's Saved games button gets a mark and the player is
+told once a visit, before a save fails for it. The list keeps room for about six rows. Older copies show their total
+(the game keeps three of each save: 2 GB for one save of 690 MB), and Remove all older copies removes them at one
+press; the page removes none by itself.
+
 Delete removes a save or an older copy (with Cloud Saves, a save in the cloud goes there too). Download all gives one
-zip of every save, older copy and data set, as the save folder holds them (`zipOfBlobs`, `zip.js`: the files are stored
+zip of every save, older copy and data set, as the save folder holds them, or, when that is more than a zip holds (4 GB:
+six saves of 690 MB pass it), a part of at most 3.5 GB at each press (`zipParts`), the button naming the next one (`zipOfBlobs`, `zip.js`: the files are stored
 as they are and the zip is made of their Blobs, so the vault's files go from disk and a backup needs no memory). While the game runs,
 the page keeps the game files and the whole user folder in memory: every save, older copy and data set. A browser that
 runs out of memory stops the game with "Array buffer allocation failed"; the page then says so and suggests closing the

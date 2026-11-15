@@ -188,6 +188,11 @@
   .report-field textarea { resize: vertical; min-height: 64px; }
   #sets select { font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; }
   dialog#saves { width: min(820px, calc(100vw - 24px)); }
+  /* The saves list keeps room for about six rows (it once shrank to two or three under the sections below it); the
+     dialog's body scrolls for the rest. */
+  #saves-list:has(tr + tr + tr + tr) { min-height: min(46vh, 360px); }
+  /* Little room left in the browser for saves (saves.js, lowOnSpace): a mark on the bar's button. */
+  #saves-open.low::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #d9a441; margin-left: 2px; }
   td.acts button + button { margin-left: 6px; }
 
   /* The save editor (editor.js): the players on the left, the one chosen on the right; one at a time when narrow. */
@@ -318,6 +323,7 @@
     device or to play it on another one; upload a .sav file to play it here.</p>
     <p id="saves-risk" class="small warn"></p>
     <p id="saves-promo" class="small promo" hidden><span></span><button class="link">See Cloud Saves</button></p>
+    <p id="saves-space" class="small"></p>
     <div id="saves-list" class="dlg-list"></div>
     <p id="saves-note" class="small" role="status"></p>
     <div class="row">
