@@ -41,6 +41,17 @@ typedef struct {
 const MlsSchedule *season_mls_schedule(int season);   /* NULL before MLS_FIRST_SEASON */
 const MlsPlayoff *season_mls_playoff(int season);     /* NULL before MLS_FIRST_SEASON */
 
+/* The shape of a play-off with ne East and nw West clubs in the league: the size of each bracket (bracket[0] East,
+ * bracket[1] West: the qualifiers of the conference and the wild clubs, which fill the brackets to the same size
+ * when they can) and the targets of its rounds (8, 4, 2, 1: the rounds that some bracket needs). Returns the number
+ * of rounds before the final. */
+int season_mls_playoff_rounds(const MlsPlayoff *p, int ne, int nw, int bracket[2], int targets[4]);
+
+/* The matches of a round that brings c clubs (in seed order, 0 the best) down to t: m = c - t matches between the
+ * 2m worst clubs, the best of them against the worst. pairs[2k] is the better seed, pairs[2k + 1] the worse.
+ * Returns m (0 when c <= t). */
+int season_mls_round_pairs(int c, int t, int *pairs);
+
 /* The conference of a club by its name in a season: MLS_EAST, MLS_WEST, or -1 when the name is not known. */
 int season_mls_conference(const char *name, int season);
 

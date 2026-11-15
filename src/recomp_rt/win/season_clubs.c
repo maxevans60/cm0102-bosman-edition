@@ -2,6 +2,7 @@
  * division pointer (+0x57) of club records in the game's memory, and only in a season game. */
 #include "win.h"
 #include "season.h"
+#include "season_mls.h"
 #include "season_clubs.h"
 #include "season_second_teams.h"
 #include "season_fin_second.h"
@@ -285,6 +286,8 @@ static int class_size(const char *name, int season)
 {
     int new_division = season_divisions_class_size(name, season);   /* slice 20 */
     if (new_division >= 0) return new_division;
+    int mls = season_mls_division_size(name, season);                /* gap row 7: the MLS of real life */
+    if (mls >= 0) return mls;
     if (!strncmp(name, "Polish First Division", 52)) {                 /* issue 92: one table of 14, 16 or 18 */
         int one_table = season_pol_first_clubs(season);
         if (one_table > 0) return one_table;

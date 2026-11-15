@@ -134,9 +134,35 @@ static void test_other_counts(void)
             }
 }
 
+static void test_playoff_shape(void)
+{
+    int b[2], t[4], pairs[32];
+    int r = season_mls_playoff_rounds(season_mls_playoff(2023), 15, 14, b, t);
+    CHECK(r == 4 && b[0] == 9 && b[1] == 9 && t[0] == 8 && t[3] == 1, "2023: brackets of 9, rounds to 8, 4, 2, 1");
+    r = season_mls_playoff_rounds(season_mls_playoff(2003), 5, 5, b, t);
+    CHECK(r == 2 && b[0] == 4 && t[0] == 2 && t[1] == 1, "2003: brackets of 4, rounds to 2 and 1");
+    r = season_mls_playoff_rounds(season_mls_playoff(2020), 14, 12, b, t);
+    CHECK(r == 4 && b[0] == 10 && b[1] == 8, "2020: 10 East and 8 West, four rounds");
+    r = season_mls_playoff_rounds(season_mls_playoff(2008), 7, 7, b, t);
+    CHECK(r == 2 && b[0] == 4 && b[1] == 4, "2008: 2 a conference and 4 wild clubs make brackets of 4");
+    r = season_mls_playoff_rounds(season_mls_playoff(2019), 12, 12, b, t);
+    CHECK(r == 3 && b[0] == 7 && t[0] == 4, "2019: brackets of 7, rounds to 4, 2, 1");
+    r = season_mls_playoff_rounds(season_mls_playoff(2023), 3, 3, b, t);
+    CHECK(r == 2 && b[0] == 3 && t[0] == 2, "a small league: brackets of 3, rounds to 2 and 1");
+    int m = season_mls_round_pairs(9, 8, pairs);
+    CHECK(m == 1 && pairs[0] == 7 && pairs[1] == 8, "9 to 8: the 8th against the 9th");
+    m = season_mls_round_pairs(8, 4, pairs);
+    CHECK(m == 4 && pairs[0] == 0 && pairs[1] == 7 && pairs[6] == 3 && pairs[7] == 4, "8 to 4: 1 v 8 .. 4 v 5");
+    m = season_mls_round_pairs(7, 4, pairs);
+    CHECK(m == 3 && pairs[0] == 1 && pairs[1] == 6 && pairs[4] == 3 && pairs[5] == 4, "7 to 4: the first has a bye");
+    m = season_mls_round_pairs(4, 8, pairs);
+    CHECK(m == 0, "4 to 8: no match");
+}
+
 int main(void)
 {
     test_table();
+    test_playoff_shape();
     test_names();
     test_real_seasons();
     test_other_counts();

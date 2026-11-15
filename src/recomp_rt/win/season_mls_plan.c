@@ -1,5 +1,6 @@
 /* The MLS of real life from 2002 (0.7.2 gap row 7): the season table and the regular season plan. See
- * season_mls_plan.h. Sources: docs/research/2026-11-15-mls-seasons.tsv. */
+ * season_mls_plan.h. Sources: docs/research/2026-11-15-mls-seasons.tsv and its second-source check
+ * docs/research/2026-11-15-mls-second-source.tsv. */
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -10,13 +11,13 @@
  *   conference 4 times (28). 2003 and 2004: two designated rivals (30).
  * - 2005, 2006: 4 in the conference and 2 with the other (32).
  * - 2007 to 2009: every club twice, then regional rivals to 30. 2010 (30) and 2011 (34): every club twice.
- * - 2012 to 2014: the conference 2 or 3 times and the other conference once (34). 2013 has no source of its own:
- *   it keeps the 2012 and 2014 form.
+ * - 2012 to 2014: the conference 2 or 3 times and the other conference once (34). 2013: the 2012 form with home
+ *   and away reversed (the second-source check, docs/research/2026-11-15-mls-second-source.tsv).
  * - 2015 to 2019: the conference twice plus extra conference matches, the other conference once (34).
  * - 2020: the restart after the suspension, 23 matches, nearly all in the conference (the real clubs played 18 to 23).
  * - 2021: the conference 2 or 3 times to 32, then 2 matches with the other conference (34).
  * - 2022: the conference twice (26) and 8 with the other (34). 2023 to 2026: the conference twice to 28 and 6 with
- *   the other (34). 2026 has no split of its own in the sources: it keeps 2025's. */
+ *   the other (34); 2026 the same (mlssoccer.com, second-source check). */
 static const MlsSchedule SCHEDULES[] = {
     {2002, 4, 2, 26, 28, 2}, {2003, 4, 2, 26, 30, 2}, {2004, 4, 2, 26, 30, 2}, {2005, 4, 2, 32, 32, 1},
     {2006, 4, 2, 32, 32, 1}, {2007, 2, 2, 30, 30, 1}, {2008, 2, 2, 30, 30, 1}, {2009, 2, 2, 30, 30, 1},
@@ -112,6 +113,35 @@ int season_mls_conference(const char *name, int season)
     for (size_t k = 0; k < sizeof WORDS / sizeof WORDS[0]; k++)
         if (season >= WORDS[k].from && season <= WORDS[k].to && has_word(name, WORDS[k].word)) return WORDS[k].conf;
     return -1;
+}
+
+int season_mls_playoff_rounds(const MlsPlayoff *p, int ne, int nw, int bracket[2], int targets[4])
+{
+    if (!p) return 0;
+    int e = p->east < ne ? p->east : ne, w = p->west < nw ? p->west : nw;
+    int wild = p->wild, rest = ne + nw - e - w;
+    if (wild > rest) wild = rest;
+    bracket[0] = e;
+    bracket[1] = w;
+    /* A wild club joins the bracket with fewer clubs (they fill to the same size), as the conference of each wild
+     * club decides only which of two equal brackets it takes (season_mls.c). */
+    for (int k = 0; k < wild; k++) bracket[bracket[1] < bracket[0] ? 1 : 0]++;
+    int most = bracket[0] > bracket[1] ? bracket[0] : bracket[1], r = 0;
+    static const int T[4] = {8, 4, 2, 1};
+    for (int k = 0; k < 4; k++)
+        if (T[k] < most) targets[r++] = T[k];
+    return r;
+}
+
+int season_mls_round_pairs(int c, int t, int *pairs)
+{
+    int m = c - t;
+    if (m <= 0) return 0;
+    for (int k = 0; k < m; k++) {
+        pairs[2 * k] = c - 2 * m + k;
+        pairs[2 * k + 1] = c - 1 - k;
+    }
+    return m;
 }
 
 /* ---- The plan ---- */
