@@ -94,3 +94,14 @@ int season_size_lone_down(int down, int pool, int have, int want)
     if (most < 0) most = 0;
     return down < most ? down : most;
 }
+
+int season_size_lone_pick(const int *human, int nrows, int down, int *out, int *kept, int *nkept)
+{
+    int n = 0;
+    *nkept = 0;
+    for (int k = nrows - 1; k >= 0 && n < down; k--) {
+        if (!human[k]) out[n++] = k;
+        else if (k >= nrows - down) kept[(*nkept)++] = k;   /* only a club in the places stays; one above is safe */
+    }
+    return n;
+}
