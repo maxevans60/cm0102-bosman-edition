@@ -243,11 +243,16 @@ static void lone_human(void)
     int two[12] = {0};
     two[11] = two[10] = 1;
     n = season_size_lone_pick(two, 12, 1, out, kept, &nk);
-    CHECK(n == 1 && out[0] == 9 && nk == 2 && kept[0] == 11 && kept[1] == 10, "pick: two humans last, %d picks %d, "
-          "%d kept", n, out[0], nk);
+    CHECK(n == 1 && out[0] == 9 && nk == 1 && kept[0] == 11, "pick: two humans last, 1 place, %d picks %d, %d kept",
+          n, out[0], nk);
+    int gap[12] = {0};
+    gap[11] = gap[9] = 1;
+    n = season_size_lone_pick(gap, 12, 2, out, kept, &nk);
+    CHECK(n == 2 && out[0] == 10 && out[1] == 8 && nk == 1 && kept[0] == 11, "pick: humans 12th and 10th, 2 places, "
+          "%d picks %d %d, %d kept", n, out[0], out[1], nk);
     int all[3] = {1, 1, 1};
     n = season_size_lone_pick(all, 3, 1, out, kept, &nk);
-    CHECK(n == 0 && nk == 3, "pick: only humans, %d picks, %d kept", n, nk);
+    CHECK(n == 0 && nk == 1 && kept[0] == 2, "pick: only humans (the one in the place stays), %d picks, %d kept", n, nk);
     n = season_size_lone_pick(none, 12, 0, out, kept, &nk);
     CHECK(n == 0 && nk == 0, "pick: no places, %d picks", n);
 }

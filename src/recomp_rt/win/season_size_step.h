@@ -53,8 +53,8 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
 int season_size_lone_down(int down, int pool, int have, int want);
 
 /* The clubs that a lone exchange sends to no division (lead decision of 15 November): from the worst place up, down
- * clubs with no human manager (human[k] 0; rows are the best place first). A club with a human manager that it meets
- * first stays: kept gets its row. Returns the rows written to out, the worst first (fewer than down when too few
+ * clubs with no human manager (human[k] 0; rows are the best place first). A club with a human manager in the last
+ * down rows (the places) stays: kept gets its row. One above the places is skipped and is not kept. Returns the rows written to out, the worst first (fewer than down when too few
  * clubs have no human manager); *nkept the rows written to kept. out and kept hold nrows each. */
 int season_size_lone_pick(const int *human, int nrows, int down, int *out, int *kept, int *nkept);
 

@@ -955,13 +955,12 @@ static void sizes_rules(uint32_t obj)
     /* Lead decision of 15 November: only the places that the exchange will use (lone_shown, the guard of gap 47). */
     if (lone_file(file) && season_changing_rules() && r->down >= 0 && r->down <= 30) {
         int shown = lone_shown(obj, file, r);
-        if ((int8_t)g_mem[obj + DOWN] != shown) {
-            if (logging())
-                fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d to no division, the class "
-                        "gave %d (the row %d)\n", file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), shown,
-                        (int8_t)g_mem[obj + DOWN], r->down);
-            g_mem[obj + DOWN] = (uint8_t)shown;
-        }
+        /* A line every time (the class keeps the byte from the last edition), so the run test reads each edition. */
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d to no division, the class "
+                    "gave %d (the row %d)\n", file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), shown,
+                    (int8_t)g_mem[obj + DOWN], r->down);
+        if ((int8_t)g_mem[obj + DOWN] != shown) g_mem[obj + DOWN] = (uint8_t)shown;
     }
 }
 
@@ -1323,10 +1322,14 @@ static void lone_exchange(uint32_t self)
     int pool = places ? lone_pool(rec) : 0, want = step_want(self, file, step_seen[i].year + 1);
     /* Gap 47: only as many as the pool can replace, so the division keeps the count of its next row. */
     int down = season_size_lone_down(places, pool, have, want);
+    /* Lead decision of 15 November: never more than the table showed (sizes_rules, lone_shown), so the places the
+     * player saw are the places used, also when the pool grew during the season. */
+    int shown = (int8_t)g_mem[self + DOWN];
+    if (shown >= 0 && shown < down) down = shown;
     if (down < places && logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d, %d go down: %d clubs with no "
-                "division can come up, %d clubs to %d\n", file, record_name(self), step_seen[i].year, places, down,
-                pool, have, want);
+                "division can come up, %d clubs to %d, the table showed %d\n", file, record_name(self),
+                step_seen[i].year, places, down, pool, have, want, shown);
     nlone_down = 0;
     /* Lead decision of 15 November: a club with a human manager keeps its league. It stays, and the next worst club
      * with no human manager goes in its place (season_size_lone_pick). */
@@ -1351,10 +1354,12 @@ static void lone_exchange(uint32_t self)
             fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %.50s goes down to no division\n", file,
                     record_name(self), step_seen[i].year, win_str(c + CLUB_NAME));
     }
-    /* Each club that stays is paired with one of the clubs below the places that went in its place (the last picks). */
+    /* Each club that stays is paired with a club above the places that went in its place, in order. */
+    int repl[STEP_MAX_ROWS], nrepl = 0;
+    for (int j = 0; j < picks; j++)
+        if (out[j] < n - down) repl[nrepl++] = out[j];
     for (int j = 0; j < nkept && !rt_unwinding; j++) {
-        int w = picks - nkept + j;
-        uint32_t c = club[kept[j]], went = w >= 0 && w < picks ? club[out[w]] : 0;
+        uint32_t c = club[kept[j]], went = j < nrepl ? club[repl[j]] : 0;
         if (logging())
             fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %.50s stays, its manager is a player: %.50s goes "
                     "down in its place\n", file, record_name(self), step_seen[i].year, win_str(c + CLUB_NAME),

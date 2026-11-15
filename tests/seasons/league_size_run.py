@@ -574,9 +574,12 @@ def lone_guards(log, file):
     worked out again from the line's places, pool and counts (season_size_lone_down), so a wrong guard fails: -1."""
     out = {}
     for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): relegation places (\d+), (\d+) go down: "
-                         r"(\d+) clubs with no division can come up, (\d+) clubs to (-?\d+)" % re.escape(file), log):
+                         r"(\d+) clubs with no division can come up, (\d+) clubs to (-?\d+)"
+                         r"(?:, the table showed (-?\d+))?" % re.escape(file), log):
         places, down, pool, have, want = (int(m.group(k)) for k in range(2, 7))
         most = 0 if want < 0 else max(0, pool + have - want)
+        if m.group(7) is not None and 0 <= int(m.group(7)) < most:
+            most = int(m.group(7))     # never more than the table showed (lead decision of 15 November)
         out[int(m.group(1))] = down if down == min(places, most) else -1
     return out
 
@@ -1219,7 +1222,9 @@ def self_test():
         bad.append(("lone", ld, row_down("wel_first", 2009), row_down("wel_first", 2025)))
     lg = lone_guards("recomp: league sizes: kor_league (K League) 2012: relegation places 2, 1 go down: 0 clubs with "
                      "no division can come up, 13 clubs to 12\nrecomp: league sizes: kor_league (K League) 2013: "
-                     "relegation places 2, 2 go down: 0 clubs with no division can come up, 12 clubs to 12\n", "kor_league")
+                     "relegation places 2, 2 go down: 0 clubs with no division can come up, 12 clubs to 12\nrecomp: league "
+                     "sizes: kor_league (K League) 2014: relegation places 1, 0 go down: 3 clubs with no division can "
+                     "come up, 12 clubs to 12, the table showed 0\n", "kor_league")
     lp = lone_places("recomp: league sizes: kor_league (K League 1) 2024: relegation places 1 to no division, the class "
                      "gave 0\nrecomp: league sizes: kor_league (K League 1) 2024: relegation places 0 to no division, "
                      "the class gave 1\n", "kor_league")
@@ -1232,7 +1237,7 @@ def self_test():
                             "kor_league", 2013, 2014)
     if lp != {2024: 0} or hf or len(hf2) != 1:
         bad.append(("lone places and humans", lp, hf, hf2))
-    if (lg != {2012: 1, 2013: -1} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
+    if (lg != {2012: 1, 2013: -1, 2014: 0} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
             row_down("kor_league", 2025) != 0 or edition_season("kor_league", 2024) != 2023):
         bad.append(("lone kor", lg, row_down("kor_league", 2012), row_down("kor_league", 2023),
                     row_down("kor_league", 2025), edition_season("kor_league", 2024)))
