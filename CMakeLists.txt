@@ -308,6 +308,10 @@ if(NOT WIN32)
         src/recomp_rt/win/season_template.c)
     target_include_directories(season_calendar_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_calendar COMMAND season_calendar_test)
+    # The Italian rules of the league sizes (0.7.2 gap rows 30 and 32).
+    add_executable(season_ita_rules_test tests/seasons/test_season_ita_rules.c src/recomp_rt/win/season_ita_rules.c)
+    target_include_directories(season_ita_rules_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_ita_rules COMMAND season_ita_rules_test)
     # The size step at a season change (0.7.2 league sizes, slice 3, D13).
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)
@@ -317,6 +321,9 @@ if(NOT WIN32)
     target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
     add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
+    # Gap rows 19 and 20 of slice 6: no rules row or season database reaches the Croatian, Korean or Greek fallback.
+    add_test(NAME cup_east_reach COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_east_reach_check.py")
+    set_tests_properties(cup_east_reach PROPERTIES SKIP_RETURN_CODE 77)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)

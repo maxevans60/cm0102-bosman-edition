@@ -72,7 +72,7 @@ check(po("ita_ser_a", 2001) == ("-", "-", "tiebreak"), "Serie A tie-break")
 check(po("aus_nsl", 2005) == ("-", "-", "title"), "A-League finals series")
 
 # --- splits
-check(by[("sco_prm", 2001)]["split"] == "after 33: 6+6, points unknown", "Scottish split")
+check(by[("sco_prm", 2001)]["split"] == "after 33: 6+6, points kept", "Scottish split")   # the points: docs/research/2026-11-15-split-points.md
 check(by[("bel_first", 2009)]["split"] == "after 30: 6+8, points halved", "Belgian Play-off I, points halved")
 check(by[("pol_first", 2013)]["split"] == "after 30: 8+8, points halved", "Polish split 2013/14")
 check(by[("pol_first", 2017)]["split"] == "after 30: 8+8, points kept", "Polish split 2017/18")
