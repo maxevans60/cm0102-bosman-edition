@@ -105,13 +105,21 @@ int season_arg_derby_pairs(int n, const int *listed, const int *rep, int *derby)
 /* The title stages of a season (season_arg_stages.c): none, two zone tables a half and a knockout of 16 after each
  * half (2025, 2026), two zone tables and a final of the zone winners with a match of the runners-up (2016), or a
  * knockout of the first 16 of each half's table (2027 on). */
-enum { SEASON_ARG_KO_NONE, SEASON_ARG_KO_ZONES, SEASON_ARG_KO_FINAL, SEASON_ARG_KO_TABLE };
+enum { SEASON_ARG_KO_NONE, SEASON_ARG_KO_ZONES, SEASON_ARG_KO_FINAL, SEASON_ARG_KO_TABLE, SEASON_ARG_KO_PROMO };
+/* The rows of the promoción that the Primera plays (2002/03 to 2011/12; row 2001 keeps the second division's own). */
+#define SEASON_ARG_PROMO_FIRST 2002
+#define SEASON_ARG_PROMO_LAST 2011
 int season_arg_stage_kind(uint32_t obj, int *season);
 /* The clubs of zone A and zone B of the Primera's plan this edition (made with its fixtures); returns the zone size,
  * 0 when there is none. */
 int season_arg_zone_lists(uint32_t obj, uint32_t *a, uint32_t *b);
 /* The club records that go down at the end of the season (arg_down), for the Clausura's knockout. Returns the count. */
 int season_arg_relegated(uint32_t prm, uint32_t *club, int max);
+/* The 17th and 18th of the averages (club[0] the 17th), the clubs of the promoción. Returns 2, or 0. */
+int season_arg_promo_primera(uint32_t prm, uint32_t *club);
+/* The promoción's results once its ties are complete: the Primera clubs that lost (down) and the second division
+ * clubs that beat them (up), in pairs. Returns the count of pairs. */
+int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up);
 
 /* season_arg_stages.c: after ArgPrm::create_stages 0x405950 (the wrap in season_sizes_arg.c). */
 void season_arg_stages_made(uint32_t self);

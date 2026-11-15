@@ -123,6 +123,9 @@ ROWS = {
                        "row's 8 (item 260)"),
     # Slice 15: the Argentine Primera. Edition Y plays row Y (season_sizes_edition): row 2014 is the 2015 season, row
     # 2015 the 2016 tournament, row 2016 the 2016/17 season, row 2024 the 2025 season.
+    "arg_prm@2005": (2005, 2006, "Primera 2005/06 (row 2005): the promocion of the 17th and 18th of the averages "
+                                 "against the second division's 3rd and 4th, two legs"),
+    "arg_prm@2010": (2010, 2011, "Primera 2010/11 (row 2010): the promocion, then row 2011's"),
     "arg_prm@2013": (2013, 2014, "Primera 2013/14 (row 2013, 20 in two halves), then 30 in 2014/15: the size step "
                                  "takes 10 clubs of the second division, which takes clubs of the third"),
     "arg_prm": (2014, 2015, "Primera 2014/15 (row 2014, the 2015 season): one table of 30, 29 rounds and the derby "
@@ -1102,7 +1105,8 @@ def arg_title_faults(lines, year):
                     fails.append(f"arg_prm {ed} {half}: no champion of the knockout")
             continue
         if not zones:
-            if ed in stages:
+            # A season of rows 2002 to 2011 logs its stages line with no zone tables (the promocion's two ties).
+            if ed in stages and stages[ed][1] != 0:
                 fails.append(f"arg_prm {ed}: zone tables in a season of one table")
             continue
         if ed not in stages or stages[ed][1] != (4 if halves else 2):
@@ -1120,6 +1124,70 @@ def arg_title_faults(lines, year):
                              f"{kos.get((ed, 'runners-up match'))}")
             if champs.get((ed, "apertura")) != "final":
                 fails.append(f"arg_prm {ed}: no champion of the final")
+    return fails
+
+
+def arg_promo_faults(lines, year, last):
+    """The promoción of rows 2002 to 2011 (season_arg_stages.c promo_advance): the 17th and 18th of the averages (the
+    two before the last two of the "averages" line) play the second division's two clubs after its direct places,
+    the second division's club at home in the first leg and the Primera's in the second; each tie's loser of the
+    Primera goes down and its winner goes up at the season change (the "chain" line: status 3 and status 0)."""
+    fails, draws, worst, played, moved, chain = [], {}, {}, {}, {}, {}
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm promocion (\d+): stage (\d+) drawn on day \d+ of \d+: "
+                     r"(\d+):\d+-(\d+):(\d+) ", x)
+        if m:
+            draws.setdefault(int(m.group(1)), {})[int(m.group(2))] = (int(m.group(3)), int(m.group(4)), int(m.group(5)))
+        m = re.match(r"recomp: league sizes: arg_prm averages (\d+), the worst 4 last:((?: \d+:[\d.]+)+)$", x)
+        if m:
+            worst[int(m.group(1))] = [int(w.split(":")[0]) for w in m.group(2).split()]
+        m = re.match(r"recomp: league sizes: arg_prm knockout match (\d+): stage (\d+) round \d+: (\d+)-(\d+)$", x)
+        if m:
+            played.setdefault((int(m.group(1)), int(m.group(2))), []).append((int(m.group(3)), int(m.group(4))))
+        m = re.match(r"recomp: league sizes: arg_prm promocion (\d+): (\d+) .* goes down, (\d+) .* goes up$", x)
+        if m:
+            moved.setdefault(int(m.group(1)), []).append((int(m.group(2)), int(m.group(3))))
+        m = re.match(r"recomp: league sizes: arg_prm chain (\d+): primera:([^;]*); second:(.*)$", x)
+        if m:
+            down = {int(w.split(":")[0]) for w in m.group(2).split() if w.endswith(":3")}
+            up = {int(w.split(":")[0]) for w in m.group(3).split() if w.split(":")[2] in ("0", "5")}
+            chain[int(m.group(1))] = (down, up)
+    for ed in range(year, last + 1):
+        if not 2002 <= edition_season("arg_prm", ed) <= 2011 or ed not in worst:
+            continue
+        d = draws.get(ed, {})
+        if len(d) != 2:
+            fails.append(f"arg_prm {ed}: {len(d)} promocion ties drawn, want 2")
+            continue
+        w = worst[ed]
+        want = [w[0], w[1]] if len(w) == 4 else []
+        got = [d[k][1] for k in sorted(d)]
+        if got != want:
+            fails.append(f"arg_prm {ed}: promocion Primera clubs {got}, want the 17th and 18th of the averages {want}")
+        places = [d[k][2] for k in sorted(d)]
+        if places[1] != places[0] + 1:
+            fails.append(f"arg_prm {ed}: promocion second division places {places}, want two in a row")
+        pairs = {}
+        for k, (sec, prm, _place) in d.items():
+            pairs[prm] = sec
+            legs = played.get((ed, k), [])
+            if legs and legs[0] != (sec, prm):
+                fails.append(f"arg_prm {ed} promocion stage {k}: first leg {legs[0]}, want {(sec, prm)}")
+            if len(legs) > 1 and legs[1] != (prm, sec):
+                fails.append(f"arg_prm {ed} promocion stage {k}: second leg {legs[1]}, want {(prm, sec)}")
+            if ed < last and len(legs) != 2:
+                fails.append(f"arg_prm {ed} promocion stage {k}: {len(legs)} legs, want 2")
+        for lo, wi in moved.get(ed, []):
+            if pairs.get(lo) != wi:
+                fails.append(f"arg_prm {ed}: promocion {lo} down and {wi} up, not a drawn tie")
+            if ed in chain and (lo not in chain[ed][0] or wi not in chain[ed][1]):
+                fails.append(f"arg_prm {ed}: promocion {lo} down and {wi} up, but the chain moves {chain[ed]}")
+        if ed in chain:
+            kept = set(pairs) - {lo for lo, _w in moved.get(ed, [])}
+            if kept & chain[ed][0]:
+                fails.append(f"arg_prm {ed}: promocion winners {sorted(kept & chain[ed][0])} go down")
+        elif ed < last:
+            fails.append(f"arg_prm {ed}: no chain line")
     return fails
 
 
@@ -1309,6 +1377,7 @@ def arg_faults(log, year):
     # Gap row 48: a zone season has the zone tables of each half and a knockout of 16 after each half (2025 and 2026),
     # or a final of the zone winners and a match of the runners-up (2016); the knockout's winner is the champion.
     fails += arg_title_faults(lines, year)
+    fails += arg_promo_faults(lines, year, year + 1)
     if not any("league sizes: arg_prm relegation " in x for x in lines):
         fails.append("arg_prm: no relegation line (the end of a season)")
     print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))

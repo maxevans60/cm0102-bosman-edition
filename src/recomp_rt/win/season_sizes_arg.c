@@ -352,6 +352,7 @@ int season_arg_stage_kind(uint32_t obj, int *season)
     if (season) *season = f.season;
     if (f.zones) return f.halves ? SEASON_ARG_KO_ZONES : SEASON_ARG_KO_FINAL;
     if (f.split) return SEASON_ARG_KO_TABLE;
+    if (f.season >= SEASON_ARG_PROMO_FIRST && f.season <= SEASON_ARG_PROMO_LAST) return SEASON_ARG_KO_PROMO;
     return SEASON_ARG_KO_NONE;
 }
 
@@ -909,6 +910,31 @@ static int relegated(uint32_t self, const Form *f, int32_t *down, int *by_avg_ou
     return nd;
 }
 
+/* The promoción of 2001/02 to 2011/12 (research notes of 15 November 2026, EN 2010-11 and 2011-12): the 17th and 18th
+ * of the averages play two legs against the second division. club[0] the 17th, club[1] the 18th. */
+int season_arg_promo_primera(uint32_t self, uint32_t *club)
+{
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    Form f;
+    int32_t down[MAX_CLUBS];
+    if (!is_prm(self) || !form_of(self, n, &f)) return 0;
+    int nd = relegated(self, &f, down, NULL, NULL, NULL, NULL);
+    if (rt_unwinding) return 0;
+    uint32_t recs = rd32(g_mem, self + AVERAGES), clubs = rd32(g_mem, CLUBS);
+    int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT), got = 0;
+    int32_t w[2];
+    for (int k = have - 1; readable(recs) && k >= 0 && got < 2; k--) {
+        int32_t id = (int32_t)rd32(g_mem, recs + (uint32_t)k * AVG_SIZE), skip = 0;
+        if (id < 0 || !in_division(self, id)) continue;
+        for (int i = 0; i < nd; i++) skip |= down[i] == id;
+        if (!skip) w[got++] = id;                   /* w[0] the 18th, w[1] the 17th */
+    }
+    if (got < 2) return 0;
+    club[0] = clubs + (uint32_t)w[1] * CLUB_SIZE;
+    club[1] = clubs + (uint32_t)w[0] * CLUB_SIZE;
+    return 2;
+}
+
 /* The clubs (club records) that will go down at the end of the season, for the Clausura's knockout (gap row of
  * art. 14.1.2 of the LPF reglamento 2025 and 2026: a club in the relegation zone does not play it). Returns the count. */
 int season_arg_relegated(uint32_t self, uint32_t *club, int max)
@@ -946,6 +972,11 @@ RT_WRAP(00405ca0, arg_record_honours)
     float worst_kept = 1e9f;
     int nd = relegated(self, &f, down, &by_avg, &worst_kept, &worst_pos, &rows_n);
     if (rt_unwinding) return;
+    /* The promoción's losers go down after them (the stages of the season are complete here). */
+    int n_rel = nd;
+    uint32_t pd[2], pu[2];
+    int np = season_arg_promo_results(self, pd, pu);
+    for (int i = 0; i < np && nd < MAX_CLUBS; i++) down[nd++] = (int32_t)((pd[i] - clubs) / CLUB_SIZE);
     recs = rd32(g_mem, self + AVERAGES);
     int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
     /* The worst last, as the original (count - 2 first, then count - 1). */
@@ -979,9 +1010,14 @@ RT_WRAP(00405ca0, arg_record_honours)
                 }
             fprintf(stderr, " %u:%.4f", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), (double)a);
         }
-        fprintf(stderr, "; lowest average kept %.4f; %d by the annual table:", (double)worst_kept, nd - by_avg);
-        for (int i = by_avg; i < nd; i++) fprintf(stderr, " %u:%d", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), worst_pos);
+        fprintf(stderr, "; lowest average kept %.4f; %d by the annual table:", (double)worst_kept, n_rel - by_avg);
+        for (int i = by_avg; i < n_rel; i++) fprintf(stderr, " %u:%d", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), worst_pos);
         fprintf(stderr, " of %d\n", rows_n);
+        if (np)
+            for (int i = 0; i < np; i++)
+                fprintf(stderr, "recomp: league sizes: arg_prm promocion %d: %u %.30s goes down, %u %.30s goes up\n",
+                        (int16_t)rd16(g_mem, self + COMP_YEAR), rd32(g_mem, pd[i]), win_str(pd[i] + CLUB_NAME),
+                        rd32(g_mem, pu[i]), win_str(pu[i] + CLUB_NAME));
         fprintf(stderr, "recomp: league sizes: arg_prm averages %d, the worst 4 last:", (int16_t)rd16(g_mem, self + COMP_YEAR));
         int shown = 0, at[4];
         for (int k = have - 1; readable(recs) && k >= 0 && shown < 4; k--) {
@@ -1072,6 +1108,20 @@ void o_004067f0(void);
 RT_WRAP(004067f0, arg_chain)
 {
     uint32_t self = cpu.ecx;
+    if (is_prm(self)) {
+        /* The promoción's winners of the second division go up: status 0 in its table (0x406839). Its stages still
+         * exist here (start_new_season frees them after the chain, 0x4057b5). */
+        uint32_t pd[2], pu[2];
+        int np = season_arg_promo_results(self, pd, pu);
+        uint32_t objects = rd32(g_mem, COMP_OBJECTS);
+        int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
+        uint32_t second = np && readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+        uint32_t rows = readable(second) ? rd32(g_mem, second + COMP_TABLE) : 0;
+        int m = readable(second) ? (int16_t)rd16(g_mem, second + COMP_CLUBS) : 0;
+        for (int i = 0; i < np; i++)
+            for (int r = 0; readable(rows) && r < m; r++)
+                if (rd32(g_mem, rows + (uint32_t)r * ROW_SIZE) == pu[i]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0;
+    }
     if (season_sizes_on() && is_prm(self) && logging()) {
         /* The clubs the chain moves: ArgPrm rows of status 3 go down (0x406895), ArgSecond rows of status 0 or 5 go
          * up (0x406839); 0xfe marks the clubs a promoción kept (0x408cd0). */

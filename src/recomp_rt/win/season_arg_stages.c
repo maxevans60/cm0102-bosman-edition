@@ -90,6 +90,11 @@
 #define NAME_ZONE_A2 0x445              /* "Phase 2 Group A", parent 0x44a */
 #define NAME_GROUP_A 0x41f              /* "Group A", parent 0x41c */
 #define NAME_CHAMPIONSHIP 0x46b         /* "Championship" */
+#define NAME_PROMOCION 0x45b            /* the name of the second division's promotion ties (0x407ad8) */
+#define KEY_SECOND 0x9cf658u            /* the record id of the second division (0x40576b) */
+#define CLUB_DIVISION 0x57u
+#define COMP_UP 0xbeu                   /* s8: the direct promotion places */
+#define PROMO_DAYS 9                    /* the draw tomorrow, the first legs in 3 days, the second legs 4 days later */
 #define CODE_R16 20
 #define CODE_QF 120
 #define CODE_SF 130
@@ -152,6 +157,8 @@ static int plan_of(uint32_t obj, Plan *p)
         p->ko_a = FIRST_ZONE;
         p->ko_c = FIRST_ZONE + 1;
         p->count = FIRST_ZONE + 2;
+    } else if (p->kind == SEASON_ARG_KO_PROMO) {
+        p->count = FIRST_ZONE + 2;          /* the two ties of the promoción */
     } else {
         p->count = FIRST_ZONE;
     }
@@ -175,8 +182,10 @@ static int plan_live(uint32_t obj, Plan *p)
         if (!s || g_mem[s + STAGE_TYPE] != 2) break;
         p->zones++;
     }
-    p->kind = p->zones == 4 ? SEASON_ARG_KO_ZONES : p->zones == 2 ? SEASON_ARG_KO_FINAL : p->zones == 0 ?
-              SEASON_ARG_KO_TABLE : SEASON_ARG_KO_NONE;
+    /* No zone tables: the 2027 form, or the promoción of an edition up to 2011 (edition Y plays row Y). */
+    p->kind = p->zones == 4 ? SEASON_ARG_KO_ZONES : p->zones == 2 ? SEASON_ARG_KO_FINAL : p->zones != 0 ?
+              SEASON_ARG_KO_NONE : (int16_t)rd16(g_mem, obj + COMP_YEAR) <= SEASON_ARG_PROMO_LAST ?
+              SEASON_ARG_KO_PROMO : SEASON_ARG_KO_TABLE;
     p->count = count;
     return p->kind != SEASON_ARG_KO_NONE;
 }
@@ -233,8 +242,8 @@ void season_arg_stages_made(uint32_t self)
     if (!readable(old)) return;
     wr32(g_mem, self + STAGE_COUNT, (uint32_t)p.count);
     if (!any) return;
-    if (p.kind == SEASON_ARG_KO_TABLE) {
-        /* No zone tables; the array holds the two knockouts (made later). */
+    if (p.kind == SEASON_ARG_KO_TABLE || p.kind == SEASON_ARG_KO_PROMO) {
+        /* No zone tables; the array holds the two knockouts or the two promoción ties (made later). */
         uint32_t arr = season_sizes_game_malloc(4u * (uint32_t)p.count);
         if (!arr) {
             wr32(g_mem, self + STAGE_COUNT, FIRST_ZONE);
@@ -423,6 +432,9 @@ static void set_dates(uint32_t table, int round, int draw_in, int match_in, uint
 
 /* A knockout stage at index of n clubs (16 or 2) in the list order of the tree (club 2i at home to club 2i + 1 in
  * round 0), seeds the zone places, a round every step days from today. pens: penalties at once before the final. */
+static uint32_t make_cup(uint32_t self, int index, const uint32_t *club, const uint8_t *seed, int n, int rounds,
+                         uint32_t table, int name);
+
 static uint32_t ko_stage(uint32_t self, int index, const uint32_t *club, const uint8_t *seed, int n, int code_one,
                          int name, int step, int pens, int neutral_from)
 {
@@ -449,6 +461,14 @@ static uint32_t ko_stage(uint32_t self, int index, const uint32_t *club, const u
         set_dates(table, r, r == 0 ? 1 : step * r, step * (r + 1) - 1, neutral ? VENUE_NEUTRAL : VENUE_HOME, year);
         if (rt_unwinding) return 0;
     }
+    return make_cup(self, index, club, seed, n, rounds, table, name);
+}
+
+/* The Cup_Stage of a round table (which it frees) at index: its list, Cup_Stage::Cup_Stage, the first round. */
+static uint32_t make_cup(uint32_t self, int index, const uint32_t *club, const uint8_t *seed, int n, int rounds,
+                         uint32_t table, int name)
+{
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, self + COMP_YEAR);
     uint32_t list = season_sizes_game_malloc(4u * (uint32_t)n), seeds = season_sizes_game_malloc((uint32_t)n);
     uint32_t sz[1] = {0xb2};
     uint32_t stage = list && seeds ? call_cdecl(F_NEW, 1, sz) : 0;
@@ -658,6 +678,118 @@ static void fewer(uint32_t self, int want, const char *why)
     wr32(g_mem, self + STAGE_COUNT, (uint32_t)want);
 }
 
+/* ---- The promoción (rows 2002 to 2011) ---- */
+
+static int ko_winners(uint32_t s, uint32_t *win, uint32_t *second);
+
+/* The second division's object: g_comp_object_table at the key [0x9cf658]. */
+static uint32_t second_obj(void)
+{
+    uint32_t objects = rd32(g_mem, 0xadadfcu);
+    int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
+    uint32_t o = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+    return readable(o) ? o : 0;
+}
+
+/* A tie of two legs as the second division's (ArgSecond +0x3c, 0x407b4f..0x407b84): fixed bracket 0x200, the second
+ * leg 4 days after the first, and on a level aggregate the home club of the second leg goes through with no extra
+ * time, penalties or away goals (+0xf 0x804: 0x800 home side through, 0x4 away goals off; OR'd into the second leg,
+ * docs/research/2026-10-17-cup-round-record.md). The tree puts entry 0 at home in the first leg, so the second
+ * division's club comes first and the Primera's club, which had the sporting advantage, plays the second leg at home
+ * (EN 2010-11: "The Primera División team (Team 1) played the second leg at home"). */
+static uint32_t promo_tie(uint32_t self, int index, uint32_t second_club, uint32_t prm_club)
+{
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, self + COMP_YEAR);
+    uint32_t table = season_sizes_game_malloc(ROUND_SIZE);
+    if (!table) return 0;
+    memset(g_mem + table, 0, ROUND_SIZE);
+    wr16(g_mem, table + 7, 0);
+    wr16(g_mem, table + 9, 0);
+    wr16(g_mem, table + 0xb, 0);
+    wr16(g_mem, table + 0xd, 0x200);
+    wr16(g_mem, table + 0xf, 0x804);
+    g_mem[table + 0x17] = 6;
+    wr16(g_mem, table + 0x18, 2);
+    wr16(g_mem, table + 0x1a, 1);
+    wr16(g_mem, table + 0x1c, 2);
+    wr16(g_mem, table + 0x1e, 0);
+    g_mem[table + 0x20] = 0;
+    g_mem[table + 0x21] = 2;
+    g_mem[table + 0x22] = 4;
+    set_dates(table, 0, 1, 3, VENUE_HOME, year);
+    if (rt_unwinding) return 0;
+    uint32_t club[2] = {second_club, prm_club};
+    uint8_t seed[2] = {2, 1};
+    return make_cup(self, index, club, seed, 2, 1, table, NAME_PROMOCION);
+}
+
+/* The end of a season of rows 2002 to 2011: the 17th of the averages against the second division's first place after
+ * its direct places, the 18th against the next (EN 2010-11: the 3rd and 4th of the Primera B Nacional; the pairs of
+ * the earlier seasons are not stated, lead decision). It waits, a day at a time (League::update_for_date calls
+ * advance_stage each day while a stage is to come, 0x6849d1..0x6849e3), for the second division's table. A second
+ * division that plays its class's stages (the 2001 edition, or the sizes off) plays its own ties (0x408910). */
+static int promo_advance(uint32_t self, int left)
+{
+    uint32_t second = second_obj();
+    int year = (int16_t)rd16(g_mem, self + COMP_YEAR);
+    if (!second || (int32_t)rd32(g_mem, second + STAGE_COUNT) != 0) {
+        fewer(self, FIRST_ZONE, "the second division plays its own promotion ties; no promocion of the Primera");
+        return 1;
+    }
+    if (!table_done(second)) {
+        if (left >= 0 && left < PROMO_DAYS) {
+            fewer(self, FIRST_ZONE, "the second division's table is not complete in time; no promocion");
+            return 1;
+        }
+        return 1;                           /* the next day */
+    }
+    if (left >= 0 && left < PROMO_DAYS) {
+        fewer(self, FIRST_ZONE, "no days for the promocion");
+        return 1;
+    }
+    uint32_t prm2[2], t[TABLE_MAX];
+    int nt = zone_order(second, t);
+    if (rt_unwinding) return 1;
+    int up = (int8_t)g_mem[second + COMP_UP];
+    if (season_arg_promo_primera(self, prm2) != 2 || rt_unwinding || up < 0 || up + 2 > nt) {
+        if (!rt_unwinding) fewer(self, FIRST_ZONE, "no clubs for the promocion");
+        return 1;
+    }
+    for (int k = 0; k < 2; k++) {
+        uint32_t s = promo_tie(self, FIRST_ZONE + k, t[up + k], prm2[k]);
+        if (rt_unwinding) return 1;
+        if (!s) {
+            fewer(self, (int32_t)rd32(g_mem, self + STAGE_LAST) + 1, "a promocion tie not made");
+            return 1;
+        }
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_prm promocion %d: stage %d drawn on day %d of %d: %u:%d-%u:%d "
+                            "(the %d of the second division v the %d of the averages); %.30s v %.30s\n", year,
+                    FIRST_ZONE + k, (int16_t)rd16(g_mem, GAME_DATE), (int16_t)rd16(g_mem, GAME_DATE + 2),
+                    rd32(g_mem, t[up + k]), up + k + 1, rd32(g_mem, prm2[k]), 17 + k, up + k + 1, 17 + k,
+                    win_str(t[up + k] + CLUB_NAME), win_str(prm2[k] + CLUB_NAME));
+    }
+    return 1;
+}
+
+int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up)
+{
+    Plan p;
+    if (!readable(prm) || !plan_live(prm, &p) || p.kind != SEASON_ARG_KO_PROMO) return 0;
+    uint32_t rec = rd32(g_mem, prm + COMP_RECORD);
+    int last = (int32_t)rd32(g_mem, prm + STAGE_LAST), n = 0;
+    for (int i = FIRST_ZONE; i <= last && n < 2; i++) {
+        uint32_t s = stage_at(prm, i), win, lose;
+        if (!s || g_mem[s + STAGE_TYPE] != 1 || (int16_t)rd16(g_mem, s + 0x3a) != NAME_PROMOCION) continue;
+        if (!ko_winners(s, &win, &lose)) continue;
+        if (rd32(g_mem, lose + CLUB_DIVISION) == rec && rd32(g_mem, win + CLUB_DIVISION) != rec) {
+            down[n] = lose;
+            up[n++] = win;
+        }
+    }
+    return n;
+}
+
 /* The Apertura's knockout, the day its table is complete: only while both knockouts are still to come (+0x2c holds
  * them both), so a knockout that cannot be made is not tried again; the Clausura's still comes. */
 void season_arg_update(uint32_t obj)
@@ -678,6 +810,7 @@ int season_arg_advance(uint32_t obj)
     if (!plan_live(obj, &p)) return 0;
     int last = (int32_t)rd32(g_mem, obj + STAGE_LAST), left = days_to_change(obj);
     if (last + 1 >= p.count) return 0;
+    if (p.kind == SEASON_ARG_KO_PROMO) return promo_advance(obj, left);
     if (p.kind == SEASON_ARG_KO_FINAL) {
         if (!build_final(obj, &p, left) && !rt_unwinding)
             fewer(obj, (int32_t)rd32(g_mem, obj + STAGE_LAST) + 1, "no final");
