@@ -228,7 +228,7 @@ static void split_order(void)
         int x = section_of(a, sp), y = section_of(b, sp);
         if (x >= 0 && y >= 0) r = x - y;
         if (r) order_apart++;
-        else order_probe(obj, sp, a, b);
+        if (x < 0 || y < 0) order_probe(obj, sp, a, b);
     } else {
         order_probe(obj, sp, a, b);
     }
@@ -256,6 +256,22 @@ uint32_t rt_league_played_target(uint32_t obj, uint32_t original)
         uint32_t row = t + (uint32_t)i * ROW_SIZE;
         int k = section_of(row, sp);
         if (k < 0 || (int8_t)g_mem[row + ROW_PLAYED] < sp->after + sp->matches[k]) return original;
+    }
+    /* Probe (RECOMP_SIZE_LOG): the row order at the first day the table is complete. */
+    static uint32_t told_obj[8];
+    static int told_year[8], told_n;
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR), seen = 0;
+    for (int k = 0; k < told_n; k++) seen |= told_obj[k] == obj && told_year[k] == year;
+    if (logging() && !seen && told_n < 8) {
+        told_obj[told_n] = obj;
+        told_year[told_n++] = year;
+        fprintf(stderr, "recomp: league sizes: %s split complete %d:", season_change_file(obj), year);
+        for (int i = 0; i < n; i++) {
+            uint32_t row = t + (uint32_t)i * ROW_SIZE, at = rd32(g_mem, row + ROW_POSITIONS);
+            fprintf(stderr, " %d:%d", readable(at) ? (int8_t)g_mem[at + (uint32_t)(sp->after - 1)] : -1,
+                    (int16_t)rd16(g_mem, row + ROW_POINTS));
+        }
+        fprintf(stderr, "\n");
     }
     return 0;   /* every row reached its own section's matches */
 }
@@ -462,6 +478,42 @@ void season_split_loaded(uint32_t obj)
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s split %d: loaded after the split (%.50s)\n", season_change_file(obj),
                 (int16_t)rd16(g_mem, obj + COMP_YEAR), record_name(obj));
+}
+
+/* Probe (RECOMP_SIZE_LOG): League::sort_table 0x6827d0 (thiscall, one argument, ret 4). After a sort of a league
+ * after its split, a row of a later section above a row of an earlier one is logged with the caller, once a caller. */
+void o_006827d0(void);
+RT_WRAP(006827d0, league_sort_table_probe)
+{
+    uint32_t self = cpu.ecx, ret = rd32(g_mem, cpu.esp), arg = rd32(g_mem, cpu.esp + 4u), calls = order_calls;
+    o_006827d0();
+    if (rt_unwinding || !logging() || !season_sizes_on() || !readable(self)) return;
+    const SeasonSplit *sp = cached(self);
+    if (!sp) return;
+    uint32_t t = rd32(g_mem, self + COMP_TABLE);
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), last = -1, bad = -1;
+    for (int i = 0; readable(t) && i < n; i++) {
+        int k = section_of(t + (uint32_t)i * ROW_SIZE, sp);
+        if (k >= 0 && k < last && bad < 0) bad = i;
+        if (k > last) last = k;
+    }
+    static uint32_t told[16];
+    int seen = 0;
+    for (int k = 0; k < 16; k++) seen |= told[k] == ret;
+    if (bad < 0 || seen) return;
+    for (int k = 0; k < 16; k++)
+        if (!told[k]) { told[k] = ret; break; }
+    fprintf(stderr, "recomp: league sizes: %s sort %d out of section order at row %d, caller 0x%x, order 0x%x, "
+            "table argument 0x%x (own 0x%x), %u order calls, global 0x%x, sorted league 0x%x (self 0x%x), rows",
+            season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR), bad, ret,
+            rd32(g_mem, self + COMP_ORDER), arg, t, order_calls - calls, rd32(g_mem, 0xb67a00u),
+            rd32(g_mem, SORTED_LEAGUE), self);
+    for (int i = 0; readable(t) && i < n; i++) {
+        uint32_t row = t + (uint32_t)i * ROW_SIZE;
+        fprintf(stderr, " %d/%d/%d", section_of(row, sp), (int16_t)rd16(g_mem, row + ROW_POINTS),
+                (int8_t)g_mem[row + ROW_PLAYED]);
+    }
+    fprintf(stderr, "\n");
 }
 
 void season_split_log_short(uint32_t obj)

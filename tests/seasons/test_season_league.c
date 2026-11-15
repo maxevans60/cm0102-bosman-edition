@@ -64,7 +64,7 @@ int main(int argc, char **argv)
               c->split_meetings[0] == 2 && c->split_meetings[1] == 2 && !c->split_halved[0] && !c->split_halved[1],
               "cro_a2a and cro_a2b %d: 22, then 6 and 6 twice, points kept", y);
     }
-    for (int y = 2024; y <= 2025; y++) {
+    for (int y = 2024; y <= 2026; y++) {
         const SeasonLeagueRule *g = season_league_rule("gre_prm", y);
         CHECK(g && g->split_after == 26 && g->split_size[1] == 4 && !g->split_halved[0] && g->split_halved[1] &&
               !g->split_halved[2], "gre_prm %d: only the 5th to 8th halve", y);

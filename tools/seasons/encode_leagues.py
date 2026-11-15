@@ -158,9 +158,11 @@ SPLIT_BY_HAND = {
 # The points of each section where they differ: {(comp_file, first, last): (points of each section, evidence)}.
 SPLIT_POINTS_BY_HAND = {
     # Gap row 39 (slice 11).
-    ("gre_prm", 2024, 2025): ("kept+halved+kept",
+    ("gre_prm", 2024, 2026): ("kept+halved+kept",
                               "en.wikipedia.org 2024-25 and 2025-26 Super League Greece: the top 4 and the 9th to 14th "
-                              "keep their points, the 5th to 8th halve them, rounded up (35 to 18, 31 to 16)"),
+                              "keep their points, the 5th to 8th halve them, rounded up (35 to 18, 31 to 16); 2026-27 "
+                              "the same sections (slice 7 research, run-logs/0.7.2-sz07/gaps/research-points.tsv), no "
+                              "source gives its rounding: up, as the two seasons before"),
     # Gap row 38 (slice 11).
     ("cro_a2a", 2002, 2005): ("kept", "en.wikipedia.org 2003-04 Croatian Second Football League: the 32-match tables "
                                       "carry the 22-match points (Medimurje 51, then 69)"),
