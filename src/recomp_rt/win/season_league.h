@@ -66,6 +66,9 @@ int season_league_meetings(const char *file, int season);
  * NULL when the file has no row then. Reads only the tables. */
 const SeasonRule *season_league_edition_row(const char *file, int year);
 
+/* 1 when the real season of a rules table row begins with the year ("2011", "2010/11", "2002–03 (short season)"). */
+int season_league_real_starts(const SeasonRule *r, int year);
+
 /* The season of that row when its real season begins with the year, else the year (season_sizes_edition). */
 int season_league_edition(const char *file, int year);
 

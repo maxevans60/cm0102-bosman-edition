@@ -31,7 +31,7 @@ int season_league_meetings(const char *file, int season)
 }
 
 /* 1 when the real season of a row begins with the year ("2011", "2010/11", "2002–03 (short season)"). */
-static int real_starts(const SeasonRule *r, int year)
+int season_league_real_starts(const SeasonRule *r, int year)
 {
     char y[8];
     snprintf(y, sizeof y, "%d", year);
@@ -42,9 +42,9 @@ static int real_starts(const SeasonRule *r, int year)
 static const SeasonRule *starting_row(const char *file, int year)
 {
     const SeasonRule *r = season_rules_find(year, file, 0);
-    if (real_starts(r, year)) return r;
+    if (season_league_real_starts(r, year)) return r;
     for (int n = 0; (r = season_rules_find(year - 1, file, n)) != NULL; n++)
-        if (real_starts(r, year)) return r;
+        if (season_league_real_starts(r, year)) return r;
     return NULL;
 }
 

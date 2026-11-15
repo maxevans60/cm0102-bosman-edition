@@ -136,6 +136,8 @@ int season_sizes_edition(const char *file, int year) { return season_league_edit
 
 static const SeasonRule *row_of_edition(const char *file, int year) { return season_league_edition_row(file, year); }
 
+static int real_starts(const SeasonRule *r, int year) { return season_league_real_starts(r, year); }
+
 /* The row of the rules of a league object now (season_sizes.h). */
 static const SeasonRule *row_now(uint32_t obj, const char *file)
 {
