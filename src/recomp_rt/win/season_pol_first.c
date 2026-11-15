@@ -43,6 +43,7 @@
 #include "season_rules.h"
 #include "season_pol_first.h"
 #include "season_playoffs.h"
+#include "season_pol_second.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -684,6 +685,9 @@ void o_007cc290(void);
 RT_WRAP(007cc290, pol_second_playoff)
 {
     uint32_t self = cpu.ecx;
+    /* The places of barred reserve sides go on first (item 243, season_pol_second.c). */
+    season_pol_second_before_playoff(self);
+    if (rt_unwinding) return;
     Exchange x;
     if (second_exchange(self, &x) && x.own) {
         /* PolSecond::advance_stage 0x7cc1c0 sets +0x30 to 0 (0x7cc276..0x7cc281) before it calls this function, so the

@@ -454,10 +454,8 @@ RT_WRAP(007ca490, pol_second_chain)
 }
 
 /* Before PolSecond::create_play_off_stage 0x7cc290 (thiscall, no arguments; it takes the rows of status 1): the
- * places of barred reserve sides go on to the next clubs. A function of its own, so that one wrap of 0x7cc290 calls
- * it: the I liga play-off of issue 92 (season_pol_first.c, branch claude/i92-*) wraps 0x7cc290 too. When both are
- * on one branch, delete the wrap below and call season_pol_second_before_playoff(self) first in that wrap. Issue
- * 92's own play-off (season_playoffs_build_for) picks its rows by place; its reserve test (barred, season_playoffs.c)
+ * places of barred reserve sides go on to the next clubs. The one wrap of 0x7cc290 is the I liga play-off of issue 92
+ * (season_pol_first.c, pol_second_playoff), which calls this first. Issue 92's own play-off (season_playoffs_build_for) picks its rows by place; its reserve test (barred, season_playoffs.c)
  * asks season_second_barred, so it skips a reserve side that this file bars (season_pol_barred). */
 void season_pol_second_before_playoff(uint32_t league)
 {
@@ -465,13 +463,6 @@ void season_pol_second_before_playoff(uint32_t league)
         mark_year = rule_year_of(league_year(league));
         st_shift_up(league, barred_up, TAG, "before the play-off", log_on());
     }
-}
-
-void o_007cc290(void);
-RT_WRAP(007cc290, pol_second_playoff)
-{
-    season_pol_second_before_playoff(cpu.ecx);
-    o_007cc290();
 }
 
 static const SecondTeamHooks pol_hooks = {pol_before_status, NULL, NULL, season_pol_barred};
