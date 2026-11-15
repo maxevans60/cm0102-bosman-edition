@@ -95,6 +95,11 @@ ROWS = {
     "kor_league": (2013, 2014, "K League, 14 clubs: 26 rounds, then sections of 7 and 7 that meet twice"),
     "kor_league@2003": (2003, 2004, "K League, 12 clubs in four meetings: 44 dates, 17 weeks earlier at most, "
                                     "then two stages as one table in two meetings, 12 of the row's 13 (no club to add, D12)"),
+    # Gap 45: row 2025 (2026) splits after 33 into 6 and 6 that meet once more, 38 in all (2026 K League 1 page).
+    # Gap 47: the K League alone sends its row's places to no division (edition 2024 plays row 2023: 1 down), and the
+    # step takes one Korean club with no division back up to 12.
+    "kor_league@2024": (2024, 2025, "K League 1, 12 clubs: 1 down to no division, 1 up from no division"),
+    "kor_league@2026": (2026, 2026, "K League 1, 12 clubs: 33 rounds, then sections of 6 and 6 that meet once more"),
     # Slice 13: the NIFL Championship (the class holds 10 in 4 meetings on 36 dates) and the League of Ireland First
     # Division (the class takes 9 to 12; rows are keyed one year before the real season, row 2013 is the 2014 season).
     "nir_first": (2016, 2017, "NIFL Championship, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
@@ -515,7 +520,9 @@ def row_down(file, season):
 
 # A division with no chain (open item 250, season_sizes.c lone_exchange): its row's relegation places go to no
 # division at its season change.
-LONE = {"wel_first"}
+# Gap 47: the K League too (no K League 2 in the game). A division alone sends down only as many clubs as its nation's
+# clubs with no division can replace (season_size_lone_down), and the log says so when it sends fewer.
+LONE = {"wel_first", "kor_league"}
 
 
 def lone_downs(log, file):
@@ -523,6 +530,18 @@ def lone_downs(log, file):
     out = {}
     for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): .* goes down to no division" % re.escape(file), log):
         out[int(m.group(1))] = out.get(int(m.group(1)), 0) + 1
+    return out
+
+
+def lone_guards(log, file):
+    """{edition: clubs that go down} of the guard lines of a file (fewer than its relegation places). The count is
+    worked out again from the line's places, pool and counts (season_size_lone_down), so a wrong guard fails: -1."""
+    out = {}
+    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): relegation places (\d+), (\d+) go down: "
+                         r"(\d+) clubs with no division can come up, (\d+) clubs to (-?\d+)" % re.escape(file), log):
+        places, down, pool, have, want = (int(m.group(k)) for k in range(2, 7))
+        most = 0 if want < 0 else max(0, pool + have - want)
+        out[int(m.group(1))] = down if down == min(places, most) else -1
     return out
 
 
@@ -692,6 +711,15 @@ def faults(work, file, year, last):
     def row(ed):
         clubs, m = edition_row(file, ed)
         return (short[ed][0], m) if ed in short else (clubs, m)
+
+    def counts(ed):
+        """(rounds, matches of a club) of an edition. The J1 and K League rows of halves or stages are one table of
+        both (HALVES_IN_TABLE: row() doubles the meetings) and may hold fewer clubs than the row (D12), so they count
+        from row(); the rest from edition_counts (zones and derby rounds)."""
+        if file not in HALVES_IN_TABLE:
+            return edition_counts(file, ed)
+        clubs, m = row(ed)
+        return (rounds_of(clubs, m or 2), (m or 2) * (clubs - 1))
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
     # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
@@ -709,7 +737,7 @@ def faults(work, file, year, last):
                          f"{(clubs, m)}")
         else:
             sp = edition_split(file, ed)
-            want = edition_counts(file, ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
+            want = counts(ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
             if matches != -1 and matches != want:
                 fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {want}")
     fails += [f"{file}: {x.split(': ', 1)[1]}" for x in lines
@@ -724,7 +752,7 @@ def faults(work, file, year, last):
     for base, cls, new in tmpl:
         clubs, m = row(base)
         sp = edition_split(file, base)
-        rounds = edition_counts(file, base)[0] + (split_numbers(sp[1])[0] if sp else 0)
+        rounds = counts(base)[0] + (split_numbers(sp[1])[0] if sp else 0)
         if rounds == len(cls) and not sp:
             continue
         if new is None:
@@ -750,7 +778,7 @@ def faults(work, file, year, last):
         m = m or 2
         sp = edition_split(file, ed)
         if not sp:
-            want = edition_counts(file, ed)[1]
+            want = counts(ed)[1]
             if n != clubs or not (matches == lo == hi == want):
                 fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs "
                              f"with {want} each")
@@ -777,9 +805,9 @@ def faults(work, file, year, last):
     if file == "arg_prm":
         fails += arg_faults(log, year)
     if file in LONE:
-        downs = lone_downs(log, file)
+        downs, guards = lone_downs(log, file), lone_guards(log, file)
         for ed in range(year, last):
-            want = row_down(file, edition_season(file, ed))
+            want = guards.get(ed, row_down(file, edition_season(file, ed)))
             if want >= 0 and downs.get(ed, 0) != want:
                 fails.append(f"{file} {ed}: {downs.get(ed, 0)} clubs down to no division, want {want}")
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
@@ -1147,6 +1175,13 @@ def self_test():
                     "wel_first")
     if ld != {2009: 2} or row_down("wel_first", 2009) != 6 or row_down("wel_first", 2025) != 2:
         bad.append(("lone", ld, row_down("wel_first", 2009), row_down("wel_first", 2025)))
+    lg = lone_guards("recomp: league sizes: kor_league (K League) 2012: relegation places 2, 1 go down: 0 clubs with "
+                     "no division can come up, 13 clubs to 12\nrecomp: league sizes: kor_league (K League) 2013: "
+                     "relegation places 2, 2 go down: 0 clubs with no division can come up, 12 clubs to 12\n", "kor_league")
+    if (lg != {2012: 1, 2013: -1} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
+            row_down("kor_league", 2025) != 0 or edition_season("kor_league", 2024) != 2023):
+        bad.append(("lone kor", lg, row_down("kor_league", 2012), row_down("kor_league", 2023),
+                    row_down("kor_league", 2025), edition_season("kor_league", 2024)))
     # Slice 14: the table of a row of halves holds both halves (twice the row's meetings).
     if (encoded_row("jap_j1", 2014) != (18, 2) or encoded_row("jap_j1", 2004) != (18, 2) or
             encoded_row("kor_league", 2005) != (14, 2) or encoded_row("jap_j2", 2009) != (19, 2) or
