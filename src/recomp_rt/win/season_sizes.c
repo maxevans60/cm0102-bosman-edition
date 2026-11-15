@@ -21,6 +21,7 @@
 #include "season_bel_second.h"
 #include "season_esp_second.h"
 #include "season_sizes_arg.h"
+#include "season_calendar.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -476,7 +477,10 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         if (!rt_unwinding) season_arg_schedule(self, stage, count_at);
         return;
     }
-    if (stage != -1) return;
+    if (stage != -1) {
+        season_calendar_stage(self, season_change_file(self), stage, count_at);
+        return;
+    }
     size_step_run(self);
     const char *file = season_change_file(self);
     const SeasonGrown *g = grown_of(file);
@@ -524,6 +528,9 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         uint32_t r = old + (uint32_t)i * DATE_SIZE;
         days[i] = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r));
     }
+    /* The Irish calendar move (season_calendar.h, gap row 2): a calendar season moves the class's dates by whole weeks
+     * (their records keep their weekday), the short season plans only from the class's dates before its cut. */
+    int cal_cut = 0, cal = probe ? 0 : season_calendar_template(self, file, base, days, have, &cal_cut);
     if (logging() && !probe) {
         fprintf(stderr, "recomp: league sizes: %s template %d: class %d", file, base, have);
         log_days(base, days, NULL, have);
@@ -532,13 +539,13 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     /* The matches of the count (rt_league_clubs writes the same when create_table runs after this), and those of
      * the largest section of a split. */
     if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings + (split ? sp.matches_max : 0)));
-    if (total == have && !split) return;
+    if (total == have && !split && !cal) return;
     /* A class date on the day of an earlier one (NirPrm 2010/11: 15 January 2011 twice, a date that snaps to its
      * Saturday) is left out of the plan, which never puts two rounds on one day (season_template.c). Not for a
      * mirrored class: its halves are the halves of the class's dates. */
     int uniq[SEASON_TEMPLATE_MAX], from_of[SEASON_TEMPLATE_MAX], count_u = 0;
     for (int i = 0; i < have; i++) {
-        int seen = 0;
+        int seen = cal_cut && days[i] >= cal_cut;
         for (int j = 0; j < count_u && mode != SEASON_TEMPLATE_MIRRORED; j++) seen |= uniq[j] == days[i];
         if (seen) continue;
         from_of[count_u] = i;

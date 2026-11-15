@@ -38,8 +38,11 @@ uint32_t rt_ire_first_meetings(uint32_t obj, uint32_t original)
 
 int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings)
 {
-    if (!file || strcmp(file, "ire_first") || row_meetings) return 0;
-    return n == 9 || n == 10 ? 4 : 3;
+    if (!file || row_meetings) return 0;
+    if (!strcmp(file, "ire_first")) return n == 9 || n == 10 ? 4 : 3;
+    /* IrePrm::create_table 0x63a740: 4 meetings for 10 clubs (0x63a7be), 3 for 12 (0x63a7c6); grown from gap row 2. */
+    if (!strcmp(file, "ire_prm")) return n == 10 ? 4 : 3;
+    return 0;
 }
 
 /* Gap 43: IrePrm::create_table 0x63a740 sets 3 relegation places for any table of 12 clubs (mov byte [esi + 0xc1], 3

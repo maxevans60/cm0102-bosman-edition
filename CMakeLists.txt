@@ -303,6 +303,11 @@ if(NOT WIN32)
     add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
     target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_template COMMAND season_template_test)
+    # The Irish calendar move of 2003 (gap row 2 of 0.7.2 league sizes).
+    add_executable(season_calendar_test tests/seasons/test_season_calendar.c src/recomp_rt/win/season_calendar.c
+        src/recomp_rt/win/season_template.c)
+    target_include_directories(season_calendar_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_calendar COMMAND season_calendar_test)
     # The size step at a season change (0.7.2 league sizes, slice 3, D13).
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)

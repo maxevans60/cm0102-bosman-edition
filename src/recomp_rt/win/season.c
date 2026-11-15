@@ -31,6 +31,7 @@
 #include "tier_a.h"
 #include "season_names.h"
 #include "season_change.h"
+#include "season_calendar.h"
 #include "caps_wide.h"
 #include "season_dates.h"
 #include "season_intl.h"
@@ -395,6 +396,7 @@ RT_WRAP(0082e430, save_game)
     char path[1024];
     snprintf(path, sizeof path, "%.1023s", win_str(rt_arg(0)));
     saving = 1, part_added = 0;
+    season_calendar_log_entry("save");
     o_0082e430();
     saving = 0;
     if (save_too_big() || rt_unwinding) return;
@@ -529,6 +531,7 @@ RT_WRAP(0082a9c0, load_game)
     if (cpu.eax) {
         game_on = 1;
         season_change_loaded();
+        season_calendar_log_entry("load");
     } else {                                    /* a failed load: back to the values of a new game */
         rt_season_year = (uint32_t)new_year;
         rules_now = 0;
