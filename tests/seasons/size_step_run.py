@@ -54,13 +54,27 @@ CASES = {
     "italy2001": (2001, 2005, ["England", "Italy"],
                   {"ita_ser_a": (2004, 20), "ita_ser_b": (2004, 22), "ita_ser_c1a": (2005, 18)},
                   "Italy from 2001 to 2005/06: Serie B 24 then 22, Serie A 20, Serie C1/A 19 then 18"),
+    "conference": (2005, 2007, ["England"], {"eng_conf": (2006, 24)},
+                   "D15 (slice 8): League Two sends 2 down and the Conference 2 up (the champion and the play-off "
+                   "winner) at each change; the Conference grows from 22 to 24 in 2006/07"),
 }
+
+# The extra divisions of the new game screen of a case (rules_report_check.EXTRA).
+EXTRA = {"conference": ["conference"]}
+
+# The exchanges of league_promote_and_relegate 0x689c80 between two leagues of a case (the log line of the wrap in
+# season_sizes.c): (upper, lower, clubs each way, the least count of such lines). The chain body 0x5752f0 makes no
+# such call in a season whose Conference champion may not go up (0x57541a, return at 0x575468), so the least is 1 of
+# the 2 season changes of the case.
+EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 1)}
+EXCHANGE_LINE = re.compile(r"recomp: league sizes: (\S+) \(.*?\) down (-?\d+), (\S+) \(.*?\) up (-?\d+), pairs")
 
 # D23: the places of the season before a change (report season, up, down; None: not checked) and the files whose
 # count the real places reach, so the size step moves no club into or out of them.
 PLACES = {
     "grow": {"swe_prm": (2007, None, 1), "swe_first": (2007, 3, None)},
     "shrink": {"fra_first": (2022, None, 4), "fra_second": (2022, 2, None)},
+    "conference": {"eng_third": [(2005, None, 2), (2006, None, 2)], "eng_conf": [(2005, 2, None), (2006, 2, None)]},
 }
 NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
 
@@ -106,7 +120,8 @@ def faults(work, case):
         if not any(s[2] == s[3] == want for s in mine):
             fails.append(f"{file}: no step line with {want} clubs ({mine})")
         fails += [f"{file} {e}: step: {n} clubs, the row {r}{rest}" for f, e, n, r, rest in mine if n != r]
-    for file, (season, up, down) in PLACES.get(case, {}).items():
+    places = [(file, p) for file, ps in PLACES.get(case, {}).items() for p in (ps if isinstance(ps, list) else [ps])]
+    for file, (season, up, down) in places:
         line = [c for c in comps if c["file"] == file and c["season"] == season and c["phase"] == "start"
                 and c["kind"] == "league" and c["year"]]
         if not line:
@@ -118,12 +133,26 @@ def faults(work, case):
             c, extra = line[0][key], line[0]["playoff_" + key]
             if want is not None and want not in (c, c + (1 if extra else 0), c + extra):
                 fails.append(f"{file} {season}: {key} {c} (+{extra} play-off places), its row {want}")
+    fails += exchange_faults(log, case)
     for file in NO_STEP.get(case, []):
         names = {c["name"] for c in comps if c["file"] == file}
         moves = [m.group(0) for m in map(MOVE_LINE.match, log.split("\n")) if m and
                  (m.group(2) in names or m.group(3) in names)]
         fails += [f"{file}: the step moved a club: {m}" for m in moves]
     fails += [f"{d[0]} {d[2]}" for d in sorted(rrc.division_differences(comps, clubs))]
+    return fails
+
+
+def exchange_faults(log, case):
+    """The exchanges of EXCHANGES: each line of the two leagues moves the clubs of the case each way."""
+    if case not in EXCHANGES:
+        return []
+    upper, lower, clubs, least = EXCHANGES[case]
+    lines = [m for m in map(EXCHANGE_LINE.search, log.split("\n")) if m and m.group(1) == upper and m.group(3) == lower]
+    fails = [f"{upper} {m.group(2)} down and {lower} {m.group(4)} up, want {clubs} each way" for m in lines
+             if int(m.group(2)) != clubs or int(m.group(4)) != clubs]
+    if len(lines) < least:
+        fails.append(f"{len(lines)} exchanges of {upper} and {lower}, want at least {least}")
     return fails
 
 
@@ -178,6 +207,11 @@ def self_test():
                       {"file": "por_prm", "season": 2014, "phase": "end", "kind": "league", "clubs": 16, "year": 2015}])
     if c != {("por_prm", 2014): 18}:
         bad.append(("start_counts", c))
+    x = ("recomp: league sizes: eng_third (Football League Two) down 2, eng_conf (Football Conference) up 2, pairs 1, "
+         "expected -1 up -1 down\n")
+    if exchange_faults(x * 2, "conference") or not exchange_faults("", "conference") or \
+            not exchange_faults(x.replace("down 2", "down 1") * 2, "conference"):
+        bad.append(("exchange_faults", exchange_faults(x, "conference")))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " size_step_run self-test")
@@ -204,7 +238,7 @@ def main(argv):
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix=f"cm0102-size-step-{case}-")
     if "--reuse" not in argv:
         db = rrc.run_database(argv, year, os.path.join(work, "owndb"))
-        code, _report = rrc.run(program, game, last, year, db, nations, [], work, timeout,
+        code, _report = rrc.run(program, game, last, year, db, nations, EXTRA.get(case, []), work, timeout,
                                 {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"})
         if code != 0:
             print(f"FAIL {case}: the run ended with code {code} ({work})")
