@@ -306,6 +306,11 @@ PATCHES = {
     0x63596F: (9, "rt_ire_first_least(esi, 9u)"),
     0x63598F: (3, "rt_ire_first_meetings(esi, 3u)"),
     0x635997: (4, "rt_ire_first_meetings(esi, 4u)"),
+    # IrePrm::create_table 0x63a740 (gap 43): for a table of 12 clubs it sets 3 relegation places (+0xc1) and 1
+    # play-off place (+0xc0) at 0x63a8a9..0x63a8b5, the 12 to 10 of 2001/02. It runs in the constructor after
+    # set_up_rules (0x639c3c, then 0x639c77) and again at each start_new_season (0x63aa3d), so every 12-club season
+    # sends 3 down. A season game with the sizes on takes the direct places of the row (season_sizes_irl.c).
+    0x63A8B5: (3, "rt_ire_prm_down(esi, 3u)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the

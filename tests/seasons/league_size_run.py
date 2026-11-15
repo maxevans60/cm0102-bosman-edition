@@ -440,6 +440,27 @@ def no_playoff_faults(log, file, meetings):
     return fails
 
 
+# Gap 43: an exchange whose real places keep both counts. The lower file: (the upper file, the least clubs that move
+# each way). League of Ireland 2011 to 2015 (rows wal-nir-irl-266 to 367): the 12th of the Premier Division goes down,
+# the First Division champion goes up, and the 11th meets the winner of the First Division play-off, so 1 or 2 clubs
+# move each way and the counts stay 12 and 8.
+EXCHANGE = {"ire_first": ("ire_prm", 1)}
+
+
+def exchange_faults(log, file):
+    """The pair lines of the promotion wrap (season_sizes.c, league_promote_and_relegate 0x689c80) between the upper
+    file and this one: as many clubs go down as come up, and at least the least count."""
+    if file not in EXCHANGE:
+        return []
+    upper, least = EXCHANGE[file]
+    pat = re.compile(rf"recomp: league sizes: {upper} \(.*\) down (-?\d+), {file} \(.*\) up (-?\d+), pairs")
+    moves = [(int(m.group(1)), int(m.group(2))) for m in map(pat.match, log.split("\n")) if m]
+    if not moves:
+        return [f"{file}: no exchange line with {upper}"]
+    return [f"{file}: {upper} sends {d} down and {file} {u} up, want the same count of {least} or more"
+            for d, u in moves if d != u or d < least]
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
@@ -528,6 +549,7 @@ def faults(work, file, year, last):
     if file == "arg_prm":
         fails += arg_faults(log, year)
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
+    fails += exchange_faults(log, file)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -811,6 +833,14 @@ def self_test():
             not end_faults("crossed", good_end[:5] + [(6, 35)] + good_end[6:], 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
+    ex = "recomp: league sizes: ire_prm (League of Ireland Premier Division) down %d, ire_first (League of Ireland " \
+         "First Division) up %d, pairs 0, expected -1 up -1 down%s"
+    if (exchange_faults(ex % (2, 2, ""), "ire_first") or exchange_faults(ex % (1, 1, ""), "ire_first") or
+            not exchange_faults(ex % (1, 2, ": in pairs"), "ire_first") or
+            not exchange_faults(ex % (0, 1, ": in pairs"), "ire_first") or
+            not exchange_faults(ex % (0, 0, ""), "ire_first") or not exchange_faults("", "ire_first") or
+            exchange_faults("", "nir_first")):
+        bad.append(("exchange", exchange_faults(ex % (1, 2, ": in pairs"), "ire_first")))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"

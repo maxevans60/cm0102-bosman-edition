@@ -18,6 +18,7 @@
 #include <string.h>
 
 #define COMP_MEETINGS 0x3cu     /* s16: meetings of each pair */
+#define MOST_PLACES 30          /* season_sizes.c set_places: the most places of a row */
 #define LEAST_CLUBS 2u          /* season_sizes.c MIN_CLUBS: the least count that the engine plans */
 
 uint32_t rt_ire_first_least(uint32_t obj, uint32_t original)
@@ -39,4 +40,16 @@ int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings)
 {
     if (!file || strcmp(file, "ire_first") || row_meetings) return 0;
     return n == 9 || n == 10 ? 4 : 3;
+}
+
+/* Gap 43: IrePrm::create_table 0x63a740 sets 3 relegation places for any table of 12 clubs (mov byte [esi + 0xc1], 3
+ * at 0x63a8b5), and IrePrm::set_up_rules 0x63a900 sets 1 and a play-off place (0x63a957, 0x63a95d). The rows of the
+ * Premier Division give the direct places in "down" and the play-off place apart ("1 (pos 12)" and "pos 11:
+ * relegation play-off" in 2011 to 2015). With the sizes on, the 12-club branch takes the row's direct places, so the
+ * 12th goes down and the 11th plays off, as in real life. The play-off place (0x63a8ae) stays the class's. */
+uint32_t rt_ire_prm_down(uint32_t obj, uint32_t original)
+{
+    if (!season_sizes_on()) return original;
+    int down = season_sizes_row_down(obj, "ire_prm");
+    return down >= 0 && down <= MOST_PLACES ? (uint32_t)down : original;
 }
