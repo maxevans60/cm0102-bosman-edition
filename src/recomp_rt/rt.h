@@ -400,6 +400,7 @@ uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
 /* The matches that League::check_complete 0x689ad0 wants of every row (0x689b47), the original's +0xa7 except in a
  * league whose sections of a split play different matches (0.7.2 slice 7, win/season_split.c). */
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original);
+int rt_split_bounds(uint32_t obj);              /* season_split.c: best and worst places by section */
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
 uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
