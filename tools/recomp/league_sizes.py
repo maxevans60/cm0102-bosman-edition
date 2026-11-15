@@ -179,6 +179,20 @@ GROWN = {
     "nir_first": (17, 0x78B310, "shuffled"),
     # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
     "ire_first": (12, 0x634F40, "shuffled"),
+    # Slice 14 (Japan and Korea; src/recomp_rt/win/season_sizes_asia.c, sizes_asia.py). Calendar-year leagues.
+    # - JapJ1 (J1, 16 in the class, 18 from 2005, 20 in 2021 and from 2024): create_table 0x6634e0 allocates 16 rows
+    #   (push 0x3b0 at 0x6634eb) and stores 16 at 0x6634f2; create_schedule 0x662e30 makes 30 dates for stage -1 (D
+    #   0x1e at 0x662e6d, 0x79e bytes at 0x662e68) and 1 for the final (stage 2, 0x6633d4); set_up_rules 0x663620 sets
+    #   2 meetings (0x66362d) and +0xd9 8 (0x6636b2): shuffled. Halves and the final only by the row (D8).
+    # - JapJ2 (J2, 12 to 22): create_table 0x665030 allocates 12 rows (push 0x2c4 at 0x66503b) and stores 12 at
+    #   0x665042; create_schedule 0x664780 makes 44 dates (D 0x2c at 0x6647ba, 0xb2c bytes at 0x6647b5); set_up_rules
+    #   0x665140 sets 4 meetings (0x665149) and does not write +0xd9: shuffled.
+    # - KorLeague (K League, 10 to 16): create_table 0x66bba0 allocates 10 rows (push 0x24e at 0x66bbab) and stores 10
+    #   at 0x66bbb2; create_schedule 0x66b130 makes 27 dates (D 0x1b at 0x66b16a, 0x6db bytes at 0x66b165);
+    #   set_up_rules 0x66bcc0 sets 3 meetings (0x66bcf1) and does not write +0xd9: shuffled. The split by its row.
+    "jap_j1": (20, 0x662E30, "shuffled"),
+    "jap_j2": (22, 0x664780, "shuffled"),
+    "kor_league": (16, 0x66B130, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 # Grown classes that count the clubs of the data (CLASSES rows with no store): create_table allocates the rows of
@@ -519,3 +533,8 @@ if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
 import cup_sizes_east  # noqa: E402
 
 INSNS.update(cup_sizes_east.INSNS)
+# 0.7.2 slice 14: J1 halves of any count (sizes_asia.py).
+import sizes_asia  # noqa: E402
+
+assert not set(sizes_asia.INSNS) & set(INSNS)
+INSNS.update(sizes_asia.INSNS)
