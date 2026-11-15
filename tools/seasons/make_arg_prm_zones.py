@@ -24,10 +24,15 @@ ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 TSV = os.path.join(ROOT, "docs", "research", "arg-zones-0.7.2", "primera.tsv")
 CLUBS = os.path.join(ROOT, "docs", "research", "rules-0.6.0", "arg-usa-clubs.tsv")
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_sizes_arg_table.c")
-# Derby partners that no row of primera.tsv names as its club: (season, short name): the real name of the clubs file.
+# Derby partners that no row of primera.tsv names as its club, or names by another season's database name: (season,
+# short name): the real name of the clubs file. They come before the names of the club column.
 ALIASES = {
     ("2014/15", "Crucero del Norte"): "Crucero del Norte",
     ("2014/15", "Quilmes"): "Quilmes Atlético Club",
+    ("2016/17", "Quilmes"): "Quilmes Atlético Club",
+    # The 2025 rows name Sarmiento by the database name of 2025; the databases of 2014 and 2016 hold another.
+    ("2014/15", "Sarmiento (J)"): "Sarmiento de Junín",
+    ("2016/17", "Sarmiento (J)"): "Sarmiento de Junín",
 }
 
 
@@ -56,7 +61,7 @@ def make():
     for (season, short), real in ALIASES.items():
         if (season, real) not in db:
             raise SystemExit(f"make_arg_prm_zones.py: alias {season} {short}: no club {real} in the clubs file")
-        names.setdefault(short, db[(season, real)])
+        names[(season, short)] = db[(season, real)]
     for r in rows:
         if r["kind"] == "zone" and row_season(r["season"]) is not None:
             zones.append((row_season(r["season"]), r["zone"], r["db_club"]))
@@ -64,7 +69,7 @@ def make():
         s = row_season(r["season"])
         if s is None or r["kind"] not in ("interzone", "derby"):
             continue
-        partner = names.get(r["partner"])
+        partner = names.get((r["season"], r["partner"])) or names.get(r["partner"])
         if not partner:
             raise SystemExit(f"make_arg_prm_zones.py: {r['season']} {r['partner']}: no database name")
         m = re.search(r"fecha (\d+)", r["note"])
