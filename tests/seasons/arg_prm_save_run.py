@@ -16,7 +16,9 @@ and into edition 2025. The checks:
     load     the second run ends with code 0 and no message box and makes its save;
     played   at the start of edition 2025 (League::free_table 0x687970, RECOMP_SIZE_LOG) the table of 2024 holds 30
              clubs that each played 16 matches, so the Apertura table completed;
-    next     edition 2025 makes its zones (row 2025) and both halves' fixtures after the load.
+    next     edition 2025 makes its zones (row 2025) and both halves' fixtures after the load;
+    champion the knockout winners of both halves of 2024 are the champions (gap row 48). --save-days 172 saves in the
+             Apertura knockout (about 1 January 2025); give --play-days 220 then.
 Exit code 1 on a failure. A run takes about an hour.
 """
 import os
@@ -55,6 +57,11 @@ def faults_load(again, code):
     if not played or played[-1] != ("30", "16", "16", "16"):
         fails.append(f"played: the 2024 table after the load: {played or 'no played line'}, want 30 clubs with 16 "
                      f"matches each")
+    # Gap row 48: the knockouts of 2024 end after the load (a save in the Apertura knockout or in the Clausura), and
+    # their winners are the champions of the halves.
+    for half in ("apertura", "clausura"):
+        if not re.search(rf"recomp: league sizes: arg_prm champion 2024 {half}: .*\(the knockout\)", log):
+            fails.append(f"load: no champion of the {half} knockout of 2024 after the load")
     if not re.search(r"recomp: league sizes: arg_prm zones 2025: list 2025", log):
         fails.append("next: no zones of row 2025 (edition 2025) after the load")
     for half in ("apertura", "clausura"):
