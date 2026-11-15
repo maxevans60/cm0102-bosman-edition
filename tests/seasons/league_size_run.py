@@ -827,7 +827,12 @@ def faults(work, file, year, last):
                   any(w in x for w in ("no dates", "not made", "not each place")))]
     # The templates of each edition.
     tmpl = templates(log, file)
-    if not tmpl:
+    # The Primera's rows 2001 to 2011 are the class's own form (20 clubs, Apertura and Clausura of 19 rounds): the
+    # class's dates stay, so no template line.
+    class_form = file == "arg_prm" and all(encoded_form(file, edition_season(file, e))[0] == 20 and
+                                           not encoded_form(file, edition_season(file, e))[2] and
+                                           edition_season(file, e) <= 2011 for e in range(year, last + 1))
+    if not tmpl and not class_form:
         fails.append(f"{file} {year}: no template line")
     for base, cls, new in tmpl:
         clubs, m = row(base)
@@ -1143,9 +1148,10 @@ def arg_promo_faults(lines, year, last):
         if re.match(r"recomp: league sizes: arg_prm relegation (\d+):", x):
             ended.add(int(x.split("relegation ")[1].split(":")[0]))
         m = re.match(r"recomp: league sizes: arg_prm promocion (\d+): stage (\d+) drawn on day \d+ of \d+: "
-                     r"(\d+):\d+-(\d+):(\d+) ", x)
+                     r"(\d+):(\d+)-(\d+):\d+ ", x)
         if m:
-            draws.setdefault(int(m.group(1)), {})[int(m.group(2))] = (int(m.group(3)), int(m.group(4)), int(m.group(5)))
+            # (second division club, Primera club, the second division club's place)
+            draws.setdefault(int(m.group(1)), {})[int(m.group(2))] = (int(m.group(3)), int(m.group(5)), int(m.group(4)))
         m = re.match(r"recomp: league sizes: arg_prm averages (\d+), the worst 4 last:((?: \d+:[\d.]+)+)$", x)
         if m:
             worst[int(m.group(1))] = [int(w.split(":")[0]) for w in m.group(2).split()]
