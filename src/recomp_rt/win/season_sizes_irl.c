@@ -45,8 +45,11 @@ int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings)
 /* Gap 43: IrePrm::create_table 0x63a740 sets 3 relegation places for any table of 12 clubs (mov byte [esi + 0xc1], 3
  * at 0x63a8b5), and IrePrm::set_up_rules 0x63a900 sets 1 and a play-off place (0x63a957, 0x63a95d). The rows of the
  * Premier Division give the direct places in "down" and the play-off place apart ("1 (pos 12)" and "pos 11:
- * relegation play-off" in 2011 to 2015). With the sizes on, the 12-club branch takes the row's direct places, so the
- * 12th goes down and the 11th plays off, as in real life. The play-off place (0x63a8ae) stays the class's. */
+ * relegation play-off" in 2011 to 2015). With the sizes on, the 12-club branch takes the row's direct places, so in
+ * 2004 to 2006 and 2011 to 2015 the 12th goes down and the 11th plays off, as in real life. The play-off place
+ * (0x63a8ae) stays the class's 1, also in the 12-club rows with no play-off (2007, 2016: open item). set_places runs in
+ * the set_up_rules wrap, before create_table (0x639c3c then 0x639c77; vtable +0x8c at 0x63a9ff then 0x63aa3d), so for a
+ * 12-club table this store decides +0xc1. */
 uint32_t rt_ire_prm_down(uint32_t obj, uint32_t original)
 {
     if (!season_sizes_on()) return original;
