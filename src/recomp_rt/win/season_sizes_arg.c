@@ -1,0 +1,719 @@
+/* The Argentine Primera at its real size (season_sizes_arg.h). */
+#include "win.h"
+#include "season_sizes_arg.h"
+#include "season_sizes.h"
+#include "season_league.h"
+#include "season_change.h"
+#include "season_template.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define KEY_PRM 0x9cf654u           /* the record id of the Primera (ArgPrm::create_table 0x4055ed) */
+#define KEY_SECOND 0x9cf658u        /* the record id of the second division (ArgPrm::start_new_season 0x40576b) */
+#define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each record id (0x405765..0x405775) */
+#define CLUBS 0xae23b4u
+#define CLUB_SIZE 0x245u
+#define CLUB_NAME 4u
+#define CLUB_DIVISION 0x57u
+#define CLUB_REPUTATION 0x80u
+#define COMP_RECORD 4u
+#define STAGES 0xcu                 /* the stage array: [0] the Clausura, [1] the aggregate table (0x405aac, 0x405b9b) */
+#define AVERAGES 0x18u              /* the records of the relegation averages, 0x13 bytes each (0x405f16) */
+#define AVERAGE_COUNT 0x34u         /* s16: their count (0x405f02) */
+#define COMP_MEETINGS 0x3cu
+#define COMP_CLUBS 0x3eu
+#define COMP_YEAR 0x40u
+#define STAGE_INDEX 0x44u           /* s8: 0xff for the league itself, the stage index for a stage (0x685dc4) */
+#define COMP_MATCHES 0xa7u
+#define COMP_DATES 0xa9u            /* s16: the dates of the template (D) */
+#define COMP_TABLE 0xb1u
+#define COMP_COMPLETE 0xddu         /* 1 once check_complete 0x689ad0 found the table complete (0x689c06) */
+#define COMP_FIXED 0xeau            /* the fixed fixture list (League::create_fixtures 0x6837fe) */
+#define ROW_SIZE 0x3bu
+#define DATE_SIZE 0x41u
+#define AVG_SIZE 0x13u              /* +0 club id, +4 the average, +8 s16 the season, then three seasons of points and
+                                     * matches (0x406651..0x4066fb) */
+#define F_SCHEDULE 0x00404570u      /* ArgPrm::create_schedule, thiscall (stage, &count, &code, &flag) ret 0x10 */
+#define F_NEW 0x00944cf1u           /* operator new, cdecl (size): the fixed list is new[] (count at -4, 0x683aa1) */
+#define FIXED_SIZE 0x10u            /* an entry of the fixed list: +2 the edition, +8 home, +0xc away (0x683914) */
+#define CLASS_CLUBS 20              /* ArgPrm::create_table 0x405552 */
+#define MIN_CLUBS 2
+#define MAX_CLUBS SEASON_ARG_MAX_CLUBS
+
+static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
+
+static int logging(void)
+{
+    const char *v = getenv("RECOMP_SIZE_LOG");
+    return v && *v && strcmp(v, "0");
+}
+
+static uint32_t call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(fn, nargs, args);
+    if (!rt_unwinding) cpu = saved;
+    return r;
+}
+
+static uint32_t prm_object(void)
+{
+    uint32_t objects = rd32(g_mem, COMP_OBJECTS);
+    int32_t key = (int32_t)rd32(g_mem, KEY_PRM);
+    return readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+}
+
+static int is_prm(uint32_t obj) { return readable(obj) && !strcmp(season_change_file(obj), "arg_prm"); }
+
+/* ---- The form of an edition ---- */
+
+typedef struct {
+    int season;             /* the rules row */
+    int halves;             /* 1: Apertura and Clausura */
+    int zones;              /* 2: two zones of n / 2; 0: one table */
+    int extra;              /* derby or inter-zone rounds */
+    int meet;
+    int rounds;             /* the rounds of a half (or of the one table) */
+    int matches;            /* the matches of a club in a half (or in the one table) */
+} Form;
+
+static int form_of(uint32_t obj, int n, Form *f)
+{
+    memset(f, 0, sizeof *f);
+    if (!season_sizes_on() || !readable(obj) || n < MIN_CLUBS || n > MAX_CLUBS) return 0;
+    if (season_sizes_kept(obj)) return 0;     /* no room for the dates this edition: the class's form */
+    f->season = season_sizes_row_season(obj, "arg_prm");
+    const SeasonLeagueRule *r = f->season >= 0 ? season_league_row("arg_prm", f->season) : NULL;
+    if (!r) return 0;
+    f->halves = r->halves != 0;
+    f->meet = r->meetings >= 1 && r->meetings <= 4 ? r->meetings : 1;
+    f->extra = r->extra_rounds > 0 ? r->extra_rounds : 0;
+    /* Two zones of one meeting with two inter-zone rounds (the rival in the round where both rest, and a round of
+     * drawn opponents): an odd zone of 5 or more. Any other zone form plays as one table. */
+    int z = n / 2;
+    f->zones = r->zones == 2 && n % 2 == 0 && z % 2 == 1 && z >= 5 && f->meet == 1 && f->extra == 2 ? 2 : 0;
+    if (f->zones) {
+        f->rounds = z + 1;
+        f->matches = z - 1 + 2;
+    } else {
+        int even = n + (n & 1);
+        /* One derby round of one table: an even count (every club has a partner). */
+        if (n & 1 || f->extra > 1 || f->meet != 1) f->extra = 0;
+        f->rounds = f->meet * (even - 1) + f->extra;
+        f->matches = f->meet * (n - 1) + f->extra;
+    }
+    return 1;
+}
+
+int season_arg_matches(uint32_t obj, int n)
+{
+    Form f;
+    if (!form_of(obj, n, &f)) return (n - 1) * (int)g_mem[obj + COMP_MEETINGS];
+    return f.matches;
+}
+
+/* ---- The date templates ---- */
+
+static void put_template(uint32_t count_at, uint32_t old, uint32_t tmpl, int rounds)
+{
+    season_sizes_game_free(old);
+    wr16(g_mem, count_at, (uint16_t)rounds);
+    cpu.eax = tmpl;
+}
+
+static int in_schedule;
+
+/* The records of a template with one round on each day: the class can date two rounds on one day (the Apertura of 2025
+ * makes 21 and 28 September twice: Date 0x54a2d0 snaps each date to its weekday), which the plan refuses. The block
+ * keeps its size; returns the records left. */
+static int one_a_day(uint32_t block, int have, int base)
+{
+    int days[SEASON_TEMPLATE_MAX], n = 0;
+    for (int i = 0; i < have && i < SEASON_TEMPLATE_MAX; i++) {
+        uint32_t r = block + (uint32_t)i * DATE_SIZE;
+        int d = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r)), twice = 0;
+        for (int j = 0; j < n; j++) twice |= days[j] == d;
+        if (twice) continue;
+        if (n != i) memmove(g_mem + block + (uint32_t)n * DATE_SIZE, g_mem + r, DATE_SIZE);
+        days[n++] = d;
+    }
+    if (n != have && logging())
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: %d class dates on a day of another, left out\n", base, have - n);
+    return n;
+}
+
+/* No room for the dates (D4): the Primera keeps the class's count and form this edition, as a grown class does
+ * (season_sizes_schedule), and its Clausura and fixtures stay the class's. */
+static void no_room(uint32_t self)
+{
+    season_sizes_keep(self, 1);
+    fprintf(stderr, "recomp: league sizes: arg_prm %d: no room for the dates of its row; the class's 20 clubs in two "
+                    "halves stay\n", (int16_t)rd16(g_mem, self + COMP_YEAR));
+}
+
+void season_arg_schedule(uint32_t self, int stage, uint32_t count_at)
+{
+    if (in_schedule || (stage != -1 && stage != 0) || !readable(count_at)) return;
+    if (stage == -1) season_sizes_keep(self, 0);    /* a new edition (set_up_rules, 0x40570c) */
+    int n = season_sizes_count(self);
+    Form f;
+    if (n < MIN_CLUBS || !form_of(self, n, &f)) return;
+    uint32_t old = cpu.eax;
+    int have = (int16_t)rd16(g_mem, count_at);
+    if (!readable(old) || have < 1) return;
+    if (stage == 0 && !f.halves) {
+        /* One table: the Clausura stage has no dates, so League_Stage::League_Stage makes no fixtures for it
+         * (0x68b26d, 0x68b3b5: a template of one date, the day it is made). */
+        season_sizes_game_free(old);
+        wr16(g_mem, count_at, 0);
+        cpu.eax = 0;
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_prm %d: one table of %d clubs, no Clausura\n",
+                    (int16_t)rd16(g_mem, self + COMP_YEAR), n);
+        return;
+    }
+    int base = (int16_t)rd16(g_mem, self + COMP_YEAR);
+    if (f.halves) {
+        /* A half: its own 19 dates, fewer for the zones (D5). */
+        if (f.rounds == have) return;
+        int left = one_a_day(old, have, base);
+        uint32_t t = season_sizes_build_template(self, "arg_prm", old, left, f.rounds, SEASON_TEMPLATE_SEQUENTIAL);
+        if (rt_unwinding) return;
+        if (t) put_template(count_at, old, t, f.rounds);
+        else if (stage == -1) no_room(self);
+        else {
+            /* The Apertura has its dates; a Clausura with none would leave the season short. The class's own dates
+             * stay and the stage plays the class's fixtures (create_stages then counts its rows as the class). */
+            wr16(g_mem, count_at, (uint16_t)left);
+            fprintf(stderr, "recomp: league sizes: arg_prm %d: no room for the Clausura's %d rounds\n", base, f.rounds);
+        }
+        return;
+    }
+    /* One table: the dates of both halves (the Clausura's of create_schedule(0)), down to the rounds of the row. */
+    uint32_t scratch = season_sizes_game_malloc(16);
+    if (!scratch) return;
+    uint32_t a[4] = {0, scratch, scratch + 4, scratch + 8};
+    in_schedule = 1;
+    uint32_t second = call_this(F_SCHEDULE, self, 4, a);
+    in_schedule = 0;
+    if (rt_unwinding) return;
+    int have2 = (int16_t)rd16(g_mem, scratch);
+    season_sizes_game_free(scratch);
+    if (!readable(second) || have2 < 1 || have + have2 > SEASON_TEMPLATE_MAX) {
+        season_sizes_game_free(second);
+        no_room(self);
+        return;
+    }
+    uint32_t both = season_sizes_game_malloc((uint32_t)(have + have2) * DATE_SIZE);
+    if (!both) {
+        no_room(self);
+        return;
+    }
+    memcpy(g_mem + both, g_mem + old, (size_t)have * DATE_SIZE);
+    memcpy(g_mem + both + (uint32_t)have * DATE_SIZE, g_mem + second, (size_t)have2 * DATE_SIZE);
+    season_sizes_game_free(second);
+    int left = one_a_day(both, have + have2, base);
+    uint32_t t = season_sizes_build_template(self, "arg_prm", both, left, f.rounds, SEASON_TEMPLATE_SEQUENTIAL);
+    season_sizes_game_free(both);
+    if (rt_unwinding) return;
+    if (t) put_template(count_at, old, t, f.rounds);
+    else no_room(self);
+}
+
+/* ---- The plan of an edition ---- */
+
+static int same_name(uint32_t club, const char *name)
+{
+    return readable(club) && !strncmp(win_str(club + CLUB_NAME), name, 52);
+}
+
+/* The newest row up to season that the table holds for a kind (zones: 'Z'), or -1. */
+static int list_season(int season, int kind)
+{
+    int best = -1;
+    if (kind == 'Z') {
+        for (int i = 0; i < season_arg_prm_zone_count; i++)
+            if (season_arg_prm_zones[i].season <= season && season_arg_prm_zones[i].season > best) best = season_arg_prm_zones[i].season;
+    } else {
+        for (int i = 0; i < season_arg_pair_count; i++)
+            if (season_arg_pairs[i].kind == kind && season_arg_pairs[i].season <= season &&
+                season_arg_pairs[i].season > best)
+                best = season_arg_pairs[i].season;
+    }
+    return best;
+}
+
+static int index_of(const uint32_t *club, int n, const char *name)
+{
+    for (int i = 0; i < n; i++)
+        if (same_name(club[i], name)) return i;
+    return -1;
+}
+
+/* The plan of the last Apertura (or one table) made: the Clausura plays it with the venues reversed. */
+static struct {
+    uint32_t obj;
+    int year, n, rounds;
+    uint32_t home[SEASON_ARG_MAX_ROUNDS][MAX_CLUBS / 2], away[SEASON_ARG_MAX_ROUNDS][MAX_CLUBS / 2];    /* club ids */
+} last;
+
+static int zones_plan(const Form *f, const uint32_t *club, int n, int round[][SEASON_ARG_MAX_CLUBS / 2][2],
+                      int *ids_at)
+{
+    int z = n / 2, zone[MAX_CLUBS], s = list_season(f->season, 'Z'), na = 0, nb = 0;
+    for (int i = 0; i < n; i++) {
+        zone[i] = -1;
+        for (int k = 0; s >= 0 && k < season_arg_prm_zone_count; k++)
+            if (season_arg_prm_zones[k].season == s && same_name(club[i], season_arg_prm_zones[k].club))
+                zone[i] = season_arg_prm_zones[k].zone == 'A' ? 0 : 1;
+        if (zone[i] == 0 && na >= z) zone[i] = 1;
+        if (zone[i] == 1 && nb >= z) zone[i] = na < z ? 0 : -1;
+        na += zone[i] == 0;
+        nb += zone[i] == 1;
+    }
+    /* A club of no list (a promoted club, a club of another database) takes a place of the zone that has one: the
+     * place of the club it replaces. */
+    for (int i = 0; i < n; i++)
+        if (zone[i] < 0) {
+            zone[i] = na < z ? 0 : 1;
+            na += zone[i] == 0;
+            nb += zone[i] == 1;
+        }
+    int a[MAX_CLUBS / 2], b[MAX_CLUBS / 2], ia = 0, ib = 0;
+    for (int i = 0; i < n; i++) {
+        if (zone[i] == 0) a[ia++] = i; else b[ib++] = i;
+    }
+    if (ia != z || ib != z) return 0;
+    /* The rival of each club of zone A in the round of its real fecha, the drawn opponents in their fecha. */
+    int rs = list_season(f->season, SEASON_ARG_RIVAL), ds = list_season(f->season, SEASON_ARG_DRAW), draw_at = -1;
+    int rival_b[MAX_CLUBS / 2], fecha[MAX_CLUBS / 2], draw_b[MAX_CLUBS / 2];
+    char b_used[MAX_CLUBS / 2] = {0}, d_used[MAX_CLUBS / 2] = {0};
+    for (int i = 0; i < z; i++) rival_b[i] = draw_b[i] = -1, fecha[i] = 1000 + i;
+    for (int k = 0; k < season_arg_pair_count; k++) {
+        const SeasonArgPair *p = &season_arg_pairs[k];
+        if (p->kind == SEASON_ARG_DRAW && p->season == ds && draw_at < 0) draw_at = p->round - 1;
+        if ((p->kind != SEASON_ARG_RIVAL || p->season != rs) && (p->kind != SEASON_ARG_DRAW || p->season != ds)) continue;
+        int h = index_of(club, n, p->home), w = index_of(club, n, p->away);
+        if (h < 0 || w < 0 || zone[h] == zone[w]) continue;
+        int x = zone[h] == 0 ? h : w, y = zone[h] == 0 ? w : h, ax = 0, by = 0;
+        while (a[ax] != x) ax++;
+        while (b[by] != y) by++;
+        if (p->kind == SEASON_ARG_RIVAL && rival_b[ax] < 0 && !b_used[by]) {
+            rival_b[ax] = by;
+            b_used[by] = 1;
+            fecha[ax] = p->round;
+        } else if (p->kind == SEASON_ARG_DRAW && draw_b[ax] < 0 && !d_used[by]) {
+            draw_b[ax] = by;
+            d_used[by] = 1;
+        }
+    }
+    for (int i = 0, j = 0; i < z; i++)
+        if (rival_b[i] < 0) {
+            while (b_used[j]) j++;
+            rival_b[i] = j;
+            b_used[j] = 1;
+        }
+    /* Zone A in the order of the rival fechas. */
+    int order[MAX_CLUBS / 2];
+    for (int i = 0; i < z; i++) {
+        int j = i;
+        for (; j > 0 && fecha[order[j - 1]] > fecha[i]; j--) order[j] = order[j - 1];
+        order[j] = i;
+    }
+    if (draw_at < 0 || draw_at > z) draw_at = z / 2;
+    /* Drawn opponents for the clubs of no pair: a club of zone B not drawn yet and not the rival. When the last
+     * clubs are left with their rivals only, every club of the zone takes the club after its rival instead (a
+     * matching apart from the rivals). */
+    int ok = 1;
+    for (int i = 0; i < z && ok; i++) {
+        if (draw_b[i] >= 0) continue;
+        for (int j = 0; j < z && draw_b[i] < 0; j++)
+            if (!d_used[j] && j != rival_b[i]) draw_b[i] = j, d_used[j] = 1;
+        ok = draw_b[i] >= 0;
+    }
+    for (int i = 0; i < z && ok; i++) ok = draw_b[i] != rival_b[i];
+    if (!ok)
+        for (int i = 0; i < z; i++) draw_b[i] = (rival_b[i] + 1) % z;
+    int rival[MAX_CLUBS / 2], draw[MAX_CLUBS / 2];
+    for (int c = 0; c < z; c++) {
+        rival[c] = rival_b[order[c]];
+        draw[c] = draw_b[order[c]];
+    }
+    int rounds = season_arg_zone_plan(z, rival, draw, draw_at, round);
+    for (int c = 0; c < z; c++) {
+        ids_at[c] = a[order[c]];
+        ids_at[z + c] = b[c];
+    }
+    if (logging()) {
+        /* The test (tests/seasons/league_size_run.py) reads the zones by club id, and the pairs that the list gave. */
+        int from_list = 0, drawn_list = 0, in_list = 0;
+        for (int i = 0; i < z; i++) from_list += fecha[i] < 1000;
+        for (int i = 0; i < n; i++)
+            for (int k = 0; s >= 0 && k < season_arg_prm_zone_count; k++)
+                in_list += season_arg_prm_zones[k].season == s && same_name(club[i], season_arg_prm_zones[k].club);
+        for (int k = 0; k < season_arg_pair_count; k++) {
+            const SeasonArgPair *p = &season_arg_pairs[k];
+            int h = p->kind == SEASON_ARG_DRAW && p->season == ds ? index_of(club, n, p->home) : -1;
+            int w = h >= 0 ? index_of(club, n, p->away) : -1;
+            if (w >= 0) {
+                int x = zone[h] == 0 ? h : w, y = zone[h] == 0 ? w : h, ax = 0;
+                while (ax < z && a[ax] != x) ax++;
+                drawn_list += ax < z && draw_b[ax] >= 0 && b[draw_b[ax]] == y;
+            }
+        }
+        fprintf(stderr, "recomp: league sizes: arg_prm zones %d: list %d, %d clubs of the list, rivals %d of the list, "
+                        "drawn %d of the list, drawn round %d; A", f->season, s, in_list, from_list, drawn_list,
+                draw_at + 1);
+        for (int c = 0; c < z; c++) fprintf(stderr, " %u", rd32(g_mem, club[a[order[c]]]));
+        fprintf(stderr, "; B");
+        for (int c = 0; c < z; c++) fprintf(stderr, " %u", rd32(g_mem, club[b[c]]));
+        fprintf(stderr, "; rivals");
+        for (int c = 0; c < z; c++)
+            fprintf(stderr, " %.30s~%.30s,", win_str(club[a[order[c]]] + CLUB_NAME), win_str(club[b[rival[c]]] + CLUB_NAME));
+        fprintf(stderr, "; not in the division:");
+        for (int k = 0; s >= 0 && k < season_arg_prm_zone_count; k++)
+            if (season_arg_prm_zones[k].season == s && index_of(club, n, season_arg_prm_zones[k].club) < 0)
+                fprintf(stderr, " %s,", season_arg_prm_zones[k].club);
+        fprintf(stderr, "\n");
+    }
+    return rounds;
+}
+
+static int derby_plan(const Form *f, const uint32_t *club, int n, int year, int round[][SEASON_ARG_MAX_CLUBS / 2][2],
+                      int *ids_at)
+{
+    int s = list_season(f->season, SEASON_ARG_DERBY), derby[MAX_CLUBS], derby_at = -1, perm[MAX_CLUBS];
+    for (int i = 0; i < n; i++) derby[i] = -1;
+    for (int k = 0; k < season_arg_pair_count; k++) {
+        const SeasonArgPair *p = &season_arg_pairs[k];
+        if (p->kind != SEASON_ARG_DERBY || p->season != s) continue;
+        if (derby_at < 0) derby_at = p->round - 1;
+        int h = index_of(club, n, p->home), w = index_of(club, n, p->away);
+        if (h < 0 || w < 0 || h == w || derby[h] >= 0 || derby[w] >= 0) continue;
+        derby[h] = w;
+        derby[w] = h;
+    }
+    /* The clubs of no pair meet the club next to them by reputation. */
+    int rest[MAX_CLUBS], nr = 0;
+    for (int i = 0; i < n; i++)
+        if (derby[i] < 0) {
+            int j = nr++;
+            int rep = (int16_t)rd16(g_mem, club[i] + CLUB_REPUTATION);
+            for (; j > 0 && (int16_t)rd16(g_mem, club[rest[j - 1]] + CLUB_REPUTATION) < rep; j--) rest[j] = rest[j - 1];
+            rest[j] = i;
+        }
+    for (int j = 0; j + 1 < nr; j += 2) derby[rest[j]] = rest[j + 1], derby[rest[j + 1]] = rest[j];
+    if (derby_at < 0 || derby_at > n - 1) derby_at = (n - 1) / 2;
+    /* The order of the circle: a shuffle of the table order by the edition (no draw of the game's random numbers). */
+    for (int i = 0; i < n; i++) perm[i] = i;
+    uint32_t x = 0x9e3779b9u ^ (uint32_t)year;
+    for (int i = n - 1; i > 0; i--) {
+        x = x * 1664525u + 1013904223u;
+        int j = (int)((x >> 8) % (uint32_t)(i + 1)), t = perm[i];
+        perm[i] = perm[j];
+        perm[j] = t;
+    }
+    int pd[MAX_CLUBS], inv[MAX_CLUBS];
+    for (int i = 0; i < n; i++) inv[perm[i]] = i;
+    for (int i = 0; i < n; i++) pd[i] = inv[derby[perm[i]]];
+    for (int i = 0; i < n; i++) ids_at[i] = perm[i];
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: arg_prm derby %d: list %d, %d pairs of the list, derby round %d; pairs",
+                f->season, s, (n - nr) / 2, derby_at + 1);
+        for (int i = 0; i < n; i++)
+            if (i < derby[i]) fprintf(stderr, " %u-%u", rd32(g_mem, club[i]), rd32(g_mem, club[derby[i]]));
+        fprintf(stderr, "; not in the division:");
+        for (int k = 0; k < season_arg_pair_count; k++) {
+            const SeasonArgPair *p = &season_arg_pairs[k];
+            if (p->kind != SEASON_ARG_DERBY || p->season != s) continue;
+            if (index_of(club, n, p->home) < 0) fprintf(stderr, " %s,", p->home);
+            if (index_of(club, n, p->away) < 0) fprintf(stderr, " %s,", p->away);
+        }
+        fprintf(stderr, ";");
+        for (int i = 0; i < n; i++)
+            if (i < derby[i])
+                fprintf(stderr, " %.30s~%.30s,", win_str(club[i] + CLUB_NAME), win_str(club[derby[i]] + CLUB_NAME));
+        fprintf(stderr, "\n");
+    }
+    return season_arg_derby_plan(n, pd, derby_at, round);
+}
+
+static uint32_t building_stages;    /* the Primera whose create_stages runs (the Clausura stage gets its list) */
+
+static uint32_t fixed_list(uint32_t league, int rounds, int per_round, int reverse)
+{
+    int n = rounds * per_round;
+    uint32_t a[1] = {4u + FIXED_SIZE * (uint32_t)n};
+    uint32_t block = call_cdecl(F_NEW, 1, a);
+    if (rt_unwinding || !readable(block)) return 0;
+    memset(g_mem + block, 0, 4u + FIXED_SIZE * (uint32_t)n);
+    wr32(g_mem, block, (uint32_t)n);
+    uint32_t list = block + 4;
+    for (int r = 0; r < rounds; r++)
+        for (int k = 0; k < per_round; k++) {
+            uint32_t e = list + FIXED_SIZE * (uint32_t)(r * per_round + k);
+            wr16(g_mem, e + 2, rd16(g_mem, league + COMP_YEAR));
+            wr32(g_mem, e + 8, reverse ? last.away[r][k] : last.home[r][k]);
+            wr32(g_mem, e + 0xc, reverse ? last.home[r][k] : last.away[r][k]);
+        }
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: arg_prm fixtures %d %s:", (int16_t)rd16(g_mem, league + COMP_YEAR),
+                reverse ? "clausura" : "apertura");
+        for (int r = 0; r < rounds; r++) {
+            fprintf(stderr, " |");
+            for (int k = 0; k < per_round; k++)
+                fprintf(stderr, " %u-%u", reverse ? last.away[r][k] : last.home[r][k],
+                        reverse ? last.home[r][k] : last.away[r][k]);
+        }
+        fprintf(stderr, "\n");
+    }
+    return list;
+}
+
+uint32_t season_arg_fixtures(uint32_t league)
+{
+    if (!season_sizes_on() || !readable(league)) return 0;
+    uint32_t prm;
+    int half;
+    if (is_prm(league) && g_mem[league + STAGE_INDEX] == 0xff) prm = league, half = 0;
+    else if (building_stages && league != building_stages && g_mem[league + STAGE_INDEX] == 0) prm = building_stages, half = 1;
+    else return 0;
+    int n = (int16_t)rd16(g_mem, league + COMP_CLUBS), d = (int16_t)rd16(g_mem, league + COMP_DATES);
+    int year = (int16_t)rd16(g_mem, league + COMP_YEAR);
+    Form f;
+    if (!form_of(prm, n, &f) || (!f.zones && !f.extra) || (half && !f.halves) || n % 2) return 0;
+    if (d != f.rounds) {
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: %d dates for %d rounds: the class's fixtures\n", year, d,
+                f.rounds);
+        return 0;
+    }
+    uint32_t table = rd32(g_mem, league + COMP_TABLE), club[MAX_CLUBS];
+    if (!readable(table)) return 0;
+    for (int i = 0; i < n; i++) {
+        club[i] = rd32(g_mem, table + (uint32_t)i * ROW_SIZE);
+        if (!readable(club[i])) return 0;
+    }
+    if (half == 1) {
+        /* The Clausura: the Apertura's matches with the venues reversed, when it holds the same clubs. */
+        if (last.obj != prm || last.year != year || last.n != n || last.rounds != d) return 0;
+        int found = 0;      /* every club plays in the first round of both zones */
+        for (int i = 0; i < n; i++)
+            for (int k = 0; k < n / 2; k++)
+                found += rd32(g_mem, club[i]) == last.home[0][k] || rd32(g_mem, club[i]) == last.away[0][k];
+        if (found != n) return 0;
+        return fixed_list(league, d, n / 2, 1);
+    }
+    static int round[SEASON_ARG_MAX_ROUNDS][SEASON_ARG_MAX_CLUBS / 2][2];
+    int at[MAX_CLUBS];
+    int rounds = f.zones ? zones_plan(&f, club, n, round, at) : derby_plan(&f, club, n, year, round, at);
+    if (rounds != d) {
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: no plan of %d rounds for %d clubs: the class's fixtures\n",
+                year, d, n);
+        return 0;
+    }
+    last.obj = prm;
+    last.year = year;
+    last.n = n;
+    last.rounds = rounds;
+    for (int r = 0; r < rounds; r++)
+        for (int k = 0; k < n / 2; k++) {
+            last.home[r][k] = rd32(g_mem, club[at[round[r][k][0]]]);
+            last.away[r][k] = rd32(g_mem, club[at[round[r][k][1]]]);
+        }
+    return fixed_list(league, d, n / 2, 0);
+}
+
+/* ---- The stages ---- */
+
+/* ArgPrm::create_stages 0x405950 (thiscall, no argument): the Clausura stage gets the matches of a half, or in one
+ * table is complete with no dates; the aggregate table gets the matches of the season. check_complete 0x689ad0 then
+ * finds each complete (rows +0x11 against +0xa7 at 0x689b47..0x689b58; the stages at 0x689bbc..0x689be8). */
+void o_00405950(void);
+RT_WRAP(00405950, arg_create_stages)
+{
+    uint32_t self = cpu.ecx;
+    building_stages = self;
+    o_00405950();
+    building_stages = 0;
+    if (rt_unwinding) return;
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    Form f;
+    uint32_t stages = rd32(g_mem, self + STAGES);
+    if (!form_of(self, n, &f) || !readable(stages)) return;
+    uint32_t clausura = rd32(g_mem, stages), aggregate = rd32(g_mem, stages + 4);
+    if (readable(clausura)) {
+        int dates = (int16_t)rd16(g_mem, clausura + COMP_DATES);
+        if (f.halves && dates != f.rounds) {
+            /* No room for the Clausura's rounds (season_arg_schedule): its rows count the class's matches. */
+            wr16(g_mem, clausura + COMP_MATCHES, (uint16_t)((n - 1) * (int)g_mem[self + COMP_MEETINGS]));
+        } else if (dates <= 1 && !f.halves) {
+            /* No dates (season_arg_schedule): complete, so check_complete returns 1 at once (0x689b09..0x689b11)
+             * and gives it no places, no prize money and no news. */
+            wr32(g_mem, clausura + COMP_COMPLETE, 1);
+        } else {
+            wr16(g_mem, clausura + COMP_MATCHES, (uint16_t)f.matches);
+        }
+    }
+    if (readable(aggregate)) wr16(g_mem, aggregate + COMP_MATCHES, (uint16_t)(f.matches * (f.halves ? 2 : 1)));
+}
+
+/* League::record_season_honours 0x684640 (thiscall, no argument): ArgPrm::record_season_honours calls it for the
+ * Clausura stage (vtable +0x30 at 0x405edc). A Clausura of no dates (one table) has no champion. */
+void o_00684640(void);
+RT_WRAP(00684640, league_record_honours)
+{
+    uint32_t self = cpu.ecx, prm = season_sizes_on() ? prm_object() : 0;
+    uint32_t stages = readable(prm) ? rd32(g_mem, prm + STAGES) : 0;
+    if (readable(stages) && self == rd32(g_mem, stages) && (int16_t)rd16(g_mem, self + COMP_DATES) <= 1 &&
+        rd32(g_mem, self + COMP_COMPLETE) == 1)
+    {
+        rt_ret_stdcall(0, 0);
+        return;
+    }
+    o_00684640();
+}
+
+/* ---- The relegation averages ---- */
+
+static int in_division(uint32_t self, int32_t id)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS);
+    if (id < 0 || !readable(clubs)) return 0;
+    return rd32(g_mem, clubs + (uint32_t)id * CLUB_SIZE + CLUB_DIVISION) == rd32(g_mem, self + COMP_RECORD);
+}
+
+/* The records of the clubs of the division, and a free record (id -1, the edition) for each other place: the count of
+ * the division. */
+static void averages_fit(uint32_t self, int n)
+{
+    uint32_t old = rd32(g_mem, self + AVERAGES);
+    int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT), keep = 0, stale = 0;
+    if (!readable(old) || have < 1 || have > 4 * MAX_CLUBS) return;
+    for (int i = 0; i < have; i++) {
+        int32_t id = (int32_t)rd32(g_mem, old + (uint32_t)i * AVG_SIZE);
+        if (id == -1) continue;
+        if (in_division(self, id)) keep++; else stale++;
+    }
+    if (have == n && !stale) {
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_prm %d: averages of %d clubs (%d held, %d kept, 0 left the "
+                            "division)\n", (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep);
+        return;
+    }
+    uint32_t block = season_sizes_game_malloc((uint32_t)n * AVG_SIZE);
+    if (!block) return;
+    int k = 0;
+    for (int i = 0; i < have && k < n; i++) {
+        uint32_t r = old + (uint32_t)i * AVG_SIZE;
+        int32_t id = (int32_t)rd32(g_mem, r);
+        if (id != -1 && in_division(self, id)) memcpy(g_mem + block + (uint32_t)(k++) * AVG_SIZE, g_mem + r, AVG_SIZE);
+    }
+    for (; k < n; k++) {    /* as the original's empty records (0x406538..0x40654a) */
+        wr32(g_mem, block + (uint32_t)k * AVG_SIZE, 0xffffffffu);
+        wr16(g_mem, block + (uint32_t)k * AVG_SIZE + 8, rd16(g_mem, self + COMP_YEAR));
+    }
+    season_sizes_game_free(old);
+    wr32(g_mem, self + AVERAGES, block);
+    wr16(g_mem, self + AVERAGE_COUNT, (uint16_t)n);
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: arg_prm %d: averages of %d clubs (%d held, %d kept, %d left the division)\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep, stale);
+}
+
+/* ArgPrm::update_relegation_averages 0x406570 (thiscall (new_season), ret 4). At the end of a season (0, from
+ * ArgPrm::record_season_honours 0x405cac) the records first take the count of the division: the original keeps the
+ * count of its first season (+0x34 at 0x405f02), so the clubs of a grown division found no record and the last two
+ * records were not the last two clubs. */
+void o_00406570(void);
+RT_WRAP(00406570, arg_update_averages)
+{
+    uint32_t self = cpu.ecx;
+    if (rt_arg(0) == 0 && season_sizes_on() && is_prm(self)) {
+        int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+        if (n >= MIN_CLUBS && n <= MAX_CLUBS) averages_fit(self, n);
+        if (rt_unwinding) return;
+    }
+    o_00406570();
+}
+
+/* ArgPrm::init_relegation_averages 0x405ef0 (thiscall, no argument), called by the constructor (0x404457): it writes
+ * 20 records of 2001 clubs (the last at 0x406441) into a block of the count's records (0x405f0a). A season game with
+ * fewer than 20 clubs (a database short of clubs, D12) gets the original's empty records instead. */
+void o_00405ef0(void);
+RT_WRAP(00405ef0, arg_init_averages)
+{
+    uint32_t self = cpu.ecx;
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    if (!season_sizes_on() || n >= CLASS_CLUBS || n < 1) {
+        o_00405ef0();
+        return;
+    }
+    uint32_t block = season_sizes_game_malloc((uint32_t)n * AVG_SIZE);
+    if (rt_unwinding) return;
+    if (block)
+        for (int k = 0; k < n; k++) {
+            wr32(g_mem, block + (uint32_t)k * AVG_SIZE, 0xffffffffu);
+            wr16(g_mem, block + (uint32_t)k * AVG_SIZE + 8, rd16(g_mem, self + COMP_YEAR));
+        }
+    wr32(g_mem, self + AVERAGES, block);
+    wr16(g_mem, self + AVERAGE_COUNT, (uint16_t)(block ? n : 0));
+    rt_ret_stdcall(cpu.eax, 0);
+}
+
+uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original)
+{
+    if (!season_sizes_on() || !is_prm(obj) || season_sizes_kept(obj)) return original;
+    int d = (int16_t)rd16(g_mem, obj + COMP_DATES);
+    return d >= 1 ? (uint32_t)d : original;
+}
+
+uint32_t rt_arg_count(uint32_t original)
+{
+    if (!season_sizes_on()) return original;
+    uint32_t prm = prm_object();
+    int n = readable(prm) ? (int16_t)rd16(g_mem, prm + COMP_CLUBS) : 0;
+    if (n < MIN_CLUBS || n > MAX_CLUBS || n == CLASS_CLUBS) return original;
+    int v = (int)original + n - CLASS_CLUBS;
+    return v > 0 ? (uint32_t)v : original;
+}
+
+/* ---- The size step (D13) ---- */
+
+/* ArgPrm::process_promotion_relegation_chain 0x4067f0 (thiscall (arg), ret 4; vtable +0xb0, called by
+ * start_new_season 0x405737): it moves the clubs itself (0x6830b0 at 0x406864, 0x6831a0 at 0x4068bc), not through
+ * league_promote_and_relegate 0x689c80, so the step gets the pair here. */
+void o_004067f0(void);
+RT_WRAP(004067f0, arg_chain)
+{
+    uint32_t self = cpu.ecx;
+    o_004067f0();
+    if (rt_unwinding || !season_sizes_on() || !is_prm(self)) return;
+    uint32_t objects = rd32(g_mem, COMP_OBJECTS);
+    int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
+    uint32_t second = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+    if (readable(second)) season_sizes_step_note(self, second);
+}
+
+uint32_t season_arg_third_record(void)
+{
+    /* The record of a key id: [0xae23d0] + id x 0x6b, as 0x40689d..0x4068b6. */
+    int32_t id = (int32_t)rd32(g_mem, 0x9cf688u);
+    uint32_t table = rd32(g_mem, 0xae23d0u);
+    return season_sizes_on() && id >= 0 && readable(table) ? table + (uint32_t)id * 0x6bu : 0;
+}
+
+int season_arg_third(uint32_t record)
+{
+    return season_sizes_on() && readable(record) && rd32(g_mem, record) == rd32(g_mem, 0x9cf688u);
+}

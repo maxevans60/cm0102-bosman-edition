@@ -19,6 +19,7 @@
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
+#include "season_sizes_arg.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -325,7 +326,9 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
         wr16(g_mem, obj + COMP_MATCHES, 0xffffu);
     /* A grown class: the matches of the count and the row's meetings (slice 2), as check_complete counts them
      * ((+0x3e - 1) x +0x3c, 0x689b27..0x689b36; an odd count plays the same, with a rest round). */
-    if (grown_of(file) && meet > 0)
+    if (grown_of(file) && grown_of(file)->mode == SEASON_TEMPLATE_HALVES)
+        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)season_arg_matches(obj, n));   /* slice 15: zones, derby round */
+    else if (grown_of(file) && meet > 0)
         wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet +
                                                    (kept_at(obj) ? 0 : season_split_matches(obj, file, n, meet))));
     return (uint32_t)n;
@@ -394,7 +397,7 @@ static int grown_meetings(uint32_t obj, const char *file)
     return m >= 1 && m <= 4 ? m : 2;
 }
 
-static const char *const MODE_NAMES[] = {"shuffled", "sequential", "mirrored"};
+static const char *const MODE_NAMES[] = {"shuffled", "sequential", "mirrored", "halves"};
 
 /* The dates of a template as YYYY-MM-DD, a new date with "+", for the test log (tests/seasons/league_size_run.py). */
 static void log_days(int base, const int *days, const int *added, int n)
@@ -419,9 +422,76 @@ static void log_days(int base, const int *days, const int *added, int n)
 static int probe_meetings;
 static int probe_made;      /* 1 when the probe's wrap gave the dates after the table's rounds */
 
+/* The template builder of the Argentine Primera (season_sizes_arg.c): the plan of season_template_plan_from, built as
+ * season_sizes_schedule builds a grown class's template. */
+uint32_t season_sizes_build_template(uint32_t self, const char *file, uint32_t old, int have, int rounds, int mode)
+{
+    int base = (int16_t)rd16(g_mem, self + COMP_YEAR), n = league_count(self, file, NULL, NULL);
+    if (have < 1 || have > SEASON_TEMPLATE_MAX || rounds < 1 || rounds > SEASON_TEMPLATE_MAX || !readable(old) ||
+        !readable(old + (uint32_t)have * DATE_SIZE))
+        return 0;
+    int days[SEASON_TEMPLATE_MAX];
+    for (int i = 0; i < have; i++) {
+        uint32_t r = old + (uint32_t)i * DATE_SIZE;
+        days[i] = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r));
+    }
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: %s template %d: class %d", file, base, have);
+        log_days(base, days, NULL, have);
+        fprintf(stderr, "\n");
+    }
+    SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
+    char why[160];
+    if (season_template_plan_from(base, days, have, rounds, mode, season_sizes_bra_earlier(file), plan, why,
+                                  sizeof why) != rounds) {
+        fprintf(stderr, "recomp: league sizes: %s dates: no room for %d rounds of %d clubs (%.50s %d): %s; the class's "
+                        "%d dates and count stay\n", file, rounds, n, record_name(self), base, why, have);
+        return 0;
+    }
+    uint32_t tmpl = game_malloc((uint32_t)rounds * DATE_SIZE);
+    if (!tmpl) return 0;
+    int new_days[SEASON_TEMPLATE_MAX], added[SEASON_TEMPLATE_MAX];
+    for (int k = 0; k < rounds; k++) {
+        uint32_t to = tmpl + (uint32_t)k * DATE_SIZE, from = old + (uint32_t)plan[k].from * DATE_SIZE;
+        memcpy(g_mem + to, g_mem + from, DATE_SIZE);
+        int yoff, doy;
+        season_template_split(base, plan[k].day, &yoff, &doy);
+        wr16(g_mem, to, (uint16_t)doy);
+        wr16(g_mem, to + 2, (uint16_t)yoff);
+        if (plan[k].added &&
+            season_template_weekday(base, plan[k].day) != season_template_weekday(base, days[plan[k].from]))
+        {
+            g_mem[to + 4] = TIME_MIDWEEK;
+            /* Slot 0 as the original's midweek rounds: no weekday, kind or option (NorPrm 0x79191d writes
+             * (round, 0, -1, -1, -1, 0) through 0x68a1c0, which stores +5 the value, +9 the weekday, +0xa the kind,
+             * +0xb the option at 0x68a3b9..0x68a3c9). A Sunday record holds weekday 6 there (PorSecond 0x7d0d21). */
+            wr32(g_mem, to + 5, 0);
+            g_mem[to + 9] = g_mem[to + 0xa] = g_mem[to + 0xb] = 0xff;
+        }
+        new_days[k] = plan[k].day;
+        added[k] = plan[k].added;
+    }
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: %s dates: %d dates for %d clubs (%.50s %d, the class makes %d)\n", file,
+                rounds, n, record_name(self), base, have);
+        fprintf(stderr, "recomp: league sizes: %s template %d: new %d", file, base, rounds);
+        log_days(base, new_days, added, rounds);
+        fprintf(stderr, "\n");
+    }
+    return tmpl;
+}
+
 void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
 {
-    if (stage != -1 || !sizes_on() || !readable(self)) return;
+    if (!sizes_on() || !readable(self)) return;
+    /* A class of halves makes the dates of each half itself (the Argentine Primera, slice 15). */
+    const SeasonGrown *gh = grown_of(season_change_file(self));
+    if (gh && gh->mode == SEASON_TEMPLATE_HALVES) {
+        if (stage == -1) size_step_run(self);
+        if (!rt_unwinding) season_arg_schedule(self, stage, count_at);
+        return;
+    }
+    if (stage != -1) return;
     size_step_run(self);
     const char *file = season_change_file(self);
     const SeasonGrown *g = grown_of(file);
@@ -586,6 +656,18 @@ uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32
     *count = n;
     return t;
 }
+
+void season_sizes_keep(uint32_t obj, int on) { keep(obj, on); }
+int season_sizes_kept(uint32_t obj) { return kept_at(obj); }
+
+int season_sizes_count(uint32_t obj)
+{
+    if (!sizes_on() || !readable(obj)) return 0;
+    return league_count(obj, season_change_file(obj), NULL, NULL);
+}
+
+uint32_t season_sizes_game_malloc(uint32_t size) { return game_malloc(size); }
+void season_sizes_game_free(uint32_t p) { game_free(p); }
 
 /* League::free_table 0x687970 (thiscall: table, 0 for its own; ret 4): at the start of a new edition it frees the
  * table of the last one (start_new_season, for example 0x64b830). For the test log: the matches that each club of a
@@ -1019,6 +1101,7 @@ static void step_note_alone(uint32_t upper)
 {
     if (!step_running) step_index(upper);
 }
+void season_sizes_step_note(uint32_t upper, uint32_t lower) { step_note_pair(upper, lower); }
 
 static void step_note_pair(uint32_t upper, uint32_t lower)
 {
@@ -1034,6 +1117,9 @@ static void step_note_pair(uint32_t upper, uint32_t lower)
  * class that counts the clubs of its data, cap 0, takes only some counts: IrePrm 10 or 12, 0x63a79f..0x63a7c6). */
 static int step_want(uint32_t obj, const char *file, int year)
 {
+    /* The Argentine second division takes exactly 25 (ArgSecond::fill_league_table 0x407ce2) and gives the Primera
+     * its clubs (slice 15; its own row is slice 16's). */
+    if (!strcmp(file, "arg_second")) return 25;
     int cap = season_ita_cap(obj, cap_of(file));     /* slice 20b: Serie C */
     if (cap <= 0) return -1;
     const SeasonRule *r = row_of_edition(file, year);
@@ -1122,7 +1208,7 @@ static void size_step_run(uint32_t trigger)
      * of a new game takes it (season_clubs.c group 2): the Portuguese clubs below the Segunda Liga sit there. */
     for (int i = 0; readable(table) && i < count && i < national_from; i++) {
         uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION), now = current_division(c);
-        if (now && season_clubs_in_spare(c)) now = 0;
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
         int wanted = 0;
         if (now) {
             for (int d = 0; d < ndiv && !wanted; d++) wanted = now == step_seen[d].rec;
@@ -1137,7 +1223,7 @@ static void size_step_run(uint32_t trigger)
     }
     for (int k = 0; k < nclub; k++) {
         uint32_t c = at[k], now = current_division(c);
-        if (now && season_clubs_in_spare(c)) now = 0;
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
         club[k].div = now ? -3 : STEP_NONE;     /* -3: a division outside the step */
         for (int d = 0; d < ndiv; d++)
             if (now == step_seen[d].rec) club[k].div = d;
@@ -1179,7 +1265,10 @@ static void size_step_run(uint32_t trigger)
             uint32_t a[3] = {c, to, 0};
             call_this(F_MOVE_CLUB, step_seen[moves[i].to].obj, 3, a);
         } else {
-            /* Down: as a relegation of 0x689c80 (0x689e58..0x689e70). */
+            /* Down: as a relegation of 0x689c80 (0x689e58..0x689e70). The Argentine second division sends its
+             * surplus to the third division, not out of the league system (slice 15). */
+            if (!to && moves[i].from >= 0 && !strcmp(season_change_file(step_seen[moves[i].from].obj), "arg_second"))
+                to = season_arg_third_record();
             wr32(g_mem, c + CLUB_LAST_DIVISION, old);
             wr32(g_mem, c + CLUB_DIVISION, to);
             uint32_t a[2] = {c, old};

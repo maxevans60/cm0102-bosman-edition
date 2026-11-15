@@ -34,7 +34,7 @@ from league_sizes import (CAPS, CLASSES, FIXED_EXCHANGE, FLOOR_COUNT, GROWN, HEL
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_size_wraps.c")
 ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encoded.tsv")
 MODES = {"shuffled": "SEASON_TEMPLATE_SHUFFLED", "sequential": "SEASON_TEMPLATE_SEQUENTIAL",
-         "mirrored": "SEASON_TEMPLATE_MIRRORED"}
+         "mirrored": "SEASON_TEMPLATE_MIRRORED", "halves": "SEASON_TEMPLATE_HALVES"}
 
 
 def make():
