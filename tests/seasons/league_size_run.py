@@ -654,6 +654,17 @@ def arg_round_faults(name, rounds, n):
     return fails
 
 
+def arg_down(row):
+    """The real relegation of a rules row of arg_prm: (by the averages, by the annual table). Research notes of 15
+    November 2026 (RSSSF arg02 to arg2026, es and en Wikipedia); rows 2026 on take the 2027 format."""
+    if row <= 2011:
+        return 2, 0
+    if row <= 2013:
+        return 3, 0
+    return {2014: (2, 0), 2015: (1, 0), 2016: (4, 0), 2017: (4, 0), 2018: (4, 0), 2019: (0, 0), 2020: (0, 0),
+            2021: (2, 0), 2023: (0, 0)}.get(row, (1, 1))
+
+
 def arg_faults(log, year):
     """The Argentine Primera (slice 15): each edition with a fixed list plays the form of its row. Zones: the clubs of
     each zone of the zones line meet once in a half, each club meets two clubs of the other zone (its rival and a
@@ -789,6 +800,27 @@ def arg_faults(log, year):
             down.append(m.group(1).strip())
     if order is not None or down:
         fails += check_block()
+    # Gap row 54: the clubs of each row's real relegation go down, the worst averages first, then the worst club of
+    # the annual table that the averages kept (season_sizes_arg.c arg_down).
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm relegation (\d+): row (\d+), (\d+) by the averages:([^;]*); "
+                     r"lowest average kept (\S+); (\d+) by the annual table:([^;]*) of (\d+)$", x)
+        if not m:
+            continue
+        ed, row, n_avg, n_tab = int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(6))
+        want = arg_down(row)
+        if (n_avg, n_tab) != want:
+            fails.append(f"arg_prm {ed}: {n_avg} down by the averages and {n_tab} by the annual table, want {want} "
+                         f"(row {row})")
+        kept = float(m.group(5))
+        for w in m.group(4).split():
+            if float(w.split(":")[1]) > kept + 1e-6:
+                fails.append(f"arg_prm {ed}: {w} goes down by the averages above the lowest average kept {kept}")
+        for w in m.group(7).split():
+            if int(w.split(":")[1]) < int(m.group(8)) - 1 - n_avg:
+                fails.append(f"arg_prm {ed}: {w} goes down by the annual table, not one of its last places")
+    if not any("league sizes: arg_prm relegation " in x for x in lines):
+        fails.append("arg_prm: no relegation line (the end of a season)")
     print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))
     for x in lines:
         if "league sizes: arg_prm " in x and "not in the division:" in x:

@@ -754,6 +754,127 @@ RT_WRAP(00405ef0, arg_init_averages)
     rt_ret_stdcall(cpu.eax, 0);
 }
 
+/* The clubs that go down at the end of a season of the rules row (gap row 54; research notes of 15 November 2026 from
+ * RSSSF arg02 to arg2026, es and en Wikipedia): the worst averages, then (from the 2023 season) the worst club of the
+ * annual table that the averages did not send down. Rows are the game's editions (row 2014 the 2015 season, row 2015
+ * the 2016 tournament, row 2016 the 2016/17 season, row 2022 the 2023 season). Rows to 2011 also had a promoción of
+ * the 17th and 18th of the averages against the second division, which the game does not play: those two stay up. Rows
+ * from 2026 take the 2027 format (one by the averages, one by the annual table). */
+static void arg_down(int row, int *avg, int *tab)
+{
+    *tab = 0;
+    if (row <= 2011) *avg = 2;
+    else if (row <= 2013) *avg = 3;
+    else if (row == 2014) *avg = 2;
+    else if (row == 2015) *avg = 1;
+    else if (row <= 2018) *avg = 4;
+    else if (row <= 2020) *avg = 0;     /* 2019/20 and 2021: relegation suspended */
+    else if (row == 2021) *avg = 2;
+    else if (row == 2023) *avg = 0;     /* 2024: none */
+    else *avg = 1, *tab = 1;            /* 2023, 2025, 2026 and the 2027 format */
+}
+
+#define F_SORT_TABLE 0x006827d0u    /* League::sort_table, thiscall (rows or 0), ret 4 */
+#define F_RECORD_HONOURS 0x00684640u
+#define ROW_POSITION 4u
+#define ROW_STATUS 0x37u
+#define STATUS_DOWN 3               /* 0x405e4f */
+
+/* ArgPrm::record_season_honours 0x405ca0 (thiscall, no argument): the original sends down the clubs of the last two
+ * records of the averages (+0x34 - 2 and - 1 at 0x405cb3, 0x405d6a): vtable +0x40 (club, 3, -1, 0, 0) and +0x68 (club,
+ * -2, place, place, place), status 3 in the rows of the league, stages[0] and stages[1] (0x405e23..0x405ec8), then
+ * League::record_season_honours 0x684640 for the league and stages[0] +0x30. In a season game with the sizes on the
+ * same steps run for the clubs of the row (arg_down). */
+void o_00405ca0(void);
+RT_WRAP(00405ca0, arg_record_honours)
+{
+    uint32_t self = cpu.ecx;
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    Form f;
+    uint32_t stages = rd32(g_mem, self + STAGES);
+    if (!is_prm(self) || !form_of(self, n, &f) || !readable(stages)) {
+        o_00405ca0();
+        return;
+    }
+    uint32_t vt = rd32(g_mem, self), a0[1] = {0};
+    call_this(rd32(g_mem, vt + 0x34), self, 1, a0);           /* the averages of the season (0x405cb0) */
+    if (rt_unwinding) return;
+    int avg, tab, down[MAX_CLUBS], nd = 0;
+    arg_down(f.season, &avg, &tab);
+    uint32_t recs = rd32(g_mem, self + AVERAGES), clubs = rd32(g_mem, CLUBS);
+    int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
+    float worst_kept = 1e9f;
+    for (int k = have - 1; readable(recs) && k >= 0; k--) {
+        int32_t id = (int32_t)rd32(g_mem, recs + (uint32_t)k * AVG_SIZE);
+        if (id < 0 || !in_division(self, id)) continue;
+        uint32_t bits = rd32(g_mem, recs + (uint32_t)k * AVG_SIZE + 4);
+        float a;
+        memcpy(&a, &bits, sizeof a);
+        if (nd < avg) down[nd++] = id;
+        else if (a < worst_kept) worst_kept = a;
+    }
+    int by_avg = nd, worst_pos = -1, rows_n = 0;
+    uint32_t annual = rd32(g_mem, stages + 4);
+    if (tab && readable(annual)) {
+        uint32_t a1[1] = {0};
+        call_this(F_SORT_TABLE, annual, 1, a1);
+        if (rt_unwinding) return;
+        uint32_t rows = rd32(g_mem, annual + COMP_TABLE);
+        rows_n = (int16_t)rd16(g_mem, annual + COMP_CLUBS);
+        int pick = -1;
+        for (int r = 0; readable(rows) && r < rows_n; r++) {
+            uint32_t c = rd32(g_mem, rows + (uint32_t)r * ROW_SIZE);
+            if (!readable(c)) continue;
+            int32_t id = (int32_t)((c - clubs) / CLUB_SIZE), skip = 0;
+            for (int i = 0; i < nd; i++) skip |= down[i] == id;
+            int pos = g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_POSITION];
+            if (!skip && in_division(self, id) && pos > worst_pos) worst_pos = pos, pick = id;
+        }
+        if (pick >= 0) down[nd++] = pick;
+    }
+    /* The worst last, as the original (count - 2 first, then count - 1). */
+    for (int i = nd - 1; i >= 0; i--) {
+        uint32_t club = clubs + (uint32_t)down[i] * CLUB_SIZE, place = (uint32_t)(n - i);
+        uint32_t s1[5] = {club, 3, 0xffffffffu, 0, 0}, s2[5] = {club, 0xfffffffeu, place, place, place};
+        call_this(rd32(g_mem, vt + 0x40), self, 5, s1);
+        if (rt_unwinding) return;
+        call_this(rd32(g_mem, vt + 0x68), self, 5, s2);
+        if (rt_unwinding) return;
+    }
+    uint32_t tables[3] = {self, rd32(g_mem, stages), annual};
+    for (int t = 0; t < 3; t++) {
+        uint32_t rows = readable(tables[t]) ? rd32(g_mem, tables[t] + COMP_TABLE) : 0;
+        int m = readable(tables[t]) ? (int16_t)rd16(g_mem, tables[t] + COMP_CLUBS) : 0;
+        for (int r = 0; readable(rows) && r < m; r++) {
+            uint32_t c = rd32(g_mem, rows + (uint32_t)r * ROW_SIZE);
+            for (int i = 0; i < nd; i++)
+                if (c == clubs + (uint32_t)down[i] * CLUB_SIZE) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = STATUS_DOWN;
+        }
+    }
+    if (logging()) {
+        fprintf(stderr, "recomp: league sizes: arg_prm relegation %d: row %d, %d by the averages:",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), f.season, by_avg);
+        for (int i = 0; i < by_avg; i++) {
+            float a = 0;
+            for (int k = 0; readable(recs) && k < have; k++)
+                if ((int32_t)rd32(g_mem, recs + (uint32_t)k * AVG_SIZE) == down[i]) {
+                    uint32_t bits = rd32(g_mem, recs + (uint32_t)k * AVG_SIZE + 4);
+                    memcpy(&a, &bits, sizeof a);
+                }
+            fprintf(stderr, " %d:%.4f", down[i], (double)a);
+        }
+        fprintf(stderr, "; lowest average kept %.4f; %d by the annual table:", (double)worst_kept, nd - by_avg);
+        for (int i = by_avg; i < nd; i++) fprintf(stderr, " %d:%d", down[i], worst_pos);
+        fprintf(stderr, " of %d\n", rows_n);
+    }
+    call_this(F_RECORD_HONOURS, self, 0, NULL);
+    if (rt_unwinding) return;
+    uint32_t clausura = rd32(g_mem, stages);
+    if (readable(clausura)) call_this(rd32(g_mem, rd32(g_mem, clausura) + 0x30), clausura, 0, NULL);
+    if (rt_unwinding) return;
+    rt_ret_stdcall(0, 0);
+}
+
 uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original)
 {
     if (!season_sizes_on() || !is_prm(obj) || season_sizes_kept(obj)) return original;
