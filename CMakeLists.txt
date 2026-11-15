@@ -296,6 +296,10 @@ if(NOT WIN32)
     add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
     target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_template COMMAND season_template_test)
+    # The Italian rules of the league sizes (0.7.2 gap rows 30 and 32).
+    add_executable(season_ita_rules_test tests/seasons/test_season_ita_rules.c src/recomp_rt/win/season_ita_rules.c)
+    target_include_directories(season_ita_rules_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_ita_rules COMMAND season_ita_rules_test)
     # The size step at a season change (0.7.2 league sizes, slice 3, D13).
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)

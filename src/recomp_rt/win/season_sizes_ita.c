@@ -11,7 +11,9 @@
  *   ItaSerB::create_tiebreak_playoff_stage 0x646bb0 build 20 fixed entries (1, then 2 for entries 1 to 3, 3 for
  *   entries 16 to 19: 0x647057..0x647077, 0x646bd0..0x646bee) and compare at 0x647123, 0x647127 and 0x646c6d,
  *   0x646c71. A table of 20 in Serie A read 2 unwritten bytes and checked the relegation line at 15th; a Serie B of
- *   22 or 24 read the return address of 0x647050. Here each read gives the zone of the row for the count.
+ *   22 or 24 read the return address of 0x647050. Here each read gives the zone of the row for the count. Serie B
+ *   with the sizes on takes the zones of the season's places to 2004/05 and none from 2005/06, when the head-to-head
+ *   table replaced the tie-break match (season_ita_rules.h, gap row 30).
  * - The play-out rows of the C1 groups. ItaSerC1a::create_playoff_stages 0x64ba70 and
  *   ItaSerC1b::create_play_off_stages 0x64fc30 put the rows 16, 13, 15 and 14 (17th, 14th, 16th, 15th: +0x3b0,
  *   +0x2ff, +0x375, +0x33a at 0x64bc2c..0x64bc58 and 0x64fdec..0x64fe18, seeds 0x10, 0xd, 0xf, 0xe at
@@ -35,6 +37,9 @@
  *   the list only when the year of its first date is the league's (0x68382e..0x68383d), a 2001 game at the real
  *   counts. Here a block too small for the list makes none (+0xea 0, as the builders leave it when a club is missing),
  *   as season_divisions_ita.c does for C2/B and C2/C.
+ * - The Coppa Italia seeding pots. compare_clubs_by_seeding_pot 0x640590 ranks Serie B's places 3rd to 6th, 7th to
+ *   14th and 15th to 18th, the 3rd-last of 20 (0x6405fe, 0x64068e). Here the last range ends at the 3rd-last of the
+ *   last Serie B's count (gap row 32).
  *
  * The base game and a table at the class's count (18 in Serie A and C1, 20 in Serie B) keep the original's bytes
  * and paths (rule Q152). The regroup and the C2 exchange take the new code only in a season game with the sizes on. */
@@ -43,6 +48,7 @@
 #include "season.h"
 #include "season_sizes.h"
 #include "season_sizes_ita.h"
+#include "season_ita_rules.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -60,7 +66,9 @@
 #define ROW_SIZE 0x3bu
 #define ROW_STATUS 0x37u
 #define CLUBS_AT 0x3eu
+#define UP 0xbeu                        /* promotion places (League::has_automatic_promotion 0x684790) */
 #define DOWN 0xc1u                      /* relegation places (ItaSerA +0xc1 at 0x6416a4, read at 0x642992) */
+#define YEAR 0x40u                      /* s16: the season of the edition */
 #define F_PROGRESS 0x004a4850u          /* thiscall (club) on [league + 8]: the club's progress record (0x64bd89) */
 
 #define SERIE_A_CLASS 18
@@ -77,6 +85,12 @@ static int count_of(uint32_t obj) { return readable(obj) ? (int16_t)rd16(g_mem, 
 uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at)
 {
     int n = count_of(obj), cls = serie_b ? SERIE_B_CLASS : SERIE_A_CLASS, i = (int)row;
+    /* Serie B with the sizes on: the zones of the season's places to 2004/05, none from 2005/06, when the head-to-head
+     * table settles a tie (season_ita_rules.h; gap row 30). At 20 clubs with 4 up and 4 down (2001/02 and 2002/03)
+     * these are the original's bytes. */
+    if (serie_b && season_sizes_on() && n >= 2 && i >= 0 && i < n)
+        return (uint32_t)ita_serie_b_zone((int16_t)rd16(g_mem, obj + YEAR), n, (int8_t)g_mem[obj + UP],
+                                          (int8_t)g_mem[obj + DOWN], i);
     if (n == cls || n < 2 || i < 0 || i >= n) return g_mem[at];
     if (!serie_b) {
         /* Serie A: the European entries of the original stay (rows 0 to 8 at most), the relegation entries count up
@@ -89,7 +103,8 @@ uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at)
         }
         return 0;
     }
-    /* Serie B: the original's layout, with its 4 last entries at the last 4 rows of the table. */
+    /* Serie B with the sizes off (a grown table needs them on): the original's layout, its 4 last entries at the
+     * last 4 rows of the table. */
     if (i == 0) return 1;
     if (i < 4) return 2;
     if (i >= n - 4) return 3;
@@ -101,17 +116,17 @@ uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at)
 /* The row offset of a play-out row (original row offset for 18 clubs), moved with the count. */
 uint32_t rt_ita_c1_row(uint32_t obj, uint32_t original)
 {
-    int n = count_of(obj), row = (int)(original / ROW_SIZE) + n - C1_CLASS;
-    if (!season_sizes_on() || n == C1_CLASS || n < 6 || row < 0 || row >= n) return original;
-    return (uint32_t)row * ROW_SIZE;
+    int n = count_of(obj);
+    if (!season_sizes_on() || n == C1_CLASS) return original;
+    return (uint32_t)ita_c1_playout_row(n, (int)(original / ROW_SIZE)) * ROW_SIZE;
 }
 
 /* The seed (a row index) of a play-out place, moved with the count. */
 uint32_t rt_ita_c1_seed(uint32_t obj, uint32_t original)
 {
-    int n = count_of(obj), row = (int)original + n - C1_CLASS;
-    if (!season_sizes_on() || n == C1_CLASS || n < 6 || row < 0 || row >= n) return original;
-    return (uint32_t)row;
+    int n = count_of(obj);
+    if (!season_sizes_on() || n == C1_CLASS) return original;
+    return (uint32_t)ita_c1_playout_row(n, (int)original);
 }
 
 /* set_club_progress of C1/A 0x64bd80 and C1/B 0x64ff40 (the same code), thiscall (club, stage, place, best, worst)
@@ -163,6 +178,64 @@ void o_0064bd80(void);
 void o_0064ff40(void);
 RT_WRAP(0064bd80, c1a_progress) { c1_progress(o_0064bd80); }
 RT_WRAP(0064ff40, c1b_progress) { c1_progress(o_0064ff40); }
+
+/* ---- Coppa Italia seeding pots ---- */
+
+#define KEY_B 0x9cf574u
+#define CLUB_LAST_DIVISION 0x5bu
+#define CLUB_LAST_PLACE 0x5fu
+
+static int cup_b_count;                 /* the count of the last Serie B, 0: not known */
+
+void season_sizes_ita_cup_pick(void)
+{
+    cup_b_count = 0;
+    uint32_t table = rd32(g_mem, CLUBS), b = rd32(g_mem, KEY_B);
+    int count = (int)rd32(g_mem, CLUB_COUNT);
+    if (!season_sizes_on() || !readable(table) || count <= 0 || count > 100000) return;
+    for (int i = 0; i < count; i++) {
+        uint32_t club = table + CLUB_SIZE * (uint32_t)i, last = rd32(g_mem, club + CLUB_LAST_DIVISION);
+        int place = (int8_t)g_mem[club + CLUB_LAST_PLACE];
+        if (readable(last) && rd32(g_mem, last) == b && place > cup_b_count) cup_b_count = place;
+    }
+    if (cup_b_count > 0 && cup_b_count != SERIE_B_CLASS)
+        fprintf(stderr, "recomp: league sizes: Coppa Italia pots: the last Serie B had %d clubs, its places 15 to %d "
+                        "share a pot\n", cup_b_count, cup_b_count - 2);
+}
+
+static int cup_pot(uint32_t club)
+{
+    uint32_t a = rd32(g_mem, KEY_A), b = rd32(g_mem, KEY_B);
+    uint32_t last = rd32(g_mem, club + CLUB_LAST_DIVISION), now = rd32(g_mem, club + CLUB_DIVISION);
+    ItaCupClub c = {0};
+    c.has_last = last != 0;
+    c.last_is_b = readable(last) && rd32(g_mem, last) == b;
+    c.last_is_a = readable(last) && rd32(g_mem, last) == a;
+    c.cur_is_b = readable(now) && rd32(g_mem, now) == b;
+    c.last_is_cur = last == now;
+    c.place = (int8_t)g_mem[club + CLUB_LAST_PLACE];
+    return ita_cup_pot(&c, cup_b_count);
+}
+
+/* compare_clubs_by_seeding_pot 0x640590, cdecl (Club **a, Club **b): the pot of a less the pot of b. The original
+ * ends Serie B's third range at 18th, the 3rd-last of its 20 (0x6405fe, 0x64068e): with a last Serie B of 22, 24 or
+ * 19 the range ends at its own 3rd-last (season_ita_rules.h, gap row 32). A last Serie B of 20 (or not known) keeps
+ * the original. */
+void o_00640590(void);
+RT_WRAP(00640590, ita_cup_pot_compare)
+{
+    if (!season_sizes_on() || cup_b_count <= 0 || cup_b_count == SERIE_B_CLASS) {
+        o_00640590();
+        return;
+    }
+    uint32_t pa = rt_arg(0), pb = rt_arg(1);
+    uint32_t a = readable(pa) ? rd32(g_mem, pa) : 0, b = readable(pb) ? rd32(g_mem, pb) : 0;
+    if (!readable(a) || !readable(b)) {
+        o_00640590();
+        return;
+    }
+    rt_ret_cdecl((uint32_t)(cup_pot(a) - cup_pot(b)));
+}
 
 /* ---- Fixed fixture lists ---- */
 

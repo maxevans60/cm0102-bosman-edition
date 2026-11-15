@@ -1550,6 +1550,7 @@ RT_WRAP(0063faf0, ita_cup_entrants)
         if (rt_unwinding) return;
         cpu.ecx = saved;
     }
+    season_sizes_ita_cup_pick();     /* 0.7.2 gap row 32: the pots of a Serie B of any count */
     o_0063faf0();
     if (!rt_unwinding && cpu.eax) season_cup_sizes_ita_cup(cup);     /* 0.7.2 slice 5: Serie A and B take part */
 }
