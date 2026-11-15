@@ -125,8 +125,8 @@ Merge danger: one-way door for saves (a save holds the grown table). Blast radiu
 Blocked by: 2
 Delivers: a new game fills each division to its row (D12). At a season change with changing rules on, each division reaches its new row's count (D13). A 0.7.1 save reaches the row at its next season change (D18).
 Merge danger: one-way door for saves. Blast radius: club lists of every division in a season game.
-- [ ] A 2001 game with changing rules on across 2004/05 gives Serie A 20 in 2004/05
-  Open: Serie A gets its row of 20 only when slice 9 adds ita_ser_a to the grown classes. The size step and D23 are proven by Allsvenskan 14 to 16 in 2008 and Ligue 1 20 to 18 in 2023/24 (`tests/seasons/size_step_run.py` grow and shrink).
+- [x] A 2001 game with changing rules on across 2004/05 gives Serie A 20 in 2004/05
+  Slice 9 adds ita_ser_a to the grown classes. `tests/seasons/size_step_run.py italy2001` passes: Serie A has 18 clubs to 2003/04 and 20 from 2004/05. The size step and D23 are also proven by Allsvenskan 14 to 16 in 2008 and Ligue 1 20 to 18 in 2023/24 (`size_step_run.py` grow and shrink).
 - [x] A 0.7.1 save of a 2015 game loads and reaches the row sizes at the next season change
 - [x] Each division short of clubs in a database is named in the log, and the same-save set is equal
 
@@ -156,25 +156,25 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 Blocked by: 2, 4
 Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 33 + 6 and 6, 2 meetings in place of 4) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
 Merge danger: one-way door for saves (a save holds the section stages). Blast radius: leagues with a split row.
-- [ ] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
-- [ ] A save during the split loads and the season completes
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
+- [x] A save during the split loads and the season completes
+- [x] The same-save set is equal
 
 ### 8. England and France
 Blocked by: 2, 3, 4, 5
 Delivers: the Conference at 24 with the row's exchange places (D15), League One by its row, the National at 21 (2010/11, a template block of 42) and at 17 and 18.
 Merge danger: two-way door. Blast radius: the English and French pyramids.
-- [ ] `league_size_run.py` passes for eng_conf 2010 and fra_third 2010 and 2014
-- [ ] A 2005 game with changing rules on through 2007 moves the row's Conference places
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for eng_conf 2010 and fra_third 2010 and 2014
+- [x] A 2005 game with changing rules on through 2007 moves the row's Conference places (`size_step_run.py conference`)
+- [x] The same-save set is equal
 
 ### 9. Italy
 Blocked by: 2, 3, 5
 Delivers: Serie A 20, Serie B 22, 24 and 19, Serie C1 19, 16 and 17, with the tie-break arrays, the C1 regroup and the play-out rows taking the count (D22), and the expected counts of 0x642476 and 0x642478 from the places.
 Merge danger: two-way door. Blast radius: the Italian pyramid and the Serie C groups.
-- [ ] `league_size_run.py` passes for ita_ser_a 2005, ita_ser_b 2003 and 2018, ita_ser_c1a 2004 and 2012
-- [ ] A 2001 game with changing rules on to 2005 changes sizes with no fault line
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for ita_ser_a 2005, ita_ser_b 2003 and 2018, ita_ser_c1a 2004 and 2012
+- [x] A 2001 game with changing rules on to 2005 changes sizes with no fault line
+- [x] The same-save set is equal
 
 ### 10. Netherlands, Belgium, Denmark, Finland
 Blocked by: 2, 3, 5, 7
@@ -201,8 +201,8 @@ Merge danger: two-way door. Blast radius: these two pyramids.
 Blocked by: 4, 7
 Delivers: the Northern Irish First Division at its row's count with its meetings and splits, and the Irish First Division at 8 (2012 to 2017).
 Merge danger: two-way door. Blast radius: the two Irish pyramids.
-- [ ] `league_size_run.py` passes for nir_first 2016 and 2022 and ire_first 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for nir_first 2016 and 2022 and ire_first 2013
+- [x] The same-save set is equal
 
 ### 14. Japan and Korea
 Blocked by: 2, 3, 6, 7

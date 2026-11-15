@@ -37,7 +37,6 @@
 2019	club_list	Danish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: Lyngby BK, Silkeborg IF; others: -
 2019	club_list	Danish Second Division: 16 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: Boldklubben Avarta, FC Helsingör, Frederiksberg Alliancen, Holbaek B&I, Naesby Boldklub, Skovshoved IF, Thisted FC, VSK Aarhus; others: -
 2019	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AZ Alkmaar U21, FC Utrecht U21; others: -
-2019	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Sporting Club de Toulon, US Le Pontet
 2019	club_list	Greek National B Division: 12 of 12 listed clubs that the database holds (12 listed), 2 other clubs, 14 in all; not in it: -; others: AO Egaleo, Iraklis Thessaloniki
 2019	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Hellas Verona, US Lecce; others: -
 2019	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Oita Trinita, Yokohama FC; others: -
@@ -90,8 +89,6 @@
 2019	down	cro_a1 (Prva HNL), row gre-pol-cro-343: game 2 (+0 play-off places), table 1 (1 (10th))
 2019	down	cro_a2b (Druga HNL South), row gre-pol-cro-397: game 2 (+0 play-off places), table na (n/a)
 2019	down	den_second (Danish 2nd Divisions), row den-swe-112: game 4 (+0 play-off places), table 5 (5)
-2019	down	eng_third (EFL League Two), row eng-211: game 1 (+0 play-off places), table 2 (2)
-2019	down	fra_second (Ligue 2), row fra-165: game 3 (+0 play-off places), table 2 (2)
 2019	down	ger_second (2. Bundesliga), row ger-236: game 4 (+0 play-off places), table 2 (2)
 2019	down	gre_prm (Super League 1), row gre-pol-cro-46: game 2 (+0 play-off places), table 1 (1 (14th))
 2019	down	hol_prm (Eredivisie), row hol-bel-236: game 1 (+2 play-off places), table 0 (0 (season abandoned on 24 April 2020 after 26 rounds, COVID-19: no club relegate)
@@ -176,7 +173,6 @@
 2019	rounds	den_prm (Danish Superliga), row den-swe-110: game 33, table 26 (2 meetings, zones -, extra 0)
 2019	rounds	fin_first (Ykkönen), row nor-fin-188: game 27, table 22 (2 meetings, zones -, extra 0)
 2019	rounds	fin_prm (Veikkausliiga), row nor-fin-187: game 33, table 22 (2 meetings, zones -, extra 0)
-2019	rounds	fra_third (Championnat National), row fra-166: game 38, table 34 (2 meetings, zones -, extra 0)
 2019	rounds	gre_second (Super League 2), row gre-pol-cro-73: game 26, table 22 (2 meetings, zones -, extra 0)
 2019	rounds	hol_first (Eerste Divisie), row hol-bel-237: game 34, table 38 (2 meetings, zones -, extra 0)
 2019	rounds	ita_ser_a (Serie A), row ita-308: game 34, table 38 (2 meetings, zones -, extra 0)
@@ -199,7 +195,6 @@
 2019	up	cro_a2a (Druga HNL), row gre-pol-cro-370: game 0 (+0 play-off places), table 1 (1 (1st))
 2019	up	den_second (Danish 2nd Divisions), row den-swe-112: game 3 (+0 play-off places), table 1 (1)
 2019	up	fin_first (Ykkönen), row nor-fin-188: game 2 (+0 play-off places), table 1 (1st (1))
-2019	up	fra_third (Championnat National), row fra-166: game 3 (+0 play-off places), table 2 (2)
 2019	up	gre_cup (Greek Football Cup), row gre-pol-cro-19: game 2 (+0 play-off places), table na (n/a)
 2019	up	gre_second (Super League 2), row gre-pol-cro-73: game 2 (+0 play-off places), table 1 (1 (1st))
 2019	up	hol_first (Eerste Divisie), row hol-bel-237: game 1 (+0 play-off places), table 0 (0 (season abandoned on 24 April 2020 after 29 rounds, COVID-19: no club promoted)

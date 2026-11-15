@@ -93,7 +93,7 @@ static int form_of(uint32_t obj, int n, Form *f)
     memset(f, 0, sizeof *f);
     if (!season_sizes_on() || !readable(obj) || n < MIN_CLUBS || n > MAX_CLUBS) return 0;
     if (season_sizes_kept(obj)) return 0;     /* no room for the dates this edition: the class's form */
-    f->season = season_sizes_row_season(obj);
+    f->season = season_sizes_row_season(obj, "arg_prm");
     const SeasonLeagueRule *r = f->season >= 0 ? season_league_row("arg_prm", f->season) : NULL;
     if (!r) return 0;
     f->halves = r->halves != 0;

@@ -121,11 +121,22 @@ int season_template_plan_from(int base_year, const int *days, int count, int rou
         order[j] = i;
     }
     for (int i = 0; i < count; i++) sorted[i] = days[order[i]];
-    for (int i = 0; i + 1 < count; i++)
-        if (sorted[i + 1] == sorted[i]) {   /* two rounds on one day: the plan could keep both */
-            snprintf(why, (size_t)why_size, "class dates %d and %d are on one day", order[i], order[i + 1]);
-            return 0;
+    /* Two class dates on one day (ItaSerB 2003/04 makes 18 January 2004 twice, ItaSerC1a 2013/14 2 March 2014):
+     * a plan that kept both would play two rounds on one day. A shuffled or sequential plan uses the first record of
+     * the day and drops the other. The halves of a mirrored template cannot lose a date, so it keeps the class's. */
+    int distinct = 0;
+    for (int i = 0; i < count; i++) {
+        if (distinct && sorted[i] == sorted[distinct - 1]) {
+            if (mode == SEASON_TEMPLATE_MIRRORED) {
+                snprintf(why, (size_t)why_size, "class dates %d and %d are on one day", order[distinct - 1], order[i]);
+                return 0;
+            }
+            continue;
         }
+        order[distinct] = order[i];
+        sorted[distinct++] = sorted[i];
+    }
+    count = distinct;
     days = sorted;
     int largest = 0;
     for (int i = 0; i + 1 < count; i++)
