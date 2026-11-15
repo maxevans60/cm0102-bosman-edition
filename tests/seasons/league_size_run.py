@@ -242,7 +242,10 @@ EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13}
 
 def template_faults(name, cls, new, rounds, earlier=EARLIER):
     """The faults of a new template (D4, D5) against the class's dates. A template with no gap over 7 days has no
-    winter break (season_template.c)."""
+    winter break (season_template.c). The class's dates sorted, each once: a class can list a date twice and out of
+    order (HolFirst 2005/06: 3 December after 22 October and again after 26 November), and the engine leaves the
+    second out."""
+    cls = sorted(set(cls))
     fails = []
     if len(new) != rounds:
         return [f"{name}: {len(new)} dates, want {rounds}"]
@@ -587,6 +590,11 @@ def self_test():
         (template_faults("shrink", cls, shrink, 3), False),
         (template_faults("late", cls, late, 6), True),
         (template_faults("count", cls, good, 8), True),
+        # A class date listed twice, the first out of order (8 March, 26 April, 22 March, 26 April): the Wednesday of
+        # 11 March is in a gap of 14 days, not in a false one of 49.
+        (template_faults("twice", [d(2009, 3, 1), d(2009, 3, 8), d(2009, 4, 26), d(2009, 3, 22), d(2009, 4, 26)],
+                         [(d(2009, 3, 1), False), (d(2009, 3, 8), False), (d(2009, 3, 11), True),
+                          (d(2009, 3, 22), False), (d(2009, 4, 26), False)], 5), False),
     ]
     # A template of 7-day gaps only (the Brazilian classes) has no winter break: a Wednesday in a gap is good, and the
     # earlier starts go up to the class's limit.

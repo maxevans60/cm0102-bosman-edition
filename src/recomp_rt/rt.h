@@ -400,6 +400,8 @@ uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
 /* The matches that League::check_complete 0x689ad0 wants of every row (0x689b47), the original's +0xa7 except in a
  * league whose sections of a split play different matches (0.7.2 slice 7, win/season_split.c). */
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original);
+/* 1 when the sort of a split league (0x682b0f) must keep a row's place after match N (win/season_split.c). */
+int rt_league_keep_split_place(uint32_t obj, uint32_t played);
 /* The periods of the Eerste Divisie and the Belgian Second Division at the rounds of the season (0.7.2 slice 10, D6,
  * win/season_sizes_periods.c): the round where a period begins (HolFirst 0x5f65b0, BelSecond 0x420110) and the matches
  * of a period stage (HolFirst 0x5f6ad0, BelSecond 0x4204d0). */

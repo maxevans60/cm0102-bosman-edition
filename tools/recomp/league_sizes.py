@@ -445,6 +445,10 @@ INSNS.update(DATES)
 # reached the matches of its own section, else the original.
 INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
                    "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
+# The sort 0x6827d0 writes each row's place at index played - 1 (0x682b0f, ebx the league, eax the played). After a
+# split the place after match N stays as the split read it (rt_league_keep_split_place, slice 10 test runs).
+INSNS[0x682B0F] = ("mov byte ptr [eax + esi - 1], cl",
+                   "if (!rt_league_keep_split_place(ebx, eax)) W8(eax + esi + 0xffffffffu, ecx & 0xffu);")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and

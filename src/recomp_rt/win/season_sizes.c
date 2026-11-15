@@ -205,6 +205,8 @@ static const char *record_name(uint32_t obj)
 /* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
 static void size_step_run(uint32_t trigger);
 static void step_note_pair(uint32_t upper, uint32_t lower);
+static int step_alone(uint32_t upper, uint32_t lower);
+static void step_note_alone(uint32_t upper);
 static int row_reachable(uint32_t obj, const char *file);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
@@ -859,6 +861,11 @@ RT_WRAP(00689c80, promote_relegate)
     int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
+    /* Slice 10: a size division whose division below plays as now (D16: the Ykkonen, fin_first) takes part in the
+     * step alone, as a lowest division. Its count changes (the Veikkausliiga 14 to 13 for 2006, 14 to 12 for 2011)
+     * by the clubs that leave it for no division (2006: AC Allianssi) or join it from none. */
+    if (!ours && season_changing_rules() && !season_change_is_creating() && step_alone(upper, lower))
+        step_note_alone(upper);
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
     /* When the places of the two divisions differ, the clubs move on their own only with changing rules on and
      * between two classes of the size table. Else the clubs move in pairs, so no size changes (with changing rules
@@ -969,6 +976,18 @@ static int step_index(uint32_t obj)
         step_seen[i].nrows++;
     }
     return i;
+}
+
+/* The size divisions that take part in the step alone (above): the division below plays as now (D16). */
+static int step_alone(uint32_t upper, uint32_t lower)
+{
+    const char *fu = season_change_file(upper), *fl = season_change_file(lower);
+    return fu && fl && !strcmp(fu, "fin_prm") && size_file(fu) && !size_file(fl);
+}
+
+static void step_note_alone(uint32_t upper)
+{
+    if (!step_running) step_index(upper);
 }
 
 static void step_note_pair(uint32_t upper, uint32_t lower)

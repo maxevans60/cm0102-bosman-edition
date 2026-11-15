@@ -236,6 +236,19 @@ uint32_t rt_league_played_target(uint32_t obj, uint32_t original)
     return 0;   /* every row reached its own section's matches */
 }
 
+/* The sort of a league table (0x6827d0) writes each row's place at index played - 1 of its positions (`mov byte ptr
+ * [eax + esi - 1], cl` at 0x682b0f, eax the row's played, ebx the league). After the split the order of the sections
+ * and their targets read the place after match N, so it must not change. But a row that is still at N on a later
+ * update (a club that rests on a section date, or a postponed match) got its place in the table of that day: the
+ * places after N were then not each place once (slice 10 test runs, Belgian Pro League 2010/11 and Challenger Pro
+ * League 2022/23). 1 when the store must not happen: a split league and a row at N. */
+int rt_league_keep_split_place(uint32_t obj, uint32_t played)
+{
+    if (!season_sizes_on() || !readable(obj)) return 0;
+    const SeasonSplit *sp = cached(obj);
+    return sp && (int32_t)played == sp->after;
+}
+
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
 {
     Cpu saved = cpu;

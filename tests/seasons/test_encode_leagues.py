@@ -134,7 +134,9 @@ check(st("arg_second", 2025, "extra") == "?", "inter-zone matches with no number
 check(st("bel_second", 2001, "periods") == 3, "three periods")
 check(st("hol_first", 2005, "periods") == 6 and st("hol_first", 2010, "periods") == 4, "six, then four periods")
 check(st("hol_first", 2001, "periods") == 0 and st("bel_second", 2007, "periods") == 0, "no periods")
-check(st("hol_first", 2003, "periods") == "?", "periods unknown")
+check(e.encode_periods({"comp_file": "hol_first", "season": 2002, "format_text": "Periods unknown.", "split_text": ""})
+      == "?", "periods unknown")
+check(st("hol_first", 2003, "periods") == 0 and st("bel_second", 2009, "periods") == 0, "periods by hand: none")
 check(st("bel_second", 2016, "periods") == 2, "PERIODS_BY_HAND: First Division B, two periods")
 # the meetings of the split sections
 check(st("nir_prm", 2010, "split_meet") == "1+1", "after 33, 5 more matches each in sixes: one meeting")
