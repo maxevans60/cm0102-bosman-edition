@@ -2,7 +2,7 @@
 """The Ekstraklasa in its real format of each season (GitHub issue 92, 0.6.2 open item 221).
 
 Usage:
-    python3 tests/seasons/pol_first_run.py <cm0102_recomp> <game folder> [--only 2002,2013,2025,long,long2] [--keep <folder>]
+    python3 tests/seasons/pol_first_run.py <cm0102_recomp> <game folder> [--only 2002,2013,2025,long,long2,long3] [--keep <folder>]
         [--reuse] [--timeout <seconds>]
 
 Each run starts a new game in a season with all nations (the rows of the Select League(s) screen differ by
@@ -59,10 +59,15 @@ LONG = (2002, 2005, {2002: 16, 2003: 14, 2004: 14, 2005: 16})
 # The second long run: a December 2025 game to the end of 2026/27. The I liga's own play-off of 3rd to 6th (2025/26) must
 # be drawn and played before the Polish season change (log line of season_playoffs.c), and both leagues keep 18 clubs.
 LONG2 = (2025, 2026, {2025: 18, 2026: 18})
+# The third long run: a March 2020 game (2019/20) to the end of 2020/21. The I liga's own play-off of 2019/20 has two
+# rounds, so its final falls after the Polish update day: the season change of the Polish leagues must wait for it
+# (season_pol_playoff.c), and its winner goes up with the 2 direct places.
+LONG3 = (2019, 2020, {2019: 16, 2020: 16})
+LONG3_DB = "March 2020"
 
 
-def database(year, work):
-    name, own, _, _ = RUNS[year]
+def database(year, work, name=None):
+    name, own, _, _ = (name, False, 0, None) if name else RUNS[year]
     if own:
         folder = os.path.join(work, "owndb")
         path = os.path.join(folder, name)
@@ -156,12 +161,12 @@ def one(program, game, year, keep, reuse, timeout):
 
 def long_run(program, game, keep, reuse, timeout, which="long"):
     """LONG: a 2002 game to 2005/06; the clubs and places of each season. LONG2: a 2025 game to 2026/27."""
-    start, last, sizes = LONG if which == "long" else LONG2
+    start, last, sizes = {"long": LONG, "long2": LONG2, "long3": LONG3}[which]
     work = os.path.join(keep, which) if keep else tempfile.mkdtemp(prefix="cm0102-pol-first-long-")
     report = os.path.join(work, "report.tsv")
     if not reuse:
-        code, report = rrc.run(program, game, last, start, database(start, keep or work), ["all"], [], work,
-                               timeout * (last - start + 1), {"changing_rules": "on"}, {"RECOMP_POL_FIRST_LOG": "1"})
+        code, report = rrc.run(program, game, last, start, database(start, keep or work, LONG3_DB if which == "long3" else None), ["all"], [], work,
+                               timeout * (last - start + 1), {"changing_rules": "on"}, {"RECOMP_POL_FIRST_LOG": "1", "RECOMP_PLAYOFF_LOG": "1"})
         if code != 0:
             return [f"long: the run ended with code {code} ({work})"]
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
@@ -171,16 +176,18 @@ def long_run(program, game, keep, reuse, timeout, which="long"):
         got = int(row["clubs"]) if row else None
         if got != clubs:
             fails.append(f"long: {year}/{(year + 1) % 100:02d} Ekstraklasa clubs {got}, want {clubs}")
-        fails += [f"long: {x}" for x in place_faults(report, year)]
+        if year in PLACES:
+            fails += [f"long: {x}" for x in place_faults(report, year)]
         hist = f"recomp: pol first: {year}/{(year + 1) % 100:02d}: club history of the final table, {clubs} clubs"
         if hist not in log:
             fails.append(f"long: no club history line '{hist}'")
         second = report_rows(report, year, "pol_second").get("start")
-        if second and int(second["clubs"]) != 18:
+        if second and int(second["clubs"]) != 18 and which != "long3":
             fails.append(f"long: {year}/{(year + 1) % 100:02d} I liga clubs {second['clubs']}, want 18")
-    if which == "long2":
-        if not re.search(r"recomp: playoffs: pol_second 2025: play-off of places 3, 4, 5 and 6 drawn on day \d+", log):
-            fails.append("long: no line for the I liga's own play-off of 2025/26 (drawn before the season change)")
+    if which in ("long2", "long3"):
+        own = 2025 if which == "long2" else 2019
+        if not re.search(rf"recomp: playoffs: pol_second {own}: play-off of places 3, 4, 5 and 6 drawn on day \d+", log):
+            fails.append(f"long: no line for the I liga's own play-off of {own}/{(own + 1) % 100:02d} (drawn before the season change)")
         # 2 direct places and the play-off's winner go up, 3 clubs go down, all between the two leagues.
         def members(season, slot):
             out = set()
@@ -190,10 +197,10 @@ def long_run(program, game, keep, reuse, timeout, which="long"):
                     if len(p) > 5 and p[0] == "club" and p[1] == str(season) and p[2] == "start" and p[3] == slot:
                         out.add(p[5])
             return out
-        e1, e2, i1, i2 = members(2025, "133"), members(2026, "133"), members(2025, "134"), members(2026, "134")
+        e1, e2, i1, i2 = members(own, "133"), members(own + 1, "133"), members(own, "134"), members(own + 1, "134")
         up, down = e2 - e1, e1 - e2
         if not e1 or len(up) != 3 or len(down) != 3 or not up <= i1 or not down <= i2:
-            fails.append(f"long: the exchange of 2025/26: {len(up)} clubs up (want 3, from the I liga), {len(down)} down (want 3)")
+            fails.append(f"long: the exchange of {own}/{(own + 1) % 100:02d}: {len(up)} clubs up (want 3, from the I liga), {len(down)} down (want 3)")
         if re.search(r"recomp: season change net: .*pol", log):
             fails.append("long: the season change net acted on the Polish leagues")
     print(("FAIL  " + "; ".join(fails)) if fails else f"ok    {which}: a {start} game to {last}/{(last + 1) % 100:02d} ({work})")
@@ -205,12 +212,12 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = argv[0], argv[1]
-    only = [y for y in argv[argv.index("--only") + 1].split(",")] if "--only" in argv else [str(y) for y in sorted(RUNS)] + ["long", "long2"]
+    only = [y for y in argv[argv.index("--only") + 1].split(",")] if "--only" in argv else [str(y) for y in sorted(RUNS)] + ["long", "long2", "long3"]
     keep = argv[argv.index("--keep") + 1] if "--keep" in argv else None
     timeout = int(argv[argv.index("--timeout") + 1]) if "--timeout" in argv else 7200
     fails = []
     for y in only:
-        fails += long_run(program, game, keep, "--reuse" in argv, timeout, y) if y in ("long", "long2") else \
+        fails += long_run(program, game, keep, "--reuse" in argv, timeout, y) if y in ("long", "long2", "long3") else \
             one(program, game, int(y), keep, "--reuse" in argv, timeout)
     print(("FAIL  " + f"{len(fails)} failures") if fails else f"ok    pol_first_run: {len(only)} seasons")
     return 1 if fails else 0
