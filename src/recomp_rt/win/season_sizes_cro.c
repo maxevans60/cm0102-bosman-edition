@@ -33,10 +33,10 @@
  *   the clubs after the North go to A Lower Division, which stands for the third level (3. HNL) that the 2006/07
  *   restructure sent them to; the South does not start its season (season_sizes_cro_south_before) and keeps its
  *   last table with the year 2998; after such a season the chain and 0x514ed0 leave it out (rt_cro_south_idle).
- *   A new game in such a season makes the South with its clubs of the database, which play the start season: a
- *   table of no club fails in League::calc_prize_fund 0x682f70 ("league..cpp 532" from CroA2b::create_table at
- *   0x516ed3), and League::create_fixtures 0x6835c0 builds its grid from the count; the class is made with the
- *   nation (CroA1::start_new_season and 0x514ed0 read its object). The first change empties it.
+ *   A new game in such a season sends the South's clubs to A Lower Division and makes the class (it is made with
+ *   the nation: CroA1::start_new_season and 0x514ed0 read its object) with a table of no row, no prize fund, no
+ *   TV money, no fixtures and no sort (rt_cro_south_empty; with no row calc_prize_fund 0x682f70 stops at
+ *   "league..cpp 532" and create_fixtures 0x6835c0 builds a grid from the count).
  * The clubs after North + South go to A Lower Division [0x9cf764], the spare division that the club
  * moves and the size step take clubs from (season_clubs.c), through the same store and news of the regroup
  * (0x5152be, 0x515251..0x5152a1: the news reads the target's id, so the target is a record).
@@ -274,7 +274,18 @@ uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place)
 uint32_t rt_cro_south_idle(void)
 {
     uint32_t south = season_sizes_on() ? league_at(CRO_A2B) : 0;
-    return south && (int16_t)rd16(g_mem, south + COMP_YEAR) >= 2998;
+    return south && ((int16_t)rd16(g_mem, south + COMP_YEAR) >= 2998 || (int16_t)rd16(g_mem, south + COMP_CLUBS) == 0);
+}
+
+/* 1 for the South with a table of no row: a new game in a season of one group (season_sizes_cro_new_game). Its
+ * set-up leaves out the prize fund, the TV money, the fixtures and the sort (sizes_cro.py). */
+uint32_t rt_cro_south_empty(uint32_t obj)
+{
+    if (!season_sizes_on() || !readable(obj) || (int16_t)rd16(g_mem, obj + COMP_CLUBS) != 0) return 0;
+    uint32_t rec = rd32(g_mem, obj + 4u);
+    int32_t key = (int32_t)rd32(g_mem, CRO_A2B);
+    uint32_t comps = rd32(g_mem, COMPS);
+    return key >= 0 && readable(comps) && rec == comps + (uint32_t)key * COMP_SIZE;
 }
 
 /* The exchange of the South with the First Division at 0x515180 (1: the original's call): none after a season of
@@ -301,6 +312,40 @@ int season_sizes_cro_south_before(uint32_t comp, int season)
     if (getenv("RECOMP_SIZE_LOG"))
         fprintf(stderr, "recomp: league sizes: cro_a2b %d: not held, the South waits\n", season);
     return 1;
+}
+
+/* A new game in a season of one group (season_clubs.c, after the club moves and before the competitions are made):
+ * the South is not held, so its clubs of the database go to A Lower Division, the third level that the 2006/07
+ * restructure sent them to. The class is made with the nation, with a table of no row (season_sizes_cro_empty) and
+ * no fixtures (rt_cro_south_empty), and its first season start waits (season_sizes_cro_south_before). */
+#define CLUBS 0x00ae23b4u          /* the club table, 0x245 bytes a club */
+#define CLUB_COUNT 0x00ae235cu
+#define CLUB_SIZE 0x245u
+#define CLUB_DIVISION 0x57u        /* club_comp pointer */
+
+void season_sizes_cro_new_game(int start)
+{
+    if (!season_sizes_on() || !one_group(start)) return;
+    uint32_t clubs = rd32(g_mem, CLUBS), comps = rd32(g_mem, COMPS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), key = (int32_t)rd32(g_mem, CRO_A2B), lower = (int32_t)rd32(g_mem, KEY_LOWER);
+    if (!readable(clubs) || !readable(comps) || key < 0 || lower < 0) return;
+    uint32_t south = comps + (uint32_t)key * COMP_SIZE, to = comps + (uint32_t)lower * COMP_SIZE;
+    int moved = 0;
+    for (int i = 0; i < count; i++) {
+        uint32_t club = clubs + (uint32_t)i * CLUB_SIZE;
+        if (rd32(g_mem, club + CLUB_DIVISION) != south) continue;
+        wr32(g_mem, club + CLUB_DIVISION, to);
+        moved++;
+    }
+    if (getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: cro_a2b %d: not held, the South's %d clubs start in A Lower Division\n",
+                start, moved);
+}
+
+/* 1 for the South in a season of one group: the size engine gives it a table of no row (rt_league_clubs). */
+int season_sizes_cro_empty(uint32_t obj, const char *file, int season)
+{
+    return season_sizes_on() && file && !strcmp(file, "cro_a2b") && one_group(season) && readable(obj);
 }
 
 /* The count that fix_division_club_count 0x839920 gives a Greek division at a new game (0x8283c0 National A,

@@ -296,6 +296,12 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     size_step_run(obj);
     const char *file = season_change_file(obj);
     int have = 0, cap = 0, n = league_count(obj, file, &have, &cap);
+    /* The Croatian South of a new game in a season of one group has no club: a table of no row (season_sizes_cro.c;
+     * its set-up leaves out the calls that need rows, sizes_cro.py). */
+    if (!n && clubs_in_division(obj) == 0 &&
+        season_sizes_cro_empty(obj, file, season_change_is_creating() || !season_changing_rules()
+                                              ? season_start_year() : (int16_t)rd16(g_mem, obj + COMP_YEAR)))
+        return 0;
     if (!n) return original;
     /* A grown league whose template had no room keeps the class's count, or fewer: create_table fills only the
      * clubs of the division and fails with more rows than clubs (NorPrm 0x7926a0..0x7926ce, box at 0x792845). */

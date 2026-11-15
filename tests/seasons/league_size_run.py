@@ -101,8 +101,10 @@ ROWS = {
                                  "South does not go up after 2006/07 (row 40)"),
     "cro_a2a@2009": (2009, 2010, "Druga HNL 14 in 2009/10, 16 in 2010/11 by results, and no message box (slice 18 "
                                  "saw cro_a2b 446 at this change)"),
-    "cro_a2a@2006": (2006, 2007, "a new game in 2006/07: the South plays its start season with the database's clubs "
-                                 "(its class is made with the nation), then waits with no club (open item 255)"),
+    "cro_a2a@2006": (2006, 2007, "a new game in 2006/07: the South is not held, so its clubs start in A Lower Division "
+                                 "and it makes no table and no fixtures (open item 255)"),
+    "cro_a2a@2010": (2010, 2011, "a new game in 2010/11 (the lead's 2010 start of open item 255): no South table, the "
+                                 "Druga HNL by its row"),
     "cro_a2a@2001": (2001, 2011, "a 2001 start to 2011/12: the groups of 16 and 12, one group from 2006/07, the South "
                                  "idle, and no message box at the 2010/11 change (open item 255, cro_a2b 446)"),
     "gre_prm@2024": (2024, 2025, "Super League 14: 26 rounds, then 4+4+6 twice, only the 5th to 8th halve (row 39)"),
@@ -465,9 +467,9 @@ def south_held(season):
 def cro_faults(log, start=None):
     """The Croatian second tier (slice 11, gap rows 38 and 40, open item 255): each regroup gives the North its row
     and the South its row (two groups, by latitude), or with one group the North its row by results and the South no
-    club (the others to A Lower Division); in a season of one group the South waits (no table), but for the start
-    season of a new game (its class is made with the database's clubs, season_sizes_cro.c); after a season of one
-    group the South has no exchange with the First Division."""
+    club (the others to A Lower Division); in a season of one group the South makes no table: a new game sends its
+    clubs to A Lower Division (season_sizes_cro.c) and each later season start waits; after a season of one group the
+    South has no exchange with the First Division."""
     fails, years = [], []
     for line in log.split("\n"):
         m = re.match(r"recomp: league sizes: cro_a2a regroup (\d+): (\d+) clubs, (\d+) North, (\d+) South, (-?\d+) "
@@ -492,8 +494,11 @@ def cro_faults(log, start=None):
         if not south_held(y) and f"recomp: league sizes: cro_a2b {y}: not held, the South waits" not in log:
             fails.append(f"cro_a2b {y}: no line of the South waiting")
     for m in re.finditer(r"recomp: league sizes: cro_a2b \([^)]*\) (\d+): (\d+) clubs in the division", log):
-        if not south_held(int(m.group(1))) and int(m.group(1)) != start:
+        if not south_held(int(m.group(1))):
             fails.append(f"cro_a2b {m.group(1)}: a table of {m.group(2)} clubs in a season it is not held")
+    if start is not None and not south_held(start) and \
+            f"recomp: league sizes: cro_a2b {start}: not held, the South's" not in log:
+        fails.append(f"cro_a2b {start}: the new game did not send the South's clubs to A Lower Division")
     held = sum(1 for y in years if south_held(y - 1))
     if pairs > held:
         fails.append(f"cro_a2b: {pairs} exchanges with the First Division, want at most {held} (seasons of two groups)")
@@ -955,7 +960,10 @@ def self_test():
             or not cro_faults(one.replace("0 South", "8 South"))
             or not cro_faults(one.replace(tag + "cro_a2b 2010: not held, the South waits\n", ""))
             or not cro_faults(one + tag + "cro_a2b (Druga HNL South) 2010: 14 clubs in the division, 16 in the table\n")
-            or cro_faults(one + tag + "cro_a2b (Druga HNL South) 2010: 16 clubs in the division, 16 in the table\n",
+            or not cro_faults(one + tag + "cro_a2b (Druga HNL South) 2010: 16 clubs in the division, 16 in the "
+                              "table\n", 2010)
+            or not cro_faults(one, 2010)
+            or cro_faults(one + tag + "cro_a2b 2010: not held, the South's 16 clubs start in A Lower Division\n",
                           2010)):
         bad.append(("cro regroup", cro_faults(two), cro_faults(one), cro_faults(swapped)))
     pts = tag + "gre_prm split 2024: after 26, sections 4+4+6, meetings 2+2+2, rounds 6+6+10, 10 dates, points " \

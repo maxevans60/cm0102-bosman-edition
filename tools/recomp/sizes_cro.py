@@ -25,7 +25,23 @@ def _cmp(width_mask, size, left, right):
             f"SETF(K_SUB | {size}, t0, t1, t2, 0);")
 
 
+def _skip_if_empty(ret, pops, value):
+    """A call of the South's set-up left out when its table has no row (rt_cro_south_empty): drop its stack
+    arguments (callee cleanup) and give eax the value of a success."""
+    return (f"if (rt_cro_south_empty(esi)) {{ esp += {pops}u; eax = {value}u; }} else {{ esp -= 4; W32(esp, {ret}u); "
+            "SYNC(); @FN@; LOAD(); RT_AFTER_CALL(); }")
+
+
 INSNS = {
+    # Open item 255: the South of a new game in a season of one group has no club (season_sizes_cro.c). Its set-up
+    # leaves out the calls that need rows: the prize fund (League::calc_prize_fund 0x682f70, one argument) and the TV
+    # money (League::pay_tv_rights 0x683010, two) of CroA2b::create_table, and the fixtures (League::create_fixtures
+    # 0x6835c0, none, 1 on success) and the sort (League::sort_table 0x6827d0, one, 1 on success) of the constructor
+    # CroA2b::CroA2b 0x516430.
+    0x516ED3: ("call 0x682f70", _skip_if_empty("0x516ed8", 4, 0).replace("@FN@", "f_00682f70()")),
+    0x516EEB: ("call 0x683010", _skip_if_empty("0x516ef0", 8, 0).replace("@FN@", "f_00683010()")),
+    0x516525: ("call 0x6835c0", _skip_if_empty("0x51652a", 0, 1).replace("@FN@", "f_006835c0()")),
+    0x516561: ("call 0x6827d0", _skip_if_empty("0x516566", 4, 1).replace("@FN@", "f_006827d0()")),
     # The chain 0x5150f0: the South's exchange with the First Division (league_promote_and_relegate 0x689c80, six
     # arguments, ret 0x18). None when the season that ends had one group (season_sizes_cro.c rt_cro_south_swap).
     # The chain's record_final_positions of the South (vtable +0xa4, thiscall, no arguments): none after a season of
