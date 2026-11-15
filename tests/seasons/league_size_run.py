@@ -101,6 +101,10 @@ ROWS = {
                                  "South does not go up after 2006/07 (row 40)"),
     "cro_a2a@2009": (2009, 2010, "Druga HNL 14 in 2009/10, 16 in 2010/11 by results, and no message box (slice 18 "
                                  "saw cro_a2b 446 at this change)"),
+    "cro_a2a@2006": (2006, 2007, "a new game in 2006/07: the South is not held, so its clubs start in A Lower Division "
+                                 "and it plays no table (open item 255)"),
+    "cro_a2a@2001": (2001, 2011, "a 2001 start to 2011/12: the groups of 16 and 12, one group from 2006/07, the South "
+                                 "idle, and no message box at the 2010/11 change (open item 255, cro_a2b 446)"),
     "gre_prm@2024": (2024, 2025, "Super League 14: 26 rounds, then 4+4+6 twice, only the 5th to 8th halve (row 39)"),
     "gre_second@2023": (2023, 2025, "Super League 2 groups: 12 in 2023/24 (5+6+1), 10 in 2024/25 (5+5), each group "
                                     "splits, points halved (row 41)"),
@@ -459,9 +463,10 @@ def south_held(season):
 
 
 def cro_faults(log):
-    """The Croatian second tier (slice 11, gap rows 38 and 40): each regroup gives the North its row and the South
-    its row (two groups, by latitude) or 16 (one group, by results); after a season of one group the South has no
-    exchange with the First Division."""
+    """The Croatian second tier (slice 11, gap rows 38 and 40, open item 255): each regroup gives the North its row
+    and the South its row (two groups, by latitude), or with one group the North its row by results and the South no
+    club (the others to A Lower Division); in a season of one group the South waits (no table); after a season of one
+    group the South has no exchange with the First Division."""
     fails, years = [], []
     for line in log.split("\n"):
         m = re.match(r"recomp: league sizes: cro_a2a regroup (\d+): (\d+) clubs, (\d+) North, (\d+) South, (-?\d+) "
@@ -472,8 +477,8 @@ def cro_faults(log):
         years.append(y)
         one = not south_held(y)
         want_n = min(encoded_row("cro_a2a", y)[0], found)
-        # One group: the South holds 16 (the lower divisions fill it, season_sizes_cro.c fill_south).
-        want_s = 16 if one else min(encoded_row("cro_a2b", y)[0], found - want_n)
+        # One group: the South is not held, so it keeps no club.
+        want_s = 0 if one else min(encoded_row("cro_a2b", y)[0], found - want_n)
         want_how = "results" if one else "latitude"
         if (north, south, m.group(6)) != (want_n, want_s, want_how):
             fails.append(f"cro_a2a regroup {y}: {north} North, {south} South, by {m.group(6)}; want {want_n}, "
@@ -482,6 +487,12 @@ def cro_faults(log):
     for y in years:
         if not south_held(y - 1) and f"recomp: league sizes: cro_a2b {y - 1}: not held, no exchange" not in log:
             fails.append(f"cro_a2b {y - 1}: no line of the South's exchange left out")
+    for y in years:
+        if not south_held(y) and f"recomp: league sizes: cro_a2b {y}: not held, the South waits" not in log:
+            fails.append(f"cro_a2b {y}: no line of the South waiting")
+    for m in re.finditer(r"recomp: league sizes: cro_a2b \([^)]*\) (\d+): (\d+) clubs in the division", log):
+        if not south_held(int(m.group(1))):
+            fails.append(f"cro_a2b {m.group(1)}: a table of {m.group(2)} clubs in a season it is not held")
     held = sum(1 for y in years if south_held(y - 1))
     if pairs > held:
         fails.append(f"cro_a2b: {pairs} exchanges with the First Division, want at most {held} (seasons of two groups)")
@@ -934,13 +945,15 @@ def self_test():
     tag = "recomp: league sizes: "
     two = tag + "cro_a2a regroup 2003: 32 clubs, 12 North, 12 South, 8 to A Lower Division, by latitude\n"
     one = (tag + "cro_a2b 2009: not held, no exchange with the First Division\n" + tag +
-           "cro_a2a regroup 2010: 32 clubs, 16 North, 16 South, 0 to A Lower Division, by results, 1 from the lower "
-           "divisions\n")
+           "cro_a2a regroup 2010: 30 clubs, 16 North, 0 South, 14 to A Lower Division, by results\n" + tag +
+           "cro_a2b 2010: not held, the South waits\n")
     swapped = one.replace(tag + "cro_a2b 2009: not held, no exchange with the First Division\n",
                           tag + "cro_a1 (Prva HNL) down 0, cro_a2b (Druga HNL South) up 1, pairs 1\n")
     if (cro_faults(two) or cro_faults(one) or len(cro_faults(swapped)) != 2 or
             not cro_faults(two.replace("12 South", "16 South")) or not cro_faults(one.replace("results", "latitude"))
-            or not cro_faults(one.replace("16 South", "8 South"))):
+            or not cro_faults(one.replace("0 South", "8 South"))
+            or not cro_faults(one.replace(tag + "cro_a2b 2010: not held, the South waits\n", ""))
+            or not cro_faults(one + tag + "cro_a2b (Druga HNL South) 2010: 14 clubs in the division, 16 in the table\n")):
         bad.append(("cro regroup", cro_faults(two), cro_faults(one), cro_faults(swapped)))
     pts = tag + "gre_prm split 2024: after 26, sections 4+4+6, meetings 2+2+2, rounds 6+6+10, 10 dates, points " \
                 "kept+halved+kept (Super League)"

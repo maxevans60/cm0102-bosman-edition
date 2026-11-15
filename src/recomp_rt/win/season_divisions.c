@@ -1236,6 +1236,11 @@ RT_WRAP(005eb120, gre_swap)
  * start_new_season (0x5ebe90 adds 1) makes the new season's dates (the third case of season_comps.h). */
 static void divisions_before(const SeasonChange *c)
 {
+    /* The Croatian South in a season of one group (season_sizes_cro.c). */
+    if (season_sizes_cro_south_before(c->comp, c->season)) {
+        season_change_skip();
+        return;
+    }
     uint32_t group = gre_group();
     if (!group || c->comp != group) return;
     if (!gre_held(c->season)) {

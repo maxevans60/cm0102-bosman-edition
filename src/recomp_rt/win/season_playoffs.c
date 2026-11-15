@@ -41,6 +41,7 @@
  * stage count, and both wraps pass to the original (a league with +0x2c 0 is never marked). The test switch
  * RECOMP_PLAYOFFS=off turns the kind off. */
 #include "win.h"
+#include "season_split.h"
 #include "season.h"
 #include "season_change.h"
 #include "season_league.h"
@@ -640,6 +641,7 @@ static int entry_playoffs(int e, int year, const char **file)
         uint32_t vt = rd32(g_mem, buf[i]), args[2] = {1, 1};
         if (!(call_this(rd32(g_mem, vt + 0x10), buf[i], 2, args) & 0xff)) {   /* check_complete(1, 1) */
             *file = season_change_file(buf[i]);
+            season_split_log_short(buf[i]);
             return 2;
         }
     }
@@ -662,6 +664,7 @@ static int entry_unfinished(int e, int year, const char **file)
         uint32_t vt = rd32(g_mem, buf[i]), args[2] = {1, 1};
         if (!(call_this(rd32(g_mem, vt + 0x10), buf[i], 2, args) & 0xff)) {   /* check_complete(1, 1) */
             *file = season_change_file(buf[i]);
+            season_split_log_short(buf[i]);
             return 2;
         }
     }

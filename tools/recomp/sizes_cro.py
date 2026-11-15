@@ -28,6 +28,14 @@ def _cmp(width_mask, size, left, right):
 INSNS = {
     # The chain 0x5150f0: the South's exchange with the First Division (league_promote_and_relegate 0x689c80, six
     # arguments, ret 0x18). None when the season that ends had one group (season_sizes_cro.c rt_cro_south_swap).
+    # The chain's record_final_positions of the South (vtable +0xa4, thiscall, no arguments): none after a season of
+    # one group, when the South kept its old table (rt_cro_south_idle).
+    0x51512F: ("call dword ptr [edx + 0xa4]", "if (!rt_cro_south_idle()) { ad = (uint32_t)(edx + 0xa4u); t0 = R32(ad); "
+                                              "esp -= 4; W32(esp, 0x515135u); SYNC(); rt_call(t0); LOAD(); "
+                                              "RT_AFTER_CALL(); }"),
+    # 0x514ed0: the South's relegated row (status 3) to A Lower Division; no status after a season of one group.
+    0x515097: ("cmp byte ptr [eax + 0x37], bl", _cmp("0xffu", "SZ1", "(rt_cro_south_idle() ? 0u : R8(eax + 0x37u))",
+                                                      "ebx")),
     0x515180: ("call 0x689c80", "if (rt_cro_south_swap()) { esp -= 4; W32(esp, 0x515185u); SYNC(); f_00689c80(); "
                                 "LOAD(); RT_AFTER_CALL(); } else { esp += 0x18u; }"),
     # The Greek National A Division count at a new game (record id in eax, 0x8283bb).

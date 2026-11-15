@@ -61,6 +61,13 @@ int season_sizes_edition(const char *file, int year);
  * size table or the row holds no usable count. */
 int season_sizes_clubs(const char *file, int season);
 
+/* The Croatian South (season_sizes_cro.c, open item 255). In a season of one group it is not held: the before hook
+ * of its season start keeps it idle (1: skip the start), a new game starts its clubs in A Lower Division, and its
+ * table may be empty (1 from season_sizes_cro_empty). */
+int season_sizes_cro_south_before(uint32_t comp, int season);
+void season_sizes_cro_new_game(int start);
+int season_sizes_cro_empty(uint32_t obj, const char *file, int season);
+
 /* The source files of the league classes of tools/recomp/league_sizes.py (season_size_wraps.c). */
 extern const char *const season_size_files[];
 extern const int season_size_file_count;

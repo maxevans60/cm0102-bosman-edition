@@ -201,14 +201,32 @@ static void forget(uint32_t obj)
         if (cache[k].obj == obj) cache[k].obj = 0;
 }
 
+/* Probe (RECOMP_SIZE_LOG): a sort that reaches the order of a split but finds no split state or no section. */
+static void order_probe(uint32_t obj, const SeasonSplit *sp, uint32_t a, uint32_t b)
+{
+    static int told;
+    if (!logging() || told >= 20) return;
+    told++;
+    fprintf(stderr, "recomp: league sizes: split order probe: obj 0x%x year %d state %s meetings %d dates %d matches %d "
+            "clubs %d sections %d %d (%.50s)\n", obj, readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_YEAR) : -1,
+            sp ? "2" : "not 2", readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_MEETINGS) : -1,
+            readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_DATES) : -1,
+            readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_MATCHES) : -1,
+            readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_CLUBS) : -1, sp ? section_of(a, sp) : -9,
+            sp ? section_of(b, sp) : -9, readable(obj) ? record_name(obj) : "");
+}
+
 static void split_order(void)
 {
-    uint32_t a = rt_arg(0), b = rt_arg(1);
-    const SeasonSplit *sp = cached(rd32(g_mem, SORTED_LEAGUE));
+    uint32_t a = rt_arg(0), b = rt_arg(1), obj = rd32(g_mem, SORTED_LEAGUE);
+    const SeasonSplit *sp = cached(obj);
     int r = 0;
     if (sp) {
         int x = section_of(a, sp), y = section_of(b, sp);
         if (x >= 0 && y >= 0) r = x - y;
+        else order_probe(obj, sp, a, b);
+    } else {
+        order_probe(obj, sp, a, b);
     }
     rt_ret_cdecl((uint32_t)r);
 }
@@ -440,6 +458,29 @@ void season_split_loaded(uint32_t obj)
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s split %d: loaded after the split (%.50s)\n", season_change_file(obj),
                 (int16_t)rd16(g_mem, obj + COMP_YEAR), record_name(obj));
+}
+
+void season_split_log_short(uint32_t obj)
+{
+    static int told;
+    if (!logging() || !season_sizes_on() || !readable(obj) || told >= 6) return;
+    told++;
+    SeasonSplit sp;
+    int st = state(obj, &sp);
+    uint32_t t = rd32(g_mem, obj + COMP_TABLE);
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    fprintf(stderr, "recomp: league sizes: %s short %d: state %d meetings %d dates %d matches %d, rows below target:",
+            season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), st,
+            (int16_t)rd16(g_mem, obj + COMP_MEETINGS), (int16_t)rd16(g_mem, obj + COMP_DATES),
+            (int16_t)rd16(g_mem, obj + COMP_MATCHES));
+    for (int i = 0; readable(t) && i < n && i < MAX_CLUBS; i++) {
+        uint32_t row = t + (uint32_t)i * ROW_SIZE;
+        int k = st == 2 ? section_of(row, &sp) : -1;
+        int want = st == 2 && k >= 0 ? sp.after + sp.matches[k] : (int16_t)rd16(g_mem, obj + COMP_MATCHES);
+        int played = (int8_t)g_mem[row + ROW_PLAYED];
+        if (played < want) fprintf(stderr, " row %d section %d played %d of %d", i, k, played, want);
+    }
+    fprintf(stderr, " (%.50s)\n", record_name(obj));
 }
 
 void season_split_log_end(uint32_t obj)
