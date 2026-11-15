@@ -41,18 +41,82 @@ uint32_t rt_league_dates(uint32_t obj, uint32_t original);
 /* After set_up_rules of a league class: the promotion and relegation places of the season. */
 void season_sizes_rules(uint32_t obj);
 
-/* The club count of a division of a league class in the row of a season (the club moves of a new game), or -1
- * when the class is not in the size table or the row holds no usable count. */
-int season_sizes_clubs(const char *file, int season);
+/* 1 in a season game with the size engine on (RECOMP_LEAGUE_SIZES=off turns it off). */
+int season_sizes_on(void);
 
-/* 1 when the club moves leave a division of this file the clubs of the database, up to the class count, where its
- * row has fewer (a cup takes the division whole). */
-int season_sizes_keeps_database(const char *file);
+/* The most earlier starts of 7 days of a file's date template: 13 for the Brazilian Série A and B, else
+ * SEASON_TEMPLATE_EARLIER (season_sizes_bra.c). */
+int season_sizes_bra_earlier(const char *file);
+
+/* After the places of season_sizes_rules, with the size engine on: Série A and B with the row's two meetings play
+ * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
+void season_sizes_bra_rules(uint32_t obj, const char *file);
+
+/* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
+ * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
+int season_sizes_edition(const char *file, int year);
+
+/* The club count of a division of a league class in the row of the edition of a season (the club moves of a new
+ * game; a calendar-year league takes the row whose real season is that year), or -1 when the class is not in the
+ * size table or the row holds no usable count. */
+int season_sizes_clubs(const char *file, int season);
 
 /* The source files of the league classes of tools/recomp/league_sizes.py (season_size_wraps.c). */
 extern const char *const season_size_files[];
 extern const int season_size_file_count;
 extern const int season_size_caps[];         /* the largest count of each file, 0: the class counts its data */
 extern const int season_size_floors[];       /* the smallest count, 0: none (a cup of the nation needs it) */
+extern const int season_size_fixed[];        /* the count whose exchange stays the class's, 0: none (FIXED_EXCHANGE) */
+
+/* 1 in a season game with the sizes on (not RECOMP_LEAGUE_SIZES=off): the cups of season_cup_sizes_uk.c. */
+int season_sizes_on(void);
+
+/* 1 for League Two (eng_third): it takes the relegation places of its row towards the Conference, whether the game
+ * plays the Conference or not; the wrap of EngPrm::exchange_conference_clubs_unplayed 0x574e60 moves up as many
+ * Conference clubs (season_sizes_eng.c, 0.7.2 league sizes slice 8, D15). */
+int season_sizes_eng_below(const char *file);
+
+/* The grown classes of tools/recomp/league_sizes.py GROWN (0.7.2 league sizes, slice 2, D21; season_size_wraps.c):
+ * create_table allocates the rows of the season's count up to the cap (rt_league_table_bytes), and the wrap of
+ * create_schedule gives the date template exactly the rounds of the count (season_template.h, D4 and D5). */
+typedef struct {
+    const char *file;
+    int held;               /* the rows that the class allocates (its largest original count) */
+    int cap;                /* the largest count of its rows */
+    int mode;               /* SEASON_TEMPLATE_SHUFFLED, _SEQUENTIAL or _MIRRORED (league_next_schedule_round 0x68a030) */
+} SeasonGrown;
+extern const SeasonGrown season_grown[];
+extern const int season_grown_count;
+
+/* 1 when a division of file's class plays with fewer clubs than its row (a size-table class with a cap and no floor,
+ * with the sizes on): the club moves of a new game then take no reserve side for it (D12). */
+int season_sizes_plays_short(const char *file);
+
+/* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
+ * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
+int season_sizes_data_clubs(const char *file, int season);
+
+/* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
+ * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
+ * replaces the class's (the pointer in eax, the count at count_at). */
+void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
+
+/* 1 when the date template of a grown league object this edition is the engine's (a season game with the sizes on,
+ * and the template had room for the count): its +0x3c then holds the meetings of the row (slice 13: IreFirst). */
+int season_sizes_planned(uint32_t obj);
+
+/* The meetings of a class that sets them by its count in create_table (slice 13, season_sizes_irl.c: IreFirst 4 for 9
+ * or 10 clubs, else 3, 0x635983..0x635997) for a row with no meetings value (row_meetings 0), or 0: the engine's
+ * meetings stay. */
+int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings);
+
+/* The season of the rules row of a league object this edition (the row of the start season with changing rules off),
+ * or -1. */
+int season_sizes_row_season(uint32_t obj, const char *file);
+
+/* The dates of a split league after its split (slice 7, season_split.c): create_schedule of the object for stage -1
+ * with the row's meetings, whose wrap plans the season again and gives the dates after the table's rounds in a new
+ * block (count to *count, the class's name code to *code). 0 when the plan gives none. */
+uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32_t *code);
 
 #endif

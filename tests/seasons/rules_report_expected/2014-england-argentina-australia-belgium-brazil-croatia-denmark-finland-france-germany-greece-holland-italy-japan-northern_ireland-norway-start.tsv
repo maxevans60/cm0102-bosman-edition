@@ -20,7 +20,6 @@
 2014	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: BK Marienlyst, FC Fyn, Hellerup IK, Næstved BK
 2014	club_list	Danish Second Division: 16 of 32 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Avedøre IF, BK Avarta, BK Marienlyst, FC Svendborg, FC Sydvest 05, Gentofte-Vangede Idrætsforening, Hellerup IK, Herlev IF, Kjellerup IF, Kolding BK, Kolding IF, Næsby BK, Næstved BK, Odder IGF, Svebølle B&I, Varde IF; others: -
 2014	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong FC Twente, Jong PSV; others: -
-2014	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: USJA Carquefou, Vannes Olympique Club
 2014	club_list	Greek National A Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Niki Volos, PAE Kerkyras, Skoda Xanthi, Veria; others: -
 2014	club_list	Greek National B Division: 13 of 13 listed clubs that the database holds (13 listed), 1 other clubs, 14 in all; not in it: -; others: Skoda Xanthi
 2014	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Cesena, Empoli; others: -
@@ -35,7 +34,6 @@
 2014	clubs	arg_second (Primera B Nacional), row arg-usa-41: game 25, table 22 (22)
 2014	clubs	asia_club_champ (AFC Champions League), row club-world-260: game 16, table 32 (32)
 2014	clubs	asia_nations (AFC Asian Cup), row int-continental-152: game 0, table 16 (16)
-2014	clubs	bel_first (Belgian Pro League), row hol-bel-177: game 18, table 16 (16)
 2014	clubs	bel_third (Belgian Third Division), row hol-bel-179: game 16, table 36 (36 (A 18, B 18))
 2014	clubs	bra_cup (Copa do Brasil), row bra-149: game 71, table 87 (87)
 2014	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-95: game 7, table 20 (20)
@@ -49,10 +47,8 @@
 2014	clubs	conmebol_liber (Copa Libertadores), row club-world-251: game 4, table 38 (38)
 2014	clubs	cro_a1 (Prva HNL), row gre-pol-cro-338: game 16, table 10 (10)
 2014	clubs	cro_a2a (Druga HNL), row gre-pol-cro-365: game 16, table 12 (12)
-2014	clubs	den_first (Danish 1st Division), row den-swe-81: game 16, table 12 (12)
 2014	clubs	den_second (Danish 2nd Divisions), row den-swe-82: game 16, table 32 (32)
 2014	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-145: game 6, table 53 (53)
-2014	clubs	fra_third (Championnat National), row fra-121: game 20, table 18 (18)
 2014	clubs	goldcup (Copa América), row int-continental-154: game 0, table 12 (12)
 2014	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-14: game 4, table 46 (46)
 2014	clubs	gre_prm (Super League Greece), row gre-pol-cro-41: game 14, table 18 (18)
@@ -83,7 +79,6 @@
 2014	down	cro_a2b (Druga HNL South), row gre-pol-cro-392: game 2 (+0 play-off places), table na (n/a)
 2014	down	den_first (Danish 1st Division), row den-swe-81: game 3 (+0 play-off places), table 2 (2)
 2014	down	den_second (Danish 2nd Divisions), row den-swe-82: game 4 (+0 play-off places), table 10 (10)
-2014	down	eng_third (Football League Two), row eng-161: game 1 (+0 play-off places), table 2 (2)
 2014	down	ger_second (2. Bundesliga), row ger-171: game 4 (+0 play-off places), table 2 (2)
 2014	down	gre_prm (Super League Greece), row gre-pol-cro-41: game 2 (+0 play-off places), table 4 (4 (15th-18th))
 2014	down	gre_second (Football League North), row gre-pol-cro-68: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
@@ -150,7 +145,6 @@
 2014	rounds	cro_a1 (Prva HNL), row gre-pol-cro-338: game 30, table 36 (4 meetings, zones -, extra 0)
 2014	rounds	cro_a2a (Druga HNL), row gre-pol-cro-365: game 30, table 33 (3 meetings, zones -, extra 0)
 2014	rounds	den_first (Danish 1st Division), row den-swe-81: game 30, table 33 (3 meetings, zones -, extra 0)
-2014	rounds	fra_third (Championnat National), row fra-121: game 38, table 34 (2 meetings, zones -, extra 0)
 2014	rounds	gre_prm (Super League Greece), row gre-pol-cro-41: game 26, table 34 (2 meetings, zones -, extra 0)
 2014	rounds	hol_first (Eerste Divisie), row hol-bel-172: game 34, table 38 (2 meetings, zones -, extra 0)
 2014	rounds	ita_ser_a (Serie A), row ita-223: game 34, table 38 (2 meetings, zones -, extra 0)

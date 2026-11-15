@@ -74,6 +74,7 @@
 #include "season_cups.h"
 #include "season_comps.h"
 #include "season_uefa.h"
+#include "season_split.h"
 #include "season_comps.h"
 #include "../host.h"
 #include "../rt_host.h"
@@ -236,7 +237,7 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
     fprintf(f, "comp\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t0x%x\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", season, phase, slot, id,
             file, c ? c->cls : "?",
             c ? (league ? "league" : c->kind == SEASON_KIND_CUP ? "cup" : "comp") : "?", vt,
-            (int16_t)rd16(g_mem, obj + 0x40), clubs, (int16_t)rd16(g_mem, obj + 0x3c),
+            (int16_t)rd16(g_mem, obj + 0x40), clubs, league ? season_split_meetings(obj) : (int16_t)rd16(g_mem, obj + 0x3c),
             g_mem[obj + 0x4a], g_mem[obj + 0x49], rules, name);
     if (c && c->kind == SEASON_KIND_CUP) write_cup_rounds(f, season, phase, slot, file, obj);
     if (sweep_on) sweep_comp(f, season, phase, file, c, obj);

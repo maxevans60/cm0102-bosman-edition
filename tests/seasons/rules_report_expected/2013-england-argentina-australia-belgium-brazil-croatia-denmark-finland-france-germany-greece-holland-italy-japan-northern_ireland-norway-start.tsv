@@ -20,7 +20,6 @@
 2013	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Aarhus Fremad, FC Fyn, FC Helsingør, Skive Idrætsklub
 2013	club_list	Danish Second Division: 16 of 31 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Aarhus Fremad, BK Søllerød-Vedbæk, Boldklubben Avarta, Boldklubben Fremad Amager, Boldklubben af 1893, FC Djursland, FC Helsingør, Fodbold Club Sydvest 05, Idrætsforeningen Skjold Birkerød, Odder IGF, Ringkøbing IF, SC Egedal, Skive Idrætsklub, Svebølle B&I, Vanløse Idræts Forening; others: -
 2013	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong FC Twente, Jong PSV; others: -
-2013	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Le Mans FC, Pau FC
 2013	club_list	Greek National A Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AEL Kalloni, Apollon Smirnis, Diethnis Enosis Ergotelis, Panetolikos; others: -
 2013	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Hellas Verona, Livorno; others: -
 2013	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Carpi, Trapani; others: -
@@ -33,7 +32,6 @@
 2013	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: FK Bodø/Glimt, IK Start; others: -
 2013	clubs	arg_second (Primera B Nacional), row arg-usa-40: game 25, table 22 (22)
 2013	clubs	asia_club_champ (AFC Champions League), row club-world-241: game 16, table 32 (32)
-2013	clubs	bel_first (Belgian Pro League), row hol-bel-164: game 18, table 16 (16)
 2013	clubs	bel_third (Belgian Third Division), row hol-bel-166: game 16, table 36 (36 (A 18, B 18))
 2013	clubs	bra_cup (Copa do Brasil), row bra-148: game 71, table 87 (87)
 2013	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-94: game 7, table 20 (20)
@@ -46,9 +44,7 @@
 2013	clubs	conmebol_liber (Copa Libertadores), row club-world-232: game 4, table 38 (38)
 2013	clubs	cro_a1 (Prva HNL), row gre-pol-cro-337: game 16, table 10 (10)
 2013	clubs	cro_a2a (Druga HNL), row gre-pol-cro-364: game 16, table 12 (12)
-2013	clubs	den_first (Danish 1st Division), row den-swe-75: game 16, table 12 (12)
 2013	clubs	den_second (Danish 2nd Divisions), row den-swe-76: game 16, table 32 (32)
-2013	clubs	fra_third (Championnat National), row fra-112: game 20, table 18 (18)
 2013	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-13: game 4, table 46 (46)
 2013	clubs	gre_prm (Super League Greece), row gre-pol-cro-40: game 14, table 18 (18)
 2013	clubs	hol_first (Eerste Divisie), row hol-bel-159: game 18, table 20 (20)
@@ -87,7 +83,6 @@
 2013	down	cro_a2b (Druga HNL South), row gre-pol-cro-391: game 2 (+0 play-off places), table na (n/a)
 2013	down	den_first (Danish 1st Division), row den-swe-75: game 3 (+0 play-off places), table 2 (2)
 2013	down	den_second (Danish 2nd Divisions), row den-swe-76: game 4 (+0 play-off places), table 6 (6)
-2013	down	eng_third (Football League Two), row eng-151: game 1 (+0 play-off places), table 2 (2)
 2013	down	ger_second (2. Bundesliga), row ger-158: game 4 (+0 play-off places), table 2 (2)
 2013	down	gre_second (Football League North), row gre-pol-cro-67: game 2 (+0 play-off places), table 3 (3 per group (bottom three))
 2013	down	ita_ser_b (Serie B), row ita-207: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
@@ -154,7 +149,6 @@
 2013	rounds	cro_a1 (Prva HNL), row gre-pol-cro-337: game 30, table 36 (4 meetings, zones -, extra 0)
 2013	rounds	cro_a2a (Druga HNL), row gre-pol-cro-364: game 30, table 33 (3 meetings, zones -, extra 0)
 2013	rounds	den_first (Danish 1st Division), row den-swe-75: game 30, table 33 (3 meetings, zones -, extra 0)
-2013	rounds	fra_third (Championnat National), row fra-112: game 38, table 34 (2 meetings, zones -, extra 0)
 2013	rounds	gre_prm (Super League Greece), row gre-pol-cro-40: game 26, table 34 (2 meetings, zones -, extra 0)
 2013	rounds	hol_first (Eerste Divisie), row hol-bel-159: game 34, table 38 (2 meetings, zones -, extra 0)
 2013	rounds	ita_ser_a (Serie A), row ita-206: game 34, table 38 (2 meetings, zones -, extra 0)

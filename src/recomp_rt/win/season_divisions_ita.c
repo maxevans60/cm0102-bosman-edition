@@ -19,7 +19,10 @@
 #include "season_rules.h"
 #include "season_names.h"
 #include "season_divisions_ita.h"
+#include "season_cup_sizes_west.h"
 #include "season_ita_second.h"
+#include "season_sizes.h"
+#include "season_sizes_ita.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -295,7 +298,10 @@ int season_ita_cap(uint32_t obj, int cap)
 
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original)
 {
-    return (season_ita_serie_c(obj) || two_c2(obj)) && original < MAX_CLUBS * ROW_SIZE ? MAX_CLUBS * ROW_SIZE : original;
+    if ((season_ita_serie_c(obj) || two_c2(obj)) && original < MAX_CLUBS * ROW_SIZE) return MAX_CLUBS * ROW_SIZE;
+    /* Outside the era C1/A and C1/B are grown classes of the size engine (league_sizes.py GROWN, 0.7.2 slice 9: 19
+     * in C1/A in 2004/05). C2/A and C2/B are not, and rt_league_table_bytes gives them the original. */
+    return rt_league_table_bytes(obj, original);
 }
 
 /* The count store of C2/A's create_table (0x653aa2), and of C2/B's (0x657f62, through rt_ita_c2_end_clubs): the
@@ -369,8 +375,19 @@ void o_0064ad80(void);
 void o_0064ef30(void);
 void o_006531a0(void);
 void o_00657660(void);
-RT_WRAP(0064ad80, c1a_schedule) { if (!schedule(KEY_C1A)) o_0064ad80(); }
-RT_WRAP(0064ef30, c1b_schedule) { if (!schedule(KEY_C1B)) o_0064ef30(); }
+/* C1/A and C1/B are also grown classes of the size engine (league_sizes.py GROWN and SCHEDULE_TAKEN, 0.7.2 slice 9):
+ * when the era's template does not apply, the original's template goes to season_sizes_schedule, which gives it the
+ * rounds of the season's count (19 in C1/A in 2004/05, 16 and 17 in 2012/13 and 2013/14). */
+static void c1_schedule(uint32_t key, void (*original)(void))
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    if (schedule(key)) return;
+    original();
+    if (!rt_unwinding) season_sizes_schedule(self, stage, count_at);
+}
+RT_WRAP(0064ad80, c1a_schedule) { c1_schedule(KEY_C1A, o_0064ad80); }
+RT_WRAP(0064ef30, c1b_schedule) { c1_schedule(KEY_C1B, o_0064ef30); }
 RT_WRAP(006531a0, c2a_schedule) { if (!schedule(KEY_C2A)) o_006531a0(); }
 /* ItaSerC2b::create_schedule 0x657660 (D 0x22 at 0x65769d, block 0x8a2 at 0x657698): C2/B of 20 in 2011/12. */
 RT_WRAP(00657660, c2b_schedule) { if (!schedule(KEY_C2B)) o_00657660(); }
@@ -1009,8 +1026,13 @@ RT_WRAP(00641fc0, ita_exchange_c2)
 }
 RT_WRAP(00642630, ita_regroup_c1)
 {
-    if (!era_code(cpu.ecx)) o_00642630();
-    else rt_ret_cdecl(cpu.eax);
+    if (!era_code(cpu.ecx)) {
+        int run = season_sizes_ita_regroup_begin(cpu.ecx);     /* 0.7.2 slice 9: the counts of the C1 groups */
+        if (rt_unwinding) return;
+        if (run) o_00642630();
+        else rt_ret_cdecl(cpu.eax);
+        season_sizes_ita_regroup_end();
+    } else rt_ret_cdecl(cpu.eax);
 }
 RT_WRAP(00642790, ita_regroup_c2)
 {
@@ -1529,6 +1551,7 @@ RT_WRAP(0063faf0, ita_cup_entrants)
         cpu.ecx = saved;
     }
     o_0063faf0();
+    if (!rt_unwinding && cpu.eax) season_cup_sizes_ita_cup(cup);     /* 0.7.2 slice 5: Serie A and B take part */
 }
 
 /* ---- The manager of the year of an ended C2 group ----

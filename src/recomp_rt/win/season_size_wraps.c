@@ -3,6 +3,7 @@
  * do not edit by hand. */
 #include "win.h"
 #include "season_sizes.h"
+#include "season_template.h"
 
 /* Each wrap: the original (thiscall, no arguments), then season_sizes_rules(this). The recompiler reads
  * the RT_WRAP lines as they are (tools/recomp/recomp.py), so they are written out in full. */
@@ -640,7 +641,7 @@ const int season_size_caps[] = {
     16,       /* cro_a2b */
     16,       /* den_first */
     12,       /* den_prm */
-    22,       /* eng_conf */
+    24,       /* eng_conf */
     24,       /* eng_first */
     20,       /* eng_prm */
     24,       /* eng_second */
@@ -648,7 +649,7 @@ const int season_size_caps[] = {
     12,       /* fin_prm */
     20,       /* fra_first */
     20,       /* fra_second */
-    20,       /* fra_third */
+    21,       /* fra_third */
     18,       /* ger_first */
     18,       /* ger_second */
     14,       /* gre_prm */
@@ -657,21 +658,21 @@ const int season_size_caps[] = {
     18,       /* hol_prm */
     0,       /* ire_first */
     0,       /* ire_prm */
-    18,       /* ita_ser_a */
-    20,       /* ita_ser_b */
-    18,       /* ita_ser_c1a */
-    18,       /* ita_ser_c1b */
+    20,       /* ita_ser_a */
+    24,       /* ita_ser_b */
+    20,       /* ita_ser_c1a */
+    20,       /* ita_ser_c1b */
     16,       /* jap_j1 */
     12,       /* jap_j2 */
     10,       /* kor_league */
-    10,       /* nir_first */
-    10,       /* nir_prm */
+    17,       /* nir_first */
+    16,       /* nir_prm */
     16,       /* nor_first */
-    14,       /* nor_prm */
+    16,       /* nor_prm */
     0,       /* pol_first */
     20,       /* pol_second */
     18,       /* por_prm */
-    18,       /* por_second */
+    24,       /* por_second */
     18,       /* rus_first */
     16,       /* rus_prm */
     10,       /* sco_first */
@@ -690,49 +691,108 @@ const int season_size_caps[] = {
 const int season_size_floors[] = {
     0,       /* arg_prm */
     0,       /* aus_nsl */
-    18,       /* bel_first */
+    0,       /* bel_first */
     18,       /* bel_second */
     0,       /* bra_nat_first */
     0,       /* bra_nat_second */
-    16,       /* cro_a1 */
-    16,       /* cro_a2a */
-    16,       /* cro_a2b */
+    0,       /* cro_a1 */
+    0,       /* cro_a2a */
+    0,       /* cro_a2b */
     0,       /* den_first */
     0,       /* den_prm */
-    22,       /* eng_conf */
-    24,       /* eng_first */
-    20,       /* eng_prm */
-    24,       /* eng_second */
-    24,       /* eng_third */
+    0,       /* eng_conf */
+    0,       /* eng_first */
+    0,       /* eng_prm */
+    0,       /* eng_second */
+    0,       /* eng_third */
     0,       /* fin_prm */
     0,       /* fra_first */
     0,       /* fra_second */
-    20,       /* fra_third */
+    0,       /* fra_third */
     0,       /* ger_first */
     0,       /* ger_second */
     0,       /* gre_prm */
-    14,       /* gre_second */
-    18,       /* hol_first */
-    18,       /* hol_prm */
+    0,       /* gre_second */
+    0,       /* hol_first */
+    0,       /* hol_prm */
     0,       /* ire_first */
     0,       /* ire_prm */
     0,       /* ita_ser_a */
     0,       /* ita_ser_b */
-    18,       /* ita_ser_c1a */
-    18,       /* ita_ser_c1b */
-    16,       /* jap_j1 */
-    12,       /* jap_j2 */
-    10,       /* kor_league */
+    0,       /* ita_ser_c1a */
+    0,       /* ita_ser_c1b */
+    0,       /* jap_j1 */
+    0,       /* jap_j2 */
+    0,       /* kor_league */
+    0,       /* nir_first */
+    0,       /* nir_prm */
+    0,       /* nor_first */
+    0,       /* nor_prm */
+    0,       /* pol_first */
+    0,       /* pol_second */
+    0,       /* por_prm */
+    0,       /* por_second */
+    0,       /* rus_first */
+    0,       /* rus_prm */
+    0,       /* sco_first */
+    0,       /* sco_prm */
+    0,       /* sco_second */
+    0,       /* sco_third */
+    0,       /* spa_first */
+    0,       /* spa_second */
+    0,       /* swe_first */
+    0,       /* swe_prm */
+    0,       /* tur_first */
+    0,       /* tur_second */
+    0,       /* wel_first */
+};
+/* The count whose places and exchange stay the class's (league_sizes.py FIXED_EXCHANGE). */
+const int season_size_fixed[] = {
+    0,       /* arg_prm */
+    0,       /* aus_nsl */
+    0,       /* bel_first */
+    0,       /* bel_second */
+    0,       /* bra_nat_first */
+    0,       /* bra_nat_second */
+    0,       /* cro_a1 */
+    0,       /* cro_a2a */
+    0,       /* cro_a2b */
+    0,       /* den_first */
+    0,       /* den_prm */
+    0,       /* eng_conf */
+    0,       /* eng_first */
+    0,       /* eng_prm */
+    0,       /* eng_second */
+    0,       /* eng_third */
+    0,       /* fin_prm */
+    0,       /* fra_first */
+    0,       /* fra_second */
+    0,       /* fra_third */
+    0,       /* ger_first */
+    0,       /* ger_second */
+    0,       /* gre_prm */
+    0,       /* gre_second */
+    0,       /* hol_first */
+    0,       /* hol_prm */
+    0,       /* ire_first */
+    0,       /* ire_prm */
+    0,       /* ita_ser_a */
+    0,       /* ita_ser_b */
+    0,       /* ita_ser_c1a */
+    0,       /* ita_ser_c1b */
+    0,       /* jap_j1 */
+    0,       /* jap_j2 */
+    0,       /* kor_league */
     10,       /* nir_first */
     10,       /* nir_prm */
     0,       /* nor_first */
     0,       /* nor_prm */
     0,       /* pol_first */
-    18,       /* pol_second */
+    0,       /* pol_second */
     0,       /* por_prm */
     0,       /* por_second */
-    18,       /* rus_first */
-    16,       /* rus_prm */
+    0,       /* rus_first */
+    0,       /* rus_prm */
     10,       /* sco_first */
     12,       /* sco_prm */
     10,       /* sco_second */
@@ -741,7 +801,177 @@ const int season_size_floors[] = {
     0,       /* spa_second */
     0,       /* swe_first */
     0,       /* swe_prm */
-    18,       /* tur_first */
-    20,       /* tur_second */
+    0,       /* tur_first */
+    0,       /* tur_second */
     18,       /* wel_first */
 };
+
+/* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
+ * mode of the date template. */
+const SeasonGrown season_grown[] = {
+    {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
+    {"fra_third", 20, 21, SEASON_TEMPLATE_MIRRORED},
+    {"ire_first", 0, 12, SEASON_TEMPLATE_SHUFFLED},
+    {"ita_ser_a", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
+    {"ita_ser_b", 20, 24, SEASON_TEMPLATE_SEQUENTIAL},
+    {"ita_ser_c1a", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
+    {"ita_ser_c1b", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
+    {"nir_first", 10, 17, SEASON_TEMPLATE_SHUFFLED},
+    {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
+    {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
+    {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
+    {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
+    {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
+};
+const int season_grown_count = 15;
+
+/* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
+
+/* BraNatFirst::create_schedule */
+void o_00429b50(void);
+RT_WRAP(00429b50, schedule_429b50)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00429b50();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* BraNatSecond::create_schedule */
+void o_0042c140(void);
+RT_WRAP(0042c140, schedule_42c140)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0042c140();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* EngConf::create_schedule */
+void o_0056de60(void);
+RT_WRAP(0056de60, schedule_56de60)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0056de60();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* FraThird::create_schedule */
+void o_005bfe30(void);
+RT_WRAP(005bfe30, schedule_5bfe30)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005bfe30();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* IreFirst::create_schedule */
+void o_00634f40(void);
+RT_WRAP(00634f40, schedule_634f40)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00634f40();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* ItaSerA::create_schedule */
+void o_006409b0(void);
+RT_WRAP(006409b0, schedule_6409b0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_006409b0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* ItaSerB::create_schedule */
+void o_00645af0(void);
+RT_WRAP(00645af0, schedule_645af0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00645af0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* ItaSerC1a::create_schedule 0x64ad80: wrapped in season_divisions_ita.c c1a_schedule */
+
+/* ItaSerC1b::create_schedule 0x64ef30: wrapped in season_divisions_ita.c c1b_schedule */
+
+/* NirFirst::create_schedule */
+void o_0078b310(void);
+RT_WRAP(0078b310, schedule_78b310)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0078b310();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* NirPrm::create_schedule */
+void o_0078e330(void);
+RT_WRAP(0078e330, schedule_78e330)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0078e330();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* NorPrm::create_schedule */
+void o_007917c0(void);
+RT_WRAP(007917c0, schedule_7917c0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_007917c0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* PorSecond::create_schedule */
+void o_007d0c40(void);
+RT_WRAP(007d0c40, schedule_7d0c40)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_007d0c40();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* SwePrm::create_schedule */
+void o_0088feb0(void);
+RT_WRAP(0088feb0, schedule_88feb0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0088feb0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* WelFirst::create_schedule */
+void o_009250f0(void);
+RT_WRAP(009250f0, schedule_9250f0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_009250f0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}

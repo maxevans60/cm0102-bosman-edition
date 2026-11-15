@@ -34,7 +34,6 @@
 2017	club_list	Danish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: FC Helsingør, Hobro IK; others: -
 2017	club_list	Danish Second Division: 16 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: AB Gladsaxe, Hellerup IK, Hillerød Fodbold, IF Lyseng, Jammerbugt FC, Middelfart G&BK, Ringkøbing IF, Skovshoved IF; others: -
 2017	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Jong AZ Alkmaar, Jong FC Utrecht; others: -
-2017	club_list	French National: 17 of 17 listed clubs that the database holds (17 listed), 3 other clubs, 20 in all; not in it: -; others: Sports Réunis de Colmar, Vendée Luçon Football, Évian Thonon Gaillard
 2017	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: GS Apollon Smyrnis, PAS Lamia 1964; others: -
 2017	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AO Neos  Acharnaikos, GAS Eginiakos, GS Ergotelis, Kallithea; others: -
 2017	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Benevento, Hellas Verona; others: -
@@ -46,7 +45,6 @@
 2017	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IK Start, Sandefjord Fotball; others: -
 2017	clubs	arg_prm (Superliga Argentina), row arg-usa-17: game 20, table 28 (28)
 2017	clubs	asia_club_champ (AFC Champions League), row club-world-317: game 16, table 32 (32)
-2017	clubs	bel_first (Belgian First Division A), row hol-bel-216: game 18, table 16 (16)
 2017	clubs	bel_second (Belgian First Division B), row hol-bel-217: game 18, table 8 (8)
 2017	clubs	bra_cup (Copa do Brasil), row bra-152: game 71, table 91 (91)
 2017	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-98: game 7, table 20 (20)
@@ -58,10 +56,8 @@
 2017	clubs	conmebol_liber (Copa Libertadores), row club-world-308: game 4, table 47 (47)
 2017	clubs	cro_a1 (Prva HNL), row gre-pol-cro-341: game 16, table 10 (10)
 2017	clubs	cro_a2a (Druga HNL), row gre-pol-cro-368: game 16, table 12 (12)
-2017	clubs	den_first (Danish 1st Division), row den-swe-99: game 16, table 12 (12)
 2017	clubs	den_prm (Danish Superliga), row den-swe-98: game 12, table 14 (14)
 2017	clubs	den_second (Danish 2nd Divisions), row den-swe-100: game 16, table 24 (24)
-2017	clubs	fra_third (Championnat National), row fra-148: game 20, table 17 (17)
 2017	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-17: game 4, table 33 (33)
 2017	clubs	gre_prm (Super League Greece), row gre-pol-cro-44: game 14, table 16 (16)
 2017	clubs	gre_second (Football League), row gre-pol-cro-71: game 14, table 18 (18)
@@ -99,8 +95,6 @@
 2017	down	cro_a2a (Druga HNL), row gre-pol-cro-368: game 2 (+0 play-off places), table 1 (1 (12th))
 2017	down	cro_a2b (Druga HNL South), row gre-pol-cro-395: game 2 (+0 play-off places), table na (n/a)
 2017	down	den_first (Danish 1st Division), row den-swe-99: game 3 (+0 play-off places), table 2 (2)
-2017	down	eng_third (EFL League Two), row eng-191: game 1 (+0 play-off places), table 2 (2)
-2017	down	fra_second (Ligue 2), row fra-147: game 3 (+0 play-off places), table 2 (2)
 2017	down	fra_third (Championnat National), row fra-148: game 4 (+0 play-off places), table 3 (3)
 2017	down	ger_second (2. Bundesliga), row ger-210: game 4 (+0 play-off places), table 2 (2)
 2017	down	gre_second (Football League), row gre-pol-cro-71: game 2 (+0 play-off places), table 6 (6 (bottom six))
@@ -172,7 +166,6 @@
 2017	rounds	cro_a2a (Druga HNL), row gre-pol-cro-368: game 30, table 33 (3 meetings, zones -, extra 0)
 2017	rounds	den_first (Danish 1st Division), row den-swe-99: game 30, table 33 (3 meetings, zones -, extra 0)
 2017	rounds	den_prm (Danish Superliga), row den-swe-98: game 33, table 26 (2 meetings, zones -, extra 0)
-2017	rounds	fra_third (Championnat National), row fra-148: game 38, table 34 (2 meetings, zones -, extra 0)
 2017	rounds	gre_prm (Super League Greece), row gre-pol-cro-44: game 26, table 30 (2 meetings, zones -, extra 0)
 2017	rounds	gre_second (Football League), row gre-pol-cro-71: game 26, table 34 (2 meetings, zones -, extra 0)
 2017	rounds	hol_first (Eerste Divisie), row hol-bel-211: game 34, table 38 (2 meetings, zones -, extra 0)
@@ -193,5 +186,4 @@
 2017	up	cro_a2a (Druga HNL), row gre-pol-cro-368: game 0 (+0 play-off places), table 1 (1 (1st))
 2017	up	den_second (Danish 2nd Divisions), row den-swe-100: game 3 (+0 play-off places), table 2 (2)
 2017	up	fin_first (Ykkönen), row nor-fin-168: game 2 (+0 play-off places), table 1 (1st (1))
-2017	up	fra_third (Championnat National), row fra-148: game 3 (+0 play-off places), table 2 (2)
 2017	up	gre_cup (Greek Football Cup), row gre-pol-cro-17: game 2 (+0 play-off places), table na (n/a)

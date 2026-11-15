@@ -20,7 +20,6 @@
 2015	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Akademisk Boldklub, BK Frem af 1886, BK Marienlyst, Brønshøj BK
 2015	club_list	Danish Second Division: 16 of 24 listed clubs that the database holds (24 listed), 0 other clubs, 16 in all; not in it: AB Tårnby, Aarhus Fremad, Akademisk Boldklub, BK Frem af 1886, BK Marienlyst, Brønshøj BK, Dalum IF, Middelfart G&BK; others: -
 2015	club_list	Dutch First Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: Jong PSV; others: -
-2015	club_list	French National: 18 of 18 listed clubs that the database holds (18 listed), 2 other clubs, 20 in all; not in it: -; others: Club Sportif Avionnais, La Vitréenne
 2015	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: APO Levadiakos, Panionios GSS; others: -
 2015	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AO Acharnaikos, Anagennisi Karditsas, GS Panegialios, Kallithea; others: -
 2015	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Bologna, Frosinone; others: -
@@ -33,7 +32,6 @@
 2015	clubs	arg_prm (Primera División), row arg-usa-15: game 20, table 30 (30)
 2015	clubs	arg_second (Primera B Nacional), row arg-usa-42: game 25, table 22 (22)
 2015	clubs	asia_club_champ (AFC Champions League), row club-world-279: game 16, table 32 (32)
-2015	clubs	bel_first (Belgian Pro League), row hol-bel-190: game 18, table 16 (16)
 2015	clubs	bel_second (Belgian Second Division), row hol-bel-191: game 18, table 17 (17)
 2015	clubs	bel_third (Belgian Third Division), row hol-bel-192: game 16, table 37 (37 (A 18, B 19))
 2015	clubs	bra_cup (Copa do Brasil), row bra-150: game 71, table 86 (86)
@@ -48,11 +46,9 @@
 2015	clubs	conmebol_liber (Copa Libertadores), row club-world-270: game 4, table 38 (38)
 2015	clubs	cro_a1 (Prva HNL), row gre-pol-cro-339: game 16, table 10 (10)
 2015	clubs	cro_a2a (Druga HNL), row gre-pol-cro-366: game 16, table 12 (12)
-2015	clubs	den_first (Danish 1st Division), row den-swe-87: game 16, table 12 (12)
 2015	clubs	den_second (Danish 2nd Divisions), row den-swe-88: game 16, table 24 (24)
 2015	clubs	euro_champ (UEFA European Championship), row int-continental-155: game 0, table 24 (24)
 2015	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-156: game 0, table 53 (53)
-2015	clubs	fra_third (Championnat National), row fra-130: game 20, table 18 (18)
 2015	clubs	goldcup (Copa América Centenario), row int-continental-165: game 0, table 16 (16)
 2015	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-15: game 4, table 34 (34)
 2015	clubs	gre_prm (Super League Greece), row gre-pol-cro-42: game 14, table 16 (16)
@@ -92,7 +88,6 @@
 2015	down	cro_a2b (Druga HNL South), row gre-pol-cro-393: game 2 (+0 play-off places), table na (n/a)
 2015	down	den_first (Danish 1st Division), row den-swe-87: game 3 (+0 play-off places), table 1 (1)
 2015	down	den_second (Danish 2nd Divisions), row den-swe-88: game 4 (+0 play-off places), table 2 (2)
-2015	down	eng_third (Football League Two), row eng-171: game 1 (+0 play-off places), table 2 (2)
 2015	down	ger_second (2. Bundesliga), row ger-184: game 4 (+0 play-off places), table 2 (2)
 2015	down	gre_second (Football League), row gre-pol-cro-69: game 2 (+0 play-off places), table 4 (4 (bottom four))
 2015	down	ita_ser_b (Serie B), row ita-241: game 4 (+0 play-off places), table 3 (3 direct + play-out 4th-last v 5th-last (two legs; not held if gap over 4 points)
@@ -157,7 +152,6 @@
 2015	rounds	cro_a1 (Prva HNL), row gre-pol-cro-339: game 30, table 36 (4 meetings, zones -, extra 0)
 2015	rounds	cro_a2a (Druga HNL), row gre-pol-cro-366: game 30, table 33 (3 meetings, zones -, extra 0)
 2015	rounds	den_first (Danish 1st Division), row den-swe-87: game 30, table 33 (3 meetings, zones -, extra 0)
-2015	rounds	fra_third (Championnat National), row fra-130: game 38, table 34 (2 meetings, zones -, extra 0)
 2015	rounds	gre_prm (Super League Greece), row gre-pol-cro-42: game 26, table 30 (2 meetings, zones -, extra 0)
 2015	rounds	gre_second (Football League), row gre-pol-cro-69: game 26, table 34 (2 meetings, zones -, extra 0)
 2015	rounds	hol_first (Eerste Divisie), row hol-bel-185: game 34, table 38 (2 meetings, zones -, extra 0)
