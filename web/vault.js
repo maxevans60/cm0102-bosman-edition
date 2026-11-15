@@ -5,8 +5,13 @@
 // keeps these files in an IndexedDB store of its own, as Blobs, which the browser keeps on disk:
 // - the user folder holds a placeholder for each one: a file with its real size and time and no contents, so the game
 //   lists it as before;
-// - when the game opens a placeholder, the open waits while the page reads the Blob into it (instantiate below makes
-//   the engine's open a Suspending import under JSPI), and when the game closes it unchanged, the contents go again;
+// - when the game opens a placeholder to read it, nothing is loaded: each read of the game takes the pieces of the Blob
+//   it needs (4 MB each, the last dozen kept), so a save is never in memory whole. instantiate below makes the engine's
+//   open and read Suspending imports under JSPI, so they can wait for the browser's storage. The game opens a save about
+//   100 times during a load, and the vault once read the whole file at every open: with a player's saves of 690 MB a
+//   load took 99 s and 5.6 GB of memory in the tab, and the Load Game list 17 s for four of them (15 November 2026).
+//   A file opened to be written (and not emptied) still comes into memory whole, and goes again when it is closed
+//   unchanged;
 // - a file that the game or the page writes stays in memory until it is closed and has not changed for STABLE ms,
 //   then it goes into the vault and becomes a placeholder;
 // - a renamed file keeps its record (the record moves to the new name before anything new is stored under the old
@@ -26,8 +31,13 @@ export const VAULT_DB = 'cm0102-vault';
 export const VAULT_VERSION = 2;
 const STORE = 'files';
 const IDBFS_STORE = 'FILE_DATA', IDBFS_VERSION = 21;   // Emscripten's IDBFS: one database per mount point
-const O_TRUNC = 512;                                    // Emscripten's flags (musl)
-const ENOENT = 44;
+const O_TRUNC = 512, O_ACCMODE = 3;                     // Emscripten's flags (musl); O_RDONLY is 0
+const ENOENT = 44, EIO = 29;
+export const PIECE = 4 << 20;                           // a save is read from the storage in pieces of this size
+const KEEP_PIECES = 12;                                 // the pieces kept in memory, the last used (48 MB)
+// A placeholder: the file's contents are in the browser's storage, not in its node ('lazy' while the game reads it in
+// pieces). The page reads such a file with bytes, view or blob.
+export const isAway = (node) => node?.vault === 'out' || node?.vault === 'lazy';
 const STABLE = 1500;
 
 // The files that live in the vault: saves (*.sav) at the top of the user folder, every file in backups/ (older
@@ -113,7 +123,79 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   const pathOf = (node) => { try { return FS.getPath(node); } catch { return null; } };
   const alive = (node) => { const p = pathOf(node); return p && lookup(p) === node ? p : null; };
   const inUse = (node) => FS.streams.some((s) => s && s.node === node);
-  const evict = (node) => { node.contents = new Uint8Array(0); node.vault = 'out'; };
+  // The node is whole in memory again, or a file of its own: its reads are MEMFS's, and its Blob is not kept (the
+  // record may change; the next open takes it anew, and with it other pieces).
+  const release = (node) => { if (node.vaultOps) node.stream_ops = node.vaultOps; node.vaultBlob = null; };
+  const evict = (node) => { node.contents = new Uint8Array(0); node.vault = 'out'; release(node); };
+
+  // ---- Reading in pieces ----
+  const pieces = new Map();                     // "<blob id>:<index>" -> bytes; in the order of use, the oldest first
+  let blobIds = 0;
+  // The reads of a node that the game reads in pieces: from the pieces readForGame brought. A stream opened so keeps
+  // these after the node changed (loaded whole, rewritten): they then read as MEMFS does.
+  function pieceRead(stream, buffer, offset, length, position) {
+    const node = stream.node;
+    if (node.vault !== 'lazy') return node.vaultOps.read(stream, buffer, offset, length, position);
+    const n = Math.max(0, Math.min(length, node.usedBytes - position));
+    let done = 0;
+    while (done < n) {
+      const at = position + done, i = Math.floor(at / PIECE), piece = pieces.get(`${node.vaultBlobId}:${i}`);
+      if (!piece) throw FS.ErrnoError ? new FS.ErrnoError(EIO) : Object.assign(new Error('a piece of the file was not read first'), { errno: EIO });
+      const from = at - i * PIECE, take = Math.min(n - done, piece.length - from);
+      buffer.set(piece.subarray(from, from + take), offset + done);
+      done += take;
+    }
+    return done;
+  }
+  const readInPieces = (node, blob) => {
+    node.vaultBlob = blob;
+    node.vaultBlobId = ++blobIds;
+    node.vaultOps ??= node.stream_ops;
+  };
+  const lazy = (node) => { node.stream_ops = { ...node.vaultOps, read: pieceRead }; node.vault = 'lazy'; };
+  // The game opens a placeholder (flags: those of open). To read: nothing is loaded. To write: the whole file, as load.
+  // null when the open can go on at once, else a promise that it waits for.
+  function openForGame(node, flags) {
+    if (!isAway(node)) return null;
+    if (flags & O_TRUNC) { release(node); node.vault = undefined; return null; }     // rewritten whole
+    if ((flags & O_ACCMODE) !== 0) return load(node);
+    if (node.vault === 'lazy') return null;
+    if (node.vaultBlob) { lazy(node); return null; }
+    return serial(async () => {
+      if (node.vault !== 'out') return;
+      const rec = await get(node.vaultKey);
+      if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
+      if (node.vault !== 'out') return;
+      readInPieces(node, rec.blob);
+      lazy(node);
+    });
+  }
+  // Before a read of the game at position, of length bytes: the pieces it needs. null when they are all there.
+  function readForGame(node, position, length) {
+    if (node.vault !== 'lazy') return null;
+    const end = Math.min(node.usedBytes, position + length);
+    if (position >= end) return null;
+    const first = Math.floor(position / PIECE), last = Math.floor((end - 1) / PIECE), id = node.vaultBlobId, missing = [];
+    for (let i = first; i <= last; i++) {
+      const k = `${id}:${i}`, piece = pieces.get(k);
+      if (piece) { pieces.delete(k); pieces.set(k, piece); } else missing.push(i);
+    }
+    if (!missing.length) return null;
+    const blob = node.vaultBlob, size = node.usedBytes;
+    return (async () => {
+      for (const i of missing) pieces.set(`${id}:${i}`, new Uint8Array(await blob.slice(i * PIECE, Math.min(size, (i + 1) * PIECE)).arrayBuffer()));
+      for (const k of [...pieces.keys()]) {             // the oldest go, but none of this read
+        if (pieces.size <= KEEP_PIECES) break;
+        const [kid, ki] = k.split(':').map(Number);
+        if (!(kid === id && ki >= first && ki <= last)) pieces.delete(k);
+      }
+    })();
+  }
+  // After a close (or an open that failed): a node read in pieces with no stream left is a plain placeholder again.
+  // Its Blob and its pieces stay for the next open.
+  function settle(node) {
+    if (node?.vault === 'lazy' && !inUse(node)) { node.stream_ops = node.vaultOps; node.vault = 'out'; }
+  }
 
   async function open() {
     await connect();
@@ -188,27 +270,31 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
 
   // The contents of a placeholder into its node. The node stays pinned (not given up) until unpin.
   function load(node) {
-    if (node.vault !== 'out') return Promise.resolve();
+    if (!isAway(node)) return Promise.resolve();
     if (loading.has(node)) return loading.get(node);
     const p = serial(async () => {
-      if (node.vault !== 'out') return;
+      if (!isAway(node)) return;
       const rec = await get(node.vaultKey);
       if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
       const bytes = new Uint8Array(await rec.blob.arrayBuffer());
-      if (node.vault !== 'out') return;
+      if (!isAway(node)) return;
       node.contents = bytes;
       node.usedBytes = bytes.length;
       node.vaultMtime = node.mtime; node.vaultSize = bytes.length;
+      release(node);
       node.vault = 'in';
     }).finally(() => loading.delete(node));
     loading.set(node, p);
     return p;
   }
 
-  // Module.instantiateWasm: the engine's open (__syscall_openat) waits for a placeholder's contents. Returns false
-  // when this engine or browser cannot (no JSPI): the caller then instantiates as Emscripten does.
+  // Module.instantiateWasm: the engine's open (__syscall_openat) and read (fd_read: the runtime reads with read(),
+  // host/posix.c) can wait for the browser's storage. Returns false when this engine or browser cannot (no JSPI): the
+  // caller then instantiates as Emscripten does.
+  let gameOpens = 0;                            // the engine's own opens in progress: FS.open lets those through
   function instantiate(info, receive, wasmUrl) {
     const env = info?.env, orig = env?.__syscall_openat;
+    const wasi = info?.wasi_snapshot_preview1 ?? env, origRead = wasi?.fd_read;
     if (typeof WebAssembly.Suspending !== 'function' || typeof orig !== 'function') return false;
     const decoder = new TextDecoder();
     const cstr = (ptr) => {
@@ -222,12 +308,30 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       let p = cstr(path);
       if (!p.startsWith('/')) p = `${FS.cwd().replace(/\/$/, '')}/${p}`;
       const node = p.startsWith('/user/') ? lookup(p) : null;
-      if (!node || node.vault !== 'out') return orig(dirfd, path, flags, varargs);
-      if (flags & O_TRUNC) { node.vault = undefined; return orig(dirfd, path, flags, varargs); }  // rewritten whole
+      if (!node || !isAway(node)) return orig(dirfd, path, flags, varargs);
+      const open = () => {
+        gameOpens++;
+        try { return orig(dirfd, path, flags, varargs); } finally { gameOpens--; settle(node); }
+      };
+      const wait = openForGame(node, flags);
+      if (!wait) return open();
       node.vaultPin = (node.vaultPin || 0) + 1;
-      return load(node).then(() => orig(dirfd, path, flags, varargs), (e) => { log(`page: ${e.message}`); return -ENOENT; })
-        .finally(() => { node.vaultPin--; });
+      return wait.then(open, (e) => { log(`page: ${e.message}`); return -ENOENT; }).finally(() => { node.vaultPin--; });
     });
+    if (typeof origRead === 'function') {
+      const read = new WebAssembly.Suspending((fd, iov, iovcnt, pnum) => {
+        const stream = active && memory ? FS.streams[fd] : null, node = stream?.node;
+        if (node?.vault !== 'lazy') return origRead(fd, iov, iovcnt, pnum);
+        const words = new Uint32Array(memory.buffer);
+        let length = 0;
+        for (let i = 0; i < iovcnt >>> 0; i++) length += words[((iov >>> 0) + 8 * i + 4) >>> 2];
+        const wait = readForGame(node, stream.position, length);
+        return wait ? wait.then(() => origRead(fd, iov, iovcnt, pnum), (e) => { log(`page: ${node.vaultKey}: ${e.message}`); return EIO; })
+          : origRead(fd, iov, iovcnt, pnum);
+      });
+      wasi.fd_read = read;
+      if (env !== wasi && env.fd_read === origRead) env.fd_read = read;
+    }
     const go = (r) => { memory = r.instance.exports.memory; exportsOf = r.instance.exports; receive(r.instance, r.module); };
     WebAssembly.instantiateStreaming(fetch(wasmUrl), info).then(go).catch(async () => {
       const bytes = await (await fetch(wasmUrl)).arrayBuffer();
@@ -247,14 +351,15 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
         if (node.mtime !== node.vaultMtime || node.usedBytes !== node.vaultSize) node.vault = undefined;
         else if (!inUse(node)) evict(node);
       }
+      if (active) settle(node);
       return r;
     };
     FS.open = (path, flags, mode) => {
       if (active && typeof path === 'string') {
         const node = lookup(path);
-        if (node?.vault === 'out') {
+        if (isAway(node) && !gameOpens) {
           const f = typeof flags === 'string' ? FS.modeStringToFlags(flags) : flags;
-          if (f & O_TRUNC) node.vault = undefined;
+          if (f & O_TRUNC) { release(node); node.vault = undefined; }
           else throw new Error(`${path} is in the browser's storage, not in memory: the page must read it with the vault`);
         }
       }
@@ -330,18 +435,18 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
   async function bytes(path) {
     const node = lookup(path);
-    if (node?.vault === 'out') return new Uint8Array(await (await record(node, path)).blob.arrayBuffer());
+    if (isAway(node)) return new Uint8Array(await (await record(node, path)).blob.arrayBuffer());
     return FS.readFile(path);
   }
   async function view(path) {
     const node = lookup(path);
-    if (node?.vault === 'out') return bytes(path);
+    if (isAway(node)) return bytes(path);
     const n = node ?? FS.lookupPath(path).node;
     return n.contents instanceof Uint8Array ? n.contents.subarray(0, n.usedBytes ?? n.contents.length) : FS.readFile(path);
   }
   async function blob(path) {
     const node = lookup(path);
-    if (node?.vault === 'out') return (await record(node, path)).blob;
+    if (isAway(node)) return (await record(node, path)).blob;
     const n = node ?? FS.lookupPath(path).node;
     return new Blob([n.contents instanceof Uint8Array ? n.contents.subarray(0, n.usedBytes ?? n.contents.length) : FS.readFile(path)]);
   }
@@ -368,6 +473,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     stop,
     set active(on) { active = Boolean(on); },
     open, migrateFrom, mount, materialize, clear, instantiate, wrapFS, persist, bytes, view, blob, owns, records,
+    openForGame, readForGame, settle,
     held: () => [...managed].filter((n) => n.vault === 'in').length,
   };
 }

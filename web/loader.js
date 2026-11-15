@@ -7,7 +7,7 @@
 // has the messages and the small helpers.
 import { SAVE_DIR, listSaves, mountSavesPanel, savesSignature, setStorageKept, skipWorkFiles, storageWarning, useVault } from './saves.js';
 import { needsChoice, setStatsAllowed, startStats, statsAllowed } from './stats.js';
-import { createVault } from './vault.js';
+import { createVault, isAway } from './vault.js';
 import { engineUrl, hasJspi, pickEngine } from './engine.js';
 import { mountEditor } from './editor.js';
 import { mountSetsPanel } from './setspanel.js';
@@ -84,7 +84,7 @@ function userFolderSizes(FS) {
       let st;
       try { st = FS.stat(p); } catch { continue; }
       if (FS.isDir(st.mode)) walk(p, dir === SAVE_DIR && n === 'backups' ? 'older' : dir === SAVE_DIR && n === 'Databases' ? 'sets' : kind);
-      else if ((() => { try { return FS.lookupPath(p).node.vault === 'out'; } catch { return false; } })()) sum.stored += st.size;  // a placeholder
+      else if ((() => { try { return isAway(FS.lookupPath(p).node); } catch { return false; } })()) sum.stored += st.size;  // a placeholder
       else sum[kind === 'other' && /\.sav$/i.test(n) ? 'saves' : kind] += st.size;
     }
   };

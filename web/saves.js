@@ -7,6 +7,7 @@
 // folder, which the browser build does not use). A save in progress is temp_save_file.sav, renamed when it is done;
 // older copies are in backups/ (option save_backups).
 import { zipOfBlobs } from './zip.js';
+import { isAway } from './vault.js';
 
 export const SAVE_DIR = '/user';
 const TEMP = 'temp_save_file.sav';
@@ -121,7 +122,7 @@ export async function readBlob(FS, path) { return vaultRef ? vaultRef.blob(path)
 export function readBlobNow(FS, path) {
   let node = null;
   try { node = FS.lookupPath(path).node; } catch { /* not this FS */ }
-  return vaultRef && node?.vault === 'out' ? vaultRef.blob(path) : new Blob([fileView(FS, path)]);
+  return vaultRef && isAway(node) ? vaultRef.blob(path) : new Blob([fileView(FS, path)]);
 }
 
 // Every file to keep, as the save folder holds them: the saves, backups/ (older copies), tactics/ (the game's tactics,

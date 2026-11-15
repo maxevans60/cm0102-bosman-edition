@@ -151,9 +151,13 @@ saves.
 it at the start, so a player with many saves ran the tab out of memory. With the vault on, saves, older copies and the
 files of the data sets live in an IndexedDB store of their own (`cm0102-vault`), as Blobs that the browser keeps on
 disk. The user folder holds a placeholder for each: its name, size and time, no contents, so the game lists it as
-before. When the game opens one, the open waits (under JSPI the page makes the engine's `__syscall_openat` a
-Suspending import, through `Module.instantiateWasm`) while the page reads the Blob in; when the game closes it
-unchanged, the contents go again. A file the game or the page writes goes into the vault once it is closed and has
+before. When the game opens one to read it, nothing is loaded: each read takes the pieces of the Blob it needs (4 MB
+each, the last 12 kept), so a save is never in memory whole. Under JSPI the page makes the engine's `__syscall_openat`
+and `fd_read` Suspending imports, through `Module.instantiateWasm`, so they can wait for the browser's storage. Before,
+an open read the whole Blob in and a close dropped it, and the game opens a save about 100 times during a load: with
+four saves of 690 MB (a player's size; a real 46 MB save padded, 15 November 2026) the Load Game list took 4.1 s and a
+load 99 s with 5.6 GB of memory in the tab. In pieces: 0.04 s, and 7 s with 0.9 GB. A file opened to be written (and
+not emptied) still comes into memory whole. A file the game or the page writes goes into the vault once it is closed and has
 not changed for 1.5 seconds, and becomes a placeholder; a renamed file keeps its record (an older copy of the save
 renaming keeps the old save's bytes), a deleted one loses it. At the first start with the vault the files move from
 IDBFS's store, one at a time. The page reads placeholders with `readBytes`, `readView` and `readBlob` (`saves.js`);
@@ -629,6 +633,8 @@ What to know about the Asyncify engine:
   the manifest, 460 MB) and an Emscripten stand-in in place of the engine (`test/fake-emscripten.js`): the browser
   check, the engine a browser with and without JSPI gets, the load, the Saved games panel, a second start from the
   browser's cache. Needs Playwright.
+- `NODE_PATH=$(npm root -g) node web/test/vault-check.cjs`: the vault alone in Chromium, with a real IndexedDB and a
+  small file system (seconds): a save read in pieces, never more than 4 MB from the storage at once.
 - `NODE_PATH=$(npm root -g) node web/test/cloud-check.mjs`: the accounts and cloud saves in Chromium, with stand-ins of
   Google, the S3 store (`test/fakes.mjs`, which checks every request's signature as S3 does), Paddle.js and the
   engine: the plans in the start box, the sign-in from the start box and from a small window while the game runs, the
