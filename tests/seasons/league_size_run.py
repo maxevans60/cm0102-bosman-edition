@@ -711,6 +711,15 @@ def faults(work, file, year, last):
     def row(ed):
         clubs, m = edition_row(file, ed)
         return (short[ed][0], m) if ed in short else (clubs, m)
+
+    def counts(ed):
+        """(rounds, matches of a club) of an edition. The J1 and K League rows of halves or stages are one table of
+        both (HALVES_IN_TABLE: row() doubles the meetings) and may hold fewer clubs than the row (D12), so they count
+        from row(); the rest from edition_counts (zones and derby rounds)."""
+        if file not in HALVES_IN_TABLE:
+            return edition_counts(file, ed)
+        clubs, m = row(ed)
+        return (rounds_of(clubs, m or 2), (m or 2) * (clubs - 1))
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
     # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
@@ -728,7 +737,7 @@ def faults(work, file, year, last):
                          f"{(clubs, m)}")
         else:
             sp = edition_split(file, ed)
-            want = edition_counts(file, ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
+            want = counts(ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
             if matches != -1 and matches != want:
                 fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {want}")
     fails += [f"{file}: {x.split(': ', 1)[1]}" for x in lines
@@ -743,7 +752,7 @@ def faults(work, file, year, last):
     for base, cls, new in tmpl:
         clubs, m = row(base)
         sp = edition_split(file, base)
-        rounds = edition_counts(file, base)[0] + (split_numbers(sp[1])[0] if sp else 0)
+        rounds = counts(base)[0] + (split_numbers(sp[1])[0] if sp else 0)
         if rounds == len(cls) and not sp:
             continue
         if new is None:
@@ -769,7 +778,7 @@ def faults(work, file, year, last):
         m = m or 2
         sp = edition_split(file, ed)
         if not sp:
-            want = edition_counts(file, ed)[1]
+            want = counts(ed)[1]
             if n != clubs or not (matches == lo == hi == want):
                 fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs "
                              f"with {want} each")
