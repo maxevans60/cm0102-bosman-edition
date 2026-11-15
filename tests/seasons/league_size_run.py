@@ -98,9 +98,8 @@ ROWS = {
     "nir_first@2020": (2020, 2021, "NIFL Championship, 12 clubs: the announced 22 rounds of 2020/21, no split (gap 42)"),
     "ire_first": (2013, 2014, "League of Ireland First Division, 8 clubs in four meetings: 28 dates (D5)"),
     "ire_first@2017": (2017, 2018, "League of Ireland 2017: 3 down, the champion up, no play-off; 8 to 10 (item 251)"),
-    "ire_prm@2008": (2008, 2010, "League of Ireland 2008: 3 down, the champion up, no play-off; 12 to 10, then 2009 with "
-                     "10 clubs and the play-off (item 251)"),
-    "ire_prm@2004": (2004, 2005, "League of Ireland 2004: 1 down, 3 up, no play-off; 10 to 12 (item 251)"),
+    "ire_first@2008": (2008, 2009, "League of Ireland 2008: 3 down, the champion up, no play-off; 10 to 12, Premier "
+                       "12 to 10 (item 251)"),
     # Slice 15: the Argentine Primera. Edition Y plays the row whose real season begins with Y, else row Y - 1
     # (season_sizes_edition): editions 2014 and 2015 play row 2014, 2016 row 2016, 2025 row 2024 (the 2025 season).
     "arg_prm@2013": (2013, 2014, "Primera 2013/14 (row 2013, 20 in two halves), then 30 in 2014/15: the size step "
@@ -553,6 +552,16 @@ def exchange_faults(log, file, year):
 IRL_CHANGE = {2004: (1, 3), 2008: (3, 1), 2017: (3, 1)}
 
 
+def irl_partner_faults(report, file, year):
+    """The other Irish division in the report: each edition of the run holds the clubs of its row (edition_row)."""
+    other = {"ire_prm": "ire_first", "ire_first": "ire_prm"}.get(file)
+    if not other or not os.path.exists(report):
+        return []
+    seen = {(ed, n) for _s, _p, ed, n, _m, _x in report_rows(report, other)}
+    return [f"{other} {ed}: {n} clubs, want {edition_row(other, ed)[0]}" for ed, n in sorted(seen)
+            if year <= ed and edition_row(other, ed)[0] >= 2 and n != edition_row(other, ed)[0]]
+
+
 def irl_change_faults(log, file, year):
     """In a run of ire_prm or ire_first: the play-off line of the First Division (season_sizes_irl.c) for exactly the
     editions of IRL_CHANGE among the start edition and the next; and when the run starts in one of them, the exchange
@@ -673,12 +682,17 @@ def faults(work, file, year, last):
     fails += j1_faults(log, file, {ed for ed, *_x in done})
     fails += exchange_faults(log, file, year)
     fails += irl_change_faults(log, file, year)
+    if year in IRL_CHANGE:
+        fails += irl_partner_faults(report, file, year)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
                  | rrc.division_differences(comps, rep_clubs))
         diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
+        # The report check reads the row of the game season; an Irish edition is a calendar year and plays the row of
+        # its real season (edition 2017 row 2016), so where the two rows differ the edition checks above decide.
+        diffs = [d for d in diffs if not (file in ("ire_prm", "ire_first") and edition_season(file, d[0]) != d[0])]
         # A short edition (shortages) differs from its row by the clubs the database lacks, and the log names it.
         # The report's season of a calendar-year league is the edition before (edition_row).
         def named(d):
