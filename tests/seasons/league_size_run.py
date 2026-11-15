@@ -100,6 +100,12 @@ ROWS = {
     "ire_first@2017": (2017, 2018, "League of Ireland 2017: 3 down, the champion up, no play-off; 8 to 10 (item 251)"),
     "ire_first@2008": (2008, 2009, "League of Ireland 2008: 3 down, the champion up, no play-off; 10 to 12, Premier "
                        "12 to 10 (item 251)"),
+    "ire_first@2003": (2003, 2005, "League of Ireland from a 2003 start: 10 and 12 at the start (item 260), 2004 1 down "
+                       "and 3 up with no play-off, 12 and 10 in 2005"),
+    "ire_first@2004": (2004, 2005, "League of Ireland from a 2004 start: 10 and 12 at the start, the list of row 2003 "
+                       "(item 260), then 12 and 10 in 2005"),
+    "ire_first@2010": (2010, 2012, "League of Ireland from a 2010 start: 2011 0 down and 2 up plus the play-off, each "
+                       "club on its own (item 251b); 12 Premier clubs in 2012, the First Division keeps 10 for the row's 8"),
     # Slice 15: the Argentine Primera. Edition Y plays the row whose real season begins with Y, else row Y - 1
     # (season_sizes_edition): editions 2014 and 2015 play row 2014, 2016 row 2016, 2025 row 2024 (the 2025 season).
     "arg_prm@2013": (2013, 2014, "Primera 2013/14 (row 2013, 20 in two halves), then 30 in 2014/15: the size step "
@@ -585,37 +591,54 @@ def exchange_faults(log, file, year):
 IRL_CHANGE = {2004: (1, 3), 2008: (3, 1), 2017: (3, 1)}
 
 
+def irl_total(edition):
+    """The clubs of the two League of Ireland divisions in the rows of an edition."""
+    return edition_row("ire_prm", edition)[0] + edition_row("ire_first", edition)[0]
+
+
+def irl_carry(file, year, edition):
+    """Item 251b: the clubs that a game started in year holds in the First Division beyond the row of an edition. The
+    rows of 2011 and 2012 (and 2022, 2023) take clubs out of the two divisions or add them (22 to 21 to 20), which the
+    exchanges cannot: the Premier Division plays its row's count by the real places, and the First Division holds the
+    clubs that are left (a 2010 start: 10 in 2012 where the row gives 8). 0 for any other file."""
+    if file != "ire_first" or edition_row("ire_prm", year)[0] < 2 or edition_row("ire_prm", edition)[0] < 2:
+        return 0
+    return irl_total(year) - irl_total(edition)
+
+
 def irl_partner_faults(report, file, year):
     """The other Irish division in the report: each edition of the run holds the clubs of its row (edition_row)."""
     other = {"ire_prm": "ire_first", "ire_first": "ire_prm"}.get(file)
     if not other or not os.path.exists(report):
         return []
     seen = {(ed, n) for _s, _p, ed, n, _m, _x in report_rows(report, other)}
-    return [f"{other} {ed}: {n} clubs, want {edition_row(other, ed)[0]}" for ed, n in sorted(seen)
-            if year <= ed and edition_row(other, ed)[0] >= 2 and n != edition_row(other, ed)[0]]
+    want = {ed: edition_row(other, ed)[0] + irl_carry(other, year, ed) for ed, _n in seen}
+    return [f"{other} {ed}: {n} clubs, want {want[ed]}" for ed, n in sorted(seen)
+            if year <= ed and edition_row(other, ed)[0] >= 2 and n != want[ed]]
 
 
-def irl_change_faults(log, file, year):
+def irl_change_faults(log, file, year, last=None):
     """In a run of ire_prm or ire_first: the play-off line of the First Division (season_sizes_irl.c) for exactly the
-    editions of IRL_CHANGE among the start edition and the next; and when the run starts in one of them, the exchange
-    moves the row's places with each club on its own."""
+    editions of IRL_CHANGE among the editions of the run (the start to last, default the start and the next); and for
+    each edition of IRL_CHANGE whose exchange the run plays (the start edition, or one before last), the exchange
+    moves the row's places with each club on its own, in a game of any start (item 251b)."""
     if file not in ("ire_prm", "ire_first"):
         return []
+    last = max(last or year + 1, year + 1)
     lines = log.split("\n")
     nopo = {int(m.group(1)) for m in (re.match(r"recomp: league sizes: ire_first (\d+): no play-off with the Premier "
                                                r"Division$", x) for x in lines) if m}
     fails = [f"ire_first {ed}: a line of no play-off, the row has one" for ed in sorted(nopo)
-             if ed in (year, year + 1) and ed not in IRL_CHANGE]
-    if year not in IRL_CHANGE:
-        return fails
-    if year not in nopo:
-        fails.append(f"ire_first {year}: no line of a season with no play-off with the Premier Division")
+             if year <= ed <= last and ed not in IRL_CHANGE]
     pat = re.compile(r"recomp: league sizes: ire_prm \(.*\) down (-?\d+), ire_first \(.*\) up (-?\d+), pairs \d+, .*"
                      r": each club moves on its own$")
     moves = [(int(m.group(1)), int(m.group(2))) for m in map(pat.match, lines) if m]
-    if IRL_CHANGE[year] not in moves:
-        fails.append(f"ire_prm {year}: exchanges {moves}, want {IRL_CHANGE[year][0]} down and {IRL_CHANGE[year][1]} up "
-                     "with each club on its own")
+    for ed in sorted(e for e in IRL_CHANGE if year <= e < last):
+        if ed not in nopo:
+            fails.append(f"ire_first {ed}: no line of a season with no play-off with the Premier Division")
+        if IRL_CHANGE[ed] not in moves:
+            fails.append(f"ire_prm {ed}: exchanges {moves}, want {IRL_CHANGE[ed][0]} down and {IRL_CHANGE[ed][1]} up "
+                         "with each club on its own")
     return fails
 
 
@@ -631,7 +654,14 @@ def faults(work, file, year, last):
 
     def row(ed):
         clubs, m = edition_row(file, ed)
-        return (short[ed][0], m) if ed in short else (clubs, m)
+        return (short[ed][0], m) if ed in short else (clubs + irl_carry(file, year, ed), m)
+
+    def counts(ed):
+        """edition_counts, or those of the clubs of row() for a First Division that holds carried clubs."""
+        if not irl_carry(file, year, ed) or ed in short:
+            return edition_counts(file, ed)
+        clubs, m = row(ed)
+        return (rounds_of(clubs, m or 2), (m or 2) * (clubs - 1))
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
     # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
@@ -649,7 +679,7 @@ def faults(work, file, year, last):
                          f"{(clubs, m)}")
         else:
             sp = edition_split(file, ed)
-            want = edition_counts(file, ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
+            want = counts(ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
             if matches != -1 and matches != want:
                 fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {want}")
     fails += [f"{file}: {x.split(': ', 1)[1]}" for x in lines
@@ -664,7 +694,7 @@ def faults(work, file, year, last):
     for base, cls, new in tmpl:
         clubs, m = row(base)
         sp = edition_split(file, base)
-        rounds = edition_counts(file, base)[0] + (split_numbers(sp[1])[0] if sp else 0)
+        rounds = counts(base)[0] + (split_numbers(sp[1])[0] if sp else 0)
         if rounds == len(cls) and not sp:
             continue
         if new is None:
@@ -690,7 +720,7 @@ def faults(work, file, year, last):
         m = m or 2
         sp = edition_split(file, ed)
         if not sp:
-            want = edition_counts(file, ed)[1]
+            want = counts(ed)[1]
             if n != clubs or not (matches == lo == hi == want):
                 fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs "
                              f"with {want} each")
@@ -715,9 +745,9 @@ def faults(work, file, year, last):
     fails += playoff_faults(log, file, {ed for ed, *_x in done})
     fails += j1_faults(log, file, {ed for ed, *_x in done})
     fails += exchange_faults(log, file, year)
-    fails += irl_change_faults(log, file, year)
-    if year in IRL_CHANGE:
-        fails += irl_partner_faults(report, file, year)
+    fails += irl_change_faults(log, file, year, last)
+    # Item 260: the other division too, in every Irish run (a 2003 or 2004 start held 12 Premier clubs for 10).
+    fails += irl_partner_faults(report, file, year)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -1041,8 +1071,18 @@ def self_test():
             or len(irl_change_faults(nopo.replace("2017", "2009"), "ire_prm", 2008)) != 3
             or irl_change_faults(nopo.replace("2017", "2004"), "ire_prm", 2003)
             or len(irl_change_faults(nopo.replace("2017", "2003"), "ire_prm", 2003)) != 1
-            or irl_change_faults(ex % (1, 1, ""), "ire_first", 2013) or irl_change_faults("", "nir_first", 2017)):
+            or irl_change_faults(ex % (1, 1, ""), "ire_first", 2013) or irl_change_faults("", "nir_first", 2017)
+            # Item 251b: a 2010 start played to 2018 needs the 2017 exchange on its own, and no line in 2008.
+            or irl_change_faults(own + "\n" + nopo, "ire_first", 2010, 2018)
+            or len(irl_change_faults(ex % (3, 1, ": in pairs") + "\n" + nopo, "ire_first", 2010, 2018)) != 1
+            or len(irl_change_faults(own, "ire_first", 2003, 2018)) != 4
+            or irl_change_faults(own + "\n" + nopo, "ire_first", 2010, 2017)
+            or len(irl_change_faults(nopo.replace("2017", "2012"), "ire_first", 2010, 2018)) != 3):
         bad.append(("irl change", irl_change_faults("", "ire_prm", 2017)))
+    if (irl_carry("ire_first", 2010, 2012) != 2 or irl_carry("ire_first", 2010, 2011) != 1
+            or irl_carry("ire_prm", 2010, 2012) or irl_carry("ire_first", 2008, 2009) or irl_carry("ire_first", 2003, 2005)
+            or irl_carry("ire_first", 2010, 2018) != 2 or irl_carry("ire_first", 2017, 2018)):
+        bad.append(("irl carry", [irl_carry("ire_first", 2010, e) for e in (2011, 2012, 2018)]))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"
