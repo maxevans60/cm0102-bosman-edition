@@ -114,23 +114,33 @@ static const uint32_t GROUP_KEY[GROUPS] = {KEY_C1A, KEY_C1B, KEY_C2A};
  * comp_file of the object they play in (ita_ser_c1a, ita_ser_c1b, ita_ser_c2a), and the C1 and C2 rows of those
  * seasons are n/a; so sizes, names and the rules report read them as the rows of these objects. After the last
  * row of the file (2027/28) that row holds (Q248, as slice 18's row_of_season): else the era would end and
- * the original's chain would read C2/B and C2/C (0x642506..0x642602), which a game without the flag lacks. */
+ * the original's chain would read C2/B and C2/C (0x642506..0x642602), which a game without the flag lacks.
+ * A row whose clubs are "unknown" (the 2027/28 rows since 0.7.2 slice 1: no format announced) also takes the last
+ * row before it that is not unknown: the era goes on with the last known rule (a last known row that is not held
+ * ends it). Before, group_row gave NULL for 2027/28,
+ * so at the June 2027 change the era ended: C1 sent 6 clubs down to C2, ItaSerA::start_new_season 0x641700 gave
+ * group C back to the original (0x64198f), and ItaSerC2a::start_new_season 0x653c40 ran create_table 0x653a90,
+ * which wants 18 clubs (0x653aa2, 0x653b7b) for a group of 20: the box "ita_ser_c2a..cpp 551" (0x653dbf). */
 static const SeasonRule *group_row(int s, int g)
 {
     static const char *const comp[GROUPS] = {"Serie C group A", "Serie C group B", "Serie C group C"};
     static const char *const file[GROUPS] = {"ita_ser_c1a", "ita_ser_c1b", "ita_ser_c2a"};
-    const SeasonRule *last = NULL;
-    int later = 0;                      /* the file has a row in season s or after it */
+    const SeasonRule *last = NULL;      /* the latest row before season s that is not unknown */
+    int later = 0, unknown = 0;         /* the file has a row in season s or after it; the row of s is unknown */
     for (int i = 0, n = season_rules_count(); i < n; i++) {
         const SeasonRule *r = season_rules_row(i);
         if (strcmp(r->comp_file, file[g])) continue;
         if (r->season >= s) later = 1;
         if (strcmp(r->comp, comp[g])) continue;
-        if (r->season == s) return r->clubs >= 2 && r->clubs <= MAX_CLUBS ? r : NULL;
-        if (r->season < s && (!last || r->season > last->season)) last = r;
+        if (r->season == s) {
+            if (r->clubs != SEASON_RULE_UNKNOWN) return r->clubs >= 2 && r->clubs <= MAX_CLUBS ? r : NULL;
+            unknown = 1;
+        }
+        if (r->season < s && r->clubs != SEASON_RULE_UNKNOWN && (!last || r->season > last->season)) last = r;
     }
-    if (!later && last) return last->clubs >= 2 && last->clubs <= MAX_CLUBS ? last : NULL;
-    return NULL;
+    /* A last row that is not held (or na) still ends the era. */
+    if (!last || last->clubs < 2 || last->clubs > MAX_CLUBS) return NULL;
+    return !later || unknown ? last : NULL;
 }
 
 /* The rules season of a season year: the year itself with changing rules on, the start year with them off (Q232);
