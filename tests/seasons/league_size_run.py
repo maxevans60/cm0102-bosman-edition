@@ -95,6 +95,7 @@ ROWS = {
     # Division (the class takes 9 to 12; rows are keyed one year before the real season, row 2013 is the 2014 season).
     "nir_first": (2016, 2017, "NIFL Championship, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
     "nir_first@2022": (2022, 2023, "NIFL Championship, 12 clubs: 33 rounds, then sections of 6 and 6 once more"),
+    "nir_first@2020": (2020, 2021, "NIFL Championship, 12 clubs: the announced 22 rounds of 2020/21, no split (gap 42)"),
     "ire_first": (2013, 2014, "League of Ireland First Division, 8 clubs in four meetings: 28 dates (D5)"),
     # Slice 15: the Argentine Primera. Edition Y plays the row whose real season begins with Y, else row Y - 1
     # (season_sizes_edition): editions 2014 and 2015 play row 2014, 2016 row 2016, 2025 row 2024 (the 2025 season).
@@ -518,6 +519,26 @@ def shortages(log, file):
         if m and int(m.group(2)) < int(m.group(3)):
             out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
     return out
+# Gap 43: an exchange whose real places keep both counts. The lower file: (the upper file, the least clubs that move
+# each way). League of Ireland 2011 to 2015 (rows wal-nir-irl-266 to 367): the 12th of the Premier Division goes down,
+# the First Division champion goes up, and the 11th meets the winner of the First Division play-off, so 1 or 2 clubs
+# move each way and the counts stay 12 and 8.
+EXCHANGE = {"ire_first": ("ire_prm", 1, 2011, 2014)}
+
+
+def exchange_faults(log, file, year):
+    """The pair lines of the promotion wrap (season_sizes.c, league_promote_and_relegate 0x689c80) between the upper
+    file and this one: as many clubs go down as come up, and at least the least count. Only for a run that starts in
+    the seasons of EXCHANGE: in a season of a real size change (2016/17, 12 to 10) the counts differ."""
+    if file not in EXCHANGE or not EXCHANGE[file][2] <= year <= EXCHANGE[file][3]:
+        return []
+    upper, least = EXCHANGE[file][:2]
+    pat = re.compile(rf"recomp: league sizes: {upper} \(.*\) down (-?\d+), {file} \(.*\) up (-?\d+), pairs")
+    moves = [(int(m.group(1)), int(m.group(2))) for m in map(pat.match, log.split("\n")) if m]
+    if not moves:
+        return [f"{file}: no exchange line with {upper}"]
+    return [f"{file}: {upper} sends {d} down and {file} {u} up, want the same count of {least} or more"
+            for d, u in moves if d != u or d < least]
 
 
 def faults(work, file, year, last):
@@ -614,6 +635,7 @@ def faults(work, file, year, last):
         fails += arg_faults(log, year)
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
     fails += j1_faults(log, file, {ed for ed, *_x in done})
+    fails += exchange_faults(log, file, year)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
@@ -915,6 +937,14 @@ def self_test():
     across = [(p, 38) for p in (0, 2, 3, 2, 4, 5, 8, 8, 9, 11, 10, 9, 12, 13)]
     if end_faults("kor", kor_end, 26, sp7) or not end_faults("across", across, 26, sp7):
         bad.append(("end odd", end_faults("kor", kor_end, 26, sp7), end_faults("across", across, 26, sp7)))
+    ex = "recomp: league sizes: ire_prm (League of Ireland Premier Division) down %d, ire_first (League of Ireland " \
+         "First Division) up %d, pairs 0, expected -1 up -1 down%s"
+    if (exchange_faults(ex % (2, 2, ""), "ire_first", 2013) or exchange_faults(ex % (1, 1, ""), "ire_first", 2013) or
+            not exchange_faults(ex % (1, 2, ": in pairs"), "ire_first", 2013) or
+            not exchange_faults(ex % (0, 1, ": in pairs"), "ire_first", 2013) or
+            not exchange_faults(ex % (0, 0, ""), "ire_first", 2013) or not exchange_faults("", "ire_first", 2013) or
+            exchange_faults("", "nir_first", 2013) or exchange_faults(ex % (3, 1, ": in pairs"), "ire_first", 2016)):
+        bad.append(("exchange", exchange_faults(ex % (1, 2, ": in pairs"), "ire_first", 2013)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"

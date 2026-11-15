@@ -171,6 +171,12 @@ static const SeasonRule *row_now(uint32_t obj, const char *file)
     return row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
 }
 
+int season_sizes_row_down(uint32_t obj, const char *file)
+{
+    const SeasonRule *r = readable(obj) && sizes_on() ? row_now(obj, file) : NULL;
+    return r && r->down >= 0 ? r->down : -1;
+}
+
 int season_sizes_row_season(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);

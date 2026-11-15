@@ -110,6 +110,10 @@ int season_sizes_plays_short(const char *file);
  * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
 int season_sizes_data_clubs(const char *file, int season);
 
+/* The relegation places ("down") of the row of the object's edition, the direct places of the research; -1 with the
+ * sizes off or no count (gap 43, season_sizes_irl.c). */
+int season_sizes_row_down(uint32_t obj, const char *file);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */
