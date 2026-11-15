@@ -215,9 +215,9 @@ Merge danger: two-way door. Blast radius: the Japanese and Korean leagues.
 Blocked by: 2, 3
 Delivers: halves on and off by row, one table of 30, two zones of 15 with two inter-zone rounds a half (D9), zone lists from two sources, the averages at the real count.
 Merge danger: one-way door for saves (zone stages in the save). Blast radius: Argentina.
-- [ ] `league_size_run.py` passes for arg_prm 2014, 2016 and 2024, with the zones and the inter-zone rounds
-- [ ] A save in the second half of 2024/25 loads and completes the season
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for arg_prm 2014, 2016 and 2024, with the zones and the inter-zone rounds
+- [x] A save in the second half of 2024/25 loads and completes the season
+- [x] The same-save set is equal
 
 ### 16. Argentine second division
 Blocked by: 15
