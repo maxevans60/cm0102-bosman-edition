@@ -167,6 +167,22 @@ static int plan_of(uint32_t obj, Plan *p)
 
 static uint32_t stage_at(uint32_t prm, int i);
 
+/* No zone tables: the 2027 form (two knockouts) or the promoción (two ties). The row's kind when the sizes give one
+ * (with changing rules off a 2005 start keeps row 2005 in every edition, so not the year); else the stages made (a
+ * game loaded with the sizes off); else, before any is made, the edition's year (edition Y plays row Y). */
+static int no_zones_kind(uint32_t obj, int last)
+{
+    int k = season_arg_stage_kind(obj, NULL);
+    if (k == SEASON_ARG_KO_PROMO || k == SEASON_ARG_KO_TABLE) return k;
+    for (int i = FIRST_ZONE; i <= last; i++) {
+        uint32_t s = stage_at(obj, i);
+        int name = s && g_mem[s + STAGE_TYPE] == 1 ? (int16_t)rd16(g_mem, s + 0x3a) : 0;
+        if (name == NAME_PROMOCION) return SEASON_ARG_KO_PROMO;
+        if (name == NAME_APERTURA || name == NAME_CLAUSURA) return SEASON_ARG_KO_TABLE;
+    }
+    return (int16_t)rd16(g_mem, obj + COMP_YEAR) <= SEASON_ARG_PROMO_LAST ? SEASON_ARG_KO_PROMO : SEASON_ARG_KO_TABLE;
+}
+
 /* The plan of a Primera whose stages exist, read from the stages alone (a loaded game, also with the sizes off: only
  * this code sets +0x2c above 2): the League_Stages from index 2 are the zone tables (4: two a half, 2: one
  * tournament, 0: the 2027 form), the knockouts come after them. +0x2c is the stages still planned. */
@@ -182,10 +198,8 @@ static int plan_live(uint32_t obj, Plan *p)
         if (!s || g_mem[s + STAGE_TYPE] != 2) break;
         p->zones++;
     }
-    /* No zone tables: the 2027 form, or the promoción of an edition up to 2011 (edition Y plays row Y). */
     p->kind = p->zones == 4 ? SEASON_ARG_KO_ZONES : p->zones == 2 ? SEASON_ARG_KO_FINAL : p->zones != 0 ?
-              SEASON_ARG_KO_NONE : (int16_t)rd16(g_mem, obj + COMP_YEAR) <= SEASON_ARG_PROMO_LAST ?
-              SEASON_ARG_KO_PROMO : SEASON_ARG_KO_TABLE;
+              SEASON_ARG_KO_NONE : no_zones_kind(obj, last);
     p->count = count;
     return p->kind != SEASON_ARG_KO_NONE;
 }
@@ -772,21 +786,28 @@ static int promo_advance(uint32_t self, int left)
     return 1;
 }
 
-int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up)
+int season_arg_promo_ties(uint32_t prm, uint32_t *win, uint32_t *lose)
 {
     Plan p;
     if (!readable(prm) || !plan_live(prm, &p) || p.kind != SEASON_ARG_KO_PROMO) return 0;
-    uint32_t rec = rd32(g_mem, prm + COMP_RECORD);
     int last = (int32_t)rd32(g_mem, prm + STAGE_LAST), n = 0;
     for (int i = FIRST_ZONE; i <= last && n < 2; i++) {
-        uint32_t s = stage_at(prm, i), win, lose;
+        uint32_t s = stage_at(prm, i);
         if (!s || g_mem[s + STAGE_TYPE] != 1 || (int16_t)rd16(g_mem, s + 0x3a) != NAME_PROMOCION) continue;
-        if (!ko_winners(s, &win, &lose)) continue;
-        if (rd32(g_mem, lose + CLUB_DIVISION) == rec && rd32(g_mem, win + CLUB_DIVISION) != rec) {
-            down[n] = lose;
-            up[n++] = win;
-        }
+        if (ko_winners(s, &win[n], &lose[n])) n++;
     }
+    return n;
+}
+
+int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up)
+{
+    uint32_t win[2], lose[2], rec = readable(prm) ? rd32(g_mem, prm + COMP_RECORD) : 0;
+    int t = season_arg_promo_ties(prm, win, lose), n = 0;
+    for (int i = 0; i < t; i++)
+        if (rd32(g_mem, lose[i] + CLUB_DIVISION) == rec && rd32(g_mem, win[i] + CLUB_DIVISION) != rec) {
+            down[n] = lose[i];
+            up[n++] = win[i];
+        }
     return n;
 }
 

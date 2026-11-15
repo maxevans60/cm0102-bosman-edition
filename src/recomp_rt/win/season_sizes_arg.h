@@ -120,6 +120,8 @@ int season_arg_promo_primera(uint32_t prm, uint32_t *club);
 /* The promoción's results once its ties are complete: the Primera clubs that lost (down) and the second division
  * clubs that beat them (up), in pairs. Returns the count of pairs. */
 int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up);
+/* The complete ties of the promoción in stage order (the 17th's first): each winner and loser. Returns the count. */
+int season_arg_promo_ties(uint32_t prm, uint32_t *win, uint32_t *lose);
 
 /* season_arg_stages.c: after ArgPrm::create_stages 0x405950 (the wrap in season_sizes_arg.c). */
 void season_arg_stages_made(uint32_t self);

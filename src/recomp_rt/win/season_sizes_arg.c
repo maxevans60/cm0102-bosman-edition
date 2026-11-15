@@ -978,7 +978,8 @@ RT_WRAP(00405ca0, arg_record_honours)
     int n_rel = nd;
     uint32_t pd[2], pu[2];
     int np = season_arg_promo_results(self, pd, pu);
-    for (int i = 0; i < np && nd < MAX_CLUBS; i++) down[nd++] = (int32_t)((pd[i] - clubs) / CLUB_SIZE);
+    /* The 18th's tie last in pd: first in down, so the 18th takes the lower place (n - i below). */
+    for (int i = np - 1; i >= 0 && nd < MAX_CLUBS; i--) down[nd++] = (int32_t)((pd[i] - clubs) / CLUB_SIZE);
     recs = rd32(g_mem, self + AVERAGES);
     int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
     /* The worst last, as the original (count - 2 first, then count - 1). */
@@ -1015,6 +1016,11 @@ RT_WRAP(00405ca0, arg_record_honours)
         fprintf(stderr, "; lowest average kept %.4f; %d by the annual table:", (double)worst_kept, n_rel - by_avg);
         for (int i = by_avg; i < n_rel; i++) fprintf(stderr, " %u:%d", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), worst_pos);
         fprintf(stderr, " of %d\n", rows_n);
+        uint32_t tw[2], tl[2];
+        int nt = season_arg_promo_ties(self, tw, tl);
+        for (int i = 0; i < nt; i++)
+            fprintf(stderr, "recomp: league sizes: arg_prm promocion %d: tie %d: winner %u, loser %u\n",
+                    (int16_t)rd16(g_mem, self + COMP_YEAR), i, rd32(g_mem, tw[i]), rd32(g_mem, tl[i]));
         if (np)
             for (int i = 0; i < np; i++)
                 fprintf(stderr, "recomp: league sizes: arg_prm promocion %d: %u %.30s goes down, %u %.30s goes up\n",
@@ -1110,19 +1116,25 @@ void o_004067f0(void);
 RT_WRAP(004067f0, arg_chain)
 {
     uint32_t self = cpu.ecx;
-    if (is_prm(self)) {
-        /* The promoción's winners of the second division go up: status 0 in its table (0x406839). Its stages still
-         * exist here (start_new_season frees them after the chain, 0x4057b5). */
-        uint32_t pd[2], pu[2];
-        int np = season_arg_promo_results(self, pd, pu);
+    if (season_sizes_on() && is_prm(self)) {
+        /* The promoción's winners of the second division go up: status 0 in its table (0x406839); its losers stay
+         * down: 0xfe, as the second division's own ties (0x408cd0). Its stages still exist here (start_new_season
+         * frees them after the chain, 0x4057b5). With the sizes off arg_record_honours sent no loser down, so no
+         * winner goes up either. */
+        uint32_t pd[2], pu[2], tw[2], tl[2];
+        int np = season_arg_promo_results(self, pd, pu), nt = season_arg_promo_ties(self, tw, tl);
         uint32_t objects = rd32(g_mem, COMP_OBJECTS);
         int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
-        uint32_t second = np && readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+        uint32_t second = nt && readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
         uint32_t rows = readable(second) ? rd32(g_mem, second + COMP_TABLE) : 0;
         int m = readable(second) ? (int16_t)rd16(g_mem, second + COMP_CLUBS) : 0;
-        for (int i = 0; i < np; i++)
-            for (int r = 0; readable(rows) && r < m; r++)
-                if (rd32(g_mem, rows + (uint32_t)r * ROW_SIZE) == pu[i]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0;
+        for (int r = 0; readable(rows) && r < m; r++) {
+            uint32_t c = rd32(g_mem, rows + (uint32_t)r * ROW_SIZE);
+            for (int i = 0; i < nt; i++)
+                if (c == tl[i]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0xfe;
+            for (int i = 0; i < np; i++)
+                if (c == pu[i]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0;
+        }
     }
     if (season_sizes_on() && is_prm(self) && logging()) {
         /* The clubs the chain moves: ArgPrm rows of status 3 go down (0x406895), ArgSecond rows of status 0 or 5 go

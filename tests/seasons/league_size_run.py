@@ -1132,8 +1132,16 @@ def arg_promo_faults(lines, year, last):
     two before the last two of the "averages" line) play the second division's two clubs after its direct places,
     the second division's club at home in the first leg and the Primera's in the second; each tie's loser of the
     Primera goes down and its winner goes up at the season change (the "chain" line: status 3 and status 0)."""
-    fails, draws, worst, played, moved, chain = [], {}, {}, {}, {}, {}
+    fails, draws, worst, played, moved, chain, ties, ups, ended = [], {}, {}, {}, {}, {}, {}, {}, set()
     for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm promocion (\d+): tie \d+: winner (\d+), loser (\d+)$", x)
+        if m:
+            ties.setdefault(int(m.group(1)), []).append((int(m.group(2)), int(m.group(3))))
+        m = re.match(r"recomp: league sizes: arg_second (\d+): row \d+, .*, (\d+) up, \d+ down, no stages$", x)
+        if m:
+            ups[int(m.group(1))] = int(m.group(2))
+        if re.match(r"recomp: league sizes: arg_prm relegation (\d+):", x):
+            ended.add(int(x.split("relegation ")[1].split(":")[0]))
         m = re.match(r"recomp: league sizes: arg_prm promocion (\d+): stage (\d+) drawn on day \d+ of \d+: "
                      r"(\d+):\d+-(\d+):(\d+) ", x)
         if m:
@@ -1165,8 +1173,9 @@ def arg_promo_faults(lines, year, last):
         if got != want:
             fails.append(f"arg_prm {ed}: promocion Primera clubs {got}, want the 17th and 18th of the averages {want}")
         places = [d[k][2] for k in sorted(d)]
-        if places[1] != places[0] + 1:
-            fails.append(f"arg_prm {ed}: promocion second division places {places}, want two in a row")
+        if places[1] != places[0] + 1 or (ed in ups and places != [ups[ed] + 1, ups[ed] + 2]):
+            fails.append(f"arg_prm {ed}: promocion second division places {places}, want the two after its "
+                         f"{ups.get(ed)} direct places")
         pairs = {}
         for k, (sec, prm, _place) in d.items():
             pairs[prm] = sec
@@ -1177,6 +1186,20 @@ def arg_promo_faults(lines, year, last):
                 fails.append(f"arg_prm {ed} promocion stage {k}: second leg {legs[1]}, want {(prm, sec)}")
             if ed < last and len(legs) != 2:
                 fails.append(f"arg_prm {ed} promocion stage {k}: {len(legs)} legs, want 2")
+        # Each tie has a result at the season's end, and its two clubs are the drawn pair.
+        drawn = {frozenset((sec, prm)) for sec, prm, _p in d.values()}
+        if ed in ended:
+            t = ties.get(ed, [])
+            if len(t) != 2 or {frozenset(x) for x in t} != drawn:
+                fails.append(f"arg_prm {ed}: promocion results {t}, want one for each drawn tie {sorted(map(sorted, drawn))}")
+            want_moves = sorted((lo, wi) for wi, lo in t if lo in pairs)
+            if sorted(moved.get(ed, [])) != want_moves:
+                fails.append(f"arg_prm {ed}: promocion moves {sorted(moved.get(ed, []))}, want {want_moves}")
+            if ed in chain:
+                stay = {lo for wi, lo in t if lo not in pairs}
+                if stay & chain[ed][1]:
+                    fails.append(f"arg_prm {ed}: second division clubs {sorted(stay & chain[ed][1])} lost the "
+                                 f"promocion but go up")
         for lo, wi in moved.get(ed, []):
             if pairs.get(lo) != wi:
                 fails.append(f"arg_prm {ed}: promocion {lo} down and {wi} up, not a drawn tie")
