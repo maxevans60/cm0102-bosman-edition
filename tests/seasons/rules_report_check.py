@@ -251,6 +251,10 @@ def row_files(r):
 
 _LEAGUE_PLAYOFFS = {}
 
+# Files whose table holds both halves of a row of halves (0.7.2 league sizes, slice 14): it plays twice the meetings of
+# the row's halves. Also tests/seasons/league_size_run.py HALVES_IN_TABLE.
+HALVES_IN_TABLE = {"jap_j1", "kor_league"}
+
 
 def league_playoffs():
     """{row id: encoded league row} of tools/seasons/encode_leagues.py (slice 19)."""
@@ -265,14 +269,26 @@ def league_playoffs():
 
 def two_winners_first(r):
     """0.6.2 open item 63: 1 for a row whose 4 play-off places, just below its direct places, are two ties whose
-    winners both go up (Série B from 2025: up 2, places 3 to 6), else 0. The game plays no such play-off, so both
-    winners' places go up directly (Q247, season_playoffs_winners_up in src/recomp_rt/win/season_playoff_winners.c)."""
+    winners both go up (Série B from 2025: up 2, places 3 to 6), else 0. Gap row 56 (0.7.2): the game plays the two
+    ties (src/recomp_rt/win/season_sizes_bra.c): +0xbe the row's up and +0xbf 4. A game loaded in a season of two
+    meetings has no stage array, so its next season sends both winners' places up directly (Q247,
+    season_playoffs_winners_up in src/recomp_rt/win/season_playoff_winners.c): +0xbe the row's up and 2, +0xbf 0."""
     e = league_playoffs().get(r["id"])
     if (e is None or "the two winners go up" not in (r["playoffs_text"] or "") or not isinstance(r["up"], int) or
             encode_leagues.count(e["po_up"]) != 4):
         return 0
     first = e["po_up"].split("-")[0]
     return 1 if first.isdigit() and int(first) == r["up"] + 1 else 0
+
+
+def finalists_up(r):
+    """Gap row 57 and open item 249 (0.7.2): 1 for a row whose play-off of its top 8 sends its two finalists up and
+    has no direct place (Série B 2002 to 2005: up 2, play-off places 1 to 8), else 0. The game plays it with +0xbe 0
+    and +0xbf 8, and both finalists go up (season_playoffs_finalists_up, src/recomp_rt/win/season_sizes_bra.c)."""
+    e = league_playoffs().get(r["id"])
+    if e is None or r["up"] != 2 or encode_leagues.count(e["po_up"]) != 8:
+        return 0
+    return 1 if e["po_up"].split("-")[0] == "1" else 0
 
 
 NOT_PLAYED = "not played in the game"
@@ -423,10 +439,13 @@ def differences(seasons, comps, rows):
                     continue
                 accept = {c[key], c[key] + (1 if c[extra] else 0), c[key] + c[extra]}
                 # 0.6.2 open item 63: two ties whose winners both go up, 4 places just below the direct places (Série B
-                # from 2025). The game plays no such play-off, so both winners' places go up directly (Q247,
-                # season_playoffs_winners_up): the game's direct places are the row's and 2, and only that.
+                # from 2025). The game plays them (gap row 56), or with no stage array sends both winners' places up
+                # directly (Q247, season_playoffs_winners_up): the row's places and 2. Gap row 57: the two finalists
+                # of the top 8 go up, no direct place.
                 if key == "up" and two_winners_first(r):
-                    accept = {c[key] - 2}
+                    accept = {c[key]} if c[extra] == 4 else {c[key] - 2}
+                if key == "up" and finalists_up(r) and c[extra] == 8:
+                    accept = {c[key] + 2}
                 if not isinstance(want, int) or want not in accept:
                     out.add((season, key, f"{label}: game {c[key]} (+{c[extra]} play-off places), "
                                           f"table {want} ({r[key + '_text'][:80]})"))
@@ -436,7 +455,7 @@ def differences(seasons, comps, rows):
                 want = (encode_leagues.count(e["po_up"]), encode_leagues.count(e["po_down"]))
                 game = (c["playoff_up"], c["playoff_down"])
                 same = game == want if e["po_status"] == "ok" else bool(sum(game)) == bool(sum(want))
-                if two_winners_first(r):        # open item 63: no play-off places, its winners' places go up directly
+                if two_winners_first(r) and game[0] != 4:   # open item 63: no stage, the places go up directly
                     same = game == (0, want[1])
                 if not same:
                     out.add((season, "playoffs", f"{label}: game {game[0]} up and {game[1]} down play-off places, "
@@ -444,11 +463,14 @@ def differences(seasons, comps, rows):
             # 0.7.2 league sizes, slice 1: the meetings of each pair (+0x3c, the report's rounds column of a league)
             # and the rounds of the table, meetings x (n' - 1) with n' the game's count rounded up to even, against
             # the encoded row (meetings; rounds = meetings x (n' - 1) + extra of the row's count).
+            # A row of halves gives the meetings of each half; the table of J1 and of the K League holds both halves
+            # (0.7.2 slice 14, src/recomp_rt/win/season_sizes_asia.c), so it plays twice them.
             if e is not None and isinstance(e["meetings"], int):
                 meet = sorted({x["rounds"] for x in both if x["rounds"] > 0})
-                if meet and meet != [e["meetings"]]:
+                table_meet = e["meetings"] * (2 if e["halves"] == 1 and c["file"] in HALVES_IN_TABLE else 1)
+                if meet and meet != [table_meet]:
                     out.add((season, "meetings", f"{label}: game {'/'.join(map(str, meet))}, table "
-                                                 f"{e['meetings']}"))
+                                                 f"{table_meet}"))
             # Rounds only for one table with no derby round: the game's object of a season of halves or zones
             # holds other counts.
             if e is not None and isinstance(e["rounds"], int) and e["zones"] == "-" and not e["extra"] \

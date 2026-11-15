@@ -52,6 +52,19 @@ int season_sizes_bra_earlier(const char *file);
  * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
 void season_sizes_bra_rules(uint32_t obj, const char *file);
 
+/* The meetings that the table of a league plays in a season, from the row's meetings: twice them for a row of halves
+ * whose table holds both halves (J1, and the K League stages as one table; 0.7.2 league sizes, slice 14,
+ * season_sizes_asia.c). Any other file: the row's meetings. */
+int season_sizes_asia_meetings(const char *file, int season, int meetings);
+
+/* The most earlier starts of 7 days of the K League's date template (17, season_sizes_asia_rows.c); 0 for any other
+ * file. */
+int season_sizes_asia_earlier(const char *file);
+
+/* After the places of season_sizes_rules, with the size engine on: J1 plays its halves and final only in a season of
+ * halves, else one table (slice 14, D8; season_sizes_asia.c). */
+void season_sizes_asia_rules(uint32_t obj, const char *file);
+
 /* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
  * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
 int season_sizes_edition(const char *file, int year);
@@ -102,6 +115,20 @@ int season_sizes_plays_short(const char *file);
 /* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
  * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
 int season_sizes_data_clubs(const char *file, int season);
+
+/* The relegation places ("down") of the row of the object's edition, the direct places of the research; -1 with the
+ * sizes off or no count (gap 43, season_sizes_irl.c). */
+int season_sizes_row_down(uint32_t obj, const char *file);
+
+/* The play-off code of the row of the object's edition ("none", "text", ...) when that row's real season begins in the
+ * edition's year; NULL with the sizes off, no row, or a row of another real season (edition 2003 plays row 2003,
+ * whose real season is 2004). */
+const char *season_sizes_row_playoffs(uint32_t obj, const char *file);
+
+/* Item 251 (season_sizes_irl.c): in the set_up_rules wrap of IrePrm and IreFirst, the season's play-off between the
+ * divisions; and 1 when the create_table of an Irish class takes n clubs. */
+void season_sizes_irl_rules(uint32_t obj, const char *file);
+int season_sizes_irl_takes(const char *file, int n);
 
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which

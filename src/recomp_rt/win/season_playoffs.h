@@ -7,6 +7,8 @@
 /* The wrap of the empty function 0x5a8f60 (advance_stage, season_uefa_cup.c) calls it first: 1 when obj is a
  * league of this kind whose table is complete and the play-off stage is built now (the wrap then returns). */
 int season_playoffs_advance(uint32_t obj);
+/* The same play-off for a league whose class has its own play-off code (the I liga's own play-off, season_pol_first.c). */
+int season_playoffs_build_for(uint32_t obj);
 
 /* 1 when the rules row of file and season gives a play-off that this kind plays (4 places in a row just below
  * the direct places); *direct (may be NULL) gets the direct promotion places. */
@@ -19,6 +21,11 @@ int season_playoffs_shape(const char *file, int season, int *direct);
  * places. Without them Série A sent 4 down and took 2 up, and lost 2 clubs every season (0.6.2 open item 63).
  * season_playoff_winners.c, host code only. */
 int season_playoffs_winners_up(const char *file, int season);
+
+/* 2 when the rules row of file and season sends the two finalists of a play-off of its top 8 up and has no direct
+ * places beyond them (Série B 2002 to 2005, rows 2001 to 2004: "top 8 ... finalists promoted" or "top 2 promoted",
+ * up 2, play-off places 1 to 8), else 0. season_sizes_bra.c plays it. Host code only. */
+int season_playoffs_finalists_up(const char *file, int season);
 
 /* After set_up_rules of a league (season_sizes_rules calls it): the places and the stage count of the play-off
  * of the season, or none. */

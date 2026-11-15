@@ -41,9 +41,6 @@ int season_split_matches(uint32_t obj, const char *file, int n, int meetings);
  * played N matches. */
 void season_split_update(uint32_t obj);
 
-/* Probe (RECOMP_SIZE_LOG): the rows of a league that have not reached their matches, when the season change waits. */
-void season_split_log_short(uint32_t obj);
-
 /* 1 while the split deletes the section stage obj (made at the split; its fixtures stay with the parent). */
 int season_split_deleting(uint32_t obj);
 

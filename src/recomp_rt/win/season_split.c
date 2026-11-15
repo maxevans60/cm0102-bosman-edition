@@ -28,11 +28,11 @@
  * - The save keeps +0x3c, +0xa7, the rows and their position arrays (League::save_to_temp_file 0x6891c0), and the
  *   fixtures. +0xa3 is not saved (ScoPrm's load sets it at 0x7f0bf1..0x7f0c08): season_split_loaded sets it.
  *
- * Known limits (D2, the nearest form). update_positions_and_status 0x684cd0 gives each row its best and worst place
- * from +0xa7 less the matches played (0x684f44, 0x684f75, 0x68501e) and does not know the sections, as for the
- * Scottish split of the original; with sections of different matches (6+4+6) a club of the smaller section counts
- * matches it does not play there. A table match put back past the first section date delays the split, and the
- * section fixtures of a date already past are as in the original's Scottish split.
+ * - The best and worst places of each row (update_positions_and_status 0x684cd0) follow the sections after the split:
+ *   rt_split_bounds below (gap row 24 of 0.7.2).
+ *
+ * Known limits (D2, the nearest form). A table match put back past the first section date delays the split; the
+ * section dates then move on together, so that the first is the day after the split (split, slice 11).
  *
  * The state of a league is in the save: before the split +0x3c holds the row's meetings, after it the marker
  * (meetings + the most section meetings), with +0xa7 the matches of the season. A league whose object does not hold
@@ -53,6 +53,7 @@
 #define COMP_MEETINGS 0x3cu         /* s16 */
 #define COMP_CLUBS 0x3eu            /* s16 */
 #define COMP_YEAR 0x40u             /* s16: the edition */
+#define TODAY 0x00ae2c90u            /* the game date: s16 day of the year (0 = 1 January), +2 s16 year */
 #define ORDER_GLOBAL 0x00b67a00u     /* the order that the row comparators call (League::sort_table 0x682884) */
 #define COMP_ORDER 0xa3u            /* the table order function, 0 for the points (0x683410) */
 #define COMP_MATCHES 0xa7u          /* s16: matches per club */
@@ -202,36 +203,14 @@ static void forget(uint32_t obj)
         if (cache[k].obj == obj) cache[k].obj = 0;
 }
 
-/* Probe (RECOMP_SIZE_LOG): a sort that reaches the order of a split but finds no split state or no section. */
-static void order_probe(uint32_t obj, const SeasonSplit *sp, uint32_t a, uint32_t b)
-{
-    static int told;
-    if (!logging() || told >= 20) return;
-    told++;
-    fprintf(stderr, "recomp: league sizes: split order probe: obj 0x%x year %d state %s meetings %d dates %d matches %d "
-            "clubs %d sections %d %d (%.50s)\n", obj, readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_YEAR) : -1,
-            sp ? "2" : "not 2", readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_MEETINGS) : -1,
-            readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_DATES) : -1,
-            readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_MATCHES) : -1,
-            readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_CLUBS) : -1, sp ? section_of(a, sp) : -9,
-            sp ? section_of(b, sp) : -9, readable(obj) ? record_name(obj) : "");
-}
-
-static uint32_t order_calls, order_apart;   /* probe: calls of split_order, and those with rows of two sections */
-
 static void split_order(void)
 {
-    uint32_t a = rt_arg(0), b = rt_arg(1), obj = rd32(g_mem, SORTED_LEAGUE);
-    const SeasonSplit *sp = cached(obj);
+    uint32_t a = rt_arg(0), b = rt_arg(1);
+    const SeasonSplit *sp = cached(rd32(g_mem, SORTED_LEAGUE));
     int r = 0;
-    order_calls++;
     if (sp) {
         int x = section_of(a, sp), y = section_of(b, sp);
         if (x >= 0 && y >= 0) r = x - y;
-        if (r) order_apart++;
-        if (x < 0 || y < 0) order_probe(obj, sp, a, b);
-    } else {
-        order_probe(obj, sp, a, b);
     }
     rt_ret_cdecl((uint32_t)r);
 }
@@ -266,23 +245,88 @@ uint32_t rt_league_played_target(uint32_t obj, uint32_t original)
         int k = section_of(row, sp);
         if (k < 0 || (int8_t)g_mem[row + ROW_PLAYED] < sp->after + sp->matches[k]) return original;
     }
-    /* Probe (RECOMP_SIZE_LOG): the row order at the first day the table is complete. */
-    static uint32_t told_obj[8];
-    static int told_year[8], told_n;
-    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR), seen = 0;
-    for (int k = 0; k < told_n; k++) seen |= told_obj[k] == obj && told_year[k] == year;
-    if (logging() && !seen && told_n < 8) {
-        told_obj[told_n] = obj;
-        told_year[told_n++] = year;
-        fprintf(stderr, "recomp: league sizes: %s split complete %d:", season_change_file(obj), year);
+    return 0;   /* every row reached its own section's matches */
+}
+
+/* League::update_positions_and_status 0x684cd0 works out for each row the best place it can still reach (+0x39) and
+ * the worst (+0x3a) in its loop at 0x684ef7..0x6850dc, and from 0x6850e2 sets the status marks from them. The loop
+ * reads +0xa7 as every club's matches (0x684f44, 0x684f75, 0x68501e) and compares each row with every other row. After
+ * a split a club stays in its section, and its section plays its own matches. So for a split league this loop takes
+ * the place of the original's (INSNS 0x684ef7, league_sizes.py): the same rules, a row compared only with the rows of
+ * its own section, and the matches of that section. Returns 1 when it ran (the caller jumps to 0x6850e2).
+ * The original's rules, row i against a row j above it (best) or below it (worst), T the matches, pw the points of a
+ * win (+0xc2), max the points a row can still reach, a row "done" when it played T:
+ * - best (0x684f6f..0x684fe1): +0x39 starts at i + 1 (0x684f2f) and loses 1 for each j above that i can still pass:
+ *   neither done and max_i >= pts_j; i done, j not, and max_i == pts_j; j done, i not, and max_i >= pts_j; both done,
+ *   max_i == pts_j and +0xe6 set.
+ * - worst (0x685015..0x6850ba): +0x3a starts at i + 1 (0x684fff) and gains 1 for each j below that can still pass i:
+ *   neither done and max_j >= pts_i; i done, j not, and max_j >= pts_i; j done, i not, and max_j == pts_i; both
+ *   done, max_j == pts_j and +0xe6 set.
+ * - a row whose best and worst places are equal is settled and keeps them (0x684f24). */
+#define ROW_BEST 0x39u
+#define ROW_WORST 0x3au
+#define COMP_WIN_POINTS 0xc2u       /* s8: the points of a win (0x684f4d) */
+#define COMP_TIES 0xe6u             /* the tie flag of two done rows (0x684fcd) */
+
+int rt_split_bounds(uint32_t obj)
+{
+    if (!season_sizes_on() || !readable(obj)) return 0;
+    const SeasonSplit *sp = cached(obj);
+    if (!sp) return 0;
+    uint32_t t = rd32(g_mem, obj + COMP_TABLE);
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    if (!readable(t) || n <= 0 || n > MAX_CLUBS) return 0;
+    int sec[MAX_CLUBS], target[MAX_CLUBS], played[MAX_CLUBS], pts[MAX_CLUBS];
+    for (int i = 0; i < n; i++) {
+        uint32_t row = t + (uint32_t)i * ROW_SIZE;
+        sec[i] = section_of(row, sp);
+        if (sec[i] < 0) return 0;
+        target[i] = sp->after + sp->matches[sec[i]];
+        played[i] = (int8_t)g_mem[row + ROW_PLAYED];
+        pts[i] = (int16_t)rd16(g_mem, row + ROW_POINTS);
+    }
+    int pw = (int8_t)g_mem[obj + COMP_WIN_POINTS], ties = rd32(g_mem, obj + COMP_TIES) != 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t row = t + (uint32_t)i * ROW_SIZE;
+        if (g_mem[row + ROW_BEST] == g_mem[row + ROW_WORST]) continue;
+        int done_i = played[i] >= target[i], max_i = pts[i] + (target[i] - played[i]) * pw;
+        uint8_t best = (uint8_t)(i + 1), worst = (uint8_t)(i + 1);
+        for (int j = 0; j < i; j++) {
+            if (sec[j] != sec[i]) continue;
+            int done_j = played[j] >= target[j];
+            int pass = !done_i && !done_j ? max_i >= pts[j]
+                     : done_i && !done_j ? max_i == pts[j]
+                     : !done_i ? max_i >= pts[j]
+                     : max_i == pts[j] && ties;
+            best -= (uint8_t)pass;
+        }
+        for (int j = i + 1; j < n; j++) {
+            if (sec[j] != sec[i]) continue;
+            int done_j = played[j] >= target[j], max_j = pts[j] + (target[j] - played[j]) * pw;
+            int pass = !done_i && !done_j ? max_j >= pts[i]
+                     : done_i && !done_j ? max_j >= pts[i]
+                     : !done_i ? max_j == pts[i]
+                     : max_j == pts[j] && ties;
+            worst += (uint8_t)pass;
+        }
+        g_mem[row + ROW_BEST] = best;
+        g_mem[row + ROW_WORST] = worst;
+    }
+    /* For the test log (tests/seasons/league_size_run.py): each row's places in table order, once a day. */
+    static uint32_t logged_obj, logged_day;
+    uint32_t day = rd32(g_mem, GAME_DATE);
+    if (logging() && (logged_obj != obj || logged_day != day)) {
+        logged_obj = obj;
+        logged_day = day;
+        fprintf(stderr, "recomp: league sizes: %s split bounds %d %d:", season_change_file(obj),
+                (int16_t)rd16(g_mem, obj + COMP_YEAR), (int16_t)(day & 0xffffu));
         for (int i = 0; i < n; i++) {
-            uint32_t row = t + (uint32_t)i * ROW_SIZE, at = rd32(g_mem, row + ROW_POSITIONS);
-            fprintf(stderr, " %d:%d", readable(at) ? (int8_t)g_mem[at + (uint32_t)(sp->after - 1)] : -1,
-                    (int16_t)rd16(g_mem, row + ROW_POINTS));
+            uint32_t row = t + (uint32_t)i * ROW_SIZE;
+            fprintf(stderr, " %d-%d", g_mem[row + ROW_BEST], g_mem[row + ROW_WORST]);
         }
         fprintf(stderr, "\n");
     }
-    return 0;   /* every row reached its own section's matches */
+    return 1;
 }
 
 static uint32_t call_cdecl(uint32_t fn, int nargs, const uint32_t *args)
@@ -395,6 +439,28 @@ static void split(uint32_t obj, const SeasonSplit *sp)
                 sp->after, record_name(obj));
         return;
     }
+    /* A split made after its first section date: a table match put back past that date delays the split (the Super
+     * League 2025/26 of a 2025 start: a match moved by clashes from day 66 to day 90, the sections began on day 67),
+     * and a section fixture of a date already past was never played, so the table was never complete and the
+     * nation's season change waited for ever. The dates of the block (+0 s16 day of the year, +2 s16 year,
+     * DATE_SIZE bytes each) then move on together so that the first is tomorrow, in the same year; their order and
+     * gaps stay. */
+    {
+        int today = (int16_t)rd16(g_mem, TODAY), this_year = (int16_t)rd16(g_mem, TODAY + 2u);
+        int first = (int16_t)rd16(g_mem, dates), first_year = (int16_t)rd16(g_mem, dates + 2u);
+        int last = (int16_t)rd16(g_mem, dates + (uint32_t)(days - 1) * DATE_SIZE);
+        int last_year = (int16_t)rd16(g_mem, dates + (uint32_t)(days - 1) * DATE_SIZE + 2u);
+        int shift = first_year == this_year && last_year == this_year && first <= today ? today + 1 - first : 0;
+        if (shift > 0 && last + shift < 365) {
+            for (int k = 0; k < days; k++) {
+                uint32_t d = dates + (uint32_t)k * DATE_SIZE;
+                wr16(g_mem, d, (uint16_t)((int16_t)rd16(g_mem, d) + shift));
+            }
+            fprintf(stderr, "recomp: league sizes: %s split %d: made on day %d, after its first section date (day "
+                            "%d): the section dates move on %d days (%.50s)\n", file, year, today, first, shift,
+                    record_name(obj));
+        }
+    }
     int first = 0;
     for (int k = 0; k < sp->parts; k++) {
         if (sp->size[k] >= 2 &&
@@ -489,80 +555,12 @@ void season_split_loaded(uint32_t obj)
                 (int16_t)rd16(g_mem, obj + COMP_YEAR), record_name(obj));
 }
 
-/* Probe (RECOMP_SIZE_LOG): League::sort_table 0x6827d0 (thiscall, one argument, ret 4). After a sort of a league
- * after its split, a row of a later section above a row of an earlier one is logged with the caller, once a caller. */
-void o_006827d0(void);
-RT_WRAP(006827d0, league_sort_table_probe)
-{
-    uint32_t self = cpu.ecx, ret = rd32(g_mem, cpu.esp), arg = rd32(g_mem, cpu.esp + 4u), calls = order_calls;
-    o_006827d0();
-    if (rt_unwinding || !logging() || !season_sizes_on() || !readable(self)) return;
-    const SeasonSplit *sp = cached(self);
-    if (!sp) return;
-    uint32_t t = rd32(g_mem, self + COMP_TABLE);
-    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), last = -1, bad = -1;
-    for (int i = 0; readable(t) && i < n; i++) {
-        int k = section_of(t + (uint32_t)i * ROW_SIZE, sp);
-        if (k >= 0 && k < last && bad < 0) bad = i;
-        if (k > last) last = k;
-    }
-    static uint32_t told[16];
-    int seen = 0;
-    for (int k = 0; k < 16; k++) seen |= told[k] == ret;
-    if (bad < 0 || seen) return;
-    for (int k = 0; k < 16; k++)
-        if (!told[k]) { told[k] = ret; break; }
-    fprintf(stderr, "recomp: league sizes: %s sort %d out of section order at row %d, caller 0x%x, order 0x%x, "
-            "table argument 0x%x (own 0x%x), %u order calls, global 0x%x, sorted league 0x%x (self 0x%x), rows",
-            season_change_file(self), (int16_t)rd16(g_mem, self + COMP_YEAR), bad, ret,
-            rd32(g_mem, self + COMP_ORDER), arg, t, order_calls - calls, rd32(g_mem, 0xb67a00u),
-            rd32(g_mem, SORTED_LEAGUE), self);
-    for (int i = 0; readable(t) && i < n; i++) {
-        uint32_t row = t + (uint32_t)i * ROW_SIZE;
-        fprintf(stderr, " %d/%d/%d", section_of(row, sp), (int16_t)rd16(g_mem, row + ROW_POINTS),
-                (int8_t)g_mem[row + ROW_PLAYED]);
-    }
-    fprintf(stderr, "\n");
-}
-
-void season_split_log_short(uint32_t obj)
-{
-    static int told;
-    if (!logging() || !season_sizes_on() || !readable(obj) || told >= 6) return;
-    told++;
-    SeasonSplit sp;
-    int st = state(obj, &sp);
-    uint32_t t = rd32(g_mem, obj + COMP_TABLE);
-    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
-    fprintf(stderr, "recomp: league sizes: %s short %d: state %d meetings %d dates %d matches %d, rows below target:",
-            season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), st,
-            (int16_t)rd16(g_mem, obj + COMP_MEETINGS), (int16_t)rd16(g_mem, obj + COMP_DATES),
-            (int16_t)rd16(g_mem, obj + COMP_MATCHES));
-    for (int i = 0; readable(t) && i < n && i < MAX_CLUBS; i++) {
-        uint32_t row = t + (uint32_t)i * ROW_SIZE;
-        int k = st == 2 ? section_of(row, &sp) : -1;
-        int want = st == 2 && k >= 0 ? sp.after + sp.matches[k] : (int16_t)rd16(g_mem, obj + COMP_MATCHES);
-        int played = (int8_t)g_mem[row + ROW_PLAYED];
-        if (played < want) fprintf(stderr, " row %d section %d played %d of %d", i, k, played, want);
-    }
-    fprintf(stderr, " (%.50s)\n", record_name(obj));
-}
-
 void season_split_log_end(uint32_t obj)
 {
     SeasonSplit sp;
     if (!season_sizes_on() || state(obj, &sp) != 2) return;
     uint32_t t = rd32(g_mem, obj + COMP_TABLE);
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
-    /* The points (+0x19) and status (+0x37) of each row, in table order, the order field and the order calls. */
-    fprintf(stderr, "recomp: league sizes: %s split points %d (order 0x%x, split_order 0x%x, %u calls, %u apart):",
-            season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), rd32(g_mem, obj + COMP_ORDER), order_addr,
-            order_calls, order_apart);
-    for (int i = 0; i < n; i++) {
-        uint32_t row = t + (uint32_t)i * ROW_SIZE;
-        fprintf(stderr, " %d/%d", (int16_t)rd16(g_mem, row + ROW_POINTS), (int8_t)g_mem[row + 0x37u]);
-    }
-    fprintf(stderr, "\n");
     fprintf(stderr, "recomp: league sizes: %s split end %d:", season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR));
     for (int i = 0; i < n; i++) {
         uint32_t row = t + (uint32_t)i * ROW_SIZE, at = rd32(g_mem, row + ROW_POSITIONS);

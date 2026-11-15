@@ -154,7 +154,7 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 
 ### 7. Split engine
 Blocked by: 2, 4
-Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 33 + 6 and 6, 2 meetings in place of 4) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
+Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 3 meetings in place of 4: 33 matches, then sections of 6 and 6 that meet once more, 38 matches; gap fix, sources in docs/research/2026-11-15-split-points.md) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
 Merge danger: one-way door for saves (a save holds the section stages). Blast radius: leagues with a split row.
 - [x] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
 - [x] A save during the split loads and the season completes
@@ -208,8 +208,8 @@ Merge danger: two-way door. Blast radius: the two Irish pyramids.
 Blocked by: 2, 3, 6, 7
 Delivers: J1 at 18 and 20 with halves and the final only in their seasons (D8), J2 at up to 22 with its row's meetings, the K League at 12 to 16 with its meetings and its split.
 Merge danger: two-way door. Blast radius: the Japanese and Korean leagues.
-- [ ] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
+- [x] The same-save set is equal
 
 ### 15. Argentine Primera: halves and zones
 Blocked by: 2, 3

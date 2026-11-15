@@ -8,6 +8,7 @@
 #include "season_bel_second.h"
 #include "season_esp_second.h"
 #include "season_tur_groups.h"
+#include "season_pol_first.h"
 #include "season_arg_zones.h"
 #include "season_names.h"
 #include "season_records.h"
@@ -181,6 +182,11 @@ static uint32_t planned_division(uint32_t at)
     return moves_club[i].div;
 }
 
+uint32_t season_clubs_planned_division(uint32_t club)
+{
+    return planned_division(club);
+}
+
 /* One division of the game. */
 typedef struct {
     uint32_t at, nation;
@@ -284,6 +290,10 @@ static int class_size(const char *name, int season)
 {
     int new_division = season_divisions_class_size(name, season);   /* slice 20 */
     if (new_division >= 0) return new_division;
+    if (!strncmp(name, "Polish First Division", 52)) {                 /* issue 92: one table of 14, 16 or 18 */
+        int one_table = season_pol_first_clubs(season);
+        if (one_table > 0) return one_table;
+    }
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
         if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
             int table = season_sizes_clubs(CLASS_SIZE[k].file, season);

@@ -12,6 +12,7 @@
 #include "win.h"
 #include "season_second_teams.h"
 #include "season_level_ties.h"
+#include "season.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,6 +78,14 @@ uint32_t st_league_of(uint32_t key)
     return st_readable(league) ? league : 0;
 }
 
+int st_season_year(uint32_t key)
+{
+    uint32_t league = st_league_of(key);
+    int start = season_start_year();
+    int y = league ? (int16_t)rd16(g_mem, league + 0x40u) : 0;
+    return y >= start && y <= start + 100 ? y : start;
+}
+
 uint32_t st_table_of(uint32_t league, int *n)
 {
     *n = 0;
@@ -86,6 +95,27 @@ uint32_t st_table_of(uint32_t league, int *n)
     if (!st_readable(table) || rows <= 0 || rows > 64) return 0;
     *n = rows;
     return table;
+}
+
+void st_test_mid_table(uint32_t league, StBarred side)
+{
+    int n, k = 0, pts[64];
+    uint32_t table = st_table_of(league, &n);
+    for (int i = 0; table && i < n; i++) {
+        uint32_t row = table + (uint32_t)i * ST_ROW_SIZE;
+        if (!side(rd32(g_mem, row))) pts[k++] = (int16_t)rd16(g_mem, row + ST_ROW_POINTS);
+    }
+    if (k < 2) return;
+    for (int i = 1; i < k; i++)                  /* the points of the other clubs, high first */
+        for (int j = i; j > 0 && pts[j] > pts[j - 1]; j--) {
+            int t = pts[j];
+            pts[j] = pts[j - 1];
+            pts[j - 1] = t;
+        }
+    for (int i = 0; i < n; i++) {
+        uint32_t row = table + (uint32_t)i * ST_ROW_SIZE;
+        if (side(rd32(g_mem, row))) wr16(g_mem, row + ST_ROW_POINTS, (uint16_t)pts[k / 2]);
+    }
 }
 
 uint32_t st_call_this(uint32_t fn, uint32_t self, int nargs, const uint32_t *args)
