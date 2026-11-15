@@ -595,7 +595,7 @@ static int in_division(uint32_t self, int32_t id)
 
 /* The records of the clubs of the division, and a free record (id -1, the edition) for each other place: the count of
  * the division. */
-static void averages_fit(uint32_t self, int n)
+void season_arg_averages_fit(uint32_t self, int n, const char *file)
 {
     uint32_t old = rd32(g_mem, self + AVERAGES);
     int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT), keep = 0, stale = 0;
@@ -607,8 +607,8 @@ static void averages_fit(uint32_t self, int n)
     }
     if (have == n && !stale) {
         if (logging())
-            fprintf(stderr, "recomp: league sizes: arg_prm %d: averages of %d clubs (%d held, %d kept, 0 left the "
-                            "division)\n", (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep);
+            fprintf(stderr, "recomp: league sizes: %s %d: averages of %d clubs (%d held, %d kept, 0 left the "
+                            "division)\n", file, (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep);
         return;
     }
     uint32_t block = season_sizes_game_malloc((uint32_t)n * AVG_SIZE);
@@ -627,8 +627,8 @@ static void averages_fit(uint32_t self, int n)
     wr32(g_mem, self + AVERAGES, block);
     wr16(g_mem, self + AVERAGE_COUNT, (uint16_t)n);
     if (logging())
-        fprintf(stderr, "recomp: league sizes: arg_prm %d: averages of %d clubs (%d held, %d kept, %d left the division)\n",
-                (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep, stale);
+        fprintf(stderr, "recomp: league sizes: %s %d: averages of %d clubs (%d held, %d kept, %d left the division)\n",
+                file, (int16_t)rd16(g_mem, self + COMP_YEAR), n, have, keep, stale);
 }
 
 /* ArgPrm::update_relegation_averages 0x406570 (thiscall (new_season), ret 4). At the end of a season (0, from
@@ -641,7 +641,7 @@ RT_WRAP(00406570, arg_update_averages)
     uint32_t self = cpu.ecx;
     if (rt_arg(0) == 0 && season_sizes_on() && is_prm(self)) {
         int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
-        if (n >= MIN_CLUBS && n <= MAX_CLUBS) averages_fit(self, n);
+        if (n >= MIN_CLUBS && n <= MAX_CLUBS) season_arg_averages_fit(self, n, "arg_prm");
         if (rt_unwinding) return;
     }
     o_00406570();
@@ -659,6 +659,13 @@ RT_WRAP(00405ef0, arg_init_averages)
         o_00405ef0();
         return;
     }
+    season_arg_averages_empty(self, n);
+    if (rt_unwinding) return;
+    rt_ret_stdcall(cpu.eax, 0);
+}
+
+void season_arg_averages_empty(uint32_t self, int n)
+{
     uint32_t block = season_sizes_game_malloc((uint32_t)n * AVG_SIZE);
     if (rt_unwinding) return;
     if (block)
@@ -668,7 +675,6 @@ RT_WRAP(00405ef0, arg_init_averages)
         }
     wr32(g_mem, self + AVERAGES, block);
     wr16(g_mem, self + AVERAGE_COUNT, (uint16_t)(block ? n : 0));
-    rt_ret_stdcall(cpu.eax, 0);
 }
 
 uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original)

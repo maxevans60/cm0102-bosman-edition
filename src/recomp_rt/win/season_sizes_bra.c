@@ -40,6 +40,7 @@
 #include "../rt_host.h"
 #include "season_change.h"
 #include "season_sizes.h"
+#include "season_sizes_arg_second.h"
 #include "season_template.h"
 
 #include <stdio.h>
@@ -238,12 +239,13 @@ RT_WRAP(0042d040, bra_second_result)
  * Brazilian classes hold 0x408eb0 there, which jumps to +0x30 of stage 0 (0x408eb0..0x408eb7: [this+0xc][0]), the
  * play-off; the base League holds record_season_honours 0x684640, which takes rows 0 and 1 of the table +0xb1
  * (0x68465b..0x68465d). With no play-off stage 0 is not there (a jump to 0), so a Série A or B season with no
- * play-off takes the League's, as the OFC Nations Cup with no stage (season_intl_ofc.c). Other classes that hold
- * 0x408eb0 keep it. */
+ * play-off takes the League's, as the OFC Nations Cup with no stage (season_intl_ofc.c). So does an edition of one table
+ * of the Argentine second division (ArgSecond holds 0x408eb0 too, slice 16). Other classes that hold 0x408eb0 keep
+ * it. */
 void o_00408eb0(void);
 RT_WRAP(00408eb0, staged_honours)
 {
-    if (no_playoff(cpu.ecx)) {
+    if (no_playoff(cpu.ecx) || season_arg_second_no_stage(cpu.ecx)) {   /* slice 16: one table, no stage */
         rt_jump(F_LEAGUE_HONOURS);
         return;
     }

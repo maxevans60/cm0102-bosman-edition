@@ -63,6 +63,13 @@ int season_arg_third(uint32_t record);
  * the swap 0x4068d0 finds them again. */
 uint32_t season_arg_third_record(void);
 
+/* The relegation averages of an Argentine league object (+0x18, +0x34 records of 0x13 bytes: ArgPrm 0x405f02..0x405f16,
+ * ArgSecond 0x409402..0x409416, the same layout). _fit: the records of the clubs of the division and a free record (id
+ * -1, the edition) for each other place, n records (file names the league in the log). _empty: n free records, as the
+ * original's empty records (0x406538..0x40654a); the block is the game's. */
+void season_arg_averages_fit(uint32_t self, int n, const char *file);
+void season_arg_averages_empty(uint32_t self, int n);
+
 /* tools/recomp/arg_prm.py: a constant of the class for 20 clubs plus (count - 20) in a season game. */
 uint32_t rt_arg_count(uint32_t original);
 
