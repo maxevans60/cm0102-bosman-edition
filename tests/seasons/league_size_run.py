@@ -358,8 +358,8 @@ def edition_row(file, edition):
 
 
 def edition_split(file, edition):
-    """The split of the row that an edition plays (edition_row), or None."""
-    return encoded_split(file, edition - 1 if calendar_year(file) else edition)
+    """The split of the row that an edition plays (edition_season), or None."""
+    return encoded_split(file, edition_season(file, edition))
 
 
 def report_rows(report, file):
@@ -622,6 +622,10 @@ def self_test():
         bad.append(("edition rows", [(f, y, edition_season(f, y), edition_row(f, y)) for f, y in
                                      (("rus_first", 2006), ("rus_first", 2012), ("rus_first", 2013),
                                       ("tur_first", 2020), ("tur_second", 2023))]))
+    # The split of an edition takes the row of edition_season (slices 7 and 12).
+    if (edition_split("wel_first", 2026) != encoded_split("wel_first", 2026) or
+            edition_split("nir_prm", 2010) != encoded_split("nir_prm", 2010) or edition_split("rus_first", 2006)):
+        bad.append(("edition split", "wel_first 2026, nir_prm 2010, rus_first 2006"))
     # A difference of tur_second_b (TFF 2. Lig) is not one of tur_second.
     if (own_difference("tur_second", "tur_second_b (TFF 2. Lig), row rus-tur-239: game 10, table 38 (38)") or
             not own_difference("tur_second", "tur_second (TFF 1. Lig), row rus-tur-1: game 20, table 18 (18)")):
