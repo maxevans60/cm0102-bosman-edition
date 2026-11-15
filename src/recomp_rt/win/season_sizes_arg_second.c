@@ -15,6 +15,7 @@
 #define CLASS_CLUBS 25              /* ArgSecond::fill_league_table 0x407ce2 */
 #define CLASS_STAGES 6              /* ArgSecond::ArgSecond 0x406c61 */
 #define MAX_DOWN 4                  /* arg_prm_swap_second_and_third_division_clubs 0x4068d0: cmp bl, 4 at 0x4069fb */
+#define COMP_STAGES 0x0cu            /* the stage array (0x406c72) */
 #define COMP_STAGE_COUNT 0x2cu
 #define COMP_STAGE_NOW 0x30u
 #define COMP_MEETINGS 0x3cu
@@ -55,13 +56,15 @@ typedef struct {
     const char *why;        /* the row's form, for the log */
 } Form;
 
-/* 1 when the edition plays one table (the form of the row); 0 for the class: the base game, the sizes off, an edition
- * whose dates had no room (season_sizes_kept), and a row of the class's own form (25 clubs, an Apertura and the
- * Clausura zones: 2001/02). */
+/* 1 when the edition plays one table (the form of the row); 0 for the class: the base game, the sizes off and a row of
+ * the class's own form (25 clubs, an Apertura and the Clausura zones: 2001/02). An edition whose dates had no room
+ * (season_sizes_kept, D4) still plays one table, at the class's count and meetings on the joined dates: the class's
+ * stages need exactly 25 rows (create_zone_stages 0x4081b0 reads rows 1 to 24) and a stage array that a one-table save
+ * does not hold (League::load 0x688e44 allocates it only for +0x2c > 0). */
 static int form_of(uint32_t obj, Form *f)
 {
     memset(f, 0, sizeof *f);
-    if (!season_sizes_on() || !is_second(obj) || season_sizes_kept(obj)) return 0;
+    if (!season_sizes_on() || !is_second(obj)) return 0;
     f->season = season_sizes_row_season(obj, FILE_SECOND);
     const SeasonRule *r = f->season >= 0 ? season_rules_find(f->season, FILE_SECOND, 0) : NULL;
     const SeasonLeagueRule *l = f->season >= 0 ? season_league_row(FILE_SECOND, f->season) : NULL;
@@ -107,11 +110,21 @@ int season_arg_second_meetings(uint32_t obj, int meetings)
 
 void season_arg_second_rules(uint32_t obj)
 {
-    if (!season_sizes_on() || !is_second(obj)) return;
+    if (!is_second(obj)) return;
     Form f;
     if (!form_of(obj, &f)) {
-        /* The class's own stages (a 2001 edition after an edition of one table, with changing rules on). */
-        wr32(g_mem, obj + COMP_STAGE_COUNT, CLASS_STAGES);
+        /* The class's own stages after an edition of one table: a 2001 edition with changing rules on, or a one-table
+         * save loaded with the sizes off. A loaded one-table save has no stage array (0x688e44). The base game never
+         * has +0x2c 0 (the constructor sets 6 at 0x406c61), so it allocates nothing here. */
+        if (rd32(g_mem, obj + COMP_STAGE_COUNT) == 0) {
+            if (!readable(rd32(g_mem, obj + COMP_STAGES))) {
+                uint32_t a = season_sizes_game_malloc(4u * CLASS_STAGES);   /* 0x18 bytes, as 0x406c55..0x406c72 */
+                if (rt_unwinding || !a) return;
+                memset(g_mem + a, 0, 4u * CLASS_STAGES);
+                wr32(g_mem, obj + COMP_STAGES, a);
+            }
+            wr32(g_mem, obj + COMP_STAGE_COUNT, CLASS_STAGES);
+        }
         return;
     }
     const SeasonRule *r = season_rules_find(f.season, FILE_SECOND, 0);
@@ -184,14 +197,14 @@ int season_arg_second_join(uint32_t self, uint32_t count_at)
 
 /* ArgSecond::init_relegation_averages 0x4093f0 (thiscall, no argument; the constructor at 0x406df0): it takes a block
  * of the count's records (+0x3e at 0x4093fe, calloc 0x945501 at 0x40940a) and writes 25 records of 2001 clubs, the
- * last at 0x409adf. One table of another count gets the empty records of the original's averages (id -1, the edition),
+ * last at 0x409adf. One table of any count (25 too: 2017/18 and 2018/19) gets the empty records of the original's averages (id -1, the edition),
  * as season_sizes_arg.c gives the Primera; update_relegation_averages 0x409c20 fills a free record for each club. */
 void o_004093f0(void);
 RT_WRAP(004093f0, arg_second_init_averages)
 {
     uint32_t self = cpu.ecx;
     int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
-    if (!playing_one_table(self) || n == CLASS_CLUBS || n < 1) {
+    if (!playing_one_table(self) || n < 1) {
         o_004093f0();
         return;
     }
@@ -238,5 +251,8 @@ RT_WRAP(00409fe0, arg_second_predicted)
  * 0x684640). */
 int season_arg_second_no_stage(uint32_t obj)
 {
-    return playing_one_table(obj) && (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) < 0;
+    /* Not by the sizes: a one-table save loaded with the sizes off ends its season with no stage too. The base game
+     * never has +0x2c 0. */
+    return is_second(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0 &&
+           (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) < 0;
 }
