@@ -872,7 +872,12 @@ def c_list(values):
 
 def split_points(points):
     """The split_points value: 0 kept, 1 halved, 2 unknown, 3 by section (split_halved)."""
-    return {"kept": 0, "halved": 1, "unknown": 2}.get(points, 3)
+    if "+" in points:
+        section_points(points, points.count("+") + 1)      # stops on a word other than kept and halved
+        return 3
+    if points not in ("kept", "halved", "unknown"):
+        raise SystemExit("encode_leagues.py: split points %r" % points)
+    return {"kept": 0, "halved": 1, "unknown": 2}[points]
 
 
 def section_points(points, sections):

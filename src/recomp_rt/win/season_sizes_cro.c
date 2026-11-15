@@ -24,7 +24,8 @@
  * season game the regroup walks the clubs it found, in a list of the runtime of REGROUP_MAX slots, and takes the
  * rows of the season it prepares (the edition after the First Division's):
  * - Two groups (2001/02 to 2005/06; gap row 38): the North takes the cro_a2a row and the South the cro_a2b row (12
- *   each from 2002/03), by latitude as the original.
+ *   each from 2002/03), by latitude as the original; the clubs that a smaller tier leaves out are the last by
+ *   results of both groups.
  * - One group (the South row "not held", 2006/07 on; gap row 40): the real second tier is one division of 12 to 18
  *   clubs, the Druga HNL, which keeps its clubs by results. The North takes the cro_a2a row in order of results
  *   (sort_by_results, no sort by latitude): the clubs down from the First Division, the North's by their places,
@@ -135,41 +136,46 @@ static uint32_t league_at(uint32_t key)
     return readable(obj) ? obj : 0;
 }
 
-/* The place of a club in the last table of a league (from 1), or 0 when the table does not hold it. */
+/* The rank of a club in the last table of a league (from 1), or 0 when the table does not hold it. The rank is the
+ * row's index: League::update_positions_and_status 0x684cd0 sorts the table (0x6827d0 at 0x684d18) at each match
+ * day; row +0x39 is the best place a club can still reach, which level clubs share (season_level_ties_game.c). */
 static int place_in(uint32_t obj, uint32_t club)
 {
     uint32_t t = obj ? rd32(g_mem, obj + COMP_TABLE) : 0;
     int n = obj ? (int16_t)rd16(g_mem, obj + COMP_CLUBS) : 0;
     if (!readable(t)) return 0;
-    for (int r = 0; r < n && r < REGROUP_MAX; r++) {
-        uint32_t row = t + (uint32_t)r * ROW_SIZE;
-        if (rd32(g_mem, row) != club) continue;
-        int p = (int8_t)g_mem[row + ROW_POS];
-        return p > 0 ? p : r + 1;
-    }
+    for (int r = 0; r < n && r < REGROUP_MAX; r++)
+        if (rd32(g_mem, t + (uint32_t)r * ROW_SIZE) == club) return r + 1;
     return 0;
 }
 
-/* The order of a second tier of one group, by results: the clubs down from the First Division, the North's clubs
- * by their places, the South's by theirs (the South holds the third level, so its best go up), then the clubs that
- * 0x514ed0 brought up from the lower divisions. The regroup chain 0x5150f0 and 0x514ed0 run before it, so the tables
- * of the season that ends are still there (League::free_table 0x687970 of the First Division is at 0x5149ca). */
-static int merit(uint32_t club, uint32_t a1, uint32_t north, uint32_t south)
+#define KEY_NEW 300                /* a club that 0x514ed0 brought up from the lower divisions */
+
+/* The order of the found clubs by results. The chain 0x5150f0 and 0x514ed0 run before the regroup, so the tables of
+ * the season that ends are still there (League::free_table 0x687970 of the First Division is at 0x5149ca; neither
+ * 0x6830b0 nor 0x6831a0 rewrites a table row). First the clubs down from the First Division, then:
+ * - one group: the North's clubs by rank, then the South's (the South holds the third level, so its best fill the
+ *   North's free places);
+ * - two groups: the clubs of both groups by rank together (the 5th of the North and the 5th of the South side by
+ *   side), so the clubs that a smaller tier sends to A Lower Division are the last of both groups.
+ * Then the clubs that 0x514ed0 brought up from the lower divisions (KEY_NEW; with one group they move up to the
+ * South's part in plan, so the South's last clubs go down rather than these). */
+static int merit(uint32_t club, uint32_t a1, uint32_t north, uint32_t south, int one)
 {
     int p;
     if ((p = place_in(a1, club)) > 0) return p;
     if ((p = place_in(north, club)) > 0) return 100 + p;
-    if ((p = place_in(south, club)) > 0) return 200 + p;
-    return 300;
+    if ((p = place_in(south, club)) > 0) return (one ? 200 : 100) + p;
+    return KEY_NEW;
 }
 
-static void sort_by_results(int found)
+static void sort_by_results(int found, int one, int north_count)
 {
     uint32_t a1 = league_at(CRO_A1), north = league_at(CRO_A2A), south = league_at(CRO_A2B);
     int key[REGROUP_MAX];
     for (int i = 0; i < found; i++) {
         uint32_t club = rd32(g_mem, regroup + (uint32_t)i * 4u);
-        int k = merit(club, a1, north, south), j = i;
+        int k = merit(club, a1, north, south, one), j = i;
         while (j > 0 && key[j - 1] > k) {          /* stable: the club table's order within a key */
             key[j] = key[j - 1];
             wr32(g_mem, regroup + (uint32_t)j * 4u, rd32(g_mem, regroup + (uint32_t)(j - 1) * 4u));
@@ -178,11 +184,21 @@ static void sort_by_results(int found)
         key[j] = k;
         wr32(g_mem, regroup + (uint32_t)j * 4u, club);
     }
+    if (!one) return;
+    /* One group: the new clubs go just after the North, at the head of the South's part. */
+    uint32_t moved[REGROUP_MAX];
+    int nm = 0, at = north_count;
+    for (int i = north_count; i < found; i++)
+        if (key[i] == KEY_NEW) moved[nm++] = rd32(g_mem, regroup + (uint32_t)i * 4u);
+    for (int i = found - 1, w = found - 1; i >= north_count; i--)
+        if (key[i] != KEY_NEW) wr32(g_mem, regroup + (uint32_t)w-- * 4u, rd32(g_mem, regroup + (uint32_t)i * 4u));
+    for (int i = 0; i < nm; i++) wr32(g_mem, regroup + (uint32_t)(at + i) * 4u, moved[i]);
 }
 
 /* The counts of a regroup of found clubs: the North takes the cro_a2a row, the South the cro_a2b row (two groups,
  * 2001/02 to 2005/06) or its table's 16 (one group, 2006/07 on: the South holds the third level), the others go to
- * A Lower Division. With one group the order is by results (sort_by_results), else by latitude (the original's).
+ * A Lower Division. The order is by results (sort_by_results); with two groups the original's sort by latitude then
+ * orders the clubs kept.
  * No cro_a2a row: the original's 16 and 16. */
 static void plan(int found)
 {
@@ -210,15 +226,19 @@ uint32_t rt_cro_regroup_list(uint32_t array, uint32_t count)
     if ((int32_t)count >= 0) {
         regroup_found = (int32_t)count;
         plan(regroup_found);
-        if (regroup_by_results) sort_by_results(regroup_found);
+        /* By results always; with two groups the original's sort by latitude then orders the clubs kept (the
+         * first North + South, rt_cro_regroup_sort_count), and those after them go to A Lower Division. */
+        if (regroup_north > 0) sort_by_results(regroup_found, regroup_by_results, regroup_north);
     }
     return regroup;
 }
 
-/* The count of the original's sort by latitude (0x51521d): none when the order is by results. */
+/* The count of the original's sort by latitude (0x51521d): none with one group (the order is by results), the
+ * clubs kept with two groups (North + South, the first of the order by results), all without a row. */
 uint32_t rt_cro_regroup_sort_count(uint32_t count)
 {
-    return regroup_on() && regroup_by_results ? 0u : count;
+    if (!regroup_on() || regroup_north <= 0) return count;
+    return regroup_by_results ? 0u : (uint32_t)(regroup_north + regroup_south);
 }
 
 uint32_t rt_cro_regroup_north(uint32_t original)
