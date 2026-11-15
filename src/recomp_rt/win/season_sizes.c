@@ -905,7 +905,9 @@ static void sizes_rules(uint32_t obj)
         set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
     /* A division with no chain (open item 250, below): the row's places go to no division at the season change. The
      * class writes none (WelFirst::set_up_rules 0x925c50), so set_places would keep its 0. */
-    if (lone_file(file) && r->down >= 0 && r->down <= 30 && (int8_t)g_mem[obj + DOWN] != r->down) {
+    /* Only with changing rules on: only then do the clubs go down (lone_exchange; review of 15 November). */
+    if (lone_file(file) && season_changing_rules() && r->down >= 0 && r->down <= 30 &&
+        (int8_t)g_mem[obj + DOWN] != r->down) {
         if (logging())
             fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d to no division, the class gave %d\n",
                     file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), r->down, (int8_t)g_mem[obj + DOWN]);
@@ -1202,6 +1204,7 @@ static void size_step_run(uint32_t trigger)
     if (!nstep_seen || step_running || rt_unwinding) return;
     if (!sizes_on() || !season_changing_rules()) {
         nstep_seen = 0;
+        nlone_down = 0;
         return;
     }
     step_running = 1;
@@ -1392,6 +1395,7 @@ static void sizes_new_game(int start_year)
 {
     (void)start_year;
     nstep_seen = 0;
+    nlone_down = 0;
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
@@ -1415,6 +1419,7 @@ static void sizes_loaded(int start_year)
     (void)start_year;
     nseen = 0;
     nstep_seen = 0;
+    nlone_down = 0;
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
