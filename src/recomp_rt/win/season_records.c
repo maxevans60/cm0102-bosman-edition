@@ -8,6 +8,7 @@
  * then treat them as clubs of the files. Record layouts: include/database.h. All work is in host memory. */
 #include "win.h"
 #include "season.h"
+#include "season_clubs.h"
 #include "season_dates.h"
 #include "season_names.h"
 #include "season_records.h"
@@ -728,7 +729,7 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
     log[0] = 0;
     int first = -1, n = 0;
     for (int i = 0; i < nrows; i++)
-        if (rows[i].season == season) {
+        if (rows[i].season == season_clubs_list_season(rows[i].division, season)) {   /* item 260 */
             if (first < 0) first = i;
             result.row_of[n] = i;
             result.club_id[n] = -1;
