@@ -264,8 +264,8 @@ def league_playoffs():
 
 
 # Open item 259: the pairs whose play-off is played between the two divisions (the lower class's stage, season_sizes.c
-# PLAYOFF_PAIRS) and whose places set_places sets. Their rows count only the direct places. Ireland (a class that
-# counts the clubs of its data) and Northern Ireland (a fixed exchange) keep the class's places, so not here.
+# PLAYOFF_PAIRS) and whose places set_places sets. Their rows count only the direct places. Northern Ireland is a
+# fixed exchange. The places of Ireland are an open item of their own, so neither is here.
 CROSS_PLAYOFF = {"nor_prm", "nor_first", "swe_prm", "swe_first"}
 
 

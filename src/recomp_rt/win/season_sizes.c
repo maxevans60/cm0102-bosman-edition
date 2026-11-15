@@ -846,8 +846,8 @@ uint32_t rt_ita_cup_first_position(uint32_t original)
 /* Open item 259: the pairs whose play-off is a stage of the lower class between the two divisions (NorFirst
  * 0x790b00 with NorPrm 0x792700, SweFirst 0x88f090 with SwePrm 0x890550; PLAYOFF_PAIRS below). No club surely moves
  * through such a play-off, so their rows count the direct places only: nor_prm 2005 "13th-14th (2)" with the 12th in
- * the play-off, nor_prm 2007 "14th (1)" with the 13th, nor_first 2007 "1st-3rd (3)" with the 4th. Ireland and
- * Northern Ireland keep the class's places (no open neighbour, a fixed exchange), so they are not here. */
+ * the play-off, nor_prm 2007 "14th (1)" with the 13th, nor_first 2007 "1st-3rd (3)" with the 4th. Northern Ireland
+ * is a fixed exchange. The places of Ireland are an open item of their own (0.6.2 open items), so neither is here. */
 static int cross_playoff(const char *file)
 {
     static const char *const files[] = {"nor_prm", "nor_first", "swe_prm", "swe_first"};
@@ -920,6 +920,13 @@ static void note_outside(uint32_t obj, int on)
         if (!outside_set[i] && free_at < 0) free_at = i;
     }
     if (on && free_at >= 0) outside_set[free_at] = obj;
+}
+
+/* A new game and a load start with an empty set, so a game in a new process and a game made or loaded in the same
+ * process move the same clubs (review of item 259, finding 1). */
+static void clear_outside(void)
+{
+    for (int i = 0; i < OUTSIDE_MAX; i++) outside_set[i] = 0;
 }
 
 static int is_outside(uint32_t obj)
@@ -1564,6 +1571,7 @@ static void sizes_new_game(int start_year)
 {
     (void)start_year;
     nstep_seen = 0;
+    clear_outside();
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
@@ -1587,6 +1595,7 @@ static void sizes_loaded(int start_year)
     (void)start_year;
     nseen = 0;
     nstep_seen = 0;
+    clear_outside();
     if (!sizes_on()) return;
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
