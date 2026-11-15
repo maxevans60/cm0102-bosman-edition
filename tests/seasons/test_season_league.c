@@ -24,6 +24,13 @@ static void meet(const char *file, int season, int want)
     CHECK(got == want, "%s %d: meetings %d, want %d", file, season, got, want);
 }
 
+/* The club count of the table row that a rule row encodes (the first row of its file and season). */
+static int clubs_of(const SeasonLeagueRule *e)
+{
+    const SeasonRule *r = season_rules_find(e->season, e->file, 0);
+    return r ? r->clubs : -2;
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 2 || season_rules_load(argv[1]) <= 0) {
@@ -55,6 +62,19 @@ int main(int argc, char **argv)
     CHECK(n && n->meetings == 3 && n->split_after == 33 && n->split_size[0] == 6 && n->split_size[1] == 6 &&
           n->split_meetings[0] == 1 && n->split_meetings[1] == 1 && n->rounds == 33,
           "nir_prm 2010: 3 meetings, split after 33 into 6 and 6, one more meeting");
+    /* Gap rows 1 to 6 of the 0.7.2 gaps list. Row 1: the 2002-03 First Division played one table of 12, each pair
+     * twice (22 matches). Rows 3 to 5: a season after the last real one keeps the last known row. */
+    const SeasonLeagueRule *i1 = season_league_rule("ire_first", 2002);
+    CHECK(i1 && clubs_of(i1) == 12 && i1->meetings == 2 && i1->rounds == 22 && !i1->zones,
+          "ire_first 2002: one table of 12, 2 meetings, 22 rounds");
+    meet("ire_prm", 2002, 3);           /* 2002-03 (August to January): 27 matches of 10 */
+    const SeasonLeagueRule *i5 = season_league_rule("ire_first", 2025);
+    CHECK(i5 && clubs_of(i5) == 10 && i5->split_after == 0 && season_league_row("ire_first", 2026) == i5 &&
+          season_league_row("ire_first", 2027) == i5, "ire_first 2026 and 2027: the 2025 row (10, no split)");
+    CHECK(season_league_row("ita_ser_c2a", 2027) == season_league_rule("ita_ser_c2a", 2026),
+          "ita_ser_c2a 2027 (unknown): the 2026 row");
+    const SeasonLeagueRule *s3 = season_league_row("swe_prm", 2027);
+    CHECK(s3 && clubs_of(s3) == 16, "swe_prm 2027: 16 clubs (last known)");
     const SeasonLeagueRule *h = season_league_rule("hol_first", 2005);
     CHECK(h && h->periods == 6, "hol_first 2005: six periods");
 

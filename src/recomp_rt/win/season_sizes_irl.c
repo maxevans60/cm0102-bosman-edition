@@ -8,7 +8,7 @@
  * - the meetings: the original sets 4 for 9 or 10 clubs and 3 for 11 or 12 (0x635983..0x635997), after
  *   set_up_rules 0x635aa0 called create_schedule (0x635b21), whose template the engine made for the row's meetings.
  *   An 8-club season would get 3 meetings on a template of 4.
- *   A row with no meetings value (2002/03, the unknown future rows) takes the class's meetings for the count
+ *   A row with no meetings value (the unknown future rows) takes the class's meetings for the count
  *   (season_sizes_irl_class_meetings), so the template and the table agree with the original.
  * Outside a season game with the sizes on both return the original's value; the meetings also in a season whose
  * template had no room for the count. */
