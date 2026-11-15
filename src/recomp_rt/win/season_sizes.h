@@ -115,6 +115,11 @@ int season_sizes_data_clubs(const char *file, int season);
  * sizes off or no count (gap 43, season_sizes_irl.c). */
 int season_sizes_row_down(uint32_t obj, const char *file);
 
+/* The promotion places ("up") of the row of the object's edition, the direct places of the research, when that row's
+ * real season begins in the edition's year; -1 with the sizes off, no count or a row of another real season (item
+ * 251b, season_sizes_irl.c). */
+int season_sizes_row_up(uint32_t obj, const char *file);
+
 /* The play-off code of the row of the object's edition ("none", "text", ...) when that row's real season begins in the
  * edition's year; NULL with the sizes off, no row, or a row of another real season (edition 2003 plays row 2003,
  * whose real season is 2004). */

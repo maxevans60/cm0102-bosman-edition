@@ -186,6 +186,15 @@ const char *season_sizes_row_playoffs(uint32_t obj, const char *file)
     return real_starts(r, year) ? r->playoffs : NULL;
 }
 
+int season_sizes_row_up(uint32_t obj, const char *file)
+{
+    if (!readable(obj) || !sizes_on()) return -1;
+    const SeasonRule *r = row_now(obj, file);
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                     : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    return real_starts(r, year) && r->up >= 0 ? r->up : -1;
+}
+
 int season_sizes_row_season(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
