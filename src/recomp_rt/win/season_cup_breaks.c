@@ -3,6 +3,7 @@
 #include "season_rules.h"
 
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -43,9 +44,34 @@ int season_cups_calendar(const char *file)
     return atoi(r->real_season) == r->season + 1;
 }
 
+/* 1 when the real season of a row begins with the year ("2020", "2002–03 and 2003"). */
+static int real_starts(const SeasonRule *r, int year)
+{
+    char y[8];
+    snprintf(y, sizeof y, "%d", year);
+    return r && r->real_season && !strncmp(r->real_season, y, 4) &&
+           (r->real_season[4] < '0' || r->real_season[4] > '9');
+}
+
+/* The row of an edition. A calendar-year cup (its first row holds the year after its season): row Y - 1. A cup of
+ * two-year seasons: row Y, unless row Y does not begin with Y and a row of Y - 1 does: a cup that moves to calendar
+ * years (gap row 2 of 0.7.2: the FAI Cup and the League of Ireland Cup from 2003, whose rows from 2003/04 hold the
+ * year after the season) plays edition Y in the row that holds the real season Y. The Irish cups are the only cups
+ * of two-year seasons with calendar rows (2003/04 on). */
+static const SeasonRule *edition_row(const char *file, int edition)
+{
+    int cal = season_cups_calendar(file);
+    if (!cal && !real_starts(season_rules_find(edition, file, 0), edition)) {
+        const SeasonRule *r;
+        for (int n = 0; (r = season_rules_find(edition - 1, file, n)) != NULL; n++)
+            if (real_starts(r, edition)) return r;
+    }
+    return row_of(file, edition - cal);
+}
+
 int season_cups_held(const char *file, int edition)
 {
-    const SeasonRule *r = row_of(file, edition - season_cups_calendar(file));
+    const SeasonRule *r = edition_row(file, edition);
     if (!r) return -1;
     return r->clubs != SEASON_RULE_NOT_HELD && strcmp(r->format, "not_held") != 0;
 }

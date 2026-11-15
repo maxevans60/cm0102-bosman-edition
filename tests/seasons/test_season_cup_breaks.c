@@ -27,6 +27,16 @@ int main(int argc, char **argv)
         fprintf(stderr, "cannot read %s\n", argv[1]);
         return 2;
     }
+    /* Gap row 2 (0.7.2): the League of Ireland Cup moves to calendar years with the league in 2003. Its rows hold
+     * the real season of each edition: 2002/03 "2002–03 and 2003" (not held in 2002-03), then calendar rows ("2004"
+     * in 2003/04, "2020" in 2019/20, "2021" in 2020/21, not held from then). Edition 2003 has no row of its own and
+     * takes row 2003/04 (held, as in 2003); edition 2020 takes row 2019/20, whose real season begins with 2020. */
+    CHECK(season_cups_held("ire_lge_cup", 2002) == 0, "the League of Ireland Cup is not held in 2002-03");
+    CHECK(season_cups_held("ire_lge_cup", 2003) == 1, "the League of Ireland Cup is held in 2003");
+    CHECK(season_cups_held("ire_lge_cup", 2020) == 1, "the League of Ireland Cup 2020 takes row 2019/20 (held)");
+    CHECK(season_cups_held("ire_lge_cup", 2021) == 0, "the League of Ireland Cup 2021 takes row 2020/21 (not held)");
+    CHECK(season_cups_held("ire_chal_cup", 2003) == 1 && season_cups_held("ire_chal_cup", 2004) == 1,
+          "the FAI Cup is held in 2003 and 2004");
     /* Split-season cups: the edition of year Y is the row of season Y. */
     CHECK(season_cups_calendar("fra_lge_cup") == 0, "the Coupe de la Ligue is a split-season cup");
     CHECK(season_cups_held("fra_lge_cup", 2019) == 1, "the Coupe de la Ligue is held in 2019/20");
@@ -39,8 +49,10 @@ int main(int argc, char **argv)
     CHECK(season_cups_next("wel_prm_cup", 2008) == SEASON_CUPS_NEVER,
           "the Welsh Premier Cup never comes back after 2007/08");
     CHECK(season_cups_next("wel_prm_cup", 2007) == 2007, "the Welsh Premier Cup is held in 2007/08");
-    /* A gap: the Leinster Cup is not held 2002/03 to 2008/09 and 2019/20 to 2021/22. */
-    CHECK(season_cups_next("ire_leinster_cup", 2002) == 2009, "the next Leinster Cup from 2002 is 2009, got %d",
+    /* A gap: the Leinster Cup is not held 2002/03 to 2008/09 and 2019/20 to 2021/22. Its rows of 2003/04 to 2009/10
+     * hold calendar years (real seasons "2004" to "2010"), and from 2003 its entry plays calendar years (gap row 2), so
+     * edition 2009 takes row 2008/09 ("2009", not held) and edition 2010 row 2009/10 ("2010", held). */
+    CHECK(season_cups_next("ire_leinster_cup", 2002) == 2010, "the next Leinster Cup from 2002 is 2010, got %d",
           season_cups_next("ire_leinster_cup", 2002));
     CHECK(season_cups_next("ire_leinster_cup", 2019) == 2022, "the next Leinster Cup from 2019 is 2022");
     CHECK(season_cups_next("ire_lge_cup", 2002) == 2003, "the next Irish League Cup from 2002 is 2003");
