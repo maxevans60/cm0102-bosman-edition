@@ -41,6 +41,9 @@ int season_split_matches(uint32_t obj, const char *file, int n, int meetings);
  * played N matches. */
 void season_split_update(uint32_t obj);
 
+/* 1 while the split deletes the section stage obj (made at the split; its fixtures stay with the parent). */
+int season_split_deleting(uint32_t obj);
+
 /* After League::load_from_temp_file 0x687b10 (season_load.c): a league loaded after its split takes the table
  * order of its sections again (+0xa3 is not in the save, as ScoPrm's load sets it at 0x7f0bf1..0x7f0c08). */
 void season_split_loaded(uint32_t obj);

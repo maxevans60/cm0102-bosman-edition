@@ -31,7 +31,8 @@
  *   (sort_by_results, no sort by latitude): the clubs down from the First Division, the North's by their places,
  *   then the South's by theirs. The South stands for the third level (3. HNL, regional groups of 16 to 18): it
  *   keeps the 16 rows of its table (CroA2b::create_table 0x516dd0 stores 16 at 0x516de2; cro_a2b is not a grown
- *   class), its best clubs fill the North's free places, and it does not go up to the First Division
+ *   class; when fewer are left the clubs of the Croatian lower divisions fill it, fill_south), its best clubs
+ *   fill the North's free places, and it does not go up to the First Division
  *   (rt_cro_south_swap: no exchange at 0x515180 after a season of one group).
  * The clubs after North + South in the order go to A Lower Division [0x9cf764], the spare division that the club
  * moves and the size step take clubs from (season_clubs.c), through the same store and news of the regroup
@@ -195,6 +196,50 @@ static void sort_by_results(int found, int one, int north_count)
     for (int i = 0; i < nm; i++) wr32(g_mem, regroup + (uint32_t)(at + i) * 4u, moved[i]);
 }
 
+/* The South of a season of one group, when the North took so many that fewer than its 16 are left (2006/07 after
+ * groups of 12): the clubs of the Croatian lower divisions take its free places, as 0x514ed0 takes its 4 clubs
+ * for the North: the Croatian clubs (club +0x53, the nation's id against [0x9cf2ac], 0x514f98..0x514fa9) of A Lower
+ * Division and the divisions [0x9cf888], [0x9cf890], [0x9cf88c] and [0x9cf894] (0x514fb2..0x514fdc), picked by
+ * 0x4afbd0 (cdecl: list, count, wanted; 0x515003), at the end of the regroup's list. Returns the clubs added. */
+#define CLUBS 0x00ae23b4u
+#define CLUB_COUNT 0x00ae235cu
+#define CLUB_SIZE 0x245u
+#define CLUB_NATION 0x53u
+#define CLUB_DIVISION 0x57u
+#define CRO_NATION 0x009cf2acu
+#define F_PICK 0x004afbd0u
+#define POOL_MAX 1024
+static const uint32_t LOWER_KEYS[] = {KEY_LOWER, 0x009cf888u, 0x009cf890u, 0x009cf88cu, 0x009cf894u};
+static uint32_t pool;
+
+static int fill_south(int found, int need)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS);
+    int count = (int)rd32(g_mem, CLUB_COUNT), n = 0;
+    if (need <= 0 || found + need > REGROUP_MAX || !readable(clubs)) return 0;
+    if (!pool) pool = rt_alloc_zero(POOL_MAX * 4u);
+    if (!pool) return 0;
+    for (int i = 0; i < count && n < POOL_MAX; i++) {
+        uint32_t club = clubs + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, club + CLUB_NATION),
+                 rec = rd32(g_mem, club + CLUB_DIVISION);
+        if (!readable(nation) || !readable(rec) || rd32(g_mem, nation) != rd32(g_mem, CRO_NATION)) continue;
+        int lower = 0;
+        for (unsigned k = 0; k < sizeof LOWER_KEYS / sizeof LOWER_KEYS[0]; k++)
+            lower |= rd32(g_mem, rec) == rd32(g_mem, LOWER_KEYS[k]);
+        if (lower) wr32(g_mem, pool + 4u * (uint32_t)n++, club);
+    }
+    if (need > n) need = n;
+    if (need <= 0) return 0;
+    uint32_t a[3] = {pool, (uint32_t)n, (uint32_t)need};
+    Cpu saved = cpu;
+    rt_callback(F_PICK, 3, a);
+    if (rt_unwinding) return 0;
+    cpu = saved;
+    for (int i = 0; i < need; i++)
+        wr32(g_mem, regroup + (uint32_t)(found + i) * 4u, rd32(g_mem, pool + 4u * (uint32_t)i));
+    return need;
+}
+
 /* The counts of a regroup of found clubs: the North takes the cro_a2a row, the South the cro_a2b row (two groups,
  * 2001/02 to 2005/06) or its table's 16 (one group, 2006/07 on: the South holds the third level), the others go to
  * A Lower Division. The order is by results (sort_by_results); with two groups the original's sort by latitude then
@@ -211,12 +256,15 @@ static void plan(int found)
     }
     if (north > found) north = found;
     if (south > found - north) south = found - north;
+    int added = regroup_by_results ? fill_south(found, SOUTH_ROWS - south) : 0;
+    regroup_found = found += added;
+    south += added;
     regroup_north = north;
     regroup_south = south;
     if (getenv("RECOMP_SIZE_LOG"))
         fprintf(stderr, "recomp: league sizes: cro_a2a regroup %d: %d clubs, %d North, %d South, %d to A Lower "
-                        "Division, %s\n", year, found, north, south, found - north - south,
-                regroup_by_results ? "by results" : "by latitude");
+                        "Division, %s, %d from the lower divisions\n", year, found, north, south,
+                found - north - south, regroup_by_results ? "by results" : "by latitude", added);
 }
 
 /* The array for the sort, with the clubs found (0x515219), and for the walk, count -1 (0x51522d). */

@@ -472,7 +472,8 @@ def cro_faults(log):
         years.append(y)
         one = not south_held(y)
         want_n = min(encoded_row("cro_a2a", y)[0], found)
-        want_s = min(16 if one else encoded_row("cro_a2b", y)[0], found - want_n)
+        # One group: the South holds 16 (the lower divisions fill it, season_sizes_cro.c fill_south).
+        want_s = 16 if one else min(encoded_row("cro_a2b", y)[0], found - want_n)
         want_how = "results" if one else "latitude"
         if (north, south, m.group(6)) != (want_n, want_s, want_how):
             fails.append(f"cro_a2a regroup {y}: {north} North, {south} South, by {m.group(6)}; want {want_n}, "
@@ -933,11 +934,13 @@ def self_test():
     tag = "recomp: league sizes: "
     two = tag + "cro_a2a regroup 2003: 32 clubs, 12 North, 12 South, 8 to A Lower Division, by latitude\n"
     one = (tag + "cro_a2b 2009: not held, no exchange with the First Division\n" + tag +
-           "cro_a2a regroup 2010: 31 clubs, 16 North, 15 South, 0 to A Lower Division, by results\n")
+           "cro_a2a regroup 2010: 32 clubs, 16 North, 16 South, 0 to A Lower Division, by results, 1 from the lower "
+           "divisions\n")
     swapped = one.replace(tag + "cro_a2b 2009: not held, no exchange with the First Division\n",
                           tag + "cro_a1 (Prva HNL) down 0, cro_a2b (Druga HNL South) up 1, pairs 1\n")
     if (cro_faults(two) or cro_faults(one) or len(cro_faults(swapped)) != 2 or
-            not cro_faults(two.replace("12 South", "16 South")) or not cro_faults(one.replace("results", "latitude"))):
+            not cro_faults(two.replace("12 South", "16 South")) or not cro_faults(one.replace("results", "latitude"))
+            or not cro_faults(one.replace("16 South", "8 South"))):
         bad.append(("cro regroup", cro_faults(two), cro_faults(one), cro_faults(swapped)))
     pts = tag + "gre_prm split 2024: after 26, sections 4+4+6, meetings 2+2+2, rounds 6+6+10, 10 dates, points " \
                 "kept+halved+kept (Super League)"

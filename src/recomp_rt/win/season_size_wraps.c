@@ -814,6 +814,7 @@ const SeasonGrown season_grown[] = {
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"cro_a1", 16, 16, SEASON_TEMPLATE_SEQUENTIAL},
     {"cro_a2a", 16, 18, SEASON_TEMPLATE_SEQUENTIAL},
+    {"cro_a2b", 16, 16, SEASON_TEMPLATE_SEQUENTIAL},
     {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
     {"fra_third", 20, 21, SEASON_TEMPLATE_MIRRORED},
     {"gre_prm", 14, 18, SEASON_TEMPLATE_SEQUENTIAL},
@@ -830,7 +831,7 @@ const SeasonGrown season_grown[] = {
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 20;
+const int season_grown_count = 21;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -885,6 +886,17 @@ RT_WRAP(005155e0, schedule_5155e0)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_005155e0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* CroA2b::create_schedule */
+void o_00516700(void);
+RT_WRAP(00516700, schedule_516700)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00516700();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

@@ -270,6 +270,11 @@ static void game_free(uint32_t p)
     if (p) call_cdecl(F_FREE, 1, a);
 }
 
+/* The section stage that make_section deletes now (its destructor runs League::free_table 0x687970), or 0. */
+static uint32_t deleting;
+
+int season_split_deleting(uint32_t obj) { return obj && obj == deleting; }
+
 /* One section: a League_Stage of the clubs with the section's meetings on the first `days` dates of the block,
  * deleted at once as ScoPrm's (its fixtures stay with the parent). 1 when made. */
 static int make_section(uint32_t obj, const uint32_t *clubs, int size, int meetings, uint32_t dates, int days,
@@ -291,7 +296,9 @@ static int make_section(uint32_t obj, const uint32_t *clubs, int size, int meeti
         if (rt_unwinding) return 0;
         if (readable(made_at)) {
             uint32_t one[1] = {1};
+            deleting = made_at;
             call_this(rd32(g_mem, rd32(g_mem, made_at)), made_at, 1, one);   /* delete, as 0x7f2eef..0x7f2ef5 */
+            deleting = 0;
             if (rt_unwinding) return 0;
             made = 1;
         }
@@ -441,6 +448,14 @@ void season_split_log_end(uint32_t obj)
     if (!season_sizes_on() || state(obj, &sp) != 2) return;
     uint32_t t = rd32(g_mem, obj + COMP_TABLE);
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    /* The points (+0x19) and status (+0x37) of each row, in table order. */
+    fprintf(stderr, "recomp: league sizes: %s split points %d:", season_change_file(obj),
+            (int16_t)rd16(g_mem, obj + COMP_YEAR));
+    for (int i = 0; i < n; i++) {
+        uint32_t row = t + (uint32_t)i * ROW_SIZE;
+        fprintf(stderr, " %d/%d", (int16_t)rd16(g_mem, row + ROW_POINTS), (int8_t)g_mem[row + 0x37u]);
+    }
+    fprintf(stderr, "\n");
     fprintf(stderr, "recomp: league sizes: %s split end %d:", season_change_file(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR));
     for (int i = 0; i < n; i++) {
         uint32_t row = t + (uint32_t)i * ROW_SIZE, at = rd32(g_mem, row + ROW_POSITIONS);

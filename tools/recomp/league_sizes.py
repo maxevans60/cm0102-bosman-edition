@@ -174,6 +174,9 @@ GROWN = {
     # 0x515e5a, 0x5eaf04, 0x5ebe4d). CroA1 keeps the class's 16 (10 and 12 clubs in 3 and 4 meetings).
     "cro_a1": (16, 0x5140E0, "sequential"),
     "cro_a2a": (18, 0x5155E0, "sequential"),
+    # Gap row 38: the South of 2002/03 to 2005/06 splits after 22 (the split engine and the template need a grown
+    # class). CroA2b::set_up_rules sets +0xd9 bit 0x40 (0x516f71); create_schedule 0x516700. Its cap stays 16.
+    "cro_a2b": (16, 0x516700, "sequential"),
     "gre_prm": (18, 0x5EA6D0, "sequential"),
     "gre_second": (21, 0x5EB570, "sequential"),
     # Slice 13 (Northern Ireland and Ireland).

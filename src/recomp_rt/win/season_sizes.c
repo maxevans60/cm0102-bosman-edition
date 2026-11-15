@@ -674,8 +674,9 @@ void o_00687970(void);
 RT_WRAP(00687970, league_free_table)
 {
     uint32_t self = cpu.ecx, table = rt_arg(0);
-    if (!table && readable(self)) size_step_run(self);
-    if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self))) {
+    if (!table && readable(self) && !season_split_deleting(self)) size_step_run(self);
+    if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self)) &&
+        !season_split_deleting(self)) {
         uint32_t t = rd32(g_mem, self + COMP_TABLE);
         int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), lo = 999, hi = -1;
         if (readable(t) && n >= MIN_CLUBS && n <= MAX_CLUBS) {
