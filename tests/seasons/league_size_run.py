@@ -65,6 +65,7 @@ ROWS = {
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
     # Slice 12: Russia and Turkey.
     "rus_first": (2005, 2006, "Russian First Division, 22 clubs (the class holds 18 and takes at most 18)"),
+    "rus_first@2011": (2011, 2012, "Russian First Division 2011-12: 38 rounds, then 8 meet twice and 12 once (row 2010)"),
     "rus_first@2012": (2012, 2013, "Russian First Division, 17 clubs in 2012/13 (row of a two-year season)"),
     "tur_first": (2020, 2021, "Süper Lig, 21 clubs in 2020/21 (the class holds 18), 42 rounds"),
     "tur_first@2021": (2021, 2022, "Süper Lig, 20 clubs in 2021/22"),
@@ -426,9 +427,20 @@ def edition_counts(file, edition):
     return want_counts(file, edition_season(file, edition))
 
 
+def stage_rows(first, second):
+    """1 when two consecutive rows hold the stages of one long season (season_sizes_rus.h season_stage_rows):
+    "2011–12 (first stage, ...)" then "2011–12 (second stage, ...)"."""
+    at = first.find(" (first stage")
+    return at > 0 and second.startswith(first[:at] + " (second stage")
+
+
 def edition_split(file, edition):
-    """The split of the row that an edition plays (edition_season), or None."""
-    return encoded_split(file, edition_season(file, edition))
+    """The split of the row that an edition plays (edition_season), or None. Of the first stage row when the row is
+    the second stage of one long season (season_sizes.c season_sizes_split_season)."""
+    s = edition_season(file, edition)
+    if stage_rows(real_season(file, s - 1), real_season(file, s)):
+        s -= 1
+    return encoded_split(file, s)
 
 
 def report_rows(report, file):
@@ -919,6 +931,12 @@ def self_test():
     if (edition_split("wel_first", 2026) != encoded_split("wel_first", 2026) or
             edition_split("nir_prm", 2010) != encoded_split("nir_prm", 2010) or edition_split("rus_first", 2006)):
         bad.append(("edition split", "wel_first 2026, nir_prm 2010, rus_first 2006"))
+    # The long 2011-12 Russian season (slice 12): edition 2011 plays row 2011 (the second stage), and its split is the
+    # first stage row's (2010): 38 rounds, then 8 meeting twice and 12 once.
+    if (edition_season("rus_first", 2011) != 2011 or edition_split("rus_first", 2011) != (38, [(8, 2), (12, 1)]) or
+            not stage_rows("2011–12 (first stage, x)", "2011–12 (second stage, y)") or
+            stage_rows("2026", "2026/27") or stage_rows("2019-2020", "2019-2020")):
+        bad.append(("stage rows", edition_season("rus_first", 2011), edition_split("rus_first", 2011)))
     # A difference of tur_second_b (TFF 2. Lig) is not one of tur_second.
     if (own_difference("tur_second", "tur_second_b (TFF 2. Lig), row rus-tur-239: game 10, table 38 (38)") or
             not own_difference("tur_second", "tur_second (TFF 1. Lig), row rus-tur-1: game 20, table 18 (18)")):

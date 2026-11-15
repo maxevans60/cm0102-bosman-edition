@@ -102,7 +102,7 @@ int season_split_of(uint32_t obj, const char *file, int n, int meetings, SeasonS
 {
     memset(sp, 0, sizeof *sp);
     if (!season_sizes_on() || !file || !strcmp(file, "sco_prm") || meetings < 1 || n < 2) return 0;
-    int season = season_sizes_row_season(obj, file);
+    int season = season_sizes_split_season(obj, file);
     const SeasonLeagueRule *r = season < 0 ? NULL : season_league_row(file, season);
     if (!r || r->split_after <= 0 || r->split_after != meetings * (n - 1)) return 0;
     int sum = 0, most = 0;
@@ -140,7 +140,7 @@ static int state(uint32_t obj, SeasonSplit *sp)
     if (!readable(obj)) return 0;
     const char *file = season_change_file(obj);
     if (!grown(file)) return 0;
-    int season = season_sizes_row_season(obj, file);
+    int season = season_sizes_split_season(obj, file);
     int meetings = season < 0 ? 0 : season_league_meetings(file, season);
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
     if (n < 2 || n > MAX_CLUBS || !season_split_of(obj, file, n, meetings, sp)) return 0;
