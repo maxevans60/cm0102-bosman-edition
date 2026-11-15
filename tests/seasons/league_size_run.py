@@ -168,12 +168,18 @@ def end_faults(name, rows, after, sp):
     each section together and above the next, and each club played N and its own section's matches."""
     fails = []
     places = [p for p, _x in rows]
-    if sorted(places) != list(range(sum(n for n, _m in sp))):
-        return [f"{name}: the places after match {after} are not each place once: {places}"]
     bounds, top = [], 0
     for n, m in sp:
         bounds.append((top, top + n, after + m * (n - 1)))
         top += n
+    # A section of an odd count gives a club a bye each round. The sort of each update (0x682ad1..0x682b1d) writes a
+    # row's place at index played - 1, so a club with no match yet in its section gets its new place after match N.
+    # That place is inside its own section (the table keeps each section together), so with an odd section the
+    # places are checked by section: each section holds its count of places (slice 14, the K League 7 and 7).
+    odd = any(n % 2 for n, _m in sp)
+    by_section = [sum(a <= p < b for p in places) for a, b, _w in bounds]
+    if sorted(places) != list(range(top)) and (not odd or by_section != [n for n, _m in sp]):
+        return [f"{name}: the places after match {after} are not each place once: {places}"]
     secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
     if secs != sorted(secs):
         fails.append(f"{name}: the table does not keep the sections in order: {secs}")
@@ -630,6 +636,13 @@ def self_test():
             not end_faults("short", short, 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
+    # Odd sections (the K League 2013 log): a place written again inside its own section passes, one across fails.
+    sp7 = [(7, 2), (7, 2)]
+    kor_end = [(p, 38) for p in (0, 2, 3, 2, 4, 5, 5, 8, 9, 11, 10, 9, 12, 13)]
+    across = [(p, 38) for p in (0, 2, 3, 2, 4, 5, 8, 8, 9, 11, 10, 9, 12, 13)]
+    if end_faults("kor", kor_end, 26, sp7) or not end_faults("across", across, 26, sp7) or \
+            not end_faults("even", [(0, 35)] + good_end[:5] + good_end[6:], 30, sp16):
+        bad.append(("end odd", end_faults("kor", kor_end, 26, sp7), end_faults("across", across, 26, sp7)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"

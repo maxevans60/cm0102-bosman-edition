@@ -205,6 +205,8 @@ static const char *record_name(uint32_t obj)
 /* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
 static void size_step_run(uint32_t trigger);
 static void step_note_pair(uint32_t upper, uint32_t lower);
+static int step_index(uint32_t obj);
+static int step_running;
 static int row_reachable(uint32_t obj, const char *file);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
@@ -564,6 +566,24 @@ uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32
     return t;
 }
 
+/* The K League is the only division of its nation, so no promotion pair notes it for the size step (slice 14, lead
+ * decision LD6). KorLeague::start_new_season 0x66bd60 calls free_table (0x66bd7a, return 0x66bd7f) before it adds 1
+ * to the edition (0x66bda8) and calls set_up_rules (0x66bdae): here the last table still holds its places, so the
+ * free_table call of that site notes the league alone and runs the step at once. A division alone takes clubs of its
+ * nation with no division, or sends its worst-placed clubs to no division (season_size_step.c). The destructor's call
+ * (0x66b0ce) has another return address. */
+#define KOR_START_FREE_TABLE 0x0066bd7fu
+
+static void note_alone(uint32_t self, uint32_t from)
+{
+    if (from != KOR_START_FREE_TABLE || step_running || !sizes_on() || !season_changing_rules() ||
+        season_change_is_creating())
+        return;
+    const char *file = season_change_file(self);
+    if (!file || strcmp(file, "kor_league") != 0) return;
+    step_index(self);
+}
+
 /* League::free_table 0x687970 (thiscall: table, 0 for its own; ret 4): at the start of a new edition it frees the
  * table of the last one (start_new_season, for example 0x64b830). For the test log: the matches that each club of a
  * grown league played (row +0x11, the count that check_complete compares with +0xa7 at 0x689b47..0x689b58). */
@@ -571,6 +591,7 @@ void o_00687970(void);
 RT_WRAP(00687970, league_free_table)
 {
     uint32_t self = cpu.ecx, table = rt_arg(0);
+    if (!table && readable(self)) note_alone(self, rd32(g_mem, cpu.esp));
     if (!table && readable(self)) size_step_run(self);
     if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self))) {
         uint32_t t = rd32(g_mem, self + COMP_TABLE);
@@ -943,7 +964,7 @@ static struct {
     int lower[STEP_MAX_LOWER];
     uint32_t club[STEP_MAX_ROWS];
 } step_seen[STEP_DIVS];
-static int nstep_seen, step_running;
+static int nstep_seen;
 
 static int step_index(uint32_t obj)
 {
