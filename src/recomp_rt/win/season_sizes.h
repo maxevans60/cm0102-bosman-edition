@@ -71,6 +71,11 @@ extern const int season_size_fixed[];        /* the count whose exchange stays t
 /* 1 in a season game with the sizes on (not RECOMP_LEAGUE_SIZES=off): the cups of season_cup_sizes_uk.c. */
 int season_sizes_on(void);
 
+/* 1 for League Two (eng_third): it takes the relegation places of its row towards the Conference, whether the game
+ * plays the Conference or not; the wrap of EngPrm::exchange_conference_clubs_unplayed 0x574e60 moves up as many
+ * Conference clubs (season_sizes_eng.c, 0.7.2 league sizes slice 8, D15). */
+int season_sizes_eng_below(const char *file);
+
 /* The grown classes of tools/recomp/league_sizes.py GROWN (0.7.2 league sizes, slice 2, D21; season_size_wraps.c):
  * create_table allocates the rows of the season's count up to the cap (rt_league_table_bytes), and the wrap of
  * create_schedule gives the date template exactly the rounds of the count (season_template.h, D4 and D5). */
@@ -87,10 +92,23 @@ extern const int season_grown_count;
  * with the sizes on): the club moves of a new game then take no reserve side for it (D12). */
 int season_sizes_plays_short(const char *file);
 
+/* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
+ * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
+int season_sizes_data_clubs(const char *file, int season);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */
 void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
+
+/* 1 when the date template of a grown league object this edition is the engine's (a season game with the sizes on,
+ * and the template had room for the count): its +0x3c then holds the meetings of the row (slice 13: IreFirst). */
+int season_sizes_planned(uint32_t obj);
+
+/* The meetings of a class that sets them by its count in create_table (slice 13, season_sizes_irl.c: IreFirst 4 for 9
+ * or 10 clubs, else 3, 0x635983..0x635997) for a row with no meetings value (row_meetings 0), or 0: the engine's
+ * meetings stay. */
+int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings);
 
 /* The season of the rules row of a league object this edition (the row of the start season with changing rules off),
  * or -1. */
