@@ -450,7 +450,8 @@ def edition_split(file, edition):
     """The split of the row that an edition plays (edition_season), or None. Of the first stage row when the row is
     the second stage of one long season (season_sizes.c season_sizes_split_season)."""
     s = edition_season(file, edition)
-    if stage_rows(real_season(file, s - 1), real_season(file, s)):
+    if (stage_rows(real_season(file, s - 1), real_season(file, s)) and
+            encoded_row(file, s - 1)[1] == encoded_row(file, s)[1]):
         s -= 1
     return encoded_split(file, s)
 

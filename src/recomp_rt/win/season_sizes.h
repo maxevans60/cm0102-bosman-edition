@@ -144,7 +144,7 @@ int season_sizes_row_season(uint32_t obj, const char *file);
 
 /* The season of the row that holds the split of a league object this edition: the row season, or the row before it
  * when the two rows are the stages of one long season (season_sizes_rus.h season_stage_rows: the 2011-12 Russian
- * season, whose first stage row 2010 splits after 38 rounds), or -1. */
+ * season, whose first stage row 2010 splits after 38 rounds) with the same meetings, or -1. */
 int season_sizes_split_season(uint32_t obj, const char *file);
 
 /* The dates of a split league after its split (slice 7, season_split.c): create_schedule of the object for stage -1
