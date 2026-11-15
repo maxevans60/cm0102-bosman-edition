@@ -263,6 +263,12 @@ def league_playoffs():
 
 
 
+# Open item 259: the pairs whose play-off is played between the two divisions (the lower class's stage, season_sizes.c
+# PLAYOFF_PAIRS) and whose places set_places sets. Their rows count only the direct places. Ireland (a class that
+# counts the clubs of its data) and Northern Ireland (a fixed exchange) keep the class's places, so not here.
+CROSS_PLAYOFF = {"nor_prm", "nor_first", "swe_prm", "swe_first"}
+
+
 def two_winners_first(r):
     """0.6.2 open item 63: 1 for a row whose 4 play-off places, just below its direct places, are two ties whose
     winners both go up (Série B from 2025: up 2, places 3 to 6), else 0. The game plays no such play-off, so both
@@ -429,6 +435,11 @@ def differences(seasons, comps, rows):
                 if want == "na" and (c[key] == 0 or (key == "up" and c.get("above") == -1)):
                     continue
                 accept = {c[key], c[key] + (1 if c[extra] else 0), c[key] + c[extra]}
+                # Open item 259: the play-off of these pairs is between the two divisions, so no club surely moves
+                # through it and the row counts the direct places only (nor_prm 2005 "13th-14th (2)" and the 12th
+                # in the play-off). season_sizes.c set_places reads them in the same way.
+                if c["file"] in CROSS_PLAYOFF:
+                    accept = {c[key]}
                 # 0.6.2 open item 63: two ties whose winners both go up, 4 places just below the direct places (Série B
                 # from 2025). The game plays no such play-off, so both winners' places go up directly (Q247,
                 # season_playoffs_winners_up): the game's direct places are the row's and 2, and only that.

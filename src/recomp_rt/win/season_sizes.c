@@ -843,8 +843,22 @@ uint32_t rt_ita_cup_first_position(uint32_t original)
     return season_game_changes() ? 6u : original;
 }
 
+/* Open item 259: the pairs whose play-off is a stage of the lower class between the two divisions (NorFirst
+ * 0x790b00 with NorPrm 0x792700, SweFirst 0x88f090 with SwePrm 0x890550; PLAYOFF_PAIRS below). No club surely moves
+ * through such a play-off, so their rows count the direct places only: nor_prm 2005 "13th-14th (2)" with the 12th in
+ * the play-off, nor_prm 2007 "14th (1)" with the 13th, nor_first 2007 "1st-3rd (3)" with the 4th. Ireland and
+ * Northern Ireland keep the class's places (no open neighbour, a fixed exchange), so they are not here. */
+static int cross_playoff(const char *file)
+{
+    static const char *const files[] = {"nor_prm", "nor_first", "swe_prm", "swe_first"};
+    for (unsigned i = 0; file && i < sizeof files / sizeof files[0]; i++)
+        if (!strcmp(file, files[i])) return 1;
+    return 0;
+}
+
 /* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
- * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). */
+ * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). A play-off between two
+ * divisions counts no winner (cross_playoff). */
 static int set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
 {
     if (want < 0 || want > 30) return 0;
@@ -852,8 +866,12 @@ static int set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, 
     /* A class with no places in this direction has its own way or none (Argentina relegates by the average of
      * three seasons, ArgPrm::set_up_rules 0x4056d1 writes 0): it stays. */
     if (now == 0 && playoff == 0) return 0;
-    if (want == now || want == now + (playoff ? 1 : 0) || want == now + playoff) return 0;
-    int direct = want - (playoff ? 1 : 0);
+    /* Open item 259: NorPrm::set_up_rules writes 2 down and 1 relegation play-off place (0x79275e, 0x792758). The
+     * row of 2007 (the real 2008) says 1 down: read as 0 down and the play-off, the Tippeligaen sent nobody down
+     * and, in pairs, the First Division nobody up. */
+    int cross = cross_playoff(season_change_file(obj));
+    if (want == now || (!cross && (want == now + (playoff ? 1 : 0) || want == now + playoff))) return 0;
+    int direct = cross ? want : want - (playoff ? 1 : 0);
     if (direct < 0) direct = 0;
     g_mem[obj + at] = (uint8_t)direct;
     if (logging())
