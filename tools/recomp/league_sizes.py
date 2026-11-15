@@ -185,6 +185,20 @@ GROWN = {
     "nir_first": (17, 0x78B310, "shuffled"),
     # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
     "ire_first": (12, 0x634F40, "shuffled"),
+    # Slice 14 (Japan and Korea; src/recomp_rt/win/season_sizes_asia.c, sizes_asia.py). Calendar-year leagues.
+    # - JapJ1 (J1, 16 in the class, 18 from 2005, 20 in 2021 and from 2024): create_table 0x6634e0 allocates 16 rows
+    #   (push 0x3b0 at 0x6634eb) and stores 16 at 0x6634f2; create_schedule 0x662e30 makes 30 dates for stage -1 (D
+    #   0x1e at 0x662e6d, 0x79e bytes at 0x662e68) and 1 for the final (stage 2, 0x6633d4); set_up_rules 0x663620 sets
+    #   2 meetings (0x66362d) and +0xd9 8 (0x6636b2): shuffled. Halves and the final only by the row (D8).
+    # - JapJ2 (J2, 12 to 22): create_table 0x665030 allocates 12 rows (push 0x2c4 at 0x66503b) and stores 12 at
+    #   0x665042; create_schedule 0x664780 makes 44 dates (D 0x2c at 0x6647ba, 0xb2c bytes at 0x6647b5); set_up_rules
+    #   0x665140 sets 4 meetings (0x665149) and does not write +0xd9: shuffled.
+    # - KorLeague (K League, 10 to 16): create_table 0x66bba0 allocates 10 rows (push 0x24e at 0x66bbab) and stores 10
+    #   at 0x66bbb2; create_schedule 0x66b130 makes 27 dates (D 0x1b at 0x66b16a, 0x6db bytes at 0x66b165);
+    #   set_up_rules 0x66bcc0 sets 3 meetings (0x66bcf1) and does not write +0xd9: shuffled. The split by its row.
+    "jap_j1": (20, 0x662E30, "shuffled"),
+    "jap_j2": (22, 0x664780, "shuffled"),
+    "kor_league": (16, 0x66B130, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 # Grown classes that count the clubs of the data (CLASSES rows with no store): create_table allocates the rows of
@@ -312,6 +326,14 @@ PATCHES = {
     0x63596F: (9, "rt_ire_first_least(esi, 9u)"),
     0x63598F: (3, "rt_ire_first_meetings(esi, 3u)"),
     0x635997: (4, "rt_ire_first_meetings(esi, 4u)"),
+    # IrePrm::create_table 0x63a740 (gap 43): for a table of 12 clubs it sets 3 relegation places (+0xc1) and 1
+    # play-off place (+0xc0) at 0x63a8a9..0x63a8b5, the 12 to 10 of 2001/02. It runs in the constructor after
+    # set_up_rules (0x639c3c, then 0x639c77) and again at each start_new_season (0x63aa3d), so every 12-club season
+    # sends 3 down. A season game with the sizes on takes the direct places of the row (season_sizes_irl.c).
+    0x63A8B5: (3, "rt_ire_prm_down(esi, 3u)"),
+    # Item 251: the relegation play-off place of the same branch (mov byte [esi + 0xc0], 1 at 0x63a8ae): 0 in a season
+    # whose row has no play-off (season_sizes_irl.c).
+    0x63A8AE: (1, "rt_ire_prm_playoff(esi, 1u)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
@@ -334,12 +356,13 @@ FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
-# leagues: the Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and
-# the Welsh Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7). The
-# English divisions left in slice 8 (D15): the exchange of League Two and the Conference takes the places of the rows
-# (season_sizes_eng.c).
-FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("wel_first", "nir_first", "nir_prm", "sco_first", "sco_prm",
-                                                    "sco_second", "sco_third")}
+# leagues: the Northern Irish divisions (slice 13) and the Scottish divisions (D7 keeps their split and play-offs).
+# file: the count of the old floor (the class's own count: HELD for a grown class, slice 7). The English divisions
+# left in slice 8 (D15): the exchange of League Two and the Conference takes the places of the rows
+# (season_sizes_eng.c). The Welsh Premier left with open item 250: it has no chain, and its row's relegation places go
+# to no division at its season change (season_sizes.c, lone_exchange).
+FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second",
+                                                    "sco_third")}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
@@ -503,6 +526,14 @@ INSNS.update(DATES)
 # reached the matches of its own section, else the original.
 INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
                    "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
+
+# League::update_positions_and_status 0x684cd0 works out each row's best and worst places (+0x39, +0x3a) in its loop at
+# 0x684ef7..0x6850dc from +0xa7 and every other row. After a split, rt_split_bounds runs the same rules by section with
+# the section's matches and the code goes on at 0x6850e2 (the status marks); else the original's loop runs. eax is
+# only the loop counter, and the flags of `xor eax, eax` are set again by the cmp at 0x684ef9 (and at 0x6850e4 on the
+# jump). The locals after the loop are written first: [esp + 0x14] at 0x6850e8, [esp + 0x20] at 0x6850f8, [esp + 0x18]
+# at 0x6852cc, [esp + 0x12] by UefaSeeding::get_nation_places 0x905c60 (0x6853f5) before 0x685426.
+INSNS[0x684EF7] = ("xor eax, eax", "if (rt_split_bounds(esi)) goto L_6850e2; eax = 0;")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and
@@ -525,3 +556,8 @@ if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
 import cup_sizes_east  # noqa: E402
 
 INSNS.update(cup_sizes_east.INSNS)
+# 0.7.2 slice 14: J1 halves of any count (sizes_asia.py).
+import sizes_asia  # noqa: E402
+
+assert not set(sizes_asia.INSNS) & set(INSNS)
+INSNS.update(sizes_asia.INSNS)

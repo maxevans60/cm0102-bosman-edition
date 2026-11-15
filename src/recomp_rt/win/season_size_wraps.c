@@ -662,9 +662,9 @@ const int season_size_caps[] = {
     24,       /* ita_ser_b */
     20,       /* ita_ser_c1a */
     20,       /* ita_ser_c1b */
-    16,       /* jap_j1 */
-    12,       /* jap_j2 */
-    10,       /* kor_league */
+    20,       /* jap_j1 */
+    22,       /* jap_j2 */
+    16,       /* kor_league */
     17,       /* nir_first */
     16,       /* nir_prm */
     16,       /* nor_first */
@@ -803,7 +803,7 @@ const int season_size_fixed[] = {
     0,       /* swe_prm */
     0,       /* tur_first */
     0,       /* tur_second */
-    18,       /* wel_first */
+    0,       /* wel_first */
 };
 
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the
@@ -820,6 +820,9 @@ const SeasonGrown season_grown[] = {
     {"ita_ser_b", 20, 24, SEASON_TEMPLATE_SEQUENTIAL},
     {"ita_ser_c1a", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
     {"ita_ser_c1b", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
+    {"jap_j1", 16, 20, SEASON_TEMPLATE_SHUFFLED},
+    {"jap_j2", 12, 22, SEASON_TEMPLATE_SHUFFLED},
+    {"kor_league", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nir_first", 10, 17, SEASON_TEMPLATE_SHUFFLED},
     {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
@@ -827,7 +830,7 @@ const SeasonGrown season_grown[] = {
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 17;
+const int season_grown_count = 20;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -933,6 +936,39 @@ RT_WRAP(00645af0, schedule_645af0)
 /* ItaSerC1a::create_schedule 0x64ad80: wrapped in season_divisions_ita.c c1a_schedule */
 
 /* ItaSerC1b::create_schedule 0x64ef30: wrapped in season_divisions_ita.c c1b_schedule */
+
+/* JapJ1::create_schedule */
+void o_00662e30(void);
+RT_WRAP(00662e30, schedule_662e30)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00662e30();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* JapJ2::create_schedule */
+void o_00664780(void);
+RT_WRAP(00664780, schedule_664780)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00664780();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* KorLeague::create_schedule */
+void o_0066b130(void);
+RT_WRAP(0066b130, schedule_66b130)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_0066b130();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
 
 /* NirFirst::create_schedule */
 void o_0078b310(void);
