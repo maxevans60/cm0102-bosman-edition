@@ -27,6 +27,13 @@ typedef struct {
  * Serie B (0 or 20: the original's 18th). */
 int ita_cup_pot(const ItaCupClub *club, int b_count);
 
+/* The count of the last Serie B that ita_cup_pot takes: `scanned` is the last place of the clubs whose last division
+ * is Serie B. In the start season of a game (`season` <= `start`) the last places come from the database, and a
+ * season database can hold part of the table (a 2004 start found 17, a 2005 start 18, against the real 24 and 22):
+ * a count under 20 there gives 0, the original's 18th. A count over 20 there, or any count in a later season,
+ * which the game played, stays. */
+int ita_cup_b_count(int scanned, int season, int start);
+
 /* The row (0 = 1st) of a C1 group of `clubs` that takes the play-out place of row `row18` of the class's 18
  * (ItaSerC1a::create_playoff_stages 0x64ba70 puts rows 16, 13, 15 and 14 in the play-out: 17th v 14th, 16th v 15th,
  * 0x64bc2c..0x64bc70). The play-out is the four rows above the last row at any count, the last row going down

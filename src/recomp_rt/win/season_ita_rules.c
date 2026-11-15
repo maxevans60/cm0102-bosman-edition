@@ -22,6 +22,13 @@ int ita_cup_pot(const ItaCupClub *c, int b_count)
     return 2;
 }
 
+int ita_cup_b_count(int scanned, int season, int start)
+{
+    if (scanned <= 0) return 0;
+    if (season <= start && scanned < 20) return 0;
+    return scanned;
+}
+
 int ita_c1_playout_row(int clubs, int row18)
 {
     int row = row18 + clubs - 18;

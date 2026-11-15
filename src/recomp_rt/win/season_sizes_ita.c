@@ -188,7 +188,7 @@ RT_WRAP(0064ff40, c1b_progress) { c1_progress(o_0064ff40); }
 
 static int cup_b_count;                 /* the count of the last Serie B, 0: not known */
 
-void season_sizes_ita_cup_pick(void)
+void season_sizes_ita_cup_pick(int season)
 {
     cup_b_count = 0;
     uint32_t table = rd32(g_mem, CLUBS), b = rd32(g_mem, KEY_B);
@@ -205,9 +205,10 @@ void season_sizes_ita_cup_pick(void)
         if (!italian) continue;
         if (readable(last) && rd32(g_mem, last) == b && place > cup_b_count) cup_b_count = place;
     }
+    cup_b_count = ita_cup_b_count(cup_b_count, season, season_start_year());
     if (cup_b_count > 0 && cup_b_count != SERIE_B_CLASS)
-        fprintf(stderr, "recomp: league sizes: Coppa Italia pots: the last Serie B had %d clubs, its places 15 to %d "
-                        "share a pot\n", cup_b_count, cup_b_count - 2);
+        fprintf(stderr, "recomp: league sizes: Coppa Italia %d pots: the last Serie B had %d clubs, its places 15 to "
+                        "%d share a pot\n", season, cup_b_count, cup_b_count - 2);
 }
 
 static int cup_pot(uint32_t club)

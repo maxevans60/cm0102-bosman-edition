@@ -68,6 +68,12 @@ int main(void)
     check(ita_cup_pot(&stay_a, 22), 1, "Serie A club");
     ItaCupClub none = {0, 0, 0, 1, 0, 0};
     check(ita_cup_pot(&none, 22), 1, "no last division");
+    /* The count: part of a database table in the start season keeps the original; a played season stays. */
+    check(ita_cup_b_count(17, 2004, 2004), 0, "17 from a 2004 database");
+    check(ita_cup_b_count(24, 2004, 2004), 24, "24 from a 2004 database");
+    check(ita_cup_b_count(19, 2019, 2018), 19, "19 played in 2018/19");
+    check(ita_cup_b_count(22, 2006, 2005), 22, "22 played in 2005/06");
+    check(ita_cup_b_count(0, 2006, 2005), 0, "no Serie B clubs");
 
     /* Row 31. The play-out ties of the original (rows 16 v 13, 15 v 14) as places (1st = 1) at the real counts. */
     const int real[5][5] = {{18, 17, 14, 16, 15}, {19, 18, 15, 17, 16}, {17, 16, 13, 15, 14}, {16, 15, 12, 14, 13},

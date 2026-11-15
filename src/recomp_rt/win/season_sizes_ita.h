@@ -13,6 +13,6 @@ void season_sizes_ita_regroup_end(void);
 
 /* Before ItaCup::select_entrants 0x63faf0 (its wrap in season_divisions_ita.c): notes the count of the last Serie B,
  * the largest last place (+0x5f) of a club whose last division is Serie B, for its sort 0x640590 (gap row 32). */
-void season_sizes_ita_cup_pick(void);
+void season_sizes_ita_cup_pick(int season);
 
 #endif
