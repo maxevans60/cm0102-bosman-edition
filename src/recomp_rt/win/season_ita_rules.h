@@ -46,13 +46,33 @@ int ita_cup_pot(const ItaCupClub *club, int b_count);
  * which the game played, stays. */
 int ita_cup_b_count(int scanned, int season, int start);
 
-/* The row (0 = 1st) of a C1 group of `clubs` that takes the play-out place of row `row18` of the class's 18
- * (ItaSerC1a::create_playoff_stages 0x64ba70 puts rows 16, 13, 15 and 14 in the play-out: 17th v 14th, 16th v 15th,
- * 0x64bc2c..0x64bc70). The play-out is the four rows above the last row at any count, the last row going down
- * directly: 2004/05 C1/A of 19 played 15th v 18th and 16th v 17th, 2012/13 groups of 17 and 16 played 13th v 16th,
- * 14th v 15th and 12th v 15th, 13th v 14th (it.wikipedia "Serie C1 2004-2005", "Lega Pro Prima Divisione
- * 2012-2013"; en.wikipedia "2004-05 Serie C1", "2012-13 Lega Pro Prima Divisione"). A row outside the table, or a
- * group under 6, keeps row18. */
-int ita_c1_playout_row(int clubs, int row18);
+/* The play-out of a C1 group (Serie C group from 2014/15) of `clubs` in the season of `year`: `ties` ties (0 to 2),
+ * each as `slot[2k]` the lower row v `slot[2k + 1]` the higher row (0 = 1st), and `direct` rows down directly at the
+ * foot. The slots are the order of the class's play-out list (ItaSerC1a::create_playoff_stages 0x64ba70: rows 16,
+ * 13, 15, 14 at 0x64bc2c..0x64bc58, the same rows as seeds at 0x64bc61..0x64bc70: 17th v 14th, 16th v 15th, 18th
+ * down). Sources: it.wikipedia "Serie C1 2001-2002" to "Serie C1 2007-2008", "Lega Pro Prima Divisione 2008-2009"
+ * to "2013-2014", "Lega Pro 2014-2015" to "2016-2017", "Serie C 2017-2018" on, and the en.wikipedia pages of the
+ * same seasons:
+ * - the class's shape, the four rows above the last v each other and the last down, at any count: 2001/02 to
+ *   2012/13 (19 and 18 in 2004/05, 17 and 16 in 2012/13), 2014/15 to 2016/17 and 2019/20 on;
+ * - 2013/14: no relegation and no play-out (the two groups merged into the Serie C);
+ * - 2017/18: the last four (16th v 19th, 17th v 18th), none down directly;
+ * - 2018/19: one tie, 18th v 19th; a group of 20 sends its 20th down, a smaller group none.
+ * A group under 6 has no play-out and its last row goes down. */
+typedef struct {
+    int ties, slot[4], direct;
+} ItaPlayout;
+void ita_c1_playout(int year, int clubs, ItaPlayout *p);
+
+/* The points gap of the play-out: no tie when its clubs are more than 8 points apart, and the lower club goes down.
+ * Written from 2016/17 and played in 2016/17, 2017/18, 2018/19 and from 2020/21 (it.wikipedia "Lega Pro 2016-2017",
+ * "Serie C 2020-2021"; en.wikipedia "Serie C"). Not in 2015/16 ("regardless of the gap") or 2019/20 (not stated). */
+#define ITA_PLAYOUT_GAP 8
+int ita_c1_gap_rule(int year);
+
+/* Takes out each tie of `p` whose rows are more than ITA_PLAYOUT_GAP apart on `points` (by row): its lower row goes
+ * to down[], its higher row to safe[], in the order of the ties. The ties left move to the first slots. Returns the
+ * count of ties taken out. */
+int ita_c1_playout_gap(ItaPlayout *p, const int *points, int *down, int *safe);
 
 #endif
