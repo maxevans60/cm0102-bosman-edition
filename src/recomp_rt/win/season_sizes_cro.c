@@ -342,6 +342,20 @@ void season_sizes_cro_new_game(int start)
                 start, moved);
 }
 
+/* League::pay_prize_money 0x682e10 (thiscall, ret 0), which League::check_complete 0x689ad0 calls at 0x689ba4 when
+ * the table is complete (a table of no row is complete at once): it shares the prize fund (+0x28) by the sum of the
+ * places 1 to n (0x682ebf..0x682ed6) and divides by that sum (idiv at 0x682edf), 0 for no row. The empty South pays
+ * nothing. */
+void o_00682e10(void);
+RT_WRAP(00682e10, league_pay_prize_money)
+{
+    if (rt_cro_south_empty(cpu.ecx)) {
+        rt_ret_stdcall(cpu.eax, 0);
+        return;
+    }
+    o_00682e10();
+}
+
 /* 1 for the South in a season of one group: the size engine gives it a table of no row (rt_league_clubs). */
 int season_sizes_cro_empty(uint32_t obj, const char *file, int season)
 {

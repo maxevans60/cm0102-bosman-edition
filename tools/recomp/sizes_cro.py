@@ -42,6 +42,10 @@ INSNS = {
     0x516EEB: ("call 0x683010", _skip_if_empty("0x516ef0", 8, 0).replace("@FN@", "f_00683010()")),
     0x516525: ("call 0x6835c0", _skip_if_empty("0x51652a", 0, 1).replace("@FN@", "f_006835c0()")),
     0x516561: ("call 0x6827d0", _skip_if_empty("0x516566", 4, 1).replace("@FN@", "f_006827d0()")),
+    # The same calls of CroA2b::start_new_season 0x516fc0, which runs with changing rules off (no before hook keeps the
+    # South waiting then): the fixtures at 0x5170a1 and the sort at 0x5170dd (push edi, 0).
+    0x5170A1: ("call 0x6835c0", _skip_if_empty("0x5170a6", 0, 1).replace("@FN@", "f_006835c0()")),
+    0x5170DD: ("call 0x6827d0", _skip_if_empty("0x5170e2", 4, 1).replace("@FN@", "f_006827d0()")),
     # The chain 0x5150f0: the South's exchange with the First Division (league_promote_and_relegate 0x689c80, six
     # arguments, ret 0x18). None when the season that ends had one group (season_sizes_cro.c rt_cro_south_swap).
     # The chain's record_final_positions of the South (vtable +0xa4, thiscall, no arguments): none after a season of
