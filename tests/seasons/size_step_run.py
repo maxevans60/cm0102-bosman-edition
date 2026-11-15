@@ -54,6 +54,12 @@ CASES = {
     "italy2001": (2001, 2005, ["England", "Italy"],
                   {"ita_ser_a": (2004, 20), "ita_ser_b": (2004, 22), "ita_ser_c1a": (2005, 18)},
                   "Italy from 2001 to 2005/06: Serie B 24 then 22, Serie A 20, Serie C1/A 19 then 18"),
+    "portugal2015": (2014, 2016, ["England", "Portugal"], {"por_second": (2016, 22), "por_prm": (2016, 18)},
+                     "D23 towards a division outside the size table: LigaPro 24 to 22 in 2016/17 through the real "
+                     "places of 2015/16 (5 down, open item 248)"),
+    "brazil": (2004, 2006, ["England", "Brazil"], {"bra_nat_second": (2006, 20)},
+               "D23 towards a division outside the size table: Serie B 22 to 20 in 2006 through the real places of "
+               "2005 (6 down, open item 249)"),
     "conference": (2005, 2007, ["England"], {"eng_conf": (2006, 24)},
                    "D15 (slice 8): League Two sends 2 down and the Conference 2 up (the champion and the play-off "
                    "winner) at each change; the Conference grows from 22 to 24 in 2006/07"),
@@ -75,6 +81,8 @@ PLACES = {
     "grow": {"swe_prm": (2007, None, 1), "swe_first": (2007, 3, None)},
     "shrink": {"fra_first": (2022, None, 4), "fra_second": (2022, 2, None)},
     "conference": {"eng_third": [(2005, None, 2), (2006, None, 2)], "eng_conf": [(2005, 2, None), (2006, 2, None)]},
+    "portugal2015": {"por_second": (2015, None, 5)},
+    "brazil": {"bra_nat_second": (2005, None, 6)},
 }
 NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
 

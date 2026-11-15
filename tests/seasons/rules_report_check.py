@@ -417,9 +417,16 @@ def differences(seasons, comps, rows):
                 game = "/".join(str(v) for v in values)
                 out.add((season, key, f"{label}: game {game}, table {r[key]} ({r[key + '_text'][:80]})"))
         if c["kind"] == "league" and isinstance(r["tier"], int):     # a division, not a group tournament
+            # The places of the row's edition. A calendar-year row (real season "2007" for 2006/07) is the edition of
+            # the end line: at the start of 2006/07 the Allsvenskan object still plays 2006 (year 2006), at its end
+            # 2007 (season_sizes_edition, season_sizes.c, reads the rows in the same way).
+            real = str(r.get("real_season", ""))
+            c = next((x for x in both if real.isdigit() and x["year"] == int(real)), c)
             for key, extra in (("up", "playoff_up"), ("down", "playoff_down")):
                 want = r[key]
-                if want == "na" and c[key] == 0:
+                # A top division (no division above, -1) sends nobody up: the class's up places of the Série A (4 in
+                # 2001/02) or the MLS (1) only mark rows.
+                if want == "na" and (c[key] == 0 or (key == "up" and c.get("above") == -1)):
                     continue
                 accept = {c[key], c[key] + (1 if c[extra] else 0), c[key] + c[extra]}
                 # 0.6.2 open item 63: two ties whose winners both go up, 4 places just below the direct places (Série B

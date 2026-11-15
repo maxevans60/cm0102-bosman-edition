@@ -841,21 +841,21 @@ uint32_t rt_ita_cup_first_position(uint32_t original)
 
 /* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
  * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). */
-static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
+static int set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
 {
-    if (want < 0 || want > 30) return;
+    if (want < 0 || want > 30) return 0;
     int now = (int8_t)g_mem[obj + at], playoff = (int8_t)g_mem[obj + playoff_at];
     /* A class with no places in this direction has its own way or none (Argentina relegates by the average of
      * three seasons, ArgPrm::set_up_rules 0x4056d1 writes 0): it stays. */
-    if (now == 0 && playoff == 0) return;
-    if (want == now || want == now + (playoff ? 1 : 0) || want == now + playoff) return;
+    if (now == 0 && playoff == 0) return 0;
+    if (want == now || want == now + (playoff ? 1 : 0) || want == now + playoff) return 0;
     int direct = want - (playoff ? 1 : 0);
     if (direct < 0) direct = 0;
     g_mem[obj + at] = (uint8_t)direct;
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %s places %d, the class gave %d (+%d play-off)\n",
                 season_change_file(obj), record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), what, direct, now,
-                playoff);
+                playoff);    return 1;
 }
 
 /* The object of the division above or below (league +0x1c, +0x20: the record ids, -1 for none, EngFirst::
@@ -882,6 +882,49 @@ static int open_neighbour(uint32_t obj, uint32_t at)
     return size_file(f) && exchange_floor(f) == 0;
 }
 
+/* The divisions whose relegation places towards a division outside the size table this slice changed (D23): their
+ * chain call to it moves in pairs (the wrap of 0x689c80), so that division keeps its count whatever its class. */
+#define OUTSIDE_MAX 32
+static uint32_t outside_set[OUTSIDE_MAX];
+
+static void note_outside(uint32_t obj, int on)
+{
+    int free_at = -1;
+    for (int i = 0; i < OUTSIDE_MAX; i++) {
+        if (outside_set[i] == obj) {
+            if (!on) outside_set[i] = 0;
+            return;
+        }
+        if (!outside_set[i] && free_at < 0) free_at = i;
+    }
+    if (on && free_at >= 0) outside_set[free_at] = obj;
+}
+
+static int is_outside(uint32_t obj)
+{
+    for (int i = 0; obj && i < OUTSIDE_MAX; i++)
+        if (outside_set[i] == obj) return 1;
+    return 0;
+}
+
+/* 1 when the division below is a league outside the size table and the row's count changes after this edition. */
+static int outside_change(uint32_t obj, const char *file, const SeasonRule *r)
+{
+    uint32_t below = neighbour(obj, BELOW);
+    if (!below || size_file(season_change_file(below))) return 0;
+    const SeasonRule *next = row_of_season(file, r->season + 1);
+    return next && next->clubs >= MIN_CLUBS && next->clubs <= MAX_CLUBS && r->clubs >= MIN_CLUBS &&
+           next->clubs != r->clubs;
+}
+
+static int outside_now(uint32_t obj)
+{
+    if (is_outside(obj)) return 1;
+    const char *file = season_change_file(obj);
+    const SeasonRule *r = size_file(file) && exchange_floor(file) == 0 ? row_now(obj, file) : NULL;
+    return r && outside_change(obj, file, r);
+}
+
 static void sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
@@ -897,9 +940,17 @@ static void sizes_rules(uint32_t obj)
      * promotions left it short in June 2017). */
     if (open_neighbour(obj, ABOVE))
         set_places(obj, UP, UP_PLAYOFF, r->up + season_playoffs_winners_up(file, r->season), "promotion");
-    /* League Two: towards the Conference, played or not (season_sizes_eng.c, slice 8, D15). */
-    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file))
-        set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+    /* League Two: towards the Conference, played or not (season_sizes_eng.c, slice 8, D15). D23 (slice 3, open items
+     * 248 and 249): towards a division outside the size table only in the season before the row's count changes. The
+     * Segunda Liga and the Serie B relegate 3 and 4 by their class, their rows 0 to 6. The chain to such a division
+     * moves in pairs (PorPrm's chain 0x7cfcbf..0x7cfd1a and BraNatFirst's 0x42afe3..0x42b124 push pairwise 1; the
+     * wrap of 0x689c80 below keeps the original's call for a pair with a class outside the table), so the division
+     * below keeps its count, and the size step (D13) moves the clubs of the relegation places that did not move. */
+    int outside = !open_neighbour(obj, BELOW) && !season_sizes_eng_below(file) && outside_change(obj, file, r);
+    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file) || outside) {
+        int changed = set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
+        note_outside(obj, outside && changed);
+    }
 }
 
 void season_sizes_rules(uint32_t obj)
@@ -971,6 +1022,18 @@ RT_WRAP(00689c80, promote_relegate)
     int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
+    /* D23 (slice 3): a division whose relegation places towards a division outside the size table this slice set
+     * sends its clubs in pairs, so the division below keeps its count. Most classes pass pairs already (0x7cfcbf,
+     * 0x42afe3); the Turkish chain 0x8fe2d4..0x8fe38b pushes 0 and the base chain 0x689c60 passes the class's flag.
+     * After a load the set is empty, so the row is read again. */
+    if (!ours && !pairwise && season_changing_rules() && !season_change_is_creating() &&
+        size_file(season_change_file(upper)) && !size_file(season_change_file(lower)) && outside_now(upper)) {
+        wr32(g_mem, cpu.esp + 4 + 12, 1);
+        pairwise = 1;
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s to %s moves in pairs (D23 places towards a division outside the "
+                            "size table)\n", season_change_file(upper), season_change_file(lower));
+    }
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
     /* When the places of the two divisions differ, the clubs move on their own only with changing rules on and
      * between two classes of the size table. Else the clubs move in pairs, so no size changes (with changing rules
