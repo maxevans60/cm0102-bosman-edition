@@ -113,6 +113,14 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
 #   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+# - EngConf (Conference, 22 to 2005/06, 24 from 2006/07, 23 in 2020/21 and 2021/22; slice 8): create_table 0x56ecb0
+#   allocates 22 rows (push 0x512 at 0x56ecbb, the object in esi) and stores 22 at 0x56ecc2; create_schedule 0x56de60
+#   makes 42 dates (D 0x2a at 0x56de9d, 0xaaa bytes at 0x56de98) for stage -1; set_up_rules 0x56ede0 sets 2 meetings
+#   (+0x3c at 0x56edf0) and does not write +0xd9: shuffled.
+# - FraThird (National, 20, 21 in 2010/11, 18 from 2013/14, 17 in 2017/18 and 2024/25; slice 8): create_table 0x5c05d0
+#   allocates 20 rows (push 0x49c at 0x5c05db) and stores 20 at 0x5c05e2; create_schedule 0x5bfe30 makes 38 dates (D
+#   0x26 at 0x5bfe6a, 0x9a6 bytes at 0x5bfe65); set_up_rules 0x5c0700 sets flag 0x83 (0x5c0798): mirrored. Its D is
+#   no longer in DATES: the wrap makes the template of any count, and a smaller count drops dates evenly (D5).
 # - BraNatFirst, BraNatSecond (Série A and B, slice 17, D11): create_table 0x42a480 and 0x42ca70 allocate 28 rows (the
 #   cap stays 28: no row holds more). create_schedule 0x429b50 and 0x42c140 make 27 dates for stage -1 (D 0x1b at
 #   0x429b8d and 0x42c17d) and the play-off for stage 0. set_up_rules 0x42a5a0 and 0x42cb70 set 1 meeting (+0x3c at
@@ -131,11 +139,40 @@ GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    # Italy (0.7.2 slice 9). All four classes are sequential: set_up_rules sets flag 0x40 (ItaSerA 0x6416b7, ItaSerB
+    # 0x64691a, ItaSerC1a 0x64b7e5, ItaSerC1b 0x64f9ae), so league_next_schedule_round 0x68a030 takes index + 1 with
+    # no wrap (0x68a081..0x68a08f) and the template must hold exactly the rounds.
+    # - ItaSerA (Serie A, 18 to 2003/04, 20 from 2004/05): create_table 0x641510 allocates 18 rows (push 0x426 at
+    #   0x64151b) and stores 18 at 0x641522; create_schedule 0x6409b0 makes 34 dates (D 0x22 at 0x6409ed, block 0x8a2
+    #   at 0x6409e8).
+    # - ItaSerB (Serie B, 20; 24 in 2003/04, 22 from 2004/05 to 2017/18, 19 in 2018/19): create_table allocates 20
+    #   rows (push 0x49c at 0x64678b) and stores 20 at 0x646792; create_schedule 0x645af0 makes 38 dates (D 0x26 at
+    #   0x645b2d, block 0x9a6 at 0x645b28).
+    # - ItaSerC1a and ItaSerC1b (Serie C1 groups, 18; 19 and 18 in 2004/05, 17 and 16 in 2012/13, 16 and 17 in
+    #   2013/14; groups of the Serie C from 2014/15): create_table allocates 18 rows (0x64b67b, 0x64f82b) and
+    #   create_schedule (0x64ad80, 0x64ef30) makes 34 dates (D 0x22 at 0x64adbd, 0x64ef6d). Slice 20b already patches
+    #   both table pushes (new_divisions.py, rt_ita_table_bytes) and wraps both create_schedule functions
+    #   (season_divisions_ita.c) for the groups of 20 of the Serie C era: TABLE_SITE_TAKEN and SCHEDULE_TAKEN.
+    "ita_ser_a": (20, 0x6409B0, "sequential"),
+    "ita_ser_b": (24, 0x645AF0, "sequential"),
+    "ita_ser_c1a": (20, 0x64AD80, "sequential"),
+    "ita_ser_c1b": (20, 0x64EF30, "sequential"),
+    "eng_conf": (24, 0x56DE60, "shuffled"),
+    "fra_third": (21, 0x5BFE30, "mirrored"),
     "nir_prm": (16, 0x78E330, "shuffled"),
     "wel_first": (18, 0x9250F0, "shuffled"),
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
+    # Slice 13 (Northern Ireland and Ireland).
+    # - NirFirst (NIFL Championship, 10 in the class, 17 in 2008/09, 16 from 2026/27; splits after 22 from 2016/17 and
+    #   after 33 from 2021/22): create_table 0x78bc50 allocates 10 rows (push 0x24e at 0x78bc5b, the object in esi
+    #   from 0x78bc59) and stores 10 at 0x78bc62; create_schedule 0x78b310 makes 36 dates for stage -1 (D 0x24 at
+    #   0x78b34d, 0x924 bytes at 0x78b348) and the play-off for any other stage (0x78b321); set_up_rules 0x78bd70
+    #   sets 4 meetings (0x78bd80) and does not write +0xd9: shuffled.
+    "nir_first": (17, 0x78B310, "shuffled"),
+    # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
+    "ire_first": (12, 0x634F40, "shuffled"),
     # Slice 14 (Japan and Korea; src/recomp_rt/win/season_sizes_asia.c, sizes_asia.py). Calendar-year leagues.
     # - JapJ1 (J1, 16 in the class, 18 from 2005, 20 in 2021 and from 2024): create_table 0x6634e0 allocates 16 rows
     #   (push 0x3b0 at 0x6634eb) and stores 16 at 0x6634f2; create_schedule 0x662e30 makes 30 dates for stage -1 (D
@@ -152,10 +189,25 @@ GROWN = {
     "kor_league": (16, 0x66B130, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
-# The rows that the class allocates: its largest original count (before the cap of GROWN).
+# Grown classes that count the clubs of the data (CLASSES rows with no store): create_table allocates the rows of
+# that count, so there is no table site, and the count stays the data's (no cap in season_size_caps). The engine
+# gives them the template of the count and the row's meetings; the class's own bounds and meetings take the row
+# through PATCHES (season_sizes_irl.c). file: the largest count that the class takes.
+# - IreFirst::create_table 0x635910 counts the clubs of division [0x9cf810] (0x635941..0x635969), takes only 9 to 12
+#   (0x63596f, 0x635979), sets 4 meetings for 9 or 10 and 3 for 11 or 12 (0x635983..0x635997) and allocates the count
+#   x 0x3b (0x63599d..0x6359b0). set_up_rules 0x635aa0 sets 4 meetings (0x635ab0) and calls create_schedule 0x634f40
+#   before the constructor calls create_table (0x634cc1, then 0x634cfc; start_new_season 0x635b9d, then 0x635bdc), so
+#   create_schedule makes 36 dates (D = 0x22 + 2 for meetings other than 3, 0x634f6d..0x634f84) and the table then
+#   plays 33 or 36 of them. It does not write +0xd9: shuffled.
+DATA_COUNT = {"ire_first": 12}
+# The rows that the class allocates: its largest original count (before the cap of GROWN); 0 for DATA_COUNT.
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
     assert _mode in GROWN_MODES, _f
+    if _f in DATA_COUNT:
+        assert _f not in CAPS and _n == DATA_COUNT[_f], _f
+        HELD[_f] = 0
+        continue
     assert _n >= CAPS[_f], _f   # equal: only the meetings and dates change (Brazil)
     HELD[_f] = CAPS[_f]
     CAPS[_f] = _n
@@ -172,7 +224,7 @@ def table_sites(read):
     0x7925e9, 0x7925eb, 0x7925f2). No such push stops the build."""
     sites = {}
     for _cls, file, _rules, stores in CLASSES:
-        if file not in GROWN:
+        if file not in GROWN or file in DATA_COUNT:
             continue
         want = (HELD[file] * ROW_BYTES).to_bytes(4, "little")
         found = []
@@ -193,9 +245,18 @@ def table_sites(read):
 
 
 # Table sites that another tool already patches for the grown count: file: (address, the tool and why it holds the
-# count). D21: such a site is not patched twice. Any other overlap stops the build. None yet (the Serie C pushes of
-# new_divisions.py, 0x64b67b, 0x64f82b, 0x653a9b, join here when a slice adds a Serie C class to GROWN).
-TABLE_SITE_TAKEN = {}
+# count). D21: such a site is not patched twice. Any other overlap stops the build. rt_ita_table_bytes
+# (season_divisions_ita.c) gives the 20 rows of the Serie C era, and otherwise rt_league_table_bytes.
+TABLE_SITE_TAKEN = {
+    "ita_ser_c1a": (0x64B67B, "new_divisions.py rt_ita_table_bytes"),
+    "ita_ser_c1b": (0x64F82B, "new_divisions.py rt_ita_table_bytes"),
+}
+# Grown classes whose create_schedule another module wraps already (RT_WRAP takes an address once). That wrap calls
+# season_sizes_schedule after the original, and make_size_wraps.py writes none: file: the module.
+SCHEDULE_TAKEN = {
+    "ita_ser_c1a": "season_divisions_ita.c c1a_schedule",
+    "ita_ser_c1b": "season_divisions_ita.c c1b_schedule",
+}
 
 
 def table_insns(read, taken=()):
@@ -215,10 +276,10 @@ def table_insns(read, taken=()):
 # The French classes play the second half from the middle of their date template (league_next_schedule_round
 # 0x68a030, flag 0x80 at 0x68a090; the classes set flag 0x83 at 0x5bc480, 0x5bf138, 0x5c0798), so the template
 # must have exactly the rounds of the count: 34 dates for 18 clubs, as FraFirst's own 2001 path (0x5bb6ad).
+# FraThird (D at 0x5bfe6a) is a grown class (GROWN, slice 8): its wrap of create_schedule makes the template.
 DATES = {
     0x5BB6B4: ("mov ebp, 0x26", "ebp = rt_league_dates(ebx, 0x26u);"),             # FraFirst::create_schedule
     0x5BE65A: ("mov word ptr [eax], 0x26", "W16(eax, rt_league_dates(edi, 0x26u));"),  # FraSecond
-    0x5BFE6A: ("mov word ptr [eax], 0x26", "W16(eax, rt_league_dates(edi, 0x26u));"),  # FraThird
 }
 
 # Cups with a fixed entrant count that take a capped number of lower clubs and then every club of the top
@@ -247,6 +308,12 @@ PATCHES = {
     0x924B81: (0x54, "rt_cup_room(0x54u, 32u, 0x9cf94cu, 0u, 0u)"),
     0x55131C: (0x120, "rt_cup_room(0x120u, 92u, 0x9cf5b4u, 0x9cf5b0u, 0x9cf5acu)"),
     0x5BD2AC: (0x60, "rt_cup_room(0x60u, 54u, 0x9cf5d0u, 0x9cf5ccu, 0u)"),
+    # IreFirst::create_table 0x635910 (DATA_COUNT, slice 13): the least count it takes, and its meetings for a count
+    # (esi the object). A season game with the sizes on takes the count of the data from 2 clubs and the meetings
+    # that the engine set from the row (season_sizes_irl.c); the base game the original's.
+    0x63596F: (9, "rt_ire_first_least(esi, 9u)"),
+    0x63598F: (3, "rt_ire_first_meetings(esi, 3u)"),
+    0x635997: (4, "rt_ire_first_meetings(esi, 4u)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
@@ -260,19 +327,21 @@ PATCHES = {
 # The cups of western Europe follow the divisions (slice 5, D14): BelFaCup 0x41d8d0, ItaCCup 0x63dfe0, HolCup
 # 0x5f4820, FraCup 0x5baa50 and DenCup. Slice 5 keeps the floors of bel_second and the Serie C1 groups.
 # A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5, and the merge of
-# slice 6: the floors any slice removed are gone).
-FLOORS = {"bel_second", "ita_ser_c1a", "ita_ser_c1b"}
+# slice 6: the floors any slice removed are gone). Slice 9 removes the Serie C1 groups: the regroup
+# ita_ser_a_regroup_serie_c1_clubs 0x642630 and the play-out rows take the counts (season_sizes_ita.c).
+FLOORS = {"bel_second"}
 # The floor is the class's largest count.
 FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # The divisions whose places and exchange stay the class's, though the club moves give them the count of their row
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
-# leagues: the Conference and League Two (a fixed exchange, D15, slice 8; 2 down and 1 back gave League Two 23), the
-# Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and the Welsh
-# Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7).
-FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("eng_conf", "eng_first", "eng_prm", "eng_second", "eng_third", "wel_first",
-                                       "nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second", "sco_third")}
+# leagues: the Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and
+# the Welsh Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7). The
+# English divisions left in slice 8 (D15): the exchange of League Two and the Conference takes the places of the rows
+# (season_sizes_eng.c).
+FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("wel_first", "nir_first", "nir_prm", "sco_first", "sco_prm",
+                                                    "sco_second", "sco_third")}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
