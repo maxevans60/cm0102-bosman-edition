@@ -113,6 +113,11 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
 #   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+# - ArgPrm (Primera, 20 to 2013/14, then 30, 28, 26, 24 and 30; slice 15): create_table 0x405540 allocates 20 rows
+#   (push 0x49c at 0x40554b, the object in esi from 0x405549) and stores 20 at 0x405552; create_schedule 0x404570
+#   makes 19 dates for the Apertura (stage -1, D at 0x4045aa) and 19 for the Clausura (stage 0, D at 0x404d9a), none
+#   for the aggregate table (stage 1). Mode halves: the runtime of the class (season_sizes_arg.c) makes the dates of
+#   each half, or of one table over both halves, and the fixed fixture lists of the zones and the derby round.
 # - EngConf (Conference, 22 to 2005/06, 24 from 2006/07, 23 in 2020/21 and 2021/22; slice 8): create_table 0x56ecb0
 #   allocates 22 rows (push 0x512 at 0x56ecbb, the object in esi) and stores 22 at 0x56ecc2; create_schedule 0x56de60
 #   makes 42 dates (D 0x2a at 0x56de9d, 0xaaa bytes at 0x56de98) for stage -1; set_up_rules 0x56ede0 sets 2 meetings
@@ -136,6 +141,7 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   0x92512a, 0x8a2 bytes at 0x925125); set_up_rules 0x925c50 sets 2 meetings (0x925c9b) and does not write +0xd9:
 #   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
 GROWN = {
+    "arg_prm": (30, 0x404570, "halves"),
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
@@ -173,8 +179,22 @@ GROWN = {
     "nir_first": (17, 0x78B310, "shuffled"),
     # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
     "ire_first": (12, 0x634F40, "shuffled"),
+    # Slice 14 (Japan and Korea; src/recomp_rt/win/season_sizes_asia.c, sizes_asia.py). Calendar-year leagues.
+    # - JapJ1 (J1, 16 in the class, 18 from 2005, 20 in 2021 and from 2024): create_table 0x6634e0 allocates 16 rows
+    #   (push 0x3b0 at 0x6634eb) and stores 16 at 0x6634f2; create_schedule 0x662e30 makes 30 dates for stage -1 (D
+    #   0x1e at 0x662e6d, 0x79e bytes at 0x662e68) and 1 for the final (stage 2, 0x6633d4); set_up_rules 0x663620 sets
+    #   2 meetings (0x66362d) and +0xd9 8 (0x6636b2): shuffled. Halves and the final only by the row (D8).
+    # - JapJ2 (J2, 12 to 22): create_table 0x665030 allocates 12 rows (push 0x2c4 at 0x66503b) and stores 12 at
+    #   0x665042; create_schedule 0x664780 makes 44 dates (D 0x2c at 0x6647ba, 0xb2c bytes at 0x6647b5); set_up_rules
+    #   0x665140 sets 4 meetings (0x665149) and does not write +0xd9: shuffled.
+    # - KorLeague (K League, 10 to 16): create_table 0x66bba0 allocates 10 rows (push 0x24e at 0x66bbab) and stores 10
+    #   at 0x66bbb2; create_schedule 0x66b130 makes 27 dates (D 0x1b at 0x66b16a, 0x6db bytes at 0x66b165);
+    #   set_up_rules 0x66bcc0 sets 3 meetings (0x66bcf1) and does not write +0xd9: shuffled. The split by its row.
+    "jap_j1": (20, 0x662E30, "shuffled"),
+    "jap_j2": (22, 0x664780, "shuffled"),
+    "kor_league": (16, 0x66B130, "shuffled"),
 }
-GROWN_MODES = ("shuffled", "sequential", "mirrored")
+GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 # Grown classes that count the clubs of the data (CLASSES rows with no store): create_table allocates the rows of
 # that count, so there is no table site, and the count stays the data's (no cap in season_size_caps). The engine
 # gives them the template of the count and the row's meetings; the class's own bounds and meetings take the row
@@ -300,6 +320,11 @@ PATCHES = {
     0x63596F: (9, "rt_ire_first_least(esi, 9u)"),
     0x63598F: (3, "rt_ire_first_meetings(esi, 3u)"),
     0x635997: (4, "rt_ire_first_meetings(esi, 4u)"),
+    # IrePrm::create_table 0x63a740 (gap 43): for a table of 12 clubs it sets 3 relegation places (+0xc1) and 1
+    # play-off place (+0xc0) at 0x63a8a9..0x63a8b5, the 12 to 10 of 2001/02. It runs in the constructor after
+    # set_up_rules (0x639c3c, then 0x639c77) and again at each start_new_season (0x63aa3d), so every 12-club season
+    # sends 3 down. A season game with the sizes on takes the direct places of the row (season_sizes_irl.c).
+    0x63A8B5: (3, "rt_ire_prm_down(esi, 3u)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
@@ -513,3 +538,8 @@ if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
 import cup_sizes_east  # noqa: E402
 
 INSNS.update(cup_sizes_east.INSNS)
+# 0.7.2 slice 14: J1 halves of any count (sizes_asia.py).
+import sizes_asia  # noqa: E402
+
+assert not set(sizes_asia.INSNS) & set(INSNS)
+INSNS.update(sizes_asia.INSNS)

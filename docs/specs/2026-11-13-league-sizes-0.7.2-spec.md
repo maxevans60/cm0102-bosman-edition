@@ -208,16 +208,16 @@ Merge danger: two-way door. Blast radius: the two Irish pyramids.
 Blocked by: 2, 3, 6, 7
 Delivers: J1 at 18 and 20 with halves and the final only in their seasons (D8), J2 at up to 22 with its row's meetings, the K League at 12 to 16 with its meetings and its split.
 Merge danger: two-way door. Blast radius: the Japanese and Korean leagues.
-- [ ] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
+- [x] The same-save set is equal
 
 ### 15. Argentine Primera: halves and zones
 Blocked by: 2, 3
 Delivers: halves on and off by row, one table of 30, two zones of 15 with two inter-zone rounds a half (D9), zone lists from two sources, the averages at the real count.
 Merge danger: one-way door for saves (zone stages in the save). Blast radius: Argentina.
-- [ ] `league_size_run.py` passes for arg_prm 2014, 2016 and 2024, with the zones and the inter-zone rounds
-- [ ] A save in the second half of 2024/25 loads and completes the season
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for arg_prm 2014, 2016 and 2024, with the zones and the inter-zone rounds
+- [x] A save in the second half of 2024/25 loads and completes the season
+- [x] The same-save set is equal
 
 ### 16. Argentine second division
 Blocked by: 15

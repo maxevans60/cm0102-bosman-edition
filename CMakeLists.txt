@@ -286,6 +286,13 @@ if(NOT WIN32)
     target_include_directories(season_league_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_league COMMAND season_league_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_league PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The meetings of the J1 and K League tables (0.7.2 league sizes, slice 14).
+    add_executable(season_sizes_asia_test tests/seasons/test_season_sizes_asia.c
+        src/recomp_rt/win/season_sizes_asia_rows.c src/recomp_rt/win/season_league.c src/recomp_rt/win/season_rules.c
+        src/recomp_rt/win/season_league_table.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_sizes_asia_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_sizes_asia COMMAND season_sizes_asia_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_sizes_asia PROPERTIES FIXTURES_REQUIRED rules_table)
     # Domestic cups that the rules table does not hold in some seasons (0.6.0 slice 21b).
     add_executable(season_cup_breaks_test tests/seasons/test_season_cup_breaks.c
         src/recomp_rt/win/season_cup_breaks.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
@@ -305,6 +312,9 @@ if(NOT WIN32)
     target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
     add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
+    # Gap rows 19 and 20 of slice 6: no rules row or season database reaches the Croatian, Korean or Greek fallback.
+    add_test(NAME cup_east_reach COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_east_reach_check.py")
+    set_tests_properties(cup_east_reach PROPERTIES SKIP_RETURN_CODE 77)
     # Level clubs under head-to-head (0.6.2 open item 167): the order of two finished level clubs stays open while a
     # club with matches left can still end on their points.
     add_executable(season_level_ties_test tests/seasons/test_season_level_ties.c src/recomp_rt/win/season_level_ties.c)
@@ -735,6 +745,12 @@ if(EXISTS "${CM0102_EXE}")
     # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
     add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
         --self-test)
+    # The Argentine Primera (0.7.2 league sizes, slice 15): the fixture plans of the zones and the derby round, and the
+    # committed table of the zones, rivals and derbies of the research.
+    add_executable(arg_prm_plan_test tests/seasons/test_arg_prm_plan.c src/recomp_rt/win/season_arg_plan.c)
+    target_include_directories(arg_prm_plan_test PRIVATE src/recomp_rt/win)
+    add_test(NAME arg_prm_plan COMMAND arg_prm_plan_test)
+    add_test(NAME arg_prm_zones COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_arg_prm_zones.py" --check)
     # The checks of the size step runs (slice 3) and of the English exchange (slice 8, D15) on made-up logs.
     add_test(NAME size_step_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/size_step_run.py"
         --self-test)

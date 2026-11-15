@@ -18,7 +18,9 @@
 #define SEASON_TEMPLATE_EARLIER 4      /* at most this many earlier starts of 7 days (lead decision, 13 November 2026) */
 #define SEASON_TEMPLATE_WEDNESDAY 2    /* weekday 0 Monday .. 6 Sunday (Date::get_weekday 0x54a3f0) */
 
-enum { SEASON_TEMPLATE_SHUFFLED, SEASON_TEMPLATE_SEQUENTIAL, SEASON_TEMPLATE_MIRRORED };
+/* SEASON_TEMPLATE_HALVES: a class of halves (ArgPrm), whose runtime makes its own templates (season_sizes_arg.h);
+ * season_template_plan never takes it. */
+enum { SEASON_TEMPLATE_SHUFFLED, SEASON_TEMPLATE_SEQUENTIAL, SEASON_TEMPLATE_MIRRORED, SEASON_TEMPLATE_HALVES };
 
 typedef struct {
     int day;        /* days from 1 January of the base year (the year argument of 0x68a160) */

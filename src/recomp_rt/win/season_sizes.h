@@ -52,6 +52,19 @@ int season_sizes_bra_earlier(const char *file);
  * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
 void season_sizes_bra_rules(uint32_t obj, const char *file);
 
+/* The meetings that the table of a league plays in a season, from the row's meetings: twice them for a row of halves
+ * whose table holds both halves (J1, and the K League stages as one table; 0.7.2 league sizes, slice 14,
+ * season_sizes_asia.c). Any other file: the row's meetings. */
+int season_sizes_asia_meetings(const char *file, int season, int meetings);
+
+/* The most earlier starts of 7 days of the K League's date template (17, season_sizes_asia_rows.c); 0 for any other
+ * file. */
+int season_sizes_asia_earlier(const char *file);
+
+/* After the places of season_sizes_rules, with the size engine on: J1 plays its halves and final only in a season of
+ * halves, else one table (slice 14, D8; season_sizes_asia.c). */
+void season_sizes_asia_rules(uint32_t obj, const char *file);
+
 /* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
  * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
 int season_sizes_edition(const char *file, int year);
@@ -83,7 +96,8 @@ typedef struct {
     const char *file;
     int held;               /* the rows that the class allocates (its largest original count) */
     int cap;                /* the largest count of its rows */
-    int mode;               /* SEASON_TEMPLATE_SHUFFLED, _SEQUENTIAL or _MIRRORED (league_next_schedule_round 0x68a030) */
+    int mode;               /* SEASON_TEMPLATE_SHUFFLED, _SEQUENTIAL or _MIRRORED (league_next_schedule_round 0x68a030), or
+                             * _HALVES (the class makes its own templates, season_sizes_arg.h) */
 } SeasonGrown;
 extern const SeasonGrown season_grown[];
 extern const int season_grown_count;
@@ -95,6 +109,10 @@ int season_sizes_plays_short(const char *file);
 /* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
  * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
 int season_sizes_data_clubs(const char *file, int season);
+
+/* The relegation places ("down") of the row of the object's edition, the direct places of the research; -1 with the
+ * sizes off or no count (gap 43, season_sizes_irl.c). */
+int season_sizes_row_down(uint32_t obj, const char *file);
 
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
@@ -118,5 +136,26 @@ int season_sizes_row_season(uint32_t obj, const char *file);
  * with the row's meetings, whose wrap plans the season again and gives the dates after the table's rounds in a new
  * block (count to *count, the class's name code to *code). 0 when the plan gives none. */
 uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32_t *code);
+
+/* A template of `rounds` dates from the class's `have` dates at old (D4, D5; season_template_plan in `mode`), in a new
+ * block of the game's heap; 0 when the plan has no room (the log says why). It does not free old. */
+uint32_t season_sizes_build_template(uint32_t obj, const char *file, uint32_t old, int have, int rounds, int mode);
+
+/* The club count of a grown league this edition (the clubs of its division up to its cap), 0 outside a season game
+ * with the sizes on. */
+int season_sizes_count(uint32_t obj);
+
+/* The objects whose template had no room this edition (D4) keep the class's count and form: on 1 marks the object,
+ * 0 clears it; season_sizes_kept gives the mark of the object's edition. */
+void season_sizes_keep(uint32_t obj, int on);
+int season_sizes_kept(uint32_t obj);
+
+/* The game's malloc 0x944e46 (cleared) and free 0x9452ca. */
+uint32_t season_sizes_game_malloc(uint32_t size);
+void season_sizes_game_free(uint32_t p);
+
+/* The size step of a division pair that a class's own chain moves (not league_promote_and_relegate 0x689c80): the
+ * Argentine Primera and second division (ArgPrm::process_promotion_relegation_chain 0x4067f0). */
+void season_sizes_step_note(uint32_t upper, uint32_t lower);
 
 #endif

@@ -20,6 +20,7 @@
  * there means (clubs - 1) * meetings (0x689b1d..0x689b36), 35 for 36 clubs. The league phase passes its match
  * count, 8 or 6. */
 #include "win.h"
+#include "season_sizes_arg.h"
 #include "season_records.h"
 #include "season.h"
 #include "season_uefa.h"
@@ -132,9 +133,19 @@ RT_WRAP(006835c0, league_create_fixtures)
         wr32(g_mem, league + 0xea, pending_list);
         pending_stage = pending_list = 0;
     }
+    uint32_t arg = 0;
+    if (!rd32(g_mem, league + 0xea)) {      /* 0.7.2 slice 15: the Argentine Primera's zones and derby round */
+        arg = season_arg_fixtures(league);
+        if (rt_unwinding) return;
+        if (arg) wr32(g_mem, league + 0xea, arg);
+    }
     season_fifa_stage_begin(league);        /* O259: a qualifier's FIFA day stays within its stage */
     o_006835c0();
     season_fifa_stage_end();
+    /* The original frees the list it plays (0x683aa1) and clears +0xea; one it did not play is a fault (test log). */
+    if (!rt_unwinding && arg && rd32(g_mem, league + 0xea) == arg)
+        fprintf(stderr, "recomp: league sizes: arg_prm fixed list not played (edition %d)\n",
+                (int16_t)rd16(g_mem, league + 0x40));
 }
 
 /* The fixed list of the draw (new[] of the game: the count, then the entries), or 0. */

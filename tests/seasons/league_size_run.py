@@ -41,6 +41,7 @@ use --last <year + 1> for its played check. --reuse checks the logs in --keep ag
 """
 import datetime
 import os
+import re
 import sys
 import tempfile
 
@@ -81,12 +82,39 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Slice 14 (D8): calendar-year leagues, edition Y plays row Y - 1. J1 plays halves and the final only in the rows
+    # of two stages; its table holds both halves (season_sizes_asia.c).
+    "jap_j1": (2005, 2006, "J1, 18 clubs in one table: 34 dates, no halves and no final"),
+    "jap_j1@2015": (2015, 2017, "J1, 18 clubs in two halves of 17 rounds and the final, then one table in 2017"),
+    "jap_j1@2024": (2024, 2025, "J1, 20 clubs in one table: 38 dates"),
+    "jap_j2": (2010, 2011, "J2, 19 clubs in two meetings: 38 dates (the class plays 4 meetings of 12)"),
+    "kor_league": (2013, 2014, "K League, 14 clubs: 26 rounds, then sections of 7 and 7 that meet twice"),
+    "kor_league@2003": (2003, 2004, "K League, 12 clubs in four meetings: 44 dates, 17 weeks earlier at most, "
+                                    "then two stages as one table in two meetings, 12 of the row's 13 (no club to add, D12)"),
     # Slice 13: the NIFL Championship (the class holds 10 in 4 meetings on 36 dates) and the League of Ireland First
     # Division (the class takes 9 to 12; rows are keyed one year before the real season, row 2013 is the 2014 season).
     "nir_first": (2016, 2017, "NIFL Championship, 12 clubs: 22 rounds, then sections of 6 and 6 that meet twice"),
     "nir_first@2022": (2022, 2023, "NIFL Championship, 12 clubs: 33 rounds, then sections of 6 and 6 once more"),
+    "nir_first@2020": (2020, 2021, "NIFL Championship, 12 clubs: the announced 22 rounds of 2020/21, no split (gap 42)"),
     "ire_first": (2013, 2014, "League of Ireland First Division, 8 clubs in four meetings: 28 dates (D5)"),
+    # Slice 15: the Argentine Primera. Edition Y plays the row whose real season begins with Y, else row Y - 1
+    # (season_sizes_edition): editions 2014 and 2015 play row 2014, 2016 row 2016, 2025 row 2024 (the 2025 season).
+    "arg_prm@2013": (2013, 2014, "Primera 2013/14 (row 2013, 20 in two halves), then 30 in 2014/15: the size step "
+                                 "takes 10 clubs of the second division, which takes clubs of the third"),
+    "arg_prm": (2014, 2015, "Primera 2014/15 (row 2014): one table of 30, 29 rounds and the derby round"),
+    "arg_prm@2016": (2016, 2017, "Primera 2016/17 (row 2016): one table of 30 and the derby round, then 28 (the step)"),
+    "arg_prm@2025": (2025, 2026, "Primera row 2024 (the 2025 season): Apertura and Clausura of two zones of 15 with "
+                                 "the rival and drawn inter-zone rounds"),
+    # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
+    # before the real season (row 2003 is the 2004 Série A).
+    "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
+    "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
+    "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
 }
+
+# Files whose table holds both halves of a row of halves, so it plays twice the row's meetings (slice 14,
+# src/recomp_rt/win/season_sizes_asia.c): J1, and the K League stages as one table.
+HALVES_IN_TABLE = {"jap_j1", "kor_league"}
 
 # The extra divisions of the new game screen that a file needs (rules_report_check.EXTRA): the game plays the
 # Conference only when the screen selects it.
@@ -104,7 +132,10 @@ def encoded_row(file, season):
                 continue
             s = int(row["season"])
             if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                best = (s, int(row["clubs"]), int(row["meetings"]) if row.get("meetings", "").isdigit() else 0)
+                m = int(row["meetings"]) if row.get("meetings", "").isdigit() else 0
+                if file in HALVES_IN_TABLE and row.get("halves") == "1":
+                    m *= 2
+                best = (s, int(row["clubs"]), m)
     return (best[1], best[2]) if best else (0, 0)
 
 
@@ -217,6 +248,66 @@ def splits(log, file):
     return out, loaded
 
 
+def encoded_form(file, season):
+    """(clubs, meetings, zones, extra, rounds, halves) of the encoded row of a file in a season, by the after-table
+    rule; zones is the list of zone counts ([] for none), rounds the encoded rounds (0 when not given)."""
+    best = None
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") != file or not row.get("season", "").isdigit():
+                continue
+            s = int(row["season"])
+            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
+                best = (s, row)
+    if not best:
+        return (0, 0, [], 0, 0, 0)
+    row = best[1]
+    num = lambda k: int(row[k]) if row.get(k, "").isdigit() else 0  # noqa: E731
+    zones = [int(z) for z in row.get("zones", "-").split("+") if z.isdigit()]
+    return (num("clubs"), num("meetings"), zones, num("extra"), num("rounds"), num("halves"))
+
+
+def want_counts(file, season):
+    """(rounds of the template, matches of a club) of a file's row: m x (n' - 1) and m x (n - 1), plus the derby or
+    inter-zone rounds of the row; with zones, those of a zone (each half the same)."""
+    clubs, m, zones, extra, rounds, _h = encoded_form(file, season)
+    m = m or 2
+    if zones:
+        return (rounds or m * (max(zones) + (max(zones) & 1) - 1) + extra, m * (max(zones) - 1) + extra)
+    if extra and clubs % 2 == 0:
+        return (m * (clubs - 1) + extra, m * (clubs - 1) + extra)
+    return (rounds_of(clubs, m), m * (clubs - 1))
+
+
+_REAL = {}
+
+
+def real_season(file, season):
+    """The real_season text of the rules row of a file and season (make_rules.read_rows), or ""."""
+    if not _REAL:
+        sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
+        import make_rules
+        for r in make_rules.read_rows():
+            if r.get("comp_file") and str(r.get("season", ""))[:4].isdigit():
+                _REAL[(r["comp_file"], int(str(r["season"])[:4]))] = r.get("real_season", "")
+    return _REAL.get((file, season), "")
+
+
+def edition_season(file, edition):
+    """The season of the row that an edition (+0x40) plays (season_sizes.c season_sizes_edition): row Y when its real
+    season begins with Y, else row Y - 1 when its real season begins with Y, else Y."""
+    def starts(season):
+        t = real_season(file, season)
+        return t[:4] == str(edition) and not t[4:5].isdigit()
+    if starts(edition):
+        return edition
+    if starts(edition - 1):
+        return edition - 1
+    return edition
+
+
 def parse_dates(words):
     """[(date, added)] of the words of a template line."""
     out = []
@@ -249,9 +340,10 @@ def templates(log, file):
     return out
 
 
-# Earlier starts of 7 days a class may take (season_template.h SEASON_TEMPLATE_EARLIER, season_sizes_bra.c BRA_EARLIER).
+# Earlier starts of 7 days a class may take (season_template.h SEASON_TEMPLATE_EARLIER, season_sizes_bra.c BRA_EARLIER,
+# season_sizes_asia_rows.c KOR_EARLIER).
 EARLIER = 4
-EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13}
+EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13, "kor_league": 17}
 
 
 def template_faults(name, cls, new, rounds, earlier=EARLIER):
@@ -318,14 +410,18 @@ def calendar_year(file):
 
 
 def edition_row(file, edition):
-    """(clubs, meetings) of the row that an edition (+0x40) plays: a calendar-year league plays edition Y by the
-    row of season Y - 1 (its real season is Y, season_sizes.c row_now), any other league by the row of season Y."""
-    return encoded_row(file, edition - 1 if calendar_year(file) else edition)
+    """(clubs, meetings) of the row that an edition (+0x40) plays (edition_season): a calendar-year league plays
+    edition Y by the row of season Y - 1 (its real season is Y), any other league by the row of season Y."""
+    return encoded_row(file, edition_season(file, edition))
+
+
+def edition_counts(file, edition):
+    return want_counts(file, edition_season(file, edition))
 
 
 def edition_split(file, edition):
     """The split of the row that an edition plays (edition_row), or None."""
-    return encoded_split(file, edition - 1 if calendar_year(file) else edition)
+    return encoded_split(file, edition_season(file, edition))
 
 
 def report_rows(report, file):
@@ -362,6 +458,89 @@ def no_playoff_faults(log, file, meetings):
     return fails
 
 
+def encoded_halves(file, season):
+    """1 when the encoded row of a file in a season (the after-table rule) plays two halves."""
+    best = None
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") != file or not row.get("season", "").isdigit():
+                continue
+            s = int(row["season"])
+            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
+                best = (s, row.get("halves") == "1")
+    return bool(best and best[1])
+
+
+def j1_faults(log, file, editions):
+    """J1 (slice 14, D8): an edition of a row of halves plays the halves of its count and their final or a double
+    winner; an edition of one table plays no half and its top club is the champion."""
+    if file != "jap_j1":
+        return []
+    lines = log.split("\n")
+    fails = []
+    for ed in sorted(editions):
+        tag = f"recomp: league sizes: jap_j1 {ed}: "
+        mine = [x[len(tag):] for x in lines if x.startswith(tag)]
+        clubs, m = edition_row(file, ed)
+        if encoded_halves(file, ed - 1 if calendar_year(file) else ed):
+            if not any(x.startswith("halves and the final") for x in mine):
+                fails.append(f"jap_j1 {ed}: no log line of a season of halves")
+            if any(x.startswith("one table") for x in mine):
+                fails.append(f"jap_j1 {ed}: a season of halves played one table")
+            half = m * (clubs - 1) // 2
+            if half != 15 and not any(x.startswith(f"half of {clubs} clubs, {half} matches") for x in mine):
+                fails.append(f"jap_j1 {ed}: no half of {clubs} clubs with {half} matches a club")
+            rounds = rounds_of(clubs, m)
+            bound = [x for x in mine if x.startswith("second half from round ")]
+            if not bound or any(not x.startswith(f"second half from round {rounds // 2 + 1} of {rounds} ") for x in bound):
+                fails.append(f"jap_j1 {ed}: second half lines {bound}, want from round {rounds // 2 + 1} of {rounds}")
+            if not any(x == "final of the halves" or x == "double winner, no final" for x in mine):
+                fails.append(f"jap_j1 {ed}: neither a final of the halves nor a double winner")
+        else:
+            if not any(x.startswith("one table, no halves and no final") for x in mine):
+                fails.append(f"jap_j1 {ed}: no log line of a season of one table")
+            if any(x.startswith(("half of", "final of the halves", "second half from", "double winner")) for x in mine):
+                fails.append(f"jap_j1 {ed}: a season of one table made a half or a final")
+            if not any(x.startswith("champion club ") for x in mine):
+                fails.append(f"jap_j1 {ed}: no champion of the table in the log")
+    return fails
+
+
+def shortages(log, file):
+    """{edition: clubs} of the editions that the size step left short with a reason (D12: when the database holds
+    too few clubs, the division plays with the clubs it has, and the log names it)."""
+    out = {}
+    pat = re.compile(rf"recomp: league sizes: step: {re.escape(file)} \(.*\) (\d+): (\d+) clubs, the row (\d+): "
+                     r"no club of its nation with no division")
+    for line in log.split("\n"):
+        m = pat.match(line)
+        if m and int(m.group(2)) < int(m.group(3)):
+            out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
+    return out
+# Gap 43: an exchange whose real places keep both counts. The lower file: (the upper file, the least clubs that move
+# each way). League of Ireland 2011 to 2015 (rows wal-nir-irl-266 to 367): the 12th of the Premier Division goes down,
+# the First Division champion goes up, and the 11th meets the winner of the First Division play-off, so 1 or 2 clubs
+# move each way and the counts stay 12 and 8.
+EXCHANGE = {"ire_first": ("ire_prm", 1, 2011, 2014)}
+
+
+def exchange_faults(log, file, year):
+    """The pair lines of the promotion wrap (season_sizes.c, league_promote_and_relegate 0x689c80) between the upper
+    file and this one: as many clubs go down as come up, and at least the least count. Only for a run that starts in
+    the seasons of EXCHANGE: in a season of a real size change (2016/17, 12 to 10) the counts differ."""
+    if file not in EXCHANGE or not EXCHANGE[file][2] <= year <= EXCHANGE[file][3]:
+        return []
+    upper, least = EXCHANGE[file][:2]
+    pat = re.compile(rf"recomp: league sizes: {upper} \(.*\) down (-?\d+), {file} \(.*\) up (-?\d+), pairs")
+    moves = [(int(m.group(1)), int(m.group(2))) for m in map(pat.match, log.split("\n")) if m]
+    if not moves:
+        return [f"{file}: no exchange line with {upper}"]
+    return [f"{file}: {upper} sends {d} down and {file} {u} up, want the same count of {least} or more"
+            for d, u in moves if d != u or d < least]
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
@@ -370,6 +549,11 @@ def faults(work, file, year, last):
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
     lines = log.split("\n")
     fails = [f"{x.strip()}" for x in lines if "recomp: message box from" in x]
+    short = shortages(log, file)
+
+    def row(ed):
+        clubs, m = edition_row(file, ed)
+        return (short[ed][0], m) if ed in short else (clubs, m)
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
     # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
@@ -380,14 +564,14 @@ def faults(work, file, year, last):
     if not any(r[0] == year and r[1] == "start" for r in rows):
         fails.append(f"{file} {year}: no row in the start report")
     for season, phase, ed, n, meet, matches in rows:
-        clubs, m = edition_row(file, ed)
+        clubs, m = row(ed)
         m = m or meet
         if (n, meet) != (clubs, m):
             fails.append(f"{file}: report {season} {phase}, edition {ed}: clubs and meetings {(n, meet)}, want "
                          f"{(clubs, m)}")
         else:
             sp = edition_split(file, ed)
-            want = m * (n - 1) + (split_numbers(sp[1])[2] if sp else 0)
+            want = edition_counts(file, ed)[1] + (split_numbers(sp[1])[2] if sp else 0)
             if matches != -1 and matches != want:
                 fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want {want}")
     fails += [f"{file}: {x.split(': ', 1)[1]}" for x in lines
@@ -400,9 +584,9 @@ def faults(work, file, year, last):
     if not tmpl:
         fails.append(f"{file} {year}: no template line")
     for base, cls, new in tmpl:
-        clubs, m = edition_row(file, base)
+        clubs, m = row(base)
         sp = edition_split(file, base)
-        rounds = rounds_of(clubs, m or 2) + (split_numbers(sp[1])[0] if sp else 0)
+        rounds = edition_counts(file, base)[0] + (split_numbers(sp[1])[0] if sp else 0)
         if rounds == len(cls) and not sp:
             continue
         if new is None:
@@ -424,13 +608,14 @@ def faults(work, file, year, last):
         if dates != tail:
             fails.append(f"{file} {base}: the section dates {dates} are not the last dates of the template {tail}")
     for ed, n, matches, lo, hi in done:
-        clubs, m = edition_row(file, ed)
+        clubs, m = row(ed)
         m = m or 2
         sp = edition_split(file, ed)
         if not sp:
-            if n != clubs or not (matches == lo == hi == m * (n - 1)):
+            want = edition_counts(file, ed)[1]
+            if n != clubs or not (matches == lo == hi == want):
                 fails.append(f"{file} {ed}: {n} clubs, {matches} matches, played {lo} to {hi}; want {clubs} clubs "
-                             f"with {m * (clubs - 1)} each")
+                             f"with {want} each")
             continue
         # A split: every club played the table's matches and those of its section (the fewest and the most).
         after = m * (clubs - 1)
@@ -446,14 +631,23 @@ def faults(work, file, year, last):
             fails.append(f"{file} {ed}: no split end line")
         else:
             fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
+    if file == "arg_prm":
+        fails += arg_faults(log, year)
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
+    fails += j1_faults(log, file, {ed for ed, *_x in done})
+    fails += exchange_faults(log, file, year)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
                  | rrc.division_differences(comps, rep_clubs))
         diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
-        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs]
+        # A short edition (shortages) differs from its row by the clubs the database lacks, and the log names it.
+        # The report's season of a calendar-year league is the edition before (edition_row).
+        def named(d):
+            ed = d[0] + (1 if calendar_year(file) else 0)
+            return ed in short and f"game {short[ed][0]}, table {short[ed][1]} " in d[2] + " "
+        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs if not named(d)]
     print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
           "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done) +
           "; splits " + ", ".join(f"{ed}:{'+'.join(map(str, v[1]))}" for ed, v in sorted(made.items())) +
@@ -524,6 +718,132 @@ def save_faults(work, file):
         fails.append(f"{file}: leg 1 loaded no edition after its split (split {sorted(made)}, loaded {sorted(loaded)})")
     if not any(ed in made for ed, *_x in played(leg1, file)):
         fails.append(f"{file}: no table of the split edition finished in leg 1")
+    return fails
+
+
+def arg_fixtures(log):
+    """{(edition, half): [[(home, away)] a round]} of the fixture lines of the Argentine Primera."""
+    out = {}
+    tag = "recomp: league sizes: arg_prm fixtures "
+    for line in log.split("\n"):
+        if line.startswith(tag):
+            head, _, rest = line[len(tag):].partition(":")
+            ed, half = head.split()
+            out[(int(ed), half)] = [[tuple(int(x) for x in m.split("-")) for m in r.split()]
+                                    for r in rest.split("|")[1:]]
+    return out
+
+
+def arg_round_faults(name, rounds, n):
+    fails = []
+    for i, r in enumerate(rounds):
+        clubs = [c for m in r for c in m]
+        if len(r) != n // 2 or len(set(clubs)) != len(clubs):
+            fails.append(f"{name} round {i + 1}: {len(r)} matches, {len(clubs) - len(set(clubs))} clubs twice")
+    return fails
+
+
+def arg_faults(log, year):
+    """The Argentine Primera (slice 15): each edition with a fixed list plays the form of its row. Zones: the clubs of
+    each zone of the zones line meet once in a half, each club meets two clubs of the other zone (its rival and a
+    drawn club) once each, the Clausura is the Apertura with the venues reversed, and in the start season every club,
+    rival and drawn pair comes from the research list. Derby round: every pair meets once, the derby pairs twice,
+    all in the derby round of the list."""
+    fails = []
+    lines = log.split("\n")
+    fixtures = arg_fixtures(log)
+    # The zones or derby line that each fixture line follows (an edition's plan is logged just before its lists).
+    plan_of = {}
+    last_plan = None
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm zones (\d+): list (-?\d+), (\d+) clubs of the list, rivals (\d+) "
+                     r"of the list, drawn (\d+) of the list, drawn round (\d+); A ([\d ]+); B ([\d ]+);", x)
+        if m:
+            last_plan = ("zones", int(m.group(3)), int(m.group(4)), int(m.group(5)), int(m.group(6)),
+                         [int(c) for c in m.group(7).split()], [int(c) for c in m.group(8).split()])
+        m = re.match(r"recomp: league sizes: arg_prm derby (\d+): list (-?\d+), (\d+) pairs of the list, derby round "
+                     r"(\d+); pairs ([\d\- ]+);", x)
+        if m:
+            last_plan = ("derby", int(m.group(3)), int(m.group(4)),
+                         [tuple(int(c) for c in p.split("-")) for p in m.group(5).split()])
+        m = re.match(r"recomp: league sizes: arg_prm fixtures (\d+) (\w+):", x)
+        if m:
+            plan_of[(int(m.group(1)), m.group(2))] = last_plan
+    seen = set()
+    for (ed, half), rounds in sorted(fixtures.items()):
+        season = edition_season("arg_prm", ed)
+        clubs, _m, zones, extra, want_rounds, halves = encoded_form("arg_prm", season)
+        name = f"arg_prm {ed} {half}"
+        seen.add(ed)
+        fails += arg_round_faults(name, rounds, clubs)
+        if len(rounds) != want_counts("arg_prm", season)[0]:
+            fails.append(f"{name}: {len(rounds)} rounds, want {want_counts('arg_prm', season)[0]}")
+        meet = {}
+        for r in rounds:
+            for h, a in r:
+                meet[frozenset((h, a))] = meet.get(frozenset((h, a)), 0) + 1
+        plan = plan_of.get((ed, half if half == "apertura" else "apertura"))
+        if zones:
+            if not plan or plan[0] != "zones":
+                fails.append(f"{name}: no zones line before its fixtures")
+                continue
+            in_list, rivals, drawn, _at, za, zb = plan[1:]
+            if len(za) != zones[0] or len(zb) != zones[1]:
+                fails.append(f"{name}: zones of {len(za)} and {len(zb)}, want {zones}")
+            for grp in (za, zb):
+                for i, x in enumerate(grp):
+                    for y in grp[i + 1:]:
+                        if meet.get(frozenset((x, y)), 0) != 1:
+                            fails.append(f"{name}: zone clubs {x} and {y} meet {meet.get(frozenset((x, y)), 0)} times")
+            for x in za + zb:
+                other = zb if x in za else za
+                inter = [y for y in other if meet.get(frozenset((x, y)))]
+                if len(inter) != extra or any(meet[frozenset((x, y))] != 1 for y in inter):
+                    fails.append(f"{name}: club {x} meets {len(inter)} clubs of the other zone, want {extra} once each")
+            if half == "clausura":
+                ap = fixtures.get((ed, "apertura"), [])
+                if [[(a, h) for h, a in r] for r in ap] != rounds:
+                    fails.append(f"{name}: not the Apertura with the venues reversed")
+            # A game started in its season: the club moves give the division the clubs of the database's date
+            # (December 2025 for a 2025 start), so a club of the list can be missing; at most 2 of each.
+            if ed == year and (in_list < clubs - 2 or rivals < zones[0] - 2 or drawn < zones[0] - 2):
+                fails.append(f"{name}: {in_list} clubs, {rivals} rivals and {drawn} drawn pairs of the list, want at "
+                             f"least {clubs - 2}, {zones[0] - 2} and {zones[0] - 2} (a game started in its season)")
+            if not halves and half == "clausura":
+                fails.append(f"{name}: a Clausura in a row of one table")
+        elif extra:
+            if not plan or plan[0] != "derby":
+                fails.append(f"{name}: no derby line before its fixtures")
+                continue
+            from_list, at, pairs = plan[1:]
+            derby = {frozenset(p) for p in pairs}
+            ids = {c for r in rounds for m in r for c in m}
+            for x in ids:
+                for y in ids:
+                    if x < y and meet.get(frozenset((x, y)), 0) != 1 + (frozenset((x, y)) in derby):
+                        fails.append(f"{name}: clubs {x} and {y} meet {meet.get(frozenset((x, y)), 0)} times")
+            if at - 1 < len(rounds) and {frozenset(m) for m in rounds[at - 1]} != derby:
+                fails.append(f"{name}: round {at} is not the derby round")
+            if ed == season == year and from_list < clubs // 2 - 2:
+                fails.append(f"{name}: {from_list} derby pairs of the list, want at least {clubs // 2 - 2} (a game "
+                             f"started in its season)")
+    for ed in range(year, year + 2):
+        clubs, _m, zones, extra, _r, _h = encoded_form("arg_prm", edition_season("arg_prm", ed))
+        if (zones or extra) and ed not in seen and any(f"arg_prm {ed}:" in x or f" {ed}, the class makes" in x
+                                                         for x in lines if "league sizes: arg_prm" in x):
+            fails.append(f"arg_prm {ed}: no fixture line of its zones or derby round")
+    fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines if "arg_prm fixed list not played" in x]
+    # The averages hold the clubs of each finished edition (ArgPrm::update_relegation_averages 0x406570 at its end).
+    for ed, n, _x, _lo, _hi in played(log, "arg_prm"):
+        if not re.search(rf"recomp: league sizes: arg_prm {ed}: averages of {n} clubs", log):
+            fails.append(f"arg_prm {ed}: no averages line of {n} clubs")
+    fails += [f"arg_prm: {x.split(': ', 1)[1]}" for x in lines
+              if re.search(r"league sizes: step: .* from Argentine Second Division to no division", x)]
+    print("arg_prm: fixed lists " + ", ".join(f"{ed} {h}: {len(r)} rounds" for (ed, h), r in sorted(fixtures.items())))
+    for x in lines:
+        if "league sizes: arg_prm " in x and "not in the division:" in x:
+            print("arg_prm: " + x.split(": ", 1)[1].split("; ")[0] + "; not in the division:" +
+                  x.split("not in the division:", 1)[1].split(";")[0])
     return fails
 
 
@@ -604,6 +924,27 @@ def self_test():
             not end_faults("crossed", good_end[:5] + [(6, 35)] + good_end[6:], 30, sp16) or
             split_ends("recomp: league sizes: wel_first split end 2026: 0:35 1:33", "wel_first") != {2026: [(0, 35), (1, 33)]}):
         bad.append(("end", end_faults("good", good_end, 30, sp16)))
+    sh = shortages("recomp: league sizes: step: kor_league (K League) 2004: 12 clubs, the row 13: no club of its "
+                   "nation with no division or in a spare division\nrecomp: league sizes: step: kor_league (K League) "
+                   "2005: 12 clubs, the row 13\nrecomp: league sizes: step: jap_j2 (J2) 2006: 12 clubs, the row 13: no "
+                   "club of its nation with no division or in a spare division\nrecomp: league sizes: step: kor_league (K League) "
+                   "2006: 12 clubs, the row 13: the division below has no club to give", "kor_league")
+    if sh != {2004: (12, 13)}:
+        bad.append(("shortages", sh))
+    # Odd sections (the K League 2013 log): a place written again inside its own section passes, one across fails.
+    sp7 = [(7, 2), (7, 2)]
+    kor_end = [(p, 38) for p in (0, 2, 3, 2, 4, 5, 5, 8, 9, 11, 10, 9, 12, 13)]
+    across = [(p, 38) for p in (0, 2, 3, 2, 4, 5, 8, 8, 9, 11, 10, 9, 12, 13)]
+    if end_faults("kor", kor_end, 26, sp7) or not end_faults("across", across, 26, sp7):
+        bad.append(("end odd", end_faults("kor", kor_end, 26, sp7), end_faults("across", across, 26, sp7)))
+    ex = "recomp: league sizes: ire_prm (League of Ireland Premier Division) down %d, ire_first (League of Ireland " \
+         "First Division) up %d, pairs 0, expected -1 up -1 down%s"
+    if (exchange_faults(ex % (2, 2, ""), "ire_first", 2013) or exchange_faults(ex % (1, 1, ""), "ire_first", 2013) or
+            not exchange_faults(ex % (1, 2, ": in pairs"), "ire_first", 2013) or
+            not exchange_faults(ex % (0, 1, ": in pairs"), "ire_first", 2013) or
+            not exchange_faults(ex % (0, 0, ""), "ire_first", 2013) or not exchange_faults("", "ire_first", 2013) or
+            exchange_faults("", "nir_first", 2013) or exchange_faults(ex % (3, 1, ": in pairs"), "ire_first", 2016)):
+        bad.append(("exchange", exchange_faults(ex % (1, 2, ": in pairs"), "ire_first", 2013)))
     if encoded_row("bra_nat_first", 2002) != (24, 2) or encoded_row("bra_nat_second", 2004) != (22, 1):
         bad.append(("encoded bra", encoded_row("bra_nat_first", 2002), encoded_row("bra_nat_second", 2004)))
     off = ("recomp: league sizes: bra_nat_first 2011: 2 meetings, no play-off\n"
@@ -611,6 +952,26 @@ def self_test():
     if no_playoff_faults(off, "bra_nat_first", 2) or len(no_playoff_faults("", "bra_nat_first", 2)) != 2 or \
             no_playoff_faults("", "bra_nat_first", 1) or no_playoff_faults("", "nor_prm", 2):
         bad.append(("no play-off", no_playoff_faults(off, "bra_nat_first", 2)))
+    # Slice 14: the table of a row of halves holds both halves (twice the row's meetings).
+    if (encoded_row("jap_j1", 2014) != (18, 2) or encoded_row("jap_j1", 2004) != (18, 2) or
+            encoded_row("kor_league", 2005) != (14, 2) or encoded_row("jap_j2", 2009) != (19, 2) or
+            edition_row("jap_j1", 2015) != (18, 2) or not encoded_halves("jap_j1", 2014) or
+            encoded_halves("jap_j1", 2004)):
+        bad.append(("encoded asia", encoded_row("jap_j1", 2014), encoded_row("kor_league", 2005)))
+    one = ("recomp: league sizes: jap_j1 2005: one table, no halves and no final (row 2004)\n"
+           "recomp: league sizes: jap_j1 2005: champion club 1234 (the top of the table)")
+    halves = ("recomp: league sizes: jap_j1 2015: halves and the final (row 2014), 3 stages\n"
+              "recomp: league sizes: jap_j1 2015: half of 18 clubs, 17 matches a club (the class makes 15)\n"
+              "recomp: league sizes: jap_j1 2015: second half from round 18 of 34 (the class's 16)\n"
+              "recomp: league sizes: jap_j1 2015: final of the halves")
+    if (not j1_faults(halves.replace("round 18", "round 16"), "jap_j1", {2015}) or
+            not j1_faults(halves.replace("final of the halves", "final of the halves not made"), "jap_j1", {2015}) or
+            j1_faults(halves.replace("final of the halves", "double winner, no final"), "jap_j1", {2015})):
+        bad.append(("j1 bound", j1_faults(halves.replace("round 18", "round 16"), "jap_j1", {2015})))
+    if (j1_faults(one, "jap_j1", {2005}) or j1_faults(halves, "jap_j1", {2015}) or
+            len(j1_faults(halves.replace("2015", "2005"), "jap_j1", {2005})) != 3 or
+            len(j1_faults(one.replace("2005", "2015"), "jap_j1", {2015})) != 5 or j1_faults("", "nor_prm", {2009})):
+        bad.append(("j1", j1_faults(one, "jap_j1", {2005}), j1_faults(halves, "jap_j1", {2015})))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
