@@ -21,3 +21,15 @@ Torneo de Transición 2016: a final of the two zone winners (29 May 2016, neutra
 Relegation by season (direct, by the averages unless named): 2 a season to 2011/12, with a promoción of the 17th and 18th of the averages against second division clubs that the game does not play; 3 in 2012/13 and 2013/14; none in the 2014 Transición; 2 in 2015; 1 in 2016; 4 in 2016/17, 2017/18 and 2018/19; none in 2019/20, 2020, 2021 and 2024; 2 in 2022; in 2023, 2025 and 2026 one by the averages and one by the annual table (the worst club of the annual table that the averages kept).
 Zones of 2026: a new draw on 10 December 2025 (reglamento 8.1.1). No rule places a promoted club.
 2027: no zones. One round-robin of 30 with a repeat of each club's clásico (30 fechas), the Apertura fechas 1 to 15 and the Clausura fechas 16 to 30, each a table from zero and a knockout of the first 16 (1 v 16, 2 v 15 and so on; the better place at home in the round of 16 and the quarter-finals, the semi-finals and the final neutral). Two relegations: one by the averages, one by the annual table. The reports say 2028 repeats it. I don't know the clásico pairs, the fecha of the repeat or the bracket after the round of 16: the game takes the 2026 rival pairs, fecha 23 and the bracket of the seeds.
+
+## The club list of a 2026/27 start
+
+The October 2026 database holds 20 clubs in the Argentine Premier Division. The other 10 clubs of the 2026 Primera
+(Aldosivi, Atlético Tucumán, Banfield, Belgrano, Estudiantes de Río Cuarto, Gimnasia y Esgrima de Mendoza, Instituto,
+Newell's Old Boys, Sarmiento de Junín and Talleres) are in its Second Division. With no club list for 2026/27, the club
+moves of a 2026 start filled the 10 places from A Lower Division (CASD Camioneros, CA Victoriano Arenas and others).
+
+The 2027 Primera is not known yet: the two clubs promoted from the Primera Nacional 2026 and the two clubs relegated
+in 2026 are still to be decided (La Gaceta, research notes of 15 November 2026). So the 2026/27 rows of
+rules-0.6.0/arg-usa-clubs.tsv repeat the 30 clubs of the 2026 Primera, the last known list (lead decision LD11 of
+slice 15). All 30 ids are the same in the October 2026 database. Replace these rows when the 2027 clubs are known.
