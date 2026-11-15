@@ -100,6 +100,8 @@ ROWS = {
     "ire_first@2017": (2017, 2018, "League of Ireland 2017: 3 down, the champion up, no play-off; 8 to 10 (item 251)"),
     "ire_first@2008": (2008, 2009, "League of Ireland 2008: 3 down, the champion up, no play-off; 10 to 12, Premier "
                        "12 to 10 (item 251)"),
+    "ire_first@2002": (2002, 2005, "League of Ireland from a 2002 start: editions 2003 and 2004 both play row 2003, and "
+                       "only edition 2004 moves its 1 down and 3 up on their own (item 251b review); 12 and 10 in 2005"),
     "ire_first@2003": (2003, 2005, "League of Ireland from a 2003 start: 10 and 12 at the start (item 260), 2004 1 down "
                        "and 3 up with no play-off, 12 and 10 in 2005"),
     "ire_first@2004": (2004, 2005, "League of Ireland from a 2004 start: 10 and 12 at the start, the list of row 2003 "

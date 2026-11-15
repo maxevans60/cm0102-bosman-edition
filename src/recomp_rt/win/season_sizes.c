@@ -1050,8 +1050,12 @@ RT_WRAP(00689c80, promote_relegate)
         single = cu > 0 && cl > 0 && (fits || (reach && !season_change_is_creating()));
         /* Items 251 and 251b: two classes that count the clubs of their data (cap 0) make their next tables of the
          * clubs that the chain leaves them, so each club moves on its own when both new counts are counts that the
-         * classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10), in a game of any start. */
-        if (!single && cu == 0 && cl == 0 && !season_change_is_creating())
+         * classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10), in a game of any start. Only in an
+         * edition that plays its row's own real season: editions 2003 and 2004 both play row 2003 (real 2004), and
+         * its 1 down and 3 up belong to edition 2004 only. */
+        int ed = (int16_t)rd16(g_mem, upper + COMP_YEAR);
+        if (!single && cu == 0 && cl == 0 && !season_change_is_creating() &&
+            real_starts(row_of_edition(fu_name, ed), ed) && real_starts(row_of_edition(fl_name, ed), ed))
             single = data_takes_count(fu_name, nu) && data_takes_count(fl_name, nl);
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "

@@ -308,8 +308,9 @@ static int class_size(const char *name, int season)
  * table row ("2004 Irish Premier Division" holds the clubs of the real 2005, row 2004 of ire_prm), and a League of
  * Ireland edition plays the row whose real season begins in its year (season_sizes_edition: edition 2004 plays row
  * 2003, real 2004). So an Irish division takes the list of its edition's row; any other division the list of the
- * season. With the sizes off the season stays. */
-static int list_season(const char *division, int season)
+ * season. With the sizes off the season stays. The club records of a division follow the same season
+ * (season_records_merge). */
+int season_clubs_list_season(const char *division, int season)
 {
     if (!season_sizes_on()) return season;
     if (!strncmp(division, "Irish Premier Division", 52)) return season_sizes_edition("ire_prm", season);
@@ -577,7 +578,7 @@ static void move_clubs(int season)
 {
     int first = -1, last = -1;
     for (int i = 0; i < nrows; i++)
-        if (rows[i].season == list_season(rows[i].division, season)) {
+        if (rows[i].season == season_clubs_list_season(rows[i].division, season)) {
             if (first < 0) first = i;
             last = i;
         }
@@ -661,7 +662,7 @@ static void move_clubs(int season)
     for (int r = first; r <= last; r++) {
         by_list[r - first] = -1;
         to_div[r - first] = -1;
-        if (rows[r].season != list_season(rows[r].division, season)) continue;
+        if (rows[r].season != season_clubs_list_season(rows[r].division, season)) continue;
         if (!season_divisions_list_on(rows[r].division, season)) continue;     /* slice 20 */
         int t = find_division(div, ncomps, rows[r].division);
         if (t < 0) {

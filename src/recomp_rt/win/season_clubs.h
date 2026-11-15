@@ -52,6 +52,10 @@ int season_clubs_load(const char *path);
  * or "(reserve team)"). Also used for the Norwegian second teams (season_nor_second.c, open item 111). */
 int season_clubs_reserve_name(const char *name);
 
+/* The season of the club lists and club records of a division in a start season: an Irish division takes those of
+ * its edition's row (item 260, season_sizes_edition), any other division those of the season. */
+int season_clubs_list_season(const char *division, int season);
+
 /* 1 when the club sits in a spare division (A Lower Division, A Premier Division: the nation's small clubs) that a
  * fill may take it from: not a Danish club (DenCup's pool). The size step of 0.7.2 slice 3 counts these clubs as
  * clubs with no division. */
