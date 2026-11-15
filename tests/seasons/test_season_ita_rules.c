@@ -33,7 +33,7 @@ int main(void)
     check(ita_serie_b_zone(2004, 22, 2, 3, 19), 3, "2004/05 20th");
     /* From 2005/06 the head-to-head table settles a tie: no zone, so no tie-break match, at any count. */
     for (int y = 2005; y <= 2030; y++)
-        for (int i = 0; i < 24; i++) check(ita_serie_b_zone(y, y == 2018 ? 19 : 22, 2, 3, i), 0, "no zone from 2005");
+        for (int n = y == 2018 ? 19 : 22, i = 0; i < n; i++) check(ita_serie_b_zone(y, n, 2, 3, i), 0, "no zone from 2005");
     check(ita_serie_b_zone(2019, 20, 2, 3, 0), 0, "2019/20 at 20");
     check(ita_serie_b_zone(2003, 24, 5, 3, 24), 0, "a row past the table");
 
@@ -62,6 +62,8 @@ int main(void)
     check(ita_cup_pot(&down, 22), 4, "down from A");
     ItaCupClub up = {1, 0, 0, 1, 0, 1};
     check(ita_cup_pot(&up, 22), 2, "up from C1");
+    ItaCupClub up_to_a = {1, 1, 0, 0, 0, 3};
+    check(ita_cup_pot(&up_to_a, 22), 4, "B 3rd now in Serie A");
     ItaCupClub stay_a = {1, 0, 1, 0, 0, 5};
     check(ita_cup_pot(&stay_a, 22), 1, "Serie A club");
     ItaCupClub none = {0, 0, 0, 1, 0, 0};

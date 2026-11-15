@@ -182,6 +182,7 @@ RT_WRAP(0064ff40, c1b_progress) { c1_progress(o_0064ff40); }
 /* ---- Coppa Italia seeding pots ---- */
 
 #define KEY_B 0x9cf574u
+#define KEY_SERIE_D 0x9cf58cu
 #define CLUB_LAST_DIVISION 0x5bu
 #define CLUB_LAST_PLACE 0x5fu
 
@@ -195,7 +196,13 @@ void season_sizes_ita_cup_pick(void)
     if (!season_sizes_on() || !readable(table) || count <= 0 || count > 100000) return;
     for (int i = 0; i < count; i++) {
         uint32_t club = table + CLUB_SIZE * (uint32_t)i, last = rd32(g_mem, club + CLUB_LAST_DIVISION);
+        uint32_t now = rd32(g_mem, club + CLUB_DIVISION), key = readable(now) ? rd32(g_mem, now) : 0;
         int place = (int8_t)g_mem[club + CLUB_LAST_PLACE];
+        /* Only a club in an Italian division now (Serie A to Serie D, the keys 0x9cf570 to 0x9cf58c): a club out of
+         * the leagues keeps an old last division and place. */
+        int italian = 0;
+        for (uint32_t k = KEY_A; k <= KEY_SERIE_D && !italian; k += 4) italian = key && key == rd32(g_mem, k);
+        if (!italian) continue;
         if (readable(last) && rd32(g_mem, last) == b && place > cup_b_count) cup_b_count = place;
     }
     if (cup_b_count > 0 && cup_b_count != SERIE_B_CLASS)
