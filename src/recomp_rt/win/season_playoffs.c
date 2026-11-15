@@ -175,8 +175,7 @@ static const SeasonLeagueRule *league_rule(const char *file, int season)
  * season_sizes.c reads it. */
 static const SeasonRule *row_of_season(const char *file, int season)
 {
-    int s = season_rules_last_season(season, file);
-    return s ? season_rules_find(s, file, 0) : NULL;
+    return season_rules_row_of(file, season);
 }
 
 /* 1 when the row of season gives a play-off that this kind plays: 4 places in a row, directly below the direct
@@ -186,7 +185,8 @@ static const SeasonRule *row_of_season(const char *file, int season)
 int season_playoffs_shape(const char *file, int season, int *direct)
 {
     const SeasonRule *r = row_of_season(file, season);
-    const SeasonLeagueRule *e = r ? league_rule(file, r->season) : NULL;
+    const SeasonLeagueRule *e = !r ? NULL : season_rules_moved(file) ? season_league_rule_of(file, r)
+                                                                      : league_rule(file, r->season);
     if (!e || e->po_up != PLAYOFF_CLUBS || r->up < 0) return 0;
     /* Two ties whose winners both go up (Série B from 2025) are not one play-off for one place. The test is wider than
      * season_playoffs_winners_up ("the two winners go up"): the rows of Belgium and Portugal 2008/09 say "two
@@ -542,8 +542,10 @@ RT_WRAP(00686940, playoff_result)
  * takes row Y - 1). */
 static int season_now(uint32_t obj, const char *file)
 {
-    if (!season_changing_rules() || season_change_is_creating()) return season_sizes_edition(file, season_start_year());
-    return season_sizes_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                        : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    /* The Irish calendar move: the edition itself, which season_rules_row_of maps to its row (41b for 2003). */
+    return season_rules_moved(file) ? year : season_sizes_edition(file, year);
 }
 
 /* No stage of a season before: a stage object that the class's start_new_season did not free stays in the heap

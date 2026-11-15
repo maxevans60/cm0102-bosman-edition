@@ -308,6 +308,7 @@ if(NOT WIN32)
         src/recomp_rt/win/season_template.c)
     target_include_directories(season_calendar_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_calendar COMMAND season_calendar_test)
+    add_test(NAME season_rules_readers COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/rules_readers_check.py")
     # The Italian rules of the league sizes (0.7.2 gap rows 30 and 32).
     add_executable(season_ita_rules_test tests/seasons/test_season_ita_rules.c src/recomp_rt/win/season_ita_rules.c)
     target_include_directories(season_ita_rules_test PRIVATE src/recomp_rt/win)
