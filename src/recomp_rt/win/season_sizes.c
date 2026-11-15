@@ -11,6 +11,7 @@
 #include "season_divisions_ita.h"
 #include "season_league.h"
 #include "season_template.h"
+#include "season_cup_sizes_west.h"
 #include "season_split.h"
 #include "season_size_step.h"
 #include "season_clubs.h"
@@ -18,7 +19,6 @@
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
-#include "season_cup_sizes_west.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -48,7 +48,12 @@ CASES = {
     "shrink": (2021, 2023, ["England", "France"], {"fra_first": (2023, 18)},
                "D23: Ligue 1 shrinks from 20 to 18 in 2023/24 through the real places of 2022/23 (4 down, 2 up)"),
     "italy": (2003, 2004, ["England", "Italy"], {"ita_ser_a": (2004, 20)},
-              "Serie A 18 to 20 in 2004/05: the class holds 18 until the Italy slice grows it (slice 9)"),
+              "Serie A 18 to 20 in 2004/05 (slice 9 grows the class to 20)"),
+    # Slice 9: a 2001 game with changing rules on to 2005/06: Serie B 20, 24 in 2003/04, 22 from 2004/05; Serie A
+    # 20 from 2004/05; C1/A 19 in 2004/05 and 18 again in 2005/06.
+    "italy2001": (2001, 2005, ["England", "Italy"],
+                  {"ita_ser_a": (2004, 20), "ita_ser_b": (2004, 22), "ita_ser_c1a": (2005, 18)},
+                  "Italy from 2001 to 2005/06: Serie B 24 then 22, Serie A 20, Serie C1/A 19 then 18"),
     "conference": (2005, 2007, ["England"], {"eng_conf": (2006, 24)},
                    "D15 (slice 8): League Two sends 2 down and the Conference 2 up (the champion and the play-off "
                    "winner) at each change; the Conference grows from 22 to 24 in 2006/07"),
