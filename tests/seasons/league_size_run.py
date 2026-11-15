@@ -534,11 +534,14 @@ def lone_downs(log, file):
 
 
 def lone_guards(log, file):
-    """{edition: clubs that go down} of the guard lines of a file (fewer than its relegation places)."""
+    """{edition: clubs that go down} of the guard lines of a file (fewer than its relegation places). The count is
+    worked out again from the line's places, pool and counts (season_size_lone_down), so a wrong guard fails: -1."""
     out = {}
-    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): relegation places \d+, (\d+) go down: "
-                         % re.escape(file), log):
-        out[int(m.group(1))] = int(m.group(2))
+    for m in re.finditer(r"recomp: league sizes: %s \(.*?\) (\d+): relegation places (\d+), (\d+) go down: "
+                         r"(\d+) clubs with no division can come up, (\d+) clubs to (-?\d+)" % re.escape(file), log):
+        places, down, pool, have, want = (int(m.group(k)) for k in range(2, 7))
+        most = 0 if want < 0 else max(0, pool + have - want)
+        out[int(m.group(1))] = down if down == min(places, most) else -1
     return out
 
 
@@ -1164,8 +1167,9 @@ def self_test():
     if ld != {2009: 2} or row_down("wel_first", 2009) != 6 or row_down("wel_first", 2025) != 2:
         bad.append(("lone", ld, row_down("wel_first", 2009), row_down("wel_first", 2025)))
     lg = lone_guards("recomp: league sizes: kor_league (K League) 2012: relegation places 2, 1 go down: 0 clubs with "
-                     "no division can come up, 13 clubs to 12\n", "kor_league")
-    if (lg != {2012: 1} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
+                     "no division can come up, 13 clubs to 12\nrecomp: league sizes: kor_league (K League) 2013: "
+                     "relegation places 2, 2 go down: 0 clubs with no division can come up, 12 clubs to 12\n", "kor_league")
+    if (lg != {2012: 1, 2013: -1} or row_down("kor_league", 2012) != 2 or row_down("kor_league", 2023) != 1 or
             row_down("kor_league", 2025) != 0 or edition_season("kor_league", 2024) != 2023):
         bad.append(("lone kor", lg, row_down("kor_league", 2012), row_down("kor_league", 2023),
                     row_down("kor_league", 2025), edition_season("kor_league", 2024)))

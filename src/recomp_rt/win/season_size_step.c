@@ -89,7 +89,7 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
 int season_size_lone_down(int down, int pool, int have, int want)
 {
     if (down <= 0) return 0;
-    if (want < 0) want = have;
+    if (want < 0) return 0;     /* no row: the step takes no club back, so none goes */
     int most = pool + have - want;
     if (most < 0) most = 0;
     return down < most ? down : most;
