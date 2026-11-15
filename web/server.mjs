@@ -17,14 +17,13 @@
 // request whose ?v= names the file's version (files.json) may be kept by the browser for good: the version changes
 // when the file does.
 import http from 'node:http';
-import { createHash, randomBytes } from 'node:crypto';
-import { createReadStream, createWriteStream, existsSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cloudFromEnv, paddleFromEnv } from './cloud.mjs';
 import { MAX_SENT_SAVE, createStats, statsStore } from './stats.mjs';
 import { s3FromEnv } from './s3.mjs';
+import { spool, unspool } from './spool.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
@@ -33,7 +32,7 @@ const SEASON_TABLES = ['rules.tsv', 'names.tsv', 'clubs.tsv', 'club_records.tsv'
 export const PAGE_FILES = ['index.html', 'loader.js', 'layout.js', 'touch.js', 'keyboard.js', 'saves.js', 'ui.js', 'account.js', 'savedit.js', 'dataset.js', 'datasets.js', 'zip.js', 'editor.js', 'setspanel.js', 'tactics.js', 'report.js', 'vault.js', 'stats.js', 'engine.js', 'direct.js', 'sw.js',
   'manifest.webmanifest', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'privacy.html', 'terms.html', 'refunds.html', 'pricing.html'];
 // The server's own files; it also imports saves.js, savedit.js, dataset.js and zip.js of the page (PAGE_FILES).
-export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'admin.html', 'package.json'];
+export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'spool.mjs', 'admin.html', 'package.json'];
 const PAGES = Object.fromEntries([['/', 'index.html'], ...['privacy', 'terms', 'refunds', 'pricing'].map((p) => [`/${p}`, `${p}.html`]),
   ...PAGE_FILES.map((f) => [`/${f}`, f])]);
 // The pages of the site's terms: the seller, the contact and the price come from the settings (CM_SELLER, CM_CONTACT,
@@ -126,21 +125,6 @@ function readJson(req, limit) {
     req.on('error', bad);
   });
 }
-// The body of a request (a sent save through the server) into a file on disk, with its sha256 for the store's
-// signature: { path, size, sha256 }. At most limit bytes. The caller removes the file.
-function spool(req, limit) {
-  const path = join(tmpdir(), `cm0102-sent-${randomBytes(8).toString('hex')}.gz`);
-  return new Promise((ok, bad) => {
-    const hash = createHash('sha256'), out = createWriteStream(path);
-    let n = 0;
-    const fail = (err) => { req.destroy(); out.destroy(); rmSync(path, { force: true }); bad(err); };
-    req.on('data', (c) => { n += c.length; if (n > limit) fail(Object.assign(new Error('too large'), { status: 413 })); else hash.update(c); });
-    req.on('error', fail);
-    out.on('error', fail);
-    out.on('finish', () => ok({ path, size: n, sha256: hash.digest('hex') }));
-    req.pipe(out);
-  });
-}
 let reportSpooled = 0;                               // bytes of sent saves on disk now (save-body), at most two of the largest
 const json = (res, status, body) => {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
@@ -178,7 +162,7 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
           if (reportSpooled + length > 2 * MAX_SENT_SAVE) throw Object.assign(new Error('the server is taking other saves: try again in a minute'), { status: 503 });
           reportSpooled += length;
           held = length;
-          file = await spool(req, length);
+          file = await spool(req, length, 'cm0102-sent-');
           return file;
         }, length);
         if (!held) req.resume();
@@ -188,7 +172,7 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
         throw err;
       } finally {
         reportSpooled -= held;
-        if (file) rmSync(file.path, { force: true });
+        unspool(file);
       }
       return;
     }

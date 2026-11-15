@@ -3,6 +3,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { randomFillSync } from 'node:crypto';
 import http from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -163,6 +164,27 @@ test('the sign-in refuses a wrong state, a cancel, an unverified email and a tok
   assert.match(html, /"ok":true/);
 });
 
+test('a save larger than 64 MB packed goes through the server by way of its disk, and comes back the same', async () => {
+  // Long careers make large saves (a player's 446 MB, 15 November 2026); the server once held each upload in memory
+  // and took 64 MB packed at most. Random bytes do not pack, so this one is about 70 MB packed.
+  google.user = { sub: '2000777', email: 'listed@example.com', email_verified: true, name: 'Big' };
+  const b = browser();
+  await b.signIn();
+  const raw = Buffer.alloc(0x416ec + (70 << 20));
+  raw.writeInt32LE(2, 0); raw.writeInt32LE(1, 8); raw.writeUInt32LE(0x416ec, 12);
+  randomFillSync(raw, 0x416ec);
+  const gz = gzipSync(raw, { level: 1 });
+  assert.ok(gz.length > 64 << 20);
+  const r = await b.send('PUT', `/api/saves/${encodeURIComponent('Hertha BSC 2011-12-11.sav')}`, gz, { 'x-base-etag': 'none', 'x-save-time': '1762770000000' });
+  assert.equal(r.status, 200, await r.clone().text());
+  assert.equal((await r.json()).rawSize, raw.length);
+  const back = await b.get(`/api/saves/${encodeURIComponent('Hertha BSC 2011-12-11.sav')}`);
+  assert.ok(gunzipSync(Buffer.from(await back.arrayBuffer())).equals(raw), 'the same bytes come back');
+  const { readdirSync } = await import('node:fs');
+  assert.equal(readdirSync(tmpdir()).filter((n) => n.startsWith('cm0102-up-')).length, 0, 'no file left on disk');
+  await b.send('DELETE', `/api/saves/${encodeURIComponent('Hertha BSC 2011-12-11.sav')}`);
+});
+
 test('cloud saves: store, list, fetch, conflicts, limits and checks', async () => {
   google.user = { sub: '2000002', email: 'listed@example.com', email_verified: true, name: 'Listed' };
   const b = browser();
@@ -172,7 +194,7 @@ test('cloud saves: store, list, fetch, conflicts, limits and checks', async () =
   assert.equal(me.user.admin, false, 'not an admin: no Admin panel button');
   assert.equal(me.user.cloudFrom, 'given');
   const empty = await (await b.get('/api/saves')).json();
-  assert.deepEqual({ ...empty, store: undefined }, { saves: [], maxSaves: 3, maxPacked: 64 << 20, maxRaw: 256 << 20, store: undefined },
+  assert.deepEqual({ ...empty, store: undefined }, { saves: [], maxSaves: 3, maxPacked: 400 << 20, maxRaw: 1024 << 20, store: undefined },
     'the list tells the page what one save may be, so it sends none larger');
   assert.match(empty.store, /^[0-9a-f]{18}$/, 'the store\'s id (meta/store.json), the same in each list');
   assert.equal(JSON.parse(s3fake.objects.get('meta/store.json').body).id, empty.store);
@@ -341,7 +363,7 @@ test('direct: a save goes to the store with a link, is checked, and takes its pl
   assert.equal(r.status, 409);
   assert.ok(s3fake.objects.get(final).body.equals(other));
   // Too large, refused before the link.
-  assert.equal((await ask('Big.sav', 'put', { size: 65 << 20, rawSize: 1000, base: 'none' })).status, 413);
+  assert.equal((await ask('Big.sav', 'put', { size: (400 << 20) + 1, rawSize: 1000, base: 'none' })).status, 413, 'past the limit (400 MB packed)');
 });
 
 test('direct: the server tries the way a page would go (a signed upload link, the browser\'s preflight from the site), and goes through itself when it fails', async () => {
@@ -431,11 +453,12 @@ test('the sync plan: what goes up, what comes down, what is kept twice', async (
   assert.equal(otherDeviceName('Arsenal.sav', new Set(['arsenal (other device).sav'])), 'Arsenal (other device) (2).sav');
 });
 
-test('uploads in memory at once stay within the budget: one past it waits for the next sync (503)', async () => {
+test('saves through the server go to its disk, two of the largest at once: a third waits for the next sync (503)', async () => {
+  // A save no longer goes through memory (spool.mjs): what bounds the machine is its disk, two saves of maxPacked.
   const s3 = createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
   const gz = gzipSync(fakeSaveBytes(7));
   const cloud = createCloud({ s3, clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'x'.repeat(40),
-    cloudFor: 'everyone', google: google.google, log: () => {}, uploadBudget: gz.length + 10, isAdmin: (e) => e === 'budget@example.com' });
+    cloudFor: 'everyone', google: google.google, log: () => {}, maxPacked: gz.length + 10, isAdmin: (e) => e === 'budget@example.com' });
   const two = createApp({ gameDir: join(tmp, 'game'), buildDir: join(tmp, 'build'), manifestPath: join(tmp, 'manifest.tsv'), cloud });
   await new Promise((r) => two.listen(0, '127.0.0.1', r));
   const at = `http://127.0.0.1:${two.address().port}`;
@@ -444,23 +467,26 @@ test('uploads in memory at once stay within the budget: one past it waits for th
     const b = browser(at);
     await b.signIn();
     assert.equal((await (await b.get('/api/me')).json()).user.admin, true, 'an admin: the page shows the Admin panel button');
-    // The first upload sends half its body and waits: it holds its size of the budget.
+    // Two uploads send part of their body and wait: each holds its size of the disk.
     const cookie = [...b.jar].map(([k, v]) => `${k}=${v}`).join('; ');
-    let firstStatus;
-    const first = new Promise((resolveFirst) => {
-      const req = http.request(`${at}/api/saves/one.sav`, { method: 'PUT', headers: { cookie, 'x-cm': '1', 'content-length': gz.length,
-        'content-type': 'application/gzip' } }, (res) => { firstStatus = res.statusCode; res.resume(); res.on('end', resolveFirst); });
-      req.write(gz.subarray(0, 100));
-      setTimeout(() => req.end(gz.subarray(100)), 400);
-    });
+    const slow = (name) => {
+      let status;
+      const done = new Promise((resolveSlow) => {
+        const req = http.request(`${at}/api/saves/${name}`, { method: 'PUT', headers: { cookie, 'x-cm': '1', 'content-length': gz.length,
+          'content-type': 'application/gzip' } }, (res) => { status = res.statusCode; res.resume(); res.on('end', resolveSlow); });
+        req.write(gz.subarray(0, 100));
+        setTimeout(() => req.end(gz.subarray(100)), 400);
+      });
+      return done.then(() => status);
+    };
+    const first = slow('one.sav'), second = slow('two.sav');
     await new Promise((r) => setTimeout(r, 150));
-    const busy = await b.send('PUT', '/api/saves/two.sav', gz);
-    assert.equal(busy.status, 503, 'past the budget while the first is in memory');
+    const busy = await b.send('PUT', '/api/saves/three.sav', gz);
+    assert.equal(busy.status, 503, 'a third while two are on disk');
     assert.equal(busy.headers.get('retry-after'), '30');
-    await first;
-    assert.equal(firstStatus, 200);
-    const again = await b.send('PUT', '/api/saves/two.sav', gz);
-    assert.equal(again.status, 200, 'the budget is free again once the first is stored');
+    assert.deepEqual([await first, await second], [200, 200]);
+    const again = await b.send('PUT', '/api/saves/three.sav', gz);
+    assert.equal(again.status, 200, 'the disk is free again once they are stored');
   } finally {
     two.close();
   }

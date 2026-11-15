@@ -126,8 +126,9 @@ export function createS3({ endpoint, bucket, accessKeyId, secretAccessKey, regio
   return {
     host,
     // A file on disk ({ path, size, sha256 }) as the object, streamed. Resolves to the new ETag.
-    async putFile(key, file, { type = 'application/octet-stream' } = {}) {
-      const r = await request('PUT', key, { headers: { 'content-type': type }, file });
+    async putFile(key, file, { type = 'application/octet-stream', metadata = {} } = {}) {
+      const headers = { 'content-type': type, ...Object.fromEntries(Object.entries(metadata).map(([k, v]) => [`x-amz-meta-${k}`, String(v)])) };
+      const r = await request('PUT', key, { headers, file });
       if (r.status !== 200) throw fail(r, `put ${key}`);
       return r.headers.etag;
     },

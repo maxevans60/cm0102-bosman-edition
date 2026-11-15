@@ -11,7 +11,9 @@
 //   grants/<google id>.json              { sub, email, by, at }: Cloud Saves an admin gave (the admin page)
 //   saves/<google id>/<name, base64url>.gz the save, gzip-compressed by the page; metadata raw-size and saved (ms)
 import { randomBytes } from 'node:crypto';
+import { createReadStream } from 'node:fs';
 import { createGunzip } from 'node:zlib';
+import { spool, unspool } from './spool.mjs';
 import { GOOGLE, SignInError, googleFinish, googleStart, readCookies, sealer, setCookie } from './auth.mjs';
 import { PADDLE_API, accountRef, applySubscription, checkPaddleSignature, openAccountRef, portalUrl } from './billing.mjs';
 import { S3Error, s3FromEnv } from './s3.mjs';
@@ -21,8 +23,12 @@ import { zipEntries } from './zip.js';
 
 const SESSION = 'cm_session', OAUTH = 'cm_oauth';
 const SESSION_DAYS = 30;
-export const MAX_GZ = 64 << 20;            // what one upload may be, compressed
-export const MAX_RAW = 256 << 20;          // and uncompressed (a save of the full database is some tens of MB)
+// What one save may be, compressed and as it is. Long careers make large saves (a player's was 446 MB, 15 November
+// 2026), where 64 MB and 256 MB once were the limits, set when the server held each upload in memory. The server now
+// streams a save through its disk (spool.mjs), and a page with direct uploads sends it straight to the store. Fly
+// secrets CM_CLOUD_MAX_PACKED_MB and CM_CLOUD_MAX_RAW_MB set others.
+export const MAX_GZ = 400 << 20;
+export const MAX_RAW = 1024 << 20;
 export const MAX_SET_ZIP = 48 << 20;       // a data set as a zip (the 3.9.68 data: about 61 MB, some 20 MB zipped)
 
 const b64u = (s) => Buffer.from(s, 'utf8').toString('base64url');
@@ -79,24 +85,26 @@ function readBody(req, limit) {
   });
 }
 
-// What the gzip body holds: its length and whether it is a saved game of CM 01/02 (the header of saves.js).
-function inspectSave(gz) {
+// What the gzip file holds (a save on disk, spool.mjs): its length and whether it is a saved game of CM 01/02 (the
+// header of saves.js), read through without keeping it.
+function inspectSave(path, maxRaw) {
   return new Promise((resolveInspect) => {
-    const g = createGunzip();
+    const g = createGunzip(), src = createReadStream(path);
     const head = [];
     let total = 0, headLen = 0, settled = false;
-    const done = (v) => { if (!settled) { settled = true; resolveInspect(v); } };
+    const done = (v) => { if (!settled) { settled = true; src.destroy(); resolveInspect(v); } };
     g.on('data', (c) => {
       total += c.length;
       if (headLen < SAVE_HEADER) { head.push(c); headLen += c.length; }
-      if (total > MAX_RAW) { done({ why: `it is larger than ${MAX_RAW >> 20} MB` }); g.destroy(); }
+      if (total > maxRaw) { done({ why: `it is larger than ${maxRaw >> 20} MB` }); g.destroy(); }
     });
     g.on('end', () => {
       const h = Buffer.concat(head);
       done({ why: checkSave(new Uint8Array(h.buffer, h.byteOffset, h.length), total), total });
     });
     g.on('error', () => done({ why: 'the upload is not gzip data' }));
-    g.end(gz);
+    src.on('error', () => done({ why: 'the upload was not kept' }));
+    src.pipe(g);
   });
 }
 
@@ -109,7 +117,7 @@ ${ok ? 'setTimeout(() => window.close(), 300);' : ''}</script>`;
 // paddle: { env, clientToken, priceIds, webhookSecret, apiKey, apiBase } to sell Cloud Saves with Paddle, or null.
 // price: how the page names the price ("$5 a month").
 export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicUrl = null, cloudFor = 'listed', cloudUsers = [],
-  upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, google = GOOGLE, paddle = null, price = '$5 a month', log = (t) => console.log(t),
+  upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, maxRaw = MAX_RAW, google = GOOGLE, paddle = null, price = '$5 a month', log = (t) => console.log(t),
   onAccountDeleted = () => {}, uploadBudget = 160 << 20, isAdmin = () => false, direct: directWanted = true, origins = ['*'],
   storeTtl = 10 * 60e3 }) {
   const seal = sealer(sessionSecret);
@@ -193,8 +201,8 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     directReady.then(() => { if (direct) sweepIncoming(); });
     setInterval(() => { if (direct) sweepIncoming(); }, 6 * 3600e3).unref?.();
   }
-  // The uploads in memory at once (readBody holds each whole, for its check and its signature): a save is at most
-  // MAX_GZ, a data set MAX_SET_ZIP. Past uploadBudget an upload is turned away with 503 and goes at the next sync, so a
+  // The uploads in memory at once (readBody holds each whole, for its check and its signature): a data set, at most
+  // MAX_SET_ZIP (a save goes through the disk instead: putSave). Past uploadBudget an upload is turned away with 503 and goes at the next sync, so a
   // few players saving at once cannot run the server's small machine out of memory (web/deploy/README.md).
   let held = 0;
   const hold = (req, res, max) => {
@@ -400,17 +408,29 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     return saves.filter(Boolean).sort((a, b) => (b.saved ?? 0) - (a.saved ?? 0));
   }
 
+  // A save through this server goes to a file on its disk, is checked from there and streamed to the store: the
+  // machine's memory holds none of it. At most two of the largest on disk at once; past that, 503 and the next sync.
+  let spooled = 0;
   async function putSave(req, res, user, name) {
     const length = Number(req.headers['content-length']);
     if (length > maxPacked) { req.resume(); send(res, 413, { error: tooPacked }); return; }
-    const free = hold(req, res, maxPacked);
-    if (!free) return;
-    try { await storeSave(req, res, user, name); } finally { free(); }
+    const n = Math.min(length || maxPacked, maxPacked);
+    if (spooled + n > 2 * maxPacked && spooled > 0) {
+      req.resume();
+      res.writeHead(503, { 'Content-Type': 'application/json', 'Retry-After': '30', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify({ error: 'the server is busy with other uploads: it goes at the next sync' }));
+      return;
+    }
+    spooled += n;
+    let file = null;
+    try {
+      file = await spool(req, maxPacked);
+      await storeSave(req, res, user, name, file);
+    } finally { spooled -= n; unspool(file); }
   }
 
-  async function storeSave(req, res, user, name) {
-    const body = await readBody(req, maxPacked);
-    const { why, total } = await inspectSave(body);
+  async function storeSave(req, res, user, name, file) {
+    const { why, total } = await inspectSave(file.path, maxRaw);
     if (why) { send(res, 422, { error: `${name} was not stored: ${why}` }); return; }
     const key = saveKey(user.sub, name);
     const current = await s3.head(key);
@@ -426,8 +446,8 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     }
     const savedAt = Number(req.headers['x-save-time']);
     const saved = Number.isFinite(savedAt) && savedAt > 0 ? Math.floor(savedAt) : Date.now();
-    const etag = await s3.put(key, body, { type: 'application/gzip', metadata: { 'raw-size': total, saved } });
-    send(res, 200, { name, etag, size: body.length, rawSize: total, saved });
+    const etag = await s3.putFile(key, file, { type: 'application/gzip', metadata: { 'raw-size': total, saved } });
+    send(res, 200, { name, etag, size: file.size, rawSize: total, saved });
   }
 
   // The direct steps of a save (direct above). ?direct=put (POST { size, rawSize, saved, base }): the checks of an
@@ -462,7 +482,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       const size = Math.floor(Number(body.size)), rawSize = Math.floor(Number(body.rawSize));
       const saved = Number.isFinite(Number(body.saved)) && Number(body.saved) > 0 ? Math.floor(Number(body.saved)) : Date.now();
       if (!(size > 0) || size > maxPacked) { send(res, 413, { error: tooPacked }); return; }
-      if (!(rawSize > 0) || rawSize > MAX_RAW) { send(res, 422, { error: `${name} was not stored: it is larger than ${MAX_RAW >> 20} MB` }); return; }
+      if (!(rawSize > 0) || rawSize > maxRaw) { send(res, 422, { error: `${name} was not stored: it is larger than ${maxRaw >> 20} MB` }); return; }
       if (await conflict(body.base ?? undefined)) return;
       const upload = incomingKey(user.sub, 'gz');
       const link = s3.presign('PUT', upload, { headers: { 'content-type': 'application/gzip', 'content-length': size,
@@ -667,7 +687,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       if (!(await hasCloud(user))) { req.resume(); send(res, 403, { error: 'cloud saves are not on this account\'s plan' }); return; }
       if (path === '/api/saves') {
         if (method !== 'GET') { send(res, 405, { error: 'GET only' }); return; }
-        send(res, 200, { saves: await listSaves(user), maxSaves, maxPacked, maxRaw: MAX_RAW, store: await theStore() });
+        send(res, 200, { saves: await listSaves(user), maxSaves, maxPacked, maxRaw, store: await theStore() });
         return;
       }
       let name;
@@ -725,6 +745,7 @@ export function cloudFromEnv(env = process.env, log, { onAccountDeleted, isAdmin
     publicUrl: env.CM_PUBLIC_URL ? env.CM_PUBLIC_URL.replace(/\/+$/, '') : null,
     cloudFor: env.CM_CLOUD_FOR === 'everyone' ? 'everyone' : 'listed', cloudUsers: (env.CM_CLOUD_USERS ?? '').split(','),
     upgradeUrl: env.CM_UPGRADE_URL || null, maxSaves: Number(env.CM_CLOUD_MAX_SAVES) || 30, maxSets: Number(env.CM_CLOUD_MAX_SETS) || 5, log,
+    maxPacked: (Number(env.CM_CLOUD_MAX_PACKED_MB) || MAX_GZ >> 20) << 20, maxRaw: (Number(env.CM_CLOUD_MAX_RAW_MB) || MAX_RAW >> 20) << 20,
     price: env.CM_PRICE || '$5 a month', paddle: paddleFromEnv(env), onAccountDeleted, isAdmin,
     uploadBudget: (Number(env.CM_UPLOAD_BUDGET_MB) || 160) << 20,
     // Direct to the store (createCloud, "direct"): off with CM_DIRECT=off; on without setting the rules with CM_DIRECT=on

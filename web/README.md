@@ -404,10 +404,15 @@ deleted until the subscription is canceled. In Paddle (start in the sandbox, `sa
 | `CM_CLOUD_MAX_SETS` | the most data sets an account keeps in the cloud (default 5) |
 | `CM_DIRECT` | `off`: saves and data sets go through the server, not straight to the store; `on`: straight, with the bucket's CORS rules set in the store's console (the server does not set them) |
 | `CM_CORS_ORIGINS` | the addresses the bucket's CORS rules let in, comma separated (default `CM_PUBLIC_URL` and the fly.dev address) |
-| `CM_UPLOAD_BUDGET_MB` | the uploads the server holds in memory at once, through the server (default 160) |
+| `CM_UPLOAD_BUDGET_MB` | the data set uploads the server holds in memory at once, through the server (default 160) |
+| `CM_CLOUD_MAX_PACKED_MB`, `CM_CLOUD_MAX_RAW_MB` | what one cloud save may be, compressed and as it is (default 400 and 1024) |
 
 A good start prints `accounts and cloud saves: on`. Each save is gzip-compressed by the browser; the server checks that
-it is a saved game of CM 01/02 (64 MB compressed at most, 256 MB as it is) before it stores it. The saves list tells
+it is a saved game of CM 01/02 (400 MB compressed at most, 1 GB as it is; `CM_CLOUD_MAX_PACKED_MB` and
+`CM_CLOUD_MAX_RAW_MB` set others) before it stores it. A save that comes through the server goes to a file on its
+disk (`spool.mjs`), is checked from there and streamed to the store, so the machine's memory holds none of it (at
+most two of the largest on disk at once; a third waits for the next sync). The limits were 64 MB and 256 MB while the
+server held each upload in memory; long careers make larger saves (a player's was 446 MB). The saves list tells
 the page both limits (`maxPacked`, `maxRaw`), so a larger save is not sent at all: it stays in the browser, Saved games
 says "Too large for the cloud", a message says so once, and the sync goes on with the other saves. It goes again only
 when it changes. Before (a player's log, 15 November 2026: "Hertha BSC 2011-12-11.sav up: HTTP 413"), the 413 stopped
