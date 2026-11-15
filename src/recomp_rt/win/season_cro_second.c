@@ -200,7 +200,8 @@ static int barred_in(uint32_t club, int l, int y)
     return 0;                                   /* from 2025: up to the Prva NL; the same-tier case I don't know */
 }
 
-/* The season the hooks of st_mark and st_shift_up read (they take the club only): the season played. */
+/* The season the hooks of st_mark and st_shift_up read (they take the club only): the season played. barred_up
+ * reads the rule of the next season (cur_year + 1), the season the side would go up into, as gre_after_chain does. */
 static int cur_year;
 
 static int barred_up(uint32_t club) { return barred_in(club, 0, cur_year + 1); }
@@ -365,7 +366,7 @@ static int stay_up(int y)
 static int season_cro_barred(uint32_t club, uint32_t div)
 {
     if (switched_off() || !croatian(club)) return 0;
-    int y = season_start_year(), barred = barred_in(club, level_of(div), y);
+    int y = st_season_year(KEY_A1), barred = barred_in(club, level_of(div), y);
     if (barred && log_on())
         fprintf(stderr, "recomp: cro second: new game: %.51s may not play the %s (rule of %d)\n", name_of(club),
                 level_of(div) ? "Second Division" : "First Division", rule_year(y));

@@ -440,8 +440,13 @@ static int gre_barred(uint32_t club, uint32_t div)
 {
     if (switched_off() || !b_side(club) || !st_readable(div)) return 0;
     if (div == st_comp_of(KEY_PRM)) return 1;
+    /* A side held out of the Lower Division's list (division 0 until 0x5ead60 gives it back) may not be taken by the
+     * size step that GrePrm::set_up_rules runs in between (0x5eafc3, season_sizes.c up_ok): give_back would put it
+     * back in the Lower Division and leave the second tier one club short. */
+    for (int k = 0; k < nheld; k++)
+        if (held[k] == club) return 1;
     read_group();
-    return second_tier(div) && rule_year(season_start_year()) < 2021;
+    return second_tier(div) && rule_year(st_season_year(KEY_PRM)) < 2021;
 }
 
 static const SecondTeamHooks gre_hooks = {gre_before_status, gre_before_chain, gre_after_chain, gre_barred};

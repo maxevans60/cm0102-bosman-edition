@@ -331,7 +331,7 @@ static int ire_barred(uint32_t club, uint32_t div)
 {
     if (switched_off() || !reserve_side(club) || !st_readable(div)) return 0;
     if ((int32_t)rd32(g_mem, div) != (int32_t)rd32(g_mem, KEY_PREMIER)) return 0;
-    return rule_bars(season_start_year());
+    return rule_bars(st_season_year(KEY_PREMIER));
 }
 
 static const SecondTeamHooks ire_hooks = {ire_before_status, ire_before_chain, ire_after_chain, ire_barred};

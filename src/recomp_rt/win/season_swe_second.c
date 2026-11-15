@@ -207,7 +207,7 @@ static int top_division(uint32_t div)
 int season_swe_barred(uint32_t club, uint32_t div)
 {
     if (switched_off() || !barred_club(club) || !top_division(div)) return 0;
-    return year_bars(rule_year_of(season_start_year()));   /* the first Swedish season of the game (+0x40 holds it) */
+    return year_bars(rule_year_of(st_season_year(KEY_PREMIER)));
 }
 
 /* The six group stages of the Second Division league: the league (North) and [league +0xc][0..4]. */

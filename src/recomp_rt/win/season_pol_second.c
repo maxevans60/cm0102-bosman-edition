@@ -292,7 +292,7 @@ int season_pol_barred(uint32_t club, uint32_t div);
 int season_pol_barred(uint32_t club, uint32_t div)
 {
     if (switched_off() || !reserve_side(club) || !st_readable(div)) return 0;
-    int y = rule_year_of(season_start_year());
+    int y = rule_year_of(st_season_year(KEY_TOP));
     const char *why;
     if (div == st_comp_of(KEY_TOP)) return top_barred(y);
     if (div == st_comp_of(KEY_SECOND)) return second_barred(club, y, &why);

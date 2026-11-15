@@ -12,6 +12,7 @@
 #include "win.h"
 #include "season_second_teams.h"
 #include "season_level_ties.h"
+#include "season.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,6 +76,14 @@ uint32_t st_league_of(uint32_t key)
     if (!st_readable(leagues) || id < 0 || id > 0xffff) return 0;
     uint32_t league = rd32(g_mem, leagues + 4u * (uint32_t)id);
     return st_readable(league) ? league : 0;
+}
+
+int st_season_year(uint32_t key)
+{
+    uint32_t league = st_league_of(key);
+    int start = season_start_year();
+    int y = league ? (int16_t)rd16(g_mem, league + 0x40u) : 0;
+    return y >= start && y <= start + 100 ? y : start;
 }
 
 uint32_t st_table_of(uint32_t league, int *n)

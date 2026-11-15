@@ -487,10 +487,16 @@ RT_WRAP(005dd7f0, ger_second_table)
             if (rd32(g_mem, c + ST_CLUB_DIVISION) != reg_rec || !barred_regional(c, y)) continue;
             uint32_t group = rd32(g_mem, c + CLUB_GROUP);
             Side s = side_of(c);
+            /* No club to take its place: the side stays, so German Regional keeps its size. */
+            uint32_t in = best_of_pool(y);
+            if (!in || rt_unwinding) {
+                if (log_on()) fprintf(stderr, "recomp: ger second: %.51s stays in German Regional (no club of A Lower "
+                                      "Division to take its place)\n", name_of(c));
+                continue;
+            }
             uint32_t a[3] = {c, lower_rec, 1};
             st_call_this(F_MOVE_DOWN, self, 3, a);
             wr32(g_mem, c + CLUB_GROUP, 0);
-            uint32_t in = rt_unwinding ? 0 : best_of_pool(y);
             if (in) {
                 uint32_t m[3] = {in, reg_rec, 1};
                 st_call_this(F_MOVE_UP, self, 3, m);
@@ -531,7 +537,7 @@ static int ger_barred_at_start(uint32_t club, uint32_t div)
 {
     if (!rule_on() || !german(club) || name_kind(name_of(club)) == KIND_NONE) return 0;
     if (top_two(div)) return no_way_up(club);
-    if (regional_div(div)) return barred_regional(club, season_rule_year(season_start_year()));
+    if (regional_div(div)) return barred_regional(club, season_rule_year(st_season_year(KEY_FIRST)));
     return 0;
 }
 
