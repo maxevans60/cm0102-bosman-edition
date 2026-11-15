@@ -749,7 +749,7 @@ if(EXISTS "${CM0102_EXE}")
     # The checks of the league size runs (0.7.2 league sizes, slice 2) on made-up templates.
     add_test(NAME league_size_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/league_size_run.py"
         --self-test)
-    # Gap 47: every K League count change is a new club or a K League 2 move, and the game has no K League 2 class.
+    # Gap 47: every K League count change is a new club or a K League 2 move, played with no division (no K League 2 class).
     add_test(NAME kor_count_changes COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/kor_count_changes_check.py"
         "${CMAKE_BINARY_DIR}")
     # The Argentine Primera (0.7.2 league sizes, slice 15): the fixture plans of the zones and the derby round, and the

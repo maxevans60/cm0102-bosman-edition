@@ -1233,19 +1233,51 @@ static int up_ok(uint32_t club, uint32_t rec)
 static uint32_t lone_down[STEP_MAX_ROWS];
 static int nlone_down;
 
-static int lone_file(const char *file) { return !strcmp(file, "wel_first"); }
+/* The K League (gap 47, lead decision of 15 November) is alone too: KorLeague::start_new_season 0x66bd60 calls no
+ * chain either (free_table at 0x66bd7a, KOR_START_FREE_TABLE), and the game has no K League 2, so the row's places go
+ * to no division and the step fills the division from the Korean clubs with no division. */
+static uint32_t lone_return(const char *file)
+{
+    if (!file) return 0;
+    if (!strcmp(file, "wel_first")) return WEL_FREE_TABLE_RET;
+    if (!strcmp(file, "kor_league")) return KOR_START_FREE_TABLE;
+    return 0;
+}
+
+static int lone_file(const char *file) { return lone_return(file) != 0; }
+
+/* The clubs with no division (or in a spare division) of the nation of record rec that the step may take into it:
+ * the same clubs as the pool of size_step_run. */
+static int lone_pool(uint32_t rec)
+{
+    uint32_t table = rd32(g_mem, CLUBS), nation = rd32(g_mem, rec + REC_NATION);
+    int count = (int)rd32(g_mem, CLUB_COUNT), national_from = count - 2 * (int)rd32(g_mem, NATION_COUNT), n = 0;
+    if (!nation) return 0;
+    for (int i = 0; readable(table) && i < count && i < national_from && !rt_unwinding; i++) {
+        uint32_t c = table + (uint32_t)i * CLUB_SIZE, now = current_division(c);
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
+        if (!now && rd32(g_mem, c + CLUB_NATION) == nation && up_ok(c, rec)) n++;
+    }
+    return n;
+}
 
 static void lone_exchange(uint32_t self)
 {
-    if (rd32(g_mem, cpu.esp) != WEL_FREE_TABLE_RET || step_running) return;
-    if (!sizes_on() || !season_changing_rules() || season_change_is_creating()) return;
+    if (step_running || !sizes_on() || !season_changing_rules() || season_change_is_creating()) return;
     const char *file = season_change_file(self);
-    if (!lone_file(file)) return;
+    if (!lone_file(file) || rd32(g_mem, cpu.esp) != lone_return(file)) return;
     const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, self + COMP_YEAR));
     int i = step_index(self);
     if (i < 0) return;
     uint32_t rec = step_seen[i].rec;
-    int down = r && r->down > 0 ? r->down : 0;
+    int places = r && r->down > 0 ? r->down : 0, have = step_seen[i].nrows;
+    int pool = places ? lone_pool(rec) : 0, want = step_want(self, file, step_seen[i].year + 1);
+    /* Gap 47: only as many as the pool can replace, so the division keeps the count of its next row. */
+    int down = season_size_lone_down(places, pool, have, want);
+    if (down < places && logging())
+        fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: relegation places %d, %d go down: %d clubs with no "
+                "division can come up, %d clubs to %d\n", file, record_name(self), step_seen[i].year, places, down,
+                pool, have, want);
     nlone_down = 0;
     for (int k = step_seen[i].nrows - 1; k >= 0 && nlone_down < down && !rt_unwinding; k--) {
         uint32_t c = step_seen[i].club[k];

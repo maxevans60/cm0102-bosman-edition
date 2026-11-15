@@ -207,8 +207,24 @@ static void truncated(void)
           div[0].short_by);
 }
 
+/* Gap 47: a division with no chain sends down only as many clubs as its no-division pool can replace. */
+static void lone_guard(void)
+{
+    CHECK(season_size_lone_down(1, 5, 12, 12) == 1, "guard: 1 down, pool 5, 12 to 12");
+    CHECK(season_size_lone_down(1, 0, 12, 12) == 0, "guard: 1 down, empty pool, 12 to 12");
+    CHECK(season_size_lone_down(2, 0, 14, 12) == 2, "guard: 2 down, empty pool, 14 to 12 (no refill)");
+    CHECK(season_size_lone_down(3, 0, 14, 12) == 2, "guard: 3 down, empty pool, 14 to 12");
+    CHECK(season_size_lone_down(1, 2, 12, 14) == 0, "guard: 1 down, pool 2, 12 to 14 (the pool fills the growth)");
+    CHECK(season_size_lone_down(1, 3, 12, 14) == 1, "guard: 1 down, pool 3, 12 to 14");
+    CHECK(season_size_lone_down(2, 1, 12, -1) == 1, "guard: 2 down, pool 1, no row (the count stays)");
+    CHECK(season_size_lone_down(0, 9, 12, 12) == 0 && season_size_lone_down(-2, 9, 12, 12) == 0,
+          "guard: no places");
+    CHECK(season_size_lone_down(6, 9, 18, 12) == 6, "guard: Wales 2009, 18 to 12");
+}
+
 int main(void)
 {
+    lone_guard();
     outsiders_and_pool();
     truncated();
     grow();

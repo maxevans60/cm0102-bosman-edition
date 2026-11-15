@@ -1,16 +1,21 @@
-"""Every change of the K League club count in the rules table, and why the game cannot play its real moves (0.7.2
-league sizes, gap 47).
+"""Every change of the K League club count in the rules table, and how the game plays it (0.7.2 league sizes,
+gap 47).
 
 The K League count changes only by clubs that join from outside the league (new clubs, before the K League 2 began
 in 2013) or by moves to and from the K League 2. The game has one Korean league class, KorLeague (kor_league), and
-no class for a K League 2, so a club that goes down goes to no division and a club that comes up comes from no
-division (the size step, season_sizes.c note_alone, LD6 of slice 14). Clubs founded after the start of a game are
-not in its club table (season_records.c makes clubs only at the data load): a later release (gap 46).
+no class for a K League 2. So no division stands in for the K League 2 (lead decision of 15 November): at each season
+change the row's relegation places go to no division (season_sizes.c lone_exchange), and the size step fills the
+league to its next row from the Korean clubs with no division (note_alone, LD6 of slice 14). It sends down only as
+many clubs as those clubs can replace (season_size_lone_down). Clubs founded after the start of a game are not in its
+club table (season_records.c makes clubs only at the data load), so a new club of REAL is played by a club with no
+division: a later release (gap 46).
 
 This check reads the encoded rules (docs/research/2026-10-18-league-rules-encoded.tsv) and the competition classes
 of the build (seasons/comp_classes.c) and fails when:
 - a count change of kor_league is not in REAL, or REAL holds a change the rows do not make;
-- the build has a Korean league class other than kor_league and kor_league_cup (then a K League 2 may be reachable).
+- the build has a Korean league class other than kor_league and kor_league_cup (then a K League 2 class exists and
+  should take the place of no division).
+The run rows kor_league, kor_league@2024 and kor_league@2026 of tests/seasons/league_size_run.py play the moves.
 
 Usage:
     python3 -I tests/seasons/kor_count_changes_check.py <build folder>
@@ -24,7 +29,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encoded.tsv")
 
 NEW = "joined from outside the league (no K League 2 before 2013)"
-K2 = "moved to or from the K League 2"
+K2 = "moved to or from the K League 2 (no division in the game)"
 W = "https://en.wikipedia.org/wiki/"
 
 # Row season (the real season is the next calendar year): (change of the count, how, the clubs, source).
@@ -85,7 +90,7 @@ def main(argv):
     if leagues != ["kor_league", "kor_league_cup"]:
         fails.append(f"Korean league classes {leagues}: a class other than kor_league and kor_league_cup")
     else:
-        print("ok    the game's Korean league classes are kor_league and kor_league_cup: no K League 2")
+        print("ok    the game's Korean league classes are kor_league and kor_league_cup: no division stands in for the K League 2")
     for f in fails:
         print("FAIL  " + f)
     print("FAIL" if fails else "PASS")
