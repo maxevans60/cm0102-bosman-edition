@@ -611,7 +611,7 @@ def irl_partner_faults(report, file, year):
 def irl_place_faults(report):
     """Item 251b review: a League of Ireland edition that plays a row of another real season (edition 2003 plays row
     2003, the real 2004) keeps the class's places: the First Division 1 up and the play-off (IreFirst::set_up_rules
-    0x635aa0), not the row's 3 up."""
+    0x635aa0), not the row's 3 up, and the Premier Division 1 down and the play-off (the real 2003)."""
     if not os.path.exists(report):
         return []
     fails, cols = [], None
@@ -624,10 +624,16 @@ def irl_place_faults(report):
             if p[0] != "comp" or not cols or len(p) < len(cols) + 1:
                 continue
             row = dict(zip(cols, p[1:]))
-            if row.get("file") != "ire_first" or not row.get("year", "").lstrip("-").isdigit():
+            if row.get("file") not in ("ire_first", "ire_prm") or not row.get("year", "").lstrip("-").isdigit():
                 continue
             ed = int(row["year"])
-            if real_season("ire_first", edition_season("ire_first", ed))[:4] == str(ed):
+            if real_season(row["file"], edition_season(row["file"], ed))[:4] == str(ed):
+                continue
+            if row["file"] == "ire_prm":
+                # The Premier Division: 1 down and the play-off (IrePrm::set_up_rules 0x63a900, +0xc0 at 0x63a957).
+                if (row.get("down"), row.get("playoff_down")) != ("1", "1"):
+                    fails.append(f"ire_prm {ed} {row.get('phase')}: down {row.get('down')} and play-off "
+                                 f"{row.get('playoff_down')}, want 1 and 1 (a row of another real season)")
                 continue
             if (row.get("up"), row.get("playoff_up")) != ("1", "1"):
                 fails.append(f"ire_first {ed} {row.get('phase')}: up {row.get('up')} and play-off "

@@ -174,6 +174,13 @@ static const SeasonRule *row_now(uint32_t obj, const char *file)
 int season_sizes_row_down(uint32_t obj, const char *file)
 {
     const SeasonRule *r = readable(obj) && sizes_on() ? row_now(obj, file) : NULL;
+    /* An Irish row of another real season gives no places (edition 2003 plays row 2003, the real 2004), as in
+     * sizes_rules: the class's places stand. */
+    if (r && file && !strncmp(file, "ire_", 4)) {
+        int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                         : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+        if (!real_starts(r, year)) return -1;
+    }
     return r && r->down >= 0 ? r->down : -1;
 }
 
