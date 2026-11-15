@@ -106,8 +106,9 @@ extern const int season_grown_count;
  * with the sizes on): the club moves of a new game then take no reserve side for it (D12). */
 int season_sizes_plays_short(const char *file);
 
-/* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
- * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
+/* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), and
+ * for ire_prm when IrePrm takes it (item 260), for the club moves of a new game; -1 for any other class or with the
+ * sizes off (0.7.2 slice 13). */
 int season_sizes_data_clubs(const char *file, int season);
 
 /* The relegation places ("down") of the row of the object's edition, the direct places of the research; -1 with the

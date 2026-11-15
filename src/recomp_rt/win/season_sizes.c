@@ -208,10 +208,16 @@ int season_sizes_clubs(const char *file, int season)
 int season_sizes_data_clubs(const char *file, int season)
 {
     const SeasonGrown *g = grown_of(file);
-    if (!sizes_on() || !g || g->held) return -1;
+    /* Item 260: IrePrm counts the clubs of its data too (IrePrm::create_table 0x63a740 counts the clubs of division
+     * [0x9cf80c] at 0x63a779..0x63a783, and takes 10 or 12 at 0x63a79f..0x63a7a9), but it is not grown: its row's
+     * count when the class takes it. Without it the moves kept the database's count, so a 2003 or 2004 start held 12
+     * where the row gives 10. */
+    int prm = file && !strcmp(file, "ire_prm");
+    if (!sizes_on() || (!prm && (!g || g->held))) return -1;
     const SeasonRule *r = row_of_edition(file, season);
-    if (!r || r->clubs < MIN_CLUBS || r->clubs > g->cap) return -1;
-    return r->clubs;
+    if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS) return -1;
+    if (prm) return season_sizes_irl_takes(file, r->clubs) ? r->clubs : -1;
+    return r->clubs <= g->cap ? r->clubs : -1;
 }
 
 /* The clubs whose division is the record of the object. */
@@ -237,7 +243,7 @@ static void step_note_pair(uint32_t upper, uint32_t lower);
 static int step_index(uint32_t obj);
 static int step_running;
 static int row_reachable(uint32_t obj, const char *file);
-static int data_next_count(uint32_t obj, const char *file, int n);
+static int data_takes_count(const char *file, int n);
 
 /* The club count of a league object in a season game: the clubs of its division, up to the class's cap; 0 when the
  * original's count stays. */
@@ -1042,11 +1048,11 @@ RT_WRAP(00689c80, promote_relegate)
          * class of 18) would leave the step to send down clubs that finished safe (review 2). */
         int reach = row_reachable(upper, fu_name) && row_reachable(lower, fl_name);
         single = cu > 0 && cl > 0 && (fits || (reach && !season_change_is_creating()));
-        /* Item 251: two classes that count the clubs of their data (cap 0) make their next tables of the clubs that
-         * the chain leaves them, so each club moves on its own when both counts are those of the next rows and
-         * counts that the classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10). */
+        /* Items 251 and 251b: two classes that count the clubs of their data (cap 0) make their next tables of the
+         * clubs that the chain leaves them, so each club moves on its own when both new counts are counts that the
+         * classes take (League of Ireland 2004, 2008, 2017: 10 to 12, 12 to 10), in a game of any start. */
         if (!single && cu == 0 && cl == 0 && !season_change_is_creating())
-            single = data_next_count(upper, fu_name, nu) && data_next_count(lower, fl_name, nl);
+            single = data_takes_count(fu_name, nu) && data_takes_count(fl_name, nl);
         if (logging() && !single)
             fprintf(stderr, "recomp: league sizes: %s %d clubs and %s %d clubs after the season change do not fit "
                             "(%d to %d and %d to %d): the clubs move in pairs\n", fu_name, nu, fl_name, nl, lu, cu, ll, cl);
@@ -1174,12 +1180,14 @@ static int row_reachable(uint32_t obj, const char *file)
     return cap > 0 && r && r->clubs >= MIN_CLUBS && r->clubs <= cap && r->clubs >= floor_of(file);
 }
 
-/* 1 when n is the count of the next edition's row of a class that counts the clubs of its data, and a count that
- * its create_table takes (season_sizes_irl_takes). */
-static int data_next_count(uint32_t obj, const char *file, int n)
+/* 1 when n is a count that the create_table of a class that counts the clubs of its data takes
+ * (season_sizes_irl_takes). Item 251 also needed the count of the next edition's row, so a game started before 2011
+ * moved in pairs in 2017: the 2011 and 2012 rows take clubs out of the two divisions (22 to 21 to 20), which the
+ * chain cannot, so such a game holds 12 and 10 in 2017 and the next rows give 10 and 10. The real places now move
+ * the clubs whenever the new counts are ones the classes take (12 to 10 and 10 to 12 there). */
+static int data_takes_count(const char *file, int n)
 {
-    const SeasonRule *r = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
-    return r && r->clubs == n && season_sizes_irl_takes(file, n);
+    return season_sizes_irl_takes(file, n);
 }
 
 int season_sizes_plays_short(const char *file)
