@@ -175,12 +175,26 @@ int season_sizes_row_season(uint32_t obj, const char *file)
     return r ? r->season : -1;
 }
 
+static const SeasonGrown *grown_of(const char *file);
+
 int season_sizes_clubs(const char *file, int season)
 {
     if (!sizes_on() || !size_file(file)) return -1;
     const SeasonRule *r = row_of_edition(file, season);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS || cap_of(file) <= 0) return -1;
     return within(file, r->clubs);
+}
+
+/* The count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT, held 0:
+ * IreFirst::create_table 0x635910 counts division [0x9cf810] and allocates count x 0x3b): its row's count, so that
+ * the club moves of a new game give the division that many clubs. -1 for any other class or with the sizes off. */
+int season_sizes_data_clubs(const char *file, int season)
+{
+    const SeasonGrown *g = grown_of(file);
+    if (!sizes_on() || !g || g->held) return -1;
+    const SeasonRule *r = row_of_edition(file, season);
+    if (!r || r->clubs < MIN_CLUBS || r->clubs > g->cap) return -1;
+    return r->clubs;
 }
 
 /* The clubs whose division is the record of the object. */
@@ -255,6 +269,11 @@ static void keep(uint32_t obj, int on)
 static int grown_count(uint32_t obj, const char *file)
 {
     return grown_of(file) && !kept_at(obj) ? league_count(obj, file, NULL, NULL) : 0;
+}
+
+int season_sizes_planned(uint32_t obj)
+{
+    return sizes_on() && readable(obj) && grown_of(season_change_file(obj)) && !kept_at(obj);
 }
 
 uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original)
@@ -418,6 +437,17 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     if (n < MIN_CLUBS || !readable(old) || have < 1 || have > SEASON_TEMPLATE_MAX ||
         !readable(old + (uint32_t)have * DATE_SIZE))
         return;
+    /* A class that sets its meetings by its count in create_table (IreFirst, slice 13): a row with no meetings value
+     * takes the class's meetings for this count, not the value set_up_rules wrote for another count. */
+    if (!probe) {
+        const SeasonRule *r = row_now(self, file);
+        int row_m = r ? season_league_meetings(file, r->season) : 0;
+        int m = season_sizes_irl_class_meetings(file, n, row_m >= 1 && row_m <= 4 ? row_m : 0);
+        if (m && m != meetings) {
+            meetings = m;
+            wr16(g_mem, self + COMP_MEETINGS, (uint16_t)m);
+        }
+    }
     int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
     /* A split (slice 7, D7): the template plans the rounds before the split and the most rounds of a section after
      * it. The table plays the first; the sections take the rest when the split comes (season_split.c), through

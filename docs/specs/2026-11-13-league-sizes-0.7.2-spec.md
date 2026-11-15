@@ -201,8 +201,8 @@ Merge danger: two-way door. Blast radius: these two pyramids.
 Blocked by: 4, 7
 Delivers: the Northern Irish First Division at its row's count with its meetings and splits, and the Irish First Division at 8 (2012 to 2017).
 Merge danger: two-way door. Blast radius: the two Irish pyramids.
-- [ ] `league_size_run.py` passes for nir_first 2016 and 2022 and ire_first 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for nir_first 2016 and 2022 and ire_first 2013
+- [x] The same-save set is equal
 
 ### 14. Japan and Korea
 Blocked by: 2, 3, 6, 7

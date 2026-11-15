@@ -92,10 +92,23 @@ extern const int season_grown_count;
  * with the sizes on): the club moves of a new game then take no reserve side for it (D12). */
 int season_sizes_plays_short(const char *file);
 
+/* The row's count of a season for a grown class that counts the clubs of its data (league_sizes.py DATA_COUNT), for
+ * the club moves of a new game; -1 for any other class or with the sizes off (0.7.2 slice 13). */
+int season_sizes_data_clubs(const char *file, int season);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */
 void season_sizes_schedule(uint32_t obj, int stage, uint32_t count_at);
+
+/* 1 when the date template of a grown league object this edition is the engine's (a season game with the sizes on,
+ * and the template had room for the count): its +0x3c then holds the meetings of the row (slice 13: IreFirst). */
+int season_sizes_planned(uint32_t obj);
+
+/* The meetings of a class that sets them by its count in create_table (slice 13, season_sizes_irl.c: IreFirst 4 for 9
+ * or 10 clubs, else 3, 0x635983..0x635997) for a row with no meetings value (row_meetings 0), or 0: the engine's
+ * meetings stay. */
+int season_sizes_irl_class_meetings(const char *file, int n, int row_meetings);
 
 /* The season of the rules row of a league object this edition (the row of the start season with changing rules off),
  * or -1. */

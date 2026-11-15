@@ -146,12 +146,36 @@ GROWN = {
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
+    # Slice 13 (Northern Ireland and Ireland).
+    # - NirFirst (NIFL Championship, 10 in the class, 17 in 2008/09, 16 from 2026/27; splits after 22 from 2016/17 and
+    #   after 33 from 2021/22): create_table 0x78bc50 allocates 10 rows (push 0x24e at 0x78bc5b, the object in esi
+    #   from 0x78bc59) and stores 10 at 0x78bc62; create_schedule 0x78b310 makes 36 dates for stage -1 (D 0x24 at
+    #   0x78b34d, 0x924 bytes at 0x78b348) and the play-off for any other stage (0x78b321); set_up_rules 0x78bd70
+    #   sets 4 meetings (0x78bd80) and does not write +0xd9: shuffled.
+    "nir_first": (17, 0x78B310, "shuffled"),
+    # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
+    "ire_first": (12, 0x634F40, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored")
-# The rows that the class allocates: its largest original count (before the cap of GROWN).
+# Grown classes that count the clubs of the data (CLASSES rows with no store): create_table allocates the rows of
+# that count, so there is no table site, and the count stays the data's (no cap in season_size_caps). The engine
+# gives them the template of the count and the row's meetings; the class's own bounds and meetings take the row
+# through PATCHES (season_sizes_irl.c). file: the largest count that the class takes.
+# - IreFirst::create_table 0x635910 counts the clubs of division [0x9cf810] (0x635941..0x635969), takes only 9 to 12
+#   (0x63596f, 0x635979), sets 4 meetings for 9 or 10 and 3 for 11 or 12 (0x635983..0x635997) and allocates the count
+#   x 0x3b (0x63599d..0x6359b0). set_up_rules 0x635aa0 sets 4 meetings (0x635ab0) and calls create_schedule 0x634f40
+#   before the constructor calls create_table (0x634cc1, then 0x634cfc; start_new_season 0x635b9d, then 0x635bdc), so
+#   create_schedule makes 36 dates (D = 0x22 + 2 for meetings other than 3, 0x634f6d..0x634f84) and the table then
+#   plays 33 or 36 of them. It does not write +0xd9: shuffled.
+DATA_COUNT = {"ire_first": 12}
+# The rows that the class allocates: its largest original count (before the cap of GROWN); 0 for DATA_COUNT.
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
     assert _mode in GROWN_MODES, _f
+    if _f in DATA_COUNT:
+        assert _f not in CAPS and _n == DATA_COUNT[_f], _f
+        HELD[_f] = 0
+        continue
     assert _n >= CAPS[_f], _f   # equal: only the meetings and dates change (Brazil)
     HELD[_f] = CAPS[_f]
     CAPS[_f] = _n
@@ -168,7 +192,7 @@ def table_sites(read):
     0x7925e9, 0x7925eb, 0x7925f2). No such push stops the build."""
     sites = {}
     for _cls, file, _rules, stores in CLASSES:
-        if file not in GROWN:
+        if file not in GROWN or file in DATA_COUNT:
             continue
         want = (HELD[file] * ROW_BYTES).to_bytes(4, "little")
         found = []
@@ -243,6 +267,12 @@ PATCHES = {
     0x924B81: (0x54, "rt_cup_room(0x54u, 32u, 0x9cf94cu, 0u, 0u)"),
     0x55131C: (0x120, "rt_cup_room(0x120u, 92u, 0x9cf5b4u, 0x9cf5b0u, 0x9cf5acu)"),
     0x5BD2AC: (0x60, "rt_cup_room(0x60u, 54u, 0x9cf5d0u, 0x9cf5ccu, 0u)"),
+    # IreFirst::create_table 0x635910 (DATA_COUNT, slice 13): the least count it takes, and its meetings for a count
+    # (esi the object). A season game with the sizes on takes the count of the data from 2 clubs and the meetings
+    # that the engine set from the row (season_sizes_irl.c); the base game the original's.
+    0x63596F: (9, "rt_ire_first_least(esi, 9u)"),
+    0x63598F: (3, "rt_ire_first_meetings(esi, 3u)"),
+    0x635997: (4, "rt_ire_first_meetings(esi, 4u)"),
 }
 
 # The smallest count of a class: its own count where a cup of its nation cannot hold a smaller division (the
