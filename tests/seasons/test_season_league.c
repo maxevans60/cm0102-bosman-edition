@@ -48,6 +48,10 @@ int main(int argc, char **argv)
     meet("jap_j2", 2010, 2);            /* a hand row: J2 of 19 clubs, 2 meetings */
     meet("ita_ser_a", 2027, 2);         /* unknown clubs: the row before */
     meet("ita_ser_a", 2300, 2);         /* after the table: the last row, then the row before */
+    meet("aus_nsl", 2019, 3);           /* gap row 7: 26 of 11 clubs, 3 meetings (30) are nearest */
+    meet("aus_nsl", 2020, 2);           /* 26 of 12 clubs (22 + 4 third meetings): 2 are nearest */
+    meet("aus_nsl", 2024, 2);           /* 26 of 13 clubs (24 + 2) */
+    meet("aus_nsl", 2027, 2);           /* unknown clubs: the 2026 row */
     meet("gre_cup", 2010, 0);           /* a cup */
     meet("no_such_file", 2010, 0);
 
