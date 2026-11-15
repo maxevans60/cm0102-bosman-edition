@@ -1176,15 +1176,23 @@ static void step_note_pair(uint32_t upper, uint32_t lower)
 }
 
 /* The count of a division's row in an edition (within the class's cap and floor), or -1: no part in the step (a
- * class that counts the clubs of its data, cap 0, takes only some counts: IrePrm 10 or 12, 0x63a79f..0x63a7c6). */
+ * class with no cap, or a row that its class cannot hold). The Irish classes, which count the clubs of their data,
+ * take the row's count when the class takes it (item 260, below). */
 static int step_want(uint32_t obj, const char *file, int year)
 {
     /* The Argentine second division takes exactly 25 (ArgSecond::fill_league_table 0x407ce2) and gives the Primera
      * its clubs (slice 15; its own row is slice 16's). */
     if (!strcmp(file, "arg_second")) return 25;
+    const SeasonRule *r = row_of_edition(file, year);
+    /* Item 260: the two Irish classes count the clubs of their data (cap 0) and take some counts only (IrePrm 10 or
+     * 12, IreFirst 2 to 12: season_sizes_irl_takes). With no part in the step, a 2001 game kept the Premier
+     * Division at 12 and the First Division at 9 in 2002, where the rows give 10 and 12: the First Division never
+     * took a club of its nation with no division (D12). They take part with their row's count when the class takes
+     * it. The Premier Division takes its clubs from the First Division, so it always reaches a count it takes. */
+    if (!strcmp(file, "ire_prm") || !strcmp(file, "ire_first"))
+        return r && season_sizes_irl_takes(file, r->clubs) ? r->clubs : -1;
     int cap = season_ita_cap(obj, cap_of(file));     /* slice 20b: Serie C */
     if (cap <= 0) return -1;
-    const SeasonRule *r = row_of_edition(file, year);
     if (!r || r->clubs < MIN_CLUBS || r->clubs > MAX_CLUBS) return -1;
     int n = r->clubs, low = floor_of(file);
     if (n > cap) n = cap;
@@ -1201,10 +1209,10 @@ static int row_reachable(uint32_t obj, const char *file)
 }
 
 /* 1 when n is a count that the create_table of a class that counts the clubs of its data takes
- * (season_sizes_irl_takes). Item 251 also needed the count of the next edition's row, so a game started before 2011
- * moved in pairs in 2017: the 2011 and 2012 rows take clubs out of the two divisions (22 to 21 to 20), which the
- * chain cannot, so such a game holds 12 and 10 in 2017 and the next rows give 10 and 10. The real places now move
- * the clubs whenever the new counts are ones the classes take (12 to 10 and 10 to 12 there). */
+ * (season_sizes_irl_takes). Item 251 also needed the count of the next edition's row, so a game whose counts
+ * differed from the rows moved in pairs (a game started before 2011 in 2017). The real places now move the clubs
+ * whenever the new counts are ones the classes take, and the size step then brings both divisions to their rows
+ * (step_want, item 260). */
 static int data_takes_count(const char *file, int n)
 {
     return season_sizes_irl_takes(file, n);
