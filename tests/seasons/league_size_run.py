@@ -289,11 +289,12 @@ def encoded_form(file, season):
     return (num("clubs"), num("meetings"), zones, num("extra"), num("rounds"), num("halves"))
 
 
-def want_counts(file, season):
+def want_counts(file, season, meetings=0):
     """(rounds of the template, matches of a club) of a file's row: m x (n' - 1) and m x (n - 1), plus the derby or
-    inter-zone rounds of the row; with zones, those of a zone (each half the same)."""
+    inter-zone rounds of the row; with zones, those of a zone (each half the same). A row with no meetings plays the
+    class's meetings (rules gaps "the class's meetings stay"), which the caller gives from the report, else 2."""
     clubs, m, zones, extra, rounds, _h = encoded_form(file, season)
-    m = m or 2
+    m = m or meetings or 2
     if zones:
         return (rounds or m * (max(zones) + (max(zones) & 1) - 1) + extra, m * (max(zones) - 1) + extra)
     if extra and clubs % 2 == 0:
@@ -435,8 +436,8 @@ def edition_row(file, edition):
     return encoded_row(file, edition_season(file, edition))
 
 
-def edition_counts(file, edition):
-    return want_counts(file, edition_season(file, edition))
+def edition_counts(file, edition, meetings=0):
+    return want_counts(file, edition_season(file, edition), meetings)
 
 
 def edition_split(file, edition):
@@ -680,8 +681,6 @@ def faults(work, file, year, last):
         clubs, m = edition_row(file, ed)
         return (short[ed][0], m) if ed in short else (clubs, m)
 
-    def counts(ed):
-        return edition_counts(file, ed)
     if edition_row(file, year)[0] < 2:
         return fails + [f"{file} {year}: no row in {os.path.basename(ENCODED)}"]
     # A class of DATA_COUNT allocates the rows of the clubs it counts (IreFirst::create_table 0x635910), so it
@@ -689,6 +688,11 @@ def faults(work, file, year, last):
     held = league_sizes.DATA_COUNT.get(file, league_sizes.HELD.get(file, 0))
     # The report: every edition of the run holds the clubs and meetings of its row, and the matches of the count.
     rows = report_rows(report, file) if os.path.exists(report) else []
+    # The meetings that the game shows for each edition: a row with no meetings plays the class's.
+    meet_of = {r[2]: r[4] for r in rows}
+
+    def counts(ed):
+        return edition_counts(file, ed, meet_of.get(ed, 0))
     if not any(r[0] == year and r[1] == "start" for r in rows):
         fails.append(f"{file} {year}: no row in the start report")
     for season, phase, ed, n, meet, matches in rows:
@@ -737,7 +741,7 @@ def faults(work, file, year, last):
             fails.append(f"{file} {base}: the section dates {dates} are not the last dates of the template {tail}")
     for ed, n, matches, lo, hi in done:
         clubs, m = row(ed)
-        m = m or 2
+        m = m or meet_of.get(ed, 0) or 2
         sp = edition_split(file, ed)
         if not sp:
             want = counts(ed)[1]
