@@ -189,6 +189,12 @@ assert not set(TUR_INSNS) & (set(INSNS) | set(PATCHES)) and not set(TUR_PATCHES)
 INSNS.update(TUR_INSNS)
 PATCHES.update(TUR_PATCHES)
 
+# The constants of the Argentine Primera that follow its count (0.7.2 league sizes, slice 15; arg_prm.py).
+from arg_prm import PATCHES as ARG_PATCHES  # noqa: E402
+
+assert not set(ARG_PATCHES) & (set(PATCHES) | set(INSNS))
+PATCHES.update(ARG_PATCHES)
+
 # A fix for the error box league_stage.cpp 533 of a league load (league_load.py): a row array of 0 bytes.
 from league_load import INSNS as LOAD_INSNS  # noqa: E402
 

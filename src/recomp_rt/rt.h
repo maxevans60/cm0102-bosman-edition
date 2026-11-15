@@ -412,6 +412,9 @@ uint32_t rt_tur_table_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_tur_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_tur_stage_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_tur_stage_bytes(uint32_t obj, uint32_t original);
+/* A constant of ArgPrm for 20 clubs plus (count - 20) in a season game (win/season_sizes_arg.c, tools/recomp/arg_prm.py). */
+uint32_t rt_arg_count(uint32_t original);
+uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original);
 /* 1 when the Portuguese Cup takes a club with no division (0x7ce37d): a Portuguese club in a game with Liga 3. */
 uint32_t rt_por_cup_none(uint32_t club);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
