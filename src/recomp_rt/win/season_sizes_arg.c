@@ -836,7 +836,9 @@ void season_arg_averages_empty(uint32_t self, int n)
  * RSSSF arg02 to arg2026, es and en Wikipedia): the worst averages, then (from the 2023 season) the worst club of the
  * annual table that the averages did not send down. Rows are the game's editions (row 2014 the 2015 season, row 2015
  * the 2016 tournament, row 2016 the 2016/17 season, row 2022 the 2023 season). Rows to 2011 also had a promoción of
- * the 17th and 18th of the averages against the second division, which the game does not play: those two stay up. Rows
+ * the 17th and 18th of the averages against the second division: rows 2002 to 2011 play it as two ties of the Primera
+ * (season_arg_stages.c promo_advance), the 2001 edition as the second division's own ties (0x408910). Its losers go
+ * down after the clubs of arg_down (arg_record_honours). Rows
  * from 2026 take the 2027 format (one by the averages, one by the annual table). */
 static void arg_down(int row, int *avg, int *tab)
 {
