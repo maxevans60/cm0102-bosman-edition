@@ -619,6 +619,33 @@ def irl_partner_faults(report, file, year):
             if year <= ed and edition_row(other, ed)[0] >= 2 and n != want[ed]]
 
 
+def irl_place_faults(report):
+    """Item 251b review: a League of Ireland edition that plays a row of another real season (edition 2003 plays row
+    2003, the real 2004) keeps the class's places: the First Division 1 up and the play-off (IreFirst::set_up_rules
+    0x635aa0), not the row's 3 up."""
+    if not os.path.exists(report):
+        return []
+    fails, cols = [], None
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            p = line.rstrip("\n").split("\t")
+            if p[0] == "columns":
+                cols = p[1:]
+                continue
+            if p[0] != "comp" or not cols or len(p) < len(cols) + 1:
+                continue
+            row = dict(zip(cols, p[1:]))
+            if row.get("file") != "ire_first" or not row.get("year", "").lstrip("-").isdigit():
+                continue
+            ed = int(row["year"])
+            if real_season("ire_first", edition_season("ire_first", ed))[:4] == str(ed):
+                continue
+            if (row.get("up"), row.get("playoff_up")) != ("1", "1"):
+                fails.append(f"ire_first {ed} {row.get('phase')}: up {row.get('up')} and play-off "
+                             f"{row.get('playoff_up')}, want the class's 1 and 1 (a row of another real season)")
+    return fails
+
+
 def irl_change_faults(log, file, year, last=None):
     """In a run of ire_prm or ire_first: the play-off line of the First Division (season_sizes_irl.c) for exactly the
     editions of IRL_CHANGE among the editions of the run (the start to last, default the start and the next); and for
@@ -750,6 +777,8 @@ def faults(work, file, year, last):
     fails += irl_change_faults(log, file, year, last)
     # Item 260: the other division too, in every Irish run (a 2003 or 2004 start held 12 Premier clubs for 10).
     fails += irl_partner_faults(report, file, year)
+    if file in ("ire_prm", "ire_first"):
+        fails += irl_place_faults(report)
     if os.path.exists(report):
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)

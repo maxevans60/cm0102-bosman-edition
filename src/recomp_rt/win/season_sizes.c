@@ -951,6 +951,13 @@ static void sizes_rules(uint32_t obj)
     if (!size_file(file) || exchange_floor(file) > 0) return;
     const SeasonRule *r = row_now(obj, file);
     if (!r) return;
+    /* An Irish edition that plays a row of another real season keeps the class's places: editions 2003 and 2004 both
+     * play row 2003 (the real 2004, 3 up and no play-off), and the real 2003 (row 2002) had 1 up and the play-off.
+     * The row's places belong to edition 2004 (item 251b review; season_sizes_irl.c does the same for the play-off
+     * and the direct places up). */
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                     : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (!strncmp(file, "ire_", 4) && !real_starts(r, year)) return;
     /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
      * with fixed counts (the German Regionalliga split needs exactly 36 clubs, cmp bl, 0x24 at 0x5dbc3b, box
      * ger_first.cpp 1049 at 0x5dbcd9: the 2. Bundesliga with 2 relegation places against the Regionalliga's 4
