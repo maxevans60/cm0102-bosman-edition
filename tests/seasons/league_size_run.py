@@ -1278,6 +1278,8 @@ def main(argv):
         print(__doc__)
         return 2
     import rules_report_check as rrc
+    if os.environ.get("RECOMP_TEST_LONE_HUMAN") == "1":
+        os.environ["RECOMP_SEASON_CHANGE_LOG"] = "1"    # the news lines of lone_human_faults (season_change.c)
     program, game, file = os.path.abspath(argv[0]), os.path.abspath(argv[1]), argv[2]
     year0, last0, _w = ROWS.get(file, (2025, None, ""))
     year = int(rrc.arg(argv, "--year", str(year0)))
