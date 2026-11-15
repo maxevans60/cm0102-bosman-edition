@@ -500,6 +500,15 @@ static void build_stage(uint32_t obj)
             two ? "a two-leg" : "a one-match");
 }
 
+/* The play-off of 4 places after the direct places of a league whose class has its own play-off code: the I liga's
+ * own play-off from 2019/20 (season_pol_first.c). The caller sets its places and one stage. */
+int season_playoffs_build_for(uint32_t obj)
+{
+    if (!readable(rd32(g_mem, obj + COMP_STAGES))) return 0;     /* +0x30 is 0 already: the caller is advance_stage */
+    build_stage(obj);
+    return 1;
+}
+
 int season_playoffs_advance(uint32_t obj)
 {
     if (!marked(obj) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1) return 0;
