@@ -38,6 +38,7 @@
  * (meetings + the most section meetings), with +0xa7 the matches of the season. A league whose object does not hold
  * the engine's count, template (+0xa9) and +0xa7 (a 0.7.1 save before its next season change, D18) plays no
  * split. */
+#include "season_sizes_arg.h"
 #include "win.h"
 #include "../rt_host.h"
 #include "season_change.h"
@@ -543,5 +544,7 @@ RT_WRAP(006847c0, league_update_for_date)
     if (rt_unwinding) return;
     Cpu saved = cpu;
     season_split_update(self);
+    if (rt_unwinding) return;
+    season_arg_update(self);                    /* 0.7.2 gap row 48: the Apertura's knockout */
     if (!rt_unwinding) cpu = saved;
 }

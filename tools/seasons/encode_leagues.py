@@ -140,6 +140,8 @@ BY_HAND = {
     "then penalties)": ("-", "-", "tiebreak", "ok"),
     "In each tournament: top 8 of each zone play single-leg knockouts from the round of 16":
         ("-", "-", "title", "ok"),
+    "In each tournament: top 16 of the tournament table play single-leg knockouts from the round of 16":
+        ("-", "-", "title", "ok"),
     "Liguilla Pre-Libertadores (3rd to 6th) and Liguilla Pre-Sudamericana for continental places":
         ("-", "-", "europe", "ok"),
     "Final at a neutral ground between the two zone winners; play-off of the two zone runners-up for Copa "

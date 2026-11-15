@@ -48,6 +48,12 @@ def row_season(text):
     return int(m.group(1)) if m else None
 
 
+def match_kind(r):
+    """rival or draw: the words after the row's first fecha ("fecha 8, draw match"), else None."""
+    m = re.search(r"fecha \d+, (rival|draw) match", r["note"])
+    return m.group(1) if m else None
+
+
 def make():
     rows = list(csv.DictReader(open(TSV, encoding="utf-8"), delimiter="\t"))
     db = {}
@@ -57,26 +63,43 @@ def make():
     zones, pairs = [], []
     # The database name of each short name of the file (its club column), and of the partners that are never in it
     # (ALIASES, each checked against the Primera list of its season in the clubs file).
-    names = {r["club"]: r["db_club"] for r in rows}
+    names = {}
+    for r in rows:      # the season's own name first (row_key), then any season's
+        names[(r["season"].split("-")[0], r["club"])] = r["db_club"]
+        names.setdefault(r["club"], r["db_club"])
     for (season, short), real in ALIASES.items():
         if (season, real) not in db:
             raise SystemExit(f"make_arg_prm_zones.py: alias {season} {short}: no club {real} in the clubs file")
         names[(season, short)] = db[(season, real)]
     for r in rows:
         if r["kind"] == "zone" and row_season(r["season"]) is not None:
-            zones.append((row_season(r["season"]), r["zone"], r["db_club"]))
+            # The 2016 sources number the zones (Zona 1 and Zona 2).
+            zones.append((row_season(r["season"]), {"1": "A", "2": "B"}.get(r["zone"], r["zone"]), r["db_club"]))
+    # A season of rival matches only (2016: each pair twice): the fecha that holds most of them is the round where every
+    # club meets its rival (fecha 12), which the runtime plays as its round of drawn opponents, each the rival.
+    full = {}
+    for season in {r["season"] for r in rows if r["kind"] == "interzone"}:
+        inter = [r for r in rows if r["season"] == season and r["kind"] == "interzone"]
+        if any(match_kind(r) == "draw" for r in inter):
+            continue
+        fechas = [int(re.search(r"fecha (\d+)", r["note"]).group(1)) for r in inter]
+        best = max(set(fechas), key=fechas.count)
+        if fechas.count(best) * 2 >= len({frozenset((r["club"], r["partner"])) for r in inter}):
+            full[season] = best
     for r in rows:
         s = row_season(r["season"])
         if s is None or r["kind"] not in ("interzone", "derby"):
             continue
-        partner = names.get((r["season"], r["partner"])) or names.get(r["partner"])
+        partner = names.get((r["season"].split("-")[0], r["partner"])) or names.get(r["partner"])
         if not partner:
             raise SystemExit(f"make_arg_prm_zones.py: {r['season']} {r['partner']}: no database name")
         m = re.search(r"fecha (\d+)", r["note"])
         if not m:
             raise SystemExit(f"make_arg_prm_zones.py: {r['season']} {r['club']}: no fecha in the note")
-        kind = "derby" if r["kind"] == "derby" else ("rival" if "rival match" in r["note"] else "draw")
-        if r["kind"] == "interzone" and "rival match" not in r["note"] and "draw match" not in r["note"]:
+        kind = "derby" if r["kind"] == "derby" else match_kind(r)
+        if kind == "rival" and full.get(r["season"]) == int(m.group(1)):
+            kind = "draw"
+        if r["kind"] == "interzone" and not match_kind(r):
             raise SystemExit(f"make_arg_prm_zones.py: {r['season']} {r['club']}: neither a rival nor a draw match")
         pairs.append((s, kind, int(m.group(1)), r["db_club"], partner))
     for s in sorted({z[0] for z in zones}):
