@@ -52,10 +52,6 @@ int season_sizes_bra_earlier(const char *file);
  * no play-off (0.7.2 league sizes, slice 17, D11; season_sizes_bra.c). */
 void season_sizes_bra_rules(uint32_t obj, const char *file);
 
-/* The clubs that a Série B play-off of the rules table sends up (2: the finalists of the top 8, or the winners of
- * 3rd v 6th and 4th v 5th), 0 for the class's play-off or none (season_sizes_bra.c). */
-int season_sizes_bra_playoff_winners(uint32_t league);
-
 /* The meetings that the table of a league plays in a season, from the row's meetings: twice them for a row of halves
  * whose table holds both halves (J1, and the K League stages as one table; 0.7.2 league sizes, slice 14,
  * season_sizes_asia.c). Any other file: the row's meetings. */

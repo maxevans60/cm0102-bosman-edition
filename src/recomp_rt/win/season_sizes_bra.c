@@ -78,6 +78,14 @@ void season_sizes_bra_rules(uint32_t obj, const char *file)
     int32_t count = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT);
     /* The Série B play-offs of the rules table (below): with the stage array, its places and stage count 1. */
     int kind = first ? PO_CLASS : playoff_kind(obj);
+    if (kind != PO_CLASS && !readable(rd32(g_mem, obj + COMP_STAGES))) {
+        uint32_t arr = season_sizes_game_malloc(4);     /* a loaded game of two meetings has none (above) */
+        if (rt_unwinding) return;
+        if (readable(arr)) {
+            wr32(g_mem, arr, 0);
+            wr32(g_mem, obj + COMP_STAGES, arr);
+        }
+    }
     if (kind != PO_CLASS && readable(rd32(g_mem, obj + COMP_STAGES))) {
         wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
         g_mem[obj + UP] = kind == PO_TOP8 ? 0 : 2;
@@ -191,12 +199,15 @@ RT_WRAP(0042abc0, bra_first_result) { result(o_0042abc0); }
  *   text (code 0 of stage -1, BraNatSecond::build_fate_news_text to Comp 0x48c6d0, 0x42d0dd..0x42d10b).
  *
  * Status 0 and 5 move up (league_promote_and_relegate 0x689c80, 0x689d47..0x689d4e), so each play-off sends 2 clubs
- * up; season_sizes.c counts 2 for these places (season_sizes_bra_playoff_winners). The dates start from the day the
+ * up. The dates start from the day the
  * table is complete. The play-off must end before the season change of the league's entry: the Brazilian entry
- * changes late in the year, after 1 October, where season_playoffs_hold does not wait (LATE_DAY). With too few days
- * left, or a missing club, the places go up directly (the nearest form, 0.6.0 Q247): rows 0 and 1, or 2 and 3. A
- * game loaded in a season of two meetings has no stage array (League::load 0x688e49), so a 2025 season after it
- * plays no play-off: the 2 winners' places go up directly, as before (season_playoffs_winners_up). */
+ * changes late in the year, after 1 October, where season_playoffs_hold does not wait (LATE_DAY), and the change
+ * runs only when every stage is complete (Comp::all_stages_complete 0x48ce10): a match the game moves past the update
+ * day would keep the whole Brazilian chain in its old season for a year (the Segunda's final of 2012,
+ * season_playoffs.c). So the play-off needs 5 days spare before the update day. With fewer days left, or a missing
+ * club, the places go up directly (the nearest form, 0.6.0 Q247): rows 0 and 1, or 2 and 3. A game loaded in a
+ * season of two meetings has no stage array (League::load makes it only for +0x2c > 0, 0x688e3a..0x688e5b), so
+ * season_sizes_bra_rules makes one of one empty slot, as season_playoffs_rules does. */
 #define ROW_TABLE 0xb1u
 #define ROW_SIZE 0x3bu
 #define ROW_STATUS 0x37u
@@ -229,9 +240,9 @@ RT_WRAP(0042abc0, bra_first_result) { result(o_0042abc0); }
 #define CODE_FINAL_LOST 2           /* the final's loser (0x42d1eb) */
 #define TOP8_CLUBS 8
 #define TOP8_ROUNDS 3
-#define TOP8_DAYS 18                /* the final's second leg on day 17 */
+#define TOP8_DAYS 23                /* the final's second leg on day 17, and 5 days spare (below) */
 #define TIES_CLUBS 4
-#define TIES_DAYS 8                 /* the second legs on day 7 */
+#define TIES_DAYS 13                /* the second legs on day 7, and 5 days spare */
 
 /* The play-off of a Série B object of the size engine by its row, or PO_CLASS. */
 static int playoff_kind(uint32_t self)
@@ -252,11 +263,6 @@ static int playoff_now(uint32_t self)
     int k = playoff_kind(self);
     return k != PO_CLASS && (int32_t)rd32(g_mem, self + COMP_STAGE_COUNT) == 1 && g_mem[self + UP_PLAYOFF] ? k
                                                                                                             : PO_CLASS;
-}
-
-int season_sizes_bra_playoff_winners(uint32_t league)
-{
-    return playoff_now(league) != PO_CLASS ? 2 : 0;
 }
 
 static uint32_t row_club(uint32_t self, int i)
@@ -393,7 +399,10 @@ static void build_playoff(uint32_t self, int k)
     }
     /* The class's round table of stage 0 (vtable +0x3c: stage, &rounds, &second count, NULL). */
     uint32_t outs = season_sizes_game_malloc(8);
-    if (!outs) return;
+    if (!outs) {
+        if (!rt_unwinding) direct_places(self, first, "no memory");
+        return;
+    }
     uint32_t ra[4] = {0, outs, outs + 4, 0};
     uint32_t vt = rd32(g_mem, self);
     uint32_t got = call_this(rd32(g_mem, vt + 0x3c), self, 4, ra);
@@ -412,6 +421,7 @@ static void build_playoff(uint32_t self, int k)
         table = season_sizes_game_malloc(TOP8_ROUNDS * ROUND_SIZE);
         if (!table) {
             season_sizes_game_free(got);
+            if (!rt_unwinding) direct_places(self, first, "no memory");
             return;
         }
         memcpy(g_mem + table, g_mem + got, ROUND_SIZE);
@@ -440,6 +450,7 @@ static void build_playoff(uint32_t self, int k)
     uint32_t list = rt_unwinding ? 0 : season_sizes_game_malloc(4u * (uint32_t)n);
     if (!list) {
         season_sizes_game_free(table);
+        if (!rt_unwinding) direct_places(self, first, "no memory");
         return;
     }
     for (int i = 0; i < n; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[i]);
@@ -448,6 +459,7 @@ static void build_playoff(uint32_t self, int k)
     if (rt_unwinding || !readable(stage)) {
         season_sizes_game_free(list);
         season_sizes_game_free(table);
+        if (!rt_unwinding) direct_places(self, first, "no memory");
         return;
     }
     uint32_t args[15] = {self, (uint32_t)n, list, (uint32_t)rounds, rd32(g_mem, self + COMP_RECORD), table, year, 0,
