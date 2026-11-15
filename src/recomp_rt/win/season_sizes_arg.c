@@ -851,6 +851,73 @@ static void arg_down(int row, int *avg, int *tab)
 #define ROW_STATUS 0x37u
 #define STATUS_DOWN 3               /* 0x405e4f */
 
+/* The clubs that go down at the end of the season of an ArgPrm (arg_down): the worst averages first, then the worst
+ * club of the annual table that the averages kept. It first brings the averages to the season's points with
+ * update_relegation_averages(0) (vtable +0x34, as 0x405cb0): that call only rewrites each club's slot of the current
+ * season from the annual table and sorts (0x406589..0x40671b), so a second call gives the same records. Returns the
+ * count (0 on unwinding), with the count by the averages, the lowest average kept and the annual table's place. */
+static int relegated(uint32_t self, const Form *f, int32_t *down, int *by_avg_out, float *worst_kept_out,
+                     int *worst_pos_out, int *rows_out)
+{
+    uint32_t stages = rd32(g_mem, self + STAGES);
+    uint32_t vt = rd32(g_mem, self), a0[1] = {0};
+    call_this(rd32(g_mem, vt + 0x34), self, 1, a0);           /* the averages of the season (0x405cb0) */
+    if (rt_unwinding) return 0;
+    int avg, tab, nd = 0;
+    arg_down(f->season, &avg, &tab);
+    uint32_t recs = rd32(g_mem, self + AVERAGES), clubs = rd32(g_mem, CLUBS);
+    int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
+    float worst_kept = 1e9f;
+    for (int k = have - 1; readable(recs) && k >= 0; k--) {
+        int32_t id = (int32_t)rd32(g_mem, recs + (uint32_t)k * AVG_SIZE);
+        if (id < 0 || !in_division(self, id)) continue;
+        uint32_t bits = rd32(g_mem, recs + (uint32_t)k * AVG_SIZE + 4);
+        float a;
+        memcpy(&a, &bits, sizeof a);
+        if (nd < avg) down[nd++] = id;
+        else if (a < worst_kept) worst_kept = a;
+    }
+    int by_avg = nd, worst_pos = -1, rows_n = 0;
+    uint32_t annual = readable(stages) ? rd32(g_mem, stages + 4) : 0;
+    if (tab && readable(annual)) {
+        uint32_t a1[1] = {0};
+        call_this(F_SORT_TABLE, annual, 1, a1);
+        if (rt_unwinding) return 0;
+        uint32_t rows = rd32(g_mem, annual + COMP_TABLE);
+        rows_n = (int16_t)rd16(g_mem, annual + COMP_CLUBS);
+        int pick = -1;
+        for (int r = 0; readable(rows) && r < rows_n; r++) {
+            uint32_t c = rd32(g_mem, rows + (uint32_t)r * ROW_SIZE);
+            if (!readable(c)) continue;
+            int32_t id = (int32_t)((c - clubs) / CLUB_SIZE), skip = 0;
+            for (int i = 0; i < nd; i++) skip |= down[i] == id;
+            int pos = g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_POSITION];
+            if (!skip && in_division(self, id) && pos > worst_pos) worst_pos = pos, pick = id;
+        }
+        if (pick >= 0) down[nd++] = pick;
+    }
+    if (by_avg_out) *by_avg_out = by_avg;
+    if (worst_kept_out) *worst_kept_out = worst_kept;
+    if (worst_pos_out) *worst_pos_out = worst_pos;
+    if (rows_out) *rows_out = rows_n;
+    return nd;
+}
+
+/* The clubs (club records) that will go down at the end of the season, for the Clausura's knockout (gap row of
+ * art. 14.1.2 of the LPF reglamento 2025 and 2026: a club in the relegation zone does not play it). Returns the count. */
+int season_arg_relegated(uint32_t self, uint32_t *club, int max)
+{
+    int n = (int16_t)rd16(g_mem, self + COMP_CLUBS);
+    Form f;
+    int32_t down[MAX_CLUBS];
+    if (!is_prm(self) || !form_of(self, n, &f)) return 0;
+    int nd = relegated(self, &f, down, NULL, NULL, NULL, NULL);
+    uint32_t clubs = rd32(g_mem, CLUBS);
+    int k = 0;
+    for (int i = 0; i < nd && k < max; i++) club[k++] = clubs + (uint32_t)down[i] * CLUB_SIZE;
+    return k;
+}
+
 /* ArgPrm::record_season_honours 0x405ca0 (thiscall, no argument): the original sends down the clubs of the last two
  * records of the averages (+0x34 - 2 and - 1 at 0x405cb3, 0x405d6a): vtable +0x40 (club, 3, -1, 0, 0) and +0x68 (club,
  * -2, place, place, place), status 3 in the rows of the league, stages[0] and stages[1] (0x405e23..0x405ec8), then
@@ -867,42 +934,14 @@ RT_WRAP(00405ca0, arg_record_honours)
         o_00405ca0();
         return;
     }
-    uint32_t vt = rd32(g_mem, self), a0[1] = {0};
-    call_this(rd32(g_mem, vt + 0x34), self, 1, a0);           /* the averages of the season (0x405cb0) */
-    if (rt_unwinding) return;
-    int avg, tab, down[MAX_CLUBS], nd = 0;
-    arg_down(f.season, &avg, &tab);
-    uint32_t recs = rd32(g_mem, self + AVERAGES), clubs = rd32(g_mem, CLUBS);
-    int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
+    uint32_t vt = rd32(g_mem, self), clubs = rd32(g_mem, CLUBS), recs, annual = rd32(g_mem, stages + 4);
+    int32_t down[MAX_CLUBS];
+    int by_avg = 0, worst_pos = -1, rows_n = 0;
     float worst_kept = 1e9f;
-    for (int k = have - 1; readable(recs) && k >= 0; k--) {
-        int32_t id = (int32_t)rd32(g_mem, recs + (uint32_t)k * AVG_SIZE);
-        if (id < 0 || !in_division(self, id)) continue;
-        uint32_t bits = rd32(g_mem, recs + (uint32_t)k * AVG_SIZE + 4);
-        float a;
-        memcpy(&a, &bits, sizeof a);
-        if (nd < avg) down[nd++] = id;
-        else if (a < worst_kept) worst_kept = a;
-    }
-    int by_avg = nd, worst_pos = -1, rows_n = 0;
-    uint32_t annual = rd32(g_mem, stages + 4);
-    if (tab && readable(annual)) {
-        uint32_t a1[1] = {0};
-        call_this(F_SORT_TABLE, annual, 1, a1);
-        if (rt_unwinding) return;
-        uint32_t rows = rd32(g_mem, annual + COMP_TABLE);
-        rows_n = (int16_t)rd16(g_mem, annual + COMP_CLUBS);
-        int pick = -1;
-        for (int r = 0; readable(rows) && r < rows_n; r++) {
-            uint32_t c = rd32(g_mem, rows + (uint32_t)r * ROW_SIZE);
-            if (!readable(c)) continue;
-            int32_t id = (int32_t)((c - clubs) / CLUB_SIZE), skip = 0;
-            for (int i = 0; i < nd; i++) skip |= down[i] == id;
-            int pos = g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_POSITION];
-            if (!skip && in_division(self, id) && pos > worst_pos) worst_pos = pos, pick = id;
-        }
-        if (pick >= 0) down[nd++] = pick;
-    }
+    int nd = relegated(self, &f, down, &by_avg, &worst_kept, &worst_pos, &rows_n);
+    if (rt_unwinding) return;
+    recs = rd32(g_mem, self + AVERAGES);
+    int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
     /* The worst last, as the original (count - 2 first, then count - 1). */
     for (int i = nd - 1; i >= 0; i--) {
         uint32_t club = clubs + (uint32_t)down[i] * CLUB_SIZE, place = (uint32_t)(n - i);

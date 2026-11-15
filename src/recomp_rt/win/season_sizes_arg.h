@@ -103,6 +103,8 @@ int season_arg_stage_kind(uint32_t obj, int *season);
 /* The clubs of zone A and zone B of the Primera's plan this edition (made with its fixtures); returns the zone size,
  * 0 when there is none. */
 int season_arg_zone_lists(uint32_t obj, uint32_t *a, uint32_t *b);
+/* The club records that go down at the end of the season (arg_down), for the Clausura's knockout. Returns the count. */
+int season_arg_relegated(uint32_t prm, uint32_t *club, int max);
 
 /* season_arg_stages.c: after ArgPrm::create_stages 0x405950 (the wrap in season_sizes_arg.c). */
 void season_arg_stages_made(uint32_t self);

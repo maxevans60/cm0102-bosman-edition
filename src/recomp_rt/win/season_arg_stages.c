@@ -535,6 +535,32 @@ static void log_ko(uint32_t self, const char *what, int index, const uint32_t *c
  * the first and fourth against the second and third). limit: the days it may take. */
 static int build_table_ko(uint32_t self, const Plan *p, int half, int limit);
 
+/* Art. 14.1.2 of the LPF reglamento 2025 and 2026: a club in the relegation zone does not play the Clausura's
+ * knockout, and the next club of its zone (or table) takes its place. The game knows the clubs that go down when the
+ * Clausura's tables are complete (season_arg_relegated: the averages and the annual table at their end). The rule is
+ * not stated for the Apertura, nor yet for 2027 on: those seasons keep it from 2026, the last known (lead decision).
+ * Drops them from an ordered list of n clubs; returns the count left. */
+static int bar_relegated(uint32_t self, uint32_t *club, int n, const char *what)
+{
+    uint32_t down[8];
+    int nd = season_arg_relegated(self, down, 8);
+    if (rt_unwinding) return 0;
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        int out = 0;
+        for (int j = 0; j < nd; j++) out |= club[i] == down[j];
+        if (out) {
+            if (logging())
+                fprintf(stderr, "recomp: league sizes: arg_prm %d: %u %.30s of the %s goes down; not in the Clausura "
+                        "knockout\n", (int16_t)rd16(g_mem, self + COMP_YEAR), rd32(g_mem, club[i]),
+                        win_str(club[i] + CLUB_NAME), what);
+            continue;
+        }
+        club[k++] = club[i];
+    }
+    return k;
+}
+
 static int build_ko(uint32_t self, const Plan *p, int half, int limit)
 {
     if (p->kind == SEASON_ARG_KO_TABLE) return build_table_ko(self, p, half, limit);
@@ -543,6 +569,12 @@ static int build_ko(uint32_t self, const Plan *p, int half, int limit)
     if (rt_unwinding) return 0;
     int nb = zone_order(stage_at(self, FIRST_ZONE + 2 * half + 1), b);
     if (rt_unwinding) return 0;
+    if (half) {
+        na = bar_relegated(self, a, na, "zone A");
+        if (rt_unwinding) return 0;
+        nb = bar_relegated(self, b, nb, "zone B");
+        if (rt_unwinding) return 0;
+    }
     int index = (int32_t)rd32(g_mem, self + STAGE_LAST) + 1;
     if (na < 8 || nb < 8) return 0;
     static const struct { char zone; int place; } order[KO_CLUBS] = {
@@ -575,6 +607,8 @@ static int build_table_ko(uint32_t self, const Plan *p, int half, int limit)
 {
     uint32_t t[TABLE_MAX];
     int n = zone_order(half ? stage_at(self, 0) : self, t);
+    if (rt_unwinding) return 0;
+    if (half) n = bar_relegated(self, t, n, "table");
     if (rt_unwinding || n < KO_CLUBS) return 0;
     static const int place[KO_CLUBS] = {1, 16, 8, 9, 4, 13, 5, 12, 2, 15, 7, 10, 3, 14, 6, 11};
     uint32_t club[KO_CLUBS];

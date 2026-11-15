@@ -1024,7 +1024,7 @@ def arg_down(row):
 
 def arg_title_faults(lines, year):
     fails = []
-    stages, kos, champs, ended, ko_ids, played = {}, {}, {}, set(), {}, {}
+    stages, kos, champs, ended, ko_ids, played, gone = {}, {}, {}, set(), {}, {}, {}
     for x in lines:
         m = re.match(r"recomp: league sizes: arg_prm stages (\d+): row (\d+), (\d+) zone tables of (\d+)", x)
         if m:
@@ -1047,9 +1047,24 @@ def arg_title_faults(lines, year):
         m = re.match(r"recomp: league sizes: arg_prm relegation (\d+):", x)
         if m:
             ended.add(int(m.group(1)))
+            down = re.findall(r" (\d+):[\d.]+", x.split("by the averages:", 1)[1].split("; lowest", 1)[0])
+            down += re.findall(r" (\d+):\d+", x.split("by the annual table:", 1)[1]) if "by the annual table:" in x else []
+            gone[int(m.group(1))] = {int(c) for c in down}
         if "league sizes: arg_prm " in x and ("not played" in x or "no knockout" in x or "no final" in x or
                                                "no title stages" in x):
             fails.append("arg_prm: " + x.split("arg_prm ", 1)[1])
+    # Art. 14.1.2 of the LPF reglamento 2025 and 2026: no club that goes down at the end of the season plays the
+    # Clausura's knockout (season_arg_stages.c bar_relegated).
+    for (ed, at), (what, ties) in sorted(ko_ids.items()):
+        if what == "knockout clausura":
+            barred = sorted({c for t in ties for c, _s in t} & gone.get(ed, set()))
+            if barred:
+                fails.append(f"arg_prm {ed} knockout clausura: {barred} go down but play it")
+    # The clubs the draw left out are the clubs that went down at the end (the averages at the draw are those of the end).
+    for x in lines:
+        m = re.match(r"recomp: league sizes: arg_prm (\d+): (\d+) .* goes down; not in the Clausura knockout$", x)
+        if m and int(m.group(1)) in gone and int(m.group(2)) not in gone[int(m.group(1))]:
+            fails.append(f"arg_prm {m.group(1)}: {m.group(2)} left out of the Clausura knockout but did not go down")
     # The matches the knockouts played: round 0 is the drawn ties with the drawn home clubs, the later rounds before
     # the neutral ones have the better seed at home, and a complete knockout of 16 plays 15 matches.
     for (ed, at), (what, ties) in sorted(ko_ids.items()):
@@ -1346,6 +1361,14 @@ def self_test():
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    # The Clausura knockout bar (art. 14.1.2): a club that goes down must not be in the Clausura's draw.
+    bar = ["recomp: league sizes: arg_prm knockout clausura 2025: stage 9 drawn on day 300 of 2026, a round every 7 "
+           "days: 11:1-12:8 13:4-14:5;",
+           "recomp: league sizes: arg_prm relegation 2025: row 2025, 1 by the averages: 14:0.7000; lowest average "
+           "kept 0.8000; 1 by the annual table: 15:30 of 30"]
+    got = [f for f in arg_title_faults(bar, 2025) if "go down but play it" in f]
+    if got != ["arg_prm 2025 knockout clausura: [14] go down but play it"]:
+        bad.append(("clausura bar", got))
     # Slice 9: the Italian rows of the runs.
     for file, season, want in (("ita_ser_a", 2005, (20, 2)), ("ita_ser_b", 2003, (24, 2)), ("ita_ser_b", 2018, (19, 2)),
                                ("ita_ser_c1a", 2004, (19, 2)), ("ita_ser_c1a", 2012, (17, 2)),
