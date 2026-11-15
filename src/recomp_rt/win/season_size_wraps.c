@@ -817,7 +817,7 @@ const int season_size_fixed[] = {
     0,       /* swe_prm */
     0,       /* tur_first */
     0,       /* tur_second */
-    18,       /* wel_first */
+    0,       /* wel_first */
 };
 
 /* The grown classes (league_sizes.py GROWN): file, the rows that create_table allocates, the cap, the

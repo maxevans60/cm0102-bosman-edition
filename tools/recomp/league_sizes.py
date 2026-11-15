@@ -357,12 +357,13 @@ FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
-# leagues: the Northern Irish divisions (slice 13), the Scottish divisions (D7 keeps their split and play-offs) and
-# the Welsh Premier. file: the count of the old floor (the class's own count: HELD for a grown class, slice 7). The
-# English divisions left in slice 8 (D15): the exchange of League Two and the Conference takes the places of the rows
-# (season_sizes_eng.c).
-FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("wel_first", "nir_first", "nir_prm", "sco_first", "sco_prm",
-                                                    "sco_second", "sco_third")}
+# leagues: the Northern Irish divisions (slice 13) and the Scottish divisions (D7 keeps their split and play-offs).
+# file: the count of the old floor (the class's own count: HELD for a grown class, slice 7). The English divisions
+# left in slice 8 (D15): the exchange of League Two and the Conference takes the places of the rows
+# (season_sizes_eng.c). The Welsh Premier left with open item 250: it has no chain, and its row's relegation places go
+# to no division at its season change (season_sizes.c, lone_exchange).
+FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("nir_first", "nir_prm", "sco_first", "sco_prm", "sco_second",
+                                                    "sco_third")}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
@@ -526,6 +527,14 @@ INSNS.update(DATES)
 # reached the matches of its own section, else the original.
 INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
                    "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
+
+# League::update_positions_and_status 0x684cd0 works out each row's best and worst places (+0x39, +0x3a) in its loop at
+# 0x684ef7..0x6850dc from +0xa7 and every other row. After a split, rt_split_bounds runs the same rules by section with
+# the section's matches and the code goes on at 0x6850e2 (the status marks); else the original's loop runs. eax is
+# only the loop counter, and the flags of `xor eax, eax` are set again by the cmp at 0x684ef9 (and at 0x6850e4 on the
+# jump). The locals after the loop are written first: [esp + 0x14] at 0x6850e8, [esp + 0x20] at 0x6850f8, [esp + 0x18]
+# at 0x6852cc, [esp + 0x12] by UefaSeeding::get_nation_places 0x905c60 (0x6853f5) before 0x685426.
+INSNS[0x684EF7] = ("xor eax, eax", "if (rt_split_bounds(esi)) goto L_6850e2; eax = 0;")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and

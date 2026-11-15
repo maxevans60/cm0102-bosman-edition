@@ -39,9 +39,12 @@ the clubs that go up. The runs:
           First Division clubs go down too, those of Eliteserien clubs stay
     parent-rules the same as parent with changing rules on: the rule of the season that starts (2025) holds; with
           changing rules off (the other runs) that of the start year (season_rule_year)
-    rule2014 September 2008, a 2008 start to 1 June 2009 (the database of the forum report): at the change of January
-          2009 the rule to 2014 holds, so the second team of each First Division club leaves the Second Division
-          and those of Eliteserien clubs stay
+    rule2014 September 2005 Helvete, a 2005 start to 1 June 2007 (the changes of January 2006 and January 2007, the
+          rule to 2014): the database has Stabæk IF B in the groups with Stabæk IF in the First Division, so the second
+          team of a First Division club leaves the Second Division, and those of Eliteserien clubs stay. Until the
+          league sizes of 0.7.2 the run used September 2008, the database of the forum report; there the game's
+          Eliteserien of 2008 and 2009 has 14 clubs and no place down (the rules table gives 16 clubs), so no club
+          comes down into the First Division and no First Division club has a second team in the groups
     rule2014-off the same with RECOMP_NOR_SECOND_PAIRS=off: barred second teams stay
 All runs end with code 0 and show no message box of the game.
 """
@@ -212,24 +215,25 @@ def run_parent(name, program, game, work, env, year=2024, rules="off"):
 
 
 def run_rule2014(name, program, game, work, env):
-    """September 2008, a 2008 start to 1 June 2009: the change of January 2009 (the rule to 2014)."""
-    fails, _, _, log = jump(name, program, game, work, env, last=2008, year=2008, db="September 2008")
-    pairs = pairs_of(log)
+    """September 2005 Helvete, a 2005 start to 1 June 2007: the changes of January 2006 and 2007 (the rule to 2014)."""
+    fails, _, _, log = jump(name, program, game, work, env, last=2006, year=2005, db="September 2005 Helvete")
+    pairs = [(m.group(1),) + tuple(map(int, m.groups()[1:])) for m in PAIR.finditer(log)]
     down = DOWN.findall(log)
     print(f"{name}: pairs {pairs}, to the Third Division: {[(d[0], d[2], d[3]) for d in down]}")
-    if "after" not in pairs or "before" not in pairs:
-        return fails + [f"{name}: no pair census at the change"]
-    if pairs["after"][0] != 2009 or pairs["after"][1] != 2008:
-        fails.append(f"{name}: the change reads season {pairs['after'][0]}, rule of {pairs['after'][1]}, want 2009 and "
-                     f"2008 (changing rules off: the rule of the start year)")
-    if not pairs["before"][4]:
-        fails.append(f"{name}: no second team barred before the change (the test sees no case)")
+    after = [p for p in pairs if p[0] == "after"]
+    if len(after) < 2 or len(pairs) != 2 * len(after):
+        return fails + [f"{name}: {len(after)} pair censuses after a change, want 2 changes"]
+    if [p[1] for p in after][:2] != [2006, 2007] or any(p[2] != 2005 for p in pairs):
+        fails.append(f"{name}: the changes read seasons {[p[1] for p in after]}, rules {[p[2] for p in pairs]}, want "
+                     f"2006 and 2007, rule of 2005 (changing rules off: the rule of the start year)")
+    if not any(p[5] for p in pairs if p[0] == "before"):
+        fails.append(f"{name}: no second team barred before a change (the test sees no case)")
     if name.endswith("-off"):
-        if down or not pairs["after"][4]:
+        if down or not any(p[5] for p in after):
             fails.append(f"{name}: with the switch off second teams moved ({down}) or none is barred")
         return fails
-    if pairs["after"][4] or pairs["after"][3]:
-        fails.append(f"{name}: after the change {pairs['after'][4]} barred, {pairs['after'][3]} with no first team")
+    if any(p[5] or p[4] for p in after):
+        fails.append(f"{name}: after a change second teams are barred or have no first team: {after}")
     if not any(d[3] == "the First Division" for d in down):
         fails.append(f"{name}: no second team of a First Division club went down (the rule to 2014)")
     wrong = [d[0] for d in down if d[3] == "Eliteserien" and not d[5]]

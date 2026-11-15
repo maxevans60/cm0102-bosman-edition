@@ -23,6 +23,7 @@
 #define COMP_STAGE_NOW 0x30u    /* s32: -1 before the play-off (IreFirst::start_new_season 0x635b96) */
 #define COMP_YEAR 0x40u         /* s16: the edition */
 #define COMP_MEETINGS 0x3cu     /* s16: meetings of each pair */
+#define UP 0xbeu                /* s8: IreFirst::set_up_rules 0x635aa0 sets 1 (0x635add) */
 #define UP_PLAYOFF 0xbfu        /* s8: IreFirst::set_up_rules 0x635aa0 sets 1 (0x635ae3) */
 #define DOWN_PLAYOFF 0xc0u      /* s8: IrePrm::set_up_rules 0x63a900 sets 1 (0x63a957) */
 #define MOST_FIRST 12           /* IreFirst::create_table 0x635910: cmp ax, 0xc at 0x635979 */
@@ -105,6 +106,14 @@ void season_sizes_irl_rules(uint32_t obj, const char *file)
     if (strcmp(file, "ire_first")) return;
     int none = season_sizes_on() && no_playoff(obj);
     if (none) g_mem[obj + UP_PLAYOFF] = 0;
+    /* Item 251b: the row's "up" is the direct places, and the play-off with the Premier Division is apart ("2 (pos
+     * 1,2)" and "pos 3: promotion/relegation play-off" in row 2010, the real 2011). IreFirst::set_up_rules writes 1
+     * up and 1 play-off place (+0xbe at 0x635add, +0xbf at 0x635ae3), and set_places (season_sizes.c) reads a want
+     * of 2 as 1 direct and the play-off, so in 2011 one club went up for the real two and the 2012 Premier Division
+     * kept 10. The play-off takes the row of status 1 (IreFirst::create_promotion_playoff_stage 0x635dc0, cmp byte
+     * [row + 0x37], 1 at 0x635e37), the place below the direct ones, so 2 direct places leave the 3rd in it. */
+    int up = season_sizes_row_up(obj, file);
+    if (up >= 0 && up <= MOST_PLACES) g_mem[obj + UP] = (uint8_t)up;
     /* Only before the play-off stage: the constructor and start_new_season call set_up_rules with +0x30 -1. A season
      * after one with no play-off gets the class's 1 back. A save of such a season holds +0x2c 0, and League::load
      * 0x687b10 then makes no stage array (0x688e44..0x688e5b), so it is made here as the constructor does. */
