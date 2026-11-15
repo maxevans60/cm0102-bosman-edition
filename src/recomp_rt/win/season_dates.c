@@ -318,7 +318,7 @@ static void apply(const Plan *p)
     journal_ch_base = ch;
     journal_ch_end = ch + rd32(g_mem, COMP_HISTORY_COUNT) * COMP_HISTORY_SIZE;
     const SeasonYearFixes *fx = year_fixes_for(p->name);
-    uint32_t k = 0, fixed = 0, missed = 0;
+    uint32_t k = 0, fixed = 0, missed = 0, cleared = 0;
     for (uint32_t i = 0; ch && i < n_ch; i++) {
         uint32_t r = ch + i * COMP_HISTORY_SIZE, c = rd32(g_mem, r + 4);
         int id_ok = c >= comps && (c - comps) % COMP_SIZE == 0;
@@ -333,7 +333,11 @@ static void apply(const Plan *p)
             missed++;               /* a row past the end of its file */
         }
         if (fx && k < fx->count && fx->fixes[k].nation == nation && fx->fixes[k].row == row) {
-            if (fx->fixes[k].comp == id && fx->fixes[k].year == rd16(g_mem, r + 8)) {
+            if (fx->fixes[k].comp == id && fx->fixes[k].year == rd16(g_mem, r + 8) && !fx->fixes[k].delta) {
+                keep(r + 4, 4);     /* a row of no real edition: a free row (competition 0), as the duplicate clear */
+                wr32(g_mem, r + 4, 0);
+                cleared++;
+            } else if (fx->fixes[k].comp == id && fx->fixes[k].year == rd16(g_mem, r + 8)) {
                 s += fx->fixes[k].delta;
                 fixed++;
             } else {
@@ -346,7 +350,8 @@ static void apply(const Plan *p)
     if (fx) missed += fx->count - k;
     if (fx)
         fprintf(stderr, "recomp: season dates: %u competition history years corrected for %s (open item 233), %u "
-                        "rows of the table not found\n", fixed, p->name, missed);
+                        "rows of the table not found, %u rows of no real edition cleared\n", fixed, p->name, missed,
+                cleared);
     fprintf(stderr, "recomp: season dates: %s (data %d) in %d: birth %+d, joined %+d, contract %+d (real ends "
                     "%+d), officials %+d, careers %+d (kept %+d), competition history %+d (nations %+d, last rows "
                     "%+d); %u staff, %u careers, %u history rows, %zu changes\n", p->name, p->D, p->N, p->birth,
