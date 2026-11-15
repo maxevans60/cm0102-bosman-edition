@@ -1246,7 +1246,7 @@ gre-pol-cro-204	2015	pol_first	1	16	-	-	-	ok	after 30: 8+8, points halved	split	
 gre-pol-cro-205	2016	pol_first	1	16	-	-	-	ok	after 30: 8+8, points halved	split	2	0	-	0	0	1+1	30
 gre-pol-cro-206	2017	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
 gre-pol-cro-207	2018	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
-gre-pol-cro-208	2019	pol_first	1	16	-	-	-	ok	after 30: 8+8, points unknown	split	2	0	-	0	0	1+1	30
+gre-pol-cro-208	2019	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
 gre-pol-cro-209	2020	pol_first	1	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-210	2021	pol_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-211	2022	pol_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34

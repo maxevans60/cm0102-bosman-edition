@@ -9,6 +9,7 @@
 #include "season_playoffs.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
+#include "season_pol_first.h"
 #include "season_league.h"
 #include "season_template.h"
 #include "season_cup_sizes_west.h"
@@ -968,7 +969,8 @@ RT_WRAP(00689c80, promote_relegate)
     int exp_up = (int8_t)(rt_arg(4) & 0xff), exp_down = (int8_t)(rt_arg(5) & 0xff);
     /* Only a pair of two size-table classes: only there can the places of this slice differ. Any other pair keeps
      * the original's call. */
-    int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower));
+    int ours = size_file(season_change_file(upper)) && size_file(season_change_file(lower)) &&
+               !season_pol_first_moves_alone(upper);     /* issue 92: the Ekstraklasa's exchange of the season */
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;

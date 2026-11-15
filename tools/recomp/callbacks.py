@@ -17,7 +17,7 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_bra_states.c",
                   "season_super_cups.c", "season_new_cups.c", "season_cup_groups.c",
                   "season_club_cups.c", "season_playoffs.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
-                  "season_gold_cup.c", "season_divisions.c", "season_tur_groups.c", "screen_sweep.c",
+                  "season_gold_cup.c", "season_divisions.c", "season_tur_groups.c", "season_pol_first.c", "screen_sweep.c",
                   "season_national_fill.c")
                                 # in src/recomp_rt/win
 
@@ -196,6 +196,12 @@ CALLBACKS = {
     # season_tur_groups.c (Summer 2002 slice 5): the Turkish Category B in three groups
     0x53FE50: ("81ec080200008b84", "the compare of the Turkish group deal 0x8fe580 (passed to qsort)"),
     0x8FF7E0: ("8a44240481ec0802", "TurSecondB::create_schedule, thiscall (stage, &count, &code, &flag), ret 0x10"),
+    # season_pol_first.c (GitHub issue 92): the Ekstraklasa in one table
+    0x7C8DF0: ("8a44240481ec0002", "PolFirst::create_schedule, thiscall (stage, &count, &code, &flag), ret 0x10"),
+    0x68AB70: ("53568b74241085f6", "League::find_club_row, thiscall (club, 0), ret 8"),
+    0x682F70: ("81ec000200005657", "League::calc_prize_fund, thiscall (share), ret 4"),
+    0x683010: ("a1382aae0053568b", "League::pay_tv_rights, thiscall (amount, 0), ret 8"),
+    0x7CA450: ("8b442404568b088b", "PolFirst final stage row compare (championship group first), set at stage +0xa3"),
     0x7D2CD0: ("81ec04020000558b", "PorSecondB::set_predicted_positions (own table and slots 0, 1), thiscall"),
     0x4241B0: ("8b4424048b490856", "BelThird::set_club_progress (three groups), thiscall, ret 0x14"),
     0x684640: ("83ec0c5355568bf1", "League::record_season_honours, thiscall"),
