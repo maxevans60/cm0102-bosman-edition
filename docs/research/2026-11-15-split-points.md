@@ -29,7 +29,7 @@ Every league that the rules table splits keeps the points in full, where a sourc
 | IFA and NIFL Premiership | 2002/03, 2008/09 to 2026/27 | kept | Cumulative totals in the season tables, for example Larne 73 then 83 in 2025/26. |
 | NIFL Championship | 2016/17 to 2018/19, 2021/22 to 2025/26 | kept | Cumulative totals, for example Limavady 71 then 81 in 2025/26. |
 | Welsh Premier League, Cymru Premier | 2010/11 to 2027/28 | kept | The Cymru Premier page says the phase 1 points are brought forward. The 2026/27 page says results carry over. |
-| K League | 2014 to 2018, 2021 to 2025 | kept | Cumulative totals (https://rsssf.org/tabless/skor2012.html and the season pages). |
+| K League | 2012 to 2026 (real seasons) | kept | Cumulative totals (https://rsssf.org/tabless/skor2012.html and the season pages). |
 | Danish Superliga | 2019/20 | kept | Stated on https://en.wikipedia.org/wiki/2019%E2%80%9320_Danish_Superliga. |
 | Super League Greece | 2019/20 to 2022/23 | kept | Cumulative totals (https://rsssf.org/tablesg/grk2022.html). |
 | Super League Greece 2 | 2020/21 | kept | Cumulative totals on the season page. |
@@ -43,12 +43,17 @@ The split text of each of these rows now ends "points kept in full", and the enc
 - Super League Greece 2026/27: places 1 to 4 and 9 to 14 keep their points, places 5 to 8 get half (the 2024/25 and
   2025/26 pages, https://en.wikipedia.org/wiki/2025%E2%80%9326_Super_League_Greece). No source gives the rounding. The
   rules table has one points value a split, so the row stays "unknown". Slice 11 owns it.
-- NIFL Championship 2019/20 (22 + 10 or 33 + 5 not settled), 2020/21 (cancelled), 2026/27 and 2027/28 (no points rule
-  found).
-- Rows whose split itself is wrong, for their slices:
-  - K League 2011: no split, a regular season and play-offs. The 8 + 8 split began in 2012.
-  - K League 2013: 14 clubs, 26 matches, then 7 + 7, 38 matches.
-  - K League 2019 split after 33, and 2020 after 22 (27 matches). The rows have them the other way round.
-  - Veikkausliiga 2018: one table of 33 matches, no split.
-  - Veikkausliiga 2019: the "+3" is a play-off for the last Europa League place, not a third section.
-  - Russian First Division 2010: 20 clubs, 38 matches, no split.
+- NIFL Championship 2019/20 (22 + 10 or 33 + 5 not settled), 2026/27 and 2027/28 (no points rule found). 2020/21 has
+  no split since gap 42 (22 matches).
+
+## A correction: no format errors in other slices
+
+A first reading of these sources matched the rows by their season column (for example 2011/12), not by their real
+season (column 3, 2012 for the K League). Matched by the real season, the K League, Veikkausliiga and Russian First
+Division rows agree with the sources:
+
+- K League: row aus-jap-kor-334 is real 2011 (one table, then play-offs), 335 real 2012 (8 + 8 after 30, 44 matches),
+  336 real 2013 (7 + 7 after 26), 337 real 2014 (6 + 6 after 33), 343 real 2020 (after 22, 27 matches) and 344 real
+  2021 (after 33). Rows 335, 337, 343 and 344 now also say "points kept in full" (the tables of those seasons).
+- Veikkausliiga: row nor-fin-177 is real 2019 (22 rounds, then 6 + 6). Slice 10 owns the rows of real 2018 and 2020.
+- Russian First Division: row rus-tur-37 is the first stage of the long season 2011/12, which split in 2012.
