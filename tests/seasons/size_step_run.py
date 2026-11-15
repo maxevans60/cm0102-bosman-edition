@@ -85,6 +85,12 @@ PLACES = {
     "brazil": {"bra_nat_second": (2005, None, 6)},
 }
 NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
+# Gap row 8 (lead-notes/sizes-gaps.md): the lowest division of the size table trades with the real tier below it, so
+# the step sends none of its clubs to no division.
+NO_EXIT = {"portugal2015": ["por_second"], "brazil": ["bra_nat_second"]}
+# Gap row 9: the rows of the Allsvenskan and the Superettan for 2007 say no play-off, so neither plays the class's
+# kvalspel (report season, the line of the edition).
+NO_PLAYOFF = {"grow": {"swe_prm": 2007, "swe_first": 2007}}
 
 MOVE_LINE = re.compile(r"recomp: league sizes: step: (.*) from (.*) to (.*)$")
 
@@ -147,6 +153,16 @@ def faults(work, case):
         moves = [m.group(0) for m in map(MOVE_LINE.match, log.split("\n")) if m and
                  (m.group(2) in names or m.group(3) in names)]
         fails += [f"{file}: the step moved a club: {m}" for m in moves]
+    for file, season in NO_PLAYOFF.get(case, {}).items():
+        for c in comps:
+            if c["file"] == file and c["season"] == season and c["phase"] == "start" and c["kind"] == "league" \
+                    and c["year"] and (c["playoff_up"] or c["playoff_down"]):
+                fails.append(f"{file} {season}: {c['playoff_up']} up and {c['playoff_down']} down play-off places, "
+                             f"its row none")
+    for file in NO_EXIT.get(case, []):
+        names = {c["name"] for c in comps if c["file"] == file}
+        fails += [f"{file}: the step sent a club to no division: {m.group(0)}"
+                  for m in map(MOVE_LINE.match, log.split("\n")) if m and m.group(2) in names and m.group(3) == "no division"]
     fails += [f"{d[0]} {d[2]}" for d in sorted(rrc.division_differences(comps, clubs))]
     return fails
 

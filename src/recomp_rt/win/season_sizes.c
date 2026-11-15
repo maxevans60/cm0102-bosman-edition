@@ -41,6 +41,9 @@
 #define UP_PLAYOFF 0xbfu            /* s8: promotion play-off places (inference, rules report doc) */
 #define DOWN_PLAYOFF 0xc0u          /* s8: relegation play-off places (inference) */
 #define DOWN 0xc1u                  /* s8: relegation places (League::has_relegation 0x6847b0) */
+#define COMP_STAGES 0xcu            /* the stage array (League load 0x688e3a allocates +0x2c * 4 bytes) */
+#define COMP_STAGE_COUNT 0x2cu      /* s32: stages of an edition, set by the constructor */
+#define COMP_STAGE_NOW 0x30u        /* s32: the stage now, -1 before the first */
 #define ABOVE 0x1cu                 /* s32: record id of the division above, -1 for none */
 #define BELOW 0x20u                 /* s32: record id of the division below */
 #define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each competition record */
@@ -954,10 +957,78 @@ static void sizes_rules(uint32_t obj)
     }
 }
 
+/* Gap row 9 (lead-notes/sizes-gaps.md): a row whose play-off cell says "none" plays no play-off. Here the pairs whose
+ * lower class owns a promotion play-off against the upper division's row of status 2 (research in run-logs/0.7.2-
+ * sz03/row9-research.md):
+ *   IreFirst 0x635aa0 / IrePrm 0x63a900 (+0xc0 = 1 at 0x63a957), NirFirst 0x78bd70 / NirPrm 0x78ed80 (0x78edda),
+ *   NorFirst 0x790b00 / NorPrm 0x792700 (0x792758), SweFirst 0x88f090 / SwePrm 0x890550 (0x8905a8).
+ * The play-off plays only because of the stage count +0x2c = 1 that the lower constructor sets (IreFirst 0x634cad,
+ * NirFirst 0x78b07d, NorFirst 0x78fdad, SweFirst 0x88e64d); there is no year test. With +0x2c 0 advance_stage is
+ * never called (League::update_for_date 0x6849d1..0x6849e3) and check_complete is true with no stage
+ * (0x689bdf..0x689be8). The builder needs both rows (no status 1 row: IreFirst asserts at 0x635e52..0x635e7d; no
+ * status 2 row: a stale slot 0 at 0x635f00..0x635f08), so both divisions take one decision: the upper division's row
+ * of the edition. In that edition the lower class gets +0x2c 0 and its direct up places, the upper one no relegation
+ * play-off place and its direct down places. A fixed exchange (Northern Ireland, FIXED_EXCHANGE of league_sizes.py)
+ * keeps the class's direct places, so only the play-off goes. start_new_season keeps +0x2c, so the next edition
+ * writes 1 back. A game saved with +0x2c 0 loads with no stage array (League load 0x688e3a..0x688e5b allocates
+ * +0x2c * 4 bytes), so the array gets one slot then. Only while no stage was made (+0x30 -1). */
+static const char *const PLAYOFF_PAIRS[][2] = {
+    {"ire_first", "ire_prm"}, {"nir_first", "nir_prm"}, {"nor_first", "nor_prm"}, {"swe_first", "swe_prm"},
+};
+
+static int pair_playoff_off(const char *upper_file, int year)
+{
+    /* As row_now: the start season's row with changing rules off and while the game is made (Q232). */
+    if (!season_changing_rules() || season_change_is_creating()) year = season_start_year();
+    const SeasonRule *r = row_of_edition(upper_file, year);
+    return r && r->playoffs && !strcmp(r->playoffs, "none");
+}
+
+static void class_playoff_rules(uint32_t obj, const char *file)
+{
+    if (!sizes_on() || !readable(obj) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1) return;
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    for (unsigned i = 0; i < sizeof PLAYOFF_PAIRS / sizeof PLAYOFF_PAIRS[0]; i++) {
+        const char *lower = PLAYOFF_PAIRS[i][0], *upper = PLAYOFF_PAIRS[i][1];
+        int is_lower = !strcmp(file, lower);
+        if (!is_lower && strcmp(file, upper)) continue;
+        int off = pair_playoff_off(upper, year), fixed = exchange_floor(file) > 0;
+        const SeasonRule *r = row_now(obj, file);
+        if (is_lower) {
+            int count = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT);
+            if (off && count == 1) {
+                wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+                g_mem[obj + UP_PLAYOFF] = 0;
+                if (!fixed && r && r->up >= 0 && r->up <= 30) g_mem[obj + UP] = (uint8_t)r->up;
+            } else if (!off && count == 0) {
+                uint32_t arr = rd32(g_mem, obj + COMP_STAGES);
+                if (!readable(arr)) {
+                    arr = game_malloc(4);
+                    if (!arr) return;
+                    wr32(g_mem, obj + COMP_STAGES, arr);
+                }
+                wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
+            } else {
+                return;
+            }
+        } else {
+            if (!off || (int8_t)g_mem[obj + DOWN_PLAYOFF] <= 0) return;
+            g_mem[obj + DOWN_PLAYOFF] = 0;
+            if (!fixed && r && r->down >= 0 && r->down <= 30) g_mem[obj + DOWN] = (uint8_t)r->down;
+        }
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s %d: %s (the row of %s says none): stages %d, places %d up "
+                            "%d down\n", file, year, off ? "no class play-off" : "the class play-off again", upper,
+                    (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT), (int8_t)g_mem[obj + UP], (int8_t)g_mem[obj + DOWN]);
+        return;
+    }
+}
+
 void season_sizes_rules(uint32_t obj)
 {
     if (readable(obj)) size_step_run(obj);
     sizes_rules(obj);
+    if (!rt_unwinding && readable(obj)) class_playoff_rules(obj, season_change_file(obj));
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
