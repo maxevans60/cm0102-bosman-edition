@@ -976,6 +976,19 @@ RT_WRAP(00405ca0, arg_record_honours)
         fprintf(stderr, "; lowest average kept %.4f; %d by the annual table:", (double)worst_kept, nd - by_avg);
         for (int i = by_avg; i < nd; i++) fprintf(stderr, " %u:%d", rd32(g_mem, clubs + (uint32_t)down[i] * CLUB_SIZE), worst_pos);
         fprintf(stderr, " of %d\n", rows_n);
+        fprintf(stderr, "recomp: league sizes: arg_prm averages %d, the worst 4 last:", (int16_t)rd16(g_mem, self + COMP_YEAR));
+        int shown = 0, at[4];
+        for (int k = have - 1; readable(recs) && k >= 0 && shown < 4; k--) {
+            int32_t id = (int32_t)rd32(g_mem, recs + (uint32_t)k * AVG_SIZE);
+            if (id >= 0 && in_division(self, id)) at[shown++] = k;
+        }
+        for (int i = shown - 1; i >= 0; i--) {
+            uint32_t r = recs + (uint32_t)at[i] * AVG_SIZE, bits = rd32(g_mem, r + 4);
+            float a;
+            memcpy(&a, &bits, sizeof a);
+            fprintf(stderr, " %u:%.4f", rd32(g_mem, clubs + rd32(g_mem, r) * CLUB_SIZE), (double)a);
+        }
+        fprintf(stderr, "\n");
     }
     call_this(F_RECORD_HONOURS, self, 0, NULL);
     if (rt_unwinding) return;
@@ -1053,6 +1066,26 @@ void o_004067f0(void);
 RT_WRAP(004067f0, arg_chain)
 {
     uint32_t self = cpu.ecx;
+    if (season_sizes_on() && is_prm(self) && logging()) {
+        /* The clubs the chain moves: ArgPrm rows of status 3 go down (0x406895), ArgSecond rows of status 0 or 5 go
+         * up (0x406839); 0xfe marks the clubs a promoción kept (0x408cd0). */
+        uint32_t objects = rd32(g_mem, COMP_OBJECTS);
+        int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
+        uint32_t lg[2] = {self, readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0};
+        fprintf(stderr, "recomp: league sizes: arg_prm chain %d:", (int16_t)rd16(g_mem, self + COMP_YEAR));
+        for (int t = 0; t < 2; t++) {
+            uint32_t rows = readable(lg[t]) ? rd32(g_mem, lg[t] + COMP_TABLE) : 0;
+            int m = readable(lg[t]) ? (int16_t)rd16(g_mem, lg[t] + COMP_CLUBS) : 0;
+            fprintf(stderr, t ? "; second:" : " primera:");
+            for (int r = 0; readable(rows) && r < m; r++) {
+                uint32_t row = rows + (uint32_t)r * ROW_SIZE, c = rd32(g_mem, row);
+                int st = g_mem[row + ROW_STATUS];
+                if (readable(c) && (t ? (st == 0 || st == 5 || st == 0xfe) : (st == 3 || st == 0xfe)))
+                    fprintf(stderr, " %u:%d:%d", rd32(g_mem, c), g_mem[row + ROW_POSITION], st);
+            }
+        }
+        fprintf(stderr, "\n");
+    }
     o_004067f0();
     if (rt_unwinding || !season_sizes_on() || !is_prm(self)) return;
     uint32_t objects = rd32(g_mem, COMP_OBJECTS);
