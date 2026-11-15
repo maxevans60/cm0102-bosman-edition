@@ -57,6 +57,10 @@ void season_sizes_bra_rules(uint32_t obj, const char *file);
  * season_sizes_asia.c). Any other file: the row's meetings. */
 int season_sizes_asia_meetings(const char *file, int season, int meetings);
 
+/* The most earlier starts of 7 days of the K League's date template (17, season_sizes_asia_rows.c); 0 for any other
+ * file. */
+int season_sizes_asia_earlier(const char *file);
+
 /* After the places of season_sizes_rules, with the size engine on: J1 plays its halves and final only in a season of
  * halves, else one table (slice 14, D8; season_sizes_asia.c). */
 void season_sizes_asia_rules(uint32_t obj, const char *file);

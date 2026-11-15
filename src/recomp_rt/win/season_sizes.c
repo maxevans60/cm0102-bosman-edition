@@ -398,6 +398,13 @@ static void log_days(int base, const int *days, const int *added, int n)
 /* The split dates of season_sizes_split_dates: while it calls create_schedule, the wrap gives the dates after the
  * split in place of the template, for the row's meetings of the edition (0: not called). */
 static int probe_meetings;
+/* The most earlier starts of a file's template: the K League's (slice 14), else the Brazilian or the default. */
+static int earlier_of(const char *file)
+{
+    int kor = season_sizes_asia_earlier(file);
+    return kor ? kor : season_sizes_bra_earlier(file);
+}
+
 static int probe_made;      /* 1 when the probe's wrap gave the dates after the table's rounds */
 
 void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
@@ -465,7 +472,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     SeasonTemplateDate plan[SEASON_TEMPLATE_MAX];
     char why[160];
     if (total > SEASON_TEMPLATE_MAX || mode == SEASON_TEMPLATE_MIRRORED && split ||
-        season_template_plan_from(base, uniq, count_u, total, mode, season_sizes_bra_earlier(file), plan, why,
+        season_template_plan_from(base, uniq, count_u, total, mode, earlier_of(file), plan, why,
                                   sizeof why) != total) {
         if (total > SEASON_TEMPLATE_MAX || mode == SEASON_TEMPLATE_MIRRORED && split)
             snprintf(why, sizeof why, "%s", total > SEASON_TEMPLATE_MAX ? "too many rounds" : "a split of a mirrored class");

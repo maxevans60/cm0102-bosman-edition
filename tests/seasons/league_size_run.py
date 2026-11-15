@@ -77,6 +77,8 @@ ROWS = {
     "jap_j1@2024": (2024, 2025, "J1, 20 clubs in one table: 38 dates"),
     "jap_j2": (2010, 2011, "J2, 19 clubs in two meetings: 38 dates (the class plays 4 meetings of 12)"),
     "kor_league": (2013, 2014, "K League, 14 clubs: 26 rounds, then sections of 7 and 7 that meet twice"),
+    "kor_league@2003": (2003, 2004, "K League, 12 clubs in four meetings: 44 dates, 17 weeks earlier at most, "
+                                    "then two stages as one table of 13 in two meetings"),
 }
 
 # Files whose table holds both halves of a row of halves, so it plays twice the row's meetings (slice 14,
@@ -234,9 +236,10 @@ def templates(log, file):
     return out
 
 
-# Earlier starts of 7 days a class may take (season_template.h SEASON_TEMPLATE_EARLIER, season_sizes_bra.c BRA_EARLIER).
+# Earlier starts of 7 days a class may take (season_template.h SEASON_TEMPLATE_EARLIER, season_sizes_bra.c BRA_EARLIER,
+# season_sizes_asia_rows.c KOR_EARLIER).
 EARLIER = 4
-EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13}
+EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13, "kor_league": 17}
 
 
 def template_faults(name, cls, new, rounds, earlier=EARLIER):

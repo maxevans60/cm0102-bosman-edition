@@ -48,6 +48,8 @@ int main(int argc, char **argv)
     table("eng_prm", 2001, 2);
     CHECK(season_sizes_asia_meetings("jap_j1", 2014, 0) == 0, "no meetings: the class's stay");
     CHECK(season_sizes_asia_meetings(NULL, 2014, 1) == 1, "no file");
+    CHECK(season_sizes_asia_earlier("kor_league") == 17, "K League: 17 earlier starts");
+    CHECK(season_sizes_asia_earlier("jap_j1") == 0 && season_sizes_asia_earlier(NULL) == 0, "other files: none");
     if (failures) fprintf(stderr, "%d failures\n", failures);
     else printf("PASS season_sizes_asia\n");
     return failures ? 1 : 0;
