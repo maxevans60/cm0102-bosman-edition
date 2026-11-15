@@ -84,7 +84,12 @@ check(by[("eng_prm", 2001)]["split"] == "-", "one table")
 check(by[("arg_prm", 2001)]["calendar"] == "split", "Argentina 2001/02")
 check(by[("arg_prm", 2014)]["calendar"] == "calendar", "Argentina 2015")
 check(by[("arg_prm", 2016)]["calendar"] == "split", "Argentina back in 2016/17")
-check(by[("ire_prm", 2002)]["calendar"] == "transition", "Ireland 2002/03 and 2003")
+ids = {r["id"]: r for r in rows}
+check(ids["wal-nir-irl-41"]["calendar"] == "transition" and ids["wal-nir-irl-41"]["meetings"] == 3,
+      "Ireland 2002/03: the short season, 3 meetings")
+check(ids["wal-nir-irl-41b"]["season"] == 2002 and ids["wal-nir-irl-41b"]["calendar"] == "calendar" and
+      ids["wal-nir-irl-41b"]["meetings"] == 4 and ids["wal-nir-irl-42b"]["meetings"] == 3,
+      "Ireland 2002/03, second rows: the calendar season 2003, 4 and 3 meetings (gap row 2)")
 check(by[("ire_prm", 2003)]["calendar"] == "calendar", "Ireland summer season from 2004")
 check(by[("rus_prm", 2010)]["calendar"] == "transition", "Russia 2011/12, first stage")
 check(by[("rus_prm", 2012)]["calendar"] == "split", "Russia autumn to spring from 2012/13")

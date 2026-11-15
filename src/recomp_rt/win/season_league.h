@@ -7,6 +7,8 @@
 #ifndef RECOMP_SEASON_LEAGUE_H
 #define RECOMP_SEASON_LEAGUE_H
 
+#include "season_rules.h"
+
 #define SEASON_LEAGUE_PARTS 4   /* zones of a division, sections of a split */
 
 typedef struct {
@@ -52,5 +54,27 @@ const SeasonLeagueRule *season_league_row(const char *file, int season);
  * before it that has them. 0 when no row gives meetings: the class's own meetings stay. Reads only the table:
  * no game state. */
 int season_league_meetings(const char *file, int season);
+
+/* The rules table row (season_rules.h) of a league's edition (+0x40, the year that start_new_season sets):
+ * - row Y when its real season begins with Y ("2008/09", "2026/27"; jap_j1 row 2026 "2026/27", so a league that
+ *   changes from calendar years to two-year seasons plays its two-year season in the year of the change);
+ * - else a row of season Y - 1 whose real season begins with Y: a calendar-year league holds the real season Y + 1 in
+ *   row Y ("Calendar-year league: real season 2009" in row 2008 of nor_prm), so edition Y takes row Y - 1. A season
+ *   may hold a second row (gap row 2 of 0.7.2: 2002/03 holds the short Irish 2002-03 season and, in a second row,
+ *   the first calendar season 2003), so every row of season Y - 1 is looked at, in order;
+ * - else the row of season Y, or by the after-table rule the last row before it (Q248).
+ * NULL when the file has no row then. Reads only the tables. */
+const SeasonRule *season_league_edition_row(const char *file, int year);
+
+/* The season of that row when its real season begins with the year, else the year (season_sizes_edition). */
+int season_league_edition(const char *file, int year);
+
+/* The encoded row of a rules table row r of the file: the k-th encoded row of r's season and file, r being the k-th
+ * rules table row of them (the groups of a division, the two Irish rows of 2002/03). NULL when there is none. */
+const SeasonLeagueRule *season_league_rule_of(const char *file, const SeasonRule *r);
+
+/* The meetings of a league in the season of rules table row r: those of its own encoded row when it is a second row
+ * of its season with known meetings, else season_league_meetings(file, r->season). */
+int season_league_meetings_of(const char *file, const SeasonRule *r);
 
 #endif

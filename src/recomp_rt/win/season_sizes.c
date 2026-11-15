@@ -129,40 +129,11 @@ static int within(const char *file, int n)
     return n;
 }
 
-/* The row of a season, or the last row before it (Q248: after the last row the rules stay, with no end year:
- * the after-table rule). */
-static const SeasonRule *row_of_season(const char *file, int season)
-{
-    int s = season_rules_last_season(season, file);
-    return s ? season_rules_find(s, file, 0) : NULL;
-}
+/* The season of the row of the edition of a year (season_sizes.h; season_league_edition_row gives the rule: row Y,
+ * else a row of Y - 1 whose real season begins with Y, a calendar-year league's or the second Irish row of 2002/03). */
+int season_sizes_edition(const char *file, int year) { return season_league_edition(file, year); }
 
-/* 1 when the real season of a row begins with the year ("2011", "2010/11", "2011-12 (first stage ...)"). */
-static int real_starts(const SeasonRule *r, int year)
-{
-    char y[8];
-    snprintf(y, sizeof y, "%d", year);
-    return r && r->real_season && !strncmp(r->real_season, y, 4) &&
-           (r->real_season[4] < '0' || r->real_season[4] > '9');
-}
-
-/* The season of the row of the edition of a year (season_sizes.h): row Y when its real season begins with Y
- * ("2008/09", "2026/27"), else row Y - 1 when its real season begins with Y, else Y. A calendar-year league holds
- * the real season Y + 1 in row Y ("Calendar-year league: real season 2009" in row 2008 of nor_prm), so its edition
- * Y takes row Y - 1: a 2008 start plays the Tippeligaen 2008 with the 14 clubs of row 2007 and the 2009 edition
- * with the 16 of row 2008. Row Y comes first, so a league that changes from calendar years to two-year seasons
- * (jap_j1 row 2025 "2026", row 2026 "2026/27") plays its two-year season in the year of the change. */
-int season_sizes_edition(const char *file, int year)
-{
-    if (real_starts(season_rules_find(year, file, 0), year)) return year;
-    if (real_starts(season_rules_find(year - 1, file, 0), year)) return year - 1;
-    return year;
-}
-
-static const SeasonRule *row_of_edition(const char *file, int year)
-{
-    return row_of_season(file, season_sizes_edition(file, year));
-}
+static const SeasonRule *row_of_edition(const char *file, int year) { return season_league_edition_row(file, year); }
 
 /* The row of the rules of a league object now (season_sizes.h). */
 static const SeasonRule *row_now(uint32_t obj, const char *file)
@@ -393,7 +364,7 @@ static void game_free(uint32_t p)
 static int grown_meetings(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
-    int m = r ? season_sizes_asia_meetings(file, r->season, season_league_meetings(file, r->season)) : 0;
+    int m = r ? season_sizes_asia_meetings(file, r->season, season_league_meetings_of(file, r)) : 0;
     if (m >= 1 && m <= 4 && m != (int16_t)rd16(g_mem, obj + COMP_MEETINGS)) {
         if (logging())
             fprintf(stderr, "recomp: league sizes: %s meetings %d (%.50s %d, the class sets %d)\n", file, m,
@@ -527,7 +498,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
      * takes the class's meetings for this count, not the value set_up_rules wrote for another count. */
     if (!probe) {
         const SeasonRule *r = row_now(self, file);
-        int row_m = r ? season_league_meetings(file, r->season) : 0;
+        int row_m = r ? season_league_meetings_of(file, r) : 0;
         int m = season_sizes_irl_class_meetings(file, n, row_m >= 1 && row_m <= 4 ? row_m : 0);
         if (m && m != meetings) {
             meetings = m;
