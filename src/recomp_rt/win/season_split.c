@@ -53,6 +53,7 @@
 #define COMP_MEETINGS 0x3cu         /* s16 */
 #define COMP_CLUBS 0x3eu            /* s16 */
 #define COMP_YEAR 0x40u             /* s16: the edition */
+#define ORDER_GLOBAL 0x00b67a00u     /* the order that the row comparators call (League::sort_table 0x682884) */
 #define COMP_ORDER 0xa3u            /* the table order function, 0 for the points (0x683410) */
 #define COMP_MATCHES 0xa7u          /* s16: matches per club */
 #define COMP_DATES 0xa9u            /* s16: the dates of the template */
@@ -242,6 +243,14 @@ static uint32_t order_fn(void)
 {
     if (!order_addr) order_addr = rt_host_fn("split_order", split_order);
     return order_addr;
+}
+
+/* League::sort_table's path with no tie rules list (0x682aa8, league_sizes.py): the order of a league after its
+ * split goes to the comparators' global [0xb67a00], as the other path does at 0x682884. */
+void rt_split_sort_order(uint32_t obj)
+{
+    if (!season_sizes_on() || !readable(obj) || !order_addr || rd32(g_mem, obj + COMP_ORDER) != order_addr) return;
+    wr32(g_mem, ORDER_GLOBAL, order_addr);
 }
 
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original)

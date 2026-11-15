@@ -506,6 +506,15 @@ INSNS.update(DATES)
 # reached the matches of its own section, else the original.
 INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
                    "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
+# League::sort_table 0x6827d0 copies the table order +0xa3 into the global [0xb67a00] that the row comparators 0x683210
+# and 0x683410 call first (0x68287c..0x682884). With no tie rules list (+0xad, 0x682824) and the first tie rule 6
+# (+0xc5, 0x682835) it jumps past that copy to its own qsort with 0x683210 (0x682aa8..0x682ab9), so the comparator
+# calls the order of the last sort: the Croatian classes take that path once their table is complete
+# (Club_Records::update_league_position_records 0x447430 and Club_History::record_comp_season 0x442e80 sort it then),
+# and the sections of a split were lost for the final table (slice 11). rt_split_sort_order sets the global to a split
+# league's own order there; any other league keeps the original.
+INSNS[0x682AAC] = ("movsx eax, word ptr [ebx + 0x3e]",
+                   "rt_split_sort_order(ebx); eax = (uint32_t)(int32_t)(int16_t)R16(ebx + 0x3eu);")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and
