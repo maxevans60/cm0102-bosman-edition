@@ -793,10 +793,10 @@ const int season_size_fixed[] = {
     0,       /* por_second */
     0,       /* rus_first */
     0,       /* rus_prm */
-    10,       /* sco_first */
-    12,       /* sco_prm */
-    10,       /* sco_second */
-    10,       /* sco_third */
+    0,       /* sco_first */
+    0,       /* sco_prm */
+    0,       /* sco_second */
+    0,       /* sco_third */
     0,       /* spa_first */
     0,       /* spa_second */
     0,       /* swe_first */
