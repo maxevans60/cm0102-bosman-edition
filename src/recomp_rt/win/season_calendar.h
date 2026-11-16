@@ -93,6 +93,8 @@ void season_calendar_stage(uint32_t obj, const char *file, int stage, uint32_t c
 int season_calendar_history_label(uint32_t obj);
 /* RECOMP_CALENDAR_LOG=1: one line with the entry's fields (season.c calls it at a save and after a load). */
 void season_calendar_log_entry(const char *when);
+/* IrePrm's edition +0x40, 0 when Ireland is not selected. */
+int season_calendar_edition(void);
 /* RECOMP_CALENDAR_LOG=1: the label of a history row of an Irish league or cup (season_history.c). */
 void season_calendar_log_history(uint32_t obj, int label);
 

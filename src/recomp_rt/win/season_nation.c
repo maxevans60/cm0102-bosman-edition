@@ -71,3 +71,8 @@ int season_brexit_blocks(const char *club_nation, int season, int year, int rule
     season_nation_state(club_nation, season, &st);
     return st.brexit;
 }
+
+int season_nation_row_season(const char *nation, int season, int moved)
+{
+    return moved && nation && !strcmp(nation, "Republic of Ireland") && season >= 2003 ? season - 1 : season;
+}
