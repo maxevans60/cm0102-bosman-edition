@@ -398,6 +398,7 @@ def want_counts(file, season, meetings=0):
 
 
 _REAL = {}
+_REAL_ID = {}
 
 
 def real_season(file, season):
@@ -408,9 +409,14 @@ def real_season(file, season):
         for r in make_rules.read_rows():
             if r.get("comp_file") and str(r.get("season", ""))[:4].isdigit():
                 _REAL.setdefault((r["comp_file"], int(str(r["season"])[:4])), []).append(r.get("real_season", ""))
-    rows = _REAL.get((file, int(season)), [])
-    n = season.n if isinstance(season, RowSeason) else 0
-    return rows[n] if n < len(rows) else ""
+                _REAL_ID[r.get("id")] = r.get("real_season", "")
+    if isinstance(season, RowSeason):
+        row = encoded_pick(file, season)
+        if not row or int(row["season"]) != season:
+            raise SystemExit(f"league_size_run.py: {file} has no row {season.n} of season {int(season)}")
+        return _REAL_ID.get(row.get("id"), "")
+    rows = _REAL.get((file, season), [])
+    return rows[0] if rows else ""
 
 
 # Classes that play over two years (August to June) whose rows hold calendar-year seasons from some year: edition Y
@@ -424,7 +430,8 @@ MOVED_CLASSES = {"ire_prm", "ire_first"}
 def edition_season(file, edition):
     """The season of the row that an edition (+0x40) plays (season_sizes.c season_sizes_edition): row Y when its real
     season begins with Y, else row Y - 1 when its real season begins with Y, else Y. A class of TWO_YEAR_CLASSES
-    plays row Y."""
+    plays row Y. A class of MOVED_CLASSES (Irish calendar move) can play the second row of season Y - 1, a
+    RowSeason."""
     if file in TWO_YEAR_CLASSES:
         return edition
     if file in MOVED_CLASSES:
@@ -432,13 +439,13 @@ def edition_season(file, edition):
         # set_moved) and an edition plays the row whose real season begins with it, of its own season or the season
         # before, in table order (season_rules_row_of): edition 2002 row 41 (2002-03, the short season), 2003 row
         # 41b (2003), 2004 row 66 (2004).
-        real_season(file, edition)      # fills _REAL
-        for season in (edition, edition - 1):
-            for n in range(len(_REAL.get((file, season), []))):
-                key = RowSeason(season, n) if n else season
-                t = real_season(file, key)
-                if t[:4] == str(edition) and not t[4:5].isdigit():
-                    return key
+        real_season(file, edition)      # fills _REAL_ID
+        held = sum(1 for r in encoded_rows() if r.get("comp_file") == file and r.get("season") == str(edition - 1)
+                   and r.get("clubs", "").isdigit())
+        for key in [edition] + [RowSeason(edition - 1, n) if n else edition - 1 for n in range(held)]:
+            t = real_season(file, key)
+            if t[:4] == str(edition) and not t[4:5].isdigit():
+                return key
     def starts(season):
         t = real_season(file, season)
         return t[:4] == str(edition) and not t[4:5].isdigit()
@@ -1016,12 +1023,13 @@ def faults(work, file, year, last):
         clubs, m = row(base)
         sp = edition_split(file, base)
         rounds = counts(base)[0] + (split_numbers(sp[1])[0] if sp else 0)
-        if rounds == len(cls) and not sp:
-            continue
         if file in MOVED_CLASSES and "short season" in real_season(file, edition_season(file, base)):
             # The short season of the Irish calendar move plans from the class's dates before 1 February of the next
-            # year, so the play-off ends before the update day (season_calendar.c season_calendar_move_cut).
+            # year, so the play-off ends before the update day (season_calendar.c season_calendar_move_cut); it always plans
+            # again, so the cut comes before the check of the class's count.
             cls = [d for d in cls if d < datetime.date(base + 1, 2, 1)]
+        if rounds == len(cls) and not sp:
+            continue
         if new is None:
             fails.append(f"{file} template {base}: the class's {len(cls)} dates stay, want {rounds}")
         else:
