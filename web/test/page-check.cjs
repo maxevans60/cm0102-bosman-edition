@@ -326,6 +326,18 @@ const PORT = 8097;
       `${JSON.stringify(offered.options)} | ${offeredSaid}`);
     await p.click('#report-close');
     await p.click('#saves-open');
+    // A save zipped by another site (a player's Matt.zip, 16 November 2026: "only .sav files are saved games"): the
+    // saves in it are taken; a zip with none says so.
+    const { writeZip } = await import('../zip.js');
+    const zipped = Buffer.from(await writeZip([{ name: 'Matt/Matt.sav', data: got }, { name: 'readme.txt', data: Buffer.from('from another site') }]));
+    await p.setInputFiles('#saves-file', [{ name: 'Matt.zip', mimeType: 'application/zip', buffer: zipped },
+      { name: 'Nothing.zip', mimeType: 'application/zip', buffer: Buffer.from(await writeZip([{ name: 'a.txt', data: Buffer.from('x') }])) }]);
+    await p.waitForFunction(() => /Matt/.test(document.getElementById('saves-note').textContent), null, { timeout: 15000 }).catch(() => {});
+    const zipNote = await p.textContent('#saves-note');
+    const zipBack = await p.evaluate(() => { try { return window.Module.FS.readFile('/user/Matt.sav').length; } catch { return -1; } });
+    check('a zip from another site: the save in it is uploaded; a zip with no save is refused with its reason',
+      zipBack === got.length && /Uploaded Matt\.sav/.test(zipNote) && /Nothing\.zip: it holds no saved game \(\.sav\)/.test(zipNote)
+        && /Matt\.sav/.test(await p.textContent('#saves-list')), `${zipBack} | ${zipNote}`);
     // Tactics (tactics.js): a tactic saved by the game, a preset's .pct (its version plus 0x075BCD15, which the game's
     // Load refuses: the page stores the plain one), and two files that are not tactics.
     const tct = (version) => { const t = Buffer.alloc(1476); t.writeUInt32LE(version, 0); t.writeUInt32LE(0xf2fffff2, 1472); return t; };

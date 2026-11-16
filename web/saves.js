@@ -6,7 +6,7 @@
 // The game writes *.sav files in the user folder (src/recomp_rt/win/files.c; the option save_folder can name another
 // folder, which the browser build does not use). A save in progress is temp_save_file.sav, renamed when it is done;
 // older copies are in backups/ (option save_backups).
-import { zipOfBlobs } from './zip.js';
+import { zipBlobEntries, zipBlobEntry, zipOfBlobs } from './zip.js';
 import { isAway } from './vault.js';
 
 export const SAVE_DIR = '/user';
@@ -385,18 +385,33 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
     try { await download(FS, f); say(`Downloaded ${f.name}.`); log(`page: downloaded the save ${f.name}`); }
     catch (err) { say(`${f.name} could not be read: ${err.message}`, true); }
   });
+  // The saves an uploaded file holds: [{ name, size, blob() }]. A .sav is itself; a .zip (a save zipped by another
+  // site, as a player's Matt.zip was, or a part of Download all) gives the .sav files in it, wherever in its folders,
+  // except the older copies (backups/). Each is read from the zip only when it is stored (zip.js, zipBlobEntry).
+  async function savesIn(file) {
+    if (!/\.zip$/i.test(file.name)) return [{ name: file.name, size: file.size, blob: async () => file }];
+    const entries = (await zipBlobEntries(file)).filter((e) => /\.sav$/i.test(e.name) && !/(^|\/)backups\//i.test(e.name));
+    if (!entries.length) throw new Error('it holds no saved game (.sav)');
+    return entries.map((e) => ({ name: e.name.split('/').pop(), size: e.size, blob: () => zipBlobEntry(file, e) }));
+  }
   input.onchange = async () => {
     const done = [], refused = [], refusedFiles = [];
     for (const file of input.files) {
-      const taken = new Set(listSaves(FS).saves.map((f) => f.name.toLowerCase()));
-      const name = saveName(file.name, taken);
-      if (!name) { refused.push(`${file.name}: only .sav files are saved games`); refusedFiles.push(file); continue; }
-      if (file.size > 50 << 20) say(`Storing ${file.name} (${mb(file.size)})…`);
-      let why;
-      try { why = await storeSave(FS, name, file); } catch (err) { why = `it was not stored: ${err.message}`; }
-      if (why) { refused.push(`${file.name}: ${why}`); refusedFiles.push(file); continue; }
-      done.push(name);
-      log(`page: uploaded the save ${name} (${mb(file.size)})`);
+      if (!/\.(sav|zip)$/i.test(file.name)) { refused.push(`${file.name}: only .sav files are saved games (or a .zip of them)`); refusedFiles.push(file); continue; }
+      let inside;
+      try { inside = await savesIn(file); } catch (err) { refused.push(`${file.name}: ${err.message}`); refusedFiles.push(file); continue; }
+      for (const one of inside) {
+        const taken = new Set(listSaves(FS).saves.map((f) => f.name.toLowerCase()));
+        const name = saveName(one.name, taken);
+        const label = one.name === file.name ? file.name : `${one.name} (in ${file.name})`;
+        if (!name) { refused.push(`${label}: only .sav files are saved games`); refusedFiles.push(file); continue; }
+        if (one.size > 50 << 20) say(`Storing ${label} (${mb(one.size)})…`);
+        let why;
+        try { why = await storeSave(FS, name, await one.blob()); } catch (err) { why = `it was not stored: ${err.message}`; }
+        if (why) { refused.push(`${label}: ${why}`); refusedFiles.push(file); continue; }
+        done.push(name);
+        log(`page: uploaded the save ${name} (${mb(one.size)})${one.name === file.name ? '' : ` from ${file.name}`}`);
+      }
     }
     input.value = '';
     if (done.length) sync();

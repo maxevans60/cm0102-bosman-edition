@@ -141,3 +141,48 @@ export async function zipRead(zip, entry) {
   if (crc32(data) !== entry.crc) throw new Error(`${entry.name} is damaged: its checksum does not match`);
   return data;
 }
+
+// A zip read as a Blob (an upload to Saved games: a save zipped by another site, or a part of Download all, up to 4 GB):
+// its central directory from the end of the file, and each entry as a Blob of its own, so neither the zip nor a save is
+// in memory whole. The entries: [{ name, size, method, compressed, crc, offset }].
+export async function zipBlobEntries(blob) {
+  const tailFrom = Math.max(0, blob.size - 22 - 0xffff);
+  const tail = new Uint8Array(await blob.slice(tailFrom).arrayBuffer()), tv = new DataView(tail.buffer);
+  let e = -1;
+  for (let i = tail.length - 22; i >= 0; i--) if (tv.getUint32(i, true) === 0x06054b50) { e = i; break; }
+  if (e < 0) throw new Error('it is not a zip file');
+  const count = tv.getUint16(e + 10, true), dirSize = tv.getUint32(e + 12, true), start = tv.getUint32(e + 16, true);
+  if (count === 0xffff || start === 0xffffffff) throw new Error('the zip is in the Zip64 format, which this page does not read');
+  const dir = new Uint8Array(await blob.slice(start, start + dirSize).arrayBuffer()), dv = new DataView(dir.buffer);
+  const out = [];
+  let p = 0;
+  for (let k = 0; k < count; k++) {
+    if (p + 46 > dir.length || dv.getUint32(p, true) !== 0x02014b50) throw new Error('the zip is damaged');
+    const flags = dv.getUint16(p + 8, true), method = dv.getUint16(p + 10, true);
+    const n = dv.getUint16(p + 28, true), x = dv.getUint16(p + 30, true), c = dv.getUint16(p + 32, true);
+    const name = fromUtf8.decode(dir.subarray(p + 46, p + 46 + n));
+    if (flags & 1) throw new Error(`${name} is encrypted`);
+    out.push({ name, method, crc: dv.getUint32(p + 16, true), compressed: dv.getUint32(p + 20, true), size: dv.getUint32(p + 24, true),
+      offset: dv.getUint32(p + 42, true) });
+    p += 46 + n + x + c;
+  }
+  return out;
+}
+
+// One entry of a zip Blob as a Blob: a stored one is a slice of the zip, a deflated one unpacked as a stream (the browser
+// keeps a large Blob on disk). Its size and CRC-32 are checked.
+export async function zipBlobEntry(blob, entry) {
+  const head = new DataView(await blob.slice(entry.offset, entry.offset + 30).arrayBuffer());
+  if (head.byteLength < 30 || head.getUint32(0, true) !== 0x04034b50) throw new Error(`${entry.name}: the zip is damaged`);
+  const from = entry.offset + 30 + head.getUint16(26, true) + head.getUint16(28, true);
+  const raw = blob.slice(from, from + entry.compressed);
+  let data;
+  if (entry.method === 0) data = raw;
+  else if (entry.method === 8) {
+    try { data = await new Response(raw.stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob(); }
+    catch { throw new Error(`${entry.name} is damaged: it does not unpack`); }
+  } else throw new Error(`${entry.name} is packed in a way this page does not read (method ${entry.method})`);
+  if (data.size !== entry.size) throw new Error(`${entry.name}: ${data.size} of ${entry.size} bytes`);
+  if (await crc32Blob(data) !== entry.crc) throw new Error(`${entry.name} is damaged: its checksum does not match`);
+  return data;
+}

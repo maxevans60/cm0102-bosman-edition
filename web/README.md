@@ -138,7 +138,10 @@ cup and Champions League rounds. What to expect:
 
 The game saves into the user folder as on the desktop (Game Options, Save Game). The Saved games button above the
 game lists those saves: Download writes one to your computer, as a normal `.sav` file; Upload a save puts a `.sav`
-file into the folder, and the game's Restore Saved Game screen then lists it. An upload is checked first (it must be a
+file into the folder, and the game's Restore Saved Game screen then lists it. A `.zip` works too (a save zipped by
+another site, as a player's was, or a part of Download all): the `.sav` files in it are taken, wherever in its folders,
+except its older copies, each read from the zip as it is stored (`zip.js`, zipBlobEntries), so neither is in memory
+whole. An upload is checked first (it must be a
 save container of CM 01/02), and a name that is taken gets a number. The saves use the format of the desktop game, so a
 save should move between this page and the Bosman Edition both ways.
 

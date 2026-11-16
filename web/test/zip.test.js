@@ -22,3 +22,22 @@ test('zipOfBlobs: the files stored as they are, read back by zipRead, with their
   assert.equal((await zipRead(bytes, entries[2])).length, 0);
   assert.equal(await crc32Blob(new Blob([big])), crc32(big));
 });
+
+test('a zip read as a Blob: its entries from the end of the file, each entry as a Blob, packed or stored, checked', async () => {
+  const { writeZip: w, zipOfBlobs: zb, zipBlobEntries, zipBlobEntry } = await import('../zip.js');
+  const save = new Uint8Array(300000).map((_, i) => (i * 7) & 0xff);
+  const packed = new Blob([await w([{ name: 'Matt/Matt.sav', data: save }, { name: 'notes.txt', data: new TextEncoder().encode('hi') }])]);
+  let entries = await zipBlobEntries(packed);
+  assert.deepEqual(entries.map((e) => [e.name, e.size, e.method]), [['Matt/Matt.sav', 300000, 8], ['notes.txt', 2, 0]]);
+  const back = await zipBlobEntry(packed, entries[0]);
+  assert.ok(back instanceof Blob);
+  assert.deepEqual(new Uint8Array(await back.arrayBuffer()), save);
+  const stored = await zb([{ name: 'Arsenal.sav', blob: new Blob([save]) }]);
+  entries = await zipBlobEntries(stored);
+  assert.deepEqual(new Uint8Array(await (await zipBlobEntry(stored, entries[0])).arrayBuffer()), save);
+  // A damaged entry is refused, not stored.
+  const bytes = new Uint8Array(await stored.arrayBuffer());
+  bytes[100] ^= 0xff;
+  await assert.rejects(zipBlobEntry(new Blob([bytes]), entries[0]), /checksum/);
+  await assert.rejects(zipBlobEntries(new Blob([new Uint8Array(100)])), /not a zip/);
+});
