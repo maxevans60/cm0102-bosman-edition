@@ -941,7 +941,12 @@ def q48_runs(runs, new_game):
             out.append(("rules-on-q48", dict(o, _against="rules-on-q48-ref" if REF_BUILD else "")))
             if REF_BUILD:
                 out.append(("rules-on-q48-ref", dict(o, _program=REF_BUILD, _against="")))
-            o = dict(o, _env=dict(o.get("_env", {}), RECOMP_HISTORY_AFTER_START="off", **PAIR_KEEP),
+            # Item 257: the pair is defined with no rules table (RULES_ON_PARTS). With a table, changing rules on
+            # applies the 2001/02 rows at the new game (club moves, new competitions, names), so rules-on runs with
+            # none (the null device reads as no table) whatever the set's environment holds. history-q48-off keeps it,
+            # so with a table set the pair also shows that the base game with the table equals the game with none.
+            o = dict(o, _env=dict(o.get("_env", {}), RECOMP_HISTORY_AFTER_START="off", RECOMP_RULES_TABLE=os.devnull,
+                                  **PAIR_KEEP),
                      _against=Q48_REFERENCE)
         elif name == Q48_REFERENCE and new_game:
             o = dict(o, _env=dict(o.get("_env", {}), **PAIR_KEEP), _against="")
