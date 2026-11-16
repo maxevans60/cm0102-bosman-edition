@@ -405,6 +405,75 @@ const PORT = 8097;
     const second = (await p.textContent('#log')).match(/page: \d+ files in .*/)?.[0] ?? '';
     check('the second visit gives the engine every byte', again.bytes === total + 4 * 2, second);
     check('the second visit asks the server for no game file', gameRequests.length === 0, `${gameRequests.length} requests`);
+    // Play (play.js; the runtime's play.c): a save's Play button asks the engine to load it from its start screen. With
+    // a game in play the page asks first, restarts as Restart Game does, and asks the engine after the start.
+    const toasts = () => p.evaluate(() => [...document.querySelectorAll('#toasts .toast')].map((t) => t.textContent).join(' | '));
+    await p.click('#saves-open');
+    await p.click('#saves-list button[data-play="0"]');
+    const asked = await p.evaluate(() => ({ played: window.__played, open: document.getElementById('saves').open }));
+    const askedToast = await toasts();
+    check('Play: the engine is asked for the save, and Saved games closes',
+      JSON.stringify(asked.played) === '["Harbour City 2001-07-14.sav"]' && !asked.open && /Opening Harbour City 2001-07-14\.sav/.test(askedToast),
+      `${JSON.stringify(asked)} | ${askedToast}`);
+    await p.evaluate(() => window.Module.rtPlay(6));
+    const failedToast = await toasts();
+    check('Play: an engine that could not do it says why, and where the player can open the save',
+      /Harbour City 2001-07-14\.sav did not open: the game's File entry did not take its name .*Restore Saved Game on the game's start screen opens it too/.test(failedToast), failedToast);
+    // A name the game's File entry refuses: the engine says so at once (play.c's answer), and Saved games stays open.
+    await p.evaluate(() => { window.__playAnswer = 1; document.querySelectorAll('#toasts .toast').forEach((t) => t.remove()); });
+    await p.click('#saves-open');
+    await p.click('#saves-list button[data-play="0"]');
+    const refusedPlay = { toast: await toasts(), open: await p.evaluate(() => document.getElementById('saves').open) };
+    check('Play: a name the game cannot take is refused at once, with why, and no "Opening"',
+      /did not open: its name has characters the game's File entry does not take/.test(refusedPlay.toast) && !/Opening/.test(refusedPlay.toast) && refusedPlay.open,
+      JSON.stringify(refusedPlay));
+    await p.evaluate(() => { window.__playAnswer = -1; window.__played = []; });
+    await p.click('#saves-close');
+    await p.evaluate(() => { window.__inGame = true; });
+    let question = '';
+    p.once('dialog', (d) => { question = d.message(); });            // the page check's own handler accepts it
+    const replayed = p.waitForNavigation({ timeout: 30000 }).then(() => true, () => false);
+    await p.click('#saves-open');
+    await p.click('#saves-list button[data-play="0"]');
+    check('Play with a game in play: the page asks first, then loads again', await replayed && /game in play closes/.test(question), question);
+    await p.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+    await p.waitForFunction(() => window.__played?.length, null, { timeout: 10000 }).catch(() => {});
+    check('and after the start the engine is asked for the save, once',
+      JSON.stringify(await p.evaluate(() => window.__played)) === '["Harbour City 2001-07-14.sav"]'
+        && (await p.evaluate(() => sessionStorage.getItem('cm0102-play'))) === null, JSON.stringify(await p.evaluate(() => window.__played)));
+    // A name left waiting by a start that never came (an hour old): not opened at a later start.
+    await p.evaluate(() => sessionStorage.setItem('cm0102-play', JSON.stringify({ name: 'Harbour City 2001-07-14.sav', at: Date.now() - 3600000 })));
+    await p.reload();
+    await p.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+    await p.waitForTimeout(500);
+    check('an old waiting name is dropped, not opened', JSON.stringify(await p.evaluate(() => window.__played)) === '[]'
+      && (await p.evaluate(() => sessionStorage.getItem('cm0102-play'))) === null);
+    // The game's long jobs (progress.js, display.c): a stage that runs shows in the bar with its share and time.
+    await p.evaluate(() => { window.__progress = 45; window.Module.printErr('recomp: progress: Player histories'); });
+    await p.waitForFunction(() => /^Player histories 45% · 0:0\d$/.test(document.getElementById('status').textContent), null, { timeout: 3000 }).catch(() => {});
+    const during = await p.textContent('#status');
+    await p.evaluate(() => { window.__progress = -1; });
+    await p.waitForTimeout(600);
+    check('a long job of the game shows in the bar with its share and time, and goes when it ends',
+      /^Player histories 45% · 0:0\d$/.test(during) && (await p.textContent('#status')) === '', `${during} | ${await p.textContent('#status')}`);
+    // A new version (release.js): the server names another release; the page shows New version when it comes back
+    // into view, and the button loads the page again the way Restart Game does.
+    const release = await p.evaluate(() => fetch('/version.json').then((r) => r.json()).then((j) => j.release));
+    check('the page runs the release the server names', /^[0-9a-f]{12}$/.test(release ?? '') && (await p.isHidden('#update')), release);
+    // A deploy with another page file: its time changes, and so the release (the service worker passes the page's
+    // request to the server, so the server itself is asked).
+    const releaseFile = path.join(__dirname, '..', 'release.js'), was = fs.statSync(releaseFile);
+    fs.utimesSync(releaseFile, was.atime, new Date(was.mtimeMs + 60000));
+    await p.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+    await p.waitForSelector('#update:not([hidden])', { timeout: 5000 }).catch(() => {});
+    const updateToast = await toasts();
+    check('a new release on the server: the page shows New version and says so once', await p.isVisible('#update')
+      && /A new version of the game is out/.test(updateToast), updateToast);
+    const updated = p.waitForNavigation({ timeout: 30000 }).then(() => true, () => false);
+    await p.click('#update');
+    check('New version loads the page again (through Restart Game\'s path: the saves stored first)', await updated);
+    fs.utimesSync(releaseFile, was.atime, was.mtime);
+    await p.waitForFunction(() => window.__fake, null, { timeout: 120000 });
     await p.click('#help-open');
     const helpText = (await p.textContent('#help')).replace(/\s+/g, ' ');
     check('Help lists the gestures, the right-button drag of a run (and the Mac\'s Control), and holds the engine log',
@@ -579,6 +648,9 @@ const PORT = 8097;
     await o.waitForFunction(() => window.__fake, null, { timeout: 120000 });
     check('an older engine on a touch device: no Keyboard button, a line in the log',
       (await o.locator('#kbd-open:not([hidden])').count()) === 0 && /build it again for the Keyboard button/.test(await o.textContent('#log')));
+    await o.click('#saves-open');
+    check('and no Play button: an engine without rt_web_play cannot open a save from the page',
+      (await o.locator('#saves-list button[data-play]').count()) === 0 && (await o.locator('#saves-list button[data-kind="save"]').count()) > 0);
     await oc.close();
     // Full screen on a touch device. A phone held sideways has room beside the picture: the page's buttons go there as
     // a column and cover none of the game. An iPad has none: they sit over the corner, and the fold button folds them

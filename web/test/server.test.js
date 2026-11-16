@@ -170,3 +170,19 @@ test('verify: a file whose SHA-256 is not the clean file is named', async () => 
   const inv = inventory({ gameDir, buildDir, manifestPath: m });
   assert.deepEqual(await verify(inv, m), ['Data/staff.dat']);
 });
+
+test('version.json: the release of the page and the engines, also in files.json; a new engine is a new release', async () => {
+  const r = await fetch(`${base}/version.json`);
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get('cache-control'), 'no-store');
+  const { release } = await r.json();
+  assert.match(release, /^[0-9a-f]{12}$/);
+  assert.equal((await (await fetch(`${base}/files.json`)).json()).release, release);
+  assert.equal((await (await fetch(`${base}/version.json`)).json()).release, release, 'the same while nothing changed');
+  const wasm = join(buildDir, 'cm0102_recomp.wasm');
+  const { utimesSync } = await import('node:fs');
+  const later = new Date(Date.now() + 120000);
+  utimesSync(wasm, later, later);                                   // a new engine
+  const next = (await (await fetch(`${base}/version.json`)).json()).release;
+  assert.notEqual(next, release);
+});

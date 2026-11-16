@@ -251,6 +251,41 @@ test('cloud saves: store, list, fetch, conflicts, limits and checks', async () =
   assert.deepEqual(await (await b.get('/api/me')).json(), { auth: true, user: null, offer: { price: '$5 a month', free: false, url: 'https://example.com/support', paddle: null }, maxSaves: 3 });
 });
 
+test('tactics in the cloud: one record per account, changed only from its last version, its files checked', async () => {
+  google.user = { sub: '2000077', email: 'listed@example.com', email_verified: true, name: 'Listed' };
+  const b = browser();
+  await b.signIn();
+  let r = await b.get('/api/tactics');
+  assert.equal(r.status, 200);
+  assert.deepEqual(await r.json(), { tactics: [], removed: {}, etag: null, maxTactics: 200 });
+  const tct = Buffer.alloc(1476, 3).toString('base64');
+  const put = (body, base) => b.send('PUT', '/api/tactics', JSON.stringify(body), { 'content-type': 'application/json', 'x-base-etag': base });
+  r = await put({ tactics: [{ name: 'My 4-4-2.tct', data: tct, mtime: 1762770000000 }], removed: { 'Old.tct': 1762760000000 } }, 'none');
+  assert.equal(r.status, 200, await r.clone().text());
+  const { etag } = await r.json();
+  const got = await (await b.get('/api/tactics')).json();
+  assert.deepEqual(got.tactics, [{ name: 'My 4-4-2.tct', data: tct, mtime: 1762770000000 }]);
+  assert.deepEqual(got.removed, { 'Old.tct': 1762760000000 });
+  assert.equal(got.etag, etag);
+  assert.ok(s3fake.objects.has('tactics/2000077.json'));
+  assert.equal((await put({ tactics: [], removed: {} }, 'none')).status, 409, 'another device wrote it since');
+  assert.equal((await put({ tactics: [], removed: {} }, '"stale"')).status, 409);
+  for (const bad of [{ name: '../x.tct', data: tct, mtime: 1 }, { name: 'notes.txt', data: tct, mtime: 1 },
+    { name: 'Big.tct', data: Buffer.alloc(9000).toString('base64'), mtime: 1 }]) {
+    assert.equal((await put({ tactics: [bad], removed: {} }, etag)).status, 422, bad.name);
+  }
+  const many = Array.from({ length: 201 }, (_, i) => ({ name: `T${i}.tct`, data: tct, mtime: 1 }));
+  assert.equal((await put({ tactics: many, removed: {} }, etag)).status, 413);
+  assert.equal((await put({ tactics: [], removed: {} }, etag)).status, 200, 'all removed');
+  google.user = { sub: '3000077', email: 'nocloud@example.com', email_verified: true, name: 'No cloud' };
+  const other = browser();
+  await other.signIn();
+  assert.equal((await other.get('/api/tactics')).status, 403, 'an account without cloud saves');
+  google.user = { sub: '2000077', email: 'listed@example.com', email_verified: true, name: 'Listed' };
+  assert.equal((await b.send('DELETE', '/api/account')).status, 204);
+  assert.ok(!s3fake.objects.has('tactics/2000077.json'), 'the account\'s deletion removes its tactics');
+});
+
 test('a plan of "cloud" in the account record gives cloud saves', async () => {
   const put = (key, obj) => createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true })
     .put(key, Buffer.from(JSON.stringify(obj)), { type: 'application/json' });
@@ -451,6 +486,28 @@ test('the sync plan: what goes up, what comes down, what is kept twice', async (
   assert.ok(!kinds(p).includes('down downNow') && kinds(p).includes('down newThere'));
   assert.equal(otherDeviceName('Arsenal.sav', new Set()), 'Arsenal (other device).sav');
   assert.equal(otherDeviceName('Arsenal.sav', new Set(['arsenal (other device).sav'])), 'Arsenal (other device) (2).sav');
+});
+
+test('a large save that went up less than 10 minutes ago waits; it goes when that time is past, or when the tab is left', async () => {
+  const { planSync, BIG_SAVE, BIG_EVERY_MS } = await import('../account.js');
+  assert.equal(BIG_SAVE, 100 << 20);
+  assert.equal(BIG_EVERY_MS, 10 * 60000);
+  const now = 50 * 60000, big = 690 << 20;
+  const local = new Map([['Big.sav', { size: big + 1, mtime: 9 }], ['Small.sav', { size: 40 << 20, mtime: 9 }], ['New big.sav', { size: big, mtime: 9 }],
+    ['Old big.sav', { size: big + 1, mtime: 9 }]]);
+  const cloud = new Map([['Big.sav', { etag: '"1"' }], ['Small.sav', { etag: '"1"' }], ['Old big.sav', { etag: '"1"' }]]);
+  const state = {
+    'Big.sav': { etag: '"1"', size: big, mtime: 1, upAt: now - 3 * 60000 },          // up 3 minutes ago
+    'Small.sav': { etag: '"1"', size: 1, mtime: 1, upAt: now - 60000 },
+    'Old big.sav': { etag: '"1"', size: big, mtime: 1, upAt: now - 11 * 60000 },      // up 11 minutes ago
+  };
+  const names = (p) => p.jobs.map((j) => j.name).sort();
+  let p = planSync(local, cloud, state, { replace: false, now });
+  assert.deepEqual(names(p), ['New big.sav', 'Old big.sav', 'Small.sav'], 'a small save, a first upload and one past its time go');
+  assert.deepEqual(p.held, ['Big.sav']);
+  p = planSync(local, cloud, state, { replace: false, now, force: true });
+  assert.deepEqual(names(p), ['Big.sav', 'New big.sav', 'Old big.sav', 'Small.sav'], 'the tab is left: everything goes');
+  assert.deepEqual(p.held, []);
 });
 
 test('saves through the server go to its disk, two of the largest at once: a third waits for the next sync (503)', async () => {

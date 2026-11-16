@@ -131,6 +131,10 @@ static void web_feed(void)
 }
 #endif
 
+/* 1 while input_poll or the scrollbar test waits for a held button: Play (play.c) does not click then, or its
+ * click would hold the button that the wait is about. */
+static int in_wait;
+
 /* The press that the left button is in: a new number at each WM_LBUTTONDOWN, and its time. */
 static uint32_t press_count;
 uint32_t win_press_count(void) { return press_count; }
@@ -563,6 +567,17 @@ static int click_for_key(int x, int y)
     post_mouse(WM_LBUTTONDOWN, x, y);
     key_click.down_at = q_tail;
     return 1;
+}
+
+int win_click(int x, int y) { return click_for_key(x, y); }
+
+int win_click_busy(void) { return key_click.on || (buttons & 1); }
+
+void win_char(uint32_t c)
+{
+    if (c == 0x08) post(WM_KEYDOWN, c, 1);    /* Backspace as the keyboard gives it (handle_event): down, character, up */
+    post(WM_CHAR, c, 1);
+    if (c == 0x08) post(WM_KEYUP, c, 0xC0000001u);
 }
 
 static void end_click_for_key(void)
@@ -1000,6 +1015,7 @@ void win_poll_events(void)
     SDL_Event e;
     while (SDL_PollEvent(&e))
         handle_event(&e);
+    if (!in_wait) win_play_poll();                /* not inside a wait for a held button (input_poll, below) */
     if (window) run_script();
 }
 
@@ -1161,10 +1177,12 @@ RT_WRAP(0055f620, input_poll)
     /* A press that opened or closed a screen does not repeat on the next screen: the same widget number
      * there is another widget (the options box, options_screen.c). */
     if (top != last_top) { cpu.eax |= 0xffffu; return; }
+    in_wait++;
     while ((buttons & 1) && SDL_GetTicks64() < next_repeat_at) {
         win_poll_events();
         SDL_Delay(1);
     }
+    in_wait--;
     if (!(buttons & 1)) { cpu.eax |= 0xffffu; return; }    /* released while it waited */
     next_repeat_at = SDL_GetTicks64() + REPEAT_INTERVAL;
 }
@@ -1189,10 +1207,12 @@ RT_WRAP(00561f10, scrollbar_test)
     int held = (buttons & 1) && rd32(g_mem, 0xb67a34u) && !rd32(g_mem, 0xb67a3cu);
     int again = held && scroll_press == press_count && scroll_this == self && scroll_area == area;
     if (again) {
+        in_wait++;
         while ((buttons & 1) && SDL_GetTicks64() < next_scroll_at) {
             win_poll_events();
             SDL_Delay(1);
         }
+        in_wait--;
         if (!(buttons & 1)) {                                  /* released while it waited */
             wr32(g_mem, 0xb67a34u, 0);
             o_00561f10();

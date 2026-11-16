@@ -81,3 +81,43 @@ test('a file that is not a saved game, or not one this editor knows', async () =
   b[0] = 9;
   assert.throws(() => new SaveGame(b), /not a saved game/);
 });
+
+// A Blob that counts the bytes read from it (each slice read with arrayBuffer); its slices count into the same counter.
+class CountingBlob extends Blob {
+  constructor(parts, counter) { super(parts); this.counter = counter; }
+  slice(a, b) { return new CountingBlob([super.slice(a, b)], this.counter); }
+  async arrayBuffer() { this.counter.read += this.size; return super.arrayBuffer(); }
+}
+function countingBlob(bytes) {
+  const counter = { read: 0 };
+  return { blob: new CountingBlob([bytes], counter), counter };
+}
+
+test('a saved game from a Blob: only the header and the edited tables are read; the edited save is a Blob of the parts', async () => {
+  const bytes = await fakeSaveGame();
+  // Padding after the tables, as a large save has megabytes of members the editor never touches.
+  const big = new Uint8Array(bytes.length + (8 << 20));
+  big.set(bytes);
+  const { blob, counter } = countingBlob(big);
+  const g = await SaveGame.open(blob);
+  assert.deepEqual(g.players().map((p) => p.name), ['Alessandro Del Piero', 'Gianluigi Buffon']);
+  const tables = ['index.dat', 'staff.dat', 'player.dat', 'first_names.dat', 'second_names.dat', 'common_names.dat', 'club.dat',
+    'nat_club.dat', 'nation.dat'];
+  const f0 = new SaveFile(big);
+  const need = 0x416ec + f0.members.filter((m) => tables.includes(m.name)).reduce((a, m) => a + m.raw.length, 0);
+  assert.ok(counter.read <= need, `read ${counter.read} bytes, the header and the tables are ${need}`);
+  assert.deepEqual(new Uint8Array(await (await g.toBlob()).arrayBuffer()), big, 'nothing changed: the same bytes');
+  const row = g.search('del piero')[0].row;
+  const f = g.read(row);
+  f.ca = 199;
+  g.write(row, f);
+  const out = new Uint8Array(await (await g.toBlob()).arrayBuffer());
+  const h = new SaveGame(out);
+  assert.equal(h.read(h.search('del piero')[0].row).ca, 199);
+  assert.deepEqual(new SaveGame(bytes).search('buffon').map((p) => p.ca), h.search('buffon').map((p) => p.ca));
+  // The bytes path gives the same file.
+  const viaBytes = new SaveGame(big);
+  viaBytes.write(viaBytes.search('del piero')[0].row, f);
+  assert.deepEqual(out, viaBytes.toBytes());
+  await assert.rejects(SaveGame.open(new Blob([new Uint8Array(100)])), /too short/);
+});

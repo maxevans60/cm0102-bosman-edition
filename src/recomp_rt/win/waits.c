@@ -122,6 +122,12 @@ static int screen_up(uint32_t build)
     return build && polled_node && polled_node == top_node() && top_build() == build;
 }
 
+int waits_screen_up(uint32_t build) { return screen_up(build); }
+
+uint32_t waits_top_build(void) { return top_build(); }
+
+int waits_in_box(void) { return in_box; }
+
 /* 1 when the state is reached. since: the poll count when the wait started. */
 int waits_reached(int kind, uint32_t value, uint32_t since)
 {

@@ -19,6 +19,11 @@ import { mountLayout } from './layout.js';
 import { mountMacRightButton, mountTouch } from './touch.js';
 import { guardLeave, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
 import { mountReport, watchSaveInPlay } from './report.js';
+import { mountPlay } from './play.js';
+import { watchRelease } from './release.js';
+import { watchProgress } from './progress.js';
+import { createTacticSync } from './tacticsync.js';
+import { reserveSaveRoom } from './room.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -27,7 +32,9 @@ const CONNECTIONS = 6;
 const TOUCH = hasTouch();
 
 const lines = [];
+let progress = null;                                   // the game's long jobs in the bar (progress.js)
 function log(text) {
+  progress?.line(String(text));
   lines.push(String(text));
   if (lines.length > 3000) lines.splice(0, lines.length - 3000);
   $('log').textContent = lines.join('\n');
@@ -194,7 +201,7 @@ $('help-open').onclick = () => $('help').showModal();
 
 const account = mountAccount({ log, toast, isRunning: () => running, isStandalone, leave: () => { leaving = true; } });
 account.ready.then((me) => { $('help-cloud').hidden = !me?.auth; });
-let cloud = null, cloudBehind = false, watcher = null, setSync = null;
+let cloud = null, cloudBehind = false, watcher = null, setSync = null, tacticSync = null;
 
 // The sync of the account's saves, when it has cloud saves. replace: the saves of the cloud may replace the ones here
 // (before the game runs). Resolves to the jobs done, or null.
@@ -205,14 +212,18 @@ async function startCloud(FS, { replace, onStep }) {
   cloud = null;
   setSync?.stop();
   setSync = null;
+  tacticSync?.stop();
+  tacticSync = null;
   account.setCloud(null);
   if (!me?.user?.cloud) return null;
   if (typeof CompressionStream !== 'function') { log('page: no CompressionStream in this browser: no cloud saves'); return null; }
   cloud = createCloudSync({ FS, sync, log, toast, account: me.user.email, onWrote: () => watcher?.rebase() });
   account.setCloud(cloud);
   setSync = createSetSync({ FS, root: SAVE_DIR, sync, log, toast, account: me.user.email });   // runs once the game is up
+  tacticSync = createTacticSync({ FS, sync, log, account: me.user.email });
+  tacticSync.run();                                     // the tactics of the other devices, before the game lists them
   const jobs = await cloud.run({ replace, onStep, signal: onStep?.signal });
-  cloudBehind = jobs === null || jobs.failed.length > 0;
+  cloudBehind = jobs === null || jobs.failed.length > 0 || jobs.held?.length > 0;
   const came = jobs?.filter((j) => j.do === 'down' && !jobs.failed.includes(j.name)).length ?? 0;
   if (jobs === null && !onStep?.signal?.aborted) toast('The cloud was not reached: the saves here are used, and go up later', { kind: 'bad', ms: 7000 });
   else if (jobs?.failed.length) toast(notYet(jobs.failed), { kind: 'bad', ms: 7000 });
@@ -223,17 +234,25 @@ async function startCloud(FS, { replace, onStep }) {
 // The saves that the cloud did not take this time (the server or its store failed them): they go at the next sync.
 const notYet = (names) => `${names.length === 1 ? `${names[0]} is` : `${names.length} saves are`} not in the cloud yet: the cloud did not take ${names.length === 1 ? 'it' : 'them'} this time. ${names.length === 1 ? 'It goes' : 'They go'} up in a minute.`;
 
-// After a save: up to the cloud. A sync that failed (no connection) or left a save behind is tried again each minute.
-function cloudAfterSave(quiet = false) {
+// After a save: up to the cloud. A sync that failed (no connection) or left a save behind is tried again each minute,
+// and so is one that held a large save back (account.js, BIG_EVERY_MS: at most every 10 minutes). force: the tab is
+// left, so a held save goes now.
+let heldSaid = false;
+function cloudAfterSave(quiet = false, force = false) {
   if (!cloud || cloud.stopped) return;
-  cloud.run({ replace: false }).then((jobs) => {
-    cloudBehind = jobs === null || jobs.failed.length > 0;
+  cloud.run({ replace: false, force }).then((jobs) => {
+    cloudBehind = jobs === null || jobs.failed.length > 0 || jobs.held?.length > 0;
     if (jobs === null) { if (!quiet) toast('Not in the cloud yet: no connection. It goes up later.', { kind: 'bad', ms: 6000 }); }
     else if (jobs.failed.length) { if (!quiet) toast(notYet(jobs.failed), { kind: 'bad', ms: 6000 }); }
     else if (jobs.some((j) => j.do !== 'down')) toast('Saved to the cloud');
+    else if (jobs.held?.length && !quiet && !heldSaid) {
+      heldSaid = true;
+      toast(`${jobs.held[0]} goes to the cloud within 10 minutes: a large save goes up at most every 10 minutes, and when you leave this tab.`, { ms: 9000 });
+    }
   });
 }
 setInterval(() => { if (cloudBehind && running) cloudAfterSave(true); }, 60000);   // the try again says nothing till it works
+setInterval(() => { if (running) tacticSync?.runIfChanged(); }, 60000);            // a tactic the game saved goes up
 account.onAccountChange((me) => {
   const FS = window.Module?.FS;
   if (!running || !FS) return;                   // before the game, the start does it
@@ -676,6 +695,7 @@ function runEngine(files, info) {
     preRun: [() => {
       const M = window.Module, FS = M.FS;
       saveInPlay = watchSaveInPlay(FS);                // which save a report sends by default
+      reserveSaveRoom(FS);                             // a save being written gets its room at once (room.js)
       install(FS, files);
       files.clear();
       FS.mkdirTree('/user');
@@ -754,9 +774,23 @@ function runEngine(files, info) {
       $('sets').hidden = false;
       $('saves-open').addEventListener('click', () => sets.render());
       setSync?.run();                                   // the cloud's data sets come in while the game starts
+      // Play (play.js): a save's Play button; with a game in play, through Restart Game's path.
+      const player = mountPlay({ module: () => window.Module, log, toast, restart: () => window.Module.rtRestart(), isRunning: () => running });
       mountSavesPanel({ FS, sync, log, report: () => report, cloud: () => cloud, promo: () => (cloud ? null : account.promo()),
-        openPromo: () => { $('saves').close(); account.open(); }, edit: (name) => editor.openSave(name) });
-      mountTacticsPanel({ FS, sync, log });
+        openPromo: () => { $('saves').close(); account.open(); }, edit: (name) => editor.openSave(name), play: player });
+      mountTacticsPanel({ FS, sync, log, cloud: () => tacticSync });
+      // A new version on the server (release.js): a button in the bar loads it the way Restart Game does, the saves
+      // stored first; with a game in play the page asks first. The page never loads it by itself.
+      watchRelease({ current: info?.release, onNew: (release) => {
+        log(`page: a new version is out (${release}; this page runs ${info.release})`);
+        $('update').hidden = false;
+        toast('A new version of the game is out. Press New version at the top when it suits you: your saves are stored first.', { ms: 10000 });
+      } });
+      $('update').onclick = () => {
+        if (!running) { leaving = true; location.reload(); return; }
+        if (M._rt_web_in_game?.() && !confirm('Load the new version now? The game in play closes: what you did since your last save is lost.')) return;
+        M.rtRestart();
+      };
       checkSpace();
       keyboard = mountKeyboard({ log, layout, toast });
       // What the engine says about itself, a few times a second: the size of its picture, and the text entry that takes
@@ -774,8 +808,20 @@ function runEngine(files, info) {
           }
         }, 200);
       }
+      // The game's long jobs (a new game's stages) in the bar's status, with their share and time (progress.js).
+      if (typeof M._rt_web_progress === 'function') {
+        progress = watchProgress({ read: () => M._rt_web_progress(), set: status });
+        const ticks = setInterval(() => {
+          try { progress.tick(); } catch (e) { clearInterval(ticks); log(`page: the engine's progress stopped: ${e}`); }
+        }, 250);
+      }
       keepAwake();
-      const onHide = () => { if (handedOver) return; if (vault?.active) vaultRound({ force: true }); sync(); };
+      const onHide = () => {
+        if (handedOver) return;
+        if (vault?.active) vaultRound({ force: true });
+        sync();
+        if (cloudBehind && running) cloudAfterSave(true, true);         // a large save held back goes now
+      };
       addEventListener('pagehide', onHide);
       document.addEventListener('visibilitychange', () => { if (document.hidden) onHide(); });
       primeOffline(info).catch((e) => log(`page: not kept for a start without a connection: ${e}`));
@@ -787,6 +833,7 @@ function runEngine(files, info) {
           engine.ended = r.then(() => {}, () => {});
           r.catch((e) => { if (!quiet(e)) { running = false; logStack(e); fail('The game stopped', String(e)); } });
         }
+        player.resume();                                 // a Play that restarted the game: the save it asked for
       } catch (e) {
         if (e?.name !== 'ExitStatus' && e?.name !== 'EngineLetGo') { running = false; logStack(e); fail('The game stopped', String(e)); }
       }

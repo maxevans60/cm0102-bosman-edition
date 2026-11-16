@@ -26,9 +26,11 @@ export const MAX_SENT_SAVE = 400 << 20;   // a save the player sent, packed (gzi
 const SENT_REPORTS_A_DAY = 200;    // reports sent a day, on this machine (each up to about 800 KB of log)
 const SENT_SAVES_A_DAY = 40;        // saves sent a day, on this machine: a bound on what the store takes
 const SENT_BYTES_A_DAY = 4 * 2 ** 30;           // and their packed bytes (4 GB)
+const NOTICE_MS = 90000;            // the notice of a sent report waits this long for its save (notify.mjs)
 const MAX_BEAT_SECONDS = 180;       // a beat counts at most this much play: the page sends one each minute
 const ANON = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
+const NO_BOX = 'No error box: sent from Help';
 const day = (t) => new Date(t).toISOString().slice(0, 10);
 const count = (v) => {
   const n = Math.floor(Number(v?.n)), b = Math.floor(Number(v?.bytes));
@@ -94,7 +96,10 @@ export function browserOf(ua = '') {
 }
 
 // store: { get(key) -> Buffer|null, put(key, Buffer) } or null (in memory only). now(): the time (tests).
-export function createStats({ store = null, log = (t) => console.log(t), now = () => Date.now(), flushMs = FLUSH } = {}) {
+// notify: the notice to the developer of a sent report (notify.mjs), or null. noticeMs: how long it waits for the save.
+// site: this site's address for the notice's link to the admin page (CM_SITE_URL; never a request's Host, which a
+// sender could set to any address), or '' for none.
+export function createStats({ store = null, log = (t) => console.log(t), now = () => Date.now(), flushMs = FLUSH, notify = null, noticeMs = NOTICE_MS, site = '' } = {}) {
   let data = { version: 1, people: {}, days: {}, today: { day: day(now()), ids: [] }, reports: [] };
   let dirty = false, timer = null, prunedReports = 0;
   let sentToday = { day: '', reports: 0, saves: 0, bytes: 0 };
@@ -114,6 +119,36 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
       }
     } catch (e) { log(`stats: not read: ${e.message}`); }
   })();
+
+  // The notices of sent reports not yet gone: key -> { timer, go }. Each goes when its save is stored or after
+  // noticeMs, once.
+  const notices = new Map();
+  const mbs = (n) => `${(n / 1048576).toFixed(n < 10485760 ? 1 : 0)} MB`;
+  function noticeText(r, save) {
+    const said = r.message && r.message !== NO_BOX ? `: "${r.message.slice(0, 160)}"` : ' from Help';
+    const what = [r.browser, r.engine].filter(Boolean).join(', ');
+    const saved = save?.done ? `Save: ${save.name}, ${mbs(save.size)} packed${save.rawSize ? ` (${mbs(save.rawSize)})` : ''}.`
+      : save ? `A save is on its way: ${save.name}.` : 'No save.';
+    return `CM 01/02: A player sent a report${said}${what ? ` (${what})` : ''}${r.note ? ', with a note' : ''}. ${saved}${site ? ` ${site.replace(/\/+$/, '')}/admin` : ''}`;
+  }
+  function noticeLater(key, r) {
+    if (!notify?.on) return;
+    // save: the save as stored here; none, at the end of the wait: the report file says (Fly may run two machines, and
+    // the save may have reached the other one).
+    const go = async (save = null) => {
+      const n = notices.get(key);
+      if (!n) return;
+      clearTimeout(n.timer);
+      notices.delete(key);
+      if (!save && store) {
+        try { save = JSON.parse((await store.get(key)).toString()).save ?? null; } catch { /* as sent: no save */ }
+      }
+      await notify.notice(noticeText(r, save));
+    };
+    const timer = setTimeout(() => go(), noticeMs);
+    timer.unref?.();
+    notices.set(key, { timer, go });
+  }
 
   const dayOf = (k) => (data.days[k] ??= { active: 0, seconds: 0, sessions: 0, new: 0, reports: 0, allowed: 0, declined: 0 });
 
@@ -208,7 +243,7 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     const note = String(body?.note ?? '').replace(/[\u0000-\u0009\u000b-\u001f]/g, ' ').slice(0, 2000);
     const token = store ? randomBytes(16).toString('hex') : null;
     const r = {
-      at: new Date(t).toISOString(), id, sent: true, message: text(body?.message, 500) || 'No error box: sent from Help', note,
+      at: new Date(t).toISOString(), id, sent: true, message: text(body?.message, 500) || NO_BOX, note,
       engine: text(body?.engine, 40), browser: browserOf(ua), where: text(body?.where, 400),
       log: (Array.isArray(body?.log) ? body.log : []).slice(-MAX_SENT_LOG).map((l) => text(l, 400)),
       ...(token ? { token } : {}), save: null,
@@ -222,6 +257,7 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     dayOf(day(t)).reports++;
     if (data.people[id]) data.people[id].reports = (data.people[id].reports ?? 0) + 1;
     dirty = true;
+    noticeLater(key, r);
     return { key, token, saves: Boolean(token) };
   }
 
@@ -289,6 +325,7 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     await store.put(key, Buffer.from(JSON.stringify(r, null, 1)));
     const listed = data.reports.find((x) => x.key === key);
     if (listed) { listed.save = { name: r.save.name, size, rawSize: r.save.rawSize }; dirty = true; }
+    notices.get(key)?.go({ name: r.save.name, size, rawSize: r.save.rawSize, done: true });
     return { status: 200, ok: true, size };
   }
 
@@ -407,7 +444,12 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     timer = setInterval(() => { flush(); }, flushMs);
     timer.unref?.();
   }
-  async function stop() { if (timer) clearInterval(timer); timer = null; await flush(); }
+  async function stop() {
+    if (timer) clearInterval(timer);
+    timer = null;
+    await Promise.all([...notices.values()].map((n) => n.go()));      // the notices still waiting for a save
+    await flush();
+  }
 
   return { ready, beat, choice, report, send, saveLink, saveDone, saveBody, reportFile, forget, flush, summary, start, stop, get data() { return data; } };
 }

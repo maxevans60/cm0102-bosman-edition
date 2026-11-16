@@ -207,6 +207,16 @@ try {
   await waitFor('the removal', () => !s3fake.objects.has(keyOf('From iPad.sav')));
   await a.click('#saves-close');
 
+  // Tactics (tacticsync.js): a tactic uploaded here goes into the account's record in the cloud.
+  const tct = (version) => { const t = Buffer.alloc(1476); t.writeUInt32LE(version, 0); t.writeUInt32LE(0xf2fffff2, 1472); return t; };
+  const cloudTactics = () => { const o = s3fake.objects.get(`tactics/${PLAYER.sub}.json`); return o ? JSON.parse(Buffer.from(o.body).toString()) : null; };
+  await a.click('#saves-open');
+  await a.setInputFiles('#tactics-file', [{ name: 'Cloud 4-4-2.tct', mimeType: 'application/octet-stream', buffer: tct(0x98ec5e) }]);
+  await waitFor('the tactic in the cloud', () => cloudTactics()?.tactics?.some((t) => t.name === 'Cloud 4-4-2.tct'), 20000);
+  check('a tactic uploaded here goes to the cloud, as it is',
+    cloudTactics()?.tactics?.some((t) => t.name === 'Cloud 4-4-2.tct' && Buffer.from(t.data, 'base64').equals(tct(0x98ec5e))), JSON.stringify(cloudTactics())?.slice(0, 120));
+  await a.click('#saves-close');
+
   // ---- An iPad (a second device): signs in, gets every cloud save before its game starts. ----
   const ipadCtx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true, isMobile: true });
   const b = await ipadCtx.newPage();
@@ -229,6 +239,18 @@ try {
     catch (e) { return String(e); }
   });
   check('the data set comes to the second device once its game is up', setHere === 3, String(setHere));
+  const tacticsHere = () => b.evaluate(() => { try { return window.Module.FS.readdir('/user/tactics').filter((n) => n.endsWith('.tct')); } catch { return []; } });
+  await waitFor('the tactic from the cloud', async () => (await tacticsHere()).includes('Cloud 4-4-2.tct'), 20000);
+  const tacticBytes = await b.evaluate(() => { try { return Array.from(window.Module.FS.readFile('/user/tactics/Cloud 4-4-2.tct')); } catch { return null; } });
+  check('the tactic of the other device comes here', tacticBytes !== null && Buffer.from(tacticBytes).equals(tct(0x98ec5e)), (await tacticsHere()).join(', '));
+  // Deleted here: the cloud's record keeps the removal, so the other device's copy goes at its next sync too.
+  b.on('dialog', (d) => d.accept());
+  await b.tap('#saves-open');
+  await b.tap('#tactics-list button[data-tactic-delete="0"]');
+  await waitFor('the removal in the cloud', () => cloudTactics()?.removed?.['Cloud 4-4-2.tct'] > 0, 20000);
+  check('a tactic deleted here leaves the cloud, with the time of its removal',
+    !cloudTactics()?.tactics?.some((t) => t.name === 'Cloud 4-4-2.tct') && cloudTactics()?.removed?.['Cloud 4-4-2.tct'] > 0, JSON.stringify(cloudTactics()));
+  await b.tap('#saves-close');
   // Sign out: the saves stay, the cloud column goes.
   await b.tap('#account-open');
   await b.tap('#account-signout');

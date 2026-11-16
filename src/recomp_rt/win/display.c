@@ -13,6 +13,7 @@
 #include "win.h"
 #include "host.h"
 #include "options.h"
+#include "cp1252.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -257,6 +258,17 @@ static uint32_t sye(uint32_t v) { return scale(v, rt_screen_h, CLASSIC_H, 1); }
  * so the player's time on a screen is not counted. Only the log: a stage under 2 s writes nothing. */
 static char stage[64];
 static double stage_first, stage_latest;
+static int32_t stage_step, stage_total;     /* the last call's step and total, for the page (rt_web_progress) */
+static int stage_told;                      /* the stage's "progress: <name>" line is written */
+#define STAGE_TELL_S 2.0                    /* a stage is named in the log once it has run this long */
+
+/* The stage's name for the log, in UTF-8 (the game's texts are code page 1252: a test harness reads the log as UTF-8). */
+static const char *stage_utf8(void)
+{
+    static char out[200];
+    cp1252_to_utf8(stage, out, sizeof out);
+    return out;
+}
 
 static double mono_seconds(void)
 {
@@ -267,7 +279,7 @@ static double mono_seconds(void)
 
 static void stage_close(double end)
 {
-    if (stage[0] && end - stage_first >= 2.0) fprintf(stderr, "recomp: progress: %s took %.1f s\n", stage, end - stage_first);
+    if (stage[0] && end - stage_first >= 2.0) fprintf(stderr, "recomp: progress: %s took %.1f s\n", stage_utf8(), end - stage_first);
     stage[0] = 0;
 }
 
@@ -280,6 +292,15 @@ static void progress_note(uint32_t text)
         stage_close(now - stage_latest < 5.0 ? now : stage_latest);
         snprintf(stage, sizeof stage, "%s", name);
         stage_first = now;
+        stage_told = 0;
+    }
+    /* The page shows a long stage, its share done and its time (web/progress.js, the bar's status): a player of a new
+     * game on a phone waited minutes on one stage and thought the game had stopped (Facebook, November 2026). A stage
+     * is named once it has run STAGE_TELL_S, so the many short ones (a day's parts) add nothing to the log. Only the
+     * log and a read of the page: nothing of the game changes. */
+    if (stage[0] && !stage_told && now - stage_first >= STAGE_TELL_S) {
+        stage_told = 1;
+        fprintf(stderr, "recomp: progress: %s\n", stage_utf8());
     }
     stage_latest = now;
 }
@@ -290,10 +311,25 @@ void win_progress_idle(void)
     if (stage[0]) stage_close(stage_latest);
 }
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+/* For the page (web/progress.js): the share done of the stage in progress, 0..100; 101 for a stage with no bar; -1 when
+ * none runs or it has not been named yet. The stage's name is the log line "recomp: progress: <name>", written once it
+ * has run STAGE_TELL_S. */
+EMSCRIPTEN_KEEPALIVE int rt_web_progress(void)
+{
+    if (!stage[0] || !stage_told) return -1;
+    if (stage_total <= 0 || stage_step < 0 || stage_step > stage_total) return 101;
+    return (int)((int64_t)stage_step * 100 / stage_total);
+}
+#endif
+
 RT_REPLACE(005e76f0, progress_box)
 {
     uint32_t text = rt_arg(0), step = rt_arg(1), total = rt_arg(2);
     progress_note(text);
+    stage_step = (int32_t)step;
+    stage_total = (int32_t)total;
     if (rd32(g_mem, 0xaebe0cu)) { rt_ret_cdecl(0); return; }        /* the display is off */
     rt_callback(0x68d520u, 0, NULL);                                /* the message pump */
     if (!text) { rt_ret_cdecl(0); return; }

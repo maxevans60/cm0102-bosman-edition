@@ -40,10 +40,17 @@ export function otherDeviceName(name, taken) {
   return saveName(`${name.slice(0, -4)} (other device).sav`, taken);
 }
 
+// A large save goes up at most every BIG_EVERY_MS, and when the tab is left (force): a player who saves a game of
+// 690 MB every few game days would otherwise send it again at each save (about 300 MB packed, minutes on a home
+// connection), and the sync of the others would wait behind it. Its first upload goes at once.
+export const BIG_SAVE = 100 << 20;
+export const BIG_EVERY_MS = 10 * 60000;
+
 // The plan of one sync: what to do with each save, from the local files, the cloud's list and the state.
-// local: Map name -> { size, mtime }, cloud: Map name -> { etag, rawSize, saved }, state: name -> { etag, size, mtime, removed }.
-export function planSync(local, cloud, state, { replace = true } = {}) {
-  const jobs = [], settle = {}, forget = [];
+// local: Map name -> { size, mtime }, cloud: Map name -> { etag, rawSize, saved }, state: name -> { etag, size, mtime,
+// removed, upAt }. held: the large saves that wait (BIG_EVERY_MS).
+export function planSync(local, cloud, state, { replace = true, now = Date.now(), force = false } = {}) {
+  const jobs = [], settle = {}, forget = [], held = [];
   for (const name of new Set([...local.keys(), ...cloud.keys(), ...Object.keys(state)])) {
     const l = local.get(name), c = cloud.get(name), e = state[name];
     const localChanged = Boolean(l) && (!e || e.size !== l.size || e.mtime !== l.mtime);
@@ -63,10 +70,14 @@ export function planSync(local, cloud, state, { replace = true } = {}) {
     const cloudChanged = c.etag !== e.etag;
     if (!localChanged && !cloudChanged) continue;
     if (!localChanged) { if (replace) jobs.push({ do: 'down', name }); continue; }
-    if (!cloudChanged) { jobs.push({ do: 'up', name, base: e.etag }); continue; }
+    if (!cloudChanged) {
+      if (!force && l.size >= BIG_SAVE && e.upAt && now - e.upAt < BIG_EVERY_MS) { held.push(name); continue; }
+      jobs.push({ do: 'up', name, base: e.etag });
+      continue;
+    }
     jobs.push({ do: 'both', name, cloud: c });
   }
-  return { jobs, settle, forget };
+  return { jobs, settle, forget, held };
 }
 
 export function createCloudSync({ FS, sync, log, toast, account, onWrote = () => {} }) {
@@ -75,7 +86,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const kept = JSON.parse(FS.readFile(STATE, { encoding: 'utf8' }));
     if (kept.account === account && kept.saves) state = kept;
   } catch { /* the first sync on this browser */ }
-  let chain = Promise.resolve(), busy = new Set(), stopped = false, full = false, last = null, count = null, max = null;
+  let chain = Promise.resolve(), busy = new Set(), held = new Set(), stopped = false, full = false, last = null, count = null, max = null;
   let limits = { packed: 0, raw: 0 };            // what the cloud takes of one save (the saves list), 0: not told
   const listeners = new Set();
   const changed = () => { for (const f of listeners) f(); };
@@ -147,7 +158,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     if (r.status === 401 || r.status === 403) { stopped = true; return {}; }
     if (!r.ok) throw fail(`${name} up`, r);
     const j = await r.json();
-    state.saves[name] = { etag: j.etag, size: bytes.size ?? bytes.length, mtime: before.mtime };   // a Blob, or bytes
+    state.saves[name] = { etag: j.etag, size: bytes.size ?? bytes.length, mtime: before.mtime, upAt: Date.now() };   // a Blob, or bytes
     log(`page: ${name} is in the cloud (${(j.size / 1048576).toFixed(1)} MB compressed)`);
     return { up: true };
   }
@@ -186,7 +197,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
 
   // One sync with the cloud. replace: a save of the user folder may be replaced by a newer one of the cloud (not
   // while the game runs). onStep(text) tells what it does.
-  async function once({ replace, signal, onStep = () => {} }) {
+  async function once({ replace, signal, force = false, onStep = () => {} }) {
     if (stopped) return;
     const r = await fetch('/api/saves', { cache: 'no-store', signal });
     if (r.status === 401 || r.status === 403) { stopped = true; changed(); return; }
@@ -204,7 +215,8 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     max = maxSaves;
     const local = new Map(listSaves(FS).saves.map((f) => [f.name, { size: f.size, mtime: +f.mtime }]));
     const cloud = new Map(saves.map((s) => [s.name, s]));
-    const plan = planSync(local, cloud, state.saves, { replace });
+    const plan = planSync(local, cloud, state.saves, { replace, force });
+    held = new Set(plan.held);
     Object.assign(state.saves, plan.settle);
     for (const n of plan.forget) delete state.saves[n];
     let i = 0;
@@ -242,13 +254,14 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     last = Date.now();
     if (plan.jobs.some((j) => j.do !== 'down')) count = null;     // the count changed; the next list tells it
     changed();
-    return Object.assign([...plan.jobs], { failed });            // failed: the names that go at the next sync
+    // failed: the names that go at the next sync; held: the large saves that wait their time (BIG_EVERY_MS)
+    return Object.assign([...plan.jobs], { failed, held: plan.held });
   }
 
   // Runs one sync after the ones before it. Resolves to the jobs (with failed: the saves that wait for the next sync),
   // or null when it failed as a whole (no connection, or the cloud's list not read).
   function run(opts = {}) {
-    const job = chain.then(() => once(opts)).then((jobs) => jobs ?? Object.assign([], { failed: [] })).catch((err) => {
+    const job = chain.then(() => once(opts)).then((jobs) => jobs ?? Object.assign([], { failed: [], held: [] })).catch((err) => {
       if (err.name === 'AbortError' || err.name === 'TimeoutError') return null;
       log(`page: cloud saves: ${err.message ?? err}`);
       return null;
@@ -263,9 +276,11 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     get stopped() { return stopped; },
     onChange(f) { listeners.add(f); return () => listeners.delete(f); },
     info: () => ({ last, count, max, full }),
-    // How a save of the user folder stands: 'cloud', 'up' (on its way), 'here' (removed from the cloud) or 'waiting'.
+    // How a save of the user folder stands: 'cloud', 'up' (on its way), 'later' (a large save that waits its time),
+    // 'here' (removed from the cloud), 'big' (too large for the cloud) or 'waiting'.
     status(name, file) {
       if (busy.has(name)) return 'up';
+      if (held.has(name)) return 'later';
       const e = state.saves[name];
       if (!e) return 'waiting';
       if (e.tooBig && e.size === file.size && e.mtime === +file.mtime) return 'big';

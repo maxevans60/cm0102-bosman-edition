@@ -6,7 +6,7 @@
 //   under Database when a new game starts (src/recomp_rt/win/dbfolders.h). A new one is a copy of the game's own data.
 import { ATTRIBUTES, POSITIONS, SaveGame } from './savedit.js';
 import { ATTRIBUTES as DATA_ATTRIBUTES, DATA_SET_FILES, DataSet, dateShift } from './dataset.js';
-import { listSaves, readBytes } from './saves.js';
+import { listSaves, readBlob, readBytes, storeSave } from './saves.js';
 import { noteSeason } from './datasets.js';
 
 const $ = (id) => document.getElementById(id);
@@ -149,7 +149,8 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
     say(isRunning() ? 'If this save is loaded in the game now, save your changes here, then load it again in the game. Saving in the game first would write over them.' : '');
     await later();
     try {
-      model = new SaveGame(await readBytes(FS, `${dir}/${file}`));
+      // From a Blob: the header and the tables the editor uses are read, not the whole save (690 MB for some players).
+      model = await SaveGame.open(await readBlob(FS, `${dir}/${file}`));
       log(`page: ${file} opened in the editor: ${model.players().length} players`);
       dirty();
       results();
@@ -338,12 +339,17 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
         return;
       }
       const path = `${dir}/${name}`;
+      // The save as it was becomes the older copy by a rename (the browser's storage moves its record; nothing is
+      // read), and the edited one is stored as a Blob of the members as they were and the changed tables.
       if (!backedUp) {
         try { FS.mkdir(`${dir}/backups`); } catch { /* there already */ }
-        FS.writeFile(`${dir}/backups/${name.replace(/\.sav$/i, '')} (before edit).sav`, await readBytes(FS, path));
+        const backup = `${dir}/backups/${name.replace(/\.sav$/i, '')} (before edit).sav`;
+        try { FS.unlink(backup); } catch { /* none yet */ }
+        FS.rename(path, backup);
         backedUp = true;
       }
-      FS.writeFile(path, model.toBytes());
+      const why = await storeSave(FS, name, model.toBlob());
+      if (why) throw new Error(why);
       sync();
       log(`page: ${name}: ${edited.size} player(s) edited`);
       say(`Saved: ${edited.size} player(s) changed in ${name}. The file as it was is in Saved games, Older copies.${isRunning() ? ' Load the save in the game to play with the changes.' : ''}`);

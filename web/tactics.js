@@ -72,7 +72,8 @@ const saveLink = (blob, name) => {
 
 // Wires the Tactics section of the Saved games dialog (index.html, #tactics) to the engine's file system. sync() writes
 // the user folder to the browser's storage.
-export function mountTacticsPanel({ FS, sync, log }) {
+// cloud(): the tactics sync of Cloud Saves (tacticsync.js), or null.
+export function mountTacticsPanel({ FS, sync, log, cloud = () => null }) {
   const list = document.getElementById('tactics-list'), note = document.getElementById('tactics-note');
   const input = document.getElementById('tactics-file');
   const say = (text, bad = false) => { note.textContent = text; note.className = bad ? 'small bad' : 'small'; };
@@ -94,7 +95,7 @@ export function mountTacticsPanel({ FS, sync, log }) {
     if (del) {
       const f = shown[Number(del.dataset.tacticDelete)];
       if (!confirm(`Delete the tactic ${f.name.slice(0, -4)}? This cannot be undone; Download keeps a copy first.`)) return;
-      try { FS.unlink(f.path); sync(); say(`The tactic ${f.name.slice(0, -4)} is deleted.`); log(`page: deleted the tactic ${f.name}`); }
+      try { FS.unlink(f.path); sync(); cloud()?.removed(f.name); say(`The tactic ${f.name.slice(0, -4)} is deleted.`); log(`page: deleted the tactic ${f.name}`); }
       catch (err) { say(`${f.name} was not deleted: ${err.message}`, true); }
       render();
       return;
@@ -121,7 +122,7 @@ export function mountTacticsPanel({ FS, sync, log }) {
       log(`page: uploaded the tactic ${name}${t.converted ? ' (a preset\'s file, made loadable)' : ''}`);
     }
     input.value = '';
-    if (done.length) sync();
+    if (done.length) { sync(); cloud()?.run(); }
     render();
     say([done.length ? `Uploaded ${done.join(', ')}. On the tactics screen use Tactics, Load to use it.` : '', ...refused].filter(Boolean).join('\n'),
       refused.length > 0 && done.length === 0);

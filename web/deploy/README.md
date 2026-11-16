@@ -128,6 +128,21 @@ opens `/admin` in a new tab. The token is for scripts:
 them are counted (the admin page shows the share who said yes). `CM_STATS=optout` counts everyone until they turn them
 off in Help, with no question (EU consent rules want the question); `CM_STATS=off` turns them off.
 
+**A notice when a player sends a report.** Set a webhook and each report a player sends (Send to the developer) gives
+you a short message: the game's error, the browser, whether there is a note, the save's name and size, and a link to
+the admin page. The note, the log and the save stay on the server. It waits up to 90 seconds for the save, so one
+report is one message; at most 30 a day, then one that says more came.
+
+```bash
+fly secrets set CM_REPORT_WEBHOOK=<the webhook's URL>
+```
+
+A Discord channel: Edit Channel, Integrations, Webhooks, New Webhook, Copy Webhook URL. Slack: an incoming webhook
+of a Slack app. Telegram: a bot of @BotFather and your chat's id, as
+`https://api.telegram.org/bot<token>/sendMessage?chat_id=<id>`. `fly logs` shows `report notices: on`; a webhook that
+fails is logged (`stats: report notice not sent: …`), and the report itself is kept all the same. The link goes to
+`https://<your-app>.fly.dev/admin`; with your own domain, set `CM_SITE_URL=https://<your domain>`.
+
 ## Straight to Tigris
 
 Saves and data sets go from the browser to Tigris and back without passing the machine (`web/README.md`, "Straight to

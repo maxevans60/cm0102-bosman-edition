@@ -17,11 +17,13 @@
 // request whose ?v= names the file's version (files.json) may be kept by the browser for good: the version changes
 // when the file does.
 import http from 'node:http';
+import { createHash } from 'node:crypto';
 import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cloudFromEnv, paddleFromEnv } from './cloud.mjs';
 import { MAX_SENT_SAVE, createStats, statsStore } from './stats.mjs';
+import { createNotifier } from './notify.mjs';
 import { s3FromEnv } from './s3.mjs';
 import { spool, unspool } from './spool.mjs';
 
@@ -29,10 +31,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
 const SEASON_TABLES = ['rules.tsv', 'names.tsv', 'clubs.tsv', 'club_records.tsv'];
 // The page: these files of web/, and nothing else of it. web/deploy/stage.mjs stages the same list, and the server's own.
-export const PAGE_FILES = ['index.html', 'loader.js', 'layout.js', 'touch.js', 'keyboard.js', 'saves.js', 'ui.js', 'account.js', 'savedit.js', 'dataset.js', 'datasets.js', 'zip.js', 'editor.js', 'setspanel.js', 'tactics.js', 'report.js', 'vault.js', 'stats.js', 'engine.js', 'direct.js', 'sw.js',
+export const PAGE_FILES = ['index.html', 'loader.js', 'layout.js', 'touch.js', 'keyboard.js', 'saves.js', 'ui.js', 'account.js', 'savedit.js', 'dataset.js', 'datasets.js', 'zip.js', 'editor.js', 'setspanel.js', 'tactics.js', 'report.js', 'play.js', 'release.js', 'progress.js', 'tacticsync.js', 'room.js', 'vault.js', 'stats.js', 'engine.js', 'direct.js', 'sw.js',
   'manifest.webmanifest', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'privacy.html', 'terms.html', 'refunds.html', 'pricing.html'];
 // The server's own files; it also imports saves.js, savedit.js, dataset.js and zip.js of the page (PAGE_FILES).
-export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'spool.mjs', 'admin.html', 'package.json'];
+export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'notify.mjs', 'spool.mjs', 'admin.html', 'package.json'];
 const PAGES = Object.fromEntries([['/', 'index.html'], ...['privacy', 'terms', 'refunds', 'pricing'].map((p) => [`/${p}`, `${p}.html`]),
   ...PAGE_FILES.map((f) => [`/${f}`, f])]);
 // The pages of the site's terms: the seller, the contact and the price come from the settings (CM_SELLER, CM_CONTACT,
@@ -90,6 +92,18 @@ function engineIn(dir, base) {
 }
 
 // immutable: the request named the file's current version, so the browser may keep it for good.
+// The release this server serves (/version.json, release.js): the page files and the engines, by name, size and time,
+// so a deploy that changes neither keeps it and one that changes either gives a new one. Every machine of a deploy runs
+// the same image, so they agree.
+function releaseOf(inv) {
+  const h = createHash('sha256');
+  for (const f of PAGE_FILES) {
+    try { const st = statSync(join(HERE, f)); h.update(`${f}:${st.size}:${Math.floor(st.mtimeMs)}\n`); } catch { h.update(`${f}:none\n`); }
+  }
+  for (const e of inv.engines) h.update(`${e.base}:${e.version}\n`);
+  return h.digest('hex').slice(0, 12);
+}
+
 function sendFile(req, res, disk, type, immutable = false) {
   const br = /\bbr\b/.test(req.headers['accept-encoding'] ?? '') && existsSync(`${disk}.br`);
   const file = br ? `${disk}.br` : disk;
@@ -274,6 +288,12 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
       const path = decodeURIComponent(url.pathname), v = url.searchParams.get('v');
       if (PAGES[path] && TEMPLATED.has(PAGES[path])) { sendTemplated(req, res, join(HERE, PAGES[path]), site); return; }
       if (PAGES[path]) { sendFile(req, res, join(HERE, PAGES[path]), TYPES[PAGES[path].slice(PAGES[path].lastIndexOf('.'))]); return; }
+      if (path === '/version.json') {
+        inv = inventory({ gameDir, buildDir, asyncifyDir, manifestPath });
+        res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+        res.end(JSON.stringify({ release: releaseOf(inv) }));
+        return;
+      }
       if (path === '/files.json') {
         inv = inventory({ gameDir, buildDir, asyncifyDir, manifestPath });   // a rebuild or new files count without a restart
         const body = JSON.stringify({
@@ -287,6 +307,7 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
           engines: inv.engines.map((e) => ({ base: e.base, suspend: e.suspend, version: e.version, bytes: e.wasm.size })),
           shell: SHELL,
           stats: stats ? { mode: statsMode } : null,
+          release: releaseOf(inv),
         });
         res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
         res.end(body);
@@ -371,7 +392,11 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   console.log(second ? `second engine, for browsers without JSPI: ${asyncifyDir}/cm0102_recomp.wasm (${mb(second.wasm.size)}, ${second.suspend ?? 'unknown'} build)`
     : 'second engine: none, so Safari and iPad browsers cannot play (web/README.md, "Other browsers")');
   // Statistics: in the bucket when there is one (BUCKET_NAME and the keys), else in memory only. CM_STATS=off: none.
-  const stats = process.env.CM_STATS === 'off' ? null : createStats({ store: statsStore(s3FromEnv(process.env)) });
+  // A notice to the developer for each report a player sends (notify.mjs): CM_REPORT_WEBHOOK. Its link to the admin page
+  // is CM_SITE_URL, or the app's address on Fly.
+  const notify = createNotifier({ url: process.env.CM_REPORT_WEBHOOK ?? '' });
+  const siteUrl = process.env.CM_SITE_URL ?? (process.env.FLY_APP_NAME ? `https://${process.env.FLY_APP_NAME}.fly.dev` : '');
+  const stats = process.env.CM_STATS === 'off' ? null : createStats({ store: statsStore(s3FromEnv(process.env)), notify, site: siteUrl });
   stats?.start();
   const admins = (process.env.CM_ADMIN_EMAILS ?? '').split(',');
   const adminEmails = new Set(admins.map((e) => e.trim().toLowerCase()).filter(Boolean));
@@ -388,6 +413,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.log('payments: set CM_SELLER and CM_CONTACT, which the terms, refunds and privacy pages name (Paddle checks them)');
   console.log(stats ? `statistics: on (${process.env.CM_STATS === 'optout' ? 'opt-out' : 'opt-in: the page asks first'}), ${s3FromEnv(process.env) ? 'kept in the bucket' : 'in memory only'}; admin page /admin for ${admins.filter((e) => e.trim()).length} email(s)${process.env.CM_ADMIN_TOKEN ? ' and the token' : ''}`
     : 'statistics: off (CM_STATS=off)');
+  if (stats) console.log(notify.on ? 'report notices: on (CM_REPORT_WEBHOOK)' : 'report notices: off (CM_REPORT_WEBHOOK, web/deploy/README.md)');
   const server = createApp({ gameDir, buildDir, asyncifyDir, cloud, site, stats, statsMode: process.env.CM_STATS === 'optout' ? 'optout' : 'optin', admins,
     adminToken: process.env.CM_ADMIN_TOKEN ?? null });
   server.listen(port, host, () => console.log(`open http://${host}:${port} in Chrome`));

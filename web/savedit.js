@@ -55,11 +55,25 @@ export function encodeRuns(data) {
   return out.slice(0, o);
 }
 
+// A saved game's container. From bytes (the whole file), or with SaveFile.open from a Blob: then only the header is
+// read at first, and a member's bytes when load asks for them, so a save of 690 MB is never in memory whole (the
+// editor reads the header and its nine tables, a few MB); toBlob writes the file again from the members as they were
+// (slices of the Blob) and the changed ones.
 export class SaveFile {
-  constructor(bytes) {
-    this.blob = bytes;
-    const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-    if (bytes.length < HEADER) throw new Error('it is too short to be a saved game');
+  constructor(bytes) { this._init(bytes, bytes, bytes.length); }
+
+  static async open(blob) {
+    if (blob.size < HEADER) throw new Error('it is too short to be a saved game');
+    const f = Object.create(SaveFile.prototype);
+    f._init(new Uint8Array(await blob.slice(0, HEADER).arrayBuffer()), blob, blob.size);
+    return f;
+  }
+
+  // header: the first HEADER bytes; source: the file, bytes or a Blob, of size bytes.
+  _init(header, source, size) {
+    if (size < HEADER || header.length < HEADER) throw new Error('it is too short to be a saved game');
+    this.header = header;
+    const dv = new DataView(header.buffer, header.byteOffset, header.byteLength);
     this.version = dv.getInt32(0, true);
     const count = dv.getInt32(8, true);
     if (![1, 2, 3, 4].includes(this.version) || count < 1 || count > MAX_ENTRIES) throw new Error('it is not a saved game of CM 01/02');
@@ -67,15 +81,18 @@ export class SaveFile {
     this.members = [];
     for (let k = 0; k < count; k++) {
       const o = 12 + k * ENTRY;
-      const offset = dv.getUint32(o, true), size = dv.getUint32(o + 4, true);
+      const offset = dv.getUint32(o, true), msize = dv.getUint32(o + 4, true);
       let end = o + 8;
-      while (end < o + ENTRY && bytes[end] !== 0) end++;
-      const name = String.fromCharCode(...bytes.subarray(o + 8, end));
-      if (offset < HEADER || offset > bytes.length) throw new Error(`the saved game is damaged: ${name} starts outside the file`);
-      this.members.push({ index: k, offset, size, name, raw: null, data: null, changed: false });
+      while (end < o + ENTRY && header[end] !== 0) end++;
+      const name = String.fromCharCode(...header.subarray(o + 8, end));
+      if (offset < HEADER || offset > size) throw new Error(`the saved game is damaged: ${name} starts outside the file`);
+      this.members.push({ index: k, offset, size: msize, name, raw: null, data: null, changed: false });
     }
+    // Each member's raw bytes run to the next member (or the end of the file): a view of the bytes, or a slice of the
+    // Blob until load reads it.
     const order = [...this.members].sort((a, b) => a.offset - b.offset);
-    order.forEach((m, i) => { m.raw = bytes.subarray(m.offset, i + 1 < order.length ? order[i + 1].offset : bytes.length); });
+    const cut = source instanceof Uint8Array ? (a, b) => source.subarray(a, b) : (a, b) => source.slice(a, b);
+    order.forEach((m, i) => { m.raw = cut(m.offset, i + 1 < order.length ? order[i + 1].offset : size); });
   }
 
   member(name) {
@@ -86,32 +103,55 @@ export class SaveFile {
 
   has(name) { return this.members.some((x) => x.name.toLowerCase() === name.toLowerCase()); }
 
+  // The bytes of these members, from the Blob (SaveFile.open), before read.
+  async load(names) {
+    for (const n of names) {
+      if (!this.has(n)) continue;
+      const m = this.member(n);
+      if (!(m.raw instanceof Uint8Array)) m.raw = new Uint8Array(await m.raw.arrayBuffer());
+    }
+  }
+
   // The member's bytes, decoded once; the array is the editor's to change (put marks it changed).
   read(name) {
     const m = this.member(name);
+    if (!(m.raw instanceof Uint8Array)) throw new Error(`${name} of the saved game was not read`);
     if (!m.data) m.data = this.compressed ? decodeRuns(m.raw, m.size).data : m.raw.slice(0, m.size);
     return m.data;
   }
 
   changed(name) { this.member(name).changed = true; }
 
-  // The whole file: the header with the new offsets, then the members in their order. A member that did not
-  // change keeps its bytes as they were.
-  toBytes() {
-    const parts = [], header = this.blob.slice(0, HEADER);
+  // The header with the new offsets, and the members in their order: a member that did not change keeps its bytes
+  // (or its slice of the Blob) as they were.
+  _parts() {
+    const header = this.header.slice(0, HEADER), parts = [];
     const dv = new DataView(header.buffer);
     let at = HEADER;
     for (const m of [...this.members].sort((a, b) => a.offset - b.offset)) {
       const raw = m.changed ? (this.compressed ? encodeRuns(m.data) : m.data) : m.raw;
       dv.setUint32(12 + m.index * ENTRY, at, true);
       parts.push(raw);
-      at += raw.length;
+      at += raw.length ?? raw.size;
     }
-    const out = new Uint8Array(at);
+    return { header, parts, size: at };
+  }
+
+  // The whole file as bytes (a file from bytes).
+  toBytes() {
+    const { header, parts, size } = this._parts();
+    if (parts.some((p) => !(p instanceof Uint8Array))) throw new Error('a saved game read from a Blob is written with toBlob');
+    const out = new Uint8Array(size);
     out.set(header, 0);
     let o = HEADER;
     for (const p of parts) { out.set(p, o); o += p.length; }
     return out;
+  }
+
+  // The whole file as a Blob: the members that did not change go as slices of the file, not through memory.
+  toBlob() {
+    const { header, parts } = this._parts();
+    return new Blob([header, ...parts]);
   }
 }
 
@@ -217,17 +257,24 @@ export function positionText(pos) {
 const latin1 = (b, o, n) => { let e = o; while (e < o + n && b[e]) e++; return String.fromCharCode(...b.subarray(o, e)); };
 const fold = (s) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
+// The tables of index.dat: id -> { file, count }.
+function tablesOf(index) {
+  if (index.length < 8 + INDEX_ENTRIES * INDEX_ENTRY) throw new Error('the saved game has no table index');
+  const tables = {};
+  const dv = new DataView(index.buffer, index.byteOffset, index.byteLength);
+  for (let k = 0; k < INDEX_ENTRIES; k++) {
+    const o = 8 + k * INDEX_ENTRY;
+    tables[dv.getInt32(o + 0x33, true)] = { file: latin1(index, o, 0x33), count: dv.getInt32(o + 0x37, true) };
+  }
+  return tables;
+}
+const TABLES = [6, 10, 13, 14, 15, 0, 1, 4];       // staff, player, the three name tables, clubs, national clubs, nations
+
 export class SaveGame {
+  // bytes: the whole file, or a SaveFile (SaveGame.open).
   constructor(bytes) {
-    this.file = new SaveFile(bytes);
-    const index = this.file.read('index.dat');
-    if (index.length < 8 + INDEX_ENTRIES * INDEX_ENTRY) throw new Error('the saved game has no table index');
-    this.tables = {};
-    const dv = new DataView(index.buffer, index.byteOffset, index.byteLength);
-    for (let k = 0; k < INDEX_ENTRIES; k++) {
-      const o = 8 + k * INDEX_ENTRY;
-      this.tables[dv.getInt32(o + 0x33, true)] = { file: latin1(index, o, 0x33), count: dv.getInt32(o + 0x37, true) };
-    }
+    this.file = bytes instanceof SaveFile ? bytes : new SaveFile(bytes);
+    this.tables = tablesOf(this.file.read('index.dat'));
     const table = (id, size) => {
       const t = this.tables[id];
       if (!t || !this.file.has(t.file)) throw new Error(`the saved game has no table ${id}`);
@@ -327,7 +374,18 @@ export class SaveGame {
     return missed;
   }
 
+  // A save from a Blob (the vault's file on disk): its header, index.dat and the tables the editor uses.
+  static async open(blob) {
+    const file = await SaveFile.open(blob);
+    await file.load(['index.dat']);
+    const tables = tablesOf(file.read('index.dat'));
+    await file.load(TABLES.map((id) => tables[id]?.file).filter(Boolean));
+    return new SaveGame(file);
+  }
+
   toBytes() { return this.file.toBytes(); }
+
+  toBlob() { return this.file.toBlob(); }
 }
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, Math.round(Number(v)) || lo));

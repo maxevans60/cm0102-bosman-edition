@@ -99,6 +99,39 @@ int keys_typing_row(void)
     return -1;
 }
 
+/* The centre of a clickable widget anywhere on the screen with this action id, in *x and *y; 0 when there is none
+ * or a popup is open. For Play (play.c): the button Restore Saved Game of the start screen and Ok of the file
+ * dialog. An id names a button in every language of the game, where its text does not. */
+int keys_button(int id, int *x, int *y)
+{
+    uint32_t d = screen_manager();
+    if (!d || rd32(g_mem, d) != 0) return 0;
+    int n = widget_count(d);
+    if (n < 0 || n > 0x4b0) return 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t w = widget_at(d, i);
+        if ((int32_t)rd32(g_mem, w + 0x08) != id || !clickable(d, w)) continue;
+        *x = ((int32_t)rd32(g_mem, w + 0x10) + (int32_t)rd32(g_mem, w + 0x18)) / 2;
+        *y = ((int32_t)rd32(g_mem, w + 0x14) + (int32_t)rd32(g_mem, w + 0x1c)) / 2;
+        return 1;
+    }
+    return 0;
+}
+
+/* The text of the text entry that takes keys, or NULL when none does (play.c). */
+const char *keys_typing_text(void)
+{
+    uint32_t d = screen_manager();
+    if (!d) return NULL;
+    int n = widget_count(d);
+    if (n < 0 || n > 0x4b0) return NULL;
+    for (int i = 0; i < n; i++) {
+        uint32_t w = widget_at(d, i);
+        if ((rd32(g_mem, w + 0x0c) & 8) && (int32_t)rd32(g_mem, w + 0x44) >= 0) return (const char *)(g_mem + w + 0x80);
+    }
+    return NULL;
+}
+
 int keys_continue_game(int *x, int *y) { return !keys_typing() && find_left_bar_button(CONTINUE_ID, x, y); }
 
 int keys_back(int *x, int *y) { return !keys_typing() && find_left_bar_button(BACK_ID, x, y); }

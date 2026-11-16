@@ -115,6 +115,8 @@ int keys_typing_row(void);                     /* its middle row in the picture,
 int keys_continue_game(int *x, int *y);        /* Continue Game in the left bar */
 int keys_back(int *x, int *y);                 /* the Back arrow in the left bar */
 int keys_outside_popup(int *x, int *y);        /* a place outside the open popup */
+int keys_button(int id, int *x, int *y);       /* a clickable button with this action id (play.c) */
+const char *keys_typing_text(void);            /* the text of the entry that takes keys, or NULL (play.c) */
 int keys_left_bar_label(const char *prefix);   /* a left bar button with this text (waits.c) */
 void keys_left_bar_labels(char *out, size_t size); /* the texts of the left bar buttons, for the log */
 extern uint32_t win_hwnd;
@@ -190,6 +192,16 @@ int waits_reached(int kind, uint32_t value, uint32_t since);    /* since: waits_
 uint32_t waits_poll_count(void);
 void waits_describe(char *out, size_t size);
 void waits_poll(void);                         /* at each input poll */
+int waits_screen_up(uint32_t build);           /* the screen of this build function is on top and took a poll */
+int waits_in_box(void);                        /* a message box of 0x5e8290 is open */
+uint32_t waits_top_build(void);                /* the build function of the screen on top, or 0 */
+
+/* Play (play.c): the page's Play button of a save. */
+int win_play(const char *utf8_name);           /* load this save from the start screen; -1, or why not (PLAY_*) */
+void win_play_poll(void);                      /* at each input pump (user32.c) */
+int win_click(int x, int y);                   /* user32.c: a click of the left button there, as a key's click */
+int win_click_busy(void);                      /* user32.c: that click, or the player's left button, is down */
+void win_char(uint32_t c);                     /* user32.c: a typed character (code page 1252) or Backspace (8) */
 
 /* COM (com.c). An object starts with its vtable and a reference count at +4. The list of methods ends
  * with a NULL function. */

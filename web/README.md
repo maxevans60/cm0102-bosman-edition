@@ -138,9 +138,27 @@ cup and Champions League rounds. What to expect:
 
 The game saves into the user folder as on the desktop (Game Options, Save Game). The Saved games button above the
 game lists those saves: Download writes one to your computer, as a normal `.sav` file; Upload a save puts a `.sav`
-file into the folder, and the game's Load Game screen then lists it. An upload is checked first (it must be a save
-container of CM 01/02), and a name that is taken gets a number. The saves use the format of the desktop game, so a
+file into the folder, and the game's Restore Saved Game screen then lists it. An upload is checked first (it must be a
+save container of CM 01/02), and a name that is taken gets a number. The saves use the format of the desktop game, so a
 save should move between this page and the Bosman Edition both ways.
+
+**Play (`play.js`, the runtime's `play.c`).** Each save has a Play button: the game loads that save as a player would
+from its start screen. The page calls `rt_web_play` with the file name; the runtime waits for the start screen, clicks
+Restore Saved Game, types the name into the dialog's File entry (deleting with Backspace what the entry opened with,
+the save loaded last), reads the entry back, and clicks Ok; while the entry still takes keys the first Ok only ends the
+typing (a run of 16 November 2026 needed the second), so it clicks Ok again once that click has ended and two input
+polls ran, and never while the runtime waits on a held button. The play ends when the dialog is gone. It finds each
+button by its action id in the game's own widget list, so it works at every picture size and in every language of the
+game. It types the name's UTF-8 bytes as they are, as a click on the save's row of the game's list would put them, so a
+name in any script opens (the game's list shows such a name as its bytes, for example "KÃ¶ln" for "Köln"). A name with
+a character the entry does not take (`" * / < > | { } [ ] ~ : \ ?`) is refused at once with that reason, and one too
+wide for the box after a few tries; the page names Restore Saved Game, or a new name by Download and Upload, as the
+way. With a game in play the page asks first ("The game in play closes"), keeps the name in sessionStorage for five
+minutes, restarts as Restart Game does, and asks the engine again once it has started. When a step does not come (no
+start screen in five minutes, no step forward for 30 seconds) the engine says so through `Module.rtPlay`. An engine
+built before Play has no `rt_web_play`, and the page shows no Play button. Tests: `tests/smoke/play_run.py` (native:
+a Köln and a Greek name, a second start with the entry filled, a refused name, widescreen) and the page check (the
+stand-in engine).
 
 The saves stay in IndexedDB, not localStorage: localStorage holds a few MB of text per site, and a save holds the
 whole game world. A new or changed save goes to IndexedDB about 2 seconds after the game finished writing it. Use
@@ -168,6 +186,17 @@ Download and the cloud upload hand the Blob on without memory. The data set choi
 the browser takes a Suspending import only inside `WebAssembly.promising`. The Asyncify build (Other browsers) has no
 vault; files that an earlier visit put in it come back into the user folder. `?vault=0` or localStorage `cm0102-vault` = `off` turns it
 off (the files in it then come back into the user folder).
+
+**Room for a save while the game writes it (`room.js`).** The game writes a save as `temp_save_file.sav`, opening it
+about once per member to read its header, add the member at the end and write the header again (138 opens for a save
+of 46 MB, under strace), then renames it. Emscripten's memory file system grows a file by 1.125 times whenever a write
+goes past its room, copying the whole file each time: a save of 690 MB was copied about fifty times, and the tab went
+from 0.9 GB to 3.8 GB while it was written. The page gives the file room at once for the largest save of the folder
+(5% more); past that, or with no save in the folder, it grows as before. Room that is never written takes no memory of
+the computer. Measured with a save of 690 MB written over one of that size (`/user`, the real engine's file system):
+the tab's peak while writing 2.2 GB instead of 3.8, the write 0.4 s instead of 6.3, the peak while the vault stores it
+2.3 GB instead of 3.0. What is left is the file itself and the vault's copy of it until the browser has stored it; the
+first save of a large game, with nothing to size the room from, is as before.
 
 **A write counts when it is committed (`vault.js`, committed).** An IndexedDB request's success comes before its
 transaction commits, and the commit can still fail: a full disk, or the room the browser gives the site
@@ -301,6 +330,13 @@ and announced size) before it reads a byte of it. The
 admin page marks such a report "Sent by the player", shows the note and the save, and Download the save gets it from
 the bucket (a link for an hour) and unpacks it under its own name. Reports and saves go after 90 days.
 
+**A notice of each report (`notify.mjs`).** With `CM_REPORT_WEBHOOK` set (web/deploy/README.md), each sent report gives
+the developer one short message on a Discord, Slack or Telegram webhook: the game's error, the browser, whether there
+is a note, the save's name and size, and a link to the admin page (`CM_SITE_URL`, or the app's address on Fly; never the
+request's Host, which a sender could set). The note, the log and the save stay on the server. The message waits up to
+90 seconds for the save, so a report is one message, and at the end of the wait it reads the report file, so a save that
+reached the other machine counts. At most 30 a day, then one that says more came.
+
 **Tactics (`tactics.js`).** The game keeps a player's tactics as it does on a PC: Tactics, Save As on the tactics screen
 writes `<name>.tct` in the folder `tactics` of the user folder, and Tactics, Load lists that folder. Saved games has a
 Tactics section to download them, upload others (from the PC game or a friend; several at once) and delete them, and
@@ -309,7 +345,8 @@ Download all takes them too (`tactics/` in the zip). An upload must be a tactic 
 0x5b5d10 reads it). The presets that ship in `Data` (`*.pct`) store the version plus 0x075BCD15 and differ in nothing
 else from the same tactic saved by the game; the tactics screen's Load refuses such a file ("Unable To Load"), so an
 upload of one, as a `.pct` or a `.tct`, is stored with the plain version and as `.tct`, and then loads. They stay in the
-browser's storage with the rest of the user folder; Cloud Saves do not carry them yet.
+browser's storage with the rest of the user folder, and with Cloud Saves they go to every device of the account
+(Cloud saves, below).
 
 ## Cloud saves
 
@@ -324,7 +361,17 @@ gzip-compressed, under the account's Google id. The page (`account.js`):
 
 - Before the game starts, the saves made elsewhere come into the user folder, so Load Game lists them. A slow
   connection gets a "Start without them" button after 5 seconds.
-- After each save, the new or changed save goes up ("Saved to the cloud"). With no connection it goes up later.
+- After each save, the new or changed save goes up ("Saved to the cloud"). With no connection it goes up later. A
+  large save (100 MB and more) that went up less than 10 minutes ago waits ("Goes up soon" in Saved games) and goes at
+  the next minute's try once that time is past, or at once when the tab is left (hidden): a player who saves a game of
+  690 MB every few game days would otherwise send about 300 MB packed at each save, and the other saves would wait
+  behind it (`BIG_SAVE`, `BIG_EVERY_MS` in `account.js`). Its first upload goes at once.
+- The tactics of the folder tactics go too (`tacticsync.js`, `/api/tactics`): the cloud keeps one record per account
+  (at most 200 tactics, 1.5 KB each), and a sync at the start, after an upload or a delete in Saved games, and each
+  minute when the folder changed merges it with the folder, per name the newest wins (a file's time, or the time it was
+  deleted in Saved games, so a deletion reaches the other devices). It goes up over the version it read; when another
+  device wrote meanwhile, it reads and merges again. settings.txt stays on each device: it holds what suits that
+  device (the picture size, the window).
 - A save changed on two devices since they last synced is kept twice, nothing is lost: the other device's version as
   "<name> (other device).sav", in both places.
 - While the game runs, a save in the browser is never replaced from the cloud; only new ones come in.
@@ -448,6 +495,10 @@ Saved games has an **Edit** button by each save. It opens the save editor (`edit
   example) gets the nearest one, and the editor says so.
 - The save is written under its own name, so Load Game lists it; the file as it was goes to `backups/` as "<name>
   (before edit).sav" (Saved games, Older copies). With Cloud Saves on, the edited save goes up as any other save.
+- A large save is not read whole: the editor reads the save's header and the nine tables it edits (a few MB) from the
+  browser's storage, and writes the new file as a Blob of the parts it did not change (slices of the old file, which
+  the browser copies on disk) and the tables it changed. The old file becomes the older copy by a rename, so it is not
+  read either. Before, a save of 690 MB was read whole and written whole, three copies in the tab's memory.
 - If the save is loaded in the running game, save the changes in the editor and then load the save again: the game
   keeps its own copy until it loads.
 
@@ -507,8 +558,18 @@ code addresses and the checks: `docs/research/2026-11-10-data-set-editor.md`.
 - "Saved in this browser" shows when a save has reached the browser's storage.
 - "Working…" shows at the top left when the game keeps the tab busy for more than a second or so (a database load, a
   long day): the tab has not stopped.
+- A long job of the game shows in the bar with its share and time once it has run 2 seconds, for example "Player
+  histories 45% · 0:38" while a new game is made (`progress.js`; the engine logs `recomp: progress: <stage>` when a
+  stage starts, and `rt_web_progress` gives its share, display.c). A player of a new game on a phone waited minutes on
+  one stage and thought the game had stopped.
 - The browser asks before the page is left while a game runs, and the screen stays on.
 - The second start needs no click: when the game files are in the browser, the game starts by itself.
+- **A new version (`release.js`).** The server names its release at `/version.json` (and in `files.json`): a hash of
+  the page files' names, sizes and times and of the engines' versions, so every machine of a deploy agrees, and a
+  deploy that changes neither keeps it. The page asks every 10 minutes and when it comes back into view; when the
+  release changed, a New version button shows in the bar, with one message. It loads the page the way Restart Game
+  does (the saves stored first; with a game in play the page asks first). The page never loads itself: a player in the
+  middle of a match decides when.
 
 ## On an iPad or another touch device
 

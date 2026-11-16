@@ -44,6 +44,7 @@ const WEB = path.resolve(__dirname, '..');
         writeFile(p, data) { const n = nodes.get(p) ?? { path: p, stream_ops: { read: memRead } }; nodes.set(p, n); n.contents = data; n.usedBytes = data.length; n.mtime = Date.now(); },
         readFile(p) { const n = nodes.get(p); if (!n) throw enoent(p); return n.contents.slice(0, n.usedBytes); },
         unlink(p) { if (!nodes.delete(p)) throw enoent(p); },
+        rename(a, b) { const n = nodes.get(a); if (!n) throw enoent(a); nodes.delete(a); nodes.set(b, n); n.path = b; },
         readdir(d) {
           if (!dirs.has(d)) throw enoent(d);
           const names = new Set(['.', '..']);
@@ -131,6 +132,14 @@ const WEB = path.resolve(__dirname, '..');
         out.uploadKept = (await vault.persist()).removed;
         const back = new Uint8Array(await (await vault.blob('/user/Uploaded 2002-01-05.sav')).arrayBuffer());
         out.uploadSame = back.length === big.length && back[SAVE_HEADER + 5] === 5 && back[back.length - 1] === 5;
+        // The save editor keeps the save as it was as an older copy (a rename), then stores the edited one under the
+        // name (adopt) before the vault's round moved the renamed file's record: each keeps its own bytes.
+        dirs.add('/user/backups');
+        FS.rename('/user/Uploaded 2002-01-05.sav', '/user/backups/Uploaded 2002-01-05 (before edit).sav');
+        await storeSave(FS, 'Uploaded 2002-01-05.sav', new Blob([save(2 * MB, 9)]));
+        await vault.persist();
+        const firstOf = async (p) => { const b = new Uint8Array(await (await vault.blob(p)).arrayBuffer()); return [b.length, b[SAVE_HEADER + 1]]; };
+        out.renamedThenAdopted = { old: await firstOf('/user/backups/Uploaded 2002-01-05 (before edit).sav'), now: await firstOf('/user/Uploaded 2002-01-05.sav') };
         out.junk = await storeSave(FS, 'Junk.sav', new Blob([new Uint8Array(3 * MB)]));
         out.junkStored = Boolean(nodes.get('/user/Junk.sav'));
         out.empty = await storeSave(FS, 'Empty.sav', new Blob([]));
@@ -162,6 +171,8 @@ const WEB = path.resolve(__dirname, '..');
       r.upload?.why === null && r.upload.largestRead <= 0x416ec && r.upload.state === 'out' && r.upload.inMemory === 0
         && r.upload.size === 0x416ec + 9 * MB && r.upload.mtime === 1762770000000, JSON.stringify(r.upload));
     check('it stays through the vault\'s round, reads back the same, and the next visit lists it', r.uploadKept === 0 && r.uploadSame && r.nextVisit >= 2, JSON.stringify([r.uploadKept, r.uploadSame, r.nextVisit]));
+    check('a renamed save keeps its bytes when a new file is stored under its old name before the vault\'s round',
+      JSON.stringify(r.renamedThenAdopted) === JSON.stringify({ old: [0x416ec + 9 * MB, 5], now: [0x416ec + 2 * MB, 9] }), JSON.stringify(r.renamedThenAdopted));
     check('a file that is not a save is refused and not stored; an empty one says so',
       /not a saved game/.test(r.junk ?? '') && r.junkStored === false && /empty \(0 bytes\)/.test(r.empty ?? ''), JSON.stringify([r.junk, r.junkStored, r.empty]));
     check('without the vault a save goes into the user folder in memory, as before', r.plainWhy === null && r.plain?.inMemory === 0x416ec + 1000 && r.plain.state === null, JSON.stringify([r.plainWhy, r.plain]));

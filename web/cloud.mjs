@@ -29,6 +29,8 @@ const SESSION_DAYS = 30;
 // secrets CM_CLOUD_MAX_PACKED_MB and CM_CLOUD_MAX_RAW_MB set others.
 export const MAX_GZ = 400 << 20;
 export const MAX_RAW = 1024 << 20;
+export const MAX_TACTICS = 200;            // tactics of an account in the cloud (a tactic file: 1,476 bytes)
+const MAX_TACTIC = 4096;                   // bytes of one tactic file
 export const MAX_SET_ZIP = 48 << 20;       // a data set as a zip (the 3.9.68 data: about 61 MB, some 20 MB zipped)
 
 const b64u = (s) => Buffer.from(s, 'utf8').toString('base64url');
@@ -634,6 +636,46 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     send(res, 200, { name, etag, size: body.length, rawSize, saved });
   }
 
+  // The tactics of an account (tacticsync.js): one record, tactics/<sub>.json, { tactics: [{ name, data (base64),
+  // mtime }], removed: { name: time } }, written only over the version the page last read (x-base-etag; 409 else), so
+  // two devices merge instead of writing over each other.
+  const tacticsKey = (sub) => `tactics/${sub}.json`;
+  const validTacticName = (n) => typeof n === 'string' && /^[^\\/:*?"<>|\u0000-\u001f]{1,100}\.tct$/i.test(n) && !n.startsWith('.');
+  async function tactics(req, res, user, method) {
+    const key = tacticsKey(user.sub);
+    if (method === 'GET') {
+      const r = await s3.get(key);
+      if (!r) { send(res, 200, { tactics: [], removed: {}, etag: null, maxTactics: MAX_TACTICS }); return; }
+      const chunks = [];
+      for await (const c of r) chunks.push(c);
+      const kept = JSON.parse(Buffer.concat(chunks).toString());
+      send(res, 200, { tactics: kept.tactics ?? [], removed: kept.removed ?? {}, etag: r.headers.etag, maxTactics: MAX_TACTICS });
+      return;
+    }
+    if (method !== 'PUT') { req.resume(); send(res, 405, { error: 'GET or PUT' }); return; }
+    let body;
+    try { body = JSON.parse((await readBody(req, (MAX_TACTICS + 1) * (MAX_TACTIC * 2))).toString()); }
+    catch (err) { send(res, err.status === 413 ? 413 : 400, { error: err.status === 413 ? 'too many tactics' : 'not JSON' }); return; }
+    const list = Array.isArray(body?.tactics) ? body.tactics : null, removed = body?.removed;
+    if (!list || typeof removed !== 'object' || removed === null || Array.isArray(removed)) { send(res, 400, { error: 'tactics and removed, please' }); return; }
+    if (list.length > MAX_TACTICS) { send(res, 413, { error: `the cloud keeps ${MAX_TACTICS} tactics at most` }); return; }
+    const clean = [];
+    for (const t of list) {
+      const data = typeof t?.data === 'string' ? Buffer.from(t.data, 'base64') : null;
+      if (!validTacticName(t?.name) || !data || data.length === 0 || data.length > MAX_TACTIC || !(Number(t.mtime) > 0)) {
+        send(res, 422, { error: `${String(t?.name).slice(0, 100)} is not a tactic the cloud keeps` });
+        return;
+      }
+      clean.push({ name: t.name, data: data.toString('base64'), mtime: Math.floor(Number(t.mtime)) });
+    }
+    const gone = Object.fromEntries(Object.entries(removed).filter(([n, at]) => validTacticName(n) && Number(at) > 0)
+      .slice(0, MAX_TACTICS * 5).map(([n, at]) => [n, Math.floor(Number(at))]));
+    const current = await s3.head(key), base = req.headers['x-base-etag'];
+    if (base === undefined || (base === 'none' ? current !== null : current?.etag !== base)) { send(res, 409, { error: 'changed' }); return; }
+    const etag = await s3.put(key, Buffer.from(JSON.stringify({ tactics: clean, removed: gone })), { type: 'application/json' });
+    send(res, 200, { etag });
+  }
+
   async function deleteAccount(req, res, user) {
     // A subscription that runs on would be paid for an account that is gone: it is canceled first.
     const record = await account(user.sub, true);
@@ -645,6 +687,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     for (const o of await s3.list(`saves/${user.sub}/`)) await s3.delete(o.key);
     for (const o of await s3.list(`sets/${user.sub}/`)) await s3.delete(o.key);
     for (const o of await s3.list(`incoming/${user.sub}/`)) await s3.delete(o.key);
+    await s3.delete(tacticsKey(user.sub));
     await s3.delete(grantKey(user.sub));
     await s3.delete(accountKey(user.sub));
     accounts.delete(user.sub);
@@ -676,6 +719,11 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     if (path === '/api/account' && method === 'DELETE') {
       if (!user) { send(res, 401, { error: 'not signed in' }); return; }
       return deleteAccount(req, res, user);
+    }
+    if (path === '/api/tactics') {
+      if (!user) { req.resume(); send(res, 401, { error: 'not signed in' }); return; }
+      if (!(await hasCloud(user))) { req.resume(); send(res, 403, { error: 'cloud saves are not on this account\'s plan' }); return; }
+      return tactics(req, res, user, method);
     }
     if (path === '/api/datasets' || path.startsWith('/api/datasets/')) {
       if (!user) { req.resume(); send(res, 401, { error: 'not signed in' }); return; }

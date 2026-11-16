@@ -261,6 +261,10 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   // that name there is replaced. In one step of the vault's queue: a round between the two would remove the record.
   function adopt(path, blob, mtime = Date.now()) {
     return serial(async () => {
+      // A file renamed away from this name whose record the round has not moved yet (the save editor keeps the save as
+      // it was under backups/, then stores the edited one here): its record moves first, or the round would later give
+      // it this new file's bytes.
+      for (const other of [...managed]) if (other.vaultKey === path) { const q = alive(other); if (q && q !== path) await rekey(other, q); }
       await put(path, { size: blob.size, mtime, blob });
       mine.add(path);
       const old = lookup(path);

@@ -16,6 +16,13 @@
     mkdirTree,
     mkdir(p) { if (dirs.has(p)) throw Object.assign(new Error(`EEXIST ${p}`), { errno: 20 }); dirs.add(p); },
     unlink(p) { if (!files.delete(p)) throw enoent(p); },
+    rename(from, to) {                                   // as Emscripten's: the file takes the new name, over one there
+      const f = files.get(from);
+      if (!f) throw enoent(from);
+      if (!dirs.has(to.slice(0, to.lastIndexOf('/')) || '/')) throw enoent(to);
+      files.delete(from);
+      files.set(to, f);
+    },
     rmdir(p) { if ([...files.keys()].some((f) => f.startsWith(`${p}/`))) throw new Error(`ENOTEMPTY ${p}`); if (!dirs.delete(p)) throw enoent(p); },
     writeFile(path, data, opts) {
       if (!dirs.has(path.slice(0, path.lastIndexOf('/')) || '/')) throw new Error(`no folder for ${path}`);
@@ -107,14 +114,22 @@
   // which counts the keys it sees (keyboard.js must keep the keys of its field away from it).
   window.__typed = [];
   window.__sdlKeys = 0;
+  // Play (play.c): rt_web_play's names in window.__played, and its answer window.__playAnswer (-1: on its way);
+  // rt_web_in_game says window.__inGame (a game in play).
+  window.__played = [];
   M.ccall = (name, ret, types, args) => {
     if (name === 'rt_web_type') window.__typed.push(['type', args[0]]);
     else if (name === 'rt_web_key') window.__typed.push(['key', args[0]]);
+    else if (name === 'rt_web_play') { window.__played.push(args[0]); return window.__playAnswer ?? -1; }
     else throw new Error(`no export ${name}`);
     return null;
   };
   // An engine built before the keyboard calls has neither export (the page check sets __oldEngine for that case).
-  if (!window.__oldEngine) M._rt_web_type = M._rt_web_key = () => {};
+  if (!window.__oldEngine) {
+    M._rt_web_type = M._rt_web_key = M._rt_web_play = () => {};
+    M._rt_web_in_game = () => (window.__inGame ? 1 : 0);
+    M._rt_web_progress = () => window.__progress ?? -1;          // display.c: the share done of a long job, -1: none
+  }
   function init() {
     if (started) return;
     started = true;
