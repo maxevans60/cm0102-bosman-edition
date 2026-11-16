@@ -809,8 +809,13 @@ static int build_stage(uint32_t obj, int index, const uint32_t *clubs, int k, in
     round_dates(table, 1, legs == 2 ? 3 : 4, a7, venue, year);
     if (rt_unwinding) return 0;
     if (legs == 2) {
+        /* a tie on aggregate, as the original's two-leg rounds (the play-off template of the Nations League,
+         * 0x57d4ba..: +0x0d 0, +0x0f 3): the template of stage 2 has 0x230 and 0x30 (0x907fe7, 0x908003), and 0x10
+         * decides each leg alone (cup round record doc, section 2). The round bits 0x100..0x400 stay. */
         g_mem[table + 0x21] = 2;
         g_mem[table + 0x22] = 4;
+        wr16(g_mem, table + 0x0d, rd16(g_mem, table + 0x0d) & 0x0f00u);
+        wr16(g_mem, table + 0x0f, 3);
     }
     for (int i = 0; i < k; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[i]);
     uint32_t sz[1] = {0xb2};
@@ -899,10 +904,19 @@ RT_WRAP(00909400, mls_advance)
         o_00909400();
         return;
     }
-    wr32(g_mem, obj + COMP_STAGE_NOW, (uint32_t)(now + 1));
-    if (!build_playoff(obj, now + 1) && !rt_unwinding)
-        fprintf(stderr, "recomp: mls: %d: stage %d not built\n", (int16_t)rd16(g_mem, obj + COMP_YEAR), now + 1);
+    /* +0x30 moves on only when the stage is built: the save reads the type byte of stages 0..+0x30 (0x689912..
+     * 0x68992f) and start_new_season deletes them (0x908e38..0x908e46). With no stage the play-off ends here
+     * (+0x2c = now + 1). */
+    int ok = build_playoff(obj, now + 1);
     if (rt_unwinding) return;
+    if (ok) {
+        wr32(g_mem, obj + COMP_STAGE_NOW, (uint32_t)(now + 1));
+    } else {
+        wr32(g_mem, rd32(g_mem, obj + COMP_STAGES) + 4u * (uint32_t)(now + 1), 0);
+        wr32(g_mem, obj + COMP_STAGE_COUNT, (uint32_t)(now + 1));
+        fprintf(stderr, "recomp: mls: %d: stage %d not built, the play-off ends at stage %d\n",
+                (int16_t)rd16(g_mem, obj + COMP_YEAR), now + 1, now);
+    }
     rt_ret_stdcall(0, 0);
 }
 
