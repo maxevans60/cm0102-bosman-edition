@@ -29,6 +29,7 @@
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 void rt_web_yield(void);                       /* host/web.c */
+void rt_web_breathe(void);                     /* host/web.c: from inside long work */
 /* The browser: an idle sleep hands the time to the page, so it draws and takes input (host/web.c). */
 #define SDL_Delay(ms) emscripten_sleep(ms)
 #endif
@@ -1117,10 +1118,16 @@ void o_0090cfc0(void);
 uint32_t (*win_random_hook)(uint32_t esp, uint32_t edi, uint32_t result);
 
 /* The game's random function random(n), 0x90cfc0: noted as game work for idle_rest only. The hook (win.h) can
- * replace the result of a call from one place of the game's code; it is NULL in the base game. */
+ * replace the result of a call from one place of the game's code; it is NULL in the base game. In the browser, every
+ * 4096th call lets the page have a moment if it had none for 100 ms (host/web.c, rt_web_breathe): a day's processing
+ * calls it without end, and between two input polls it ran long enough for Chrome to call the page unresponsive. Only
+ * time passes; nothing of the game changes. */
 RT_WRAP(0090cfc0, game_random)
 {
     win_game_work();
+#ifdef __EMSCRIPTEN__
+    if (!(work_count & 0xfffu)) rt_web_breathe();
+#endif
     uint32_t esp = cpu.esp, edi = cpu.edi;
     o_0090cfc0();
     if (win_random_hook && !rt_unwinding) cpu.eax = win_random_hook(esp, edi, cpu.eax);

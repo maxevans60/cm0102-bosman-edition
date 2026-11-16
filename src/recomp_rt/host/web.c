@@ -87,15 +87,30 @@ void rt_web_heap_top(uint32_t top)
     ensure(top);
 }
 
+static double last_yield;                 /* when the page last had time */
+
 /* user32.c: at each input poll. Gives the page time to draw and to take input if YIELD_MS passed since the last time. */
 void rt_web_yield(void)
 {
-    static double last;
     double now = emscripten_get_now();
-    if (now - last < YIELD_MS) return;
+    if (now - last_yield < YIELD_MS) return;
     web_check_host_heap();
     emscripten_sleep(0);
-    last = emscripten_get_now();
+    last_yield = emscripten_get_now();
+}
+
+/* user32.c: from inside the game's long work (its random function, which a day's processing calls without end), when
+ * BREATHE_MS passed without a poll. A large game's day ran seconds between two input polls on the page, and Chrome
+ * then asked the player whether to leave the page ("Page Unresponsive", a player's screenshot, 16 November 2026); the
+ * page could not draw its busy sign either. The page's own work while the game waits here (input into SDL's queue,
+ * its reads of the game's state, the vault's rounds) is the same as at an input poll. */
+#define BREATHE_MS 100.0
+void rt_web_breathe(void)
+{
+    if (emscripten_get_now() - last_yield < BREATHE_MS) return;
+    web_check_host_heap();
+    emscripten_sleep(0);
+    last_yield = emscripten_get_now();
 }
 
 #endif
