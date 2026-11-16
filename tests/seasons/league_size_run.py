@@ -65,8 +65,8 @@ ROWS = {
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
     # Slice 12: Russia and Turkey.
     "rus_first": (2005, 2006, "Russian First Division, 22 clubs (the class holds 18 and takes at most 18)"),
-    "rus_first@2011": (2011, 2012, "Russian First Division 2011-12: 20 clubs, 38 rounds, the first stage only (the split "
-                                   "of 2012 is a gap row: a season that spans two game years)"),
+    "rus_first@2011": (2011, 2012, "Russian First Division 2011-12: 20 clubs, 38 rounds, the first stage only (the split of "
+                                   "row 2010, played in 2012, is a gap: a season that spans two game years)"),
     "rus_first@2012": (2012, 2013, "Russian First Division, 17 clubs in 2012/13 (row of a two-year season)"),
     "tur_first": (2020, 2021, "Süper Lig, 21 clubs in 2020/21 (the class holds 18), 42 rounds"),
     "tur_first@2021": (2021, 2022, "Süper Lig, 20 clubs in 2021/22"),
