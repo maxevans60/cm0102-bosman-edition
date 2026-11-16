@@ -31,8 +31,8 @@
  * - The best and worst places of each row (update_positions_and_status 0x684cd0) follow the sections after the split:
  *   rt_split_bounds below (gap row 24 of 0.7.2).
  *
- * Known limits (D2, the nearest form). A table match put back past the first section date delays the split, and the
- * section fixtures of a date already past are as in the original's Scottish split.
+ * Known limits (D2, the nearest form). A table match put back past the first section date delays the split; the
+ * section dates then move on together, so that the first is the day after the split (split, slice 11).
  *
  * The state of a league is in the save: before the split +0x3c holds the row's meetings, after it the marker
  * (meetings + the most section meetings), with +0xa7 the matches of the season. A league whose object does not hold
@@ -54,6 +54,8 @@
 #define COMP_MEETINGS 0x3cu         /* s16 */
 #define COMP_CLUBS 0x3eu            /* s16 */
 #define COMP_YEAR 0x40u             /* s16: the edition */
+#define TODAY 0x00ae2c90u            /* the game date: s16 day of the year (0 = 1 January), +2 s16 year */
+#define ORDER_GLOBAL 0x00b67a00u     /* the order that the row comparators call (League::sort_table 0x682884) */
 #define COMP_ORDER 0xa3u            /* the table order function, 0 for the points (0x683410) */
 #define COMP_MATCHES 0xa7u          /* s16: matches per club */
 #define COMP_DATES 0xa9u            /* s16: the dates of the template */
@@ -109,7 +111,9 @@ int season_split_of(uint32_t obj, const char *file, int n, int meetings, SeasonS
     int sum = 0, most = 0;
     for (int k = 0; k < SEASON_LEAGUE_PARTS && r->split_size[k] > 0; k++) {
         int size = r->split_size[k], m = r->split_meetings[k];
-        if (size < 2 || m < 1 || m > 4) return 0;
+        /* A section of one club plays no more (0 meetings: the 12th of a Super League 2 group of 2023/24, which
+         * goes down at once); any other needs its meetings (0 is unknown). */
+        if (size < 2 ? size != 1 || m != 0 : m < 1 || m > 4) return 0;
         sp->size[k] = size;
         sp->meet[k] = m;
         sp->rounds[k] = m * (size + (size & 1) - 1);
@@ -124,7 +128,10 @@ int season_split_of(uint32_t obj, const char *file, int n, int meetings, SeasonS
     sp->meetings = meetings;
     sp->after = r->split_after;
     sp->marker = meetings + most;
-    sp->halved = r->split_points == 1;
+    for (int k = 0; k < sp->parts; k++) {
+        sp->halve[k] = r->split_points == 1 || (r->split_points == 3 && r->split_halved[k]);
+        sp->halved |= sp->halve[k];
+    }
     return 1;
 }
 
@@ -216,6 +223,14 @@ static uint32_t order_fn(void)
 {
     if (!order_addr) order_addr = rt_host_fn("split_order", split_order);
     return order_addr;
+}
+
+/* League::sort_table's path with no tie rules list (0x682aa8, league_sizes.py): the order of a league after its
+ * split goes to the comparators' global [0xb67a00], as the other path does at 0x682884. */
+void rt_split_sort_order(uint32_t obj)
+{
+    if (!season_sizes_on() || !readable(obj) || !order_addr || rd32(g_mem, obj + COMP_ORDER) != order_addr) return;
+    wr32(g_mem, ORDER_GLOBAL, order_addr);
 }
 
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original)
@@ -347,6 +362,11 @@ static void game_free(uint32_t p)
     if (p) call_cdecl(F_FREE, 1, a);
 }
 
+/* The section stage that make_section deletes now (its destructor runs League::free_table 0x687970), or 0. */
+static uint32_t deleting;
+
+int season_split_deleting(uint32_t obj) { return obj && obj == deleting; }
+
 /* One section: a League_Stage of the clubs with the section's meetings on the first `days` dates of the block,
  * deleted at once as ScoPrm's (its fixtures stay with the parent). 1 when made. */
 static int make_section(uint32_t obj, const uint32_t *clubs, int size, int meetings, uint32_t dates, int days,
@@ -368,7 +388,9 @@ static int make_section(uint32_t obj, const uint32_t *clubs, int size, int meeti
         if (rt_unwinding) return 0;
         if (readable(made_at)) {
             uint32_t one[1] = {1};
+            deleting = made_at;
             call_this(rd32(g_mem, rd32(g_mem, made_at)), made_at, 1, one);   /* delete, as 0x7f2eef..0x7f2ef5 */
+            deleting = 0;
             if (rt_unwinding) return 0;
             made = 1;
         }
@@ -418,9 +440,32 @@ static void split(uint32_t obj, const SeasonSplit *sp)
                 sp->after, record_name(obj));
         return;
     }
+    /* A split made after its first section date: a table match put back past that date delays the split (the Super
+     * League 2025/26 of a 2025 start: a match moved by clashes from day 66 to day 90, the sections began on day 67),
+     * and a section fixture of a date already past was never played, so the table was never complete and the
+     * nation's season change waited for ever. The dates of the block (+0 s16 day of the year, +2 s16 year,
+     * DATE_SIZE bytes each) then move on together so that the first is tomorrow, in the same year; their order and
+     * gaps stay. */
+    {
+        int today = (int16_t)rd16(g_mem, TODAY), this_year = (int16_t)rd16(g_mem, TODAY + 2u);
+        int first = (int16_t)rd16(g_mem, dates), first_year = (int16_t)rd16(g_mem, dates + 2u);
+        int last = (int16_t)rd16(g_mem, dates + (uint32_t)(days - 1) * DATE_SIZE);
+        int last_year = (int16_t)rd16(g_mem, dates + (uint32_t)(days - 1) * DATE_SIZE + 2u);
+        int shift = first_year == this_year && last_year == this_year && first <= today ? today + 1 - first : 0;
+        if (shift > 0 && last + shift < 365) {
+            for (int k = 0; k < days; k++) {
+                uint32_t d = dates + (uint32_t)k * DATE_SIZE;
+                wr16(g_mem, d, (uint16_t)((int16_t)rd16(g_mem, d) + shift));
+            }
+            fprintf(stderr, "recomp: league sizes: %s split %d: made on day %d, after its first section date (day "
+                            "%d): the section dates move on %d days (%.50s)\n", file, year, today, first, shift,
+                    record_name(obj));
+        }
+    }
     int first = 0;
     for (int k = 0; k < sp->parts; k++) {
-        if (!make_section(obj, by_pos + first, sp->size[k], sp->meet[k], dates, sp->rounds[k], code)) {
+        if (sp->size[k] >= 2 &&
+            !make_section(obj, by_pos + first, sp->size[k], sp->meet[k], dates, sp->rounds[k], code)) {
             if (rt_unwinding) return;
             /* Only when the game's allocator fails. The section's clubs then play no more matches and the table
              * is never complete; the log names it and the test fails on it. */
@@ -429,12 +474,15 @@ static void split(uint32_t obj, const SeasonSplit *sp)
         }
         first += sp->size[k];
     }
-    /* Halved points, rounded up. apply_result_to_table 0x685f60 sets the overall points to the home points (+0x27)
-     * plus the away points (+0x35) at each result (0x6864a5..0x6864b1, 0x68652a..0x686532), so the home and away
-     * points are halved too, and add up to the halved overall points. */
+    /* Halved points, rounded up, in each section that halves them (by the row's position after match N, which
+     * the check above found each place once). apply_result_to_table 0x685f60 sets the overall points to the home
+     * points (+0x27) plus the away points (+0x35) at each result (0x6864a5..0x6864b1, 0x68652a..0x686532), so the
+     * home and away points are halved too, and add up to the halved overall points. */
     if (sp->halved)
         for (int i = 0; i < n; i++) {
             uint32_t row = t + (uint32_t)i * ROW_SIZE;
+            int k = section_of(row, sp);
+            if (k < 0 || !sp->halve[k]) continue;
             int p = (int16_t)rd16(g_mem, row + ROW_POINTS), home = (int16_t)rd16(g_mem, row + ROW_HOME_POINTS);
             int half = p >= 0 ? (p + 1) / 2 : p / 2, home_half = home >= 0 ? (home + 1) / 2 : home / 2;
             if (home_half > half) home_half = half;
@@ -455,7 +503,13 @@ static void split(uint32_t obj, const SeasonSplit *sp)
         fprintf(stderr, ", rounds");
         for (int k = 0; k < sp->parts; k++)
             fprintf(stderr, "%s%d", k ? "+" : " ", sp->rounds[k]);
-        fprintf(stderr, ", %d dates, points %s (%.50s)\n", days, sp->halved ? "halved" : "kept", record_name(obj));
+        fprintf(stderr, ", %d dates, points", days);
+        int same = 1;
+        for (int k = 1; k < sp->parts; k++)
+            same &= sp->halve[k] == sp->halve[0];
+        for (int k = 0; k < (same ? 1 : sp->parts); k++)
+            fprintf(stderr, "%s%s", k ? "+" : " ", sp->halve[k] ? "halved" : "kept");
+        fprintf(stderr, " (%.50s)\n", record_name(obj));
     }
     /* Test runs (tests/seasons/league_size_run.py --save-in-split): RECOMP_SAVE_AFTER_SPLIT=k saves at the first
      * human turn on or after the k-th section date (testrun.c counts a day as year x 366 + day of the year). */

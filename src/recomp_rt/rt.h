@@ -400,6 +400,7 @@ uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
 /* The matches that League::check_complete 0x689ad0 wants of every row (0x689b47), the original's +0xa7 except in a
  * league whose sections of a split play different matches (0.7.2 slice 7, win/season_split.c). */
 uint32_t rt_league_played_target(uint32_t obj, uint32_t original);
+void rt_split_sort_order(uint32_t obj);
 int rt_split_bounds(uint32_t obj);              /* season_split.c: best and worst places by section */
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
@@ -467,6 +468,20 @@ uint32_t rt_ire_prm_playoff(uint32_t obj, uint32_t original);
 /* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
  * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
 uint32_t rt_gre_cup_lower(uint32_t pool);
+/* The CroA2a tie-break list of a table of more than 16 (0.7.2 slice 11, season_sizes_cro.c) */
+uint32_t rt_cro_tiebreak_slot(uint32_t obj, uint32_t array, uint32_t index);
+uint32_t rt_cro_tiebreak_list(uint32_t obj, uint32_t array);
+uint32_t rt_cro_regroup_max(uint32_t original);
+uint32_t rt_cro_regroup_slot(uint32_t array, uint32_t index);
+uint32_t rt_cro_regroup_list(uint32_t array, uint32_t count);
+uint32_t rt_cro_regroup_north(uint32_t original);
+uint32_t rt_cro_regroup_end(uint32_t original);
+uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place);
+uint32_t rt_cro_regroup_sort_count(uint32_t count);
+uint32_t rt_cro_south_swap(void);
+uint32_t rt_cro_south_idle(void);
+uint32_t rt_cro_south_empty(uint32_t obj);
+uint32_t rt_gre_fix_count(uint32_t original, uint32_t second);
 uint32_t rt_rus_cup_lower(uint32_t pool);
 uint32_t rt_rus_cup_picks(uint32_t esp);
 uint32_t rt_rus_cup_premier_place(uint32_t placed);

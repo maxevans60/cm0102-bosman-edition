@@ -24,7 +24,8 @@ typedef struct {
     int rounds_max;                         /* the dates after the split */
     int matches_max;                        /* the most matches of a club after the split */
     int marker;                             /* +0x3c once the split is made: meetings + the most section meetings */
-    int halved;                             /* 1: the points are halved at the split */
+    int halved;                             /* 1: some section halves its points at the split */
+    int halve[SEASON_LEAGUE_PARTS];         /* 1: the section halves its points (rounded up) */
 } SeasonSplit;
 
 /* 1 when a league object of a grown file with n clubs and the row's meetings plays a split this edition (the row
@@ -39,6 +40,9 @@ int season_split_matches(uint32_t obj, const char *file, int n, int meetings);
 /* After League::update_for_date 0x6847c0 of any league: makes the split on the first day that every club has
  * played N matches. */
 void season_split_update(uint32_t obj);
+
+/* 1 while the split deletes the section stage obj (made at the split; its fixtures stay with the parent). */
+int season_split_deleting(uint32_t obj);
 
 /* After League::load_from_temp_file 0x687b10 (season_load.c): a league loaded after its split takes the table
  * order of its sections again (+0xa3 is not in the save, as ScoPrm's load sets it at 0x7f0bf1..0x7f0c08). */

@@ -77,6 +77,15 @@ check(by[("bel_first", 2009)]["split"] == "after 30: 6+8, points halved", "Belgi
 check(by[("pol_first", 2013)]["split"] == "after 30: 8+8, points halved", "Polish split 2013/14")
 check(by[("pol_first", 2017)]["split"] == "after 30: 8+8, points kept", "Polish split 2017/18")
 check(by[("den_prm", 2020)]["split"] == "after 22: 6+6, points kept", "Danish split from 2020/21")
+# Gap rows 38, 39 and 41 (slice 11).
+check(by[("gre_prm", 2024)]["split"] == "after 26: 4+4+6, points kept+halved+kept", "Super League 2024/25: 5th-8th halve")
+check(by[("gre_second", 2023)]["split"] == "after 22: 5+6+1, points halved" and by[("gre_second", 2023)]["split_meet"]
+      == "2+2+0", "Super League 2 2023/24: each group splits, the 12th plays no section")
+check(by[("gre_second", 2025)]["split"] == "after 18: 4+6, points halved", "Super League 2 2025/26")
+check(by[("cro_a2b", 2004)]["split"] == "after 22: 6+6, points kept" and by[("cro_a2b", 2004)]["split_meet"] == "2+2",
+      "Druga HNL South 2004/05: groups of 6, twice")
+check(e.section_points("kept+halved+kept", 3) == [0, 1, 0] and e.split_points("kept+halved")
+      == 3, "points by section")
 check(by[("arg_prm", 2001)]["split"] == "stages", "Apertura and Clausura")
 check(by[("eng_prm", 2001)]["split"] == "-", "one table")
 

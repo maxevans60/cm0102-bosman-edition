@@ -142,17 +142,9 @@ fra-33	2004	fra_lower	playoffs	partial: the places of each group	relegation play
 fra-42	2005	fra_lower	playoffs	partial: the places of each group	relegation play-off: the 13th of each group, the worst 12th and the 2 best 14th v the 22 Division d'Honneur runners-up
 fra-51	2006	fra_lower	playoffs	partial: the places of each group	relegation play-off: the 13th of each group and the best 12th and 14th places v the 22 Division d'Honneur runners-up
 fra-60	2007	fra_lower	playoffs	partial: the places of each group	relegation play-off: the 13th of each group v Division d'Honneur clubs
-gre-pol-cro-46	2019	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 6 play-off round (double round robin, 10 matches) for title and Europe; bottom 8 play-out round; points kept in full
-gre-pol-cro-47	2020	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 6 play-off round (double round robin, 10 matches); bottom 8 play-out round; points kept in full
-gre-pol-cro-48	2021	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 6 play-off round (10 matches); bottom 8 play-out round; points kept in full
-gre-pol-cro-50	2023	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 6 play-off (10 matches, points kept); bottom 8 play-out (7 matches)
-gre-pol-cro-51	2024	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 4 championship play-off (double round robin, 6 matches, points kept in full); 5th-8th Europe play-offs; 9th-14th relegation play-outs
-gre-pol-cro-52	2025	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 4 championship play-off (6 matches, points and goals kept in full); 5th-8th Europe play-offs; 9th-14th relegation play-outs
-gre-pol-cro-53	2026	gre_prm	split_meet	the text does not give the meetings of each section	after 26 rounds: top 4 championship play-off; 5th-8th Europe play-offs; bottom 6 relegation play-outs
 gre-pol-cro-54	2027	gre_prm	split	the tool cannot read the split	inference: top 4 / 5th-8th / bottom 6 split as 2026/27
 gre-pol-cro-67	2013	gre_second	playoffs	partial: the places of each group	top 4 of each group: promotion play-off round of 8 for 3 places (2 direct, 3rd via a play-off match)
 gre-pol-cro-68	2014	gre_second	playoffs	partial: the places of each group	top 3 of each group: promotion play-off round of 6 for 2 places; 5th-10th: relegation play-off groups
-gre-pol-cro-74	2020	gre_second	split_meet	the text does not give the meetings of each section	after 22 rounds: top 6 play-off round, bottom 6 play-out round; points kept in full
 gre-pol-cro-74	2020	gre_second	playoffs	partial: the 2nd of the play-off round of the split	2nd of play-off round: promotion play-off
 gre-pol-cro-75	2021	gre_second	playoffs	partial: the winner of each group	group winners: title and promotion play-off
 gre-pol-cro-77	2023	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-11th: play-out round
@@ -165,26 +157,15 @@ gre-pol-cro-131	2023	gre_second	playoffs	partial: split rounds (needs the split 
 gre-pol-cro-132	2024	gre_second	playoffs	partial: split rounds (needs the split kind)	top 5 of each group: play-off round; 6th-10th: play-out round
 gre-pol-cro-133	2025	gre_second	playoffs	partial: split rounds (needs the split kind)	top 4 of each group: play-off round; 5th-10th: play-out round
 gre-pol-cro-190	2001	pol_first	playoffs	partial: the 5th and 6th of the relegation group of 8	5th-6th of relegation group: relegation play-offs
-gre-pol-cro-327	2003	cro_a1	split_meet	the text does not give the meetings of each section	after 22 rounds: championship group of 6 and relegation group of 6; points kept in full
-gre-pol-cro-328	2004	cro_a1	split_meet	the text does not give the meetings of each section	after 22 rounds: championship group of 6 and relegation group of 6; points kept in full
-gre-pol-cro-329	2005	cro_a1	split_meet	the text does not give the meetings of each section	after 22 rounds: championship group of 6 and relegation group of 6; points kept in full
-gre-pol-cro-353	2002	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-353	2002	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-354	2003	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-354	2003	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off
-gre-pol-cro-355	2004	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-355	2004	cro_a2a	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-356	2005	cro_a2a	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-356	2005	cro_a2a	playoffs	partial: the 1st of the play-off group of the split	1st of play-off group: promotion play-off
 gre-pol-cro-368	2017	cro_a2a	playoffs	partial: the next club when a B team is 1st or 2nd	2nd (next club if a B team is 1st or 2nd): promotion play-off v HNL 9th; 11th: relegation play-off v third-level South runner-up
 gre-pol-cro-370	2019	cro_a2a	playoffs	partial: the first club after the champion that is not a reserve team	promotion play-off (first eligible non-reserve club after the champion); 14th: relegation play-off
-gre-pol-cro-380	2002	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-380	2002	cro_a2b	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-381	2003	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-381	2003	cro_a2b	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off
-gre-pol-cro-382	2004	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-382	2004	cro_a2b	playoffs	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	1st of play-off group: promotion play-off; 5th of play-out group: relegation play-off (South)
-gre-pol-cro-383	2005	cro_a2b	split_meet	the text does not give the meetings of each section	after 22 rounds: play-off group of 6 and play-out group of 6; points kept in full
 gre-pol-cro-383	2005	cro_a2b	playoffs	partial: the 1st of the play-off group of the split	1st of play-off group: promotion play-off
 hol-bel-9	2001	bel_second	playoffs	gap: the period winners of a season of periods: the game has no periods	final round: three period winners (four clubs before 2005/06) and, from 2005/06, the top-flight 17th (2005/06 and 2006/07 only; none in 2007/08; in 2008/09 the top-flight 15th and 16th, see that row) or the relegation play-off winner (2009/10 to 2014/15); double round robin; winner in the top flight
 hol-bel-10	2001	bel_third	playoffs	gap: the period winners of a season of periods: the game has no periods	third division play-off: three period winners per group plus the second division 16th; winner up

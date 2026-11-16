@@ -195,6 +195,15 @@ GROWN = {
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
+    # Slice 11: Croatia and Greece. The four classes set +0xd9 bit 0x40 in set_up_rules (sequential: 0x514958,
+    # 0x515e5a, 0x5eaf04, 0x5ebe4d). CroA1 keeps the class's 16 (10 and 12 clubs in 3 and 4 meetings).
+    "cro_a1": (16, 0x5140E0, "sequential"),
+    "cro_a2a": (18, 0x5155E0, "sequential"),
+    # Gap row 38: the South of 2002/03 to 2005/06 splits after 22 (the split engine and the template need a grown
+    # class). CroA2b::set_up_rules sets +0xd9 bit 0x40 (0x516f71); create_schedule 0x516700. Its cap stays 16.
+    "cro_a2b": (16, 0x516700, "sequential"),
+    "gre_prm": (18, 0x5EA6D0, "sequential"),
+    "gre_second": (21, 0x5EB570, "sequential"),
     # Slice 13 (Northern Ireland and Ireland).
     # - NirFirst (NIFL Championship, 10 in the class, 17 in 2008/09, 16 from 2026/27; splits after 22 from 2016/17 and
     #   after 33 from 2021/22): create_table 0x78bc50 allocates 10 rows (push 0x24e at 0x78bc5b, the object in esi
@@ -576,6 +585,15 @@ INSNS.update(DATES)
 # reached the matches of its own section, else the original.
 INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
                    "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
+# League::sort_table 0x6827d0 copies the table order +0xa3 into the global [0xb67a00] that the row comparators 0x683210
+# and 0x683410 call first (0x68287c..0x682884). With no tie rules list (+0xad, 0x682824) and the first tie rule 6
+# (+0xc5, 0x682835) it jumps past that copy to its own qsort with 0x683210 (0x682aa8..0x682ab9), so the comparator
+# calls the order of the last sort: the Croatian classes take that path once their table is complete
+# (Club_Records::update_league_position_records 0x447430 and Club_History::record_comp_season 0x442e80 sort it then),
+# and the sections of a split were lost for the final table (slice 11). rt_split_sort_order sets the global to a split
+# league's own order there; any other league keeps the original.
+INSNS[0x682AAC] = ("movsx eax, word ptr [ebx + 0x3e]",
+                   "rt_split_sort_order(ebx); eax = (uint32_t)(int32_t)(int16_t)R16(ebx + 0x3eu);")
 
 # League::update_positions_and_status 0x684cd0 works out each row's best and worst places (+0x39, +0x3a) in its loop at
 # 0x684ef7..0x6850dc from +0xa7 and every other row. After a split, rt_split_bounds runs the same rules by section with
@@ -612,6 +630,10 @@ import sizes_rus_tur  # noqa: E402
 assert CAPS["rus_first"] <= sizes_rus_tur.RUS_FIRST_TAKE_MAX
 assert not set(sizes_rus_tur.INSNS) & set(INSNS)
 INSNS.update(sizes_rus_tur.INSNS)
+# 0.7.2 slice 11: the Croatian second tier at 18 (sizes_cro.py, D22).
+import sizes_cro  # noqa: E402
+
+INSNS.update(sizes_cro.INSNS)
 # 0.7.2 slice 14: J1 halves of any count (sizes_asia.py).
 import sizes_asia  # noqa: E402
 
