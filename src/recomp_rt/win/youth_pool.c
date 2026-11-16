@@ -142,6 +142,19 @@ static void log_act(const Now *t, const char *what, int nation)
             players[nation], under_21[nation], under_23[nation], under_20[nation], under_22[nation]);
 }
 
+/* RECOMP_YOUTH_LOG: a new player who gets a club of another nation (staff +0x39 club, club +0x53 nation), as the
+ * Welsh and Irish new players of Guiseley (youth_club_lists.c, open item 262). Only the log changes. */
+static void log_club(const Now *t, uint32_t slot)
+{
+    if (rt_unwinding || !getenv("RECOMP_YOUTH_LOG")) return;
+    uint32_t club = rd32(g_mem, slot + 0x39), nation = rd32(g_mem, slot + 0x1a);
+    if (!club || !nation) return;
+    uint32_t home = rd32(g_mem, club + 0x53);
+    if (!home || home == nation) return;
+    fprintf(stderr, "recomp: youth pool: %d/%d new player of %.30s joins %.40s of %.30s\n", t->day, t->year,
+            win_str(nation + 4), win_str(club + 4), win_str(home + 4));
+}
+
 /* PLAYER_REGEN::process_regen_queue 0x7a65d0, thiscall, no arguments. */
 RT_WRAP(007a65d0, youth_pool_regen_queue)
 {
@@ -180,6 +193,7 @@ RT_WRAP(007abac0, youth_pool_new_player)
     }
     if (young && (int)start_players <= YOUTH_POOL_OLDER_MAX) wr32(g_mem, trec + 0x88, YOUTH_POOL_OLDER_MAX + 1);
     o_007abac0();
+    log_club(&t, slot);
     /* No return on rt_unwinding here: +0x88 and the pool entry must go back in every case. */
     add(&t, slot, 1);
     wr32(g_mem, trec + 0x88, start_players);
