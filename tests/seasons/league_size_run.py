@@ -578,15 +578,19 @@ def mls_faults(log, rows, tmpl, file, year, last, row, games):
     ends in a final with one club out of each tie."""
     fails = []
     lines = log.split("\n")
+    last_known = max(games)
+
+    def games_of(ed):
+        return games[min(ed, last_known)]       # editions after the table play its last form (season_mls_schedule)
     for season, phase, ed, n, _meet, matches in rows:
         if ed < MLS_FIRST:
             continue
         clubs = row(ed)[0]
         if n != clubs:
             fails.append(f"{file}: report {season} {phase}, edition {ed}: {n} clubs, want {clubs}")
-        elif matches not in (-1, games.get(ed)):
+        elif matches not in (-1, games_of(ed)):
             fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want "
-                         f"{games.get(ed)}")
+                         f"{games_of(ed)}")
     plans = {}
     for x in lines:
         m = MLS_PLAN_LINE.match(x)
@@ -597,10 +601,10 @@ def mls_faults(log, rows, tmpl, file, year, last, row, games):
             fails.append(f"{file} {ed}: no plan line")
             continue
         n, east, west, matches, lo, hi, rounds = plans[ed]
-        clubs, g = row(ed)[0], games.get(ed)
+        clubs, g = row(ed)[0], games_of(ed)
         if (n, east + west, lo, hi, matches) != (clubs, clubs, g, g, clubs * g // 2):
             fails.append(f"{file} {ed}: plan of {n} clubs ({east} and {west}), {matches} matches, {lo} to {hi} games; "
-                         f"want {clubs} clubs, {clubs * (g or 0) // 2} matches, {g} games each")
+                         f"want {clubs} clubs, {clubs * g // 2} matches, {g} games each")
         if not any(x.startswith(f"recomp: mls: {ed}: final ") for x in lines):
             fails.append(f"{file} {ed}: no final")
     for base, _cls, new in tmpl:
@@ -976,6 +980,8 @@ def self_test():
                     2025, lambda ed: (29, 0), games), True),
         (mls_faults(mls_log, [], [], "usa_mls", 2025, 2026, lambda ed: (29, 0), games), True),
         ([] if short == {2025: (29, 30)} else ["shortage"], False),
+        (mls_faults(mls_log.replace("2025", "2027"), [(2026, "end", 2027, 29, 0, 34)], [], "usa_mls", 2027, 2027,
+                    lambda ed: (29, 0), games), False),
         ([] if shortages(mls_log.replace("29 clubs, the row 30", "31 clubs, the row 30"), "usa_mls") == {}
          else ["excess"], False),
         ([] if shortages("recomp: mls: 2002: 12 clubs, the row 10: no club can leave (no division below)\n"
