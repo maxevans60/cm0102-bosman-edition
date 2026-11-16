@@ -128,5 +128,7 @@ export function mountTacticsPanel({ FS, sync, log, cloud = () => null }) {
       refused.length > 0 && done.length === 0);
   };
   document.getElementById('tactics').hidden = false;
+  // A tactic that came through Saved games (upload.js): shown here, and to the cloud.
+  document.addEventListener('cm-tactics-changed', () => { render(); cloud()?.run(); });
   return { render };
 }

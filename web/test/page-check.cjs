@@ -304,8 +304,8 @@ const PORT = 8097;
     await p.waitForFunction(() => /notes\.txt/.test(document.getElementById('saves-note').textContent));
     const refusedNote = await p.textContent('#saves-note');
     check('a file that is not a save, an empty save and a file that is not .sav are refused, each with its reason',
-      /junk\.sav: it is too short to be a saved game of CM 01\/02: 1 KB, where a saved game has at least 262 KB/.test(refusedNote)
-        && /St-Etienne 2002-02-13\.sav: the file is empty \(0 bytes\)/.test(refusedNote) && /only \.sav files/.test(refusedNote)
+      /junk\.sav: it is a text file, not a saved game/.test(refusedNote)
+        && /St-Etienne 2002-02-13\.sav: the file is empty \(0 bytes\)/.test(refusedNote) && /notes\.txt: it is too short to be a saved game/.test(refusedNote)
         && !/junk|St-Etienne/.test(await p.textContent('#saves-list')), refusedNote);
     if (process.argv[2]) await p.screenshot({ path: process.argv[2].replace(/\.png$/, '-saves.png') });
     // A refused upload offers Send to the developer, with the refused files first: the file that did not load can go to
@@ -329,15 +329,23 @@ const PORT = 8097;
     // A save zipped by another site (a player's Matt.zip, 16 November 2026: "only .sav files are saved games"): the
     // saves in it are taken; a zip with none says so.
     const { writeZip } = await import('../zip.js');
-    const zipped = Buffer.from(await writeZip([{ name: 'Matt/Matt.sav', data: got }, { name: 'readme.txt', data: Buffer.from('from another site') }]));
+    const zTactic = Buffer.alloc(1476); zTactic.writeUInt32LE(0x98ec5e, 0); zTactic.writeUInt32LE(0xf2fffff2, 1472);
+    const zipped = Buffer.from(await writeZip([{ name: 'Matt/Matt.sav', data: got }, { name: 'readme.txt', data: Buffer.from('from another site') },
+      { name: 'Matt/Pressing.tct', data: zTactic }]));
     await p.setInputFiles('#saves-file', [{ name: 'Matt.zip', mimeType: 'application/zip', buffer: zipped },
       { name: 'Nothing.zip', mimeType: 'application/zip', buffer: Buffer.from(await writeZip([{ name: 'a.txt', data: Buffer.from('x') }])) }]);
     await p.waitForFunction(() => /Matt/.test(document.getElementById('saves-note').textContent), null, { timeout: 15000 }).catch(() => {});
     const zipNote = await p.textContent('#saves-note');
     const zipBack = await p.evaluate(() => { try { return window.Module.FS.readFile('/user/Matt.sav').length; } catch { return -1; } });
     check('a zip from another site: the save in it is uploaded; a zip with no save is refused with its reason',
-      zipBack === got.length && /Uploaded Matt\.sav/.test(zipNote) && /Nothing\.zip: it holds no saved game \(\.sav\)/.test(zipNote)
+      zipBack === got.length && /Uploaded Matt\.sav/.test(zipNote) && /Nothing\.zip: it holds no saved game: a\.txt/.test(zipNote)
         && /Matt\.sav/.test(await p.textContent('#saves-list')), `${zipBack} | ${zipNote}`);
+    check('and its tactic goes to Tactics, which says so', /Pressing is a tactic: it is under Tactics now/.test(zipNote)
+      && /Pressing/.test(await p.textContent('#tactics-list')), zipNote);
+    await p.setInputFiles('#saves-file', [{ name: 'Matt.rar', mimeType: 'application/octet-stream', buffer: Buffer.from('Rar!\x1a\x07\x01\x00rest') }]);
+    await p.waitForFunction(() => /Matt\.rar/.test(document.getElementById('saves-note').textContent), null, { timeout: 5000 }).catch(() => {});
+    check('a RAR archive: the page says it opens .zip only, and how to go on', /Matt\.rar: it is a RAR archive.*unpack it first/.test(await p.textContent('#saves-note')),
+      await p.textContent('#saves-note'));
     // Tactics (tactics.js): a tactic saved by the game, a preset's .pct (its version plus 0x075BCD15, which the game's
     // Load refuses: the page stores the plain one), and two files that are not tactics.
     const tct = (version) => { const t = Buffer.alloc(1476); t.writeUInt32LE(version, 0); t.writeUInt32LE(0xf2fffff2, 1472); return t; };

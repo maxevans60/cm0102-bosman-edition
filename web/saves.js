@@ -6,7 +6,9 @@
 // The game writes *.sav files in the user folder (src/recomp_rt/win/files.c; the option save_folder can name another
 // folder, which the browser build does not use). A save in progress is temp_save_file.sav, renamed when it is done;
 // older copies are in backups/ (option save_backups).
-import { zipBlobEntries, zipBlobEntry, zipOfBlobs } from './zip.js';
+import { zipOfBlobs } from './zip.js';
+import { sortUpload } from './upload.js';
+import { TACTICS_DIR, listTactics, tacticName } from './tactics.js';
 import { isAway } from './vault.js';
 
 export const SAVE_DIR = '/user';
@@ -385,26 +387,18 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
     try { await download(FS, f); say(`Downloaded ${f.name}.`); log(`page: downloaded the save ${f.name}`); }
     catch (err) { say(`${f.name} could not be read: ${err.message}`, true); }
   });
-  // The saves an uploaded file holds: [{ name, size, blob() }]. A .sav is itself; a .zip (a save zipped by another
-  // site, as a player's Matt.zip was, or a part of Download all) gives the .sav files in it, wherever in its folders,
-  // except the older copies (backups/). Each is read from the zip only when it is stored (zip.js, zipBlobEntry).
-  async function savesIn(file) {
-    if (!/\.zip$/i.test(file.name)) return [{ name: file.name, size: file.size, blob: async () => file }];
-    const entries = (await zipBlobEntries(file)).filter((e) => /\.sav$/i.test(e.name) && !/(^|\/)backups\//i.test(e.name));
-    if (!entries.length) throw new Error('it holds no saved game (.sav)');
-    return entries.map((e) => ({ name: e.name.split('/').pop(), size: e.size, blob: () => zipBlobEntry(file, e) }));
-  }
+  // Each file by what it is (upload.js): its saves, its tactics, or why neither, with what to do.
   input.onchange = async () => {
-    const done = [], refused = [], refusedFiles = [];
+    const done = [], tacticsDone = [], notes = [], refused = [], refusedFiles = [];
     for (const file of input.files) {
-      if (!/\.(sav|zip)$/i.test(file.name)) { refused.push(`${file.name}: only .sav files are saved games (or a .zip of them)`); refusedFiles.push(file); continue; }
-      let inside;
-      try { inside = await savesIn(file); } catch (err) { refused.push(`${file.name}: ${err.message}`); refusedFiles.push(file); continue; }
-      for (const one of inside) {
+      let sorted;
+      try { sorted = await sortUpload(file); } catch (err) { sorted = { saves: [], tactics: [], notes: [], why: err.message }; }
+      notes.push(...sorted.notes);
+      if (sorted.why) { refused.push(`${file.name}: ${sorted.why}`); refusedFiles.push(file); continue; }
+      for (const one of sorted.saves) {
         const taken = new Set(listSaves(FS).saves.map((f) => f.name.toLowerCase()));
         const name = saveName(one.name, taken);
         const label = one.name === file.name ? file.name : `${one.name} (in ${file.name})`;
-        if (!name) { refused.push(`${label}: only .sav files are saved games`); refusedFiles.push(file); continue; }
         if (one.size > 50 << 20) say(`Storing ${label} (${mb(one.size)})…`);
         let why;
         try { why = await storeSave(FS, name, await one.blob()); } catch (err) { why = `it was not stored: ${err.message}`; }
@@ -412,12 +406,22 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
         done.push(name);
         log(`page: uploaded the save ${name} (${mb(one.size)})${one.name === file.name ? '' : ` from ${file.name}`}`);
       }
+      for (const t of sorted.tactics) {
+        try { FS.mkdirTree(TACTICS_DIR); } catch { /* there */ }
+        const name = tacticName(t.name, new Set(listTactics(FS).map((f) => f.name.toLowerCase())));
+        FS.writeFile(`${TACTICS_DIR}/${name}`, t.bytes);
+        tacticsDone.push(name.slice(0, -4));
+        log(`page: uploaded the tactic ${name} through Saved games (from ${file.name})`);
+      }
     }
     input.value = '';
-    if (done.length) sync();
+    if (done.length || tacticsDone.length) sync();
     render();
-    say([done.length ? `Uploaded ${done.join(', ')}. ${play?.can() ? 'Press Play to open it in the game.' : 'Open Restore Saved Game in the game to play it.'}` : '', ...refused].filter(Boolean).join('\n'),
-      refused.length > 0 && done.length === 0, refusedFiles);
+    if (tacticsDone.length) document.dispatchEvent(new CustomEvent('cm-tactics-changed'));   // tactics.js: the list, the cloud
+    say([done.length ? `Uploaded ${done.join(', ')}. ${play?.can() ? 'Press Play to open it in the game.' : 'Open Restore Saved Game in the game to play it.'}` : '',
+      tacticsDone.length ? `${tacticsDone.join(', ')} ${tacticsDone.length > 1 ? 'are tactics: they are' : 'is a tactic: it is'} under Tactics now (on the tactics screen: Tactics, Load).` : '',
+      ...notes, ...refused].filter(Boolean).join('\n'),
+      refused.length > 0 && done.length === 0 && tacticsDone.length === 0, refusedFiles);
   };
   document.getElementById('saves-open').hidden = false;
 }
