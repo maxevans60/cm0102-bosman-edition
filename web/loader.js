@@ -834,7 +834,13 @@ function runEngine(files, info) {
         const r = M.callMain(M.arguments);
         if (r && typeof r.then === 'function') {
           engine.ended = r.then(() => {}, () => {});
-          r.catch((e) => { if (!quiet(e)) { running = false; logStack(e); fail('The game stopped', String(e)); } });
+          r.catch((e) => {
+            if (quiet(e)) return;
+            running = false;
+            if (e === undefined || e === null) log(`page: the engine's run ended with ${e} and no error (no stack: the browser gave none)`);
+            logStack(e);
+            fail('The game stopped', e === undefined || e === null ? 'the engine ended without an error message. Send to the developer: the log says what it did last.' : String(e));
+          });
         }
         player.resume();                                 // a Play that restarted the game: the save it asked for
       } catch (e) {
@@ -857,7 +863,17 @@ function runEngine(files, info) {
           : 'Help, Engine log says why. Your saves stay in this browser.');
       }
     },
-    onAbort: (what) => { if (engine.letGo) return; running = false; logStack(what); fail('The game stopped', String(what)); },
+    // The engine stopped itself (Emscripten's abort: a C abort(), an assert, a runtime check). A bare abort() comes
+    // with no message and no stack (a player's Firefox reported only "The game stopped: undefined"): the stack of this
+    // moment is logged instead, which names the game's and the runtime's functions that called it.
+    onAbort: (what) => {
+      if (engine.letGo) return;
+      running = false;
+      const told = what !== undefined && what !== null && String(what) !== '';
+      log(`page: the engine stopped itself (abort)${told ? `: ${String(what)}` : ' without a message'}`);
+      logStack(what?.stack ? what : new Error('abort'));
+      fail('The game stopped', told ? String(what) : 'the engine stopped itself (abort) without a message. Send to the developer: the log says where.');
+    },
   };
   const s = document.createElement('script');
   s.src = engineUrl(info.chosen, 'cm0102_recomp.js');

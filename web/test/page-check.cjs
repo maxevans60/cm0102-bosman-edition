@@ -96,6 +96,14 @@ const PORT = 8097;
         window.dispatchEvent(new ErrorEvent('error', { message: 'RuntimeError: test trap', error: f_0068dbc0() })); });
       check('an error\'s stack goes to the log: the report says where it happened',
         /page: at f_0068dbc0/.test(await pg.textContent('#log')), (await pg.textContent('#log')).split('\n').filter((l) => /page: at/.test(l)).slice(0, 2).join(' | '));
+      // The engine stops itself with no message (Emscripten's abort with nothing: a player's Firefox said only "The game
+      // stopped: undefined", 16 November 2026): the box says what happened, and the log has the stack of that moment.
+      await pg.evaluate(() => { function f_00412345() { window.Module.onAbort(); } f_00412345(); });
+      const aborted = { box: (await pg.textContent('#overlay')).replace(/\s+/g, ' '), log: await pg.textContent('#log') };
+      check('an abort with no message: the box says the engine stopped itself, and the log has where',
+        /The game stopped/.test(aborted.box) && !/undefined/.test(aborted.box) && /stopped itself \(abort\) without a message/.test(aborted.box)
+          && /page: the engine stopped itself \(abort\) without a message/.test(aborted.log) && /page: at .*f_00412345/.test(aborted.log),
+        aborted.box.slice(0, 160));
       // The game's own fatal box before the exit (the runtime logs it, waits.c): the error box quotes it.
       await pg.evaluate(() => { window.Module.printErr('recomp: message box from 0x555c66: Error: v3.9.68 discipline..cpp 274'); window.Module.onExit(70); });
       const box = (await pg.textContent('#overlay')).replace(/\s+/g, ' ');
