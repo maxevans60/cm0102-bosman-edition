@@ -69,6 +69,16 @@ int main(int argc, char **argv)
     /* Argentina 2027: both unknown, both from 2025 (substitutes 5) and 2021 (bench 12, clamped to 9). */
     expect(2027, "arg_prm", both, 5, SEASON_SUBS_MAX);
     expect_from(2027, "arg_prm", 2025, 2021);
+    /* The Champions League of 2027: its main row is unknown and its qualifying rows say "as the Champions League",
+     * which follow the main row, so the main row takes 2026 (12 named, clamped to 9, and 5). */
+    expect(2027, "european_cup", both, 5, SEASON_SUBS_MAX);
+    expect_from(2027, "european_cup", 2026, 2026);
+    /* The search back stops at a season with an n/a row: the Dutch Super Cup of 2021 (2020 is n/a, 2016 and 2017
+     * have counts) keeps its own values. */
+    expect(2021, "hol_super", 0, 0, 0);
+    /* No count of a season before 2020 reaches 2020 or later (5 substitutes from 2020, IFAB): the Russian Premier
+     * League of 2020 is unknown, 2019 has 3, so it keeps its own values. */
+    expect(2020, "rus_prm", 0, 0, 0);
     /* A count of the season itself gives its own season. */
     expect_from(2022, "eng_prm", 2022, 2022);
     /* NULL arguments do nothing. */

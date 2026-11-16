@@ -86,7 +86,18 @@ static int lookup(const char *file, int season, int *used, int *bench)
     const SeasonRule *row = season_rules_moved(file) ? season_rules_row_of(file, season) : NULL;
     int rule_season = row ? row->season : season, used_from = 0, bench_from = 0;
     int mask = season_subs_rule_from(rule_season, file, used, bench, &used_from, &bench_from);
-    /* Item 274: a count carried from an earlier season, once for each file and season (the cache below). */
+    /* Item 274: a count carried from an earlier season, once for each file and season (its own list, so a full
+     * cache does not print it again; a full list prints no more). */
+    int carried = ((mask & SEASON_SUBS_USED) && used_from != rule_season) ||
+                  ((mask & SEASON_SUBS_BENCH) && bench_from != rule_season);
+    if (carried) {
+        static struct { const char *file; int season; } logged[1024];
+        static int nlogged;
+        int seen = 0;
+        for (int i = 0; i < nlogged && !seen; i++) seen = logged[i].file == file && logged[i].season == rule_season;
+        if (seen || nlogged >= (int)(sizeof logged / sizeof logged[0])) used_from = bench_from = rule_season;
+        else logged[nlogged].file = file, logged[nlogged++].season = rule_season;
+    }
     if ((mask & SEASON_SUBS_USED) && used_from != rule_season)
         fprintf(stderr, "recomp: season subs: %s %d/%02d used %d from %d/%02d (unknown in its row)\n", file,
                 rule_season, (rule_season + 1) % 100, *used, used_from, (used_from + 1) % 100);
