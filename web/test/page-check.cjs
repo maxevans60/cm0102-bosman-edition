@@ -669,6 +669,26 @@ const PORT = 8097;
         atBlur === 'down2 up2' && /down0 up0$/.test(afterBlur) && !/up2.*up2/.test(afterBlur), `${atBlur} | ${afterBlur}`);
       await mc.close();
     }
+    // An installed app (display-mode standalone): a computer's app window can still go full screen, so the button
+    // shows (it was hidden in every installed app: a player's Mac app had none); an iPhone or iPad home-screen app
+    // (navigator.standalone) is full already and gets none.
+    for (const [label, ios] of [['a computer\'s app window', false], ['an iPad home-screen app', true]]) {
+      const ac = await b.newContext({ viewport: { width: 1200, height: 800 } });
+      await ac.addInitScript((onIos) => {
+        const real = window.matchMedia.bind(window);
+        window.matchMedia = (q) => (/display-mode: standalone/.test(q) ? { matches: true, media: q, addEventListener() {}, removeEventListener() {} } : real(q));
+        if (onIos) Object.defineProperty(navigator, 'standalone', { value: true });
+      }, ios);
+      const ap = await ac.newPage();
+      await ap.goto(`http://127.0.0.1:${PORT}/`);
+      await ap.click('#consent-no', { timeout: 5000 }).catch(() => {});
+      await ap.click('#go', { timeout: 5000 }).catch(() => {});
+      await ap.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+      await ap.waitForTimeout(300);
+      const shown = await ap.isVisible('#fullscreen');
+      check(`${label}: Full screen ${ios ? 'is not offered (it is full already)' : 'is offered'}`, shown === !ios, String(shown));
+      await ac.close();
+    }
     // An engine built before the keyboard calls: no button, and the log says to build it again.
     const oc = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true });
     await oc.addInitScript(() => { window.__oldEngine = true; });

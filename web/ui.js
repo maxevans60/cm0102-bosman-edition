@@ -50,6 +50,13 @@ export function keepAwake() {
 }
 
 // 1 while the page runs as an installed app (from the home screen or the dock), without the browser's bars.
+// Full screen is not offered where the page is full already: an iPhone or iPad home-screen app (navigator.standalone),
+// or an app in the display mode fullscreen. A computer's app window (standalone) can still go full screen: it once got
+// no button either, and a player's Mac app had none.
+export function isFullAlready() {
+  return matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+}
+
 export function isStandalone() {
   return matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches ||
     navigator.standalone === true;

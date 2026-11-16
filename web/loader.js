@@ -17,7 +17,7 @@ import { LEGAL_LINKS, createCloudSync, mountAccount, plansHtml } from './account
 import { guardKeys, hasTouch, mountKeyboard } from './keyboard.js';
 import { mountLayout } from './layout.js';
 import { mountMacRightButton, mountTouch } from './touch.js';
-import { guardLeave, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
+import { guardLeave, isFullAlready, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
 import { mountReport, watchSaveInPlay } from './report.js';
 import { mountPlay } from './play.js';
 import { watchRelease } from './release.js';
@@ -739,7 +739,7 @@ function runEngine(files, info) {
       status('');
       running = true;
       canvas.dataset.engine = '1';
-      $('fullscreen').hidden = !layout.canFullscreen || isStandalone();
+      $('fullscreen').hidden = !layout.canFullscreen || isFullAlready();
       $('right-click').hidden = !TOUCH;
       canvas.focus({ preventScroll: true });
       setInterval(sync, 15000);
