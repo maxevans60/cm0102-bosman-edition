@@ -20,7 +20,7 @@ and into edition 2025. The checks:
     champion the knockout winners of both halves of 2024 are the champions (gap row 48). --save-days 172 saves in the
              Apertura knockout (about 1 January 2025); give --play-days 220 then.
 --promocion: a 2010 game (the September 2010 database) instead, saved between the two legs of the promoción of
-edition 2010 (default --save-days 306, about day 131 of 2011; --play-days 150). The checks: the first run played the
+edition 2010 (default --save-days 310, day 131 of 2011, between leg 1 on day 130 and leg 2 on day 134; --play-days 150). The checks: the first run played the
 first legs and not the second; after the load both second legs are played, both ties have a result, and the
 season change moves the losers and winners (the "chain" line), as league_size_run.py arg_promo_faults checks.
 Exit code 1 on a failure. A run takes about an hour.
@@ -112,7 +112,7 @@ def main(argv):
     program, game = os.path.abspath(argv[0]), os.path.abspath(argv[1])
     keep = rrc.arg(argv, "--keep", None)
     promo = "--promocion" in argv
-    save_days = int(rrc.arg(argv, "--save-days", "306" if promo else "230"))
+    save_days = int(rrc.arg(argv, "--save-days", "310" if promo else "230"))
     play_days = int(rrc.arg(argv, "--play-days", "150" if promo else "160"))
     year = 2010 if promo else 2024
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix="cm0102-arg-prm-save-")
