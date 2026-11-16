@@ -899,7 +899,8 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
         env_extra["RECOMP_TEST_EXTRA"] = ",".join(test_extra)
     if year:
         env_extra["RECOMP_START_SEASON"] = str(year)
-    if database:
+    if database:                               # a run with a database never falls back to the base data
+        database = database_folder(database)
         cdr.copy_data(database, os.path.join(user, "Databases", os.path.basename(database)))
         options["database"] = "folder:" + os.path.basename(database)
     with open(os.path.join(user, "settings.txt"), "w") as f:
@@ -937,6 +938,8 @@ def run(program, game, last, year, database, nations, extra, keep, timeout, opti
             except subprocess.TimeoutExpired:
                 code = "timeout"
     print(f"run: code {code} after {time.time() - start:.0f} s, log {os.path.join(work, 'stderr.txt')}")
+    if database:
+        no_fallback(log_path, database)
     return code, report
 
 
@@ -965,6 +968,26 @@ def data_folder(path):
     subs = [os.path.join(path, n) for n in sorted(os.listdir(path))
             if os.path.isfile(os.path.join(path, n, "index.dat"))]
     return subs[0] if len(subs) == 1 else path
+
+
+def database_folder(path):
+    """The folder of index.dat in the database folder path (data_folder). Stops when path is no folder or neither
+    it nor one subfolder holds index.dat, so a run never plays the base data in place of a database."""
+    if not os.path.isdir(path):
+        raise SystemExit(f"no database folder {path}")
+    folder = data_folder(path)
+    if not os.path.isfile(os.path.join(folder, "index.dat")):
+        raise SystemExit(f"no index.dat in {path} or in one subfolder of it")
+    return folder
+
+
+def no_fallback(log_path, database):
+    """Stops when the game's log says it read its own Data in place of the database folder (files.c: "no usable
+    folder")."""
+    if os.path.isfile(log_path):
+        with open(log_path, encoding="latin-1") as f:
+            if "no usable folder" in f.read():
+                raise SystemExit(f"the game did not read {database} and fell back to its own Data (log {log_path})")
 
 
 def season_database(year, databases=DATABASES):

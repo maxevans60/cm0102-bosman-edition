@@ -3,6 +3,7 @@
 
 Usage:
     python3 tests/seasons/youth_list_run.py <cm0102_recomp> <game folder> --keep <folder> [--days <n>] [--keep-fault]
+        [--database <folder>]
 
 The run: a new game in 2026 with Italy, changing rules on, the base data (3.9.68), played --days game days (default
 120) with RECOMP_YOUTH_LOG. Without the fix the club list of England for new players (build_nation_club_lists
@@ -16,7 +17,11 @@ The checks of the fixed run:
     - Welsh and Irish new players join 3 clubs or more, and Guiseley gets at most a third of them (youth pool log)
 --keep-fault runs with RECOMP_TEST_YOUTH_LIST=original (the original lists). That run passes when it shows the fault:
 the days played with no box, 5 or more Welsh and Irish new players, and all of them at Guiseley. This is the proof
-that the run finds the fault.
+that the run finds the fault, on the base data only.
+--database <folder> plays a season database in place of the base data. With October 2026 the original English list
+holds no club (no English club of reputation 2 or less), so the original gives those players no club at all
+(0x7ad590 returns 0 for an empty list, 0x7ad5ff..0x7ad602) and the fault run has no join to count. The fixed run on
+October 2026 checks the same three points: 304 clubs in the list, and the players join English clubs.
 """
 import os
 import sys
@@ -38,13 +43,14 @@ def main(argv):
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
     keep = os.path.abspath(soak_run.arg(argv, "--keep"))
     days = int(soak_run.arg(argv, "--days", "120"))
+    database = os.path.abspath(soak_run.arg(argv, "--database")) if "--database" in argv else None
     fault = "--keep-fault" in argv
     env = {"RECOMP_YOUTH_LOG": "1", "RECOMP_SAVE_AFTER_DAYS": str(days)}
     if fault:
         env["RECOMP_TEST_YOUTH_LIST"] = "original"
     work = os.path.join(keep, "fault" if fault else "fixed")
     soak_run.wait_for_room()
-    code, _ = rrc.run(program, game, 2028, 2026, None, ["Italy"], [], work, 7200, {"changing_rules": "on"}, env)
+    code, _ = rrc.run(program, game, 2028, 2026, database, ["Italy"], [], work, 7200, {"changing_rules": "on"}, env)
     log = open(os.path.join(work, "stderr.txt"), "rb").read().decode("latin-1")
     failures = 0
 

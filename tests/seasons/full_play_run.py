@@ -83,7 +83,8 @@ def folders(work):
 def write_settings(user, argv, database):
     options = {"display": "classic", "changing_rules": arg(argv, "--changing-rules", "on"), "faster_days": "on",
                "database": "3.9.68"}
-    if database:
+    if database:                               # never the base data in place of the database
+        database = rrc.database_folder(database)
         cdr.copy_data(database, os.path.join(user, "Databases", os.path.basename(database)))
         options["database"] = "folder:" + os.path.basename(database)
     with open(os.path.join(user, "settings.txt"), "w") as f:
@@ -148,6 +149,8 @@ def run_leg(o, work, save, days):
                 p.terminate()
                 break
         p.wait()
+    if o["database"]:
+        rrc.no_fallback(err, o["database"])
     if box:
         fails.append(f"message box: {box}")
     elif not fails:
