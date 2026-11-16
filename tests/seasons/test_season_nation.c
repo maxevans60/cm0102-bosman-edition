@@ -69,6 +69,11 @@ int main(void)
     CHECK(s.squad_foreign == 6 && s.sign_foreign == 8, "Turkey 2001: %d %d", s.squad_foreign, s.sign_foreign);
     season_nation_state("Turkey", 2013, &s);
     CHECK(s.squad_foreign == 6 && s.sign_foreign == 10, "Turkey 2013: %d %d", s.squad_foreign, s.sign_foreign);
+    /* Gap row 6: 2027/28 is not announced, so the last known rule (14 foreigners signed, 2026/27) stays. */
+    season_nation_state("Turkey", 2026, &s);
+    CHECK(s.sign_foreign == 14, "Turkey 2026: %d", s.sign_foreign);
+    season_nation_state("Turkey", 2027, &s);
+    CHECK(s.sign_foreign == 14, "Turkey 2027: %d", s.sign_foreign);
     season_nation_state("Brazil", 2023, &s);
     CHECK(s.squad_foreign == 9, "Brazil 2023: %d", s.squad_foreign);
 

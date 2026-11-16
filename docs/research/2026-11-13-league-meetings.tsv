@@ -14,11 +14,11 @@ aus_nsl	2005	2008	3	sizes-check-asia.md line 117: 8 clubs, 21 games; 21 / 7 = 3 
 aus_nsl	2009	2009	3	sizes-check-asia.md line 118: 10 clubs, 27 games; 27 / 9 = 3 (from matches)
 aus_nsl	2010	2010	3	sizes-check-asia.md line 119: 11 clubs, 30 games; 30 / 10 = 3 (from matches)
 aus_nsl	2011	2018	3	sizes-check-asia.md line 120: 10 clubs, 27 games; 27 / 9 = 3 (from matches)
-aus_nsl	2019	2019	-	unbalanced: 26 rounds for 11 clubs (sizes-check-asia.md lines 121 and 134)
-aus_nsl	2020	2022	-	unbalanced: 26 rounds for 12 clubs (sizes-check-asia.md lines 122 and 134)
-aus_nsl	2023	2023	-	unbalanced: 27 rounds for 12 clubs (sizes-check-asia.md lines 123 and 134)
-aus_nsl	2024	2024	-	unbalanced: 26 rounds for 13 clubs (sizes-check-asia.md lines 124 and 134)
-aus_nsl	2025	2026	-	unbalanced: 26 rounds for 12 clubs (sizes-check-asia.md lines 125-126 and 134; A-Leagues 2026/27 fixture page, line 12)
+aus_nsl	2019	2019	3	26 matches a club for 11 clubs (29 rounds, 3 byes; https://adelaideunited.com.au/?p=8968). The engine plays whole meetings: 3 gives 30, 2 gives 20, so 3 is nearest. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2020	2022	2	26 matches a club for 12 clubs: each pair twice (22) plus 4 third meetings (https://adelaideunited.com.au/?p=10645, https://aleagues.com.au/?p=95355). Nearest whole count: 2 (22), 3 gives 33. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2023	2023	2	26 rounds for 12 clubs ("The Isuzu UTE A-League season will have 26 rounds", https://aleagues.com.au/?p=97912), while https://en.wikipedia.org/wiki/2023%E2%80%9324_A-League_Men gives 27 games a club. 22 plus 4 or 5 third meetings. Nearest whole count: 2 (3 gives 33). Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2024	2024	2	26 matches a club for 13 clubs: 24 home and away plus 2 third meetings (https://aleagues.com.au/news/a-league-men-fixtures-2024-25-every-team-kick-off-times-venues-details/). Nearest whole count: 2. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2025	2026	2	26 matches a club for 12 clubs: 22 home and away plus 4 third meetings (https://aleagues.com.au/news/a-league-men-fixtures-2025-26-every-team-kick-off-times-venues-details/, https://aleagues.com.au/news/aleague-men-2026-2027-fixture-list-revealed-key-dates-fixture-information/). Nearest whole count: 2. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
 aus_nsl	2027	2027	-	unknown: clubs unknown (row aus-jap-kor-50; sizes-check-asia.md line 127)
 bel_first	2001	2008	2	sizes-check-north.md lines 117-124 and 205: 18 clubs, 34 rounds, double round robin; 34 / 17 = 2 (from rounds)
 bel_first	2019	2019	2	sizes-check-north.md lines 135 and 211: 16 clubs, 30 rounds scheduled (29 played, COVID-19); planned 30 / 15 = 2 (from rounds)

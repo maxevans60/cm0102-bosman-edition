@@ -204,6 +204,12 @@ GROWN = {
     "cro_a2b": (16, 0x516700, "sequential"),
     "gre_prm": (18, 0x5EA6D0, "sequential"),
     "gre_second": (21, 0x5EB570, "sequential"),
+    # Gap row 7 of the 0.7.2 gaps list (A-League 2019 to 2026, 26 matches a club): the cap stays the class's 13; the
+    # row changes the meetings, so the template needs the rounds. AusNsl::create_table 0x411b70 stores 13 (0x411b82);
+    # create_schedule 0x4111a0 makes 24 dates for stage -1 (D 0x18 at 0x4111dd, 0x618 bytes at 0x4111d8) and the
+    # finals series and grand final for the other stages; set_up_rules 0x411ce0 sets 3 meetings (+0x3c at 0x411d24)
+    # and does not write +0xd9: shuffled.
+    "aus_nsl": (13, 0x4111A0, "shuffled"),
     # Slice 13 (Northern Ireland and Ireland).
     # - NirFirst (NIFL Championship, 10 in the class, 17 in 2008/09, 16 from 2026/27; splits after 22 from 2016/17 and
     #   after 33 from 2021/22): create_table 0x78bc50 allocates 10 rows (push 0x24e at 0x78bc5b, the object in esi

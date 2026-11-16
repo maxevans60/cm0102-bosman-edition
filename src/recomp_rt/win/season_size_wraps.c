@@ -825,6 +825,7 @@ const int season_size_fixed[] = {
 const SeasonGrown season_grown[] = {
     {"arg_prm", 20, 30, SEASON_TEMPLATE_HALVES},
     {"arg_second", 25, 38, SEASON_TEMPLATE_SHUFFLED},
+    {"aus_nsl", 13, 13, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"cro_a1", 16, 16, SEASON_TEMPLATE_SEQUENTIAL},
@@ -853,7 +854,7 @@ const SeasonGrown season_grown[] = {
     {"tur_second", 20, 20, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 29;
+const int season_grown_count = 30;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -875,6 +876,17 @@ RT_WRAP(00406f00, schedule_406f00)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_00406f00();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* AusNsl::create_schedule */
+void o_004111a0(void);
+RT_WRAP(004111a0, schedule_4111a0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_004111a0();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }
