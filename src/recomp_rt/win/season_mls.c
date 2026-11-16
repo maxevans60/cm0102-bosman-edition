@@ -719,9 +719,45 @@ static int seed_of(const Brackets *b, int c, uint32_t club)
     return 999;
 }
 
-/* The brackets: the best clubs of each conference table, then the wild clubs by the overall table (its rows are in
- * table order), each into its own conference's bracket while that bracket is under the size of
- * season_mls_playoff_rounds, else the other. */
+#define ROW_FOR 0x15u        /* s16 goals for, +0x17 against, +0x19 points (the compare of 0x683264..0x683275) */
+#define ROW_AGAINST 0x17u
+#define ROW_POINTS 0x19u
+
+/* The clubs in the order of the regular season: the rows of both conference tables by points, goal difference and
+ * goals for (East first when level). The play-off cannot use the main table: UsaMls::add_result gives every result to
+ * it (League::add_result 0x685d30 at 0x9099eb) and to the stages only while +0x30 is 1 (0x9099f0..0x9099f8). Each
+ * round reads the brackets again (left_before), so with the main table the wild clubs of a later round were not the
+ * clubs of round one: in 2002 (6 wild clubs) the West tie San Jose Earthquakes v Miami Fusion FC was no tie of the
+ * stage, both had lost, and the West sent no club to the final round (run5tie of gap row 7). */
+static int regular_order(uint32_t obj, uint32_t *out)
+{
+    uint32_t stages = rd32(g_mem, obj + COMP_STAGES);
+    int n = 0, key[MLS_MAX_CLUBS][3];
+    for (int c = 0; c < 2; c++) {
+        uint32_t st = readable(stages) ? rd32(g_mem, stages + 4u * (uint32_t)c) : 0;
+        uint32_t t = readable(st) ? rd32(g_mem, st + COMP_TABLE) : 0;
+        int k = readable(t) ? (int16_t)rd16(g_mem, st + COMP_CLUBS) : 0;
+        for (int i = 0; i < k && n < MLS_MAX_CLUBS; i++) {
+            uint32_t row = t + (uint32_t)i * ROW_SIZE;
+            int gf = (int16_t)rd16(g_mem, row + ROW_FOR), ga = (int16_t)rd16(g_mem, row + ROW_AGAINST);
+            int k3[3] = {(int16_t)rd16(g_mem, row + ROW_POINTS), gf - ga, gf}, j = n++;
+            /* insertion: a club moves up only past a worse club, so level clubs keep the table order */
+            while (j > 0 && (k3[0] > key[j - 1][0] || (k3[0] == key[j - 1][0] && (k3[1] > key[j - 1][1] ||
+                             (k3[1] == key[j - 1][1] && k3[2] > key[j - 1][2]))))) {
+                out[j] = out[j - 1];
+                memcpy(key[j], key[j - 1], sizeof key[j]);
+                j--;
+            }
+            out[j] = rd32(g_mem, row);
+            memcpy(key[j], k3, sizeof k3);
+        }
+    }
+    return n;
+}
+
+/* The brackets: the best clubs of each conference table, then the wild clubs in the order of the regular season,
+ * each into its own conference's bracket while that bracket is under the size of season_mls_playoff_rounds, else
+ * the other. */
 static int brackets(uint32_t obj, Brackets *b, int targets[4])
 {
     const MlsPlayoff *p = season_mls_playoff(form_season(obj));
@@ -735,9 +771,10 @@ static int brackets(uint32_t obj, Brackets *b, int targets[4])
         b->n[c] = 0;
         for (int i = 0; i < want[c]; i++) b->club[c][b->n[c]++] = row_club(st[c], i);
     }
-    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    uint32_t order[MLS_MAX_CLUBS];
+    int n = regular_order(obj, order);
     for (int i = 0; i < n && (b->n[0] < size[0] || b->n[1] < size[1]); i++) {
-        uint32_t club = row_club(obj, i);
+        uint32_t club = order[i];
         if (seed_of(b, 0, club) < 999 || seed_of(b, 1, club) < 999) continue;
         int c = in_table(st[1], club) ? 1 : 0;
         if (b->n[c] >= size[c]) c = 1 - c;
@@ -761,12 +798,26 @@ static void left_before(uint32_t obj, const Brackets *all, const int *targets, i
             int keep = left->n[c] - 2 * m, n2 = 0;
             uint32_t next[MLS_MAX_CLUBS];
             for (int i = 0; i < keep; i++) next[n2++] = left->club[c][i];
-            for (int i = keep; i < left->n[c]; i++) {
-                uint32_t club = left->club[c][i];
-                for (int e = 0; e < k && readable(entries); e++) {
-                    uint32_t at = entries + (uint32_t)e * ENTRY_SIZE;
-                    if (rd32(g_mem, at) == club && g_mem[at + 5] == 1) next[n2++] = club;
+            for (int t = 0; t < m; t++) {
+                int won = 0;
+                char states[2][8] = {"none", "none"};
+                for (int side = 0; side < 2; side++) {
+                    uint32_t club = left->club[c][pairs[2 * t + side]];
+                    for (int e = 0; e < k && readable(entries); e++) {
+                        uint32_t at = entries + (uint32_t)e * ENTRY_SIZE;
+                        if (rd32(g_mem, at) != club) continue;
+                        snprintf(states[side], sizeof states[side], "%u", g_mem[at + 5]);
+                        if (g_mem[at + 5] == 1) {
+                            next[n2++] = club;
+                            won++;
+                        }
+                    }
                 }
+                if (won != 1)
+                    fprintf(stderr, "recomp: mls: stage %d, %s tie %d: %d clubs go on (%.30s state %s, %.30s state %s, "
+                                    "%d entries)\n", 2 + d, c ? "West" : "East", t, won,
+                            win_str(left->club[c][pairs[2 * t]] + CLUB_NAME), states[0],
+                            win_str(left->club[c][pairs[2 * t + 1]] + CLUB_NAME), states[1], k);
             }
             /* seed order: the order of the bracket */
             for (int i = 1; i < n2; i++)
@@ -836,12 +887,13 @@ static int build_stage(uint32_t obj, int index, const uint32_t *clubs, int k, in
     return !rt_unwinding;
 }
 
-/* The place of a club in the overall table (rows in table order). */
+/* The place of a club in the regular season (regular_order: the main table holds the play-off results too). */
 static int overall(uint32_t obj, uint32_t club)
 {
-    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    uint32_t order[MLS_MAX_CLUBS];
+    int n = regular_order(obj, order);
     for (int i = 0; i < n; i++)
-        if (row_club(obj, i) == club) return i;
+        if (order[i] == club) return i;
     return 999;
 }
 
@@ -965,4 +1017,34 @@ RT_WRAP(00909dd0, mls_club_progress)   /* (club, stage, result, position, finish
 {
     map_stage_arg(cpu.ecx, 1);
     o_00909dd0();
+}
+
+/* UsaOpenCup::collect_entrants 0x90b530, thiscall, ret 0. It sets 32 entrants (+0x3e, 0x90b544), allocates 32
+ * entries of 6 bytes (0x90b613..0x90b622), fills 10 clubs of each of two lower competitions (0x90b6a3..0x90b718)
+ * and then every club whose division (+0x57) is the MLS (0x90b731..0x90b767), with no limit. The class held 12, so
+ * the cup had 32. With the real count of the MLS (29 from 2023) the clubs after the 12th wrote past the block, and
+ * MATCH_DAY::MATCH_DAY 0x6b3c10 got a block of the zone from the broken small list (0x6b3e18, "free of 0x51000145",
+ * day 80 of 2025 in run3b and run4diag of gap row 7). While the call runs, the MLS clubs after the first 12 of the
+ * club table have no division, so the cup keeps its 32. ConChamp::select_qualified_clubs (0x4c1247) and
+ * ConMercCup::select_invited_clubs (0x4c2714) take the first 12 in the same way. */
+void o_0090b530(void);
+
+#define OPEN_CUP_MLS 12
+
+RT_WRAP(0090b530, mls_open_cup_entrants)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS), key = rd32(g_mem, KEY_MLS);
+    int n = (int32_t)rd32(g_mem, CLUB_COUNT), seen = 0, hidden = 0;
+    static uint32_t held[MLS_MAX_CLUBS * 4], held_div[MLS_MAX_CLUBS * 4];
+    for (int i = 0; readable(clubs) && i < n && hidden < MLS_MAX_CLUBS * 4; i++) {
+        uint32_t club = clubs + (uint32_t)i * CLUB_SIZE, div = rd32(g_mem, club + CLUB_DIVISION);
+        if (!readable(div) || rd32(g_mem, div) != key || ++seen <= OPEN_CUP_MLS) continue;
+        held[hidden] = club;
+        held_div[hidden++] = div;
+        wr32(g_mem, club + CLUB_DIVISION, 0);
+    }
+    o_0090b530();
+    for (int i = 0; i < hidden; i++) wr32(g_mem, held[i] + CLUB_DIVISION, held_div[i]);
+    if (hidden && !rt_unwinding)
+        fprintf(stderr, "recomp: mls: the US Open Cup takes the first %d of %d MLS clubs\n", OPEN_CUP_MLS, seen);
 }
