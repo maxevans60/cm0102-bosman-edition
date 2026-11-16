@@ -27,6 +27,24 @@ int main(int argc, char **argv)
         fprintf(stderr, "cannot read %s\n", argv[1]);
         return 2;
     }
+    /* Gap row 2 (0.7.2): while the Irish calendar move is on (season_rules_set_moved, set by the game when the move
+     * can happen), the League of Ireland Cup plays calendar years from 2003. Its rows hold the real season of each
+     * edition: 2002/03 "2002–03 and 2003" (not held in 2002-03), then calendar rows ("2004" in 2003/04, "2020" in
+     * 2019/20, "2021" in 2020/21, not held from then). Edition 2003 has no row of its own and takes row 2003/04 (held,
+     * as in 2003); edition 2020 takes row 2019/20, whose real season begins with 2020. The Leinster Cup's rows of
+     * 2003/04 to 2009/10 hold calendar years ("2004" to "2010"), so edition 2009 takes row 2008/09 ("2009", not held)
+     * and the cup comes back in 2010 (row 2009/10, "2010"). Off (a winter Ireland), every cup keeps row Y. */
+    season_rules_set_moved(1);
+    CHECK(season_cups_held("ire_lge_cup", 2002) == 0, "the League of Ireland Cup is not held in 2002-03");
+    CHECK(season_cups_held("ire_lge_cup", 2003) == 1, "the League of Ireland Cup is held in 2003");
+    CHECK(season_cups_held("ire_lge_cup", 2020) == 1, "the League of Ireland Cup 2020 takes row 2019/20 (held)");
+    CHECK(season_cups_held("ire_lge_cup", 2021) == 0, "the League of Ireland Cup 2021 takes row 2020/21 (not held)");
+    CHECK(season_cups_held("ire_chal_cup", 2003) == 1 && season_cups_held("ire_chal_cup", 2004) == 1,
+          "the FAI Cup is held in 2003 and 2004");
+    CHECK(season_cups_next("ire_leinster_cup", 2002) == 2010, "the next Leinster Cup from 2002 in calendar years is "
+          "2010, got %d", season_cups_next("ire_leinster_cup", 2002));
+    season_rules_set_moved(0);
+    CHECK(season_cups_held("ire_lge_cup", 2020) == 0, "a winter Ireland: the League Cup 2020 takes row 2020/21");
     /* Split-season cups: the edition of year Y is the row of season Y. */
     CHECK(season_cups_calendar("fra_lge_cup") == 0, "the Coupe de la Ligue is a split-season cup");
     CHECK(season_cups_held("fra_lge_cup", 2019) == 1, "the Coupe de la Ligue is held in 2019/20");

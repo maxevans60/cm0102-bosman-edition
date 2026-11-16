@@ -457,6 +457,10 @@ uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  
 uint32_t rt_ire_first_least(uint32_t obj, uint32_t original);
 uint32_t rt_ire_first_meetings(uint32_t obj, uint32_t original);
 uint32_t rt_ire_prm_down(uint32_t obj, uint32_t original);
+/* The Irish awards (IrelandAwards::daily_update 0x63bf10, OldIrelandAwards::daily_update 0x79f250) on the day of the
+ * calendar move (gap row 2 of 0.7.2, win/season_calendar_game.c), the original's 1 May in winter. */
+uint32_t rt_ire_award_day(uint32_t original);
+uint32_t rt_ire_award_month(uint32_t original);
 uint32_t rt_ire_prm_playoff(uint32_t obj, uint32_t original);
 /* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
  * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */

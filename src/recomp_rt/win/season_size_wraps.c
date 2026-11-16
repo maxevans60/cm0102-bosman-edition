@@ -815,6 +815,7 @@ const SeasonGrown season_grown[] = {
     {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
     {"fra_third", 20, 21, SEASON_TEMPLATE_MIRRORED},
     {"ire_first", 0, 12, SEASON_TEMPLATE_SHUFFLED},
+    {"ire_prm", 0, 12, SEASON_TEMPLATE_SHUFFLED},
     {"ita_ser_a", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
     {"ita_ser_b", 20, 24, SEASON_TEMPLATE_SEQUENTIAL},
     {"ita_ser_c1a", 18, 20, SEASON_TEMPLATE_SEQUENTIAL},
@@ -829,7 +830,7 @@ const SeasonGrown season_grown[] = {
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 19;
+const int season_grown_count = 20;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -895,6 +896,17 @@ RT_WRAP(00634f40, schedule_634f40)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_00634f40();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* IrePrm::create_schedule */
+void o_00639e90(void);
+RT_WRAP(00639e90, schedule_639e90)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00639e90();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

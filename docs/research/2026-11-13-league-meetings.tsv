@@ -110,7 +110,7 @@ hol_prm	2020	2025	2	https://en.wikipedia.org/wiki/2020–21_Eredivisie to 2025�
 hol_prm	2026	2026	2	https://en.wikipedia.org/wiki/Eredivisie (each club meets every other club twice, once at home and once away); https://en.wikipedia.org/wiki/2026–27_Eredivisie in progress, 18 clubs, pld 12
 hol_prm	2027	2027	-	unknown: clubs unknown (row hol-bel-340)
 ire_first	2001	2001	4	sizes-check-west.md line 150: 2001/02, 9 clubs, pld 32; 32 / 8 = 4 (from matches)
-ire_first	2002	2002	?	row wal-nir-irl-42 holds two real seasons that the game plays in turn: 2002-03 (12 clubs, pld 22, two groups of six then a final per the row notes) and 2003 (12 clubs, pld 33, 3 meetings) (sizes-check-west.md line 151); no single value
+ire_first	2002	2002	2	https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland_First_Division: "It used a round-robin format which saw each team play 22 games", 12 clubs; 22 / 11 = 2. The game plays the short 2002-03 season in this row (August 2002 to January 2003, gap row 2 of 0.7.2) and the 2003 season in row wal-nir-irl-42b. The two groups of six were the First Division Cup.
 ire_first	2003	2003	3	sizes-check-west.md line 152: 2004, 12 clubs, pld 33; 33 / 11 = 3 (from matches)
 ire_first	2004	2007	4	sizes-check-west.md line 153: 2005 to 2008, 10 clubs, pld 36; 36 / 9 = 4 (from matches)
 ire_first	2008	2009	3	sizes-check-west.md line 154: 2009 and 2010, 12 clubs, pld 33; 33 / 11 = 3 (from matches)

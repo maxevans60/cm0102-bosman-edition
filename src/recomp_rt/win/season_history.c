@@ -15,6 +15,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_history.h"
+#include "season_calendar.h"
 #include "season_change.h"
 #include "season_comps.h"
 #include "season_titles.h"
@@ -598,7 +599,13 @@ RT_WRAP(004afce0, comp_util_add_history_record)
      * the drop at the creation, or a row this program wrote) from another day. Not for a split season: two rows a
      * year in most of the 10 years before the start, or in the year before. */
     int label = year;
-    if (on && !split_season(hist, count, comp, S) && rows_of_label(hist, count, comp, year - 1) < 2) {
+    /* The Irish calendar move (gap row 2 of 0.7.2, season_calendar.h): a league or cup that moves to calendar years
+     * writes its edition in the short and the calendar seasons, so the short season shows "2002/03", the 2003 season
+     * "2003", and no later label moves by one (the second-edition rule would give the 2003 season 2004 and each later
+     * season the year after its own). */
+    int fixed = obj ? season_calendar_history_label(obj) : 0;
+    if (fixed) label = fixed;
+    else if (on && !split_season(hist, count, comp, S) && rows_of_label(hist, count, comp, year - 1) < 2) {
         while (label < year + 8) {
             int game_row = 0, same_day = 0, any = 0;
             for (uint32_t i = 0; i < count; i++) {
@@ -615,6 +622,7 @@ RT_WRAP(004afce0, comp_util_add_history_record)
         if (label != year && getenv("RECOMP_HISTORY_LOG"))
             fprintf(stderr, "recomp: season history: a second edition in %d gets the label %d\n", year, label);
     }
+    season_calendar_log_history(obj, label);
     Own o = {comp, (uint32_t)label, {rt_arg(1), rt_arg(2), rt_arg(3), rt_arg(4)}, today};
     if (label != year) wr16(g_mem, GAME_YEAR, (uint32_t)label);
     o_004afce0();

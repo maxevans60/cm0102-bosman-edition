@@ -21,6 +21,7 @@
 #include "season_bel_second.h"
 #include "season_esp_second.h"
 #include "season_sizes_arg.h"
+#include "season_calendar.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -129,45 +130,13 @@ static int within(const char *file, int n)
     return n;
 }
 
-/* The row of a season, or the last row before it (Q248: after the last row the rules stay, with no end year:
- * the after-table rule). */
-static const SeasonRule *row_of_season(const char *file, int season)
-{
-    int s = season_rules_last_season(season, file);
-    return s ? season_rules_find(s, file, 0) : NULL;
-}
+/* The season of the row of the edition of a year (season_sizes.h; season_league_edition_row gives the rule: row Y,
+ * else a row of Y - 1 whose real season begins with Y, a calendar-year league's or the second Irish row of 2002/03). */
+int season_sizes_edition(const char *file, int year) { return season_league_edition(file, year); }
 
-/* 1 when the real season of a row begins with the year ("2011", "2010/11", "2011-12 (first stage ...)"). */
-static int real_starts(const SeasonRule *r, int year)
-{
-    char y[8];
-    snprintf(y, sizeof y, "%d", year);
-    return r && r->real_season && !strncmp(r->real_season, y, 4) &&
-           (r->real_season[4] < '0' || r->real_season[4] > '9');
-}
+static const SeasonRule *row_of_edition(const char *file, int year) { return season_league_edition_row(file, year); }
 
-/* The season of the row of the edition of a year (season_sizes.h): row Y when its real season begins with Y
- * ("2008/09", "2026/27"), else row Y - 1 when its real season begins with Y, else Y. A calendar-year league holds
- * the real season Y + 1 in row Y ("Calendar-year league: real season 2009" in row 2008 of nor_prm), so its edition
- * Y takes row Y - 1: a 2008 start plays the Tippeligaen 2008 with the 14 clubs of row 2007 and the 2009 edition
- * with the 16 of row 2008. Row Y comes first, so a league that changes from calendar years to two-year seasons
- * (jap_j1 row 2025 "2026", row 2026 "2026/27") plays its two-year season in the year of the change. */
-int season_sizes_edition(const char *file, int year)
-{
-    /* The Argentine Primera plays over two years (August to June, ArgPrm::create_schedule 0x404570: the Apertura from
-     * August at 0x404609, the Clausura from February at 0x404e34), while its rows hold calendar-year seasons from
-     * 2014 (row 2014 "2015", row 2015 "2016"). Edition Y plays row Y, the real season that ends in it, so every row
-     * plays once: the 2016 tournament is edition 2015 (slice 15 fix, lead 15 November 2026). */
-    if (!strcmp(file, "arg_prm")) return year;
-    if (real_starts(season_rules_find(year, file, 0), year)) return year;
-    if (real_starts(season_rules_find(year - 1, file, 0), year)) return year - 1;
-    return year;
-}
-
-static const SeasonRule *row_of_edition(const char *file, int year)
-{
-    return row_of_season(file, season_sizes_edition(file, year));
-}
+static int real_starts(const SeasonRule *r, int year) { return season_league_real_starts(r, year); }
 
 /* The row of the rules of a league object now (season_sizes.h). */
 static const SeasonRule *row_now(uint32_t obj, const char *file)
@@ -433,7 +402,7 @@ static void game_free(uint32_t p)
 static int grown_meetings(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
-    int m = r ? season_sizes_asia_meetings(file, r->season, season_league_meetings(file, r->season)) : 0;
+    int m = r ? season_sizes_asia_meetings(file, r->season, season_league_meetings_of(file, r)) : 0;
     if (m >= 1 && m <= 4 && m != (int16_t)rd16(g_mem, obj + COMP_MEETINGS)) {
         if (logging())
             fprintf(stderr, "recomp: league sizes: %s meetings %d (%.50s %d, the class sets %d)\n", file, m,
@@ -545,7 +514,10 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         if (!rt_unwinding) season_arg_schedule(self, stage, count_at);
         return;
     }
-    if (stage != -1) return;
+    if (stage != -1) {
+        season_calendar_stage(self, season_change_file(self), stage, count_at);
+        return;
+    }
     size_step_run(self);
     const char *file = season_change_file(self);
     const SeasonGrown *g = grown_of(file);
@@ -567,7 +539,7 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
      * takes the class's meetings for this count, not the value set_up_rules wrote for another count. */
     if (!probe) {
         const SeasonRule *r = row_now(self, file);
-        int row_m = r ? season_league_meetings(file, r->season) : 0;
+        int row_m = r ? season_league_meetings_of(file, r) : 0;
         int m = season_sizes_irl_class_meetings(file, n, row_m >= 1 && row_m <= 4 ? row_m : 0);
         if (m && m != meetings) {
             meetings = m;
@@ -593,6 +565,9 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         uint32_t r = old + (uint32_t)i * DATE_SIZE;
         days[i] = season_template_day(base, (int16_t)rd16(g_mem, r + 2), (int16_t)rd16(g_mem, r));
     }
+    /* The Irish calendar move (season_calendar.h, gap row 2): a calendar season moves the class's dates by whole weeks
+     * (their records keep their weekday), the short season plans only from the class's dates before its cut. */
+    int cal_cut = 0, cal = probe ? 0 : season_calendar_template(self, file, base, days, have, &cal_cut);
     if (logging() && !probe) {
         fprintf(stderr, "recomp: league sizes: %s template %d: class %d", file, base, have);
         log_days(base, days, NULL, have);
@@ -601,13 +576,13 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     /* The matches of the count (rt_league_clubs writes the same when create_table runs after this), and those of
      * the largest section of a split. */
     if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings + (split ? sp.matches_max : 0)));
-    if (total == have && !split) return;
+    if (total == have && !split && !cal) return;
     /* A class date on the day of an earlier one (NirPrm 2010/11: 15 January 2011 twice, a date that snaps to its
      * Saturday) is left out of the plan, which never puts two rounds on one day (season_template.c). Not for a
      * mirrored class: its halves are the halves of the class's dates. */
     int uniq[SEASON_TEMPLATE_MAX], from_of[SEASON_TEMPLATE_MAX], count_u = 0;
     for (int i = 0; i < have; i++) {
-        int seen = 0;
+        int seen = cal_cut && days[i] >= cal_cut;
         for (int j = 0; j < count_u && mode != SEASON_TEMPLATE_MIRRORED; j++) seen |= uniq[j] == days[i];
         if (seen) continue;
         from_of[count_u] = i;

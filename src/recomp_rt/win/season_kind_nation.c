@@ -301,7 +301,7 @@ static int nation_in_game(const char *nation, int season)
     int n = season_change_comps(comps, 512);
     for (int i = 0; i < n; i++) {
         const char *file = season_change_file(comps[i]);
-        const SeasonRule *r = strcmp(file, "?") ? season_rules_find(season, file, 0) : NULL;
+        const SeasonRule *r = strcmp(file, "?") ? season_rules_row_of(file, season) : NULL;
         if (r && !strcmp(r->nation, nation)) return 1;
     }
     return 0;
@@ -406,8 +406,7 @@ static const SeasonNation *file_nation(const char *file, int season, int *top)
             *top = file_cache[i].top;
             return file_cache[i].nation;
         }
-    int last = season_rules_last_season(season, file);
-    const SeasonRule *r = last ? season_rules_find(last, file, 0) : NULL;
+    const SeasonRule *r = season_rules_row_of(file, season);
     const SeasonNation *n = r ? season_nation_find(r->nation) : NULL;
     int t = r && r->tier == 1;
     if (file_cached < (int)(sizeof file_cache / sizeof file_cache[0])) file_cache[file_cached++] = (FileNation){file, season, n, t};

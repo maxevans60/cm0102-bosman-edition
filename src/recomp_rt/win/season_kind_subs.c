@@ -81,7 +81,9 @@ static int lookup(const char *file, int season, int *used, int *bench)
             *bench = cache[i].bench;
             return cache[i].mask;
         }
-    int mask = season_subs_rule(season, file, used, bench);
+    /* The Irish calendar move: the season of the row of the edition (season_rules_row_of). */
+    const SeasonRule *row = season_rules_moved(file) ? season_rules_row_of(file, season) : NULL;
+    int mask = season_subs_rule(row ? row->season : season, file, used, bench);
     if (!(mask & SEASON_SUBS_USED)) *used = 0;
     if (!(mask & SEASON_SUBS_BENCH)) *bench = 0;
     if (cached < (int)(sizeof cache / sizeof cache[0]))

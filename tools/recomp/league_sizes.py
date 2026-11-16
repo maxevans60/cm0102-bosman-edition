@@ -179,6 +179,11 @@ GROWN = {
     "nir_first": (17, 0x78B310, "shuffled"),
     # - IreFirst (League of Ireland First Division, 8 in the 2012 to 2017 seasons): a class of DATA_COUNT.
     "ire_first": (12, 0x634F40, "shuffled"),
+    # - IrePrm (League of Ireland Premier Division, 12 and 10; gap row 2 of 0.7.2: the calendar move of 2003 needs its
+    #   own template, src/recomp_rt/win/season_calendar.h): a class of DATA_COUNT. create_schedule 0x639e90 makes 34
+    #   dates for 3 meetings and 36 for any other (D = 0x22 + 2, 0x639ebc..0x639ed3) for stage -1 only (0x639eb6);
+    #   set_up_rules 0x63a900 sets 3 meetings (0x63a912) and +0xd9 = 0x103 (0x63a98f): shuffled.
+    "ire_prm": (12, 0x639E90, "shuffled"),
     # Slice 14 (Japan and Korea; src/recomp_rt/win/season_sizes_asia.c, sizes_asia.py). Calendar-year leagues.
     # - JapJ1 (J1, 16 in the class, 18 from 2005, 20 in 2021 and from 2024): create_table 0x6634e0 allocates 16 rows
     #   (push 0x3b0 at 0x6634eb) and stores 16 at 0x6634f2; create_schedule 0x662e30 makes 30 dates for stage -1 (D
@@ -205,7 +210,10 @@ GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 #   before the constructor calls create_table (0x634cc1, then 0x634cfc; start_new_season 0x635b9d, then 0x635bdc), so
 #   create_schedule makes 36 dates (D = 0x22 + 2 for meetings other than 3, 0x634f6d..0x634f84) and the table then
 #   plays 33 or 36 of them. It does not write +0xd9: shuffled.
-DATA_COUNT = {"ire_first": 12}
+# - IrePrm::create_table 0x63a740 counts the clubs of division [0x9cf80c] (0x63a76e..0x63a799), takes only 10 or 12
+#   (0x63a79f, 0x63a7a5), sets 4 meetings for 10 and 3 for 12 (0x63a7be, 0x63a7c6) and allocates the count x 0x3b
+#   (0x63a7cc..0x63a7df), after set_up_rules called create_schedule (0x63a998).
+DATA_COUNT = {"ire_first": 12, "ire_prm": 12}
 # The rows that the class allocates: its largest original count (before the cap of GROWN); 0 for DATA_COUNT.
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
@@ -325,6 +333,17 @@ PATCHES = {
     # set_up_rules (0x639c3c, then 0x639c77) and again at each start_new_season (0x63aa3d), so every 12-club season
     # sends 3 down. A season game with the sizes on takes the direct places of the row (season_sizes_irl.c).
     0x63A8B5: (3, "rt_ire_prm_down(esi, 3u)"),
+    # IrePrm::create_table (gap row 2 of 0.7.2, DATA_COUNT): the meetings for 10 and 12 clubs take those that the engine
+    # set from the row, as IreFirst's (rt_ire_first_meetings reads only the object).
+    0x63A7BE: (4, "rt_ire_first_meetings(esi, 4u)"),
+    0x63A7C6: (3, "rt_ire_first_meetings(esi, 3u)"),
+    # The Irish awards (gap row 2): IrelandAwards::daily_update 0x63bf10 and OldIrelandAwards::daily_update 0x79f250
+    # give the awards on Date(1, May, year) (push 4, push 1 before Date::Date at 0x63bf2b, 0x79f26b); in the short and
+    # calendar seasons on 16 February (src/recomp_rt/win/season_calendar_game.c).
+    0x63BF27: (4, "rt_ire_award_month(4u)"),
+    0x63BF29: (1, "rt_ire_award_day(1u)"),
+    0x79F267: (4, "rt_ire_award_month(4u)"),
+    0x79F269: (1, "rt_ire_award_day(1u)"),
     # Item 251: the relegation play-off place of the same branch (mov byte [esi + 0xc0], 1 at 0x63a8ae): 0 in a season
     # whose row has no play-off (season_sizes_irl.c).
     0x63A8AE: (1, "rt_ire_prm_playoff(esi, 1u)"),
