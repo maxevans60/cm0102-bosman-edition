@@ -180,8 +180,8 @@ Merge danger: two-way door. Blast radius: the Italian pyramid and the Serie C gr
 Blocked by: 2, 3, 5, 7
 Delivers: the Eerste Divisie at 20 with periods by row (D6), the Belgian Second Division at 19 and 8 to 17 with BelThird's row taking the count, the Belgian First Division at 16 with Play-off I and halved points, the Superliga at 14 with 2 meetings and its split, the Veikkausliiga at 14 with 2 meetings and its splits.
 Merge danger: two-way door. Blast radius: these four pyramids.
-- [ ] `league_size_run.py` passes for hol_first 2005 and 2010, bel_second 2008 and 2016, bel_first 2010, den_prm 2017, fin_prm 2005 and 2019
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for hol_first 2005 and 2010, bel_second 2008 and 2016, bel_first 2010, den_prm 2017, fin_prm 2005 and 2019
+- [x] The same-save set is equal (start.sav, new game, prematch.sav and match pass on d8c240c1 against the lead base build 6f4ef2f7)
 
 ### 11. Croatia and Greece
 Blocked by: 2, 3, 6, 7
