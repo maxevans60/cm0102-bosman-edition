@@ -382,6 +382,14 @@ KNOWN_GAPS = {
     "28 clubs: ": "a national phase of the clubs of the three Serie C groups: not a play-off of one league",
 }
 
+# Splits that the game cannot play, with the reason: {(comp_file, season): reason}. The split is a gap.
+SPLIT_GAPS = {
+    # The 2011-12 FNL: 38 rounds from April to November 2011, then the split of 8 and 12 in spring 2012, 52 rounds in
+    # all. The game year (class dates 3 April to 3 November) holds the first stage only: edition 2011 plays 20 clubs
+    # and 38 rounds (lead decision, 16 November 2026, slice 12).
+    ("rus_first", 2010): "a season that spans two game years: the game plays the first stage only",
+}
+
 # The forms of a whole text that mean no play-off.
 NONE_TEXTS = {"none", "n/a", "see split", "see format"}
 
@@ -730,6 +738,9 @@ def encode():
             continue
         last[r["comp_file"]] = po
         split = encode_split(r)
+        split_gap = SPLIT_GAPS.get((r["comp_file"], r["season"]))
+        if split_gap:
+            split = "gap"
         e = {"id": r["id"], "season": r["season"], "comp_file": r["comp_file"], "tier": r["tier"],
              "clubs": r["clubs"] if isinstance(r["clubs"], int) else -1, "po_up": po[0], "po_down": po[1],
              "po_other": po[2], "po_status": po[3], "split": split, "calendar": encode_calendar(r),
@@ -763,7 +774,7 @@ def encode():
         if po[3] != "ok":
             gaps.append((r["id"], r["season"], r["comp_file"], "playoffs", po[3], r["playoffs_text"]))
         if split == "gap":
-            gaps.append((r["id"], r["season"], r["comp_file"], "split", "the tool cannot read the split",
+            gaps.append((r["id"], r["season"], r["comp_file"], "split", split_gap or "the tool cannot read the split",
                          r["split_text"]))
     return out, gaps, problems
 

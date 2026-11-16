@@ -14,7 +14,6 @@
 #include "season_template.h"
 #include "season_cup_sizes_west.h"
 #include "season_split.h"
-#include "season_sizes_rus.h"
 #include "season_size_step.h"
 #include "season_clubs.h"
 #include "season_second_teams.h"
@@ -191,17 +190,6 @@ int season_sizes_row_season(uint32_t obj, const char *file)
 {
     const SeasonRule *r = row_now(obj, file);
     return r ? r->season : -1;
-}
-
-int season_sizes_split_season(uint32_t obj, const char *file)
-{
-    int s = season_sizes_row_season(obj, file);
-    if (s < 0) return s;
-    const SeasonRule *first = season_rules_find(s - 1, file, 0), *second = season_rules_find(s, file, 0);
-    /* The schedule and the matches count take the meetings of row s (row_now), the split check those of the split
-     * row: the stage rows must agree, else the split stays row s's (none). */
-    return first && second && season_stage_rows(first->real_season, second->real_season) &&
-           season_league_meetings(file, s - 1) == season_league_meetings(file, s) ? s - 1 : s;
 }
 
 static const SeasonGrown *grown_of(const char *file);

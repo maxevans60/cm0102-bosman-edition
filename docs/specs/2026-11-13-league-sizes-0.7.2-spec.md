@@ -195,7 +195,7 @@ Blocked by: 2, 3, 6
 Delivers: the Russian First Division at 20 and 22 (the take loop and its array take the count) and 17, the Süper Lig at 19 to 21, the Turkish second tier at 17 to 19.
 Merge danger: two-way door. Blast radius: these two pyramids.
 - [ ] `league_size_run.py` passes for rus_first 2005 and 2012, tur_first 2020 and 2021, tur_second 2023
-- [ ] `league_size_run.py` passes for rus_first 2011: the long 2011–12 season plays 38 rounds, then the split of its first stage row (8 meet twice, 12 once, points kept; lead decision 15 Nov)
+- [ ] `league_size_run.py` passes for rus_first 2011: the long 2011–12 season plays its first stage only, 20 clubs and 38 rounds, inside its game year. Its split of 2012 is a gap row: a season that spans two game years (lead decision 16 Nov)
 - [ ] The same-save set is equal
 
 ### 13. Northern Ireland and Ireland
