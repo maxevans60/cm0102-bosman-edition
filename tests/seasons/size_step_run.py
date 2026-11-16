@@ -65,10 +65,17 @@ CASES = {
                  "Gap row 27: the unplayed Conference sends up its second club by the original's pick (0x4afbd0)"),
     "ligue3": (2026, 2027, ["England", "France"], {},
                "Gap row 29: the Ligue 3 play-off of the 3rd to 6th plays, and Ligue 2 sends down its 16th"),
+    # Item 273 (open-items-0.6.2.md): the National League of 2017/18 on.
+    "nl2019": (2019, 2020, ["England"], {},
+               "Item 273: the National League 2019/20 sends 4 down (row eng-212, Q278) and plays the play-off of "
+               "the 2nd to 7th"),
+    "nl2021": (2021, 2022, ["England"], {},
+               "Item 273: the National League 2021/22 sends 3 down (row eng-232) and plays the play-off of the 2nd "
+               "to 7th"),
 }
 
 # The extra divisions of the new game screen of a case (rules_report_check.EXTRA).
-EXTRA = {"conference": ["conference"], "refuse": ["conference"]}
+EXTRA = {"conference": ["conference"], "refuse": ["conference"], "nl2019": ["conference"], "nl2021": ["conference"]}
 
 # The environment of a case beyond RECOMP_SIZE_LOG=1.
 ENV = {"refuse": {"RECOMP_TEST_REFUSE_CHAMPION": "1"}}
@@ -81,13 +88,20 @@ LINES = {
     "unplayed": [(r"recomp: league sizes: eng: .* goes up to League Two \(the original's pick\)", 1, False),
                  (r"recomp: league sizes: eng: the unplayed Conference exchange moved 2 down", 1, False)],
     "ligue3": [(r"recomp: playoffs: fra_third 2026: places 3 to 6", 1, False)],
+    "nl2019": [(r"recomp: playoffs: eng_conf 2019: play-off of places 2 to 7 drawn .*quarter-finals 4 v 7 and 5 v 6",
+                1, False),
+               (r"recomp: league sizes: eng: the feeder exchange sent (\d+) down and (\d+) up \((\d+) rows", 1,
+                True)],
+    "nl2021": [(r"recomp: playoffs: eng_conf 2021: play-off of places 2 to 7 drawn .*quarter-finals 4 v 7 and 5 v 6",
+                1, False)],
 }
 
 # The exchanges of league_promote_and_relegate 0x689c80 between two leagues of a case (the log line of the wrap in
 # season_sizes.c): (upper, lower, clubs each way, the least count of such lines). The chain body 0x5752f0 makes no
 # such call in a season whose Conference champion may not go up (0x57541a, return at 0x575468), so the least is 1 of
 # the 2 season changes of the case.
-EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 1), "refuse": ("eng_third", "eng_conf", 2, 1)}
+EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 1), "refuse": ("eng_third", "eng_conf", 2, 1),
+             "nl2019": ("eng_third", "eng_conf", 2, 1), "nl2021": ("eng_third", "eng_conf", 2, 1)}
 EXCHANGE_LINE = re.compile(r"recomp: league sizes: (\S+) \(.*?\) down (-?\d+), (\S+) \(.*?\) up (-?\d+), pairs")
 
 # D23: the places of the season before a change (report season, up, down; None: not checked) and the files whose
@@ -98,6 +112,8 @@ PLACES = {
     "conference": {"eng_third": [(2005, None, 2), (2006, None, 2)], "eng_conf": [(2005, 2, 2), (2006, 2, 4)]},
     "unplayed": {"eng_third": (2005, None, 2)},
     "ligue3": {"fra_second": (2026, None, 3), "fra_third": (2026, 3, None)},
+    "nl2019": {"eng_conf": (2019, 2, 4)},
+    "nl2021": {"eng_conf": (2021, 2, 3)},
 }
 NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
 
