@@ -6,6 +6,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_sizes_ita.h"
 #include "season_playoffs.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
@@ -1000,6 +1001,10 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
     if (!rt_unwinding) season_arg_second_rules(obj);  /* 0.7.2 slice 16 */
+    /* The C1 play-out and direct places of the season (open item 253, season_sizes_ita.c). */
+    const char *f = season_change_file(obj);
+    if (!rt_unwinding && sizes_on() && (!strcmp(f, "ita_ser_c1a") || !strcmp(f, "ita_ser_c1b")))
+        season_sizes_ita_playout_places(obj);
 }
 
 /* ---- Promotion and relegation of a size change ---- */
