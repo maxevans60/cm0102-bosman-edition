@@ -16,6 +16,11 @@ const HEADER = 0x416ec, ENTRY = 0x10c, MAX_ENTRIES = 1000;     // the save conta
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const mb = (n) => `${(n / 1048576).toFixed(n < 10485760 ? 1 : 0)} MB`;
 const when = (d) => d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+// The date of a list's row: the day over the time, never broken (Saved games, Tactics, Data sets).
+export const whenCell = (d) => {
+  const t = new Date(d);
+  return `<td class="when">${esc(t.toLocaleDateString(undefined, { dateStyle: 'medium' }))}<br><span class="small">${esc(t.toLocaleTimeString(undefined, { timeStyle: 'short' }))}</span></td>`;
+};
 const size = (n) => (n >= 2 ** 30 ? `${(n / 2 ** 30).toFixed(1)} GB` : `${Math.max(1, Math.round(n / 2 ** 20))} MB`);
 
 // Download all in parts. A zip holds 4 GB (zip.js), and six saves of 690 MB pass that: one zip was refused, with no way
@@ -271,8 +276,8 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
       const st = c.status(f.name, f);
       return `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-remove="${esc(f.name)}" title="Remove from the cloud; it stays here">Remove</button>` : ''}</td>`;
     };
-    const row = (f, i, kind) => `<tr><td>${esc(f.name)}</td><td class="num">${mb(f.size)}</td><td>${esc(when(f.mtime))}</td>
-      ${c ? (kind === 'save' ? state(f) : '<td></td>') : ''}<td class="acts">${play?.can() && kind === 'save' ? `<button class="primary" data-play="${i}" title="Load this save in the game">Play</button>` : ''}${edit && kind === 'save' ? `<button data-edit="${i}">Edit</button>` : ''}<button data-kind="${kind}" data-i="${i}">Download</button><button class="link" data-delete="${kind}" data-i="${i}">Delete</button></td></tr>`;
+    const row = (f, i, kind) => `<tr><td>${esc(f.name)}</td><td class="num">${mb(f.size)}</td>${whenCell(f.mtime)}
+      ${c ? (kind === 'save' ? state(f) : '<td></td>') : ''}<td class="acts"><div class="btns">${play?.can() && kind === 'save' ? `<button class="primary" data-play="${i}" title="Load this save in the game">Play</button>` : ''}${edit && kind === 'save' ? `<button data-edit="${i}">Edit</button>` : ''}<button data-kind="${kind}" data-i="${i}">Download</button><button class="link" data-delete="${kind}" data-i="${i}">Delete</button></div></td></tr>`;
     list.innerHTML = shown.saves.length
       ? `<table><tr><th>Save</th><th class="num">Size</th><th>Saved</th>${c ? '<th>Cloud</th>' : ''}<th></th></tr>${shown.saves.map((f, i) => row(f, i, 'save')).join('')}</table>`
       : '<p class="small">No saved games yet. Save in the game (Game Options, Save Game), or upload one.</p>';

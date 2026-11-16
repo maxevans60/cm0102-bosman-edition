@@ -9,13 +9,13 @@
 // same tactic saved by the game (442_default.pct against a Save As of 4-4-2). The tactics screen's Load reads the plain
 // version only: a preset copied as a .tct gave "Unable To Load". So an upload of such a file (a .pct, or a .tct made
 // from one) gets the plain version, and then loads (a run of the game: "Diamond Converted" from 442_diamond_default.pct).
+import { whenCell } from './saves.js';
 export const TACTICS_DIR = '/user/tactics';
 const VERSION_FROM = 0x98ec54, VERSION_TO = 0x98ec5e, OBFUSCATION = 0x075bcd15, BIG_ENDIAN = 0xf1fffff1;
 const SMALLEST = 0x400, LARGEST = 0x10000;            // the shipped ones are 1,428 to 1,476 bytes
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const kb = (n) => `${Math.max(1, Math.round(n / 1024))} KB`;
-const when = (d) => d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 const known = (v) => v >= VERSION_FROM && v <= VERSION_TO;
 
 // The tactic files of the folder, by name.
@@ -83,8 +83,8 @@ export function mountTacticsPanel({ FS, sync, log, cloud = () => null }) {
     shown = listTactics(FS);
     list.innerHTML = shown.length
       ? `<table><tr><th>Tactic</th><th class="num">Size</th><th>Saved</th><th></th></tr>${shown.map((f, i) => `<tr>
-        <td>${esc(f.name.slice(0, -4))}</td><td class="num">${kb(f.size)}</td><td>${esc(when(f.mtime))}</td>
-        <td class="acts"><button data-tactic="${i}">Download</button><button class="link" data-tactic-delete="${i}">Delete</button></td></tr>`).join('')}</table>`
+        <td>${esc(f.name.slice(0, -4))}</td><td class="num">${kb(f.size)}</td>${whenCell(f.mtime)}
+        <td class="acts"><div class="btns"><button data-tactic="${i}">Download</button><button class="link" data-tactic-delete="${i}">Delete</button></div></td></tr>`).join('')}</table>`
       : '<p class="small">No tactics yet. On the tactics screen use Tactics, Save As, or upload one.</p>';
   }
 

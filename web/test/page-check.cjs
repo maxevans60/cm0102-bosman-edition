@@ -930,6 +930,13 @@ const PORT = 8097;
         return [...document.querySelectorAll('#saves-list > table tr')].filter((tr) => tr.querySelector('td') && tr.getBoundingClientRect().bottom <= list.bottom + 1).length;
       });
       check('the list shows six rows or more at once (it showed two or three)', rows >= 6, `${rows} rows`);
+      // A narrower window: no column goes to a letter a line (the Saved column did once the Play button came).
+      await pg.setViewportSize({ width: 820, height: 760 });
+      const dates = await pg.$$eval('#saves-list > table tr', (trs) => trs.filter((tr) => tr.querySelector('td')).map((tr) => tr.children[2])
+        .map((t) => [Math.round(t.getBoundingClientRect().width), t.querySelectorAll('.small').length]));
+      check('a narrower window: each save\'s date keeps its width, the day over the time',
+        dates.length >= 8 && dates.every(([w, timeLine]) => w >= 80 && timeLine === 1), JSON.stringify(dates.slice(0, 3)));
+      await pg.setViewportSize({ width: 1100, height: 760 });
       const summary = await pg.textContent('#saves-list details summary');
       await pg.click('#saves-list details summary');
       await pg.click('#backups-remove');

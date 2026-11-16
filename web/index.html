@@ -127,12 +127,22 @@
   dialog .dlg-list:has(tr + tr) { min-height: 76px; }     /* the header and one row: never squeezed under its header */
   dialog .dlg-list:has(tr + tr + tr) { min-height: 118px; }
   dialog .dlg-list tr:first-child th { position: sticky; top: 0; background: var(--panel); z-index: 1; }
+  /* A list's columns never shrink below their longest word (overflow-wrap: anywhere let one go to a letter a line:
+     Saved games' date, when the Play button came). Only the name may break inside a word, down to 9em; the date is
+     the day over the time; the buttons go to a second line before the others are squeezed. */
+  dialog .dlg-list th { white-space: nowrap; }
+  dialog .dlg-list td { overflow-wrap: break-word; }
+  dialog .dlg-list td:first-child { white-space: normal; overflow-wrap: anywhere; min-width: 9em; }
+  dialog .dlg-list td.when { white-space: nowrap; line-height: 1.25; }     /* two lines no taller than the buttons */
+  dialog .dlg-list td.when .small { color: var(--muted); font-size: 12px; }
+  dialog .dlg-list td.acts .btns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   dialog .dlg-foot { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
   #sets:not([hidden]), #tactics:not([hidden]) { display: contents; }
   /* Narrow screens: a list keeps its columns whole and scrolls sideways, not one letter a line. */
   @media (max-width: 640px) {
     dialog .dlg-list table { width: max-content; min-width: 100%; }
-    dialog .dlg-list th, dialog .dlg-list td { overflow-wrap: normal; white-space: nowrap; }
+    dialog .dlg-list th, dialog .dlg-list td, dialog .dlg-list td:first-child { overflow-wrap: normal; white-space: nowrap; min-width: 0; }
+    dialog .dlg-list td.acts .btns { flex-wrap: nowrap; }
     dialog .dlg-list:has(tr + tr + tr) { min-height: 150px; }
   }
   /* Slim scroll bars in the dialogs, the overlay and the log. */
@@ -194,6 +204,7 @@
   /* Little room left in the browser for saves (saves.js, lowOnSpace): a mark on the bar's button. */
   #saves-open.low::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #d9a441; margin-left: 2px; }
   td.acts button + button { margin-left: 6px; }
+  td.acts .btns button + button { margin-left: 0; }   /* the wrapper's gap spaces them */
 
   /* The save editor (editor.js): the players on the left, the one chosen on the right; one at a time when narrow. */
   dialog#editor { width: min(1180px, calc(100vw - 16px)); height: calc(100% - 16px); max-height: none; padding: 14px 16px;

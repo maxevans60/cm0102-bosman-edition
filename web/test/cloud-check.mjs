@@ -202,6 +202,14 @@ try {
   await a.click('#saves-open');
   const after = await a.$$eval('#saves-list td.cloud', (tds) => tds.map((t) => t.textContent.trim()));
   check('and Saved games shows them in the cloud, not Only here', after.length > 0 && !after.includes('Only here'), after.join(', '));
+  // With the cloud column and the Play button, a window of 820 once squeezed the Saved column to a letter a line (a
+  // player's screenshot, 16 November 2026): each date keeps its width, the day over the time.
+  await a.setViewportSize({ width: 820, height: 800 });
+  const dates = await a.$$eval('#saves-list > table tr', (trs) => trs.filter((tr) => tr.querySelector('td')).map((tr) => tr.children[2])
+    .map((t) => [Math.round(t.getBoundingClientRect().width), t.querySelectorAll('.small').length]));
+  check('with the cloud column, a window of 820: each save\'s date keeps its width, the day over the time',
+    dates.length > 0 && dates.every(([w, timeLine]) => w >= 80 && timeLine === 1), JSON.stringify(dates.slice(0, 3)));
+  await a.setViewportSize({ width: 1200, height: 800 });
   check('a save removed from the old store goes to the new one too: the removal was of the old one', cloudBytes('From iPad.sav') !== null);
   await a.click('#saves-list button[data-remove="From iPad.sav"]');      // removed again, for the second device below
   await waitFor('the removal', () => !s3fake.objects.has(keyOf('From iPad.sav')));

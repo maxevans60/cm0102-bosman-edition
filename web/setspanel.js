@@ -1,6 +1,7 @@
 // The data sets in the Saved games dialog (web/README.md, "Data sets"), as the saves are there: each with Use (for
 // the next new game, in a season), Edit, Download (a zip) and Delete, and Upload for a zip or the 20 files. With
 // Cloud Saves, a Cloud column and Remove, as for the saves. The work is in datasets.js.
+import { whenCell } from './saves.js';
 import { DATA_SET_FILES } from './dataset.js';
 import { FIRST_SEASON, LAST_SEASON, chooseForNextGame, cleanName, dataSetZip, dataSetsInZip, deleteDataSet, listDataSets,
   seasonText, uniqueName, writeDataSet } from './datasets.js';
@@ -11,7 +12,6 @@ import { FIRST_SEASON, LAST_SEASON, chooseForNextGame, cleanName, dataSetZip, da
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const MB = (n) => `${(n / 1048576).toFixed(0)} MB`;
-const when = (t) => new Date(t).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 const CLOUD = { cloud: 'In the cloud', up: 'Saving…', here: 'Only here', waiting: 'Not yet' };
 
 // root: the user folder; module(): the engine's Module; cloud(): the data sets' sync (datasets.js) or null; edit(name),
@@ -29,10 +29,10 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
     box.innerHTML = `<table><tr><th>Data set</th><th class="num">Size</th><th>Changed</th>${c ? '<th>Cloud</th>' : ''}<th></th></tr>
       ${shown.map((s, i) => {
         const st = c?.status(s.name);
-        return `<tr><td>${esc(s.name)}</td><td class="num">${MB(s.size)}</td><td>${esc(when(s.mtime))}</td>
+        return `<tr><td>${esc(s.name)}</td><td class="num">${MB(s.size)}</td>${whenCell(s.mtime)}
         ${c ? `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-set-remove="${i}">Remove</button>` : ''}</td>` : ''}
-        <td class="acts"><button class="primary" data-set-use="${i}">Use</button><button data-set-edit="${i}">Edit</button>
-          <button data-set-download="${i}">Download</button><button class="link" data-set-delete="${i}">Delete</button></td></tr>
+        <td class="acts"><div class="btns"><button class="primary" data-set-use="${i}">Use</button><button data-set-edit="${i}">Edit</button>
+          <button data-set-download="${i}">Download</button><button class="link" data-set-delete="${i}">Delete</button></div></td></tr>
         ${using === s.name ? `<tr class="use"><td colspan="${c ? 5 : 4}"><label>Season of the next new game
           <select id="sets-season">${Array.from({ length: LAST_SEASON - FIRST_SEASON + 1 }, (_, k) => FIRST_SEASON + k)
             .map((y) => `<option value="${y}"${y === (s.season ?? FIRST_SEASON) ? ' selected' : ''}>${seasonText(y)}</option>`).join('')}</select></label>
