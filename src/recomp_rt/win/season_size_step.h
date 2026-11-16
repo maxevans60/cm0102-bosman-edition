@@ -27,6 +27,7 @@ typedef struct {
     int rep;            /* reputation: the order of the clubs with no division */
     int up_ok;          /* 0: never moves up by the step (reserve or B side, a second-team bar) */
     int down_ok;        /* 0: never goes down by the step (a club with a human manager) */
+    int leave;          /* 1: leaves a division with too many clubs first (a licence refused, gap 37) */
 } StepClub;
 
 typedef struct {
@@ -35,11 +36,13 @@ typedef struct {
     int nation;
     int nlower, lower[STEP_MAX_LOWER];      /* the divisions below it in the chain (indexes) */
     int nrows, rows[STEP_MAX_ROWS];         /* its clubs of the last table (club indexes), the best place first */
+    int nfeed, feed[STEP_MAX_LOWER];        /* a lowest division: the divisions below it that play as now (gap 37) */
     int short_by;       /* out: the clubs that it lacks after the step (below 0: the clubs over its row) */
 } StepDivision;
 
 typedef struct {
     int club, from, to;     /* division indexes, or STEP_NONE */
+    int replaces;           /* a club with no division into a feeder: the club whose place it takes, else -1 */
 } StepMove;
 
 /* Plans the step: for each division in index order (the top down) the moves that bring it to its row. The model's

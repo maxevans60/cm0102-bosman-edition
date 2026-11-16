@@ -17,10 +17,21 @@ static int open_division(const StepDivision *div, int ndiv, int d)
 static int add_move(StepMove *out, int max, int *n, StepClub *club, int c, int to)
 {
     if (*n >= max) return 0;
-    out[*n] = (StepMove){c, club[c].div, to};
+    out[*n] = (StepMove){c, club[c].div, to, -1};
     (*n)++;
     club[c].div = to;
     return 1;
+}
+
+/* The club of no division of a nation with the best reputation that may go up, or -1. */
+static int best_free(const StepClub *club, int nclub, int nation)
+{
+    int best = -1;
+    for (int c = 0; c < nclub; c++) {
+        if (club[c].div != STEP_NONE || club[c].nation != nation || !club[c].up_ok) continue;
+        if (best < 0 || club[c].rep > club[best].rep) best = c;
+    }
+    return best;
 }
 
 int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub, StepMove *out, int max)
@@ -46,6 +57,23 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
                         if (add_move(out, max, &n, club, c, d)) need--;
                     }
             } else if (!v->nlower) {
+                /* Gap 37: a lowest division whose divisions below play as now (the Ykkonen groups) takes their best
+                 * placed clubs that stayed, the places in turn, as real life promoted more clubs. The club of its
+                 * nation with no division of the best reputation takes each one's place, so the group keeps its
+                 * count; with none left, no club of the group goes up. */
+                for (int place = 0; place < STEP_MAX_ROWS && need > 0; place++)
+                    for (int k = 0; k < v->nfeed && need > 0; k++) {
+                        int f = v->feed[k];
+                        if (f < 0 || f >= ndiv || place >= div[f].nrows) continue;
+                        int c = div[f].rows[place];
+                        if (c < 0 || c >= nclub || club[c].div != f || !club[c].up_ok) continue;
+                        int r = best_free(club, nclub, v->nation);
+                        if (r < 0 || n + 2 > max) continue;
+                        add_move(out, max, &n, club, c, d);
+                        add_move(out, max, &n, club, r, f);
+                        out[n - 1].replaces = c;
+                        need--;
+                    }
                 /* The lowest division: the clubs of its nation with no division, the best reputation first. */
                 while (need > 0) {
                     int best = -1;
@@ -60,6 +88,12 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
             v->short_by = need;
         } else if (have > v->want) {
             int surplus = have - v->want;
+            /* Gap 37: a club that lost its licence leaves first, to no division. */
+            for (int r = 0; r < v->nrows && surplus > 0; r++) {
+                int c = v->rows[r];
+                if (c < 0 || c >= nclub || club[c].div != d || !club[c].leave || !club[c].down_ok) continue;
+                if (add_move(out, max, &n, club, c, STEP_NONE)) surplus--;
+            }
             /* The worst place first, only the clubs of its last table that are still in it. */
             for (int r = v->nrows - 1; r >= 0 && surplus > 0; r--) {
                 int c = v->rows[r];
