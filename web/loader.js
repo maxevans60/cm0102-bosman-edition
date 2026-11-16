@@ -695,7 +695,7 @@ function runEngine(files, info) {
     preRun: [() => {
       const M = window.Module, FS = M.FS;
       saveInPlay = watchSaveInPlay(FS);                // which save a report sends by default
-      reserveSaveRoom(FS);                             // a save being written gets its room at once (room.js)
+      reserveSaveRoom(FS, { when: () => Boolean(vault?.active) });   // a save being written gets its room at once (room.js)
       install(FS, files);
       files.clear();
       FS.mkdirTree('/user');
@@ -788,7 +788,9 @@ function runEngine(files, info) {
       } });
       $('update').onclick = () => {
         if (!running) { leaving = true; location.reload(); return; }
-        if (M._rt_web_in_game?.() && !confirm('Load the new version now? The game in play closes: what you did since your last save is lost.')) return;
+        // An engine without rt_web_in_game (before Play) cannot say: it asks, as for a game in play.
+        const inGame = typeof M._rt_web_in_game === 'function' ? M._rt_web_in_game() : true;
+        if (inGame && !confirm('Load the new version now? The game in play closes: what you did since your last save is lost.')) return;
         M.rtRestart();
       };
       checkSpace();
@@ -812,6 +814,7 @@ function runEngine(files, info) {
       if (typeof M._rt_web_progress === 'function') {
         progress = watchProgress({ read: () => M._rt_web_progress(), set: status });
         const ticks = setInterval(() => {
+          if (!running) { clearInterval(ticks); return; }  // stopped, failed or handed over: its message stays in the bar
           try { progress.tick(); } catch (e) { clearInterval(ticks); log(`page: the engine's progress stopped: ${e}`); }
         }, 250);
       }

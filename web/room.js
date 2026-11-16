@@ -9,7 +9,9 @@
 // over one of that size): the tab's peak while writing 2.2 GB instead of 3.8, the write 0.4 s instead of 6.3.
 const TEMP = /\/temp_save_file\.sav$/i;
 
-export function reserveSaveRoom(FS, dir = '/user') {
+// when(): whether to give room now. Only with the vault on (loader.js): IDBFS stores a file's array as a structured
+// clone, which takes the whole room with it, and a start loads it back so.
+export function reserveSaveRoom(FS, { dir = '/user', when = () => true } = {}) {
   const open = FS.open;
   if (typeof open !== 'function') return;
   // The largest save of the folder, with some more: what this save is likely to need.
@@ -23,9 +25,10 @@ export function reserveSaveRoom(FS, dir = '/user') {
     }
     return most ? Math.ceil(most * 1.05) + (1 << 20) : 0;
   };
-  const reserve = (node, need) => {
+  const reserve = (node, need, position) => {
     const have = node.contents?.length ?? 0, want = node.saveRoom.want;
     if (need <= have || need > want || !(node.contents === null || node.contents === undefined || node.contents instanceof Uint8Array)) return;
+    if (!node.usedBytes && position === 0) return;     // the first write: the file system keeps a copy of its bytes anyway
     const grown = new Uint8Array(want);
     if (node.usedBytes && node.contents) grown.set(node.contents.subarray(0, node.usedBytes));
     node.contents = grown;
@@ -33,11 +36,11 @@ export function reserveSaveRoom(FS, dir = '/user') {
   FS.open = (path, flags, mode) => {
     const stream = open(path, flags, mode);
     const node = stream?.node;
-    if (typeof path === 'string' && TEMP.test(path) && node && typeof node.stream_ops?.write === 'function') {
+    if (typeof path === 'string' && TEMP.test(path) && node && typeof node.stream_ops?.write === 'function' && when()) {
       if (!node.saveRoom) {
         const ops = node.stream_ops;
         node.saveRoom = { want: want() };
-        node.stream_ops = { ...ops, write(st, buffer, offset, length, position, canOwn) { reserve(node, position + length); return ops.write(st, buffer, offset, length, position, canOwn); } };
+        node.stream_ops = { ...ops, write(st, buffer, offset, length, position, canOwn) { reserve(node, position + length, position); return ops.write(st, buffer, offset, length, position, canOwn); } };
       }
       stream.stream_ops = node.stream_ops;            // this open too: a stream takes its node's operations when it opens
     }

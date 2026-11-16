@@ -7,6 +7,11 @@
 export const NOTICES_A_DAY = 30;    // then one notice that more came, and none until the next day (UTC)
 const TIMEOUT_MS = 10000;
 
+// The text as plain text: a report's message is what its sender wrote, and anyone can send a report. Discord pings for
+// @everyone, @here and role mentions (allowed_mentions turns that off as well); Slack reads <!channel> and <link|text>,
+// so & < > are escaped as Slack asks; a zero-width space after each @ keeps a mention from forming elsewhere.
+export const tame = (text) => String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/@/g, '@\u200b');
+
 // url: the webhook ('' or none: off). Returns { on, notice(text) }; notice never throws.
 export function createNotifier({ url = '', fetch = globalThis.fetch, log = (t) => console.log(t), now = () => Date.now() } = {}) {
   let day = '', count = 0;
@@ -18,7 +23,7 @@ export function createNotifier({ url = '', fetch = globalThis.fetch, log = (t) =
     const body = ++count > NOTICES_A_DAY ? 'More reports came today: see the admin page. No more notices until tomorrow.' : text;
     try {
       const r = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ content: body, text: body }), signal: AbortSignal.timeout(TIMEOUT_MS) });
+        body: JSON.stringify({ content: tame(body), text: tame(body), allowed_mentions: { parse: [] } }), signal: AbortSignal.timeout(TIMEOUT_MS) });
       if (!r.ok) throw new Error(`the webhook answered ${r.status}`);
     } catch (e) {
       log(`stats: report notice not sent: ${e.message}`);

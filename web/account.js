@@ -71,7 +71,7 @@ export function planSync(local, cloud, state, { replace = true, now = Date.now()
     if (!localChanged && !cloudChanged) continue;
     if (!localChanged) { if (replace) jobs.push({ do: 'down', name }); continue; }
     if (!cloudChanged) {
-      if (!force && l.size >= BIG_SAVE && e.upAt && now - e.upAt < BIG_EVERY_MS) { held.push(name); continue; }
+      if (!force && l.size >= BIG_SAVE && e.upAt && now >= e.upAt && now - e.upAt < BIG_EVERY_MS) { held.push(name); continue; }
       jobs.push({ do: 'up', name, base: e.etag });
       continue;
     }

@@ -131,10 +131,18 @@ export async function storeSave(FS, name, blob, { mtime = Date.now() } = {}) {
   const path = `${SAVE_DIR}/${name}`;
   if (vaultRef?.active) await vaultRef.adopt(path, blob, mtime);
   else {
-    FS.writeFile(path, new Uint8Array(await blob.arrayBuffer()));
+    FS.writeFile(path, new Uint8Array(await blob.arrayBuffer()), { canOwn: true });   // the file system takes the array, no copy
     try { FS.utime(path, mtime, mtime); } catch { /* an older file system: the time of the copy */ }
   }
   return null;
+}
+
+// A copy of a file of the user folder under another name (the save editor's older copy). A file of the vault is copied
+// there as a record (vault.copy: the browser copies it, not the page); any other is read and written. The file keeps its
+// name all the while.
+export async function copyFile(FS, from, to) {
+  if (vaultRef?.active && await vaultRef.copy(from, to)) return;
+  FS.writeFile(to, await readBytes(FS, from));
 }
 
 // The name an uploaded file gets in the save folder, or null when it is not a .sav file.

@@ -6,7 +6,7 @@
 //   under Database when a new game starts (src/recomp_rt/win/dbfolders.h). A new one is a copy of the game's own data.
 import { ATTRIBUTES, POSITIONS, SaveGame } from './savedit.js';
 import { ATTRIBUTES as DATA_ATTRIBUTES, DATA_SET_FILES, DataSet, dateShift } from './dataset.js';
-import { listSaves, readBlob, readBytes, storeSave } from './saves.js';
+import { copyFile, listSaves, readBlob, readBytes, storeSave } from './saves.js';
 import { noteSeason } from './datasets.js';
 
 const $ = (id) => document.getElementById(id);
@@ -339,13 +339,13 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
         return;
       }
       const path = `${dir}/${name}`;
-      // The save as it was becomes the older copy by a rename (the browser's storage moves its record; nothing is
-      // read), and the edited one is stored as a Blob of the members as they were and the changed tables.
+      // The save as it was is copied to the older copy (in the browser's storage, a copy of its record: nothing is
+      // read), and the edited one is stored over it as a Blob of the members as they were and the changed tables. The
+      // save keeps its name all the while: when it was renamed away first, a cloud sync in between found it missing
+      // and brought the cloud's version back over the edit.
       if (!backedUp) {
         try { FS.mkdir(`${dir}/backups`); } catch { /* there already */ }
-        const backup = `${dir}/backups/${name.replace(/\.sav$/i, '')} (before edit).sav`;
-        try { FS.unlink(backup); } catch { /* none yet */ }
-        FS.rename(path, backup);
+        await copyFile(FS, path, `${dir}/backups/${name.replace(/\.sav$/i, '')} (before edit).sav`);
         backedUp = true;
       }
       const why = await storeSave(FS, name, model.toBlob());

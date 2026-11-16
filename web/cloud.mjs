@@ -20,6 +20,7 @@ import { S3Error, s3FromEnv } from './s3.mjs';
 import { SAVE_HEADER, checkSave } from './saves.js';
 import { DATA_SET_FILES } from './dataset.js';
 import { zipEntries } from './zip.js';
+import { MAX_TACTIC, pruneRemoved, validTactic } from './tacticsync.js';
 
 const SESSION = 'cm_session', OAUTH = 'cm_oauth';
 const SESSION_DAYS = 30;
@@ -30,7 +31,6 @@ const SESSION_DAYS = 30;
 export const MAX_GZ = 400 << 20;
 export const MAX_RAW = 1024 << 20;
 export const MAX_TACTICS = 200;            // tactics of an account in the cloud (a tactic file: 1,476 bytes)
-const MAX_TACTIC = 4096;                   // bytes of one tactic file
 export const MAX_SET_ZIP = 48 << 20;       // a data set as a zip (the 3.9.68 data: about 61 MB, some 20 MB zipped)
 
 const b64u = (s) => Buffer.from(s, 'utf8').toString('base64url');
@@ -640,7 +640,6 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   // mtime }], removed: { name: time } }, written only over the version the page last read (x-base-etag; 409 else), so
   // two devices merge instead of writing over each other.
   const tacticsKey = (sub) => `tactics/${sub}.json`;
-  const validTacticName = (n) => typeof n === 'string' && /^[^\\/:*?"<>|\u0000-\u001f]{1,100}\.tct$/i.test(n) && !n.startsWith('.');
   async function tactics(req, res, user, method) {
     const key = tacticsKey(user.sub);
     if (method === 'GET') {
@@ -654,7 +653,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     }
     if (method !== 'PUT') { req.resume(); send(res, 405, { error: 'GET or PUT' }); return; }
     let body;
-    try { body = JSON.parse((await readBody(req, (MAX_TACTICS + 1) * (MAX_TACTIC * 2))).toString()); }
+    try { body = JSON.parse((await readBody(req, (MAX_TACTICS + 1) * (MAX_TACTIC * 2) + (1 << 20))).toString()); }
     catch (err) { send(res, err.status === 413 ? 413 : 400, { error: err.status === 413 ? 'too many tactics' : 'not JSON' }); return; }
     const list = Array.isArray(body?.tactics) ? body.tactics : null, removed = body?.removed;
     if (!list || typeof removed !== 'object' || removed === null || Array.isArray(removed)) { send(res, 400, { error: 'tactics and removed, please' }); return; }
@@ -662,14 +661,15 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     const clean = [];
     for (const t of list) {
       const data = typeof t?.data === 'string' ? Buffer.from(t.data, 'base64') : null;
-      if (!validTacticName(t?.name) || !data || data.length === 0 || data.length > MAX_TACTIC || !(Number(t.mtime) > 0)) {
+      if (!data || !validTactic(t?.name, data.length) || !(Number(t.mtime) > 0)) {
         send(res, 422, { error: `${String(t?.name).slice(0, 100)} is not a tactic the cloud keeps` });
         return;
       }
       clean.push({ name: t.name, data: data.toString('base64'), mtime: Math.floor(Number(t.mtime)) });
     }
-    const gone = Object.fromEntries(Object.entries(removed).filter(([n, at]) => validTacticName(n) && Number(at) > 0)
-      .slice(0, MAX_TACTICS * 5).map(([n, at]) => [n, Math.floor(Number(at))]));
+    // The removals kept are the newest of the last 400 days (pruneRemoved, as the page prunes them before it compares).
+    const gone = pruneRemoved(Object.fromEntries(Object.entries(removed).filter(([n, at]) => validTactic(n, 1) && Number(at) > 0)
+      .map(([n, at]) => [n, Math.floor(Number(at))])));
     const current = await s3.head(key), base = req.headers['x-base-etag'];
     if (base === undefined || (base === 'none' ? current !== null : current?.etag !== base)) { send(res, 409, { error: 'changed' }); return; }
     const etag = await s3.put(key, Buffer.from(JSON.stringify({ tactics: clean, removed: gone })), { type: 'application/json' });

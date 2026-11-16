@@ -140,6 +140,18 @@ const WEB = path.resolve(__dirname, '..');
         await vault.persist();
         const firstOf = async (p) => { const b = new Uint8Array(await (await vault.blob(p)).arrayBuffer()); return [b.length, b[SAVE_HEADER + 1]]; };
         out.renamedThenAdopted = { old: await firstOf('/user/backups/Uploaded 2002-01-05 (before edit).sav'), now: await firstOf('/user/Uploaded 2002-01-05.sav') };
+        // The save editor's older copy is a copy of the record (copy): the save keeps its name all the time, so a cloud
+        // sync in between never finds it missing; then the edited save is stored under the name (adopt).
+        await storeSave(FS, 'Edited.sav', new Blob([save(3 * MB, 4)]));
+        await vault.persist();
+        const copied = await vault.copy('/user/Edited.sav', '/user/backups/Edited (before edit).sav');
+        const listedBetween = (() => { try { return FS.stat('/user/Edited.sav').size; } catch { return null; } })();
+        await storeSave(FS, 'Edited.sav', new Blob([save(1 * MB, 6)]));
+        await vault.persist();
+        out.copied = { copied, listedBetween, old: await firstOf('/user/backups/Edited (before edit).sav'), now: await firstOf('/user/Edited.sav'),
+          backupState: FS.lookupPath('/user/backups/Edited (before edit).sav').node.vault };
+        FS.writeFile('/user/Fresh.sav', save(10, 1));          // written by the game, not yet in the vault
+        out.copyOfFresh = await vault.copy('/user/Fresh.sav', '/user/backups/Fresh (before edit).sav');
         out.junk = await storeSave(FS, 'Junk.sav', new Blob([new Uint8Array(3 * MB)]));
         out.junkStored = Boolean(nodes.get('/user/Junk.sav'));
         out.empty = await storeSave(FS, 'Empty.sav', new Blob([]));
@@ -173,6 +185,10 @@ const WEB = path.resolve(__dirname, '..');
     check('it stays through the vault\'s round, reads back the same, and the next visit lists it', r.uploadKept === 0 && r.uploadSame && r.nextVisit >= 2, JSON.stringify([r.uploadKept, r.uploadSame, r.nextVisit]));
     check('a renamed save keeps its bytes when a new file is stored under its old name before the vault\'s round',
       JSON.stringify(r.renamedThenAdopted) === JSON.stringify({ old: [0x416ec + 9 * MB, 5], now: [0x416ec + 2 * MB, 9] }), JSON.stringify(r.renamedThenAdopted));
+    check('the save editor\'s older copy is a copy of the record: the save stays listed, each keeps its bytes',
+      JSON.stringify(r.copied) === JSON.stringify({ copied: true, listedBetween: 0x416ec + 3 * MB, old: [0x416ec + 3 * MB, 4], now: [0x416ec + MB, 6], backupState: 'out' }),
+      JSON.stringify(r.copied));
+    check('a file not yet in the vault is not copied by it (the editor copies it itself)', r.copyOfFresh === false, String(r.copyOfFresh));
     check('a file that is not a save is refused and not stored; an empty one says so',
       /not a saved game/.test(r.junk ?? '') && r.junkStored === false && /empty \(0 bytes\)/.test(r.empty ?? ''), JSON.stringify([r.junk, r.junkStored, r.empty]));
     check('without the vault a save goes into the user folder in memory, as before', r.plainWhy === null && r.plain?.inMemory === 0x416ec + 1000 && r.plain.state === null, JSON.stringify([r.plainWhy, r.plain]));

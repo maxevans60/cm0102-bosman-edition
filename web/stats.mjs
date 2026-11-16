@@ -131,8 +131,10 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
       : save ? `A save is on its way: ${save.name}.` : 'No save.';
     return `CM 01/02: A player sent a report${said}${what ? ` (${what})` : ''}${r.note ? ', with a note' : ''}. ${saved}${site ? ` ${site.replace(/\/+$/, '')}/admin` : ''}`;
   }
-  function noticeLater(key, r) {
+  function noticeLater(key, report) {
     if (!notify?.on) return;
+    // Only what the notice says: the report itself (its log of up to 2,000 lines) is not held while it waits.
+    const r = { message: report.message, browser: report.browser, engine: report.engine, note: Boolean(report.note) };
     // save: the save as stored here; none, at the end of the wait: the report file says (Fly may run two machines, and
     // the save may have reached the other one).
     const go = async (save = null) => {
@@ -147,7 +149,7 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     };
     const timer = setTimeout(() => go(), noticeMs);
     timer.unref?.();
-    notices.set(key, { timer, go });
+    notices.set(key, { timer, go, summary: r });
   }
 
   const dayOf = (k) => (data.days[k] ??= { active: 0, seconds: 0, sessions: 0, new: 0, reports: 0, allowed: 0, declined: 0 });
@@ -444,14 +446,17 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     timer = setInterval(() => { flush(); }, flushMs);
     timer.unref?.();
   }
+  // The statistics first: Fly gives a machine that stops a few seconds. Then the notices still waiting for a save, for
+  // at most 3 s.
   async function stop() {
     if (timer) clearInterval(timer);
     timer = null;
-    await Promise.all([...notices.values()].map((n) => n.go()));      // the notices still waiting for a save
     await flush();
+    await Promise.race([Promise.all([...notices.values()].map((n) => n.go())), new Promise((ok) => { const t = setTimeout(ok, 3000); t.unref?.(); })]);
   }
 
-  return { ready, beat, choice, report, send, saveLink, saveDone, saveBody, reportFile, forget, flush, summary, start, stop, get data() { return data; } };
+  return { ready, beat, choice, report, send, saveLink, saveDone, saveBody, reportFile, forget, flush, summary, start, stop, get data() { return data; },
+    pendingNotices: () => [...notices.values()].map((n) => n.summary) };
 }
 
 // The store of an S3 client (s3.mjs): getBuffer and put; head and presign for the saves that players send.

@@ -260,12 +260,13 @@ test('tactics in the cloud: one record per account, changed only from its last v
   assert.deepEqual(await r.json(), { tactics: [], removed: {}, etag: null, maxTactics: 200 });
   const tct = Buffer.alloc(1476, 3).toString('base64');
   const put = (body, base) => b.send('PUT', '/api/tactics', JSON.stringify(body), { 'content-type': 'application/json', 'x-base-etag': base });
-  r = await put({ tactics: [{ name: 'My 4-4-2.tct', data: tct, mtime: 1762770000000 }], removed: { 'Old.tct': 1762760000000 } }, 'none');
+  const removedAt = Date.now() - 86400000;                // a day ago: removals older than 400 days are dropped
+  r = await put({ tactics: [{ name: 'My 4-4-2.tct', data: tct, mtime: 1762770000000 }], removed: { 'Old.tct': removedAt } }, 'none');
   assert.equal(r.status, 200, await r.clone().text());
   const { etag } = await r.json();
   const got = await (await b.get('/api/tactics')).json();
   assert.deepEqual(got.tactics, [{ name: 'My 4-4-2.tct', data: tct, mtime: 1762770000000 }]);
-  assert.deepEqual(got.removed, { 'Old.tct': 1762760000000 });
+  assert.deepEqual(got.removed, { 'Old.tct': removedAt });
   assert.equal(got.etag, etag);
   assert.ok(s3fake.objects.has('tactics/2000077.json'));
   assert.equal((await put({ tactics: [], removed: {} }, 'none')).status, 409, 'another device wrote it since');
@@ -505,6 +506,8 @@ test('a large save that went up less than 10 minutes ago waits; it goes when tha
   let p = planSync(local, cloud, state, { replace: false, now });
   assert.deepEqual(names(p), ['New big.sav', 'Old big.sav', 'Small.sav'], 'a small save, a first upload and one past its time go');
   assert.deepEqual(p.held, ['Big.sav']);
+  p = planSync(local, cloud, { ...state, 'Big.sav': { ...state['Big.sav'], upAt: now + 3600000 } }, { replace: false, now });
+  assert.deepEqual(p.held, [], 'a clock set back an hour does not hold it');
   p = planSync(local, cloud, state, { replace: false, now, force: true });
   assert.deepEqual(names(p), ['Big.sav', 'New big.sav', 'Old big.sav', 'Small.sav'], 'the tab is left: everything goes');
   assert.deepEqual(p.held, []);

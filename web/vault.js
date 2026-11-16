@@ -273,6 +273,28 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     });
   }
 
+  // A file of the vault copied under another name, as a record of its own: the browser copies the Blob, not the page,
+  // and the file keeps its name all the while. The save editor's older copy: it once renamed the save away and stored
+  // the edited one after, and a cloud sync in between found the save missing and brought the cloud's back over the
+  // edit. Resolves to false for a file whose bytes are not in the vault yet (written, not stored): the caller copies it.
+  function copy(from, to) {
+    return serial(async () => {
+      const node = lookup(from);
+      if (!node || !managed.has(node)) return false;
+      if (node.vault === 'in' && (node.mtime !== node.vaultMtime || node.usedBytes !== node.vaultSize)) return false;
+      if (node.vaultKey !== from) await rekey(node, from);
+      const rec = await get(from);
+      if (!rec) return false;
+      for (const other of [...managed]) if (other.vaultKey === to) { const q = alive(other); if (q && q !== to) await rekey(other, q); }
+      await put(to, { ...rec });
+      mine.add(to);
+      const old = lookup(to);
+      if (old) managed.delete(old);
+      placeholder(to, rec.size, rec.mtime);
+      return true;
+    });
+  }
+
   // Without JSPI: the records become files of the user folder again (in memory, as before the vault).
   async function materialize() {
     let n = 0;
@@ -493,7 +515,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     stop,
     set active(on) { active = Boolean(on); },
     open, migrateFrom, mount, materialize, clear, instantiate, wrapFS, persist, bytes, view, blob, owns, records,
-    openForGame, readForGame, settle, adopt,
+    openForGame, readForGame, settle, adopt, copy,
     held: () => [...managed].filter((n) => n.vault === 'in').length,
   };
 }

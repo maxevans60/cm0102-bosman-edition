@@ -495,10 +495,13 @@ Saved games has an **Edit** button by each save. It opens the save editor (`edit
   example) gets the nearest one, and the editor says so.
 - The save is written under its own name, so Load Game lists it; the file as it was goes to `backups/` as "<name>
   (before edit).sav" (Saved games, Older copies). With Cloud Saves on, the edited save goes up as any other save.
-- A large save is not read whole: the editor reads the save's header and the nine tables it edits (a few MB) from the
-  browser's storage, and writes the new file as a Blob of the parts it did not change (slices of the old file, which
-  the browser copies on disk) and the tables it changed. The old file becomes the older copy by a rename, so it is not
-  read either. Before, a save of 690 MB was read whole and written whole, three copies in the tab's memory.
+- With the vault (Where the saves live), a large save is not read whole: the editor reads the save's header and the
+  nine tables it edits (a few MB) from the browser's storage, and writes the new file as a Blob of the parts it did not
+  change (slices of the old file, which the browser copies on disk) and the tables it changed. The older copy is a copy
+  of the save's record (`vault.copy`), so it is not read either, and the save keeps its name all the while (when it was
+  renamed away first, a cloud sync in between could bring the cloud's version back over the edit). Before, a save of
+  690 MB was read whole and written whole, three copies in the tab's memory. Without the vault (the Asyncify engine)
+  the save is in memory anyway, and the editor copies it as before.
 - If the save is loaded in the running game, save the changes in the editor and then load the save again: the game
   keeps its own copy until it loads.
 

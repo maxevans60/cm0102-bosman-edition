@@ -31,7 +31,7 @@
   <p>To play, the page keeps in your browser's storage on your device: the game files (so they download once), your saved
   games, your data sets and the game's settings, and a few choices of the page (for example your answer about the
   statistics). They are needed for the game to work, stay on your device and are not sent anywhere; with Cloud Saves,
-  your saves and data sets also go to your account (below). Without an account the site sets no cookies. Only if you
+  your saves, data sets and tactics also go to your account (below). Without an account the site sets no cookies. Only if you
   allow the statistics does the page also keep a random id of your browser for them (next section).</p>
 
   <h2>Usage statistics (only if you allow them)</h2>
@@ -56,8 +56,8 @@
   the statistics allowed, the browser's random id goes with the report, and when you are signed in, your account. No IP
   address is kept. We use reports only to find and fix errors; they are not sold or given to anyone, and the report and
   its saved game are deleted after 90 days. When a report comes, the developer gets a short notice through a messaging
-  service: the error's message, your browser's name and system, whether you wrote a note and the name of the saved game
-  you sent. What you wrote, the log and the saved game itself stay on this site.</p>
+  service: the error's message, your browser's name and system, the game's engine version, whether you wrote a note,
+  and the name and size of the saved game you sent. What you wrote, the log and the saved game itself stay on this site.</p>
 
   <h2>With an account</h2>
   <p>You sign in with your Google account. Google tells this site:</p>
@@ -71,8 +71,10 @@
 
   <h2>Cloud saves</h2>
   <p>If your account has cloud saves, each saved game you make goes to the site's storage, with its file name, its size
-  and the time it was saved; so do the data sets (your own copies of the game's database) that you make or upload. The storage is Tigris, an object store of Fly.io, where this site runs. Nothing else of the
-  game goes there. Your browser sends and gets these files from Tigris itself, with a link that this site makes for each
+  and the time it was saved; so do the data sets (your own copies of the game's database) that you make or upload, and
+  the tactics you save on the tactics screen or upload (each file with its name and time, and the names of the tactics
+  you deleted in Saved games with the time, so they go from your other devices too). The storage is Tigris, an object
+  store of Fly.io, where this site runs. Nothing else of the game goes there. Your browser sends and gets these files from Tigris itself, with a link that this site makes for each
   file and that works for 15 minutes, so Tigris sees your browser's IP address as any web server does.</p>
 
   <h2>Payments</h2>

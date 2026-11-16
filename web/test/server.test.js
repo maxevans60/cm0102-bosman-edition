@@ -26,7 +26,7 @@ before(async () => {
   writeFileSync(join(buildDir, 'cm0102_recomp.wasm'), Buffer.from([0, 0x61, 0x73, 0x6d]));
   writeFileSync(join(buildDir, 'seasons', 'rules.tsv'), 'season\n');
   writeFileSync(join(buildDir, 'CMakeCache.txt'), 'CM0102_WEB_SUSPEND:STRING=jspi\n');
-  server = createApp({ gameDir, buildDir, manifestPath });
+  server = createApp({ gameDir, buildDir, manifestPath, releaseCacheMs: 0 });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   base = `http://127.0.0.1:${server.address().port}`;
 });

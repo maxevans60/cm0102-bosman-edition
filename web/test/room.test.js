@@ -44,7 +44,12 @@ test('a save written over one of its size: room at once, no copy of the file whi
   const old = FS.open('/user/Big.sav');
   old.node.usedBytes = 40 << 20;                       // a save of 40 MB in the folder
   reserveSaveRoom(FS);
-  const node = writeSave(FS, 40 << 20);
+  let rooms = 0;
+  const Real = globalThis.Uint8Array;
+  globalThis.Uint8Array = class extends Real { constructor(...a) { super(...a); if (typeof a[0] === 'number' && a[0] > (30 << 20)) rooms++; } };
+  let node;
+  try { node = writeSave(FS, 40 << 20); } finally { globalThis.Uint8Array = Real; }
+  assert.equal(rooms, 1, 'the room is made once (not before the first write, whose bytes the file system copies anyway)');
   assert.equal(grown.n, 0, 'the file system never grew it');
   assert.equal(node.contents.length, Math.ceil((40 << 20) * 1.05) + (1 << 20));
   assert.equal(node.usedBytes, 40 << 20);
@@ -78,4 +83,13 @@ test('another file is left alone', () => {
   FS.write(s, new Uint8Array(10), 0, 10, 0);
   FS.write(s, new Uint8Array(10), 0, 10, 10);
   assert.equal(grown.n, 1);
+});
+
+test('off while the vault is off: IDBFS would store the whole room with the save', () => {
+  const { FS, grown } = memfs();
+  FS.open('/user/Big.sav').node.usedBytes = 40 << 20;
+  let on = false;
+  reserveSaveRoom(FS, { when: () => on });
+  const node = writeSave(FS, 2 << 20);
+  assert.ok(grown.n > 0 && node.contents.length < (4 << 20), `${node.contents.length} bytes of room`);
 });

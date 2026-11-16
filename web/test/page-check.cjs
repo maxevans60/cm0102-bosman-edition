@@ -464,8 +464,11 @@ const PORT = 8097;
     // request to the server, so the server itself is asked).
     const releaseFile = path.join(__dirname, '..', 'release.js'), was = fs.statSync(releaseFile);
     fs.utimesSync(releaseFile, was.atime, new Date(was.mtimeMs + 60000));
-    await p.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
-    await p.waitForSelector('#update:not([hidden])', { timeout: 5000 }).catch(() => {});
+    // The server keeps its answer 10 s: the page comes back into view until it sees the new one.
+    for (let i = 0; i < 8 && await p.isHidden('#update'); i++) {
+      await p.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+      await p.waitForSelector('#update:not([hidden])', { timeout: 2000 }).catch(() => {});
+    }
     const updateToast = await toasts();
     check('a new release on the server: the page shows New version and says so once', await p.isVisible('#update')
       && /A new version of the game is out/.test(updateToast), updateToast);

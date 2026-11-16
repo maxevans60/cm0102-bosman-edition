@@ -26,7 +26,7 @@ test('the notifier posts JSON that Discord (content), Slack and Telegram (text) 
   assert.equal(h.got[0].url, 'https://example.test/hook');
   assert.equal(h.got[0].init.method, 'POST');
   assert.equal(h.got[0].init.headers['content-type'], 'application/json');
-  assert.deepEqual(h.got[0].body, { content: 'hello', text: 'hello' });
+  assert.deepEqual(h.got[0].body, { content: 'hello', text: 'hello', allowed_mentions: { parse: [] } });
   const off = createNotifier({ url: '', fetch: h.fetch, log: () => {} });
   assert.equal(off.on, false);
   await off.notice('nothing');
@@ -116,4 +116,26 @@ test('the notices still waiting go out when the server stops', async () => {
   await s.send({ message: 'x', log: [] }, null, '');
   await s.stop();
   assert.equal(h.got.length, 1);
+});
+
+test('what a sender wrote cannot ping a channel or make a link: Discord mentions off, Slack markup escaped, @ broken', async () => {
+  const h = hook();
+  const n = createNotifier({ url: 'https://example.test/hook', fetch: h.fetch, log: () => {} });
+  await n.notice('Error: @everyone <!channel> <http://evil.example|click> & more');
+  const { content, text, allowed_mentions: am } = h.got[0].body;
+  assert.deepEqual(am, { parse: [] });
+  assert.doesNotMatch(content, /@everyone|<!channel>|<http/);
+  assert.match(text, /&lt;!channel&gt;/);
+  assert.match(text, /&amp; more/);
+  assert.match(content, /@\u200beveryone/);
+});
+
+test('a notice waiting for its save keeps only what it says, not the report', async () => {
+  const h = hook();
+  const notify = createNotifier({ url: 'https://example.test/hook', fetch: h.fetch, log: () => {} });
+  const s = createStats({ store: memoryStore(), notify, noticeMs: 60000 });
+  await s.send({ message: 'x', note: 'n', log: Array.from({ length: 2000 }, () => 'y'.repeat(400)) }, null, '');
+  const kept = JSON.stringify(s.pendingNotices());
+  assert.ok(kept.length < 400, `${kept.length} characters kept: ${kept.slice(0, 120)}`);
+  await s.stop();
 });

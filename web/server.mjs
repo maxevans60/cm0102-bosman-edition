@@ -256,8 +256,9 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
 // stats: the statistics (stats.mjs), or null for none; statsMode: 'optin' (the page asks first: nothing is sent or stored
 // for them before a yes) or 'optout' (on unless the player turns them off). admins: the emails of the admin page; adminToken: a token for it instead.
 export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath, cloud = null, site = {}, stats = null, statsMode = 'optin', admins = [],
-  adminToken = null }) {
+  adminToken = null, releaseCacheMs = 10000 }) {
   let inv = inventory({ gameDir, buildDir, asyncifyDir, manifestPath });
+  let released = { at: 0, release: null };              // /version.json's answer and when it was worked out
   const adminSet = new Set(admins.map((e) => e.trim().toLowerCase()).filter(Boolean));
   const token = adminToken && adminToken.length >= 16 ? adminToken : null;
   return http.createServer((req, res) => {
@@ -289,9 +290,14 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
       if (PAGES[path] && TEMPLATED.has(PAGES[path])) { sendTemplated(req, res, join(HERE, PAGES[path]), site); return; }
       if (PAGES[path]) { sendFile(req, res, join(HERE, PAGES[path]), TYPES[PAGES[path].slice(PAGES[path].lastIndexOf('.'))]); return; }
       if (path === '/version.json') {
-        inv = inventory({ gameDir, buildDir, asyncifyDir, manifestPath });
+        // Every open page asks every 10 minutes and when it comes back into view: the answer is kept 10 s, not worked
+        // out (every game file looked at) for each.
+        if (Date.now() - released.at >= releaseCacheMs) {
+          inv = inventory({ gameDir, buildDir, asyncifyDir, manifestPath });
+          released = { at: Date.now(), release: releaseOf(inv) };
+        }
         res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
-        res.end(JSON.stringify({ release: releaseOf(inv) }));
+        res.end(JSON.stringify({ release: released.release }));
         return;
       }
       if (path === '/files.json') {
@@ -393,9 +399,9 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     : 'second engine: none, so Safari and iPad browsers cannot play (web/README.md, "Other browsers")');
   // Statistics: in the bucket when there is one (BUCKET_NAME and the keys), else in memory only. CM_STATS=off: none.
   // A notice to the developer for each report a player sends (notify.mjs): CM_REPORT_WEBHOOK. Its link to the admin page
-  // is CM_SITE_URL, or the app's address on Fly.
+  // is CM_SITE_URL, else CM_PUBLIC_URL, else the app's address on Fly.
   const notify = createNotifier({ url: process.env.CM_REPORT_WEBHOOK ?? '' });
-  const siteUrl = process.env.CM_SITE_URL ?? (process.env.FLY_APP_NAME ? `https://${process.env.FLY_APP_NAME}.fly.dev` : '');
+  const siteUrl = process.env.CM_SITE_URL ?? process.env.CM_PUBLIC_URL ?? (process.env.FLY_APP_NAME ? `https://${process.env.FLY_APP_NAME}.fly.dev` : '');
   const stats = process.env.CM_STATS === 'off' ? null : createStats({ store: statsStore(s3FromEnv(process.env)), notify, site: siteUrl });
   stats?.start();
   const admins = (process.env.CM_ADMIN_EMAILS ?? '').split(',');
