@@ -1965,7 +1965,7 @@ rus-tur-33	2006	rus_first	2	22	-	-	-	ok	-	calendar	2	0	-	0	0	-	42
 rus-tur-34	2007	rus_first	2	22	-	-	-	ok	-	calendar	2	0	-	0	0	-	42
 rus-tur-35	2008	rus_first	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 rus-tur-36	2009	rus_first	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
-rus-tur-37	2010	rus_first	2	20	-	-	-	ok	after 38: 8+12, points unknown	transition	2	0	-	0	0	?	38
+rus-tur-37	2010	rus_first	2	20	-	-	-	ok	gap	transition	2	0	-	0	0	-	38
 rus-tur-38	2011	rus_first	2	20	3-4	-	-	ok	groups	transition	2	0	-	0	0	-	-
 rus-tur-39	2012	rus_first	2	17	3-4	-	-	ok	-	split	2	0	-	0	0	-	34
 rus-tur-40	2013	rus_first	2	19	3-4	-	-	ok	-	split	2	0	-	0	0	-	38

@@ -673,7 +673,7 @@ const int season_size_caps[] = {
     20,       /* pol_second */
     18,       /* por_prm */
     24,       /* por_second */
-    18,       /* rus_first */
+    22,       /* rus_first */
     16,       /* rus_prm */
     10,       /* sco_first */
     12,       /* sco_prm */
@@ -683,7 +683,7 @@ const int season_size_caps[] = {
     22,       /* spa_second */
     16,       /* swe_first */
     16,       /* swe_prm */
-    18,       /* tur_first */
+    21,       /* tur_first */
     20,       /* tur_second */
     18,       /* wel_first */
 };
@@ -827,10 +827,13 @@ const SeasonGrown season_grown[] = {
     {"nir_prm", 10, 16, SEASON_TEMPLATE_SHUFFLED},
     {"nor_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
     {"por_second", 18, 24, SEASON_TEMPLATE_SHUFFLED},
+    {"rus_first", 18, 22, SEASON_TEMPLATE_SHUFFLED},
     {"swe_prm", 14, 16, SEASON_TEMPLATE_SHUFFLED},
+    {"tur_first", 21, 21, SEASON_TEMPLATE_SHUFFLED},
+    {"tur_second", 20, 20, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 20;
+const int season_grown_count = 23;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -1014,6 +1017,17 @@ RT_WRAP(007d0c40, schedule_7d0c40)
     season_sizes_schedule(self, stage, count_at);
 }
 
+/* RusFirst::create_schedule */
+void o_007ea220(void);
+RT_WRAP(007ea220, schedule_7ea220)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_007ea220();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
 /* SwePrm::create_schedule */
 void o_0088feb0(void);
 RT_WRAP(0088feb0, schedule_88feb0)
@@ -1021,6 +1035,28 @@ RT_WRAP(0088feb0, schedule_88feb0)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_0088feb0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* TurFirst::create_schedule */
+void o_008fd220(void);
+RT_WRAP(008fd220, schedule_8fd220)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_008fd220();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* TurSecond::create_schedule */
+void o_008fe9b0(void);
+RT_WRAP(008fe9b0, schedule_8fe9b0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_008fe9b0();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }

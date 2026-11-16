@@ -113,6 +113,21 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   set_up_rules 0x7d16a0 also writes D: `mov word ptr [eax], 0x22` at 0x7d16bb with eax = +0xa9 (0x7d16aa), then
 #   passes that eax to create_schedule (0x7d173d, call 0x7d1746), which writes it again; nothing reads +0xa9 between,
 #   so the wrap's count after the original holds. It does not write +0xd9: shuffled.
+# - RusFirst (Russian First Division, 17 to 22, slice 12): create_table 0x7ea6c0 allocates 18 rows (push 0x426 at
+#   0x7ea6cc, the object in ebp from 0x7ea6c9) and stores 18 at 0x7ea6d3. Its take loop puts at most 18 clubs of the
+#   division into a stack array (`cmp bl, 0x12` at 0x7ea77d, store at 0x7ea787), orders them (0x4afbd0 at 0x7ea7ac:
+#   a qsort at 0x4afc0e, then random swaps within 3 x picks, 0x4afc13..0x4afc57), adds the first +0x3e (0x687430 at 0x7ea7cf) and moves the rest to division [0x9cf91c] (0x7ea7d6..0x7ea7ef). With
+#   fewer than +0x3e it returns 0 with an empty table (0x7ea7a3). sizes_rus_tur.py gives the loop the count.
+#   create_schedule 0x7ea220 makes 36 dates (D 0x24 at 0x7ea25a, 0x924 bytes at 0x7ea255) for 34 rounds; set_up_rules
+#   0x7ea810 sets 2 meetings (+0x3c at 0x7ea81d) and does not write +0xd9: shuffled.
+# - TurFirst (Süper Lig, 18 to 21, slice 12): create_table 0x8fddc0 stores 18 at 0x8fddd4 and allocates the table from
+#   +0x3e (movsx at 0x8fde69, call at 0x8fde7d; TABLE_FROM_COUNT). It takes the clubs of the division in the club
+#   order until +0x3e (0x8fdf2c..0x8fdf34) and fails unless it took exactly +0x3e (0x8fdf4a). create_schedule
+#   0x8fd220 makes 34 dates (D 0x22 at 0x8fd25a); set_up_rules 0x8fdf90 sets 2 meetings (0x8fdf9d), no +0xd9.
+# - TurSecond (the second tier, 17 to 20, slice 12): create_table 0x8ff150 allocates 20 rows (push 0x49c at 0x8ff15b,
+#   the object in esi from 0x8ff159) and stores 20 at 0x8ff162; its take loop ends at +0x3e (0x8ff21b) and fails
+#   unless it took exactly +0x3e (0x8ff235). create_schedule 0x8fe9b0 makes 38 dates (D 0x26 at 0x8fe9ea); set_up_rules
+#   0x8ff280 sets 2 meetings (0x8ff28d), no +0xd9. The cap stays 20: the row only makes it smaller (D5).
 # - ArgPrm (Primera, 20 to 2013/14, then 30, 28, 26, 24 and 30; slice 15): create_table 0x405540 allocates 20 rows
 #   (push 0x49c at 0x40554b, the object in esi from 0x405549) and stores 20 at 0x405552; create_schedule 0x404570
 #   makes 19 dates for the Apertura (stage -1, D at 0x4045aa) and 19 for the Clausura (stage 0, D at 0x404d9a), none
@@ -145,6 +160,9 @@ GROWN = {
     "swe_prm": (16, 0x88FEB0, "shuffled"),
     "nor_prm": (16, 0x7917C0, "shuffled"),
     "por_second": (24, 0x7D0C40, "shuffled"),
+    "rus_first": (22, 0x7EA220, "shuffled"),
+    "tur_first": (21, 0x8FD220, "shuffled"),
+    "tur_second": (20, 0x8FE9B0, "shuffled"),
     # Italy (0.7.2 slice 9). All four classes are sequential: set_up_rules sets flag 0x40 (ItaSerA 0x6416b7, ItaSerB
     # 0x64691a, ItaSerC1a 0x64b7e5, ItaSerC1b 0x64f9ae), so league_next_schedule_round 0x68a030 takes index + 1 with
     # no wrap (0x68a081..0x68a08f) and the template must hold exactly the rounds.
@@ -200,6 +218,12 @@ GROWN = {
     "kor_league": (16, 0x66B130, "shuffled"),
 }
 GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
+# Grown classes whose create_table allocates the table from the count (+0x3e) after the count store, so the table
+# has the rows of the season with no patch: file: (address of `movsx eax, word ptr [reg + 0x3e]`, its bytes). The
+# tool checks the bytes (table_sites).
+TABLE_FROM_COUNT = {
+    "tur_first": (0x8FDE69, b"\x0f\xbf\x45\x3e"),   # movsx eax, word ptr [ebp + 0x3e]
+}
 # Grown classes that count the clubs of the data (CLASSES rows with no store): create_table allocates the rows of
 # that count, so there is no table site, and the count stays the data's (no cap in season_size_caps). The engine
 # gives them the template of the count and the row's meetings; the class's own bounds and meetings take the row
@@ -214,7 +238,8 @@ GROWN_MODES = ("shuffled", "sequential", "mirrored", "halves")
 #   (0x63a79f, 0x63a7a5), sets 4 meetings for 10 and 3 for 12 (0x63a7be, 0x63a7c6) and allocates the count x 0x3b
 #   (0x63a7cc..0x63a7df), after set_up_rules called create_schedule (0x63a998).
 DATA_COUNT = {"ire_first": 12, "ire_prm": 12}
-# The rows that the class allocates: its largest original count (before the cap of GROWN); 0 for DATA_COUNT.
+# The rows that the class allocates: its largest original count (before the cap of GROWN), the cap for a class
+# whose table follows the count (TABLE_FROM_COUNT), and 0 for DATA_COUNT.
 HELD = {}
 for _f, (_n, _sched, _mode) in GROWN.items():
     assert _mode in GROWN_MODES, _f
@@ -222,8 +247,8 @@ for _f, (_n, _sched, _mode) in GROWN.items():
         assert _f not in CAPS and _n == DATA_COUNT[_f], _f
         HELD[_f] = 0
         continue
-    assert _n >= CAPS[_f], _f   # equal: only the meetings and dates change (Brazil)
-    HELD[_f] = CAPS[_f]
+    assert _n >= CAPS[_f], _f   # equal: only the meetings and dates change (TurSecond, Brazil)
+    HELD[_f] = _n if _f in TABLE_FROM_COUNT else CAPS[_f]
     CAPS[_f] = _n
 
 ROW_BYTES = 0x3B
@@ -239,6 +264,11 @@ def table_sites(read):
     sites = {}
     for _cls, file, _rules, stores in CLASSES:
         if file not in GROWN or file in DATA_COUNT:
+            continue
+        if file in TABLE_FROM_COUNT:
+            at, want = TABLE_FROM_COUNT[file]
+            if read(at, len(want)) != want:
+                raise SystemExit(f"league_sizes.py: {file}: no table allocation from the count at {at:#x}")
             continue
         want = (HELD[file] * ROW_BYTES).to_bytes(4, "little")
         found = []
@@ -569,6 +599,12 @@ if _os.path.dirname(_os.path.abspath(__file__)) not in _sys.path:
 import cup_sizes_east  # noqa: E402
 
 INSNS.update(cup_sizes_east.INSNS)
+# 0.7.2 slice 12: Russia and Turkey (sizes_rus_tur.py).
+import sizes_rus_tur  # noqa: E402
+
+assert CAPS["rus_first"] <= sizes_rus_tur.RUS_FIRST_TAKE_MAX
+assert not set(sizes_rus_tur.INSNS) & set(INSNS)
+INSNS.update(sizes_rus_tur.INSNS)
 # 0.7.2 slice 14: J1 halves of any count (sizes_asia.py).
 import sizes_asia  # noqa: E402
 

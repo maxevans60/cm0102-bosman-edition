@@ -322,6 +322,10 @@ if(NOT WIN32)
     target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_cup_sizes_east COMMAND season_cup_sizes_east_test)
     add_test(NAME cup_sizes_run_self COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_sizes_run.py" --self-test)
+    # Russia and Turkey at their real counts (0.7.2 league sizes, slice 12): the RusFirst take loop.
+    add_executable(season_sizes_rus_test tests/seasons/test_season_sizes_rus.c)
+    target_include_directories(season_sizes_rus_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_sizes_rus COMMAND season_sizes_rus_test)
     # Gap rows 19 and 20 of slice 6: no rules row or season database reaches the Croatian, Korean or Greek fallback.
     add_test(NAME cup_east_reach COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/cup_east_reach_check.py")
     set_tests_properties(cup_east_reach PROPERTIES SKIP_RETURN_CODE 77)

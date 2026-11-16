@@ -51,6 +51,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "smoke"))
 sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "recomp"))
+sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
 import league_sizes  # noqa: E402
 
 ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encoded.tsv")
@@ -62,6 +63,14 @@ ROWS = {
     "por_second": (2014, 2015, "Segunda Liga, 24 clubs (the class holds 18): a template of 46 dates"),
     "por_second@2008": (2008, 2009, "Segunda Liga, 16 clubs: fewer dates, the season ends on its usual day (D5)"),
     "swe_prm": (2025, 2026, "Allsvenskan, 16 clubs (issue 106, also swe_prm_run.py)"),
+    # Slice 12: Russia and Turkey.
+    "rus_first": (2005, 2006, "Russian First Division, 22 clubs (the class holds 18 and takes at most 18)"),
+    "rus_first@2011": (2011, 2012, "Russian First Division 2011-12: 20 clubs, 38 rounds, the first stage only (the split of "
+                                   "row 2010, played in 2012, is a gap: a season that spans two game years)"),
+    "rus_first@2012": (2012, 2013, "Russian First Division, 17 clubs in 2012/13 (row of a two-year season)"),
+    "tur_first": (2020, 2021, "Süper Lig, 21 clubs in 2020/21 (the class holds 18), 42 rounds"),
+    "tur_first@2021": (2021, 2022, "Süper Lig, 20 clubs in 2021/22"),
+    "tur_second": (2023, 2024, "Turkish second tier, 18 clubs in 2023/24 (the class holds 20): fewer dates"),
     # Slice 9: Italy. All four classes are sequential (flag 0x40): the template holds exactly the rounds.
     "ita_ser_a": (2005, 2006, "Serie A, 20 clubs (the class holds 18): 38 dates of a template of 34"),
     "ita_ser_b@2003": (2003, 2004, "Serie B, 24 clubs (the class holds 20): 46 dates of a template of 38"),
@@ -470,7 +479,7 @@ def edition_counts(file, edition, meetings=0):
 
 
 def edition_split(file, edition):
-    """The split of the row that an edition plays (edition_row), or None."""
+    """The split of the row that an edition plays (edition_season), or None."""
     return encoded_split(file, edition_season(file, edition))
 
 
@@ -940,7 +949,7 @@ def faults(work, file, year, last):
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
                  | rrc.division_differences(comps, rep_clubs))
-        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
+        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and own_difference(file, d[2]))
         # The report check reads the row of the game season; an Irish edition is a calendar year and plays the row of
         # its real season (edition 2017 row 2016), so where the two rows differ the edition checks above decide.
         diffs = [d for d in diffs if not (file in ("ire_prm", "ire_first") and edition_season(file, d[0]) != d[0])]
@@ -1032,6 +1041,12 @@ def rival_twice(season):
     rows = [r for r in csv.DictReader(open(path, encoding="utf-8"), delimiter="\t")
             if r["season"] == label and r["kind"] == "interzone"]
     return bool(rows) and not any(re.search(r"fecha \d+, draw match", r["note"]) for r in rows)
+
+
+def own_difference(file, text):
+    """1 when a rules report difference ("<file> (<name>), row ...") is one of the file itself, not of a file whose
+    name starts with it (tur_second and tur_second_b)."""
+    return text.split(" ", 1)[0] == file
 
 
 def arg_fixtures(log):
@@ -1391,6 +1406,26 @@ def self_test():
             edition_row("nor_prm", 2008) != (14, 2) or edition_row("nor_prm", 2009) != (16, 2) or
             edition_row("por_second", 2014) != (24, 2)):
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
+    # Slice 12: Russia changes from calendar years (edition 2006 plays row 2005, real season 2006) to two-year
+    # seasons (edition 2012 plays row 2012, real season 2012–13).
+    if (edition_row("rus_first", 2006) != (22, 2) or edition_row("rus_first", 2012) != (17, 2) or
+            edition_row("rus_first", 2013) != (19, 2) or edition_row("tur_first", 2020) != (21, 2) or
+            edition_row("tur_second", 2023) != (18, 2)):
+        bad.append(("edition rows", [(f, y, edition_season(f, y), edition_row(f, y)) for f, y in
+                                     (("rus_first", 2006), ("rus_first", 2012), ("rus_first", 2013),
+                                      ("tur_first", 2020), ("tur_second", 2023))]))
+    # The split of an edition takes the row of edition_season (slices 7 and 12).
+    if (edition_split("wel_first", 2026) != encoded_split("wel_first", 2026) or
+            edition_split("nir_prm", 2010) != encoded_split("nir_prm", 2010) or edition_split("rus_first", 2006)):
+        bad.append(("edition split", "wel_first 2026, nir_prm 2010, rus_first 2006"))
+    # The long 2011-12 Russian season (slice 12, lead decision 16 November): edition 2011 plays row 2011 and no
+    # split; the split of the first stage row (2010) is a gap.
+    if edition_season("rus_first", 2011) != 2011 or edition_split("rus_first", 2011) or encoded_split("rus_first", 2010):
+        bad.append(("rus_first 2011", edition_season("rus_first", 2011), edition_split("rus_first", 2011)))
+    # A difference of tur_second_b (TFF 2. Lig) is not one of tur_second.
+    if (own_difference("tur_second", "tur_second_b (TFF 2. Lig), row rus-tur-239: game 10, table 38 (38)") or
+            not own_difference("tur_second", "tur_second (TFF 1. Lig), row rus-tur-1: game 20, table 18 (18)")):
+        bad.append(("own difference", "tur_second"))
     # Slice 9: the Italian rows of the runs.
     for file, season, want in (("ita_ser_a", 2005, (20, 2)), ("ita_ser_b", 2003, (24, 2)), ("ita_ser_b", 2018, (19, 2)),
                                ("ita_ser_c1a", 2004, (19, 2)), ("ita_ser_c1a", 2012, (17, 2)),
