@@ -31,6 +31,7 @@ READERS = {
     "season_kind_club_world.c": ("season_rules_find(", "the club competitions outside UEFA only"),
     "season_playoff_winners.c": ("season_rules_find(", "the Brazilian Série B only"),
     "season_pol_first.c": ("season_rules_find(", "the Ekstraklasa only"),
+    "season_mls.c": ("season_rules_find(", "the MLS only (gap row 7)"),
     "season_sizes_arg_second.c": ("season_rules_find(", "the Argentine second division (Primera B Nacional) only"),
     "season_uefa.c": ("season_rules_find(", "the UEFA Cup only"),
     "season_report.c": ("season_rules_find(", "the rules report of the tests, the row of each season, which "

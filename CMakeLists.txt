@@ -314,6 +314,10 @@ if(NOT WIN32)
     add_executable(season_ita_rules_test tests/seasons/test_season_ita_rules.c src/recomp_rt/win/season_ita_rules.c)
     target_include_directories(season_ita_rules_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_ita_rules COMMAND season_ita_rules_test)
+    # The MLS of real life: conferences, unbalanced schedule, play-off (0.7.2 gap row 7).
+    add_executable(season_mls_plan_test tests/seasons/test_season_mls_plan.c src/recomp_rt/win/season_mls_plan.c)
+    target_include_directories(season_mls_plan_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_mls_plan COMMAND season_mls_plan_test)
     # The size step at a season change (0.7.2 league sizes, slice 3, D13).
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)
