@@ -110,7 +110,7 @@ static uint32_t english_list(uint32_t self)
     g_mem[rec + NATION_LOADED] = 0;
     cpu.ecx = self;
     rt_callback(0x7acfc0u, 0, NULL);
-    cpu = saved;
+    if (!rt_unwinding) cpu = saved;     /* an unwind keeps the esp of the frame it resumes */
     g_mem[rec + NATION_LOADED] = (uint8_t)flags;
     uint32_t second = rd32(g_mem, self);
     wr32(g_mem, self, first);
