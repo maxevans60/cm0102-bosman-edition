@@ -298,7 +298,8 @@ RT_WRAP(005752e0, eng_chain)
     if (!champion || last < 0 || !row_club(third, last) || *row_status(third, last) != STATUS_STAYS) return;
     if (may_go_up(third, champion) || rt_unwinding) return;
     int rows = (int16_t)rd16(g_mem, conf + COMP_CLUBS), next = -1;
-    for (int i = 1; i < rows && i < 64 && next < 0 && !rt_unwinding; i++)
+    /* Not past the relegation places: a row of status 3 goes down (review of 16 November). */
+    for (int i = 1; i < rows && i < 64 && next < 0 && !rt_unwinding && *row_status(conf, i) != STATUS_DOWN; i++)
         if (row_club(conf, i) && *row_status(conf, i) != STATUS_UP && *row_status(conf, i) != STATUS_WINNER &&
             may_go_up(third, row_club(conf, i)))
             next = i;

@@ -467,7 +467,7 @@ static int six_place(uint32_t cup, uint32_t league, int16_t slot)
 
 void season_playoffs_draw_round(uint32_t cup, int round)
 {
-    if ((round != 0 && round != 1) || !readable(cup) || (int16_t)rd16(g_mem, cup + 0x3c) != 3) return;
+    if (!playoffs_on() || (round != 0 && round != 1) || !readable(cup) || (int16_t)rd16(g_mem, cup + 0x3c) != 3) return;
     uint32_t rounds = rd32(g_mem, cup + 0xa3), arr = rd32(g_mem, cup + 0xad), rec = rd32(g_mem, cup + COMP_RECORD);
     uint32_t objects = rd32(g_mem, 0x00adadfcu);
     if (!readable(rounds) || !readable(arr) || !readable(rec) || !readable(objects)) return;
@@ -502,9 +502,9 @@ void season_playoffs_draw_round(uint32_t cup, int round)
         }
         if (nf != 2 || nw != 2) return;
         int second = p[fresh[0]] < p[fresh[1]] ? fresh[0] : fresh[1], third = fresh[0] + fresh[1] - second;
-        /* The winner of 5th v 6th is the one of the two winners whose place is the 5th or 6th of the play-off. */
-        int first = (int8_t)g_mem[league + UP] + 1;   /* the place of the 2nd */
-        int mid = p[won[0]] == first + 3 || p[won[0]] == first + 4 ? won[0] : won[1], out = won[0] + won[1] - mid;
+        /* The winner of 5th v 6th comes from quarter-final 2 (tie index 1: list 2 v 3, build_six), whatever places
+         * a reserve side skipped (playoff_rows). */
+        int mid = s[won[0]].tie == 1 ? won[0] : won[1], out = won[0] + won[1] - mid;
         SixSide n[4] = {s[second], s[mid], s[third], s[out]};
         memcpy(s, n, sizeof s);
     }

@@ -953,11 +953,13 @@ static int open_neighbour(uint32_t obj, uint32_t at)
  * relegation place in a season whose Ligue 3 row has that play-off: the play-off plays and its winner goes up. Only
  * Ligue 2 over Ligue 3: other rows with a relegation play-off over a play-off of four (Norway, Japan, Ireland,
  * Greece, Belgium, Argentina) have their own code or gap rows. 1 for that place, else 0. */
-static int below_playoff_place(const char *file, int season)
+static int below_playoff_place(const char *file, int season, int down)
 {
     if (!file || strcmp(file, "fra_second")) return 0;
     const SeasonLeagueRule *e = season_league_rule(file, season);
-    return e && e->po_down > 0 && season_playoffs_shape("fra_third", season, NULL);
+    int direct = -1;
+    /* Only when the direct places match (balanced: the 16th's place is the winner's), else the play-off stays off. */
+    return e && e->po_down > 0 && season_playoffs_shape("fra_third", season, &direct) && down == direct;
 }
 
 static void sizes_rules(uint32_t obj)
@@ -988,7 +990,7 @@ static void sizes_rules(uint32_t obj)
     /* League Two: towards the Conference, played or not (season_sizes_eng.c, slice 8, D15). The Conference:
      * towards the leagues below it, whose exchange takes as many clubs (gap row 25). */
     if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file))
-        set_places(obj, DOWN, DOWN_PLAYOFF, r->down + below_playoff_place(file, r->season), "relegation");
+        set_places(obj, DOWN, DOWN_PLAYOFF, r->down + below_playoff_place(file, r->season, r->down), "relegation");
     /* A division with no chain (open item 250, below): the row's places go to no division at the season change. The
      * class writes none (WelFirst::set_up_rules 0x925c50), so set_places would keep its 0. */
     /* Only with changing rules on: only then do the clubs go down (lone_exchange; review of 15 November). */
