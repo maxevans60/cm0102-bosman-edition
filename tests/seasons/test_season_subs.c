@@ -5,7 +5,7 @@
  * Premier Division in the seasons of 3 and 5, 3 and 7, 3 and 9, 5 and 9 substitutes), a count above what the
  * match engine holds (12 on the bench for the World Cup, clamped to 9), a file with no row, a file whose
  * count is unknown, the first row of a file that has qualifying rows after it (the European Champions Cup),
- * and a season outside the table. */
+ * a season outside the table, and an unknown count that keeps the latest earlier count of the file (item 274). */
 #include "season_rules.h"
 #include "season_subs_rule.h"
 
@@ -26,6 +26,15 @@ static void expect(int season, const char *file, int want_mask, int want_used, i
     else CHECK(used == -1, "%d %s: used was written (%d)", season, file, used);
     if (want_mask & SEASON_SUBS_BENCH) CHECK(bench == want_bench, "%d %s: bench %d, want %d", season, file, bench, want_bench);
     else CHECK(bench == -1, "%d %s: bench was written (%d)", season, file, bench);
+}
+
+/* The seasons of the rows that gave the counts (season_subs_rule_from). */
+static void expect_from(int season, const char *file, int want_used_from, int want_bench_from)
+{
+    int used = -1, bench = -1, used_from = -1, bench_from = -1;
+    season_subs_rule_from(season, file, &used, &bench, &used_from, &bench_from);
+    CHECK(used_from == want_used_from, "%d %s: used from %d, want %d", season, file, used_from, want_used_from);
+    CHECK(bench_from == want_bench_from, "%d %s: bench from %d, want %d", season, file, bench_from, want_bench_from);
 }
 
 int main(int argc, char **argv)
@@ -50,6 +59,18 @@ int main(int argc, char **argv)
     expect(2000, "eng_prm", 0, 0, 0);
     /* The first numeric row of a file with qualifying rows after it: the Champions League in 2012/13. */
     expect(2012, "european_cup", both, 3, 7);
+    /* Item 274: an unknown count in a season row keeps the latest earlier count of the file, and the lookup says
+     * which season gave it. The MLS bench of 2026 is unknown (9 in 2025), its substitutes are known (5). */
+    expect(2026, "usa_mls", both, 5, 9);
+    expect_from(2026, "usa_mls", 2026, 2025);
+    /* The A-League substitutes of 2026 are unknown (5 in 2024; 2025 is unknown too), its bench is known (5). */
+    expect(2026, "aus_nsl", both, 5, 5);
+    expect_from(2026, "aus_nsl", 2024, 2026);
+    /* Argentina 2027: both unknown, both from 2025 (substitutes 5) and 2021 (bench 12, clamped to 9). */
+    expect(2027, "arg_prm", both, 5, SEASON_SUBS_MAX);
+    expect_from(2027, "arg_prm", 2025, 2021);
+    /* A count of the season itself gives its own season. */
+    expect_from(2022, "eng_prm", 2022, 2022);
     /* NULL arguments do nothing. */
     CHECK(season_subs_rule(2001, NULL, NULL, NULL) == 0, "NULL file");
     int u = -1;
