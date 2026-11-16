@@ -207,6 +207,67 @@ static void truncated(void)
           div[0].short_by);
 }
 
+static int replaced(int n, int c, int to, int feeder)
+{
+    for (int i = 0; i < n; i++)
+        if (mv[i].club == c && mv[i].from == STEP_NONE && mv[i].to == to && mv[i].replaces == feeder) return 1;
+    return 0;
+}
+
+/* The Veikkausliiga from 12 to 14 (2003; gap 37 of 0.7.2): its division below plays as now (D16), so it is a lowest
+ * division of the step with two feeders, the Ykkonen groups (no row: want -1). After the chain (one down, one up)
+ * it takes the best placed clubs of the groups that stayed, the places in turn (place 1 of each group, then place
+ * 2), and the club with no division of the best reputation takes each one's place in its group. With no club of
+ * no division for the group it takes nobody from it. */
+static void feeders(void)
+{
+    reset();
+    int a = add_division(0, 14, 12), g1 = add_division(1, -1, 10), g2 = add_division(2, -1, 10);
+    div[0].feed[div[0].nfeed++] = 1;
+    div[0].feed[div[0].nfeed++] = 2;
+    club[a + 11].div = 1;                          /* relegated to group 1 */
+    club[g1 + 0].div = 0;                          /* group 1's winner promoted */
+    int f1 = add_free(1, 900, 1), f2 = add_free(1, 800, 1), f3 = add_free(1, 700, 1);
+    int n = season_size_step_plan(div, 3, club, nclub, mv, 200);
+    CHECK(count_in(0) == 14 && count_in(1) == 10 && count_in(2) == 10, "feeders: %d %d %d", count_in(0),
+          count_in(1), count_in(2));
+    CHECK(moved(n, g2 + 0, 2, 0) && moved(n, g1 + 1, 1, 0), "feeders: group 2's 1st and group 1's 2nd go up");
+    CHECK(replaced(n, f1, 2, g2 + 0) && replaced(n, f2, 1, g1 + 1), "feeders: the best of no division take their places");
+    CHECK(club[f3].div == STEP_NONE && div[0].short_by == 0, "feeders: f3 stays, short %d", div[0].short_by);
+
+    /* No club with no division: the groups keep their clubs, the division lacks two. */
+    reset();
+    add_division(0, 14, 12);
+    add_division(1, -1, 10);
+    div[0].feed[div[0].nfeed++] = 1;
+    n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(n == 0 && count_in(1) == 10 && div[0].short_by == 2, "feeders none: %d moves, short %d", n, div[0].short_by);
+
+    /* No feeder club may go up (up_ok 0): a club with no division never joins the division straight, as its entry
+     * check was made against the feeder (0.7.2 sz10 review). */
+    reset();
+    add_division(0, 13, 12);
+    int h = add_division(1, -1, 10);
+    div[0].feed[div[0].nfeed++] = 1;
+    for (int k = 0; k < 10; k++) club[h + k].up_ok = 0;
+    int f = add_free(1, 900, 1);
+    n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(club[f].div == STEP_NONE && div[0].short_by == 1, "feeders barred: free club in %d, short %d", club[f].div,
+          div[0].short_by);
+}
+
+/* The Veikkausliiga from 14 to 13 (2006): AC Allianssi lost its licence. A club marked to leave goes to no division
+ * before the worst placed club; with no such club the worst placed goes. */
+static void leavers(void)
+{
+    reset();
+    int a = add_division(0, 13, 14);
+    club[a + 4].leave = 1;
+    int n = season_size_step_plan(div, 1, club, nclub, mv, 200);
+    CHECK(n == 1 && moved(n, a + 4, 0, STEP_NONE), "leave: the 5th leaves, %d moves", n);
+    CHECK(club[a + 13].div == 0, "leave: the 14th stays");
+}
+
 /* Gap 47: a division with no chain sends down only as many clubs as its no-division pool can replace. */
 static void lone_guard(void)
 {
@@ -259,6 +320,8 @@ static void lone_human(void)
 
 int main(void)
 {
+    feeders();
+    leavers();
     lone_human();
     lone_guard();
     outsiders_and_pool();

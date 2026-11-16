@@ -11,7 +11,6 @@
 2012	bench	fra_lge_cup (Coupe de la Ligue), row fra-107: game 3, table 7 (7)
 2012	bench	ita_ser_a (Serie A), row ita-189: game 9, table 12 (12)
 2012	bench	world_club_champ (FIFA Club World Cup), row club-world-211: game 7, table 12 (12)
-2012	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: Hoogstraten VV, KSK Kermt-Hasselt
 2012	club_list	Brazilian National Third Division: 21 of 21 listed clubs that the database holds (21 listed), 35 other clubs, 56 in all; not in it: -; others: Alecrim Futebol Clube, América Football Club (RJ), América Futebol Clube (AM), Araguaína Futebol e Regatas, Associação Desportiva Confiança, Botafogo Futebol Clube (SP), Botafogo Futebol e Regatas, Brasília Futebol Clube, Brusque Futebol Clube, Camaçari Futebol Clube, Cametá Sport Club, Ceilândia Esporte Clube, Central Sport Club, Centro Esportivo Nova Esperança, Centro Sportivo Alagoano, Clube Atlético Metropolitano, Clube Náutico Marcílio Dias, Esporte Clube Flamengo, Esporte Clube Gênus Rondoniense, Esporte Clube Juventude, Ferroviário Atlético Clube, Fluminense de Feira Futebol Clube, Grêmio Esportivo Brasil, Guarany Sporting Clube, Iraty Sport Club, Londrina Esporte Clube, Mixto Esporte Clube, Náuas Esporte Clube, Paulista Futebol Clube, Sociedade Esportiva River Plate, Sociedade Esportiva Vila Aurora, Sociedade Esportiva do Gama, Sport Club Corinthians Paranaense, Vilhena Esporte Clube, Ypiranga Futebol Clube
 2012	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK Croatia Sesvete, NK Marsonia 1909, NK Medjimurje Cakovec, NK Vrapce Zagreb
 2012	club_list	Danish First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: Blokhus Football Club, Boldklubben af 1893, FC Roskilde, Greve Idrætsforening
@@ -134,7 +133,6 @@
 2012	playoffs	jap_j2 (J.League Division 2), row aus-jap-kor-228: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th: single-match semi-finals and final at the higher-placed club; a draw')
 2012	playoffs	nor_first (Adeccoligaen), row nor-fin-113: game 1 up and 0 down play-off places, table 4 and 0 ('3rd-6th single-leg knockout; winner v Tippeligaen 14th, two legs')
 2012	rounds	arg_second (Primera B Nacional), row arg-usa-39: game 25, table 38 (2 meetings, zones -, extra 0)
-2012	rounds	bel_first (Belgian Pro League), row hol-bel-151: game 34, table 30 (2 meetings, zones -, extra 0)
 2012	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-39: game 19, table 38 (2 meetings, zones -, extra 0)
 2012	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-66: game 19, table 38 (2 meetings, zones -, extra 0)
 2012	rounds	cro_a1 (Prva HNL), row gre-pol-cro-336: game 30, table 33 (3 meetings, zones -, extra 0)

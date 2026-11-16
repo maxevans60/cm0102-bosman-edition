@@ -53,6 +53,7 @@
 #define CLUB_NAME 4u                /* long name, 52 bytes */
 #define CLUB_NATION 0x53u           /* nation pointer */
 #define CLUB_LAST_DIVISION 0x5bu    /* club_comp pointer: the division of the last season (0x689d99) */
+#define CLUB_GROUP 0x60u            /* club_comp pointer: the group of a division in groups (0x5960f7) */
 #define CLUB_REPUTATION 0x80u       /* s16 */
 #define NATION_COUNT 0xae2350u      /* the last 2 x nations rows of the club table are national teams (0x53b900) */
 #define REC_NATION 0x5du            /* club_comp record: nation pointer */
@@ -235,6 +236,8 @@ static int lone_file(const char *file);
 static void lone_exchange(uint32_t self);
 static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r);
 static void step_note_pair(uint32_t upper, uint32_t lower);
+static int step_alone(uint32_t upper, uint32_t lower);
+static void step_note_alone(uint32_t upper, uint32_t lower);
 static int step_index(uint32_t obj);
 static int step_running;
 static int row_reachable(uint32_t obj, const char *file);
@@ -1068,6 +1071,11 @@ RT_WRAP(00689c80, promote_relegate)
                !season_pol_first_moves_alone(upper);     /* issue 92: the Ekstraklasa's exchange of the season */
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
+    /* Slice 10: a size division whose division below plays as now (D16: the Ykkonen, fin_first) takes part in the
+     * step alone, as a lowest division. Its count changes (the Veikkausliiga 14 to 13 for 2006, 14 to 12 for 2011)
+     * by the clubs that leave it for no division (2006: AC Allianssi) or join it from none. */
+    if (!ours && season_changing_rules() && !season_change_is_creating() && step_alone(upper, lower))
+        step_note_alone(upper, lower);
     int change = ours && down >= 0 && up >= 0 && down != up, single = 0;
     /* When the places of the two divisions differ, the clubs move on their own only with changing rules on and
      * between two classes of the size table. Else the clubs move in pairs, so no size changes (with changing rules
@@ -1151,6 +1159,7 @@ static struct {
     uint32_t obj, rec;
     int year, nlower, nrows;
     int lower[STEP_MAX_LOWER];
+    int nfeed, feed[STEP_MAX_LOWER];        /* gap 37: the divisions below that play as now */
     uint32_t club[STEP_MAX_ROWS];
 } step_seen[STEP_DIVS];
 static int nstep_seen;
@@ -1192,6 +1201,47 @@ static int step_index(uint32_t obj)
     return i;
 }
 
+/* The size divisions that take part in the step alone (above): the division below plays as now (D16). */
+static int step_alone(uint32_t upper, uint32_t lower)
+{
+    const char *fu = season_change_file(upper), *fl = season_change_file(lower);
+    return fu && fl && !strcmp(fu, "fin_prm") && size_file(fu) && !size_file(fl);
+}
+
+/* Gap 37: the division below (a Ykkonen group) is noted as a feeder of the division, not as a division below it: the
+ * step takes its best placed clubs when the division grows and puts a club with no division in each one's place. */
+static void step_note_alone(uint32_t upper, uint32_t lower)
+{
+    if (step_running) return;
+    int u = step_index(upper);
+    if (u < 0 || !readable(lower) || !readable(rd32(g_mem, lower + COMP_RECORD))) return;
+    for (int k = 0; k < nstep_seen; k++)
+        if (k != u && step_seen[k].rec == rd32(g_mem, lower + COMP_RECORD)) return;    /* one record, one feeder */
+    int l = step_index(lower);
+    if (l < 0 || l == u) return;
+    for (int k = 0; k < step_seen[u].nfeed; k++)
+        if (step_seen[u].feed[k] == l) return;
+    if (step_seen[u].nfeed < STEP_MAX_LOWER) step_seen[u].feed[step_seen[u].nfeed++] = l;
+}
+
+/* Gap 37: the clubs that lost their licence after an edition (file, the edition that ends): they leave the division
+ * first when it has too many clubs. The Veikkausliiga 2006 lost AC Allianssi (fi.wikipedia.org/wiki/
+ * Veikkausliiga_2006); 2011 lost Tampere United (removed) (fi.wikipedia.org/wiki/Veikkausliiga_2011). The Ykkonen
+ * winner AC Oulu was also refused a licence, but club.dat has no AC Oulu (only FC Oulu), so it has no row. A club not
+ * in the division leaves no one in its place: the worst placed clubs go. */
+static const struct { const char *file; int edition; const char *club; } licence_lost[] = {
+    {"fin_prm", 2005, "AC Vantaan Allianssi"},
+    {"fin_prm", 2010, "Tampere United"},
+};
+
+static int lost_licence(const char *file, int edition, uint32_t club)
+{
+    for (size_t i = 0; i < sizeof licence_lost / sizeof licence_lost[0]; i++)
+        if (file && !strcmp(file, licence_lost[i].file) && edition == licence_lost[i].edition &&
+            !strncmp(win_str(club + CLUB_NAME), licence_lost[i].club, 52))
+            return 1;
+    return 0;
+}
 void season_sizes_step_note(uint32_t upper, uint32_t lower) { step_note_pair(upper, lower); }
 
 static void step_note_pair(uint32_t upper, uint32_t lower)
@@ -1453,6 +1503,8 @@ static void size_step_run(uint32_t trigger)
         div[d].started = obj != trigger && year != step_seen[d].year;
         div[d].nation = (int)(rd32(g_mem, step_seen[d].rec + REC_NATION) & 0x7fffffff);
         div[d].nlower = step_seen[d].nlower;
+        div[d].nfeed = step_seen[d].nfeed;
+        memcpy(div[d].feed, step_seen[d].feed, sizeof div[d].feed);
         memcpy(div[d].lower, step_seen[d].lower, sizeof div[d].lower);
     }
     /* The clubs of the last tables. */
@@ -1496,6 +1548,10 @@ static void size_step_run(uint32_t trigger)
         club[k].rep = (int16_t)rd16(g_mem, c + CLUB_REPUTATION);
         club[k].up_ok = 1;
         club[k].down_ok = 1;
+        club[k].leave = 0;
+        for (int d = 0; d < ndiv; d++)
+            if (club[k].div == d && step_seen[d].nfeed)
+                club[k].leave = lost_licence(season_change_file(step_seen[d].obj), step_seen[d].year, at[k]);
     }
     /* up_ok depends on the division that the club would join: the plan takes a club only into a division of its own
      * chain, the one above its own or, for a club with no division, the lowest of its nation. */
@@ -1504,10 +1560,20 @@ static void size_step_run(uint32_t trigger)
         if (d == STEP_NONE) {
             for (int e = 0; e < ndiv && to < 0; e++)
                 if (!div[e].nlower && div[e].nation == club[k].nation) to = e;
+            /* Gap 37: with a feeder, a club with no division joins the feeder (in a promoted club's place). */
+            for (int e = 0; to >= 0 && e < div[to].nfeed; e++)
+                if (div[to].feed[e] >= 0 && div[to].feed[e] < ndiv) {
+                    to = div[to].feed[e];
+                    break;
+                }
         } else if (d >= 0) {
-            for (int e = 0; e < ndiv && to < 0; e++)
+            for (int e = 0; e < ndiv && to < 0; e++) {
                 for (int j = 0; j < div[e].nlower; j++)
                     if (div[e].lower[j] == d) to = e;
+                /* Gap 37: a feeder's club goes up to the division that it feeds. */
+                for (int j = 0; to < 0 && j < div[e].nfeed; j++)
+                    if (div[e].feed[j] == d) to = e;
+            }
         }
         club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
         for (int j = 0; j < nlone_down; j++)
@@ -1527,7 +1593,17 @@ static void size_step_run(uint32_t trigger)
         int up = moves[i].from == STEP_NONE;
         for (int j = 0; moves[i].to >= 0 && j < div[moves[i].to].nlower; j++)
             up |= div[moves[i].to].lower[j] == moves[i].from;
-        if (up) {
+        for (int j = 0; moves[i].to >= 0 && j < div[moves[i].to].nfeed; j++)
+            up |= div[moves[i].to].feed[j] == moves[i].from;
+        if (moves[i].replaces >= 0) {
+            /* Gap 37: a club with no division takes the place of a feeder's club that went up. The feeder (a
+             * Ykkonen group, a class of fixed count: FinFirst::create_table stores 10 at 0x593a82) takes the clubs of
+             * its record when it makes its new table. It counts only the clubs of its group (+0x60, 0x593b1b):
+             * FinPrm::start_new_season 0x595d40 puts the First Division clubs in the groups (0x596050, called at
+             * 0x595d61) before the step runs, so the new club takes the group of the club whose place it takes. */
+            wr32(g_mem, c + CLUB_DIVISION, to);
+            wr32(g_mem, c + CLUB_GROUP, rd32(g_mem, at[moves[i].replaces] + CLUB_GROUP));
+        } else if (up) {
             /* Up: as a promotion of 0x689c80 (0x689d68..0x689d83). */
             uint32_t a[3] = {c, to, 0};
             call_this(F_MOVE_CLUB, step_seen[moves[i].to].obj, 3, a);

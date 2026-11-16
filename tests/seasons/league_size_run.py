@@ -95,6 +95,23 @@ ROWS = {
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
     "bra_nat_first": (2010, 2011, "Série A, 20 clubs in two meetings: 38 dates, no play-off"),
     "bra_nat_second": (2006, 2007, "Série B, 20 clubs in two meetings: 38 dates, no play-off"),
+    # Slice 10: the Netherlands, Belgium, Denmark and Finland. Periods scale to the rounds (D6): a periods line each
+    # edition. The calendar-year leagues (fin_prm) play edition Y by the row of season Y - 1.
+    "hol_first": (2005, 2006, "Eerste Divisie, 20 clubs (the class holds 18): 38 rounds, its four periods scaled"),
+    "hol_first@2010": (2010, 2011, "Eerste Divisie, 18 clubs: the class's 34 rounds and periods"),
+    "bel_second": (2008, 2009, "Second Division, 19 clubs: 38 rounds, no period winners, an odd count with periods"),
+    "bel_second@2016": (2016, 2017, "First Division B, 8 clubs that meet four times: 28 rounds, periods scaled"),
+    "bel_second@2022": (2022, 2023, "Challenger Pro League, 12 clubs: 22 rounds, then 6 and 6; the periods take no "
+                                     "result after the split"),
+    "bel_first": (2010, 2011, "Pro League, 16 clubs: 30 rounds, then Play-off I (points halved), Play-off II in two "
+                              "groups of 4 from 0 points, the 15th v 16th in five matches, the 15th starting on 3"),
+    "bel_first@2016": (2016, 2017, "First Division A, 16 clubs: 30 rounds, then Play-off I, Play-off II in groups "
+                                   "of 4 and 5 (with the 15th) from 0 points; the 16th plays no more"),
+    "den_prm": (2017, 2018, "Superliga, 14 clubs in two meetings (the class holds 12 in three): 26 rounds, then 6 and 8"),
+    "fin_prm": (2005, 2006, "Veikkausliiga, 14 clubs in two meetings (the class holds 12 in three), 13 in 2006"),
+    "fin_prm@2002": (2002, 2003, "Veikkausliiga, 12 clubs, then 14 in 2003: two more clubs of the Ykkonen go up"),
+    "fin_prm@2010": (2010, 2011, "Veikkausliiga, 14 clubs, then 12 in 2011: Tampere United and AC Oulu lose their licence"),
+    "fin_prm@2019": (2019, 2020, "Veikkausliiga, 12 clubs: 22 rounds, then 6 and 6 that meet once; 2020 one table"),
     # Slice 11: Croatia and Greece (sequential classes, flag 0x40).
     "cro_a2a": (2020, 2021, "Druga HNL, 18 clubs (the class holds 16): 34 rounds, tie-breaks of up to 9 pairs"),
     "cro_a2a@2012": (2012, 2013, "Druga HNL 16 in 2012/13, 12 in three meetings in 2013/14: the regroup of the "
@@ -196,6 +213,8 @@ ROWS = {
                                         "both winners go up"),
 }
 
+# Slice 10 (D6, src/recomp_rt/win/season_sizes_periods.c): leagues whose class plays periods.
+PERIOD_FILES = {"hol_first": 4, "bel_second": 3}
 # Files whose table holds both halves of a row of halves, so it plays twice the row's meetings (slice 14,
 # src/recomp_rt/win/season_sizes_asia.c): J1, and the K League stages as one table.
 HALVES_IN_TABLE = {"jap_j1", "kor_league"}
@@ -305,7 +324,62 @@ def split_ends(log, file):
     return out
 
 
-def end_faults(name, rows, after, sp):
+# Gap 35: splits whose later sections are groups of places that are not next to each other (season_split.c GROUPS):
+# {(file, first season, last season): the section of each place after match N, 0-based}. The Superliga 2016/17 to
+# 2019/20: the top 6, then the groups of 7th, 10th, 11th, 14th and of 8th, 9th, 12th, 13th (Wikipedia 2016-17 to
+# 2019-20_Danish_Superliga).
+GROUPS = {("den_prm", 2016, 2019): [0] * 6 + [1, 2, 2, 1, 1, 2, 2, 1],
+          # Gap 34: the Pro League's Play-off II groups of the 7th, 9th, 12th, 14th and the 8th, 10th, 11th, 13th
+          # (2016/17 to 2018/19 with the 15th), then the 15th and 16th (en.wikipedia.org 2009-10 to
+          # 2015-16_Belgian_Pro_League, 2016-17 to 2018-19_Belgian_First_Division_A).
+          ("bel_first", 2009, 2015): [0] * 6 + [1, 2, 1, 2, 2, 1, 2, 1, 3, 3],
+          ("bel_first", 2016, 2018): [0] * 6 + [1, 2, 1, 2, 2, 1, 2, 1, 2, 3]}
+# Gap 34: the points of each section at the split (season_split.c GROUPS): h halved, k kept, z from 0, b from 0 with
+# 3 for the section's best placed club (the 15th of the relegation play-off 2010/11 to 2014/15).
+SPLIT_POINTS = {("bel_first", 2009, 2009): "hzzk", ("bel_first", 2010, 2014): "hzzb",
+                ("bel_first", 2015, 2015): "hzzk", ("bel_first", 2016, 2018): "hzzk"}
+
+
+def split_points_faults(log, file, season_of):
+    """Gap 34: the line "<file> split <ed>: points at the split <rules>, <points of place 1> ..." of each split of a
+    file with SPLIT_POINTS: its rules, and 0 points in a 'z' section, 3 and 0 in a 'b' section."""
+    fails, tag = [], f"recomp: league sizes: {file} split "
+    for line in log.split("\n"):
+        if not line.startswith(tag) or ": points at the split " not in line:
+            continue
+        head, _, rest = line[len(tag):].partition(": points at the split ")
+        if not head.isdigit():
+            continue
+        ed = int(head)
+        season = season_of(ed)
+        want = next((v for (f, a, b), v in SPLIT_POINTS.items() if f == file and a <= season <= b), None)
+        rules, _, pts = rest.partition(",")
+        if want is None:
+            continue
+        if rules != want:
+            fails.append(f"{file} {ed}: points rules {rules} at the split, want {want}")
+            continue
+        sec, pts = groups_of(file, season), [int(x) for x in pts.split()]
+        if not sec or len(pts) != len(sec):
+            fails.append(f"{file} {ed}: points of {len(pts)} places at the split, want {len(sec or [])}")
+            continue
+        for k, rule in enumerate(rules):
+            got = [pts[p] for p in range(len(sec)) if sec[p] == k]
+            if rule == "z" and any(got):
+                fails.append(f"{file} {ed}: section {k + 1} starts on {got} points, want 0")
+            if rule == "b" and got != [3] + [0] * (len(got) - 1):
+                fails.append(f"{file} {ed}: section {k + 1} starts on {got} points, want 3 for its best, 0 others")
+    return fails
+
+
+def groups_of(file, season):
+    for (f, first, last), sec in GROUPS.items():
+        if f == file and first <= season <= last:
+            return sec
+    return None
+
+
+def end_faults(name, rows, after, sp, groups=None):
     """The faults of a table at its end after a split: each section holds its count of clubs by their places after
     match N, the table keeps each section together and above the next, and each club played N and its own section's
     matches. The places after match N need not be each place once at the end: League::sort_table 0x6827d0 writes
@@ -321,7 +395,10 @@ def end_faults(name, rows, after, sp):
     for n, m in sp:
         bounds.append((top, top + n, after + m * (n - 1)))
         top += n
-    secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
+    if groups and len(groups) == total:
+        secs = [groups[p] for p in places]
+    else:
+        secs = [next(k for k, (a, b, _w) in enumerate(bounds) if a <= p < b) for p in places]
     counts = [secs.count(k) for k in range(len(sp))]
     if counts != [n for n, _m in sp]:
         return [f"{name}: the sections hold {counts} clubs by the places after match {after}, want "
@@ -496,7 +573,10 @@ EARLIER_BY_FILE = {"bra_nat_first": 13, "bra_nat_second": 13, "kor_league": 17}
 
 def template_faults(name, cls, new, rounds, earlier=EARLIER):
     """The faults of a new template (D4, D5) against the class's dates. A template with no gap over 7 days has no
-    winter break (season_template.c)."""
+    winter break (season_template.c). The class's dates sorted, each once: a class can list a date twice and out of
+    order (HolFirst 2005/06: 3 December after 22 October and again after 26 November), and the engine leaves the
+    second out."""
+    cls = sorted(set(cls))
     fails = []
     if len(new) != rounds:
         return [f"{name}: {len(new)} dates, want {rounds}"]
@@ -636,6 +716,92 @@ def edition_split(file, edition):
     return encoded_split(file, edition_season(file, edition))
 
 
+def encoded_periods(file, season):
+    """The periods column of the encoded row of a file in a season (the after-table rule): an int, -1 unknown."""
+    best = None
+    with open(ENCODED, encoding="utf-8") as f:
+        cols = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            row = dict(zip(cols, line.rstrip("\n").split("\t")))
+            if row.get("comp_file") != file or not row.get("season", "").isdigit():
+                continue
+            s = int(row["season"])
+            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
+                best = (s, row.get("periods", "-"))
+    return int(best[1]) if best and best[1].isdigit() else -1
+
+
+def period_lines(log, file):
+    """{edition: (rounds, [lengths], winners)} of the periods lines of a file (season_sizes_periods.c)."""
+    out = {}
+    tag = f"recomp: league sizes: {file} periods "
+    for line in log.split("\n"):
+        if not line.startswith(tag):
+            continue
+        try:
+            ed, rest = line[len(tag):].split(": ", 1)
+            rounds, lengths, winners = rest.split(", ")
+            out[int(ed)] = (int(rounds.split()[1]), [int(x) for x in lengths.split()[1].split("+")], winners.split()[1])
+        except (ValueError, IndexError):
+            pass
+    return out
+
+
+def period_faults(log, file, editions):
+    """Each edition of a period class has a periods line: as many periods as the class, each of at least one round,
+    adding up to the rounds of its row, and the winners off when its row has no periods (D6)."""
+    if file not in PERIOD_FILES:
+        return []
+    fails, seen = [], period_lines(log, file)
+    for ed in sorted(editions):
+        if ed not in seen:
+            fails.append(f"{file} {ed}: no periods line")
+            continue
+        rounds, lengths, winners = seen[ed]
+        clubs, m = edition_row(file, ed)
+        want = rounds_of(clubs, m or 2)
+        row = encoded_periods(file, ed - 1 if calendar_year(file) else ed)
+        if row >= 2 and row != PERIOD_FILES[file]:
+            # Gap 33: the row's own periods, R // P rounds each (the Eerste Divisie 2005/06: six of six in 38, First
+            # Division B 2016/17: two of 14); rounds past P x (R // P) are in no period.
+            if rounds != want or lengths != [want // row] * row:
+                fails.append(f"{file} {ed}: periods of {lengths} in {rounds} rounds, want {row} of {want // row} "
+                             f"in {want}")
+            # The class names four periods; the fifth and sixth get their own names (season_sizes_period_name).
+            for k, name in ((5, "Fifth Period"), (6, "Sixth Period")):
+                if row >= k and f"recomp: league sizes: {file} {ed}: period {k} named {name}" not in log:
+                    fails.append(f"{file} {ed}: period {k} not named {name}")
+        elif rounds != want or sum(lengths) != rounds or len(lengths) != PERIOD_FILES[file] or min(lengths) < 1:
+            fails.append(f"{file} {ed}: periods of {lengths} in {rounds} rounds, want {PERIOD_FILES[file]} periods "
+                         f"adding up to {want}")
+        if winners != ("off" if row == 0 else "on"):
+            fails.append(f"{file} {ed}: period winners {winners}, the row has {row} periods")
+    return fails
+
+
+def bel_playoff_faults(log, file, editions):
+    """Gap 33: First Division B with two periods (2016/17 to 2019/20): the two period winners play a final, a group of
+    two that meets twice; a club that won both periods goes up with no final. The log line of BelSecond::
+    create_playoff_group (season_sizes_periods.c): "bel_second play-off <edition>: <clubs> clubs" or "... promoted
+    directly"."""
+    if file != "bel_second":
+        return []
+    fails, seen = [], {}
+    tag = f"recomp: league sizes: {file} play-off "
+    for line in log.split("\n"):
+        if line.startswith(tag):
+            ed, _, rest = line[len(tag):].partition(": ")
+            if ed.isdigit():
+                seen[int(ed)] = rest
+    for ed in sorted(editions):
+        if encoded_periods(file, ed) != 2:
+            continue
+        rest = seen.get(ed, "")
+        if not (rest.startswith("2 clubs") or rest.startswith("promoted directly")):
+            fails.append(f"{file} {ed}: play-off '{rest or 'no line'}', want a final of the two period winners")
+    return fails
+
+
 def report_rows(report, file):
     """The rows of a file in the rules report: [(season, phase, edition, clubs, meetings, matches)]."""
     out, cols = [], None
@@ -667,6 +833,43 @@ def no_playoff_faults(log, file, meetings):
         fails.append(f"{file}: no log line of a season with no play-off")
     if not any(x.startswith(f"recomp: league sizes: {file} ") and " champion " in x for x in lines):
         fails.append(f"{file}: no champion of the table in the log")
+    return fails
+
+
+# Gap 37: the clubs that lost their Veikkausliiga licence after an edition (season_sizes.c licence_lost).
+LICENCE_LOST = {("fin_prm", 2005): {"AC Vantaan Allianssi"}, ("fin_prm", 2010): {"Tampere United", "AC Oulu"}}
+DIVISION_NAME = {"fin_prm": "Veikkausliiga"}
+
+
+def step_faults(log, file):
+    """Gap 37: the size step of a division whose division below plays as now (the Veikkausliiga). Real life grew it
+    with clubs of the Ykkonen, so no club joins it from no division; after an edition with lost licences, a named club
+    that was in it is the one that leaves (a club leaves only to no division). The moves of a step come before its
+    line "step: <file> (<name>) <Y>: ...", the change after edition Y - 1."""
+    name = DIVISION_NAME.get(file)
+    if not name:
+        return []
+    fails, joined, left, gone = [], [], [], {}
+    tag, summary = "recomp: league sizes: step: ", f"recomp: league sizes: step: {file} ("
+    for line in log.split("\n"):
+        if line.startswith(summary):
+            head = line.split(") ", 1)[-1].split(":")[0]
+            if not head.isdigit():
+                continue
+            edition = int(head) - 1
+            fails += [f"{file} {edition}: {c} joins from no division" for c in joined]
+            if left:
+                gone[edition] = left
+            joined, left = [], []
+        elif line.startswith(tag):
+            text = line[len(tag):]
+            if text.endswith(f" from no division to {name}"):
+                joined.append(text[:-len(f" from no division to {name}")])
+            elif text.endswith(f" from {name} to no division"):
+                left.append(text[:-len(f" from {name} to no division")])
+    for (f, ed), clubs in LICENCE_LOST.items():
+        if f == file and ed in gone and not set(gone[ed]) & clubs:
+            fails.append(f"{file} {ed}: {gone[ed]} left, not a club that lost its licence ({sorted(clubs)})")
     return fails
 
 
@@ -1176,7 +1379,8 @@ def faults(work, file, year, last):
         if ed not in ends:
             fails.append(f"{file} {ed}: no split end line")
         else:
-            fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1])
+            fails += end_faults(f"{file} {ed}", ends[ed], sp[0], sp[1],
+                                groups_of(file, ed - 1 if calendar_year(file) else ed))
         bounds = split_bounds(log, file)
         if ed not in bounds:
             fails.append(f"{file} {ed}: no split bounds line")
@@ -1184,6 +1388,10 @@ def faults(work, file, year, last):
             fails += bounds_faults(f"{file} {ed}", bounds[ed], [x for x, _m in sp[1]])
     for ed, line in split_points_logged(log, file).items():
         want = encoded_points(file, edition_season(file, ed))
+        # Gap 34: a split of SPLIT_POINTS has its own section rules (split_points_faults checks them); the row's
+        # "points halved" is its first section only.
+        if any(f == file and a <= edition_season(file, ed) <= b for f, a, b in SPLIT_POINTS):
+            continue
         if want and line != want:
             fails.append(f"{file} {ed}: split points {line}, want {want}")
     if file in ("cro_a2a", "cro_a2b"):
@@ -1203,6 +1411,10 @@ def faults(work, file, year, last):
         if os.environ.get("RECOMP_TEST_LONE_HUMAN") == "1":
             fails += lone_human_faults(log, file, year, last)
     fails += no_playoff_faults(log, file, edition_row(file, year)[1] or 2)
+    fails += period_faults(log, file, {ed for ed, _n, _x, _l, _h in done})
+    fails += step_faults(log, file)
+    fails += split_points_faults(log, file, lambda ed: ed - 1 if calendar_year(file) else ed)
+    fails += bel_playoff_faults(log, file, {ed for ed, _n, _x, _l, _h in done if _l})
     fails += playoff_faults(log, file, {ed for ed, *_x in done})
     fails += j1_faults(log, file, {ed for ed, *_x in done})
     fails += exchange_faults(log, file, year)
@@ -1753,6 +1965,25 @@ def self_test():
         (template_faults("shrink", cls, shrink, 3), False),
         (template_faults("late", cls, late, 6), True),
         (template_faults("count", cls, good, 8), True),
+        # Gap 37: no club joins the Veikkausliiga from no division; the named club leaves after 2005.
+        (step_faults("recomp: league sizes: step: AC Vantaan Allianssi from Veikkausliiga to no division\n"
+                     "recomp: league sizes: step: FC Hieno from Ykkonen to Veikkausliiga\n"
+                     "recomp: league sizes: step: fin_prm (Veikkausliiga) 2006: 13 clubs, the row 13", "fin_prm"), False),
+        (step_faults("recomp: league sizes: step: FC KooTeePee from Veikkausliiga to no division\n"
+                     "recomp: league sizes: step: fin_prm (Veikkausliiga) 2006: 13 clubs, the row 13", "fin_prm"), True),
+        (step_faults("recomp: league sizes: step: FC KooTeePee from no division to Veikkausliiga\n"
+                     "recomp: league sizes: step: fin_prm (Veikkausliiga) 2007: 14 clubs, the row 14", "fin_prm"), True),
+        # Gap 35: the Superliga groups after the split (places 7, 10, 11, 14 and 8, 9, 12, 13); the contiguous form
+        # of 7 to 10 and 11 to 14 is a fault.
+        (end_faults("groups", [(p, 36) for p in range(6)] + [(p, 32) for p in (6, 9, 10, 13, 7, 8, 11, 12)], 26,
+                    [(6, 2), (4, 2), (4, 2)], GROUPS[("den_prm", 2016, 2019)]), False),
+        (end_faults("contiguous", [(p, 36) for p in range(6)] + [(p, 32) for p in range(6, 14)], 26,
+                    [(6, 2), (4, 2), (4, 2)], GROUPS[("den_prm", 2016, 2019)]), True),
+        # A class date listed twice, the first out of order (8 March, 26 April, 22 March, 26 April): the Wednesday of
+        # 11 March is in a gap of 14 days, not in a false one of 49.
+        (template_faults("twice", [d(2009, 3, 1), d(2009, 3, 8), d(2009, 4, 26), d(2009, 3, 22), d(2009, 4, 26)],
+                         [(d(2009, 3, 1), False), (d(2009, 3, 8), False), (d(2009, 3, 11), True),
+                          (d(2009, 3, 22), False), (d(2009, 4, 26), False)], 5), False),
     ]
     # Gap row 7: the MLS games of the plan table, the plan line and the shortage of a 2023 database.
     games = mls_games()
@@ -1858,6 +2089,31 @@ def self_test():
             encoded_split("wel_first", 2012) != (22, [(6, 2), (6, 2)]) or encoded_split("wel_first", 2005) is not None or
             split_numbers([(6, 1), (4, 1), (6, 1)]) != (5, 3, 5) or split_numbers([(6, 2), (6, 2)]) != (10, 10, 10)):
         bad.append(("split", encoded_split("nir_prm", 2010), encoded_split("wel_first", 2026)))
+    # Slice 10: the rows, the splits of the hand rows and the periods lines.
+    if (edition_row("hol_first", 2005) != (20, 2) or edition_row("bel_second", 2016) != (8, 4) or
+            edition_row("fin_prm", 2006) != (13, 2) or edition_row("den_prm", 2017) != (14, 2) or
+            encoded_split("bel_first", 2010) != (30, [(6, 2), (4, 2), (4, 2), (2, 5)]) or
+            encoded_split("den_prm", 2017) != (26, [(6, 2), (4, 2), (4, 2)]) or
+            edition_split("fin_prm", 2019) != (22, [(6, 1), (6, 1)]) or edition_split("fin_prm", 2020) is not None or
+            encoded_periods("bel_second", 2008) != 0 or encoded_periods("hol_first", 2005) != 6):
+        bad.append(("slice 10 rows", edition_row("hol_first", 2005), edition_row("bel_second", 2016),
+                    encoded_split("bel_first", 2010), encoded_split("den_prm", 2017)))
+    plog = ("recomp: league sizes: hol_first periods 2005: rounds 38, lengths 6+6+6+6+6+6, winners on\n"
+            "recomp: league sizes: hol_first 2005: period 5 named Fifth Period\n"
+            "recomp: league sizes: hol_first 2005: period 6 named Sixth Period\n"
+            "recomp: league sizes: bel_second periods 2008: rounds 38, lengths 11+14+13, winners off\n"
+            "recomp: league sizes: bel_second periods 2009: rounds 38, lengths 11+14+12, winners on")
+    if (period_lines(plog, "hol_first") != {2005: (38, [6, 6, 6, 6, 6, 6], "on")} or
+            len(period_faults("recomp: league sizes: hol_first periods 2005: rounds 38, lengths 9+9+11+9, winners on",
+                              "hol_first", {2005})) != 3 or     # the lengths, and periods 5 and 6 not named
+            period_faults(plog, "hol_first", {2005}) or period_faults(plog, "bel_second", {2008}) or
+            len(period_faults(plog, "bel_second", {2009})) != 2 or period_faults(plog, "den_prm", {2017}) or
+            period_faults("recomp: league sizes: hol_first periods 2001: rounds 34, lengths 8+8+10+8, winners on",
+                          "hol_first", {2001}) != ["hol_first 2001: period winners on, the row has 0 periods"] or
+            period_faults(plog, "hol_first", {2006}) != ["hol_first 2006: no periods line"] or
+            period_faults(plog.replace("Sixth", "Fourth"), "hol_first", {2005}) !=
+            ["hol_first 2005: period 6 not named Sixth Period"]):
+        bad.append(("periods", period_lines(plog, "hol_first"), period_faults(plog, "bel_second", {2009})))
     sl = splits("recomp: league sizes: wel_first split 2026: after 30, sections 6+4+6, meetings 1+1+1, rounds 5+3+5, "
                 "5 dates, points kept (Welsh Premier)\nrecomp: league sizes: wel_first split 2026: loaded after the "
                 "split (Welsh Premier)", "wel_first")
@@ -2027,6 +2283,15 @@ def self_test():
         bad.append(("j1", j1_faults(one, "jap_j1", {2005}), j1_faults(halves, "jap_j1", {2015})))
     for b in bad:
         print("FAIL self-test", b)
+    # Gap 34: the points at the split of the Pro League 2010/11 (places 1 to 16 after match 30).
+    pts = "recomp: league sizes: bel_first split 2010: points at the split hzzb, " + " ".join(
+        str(x) for x in [31, 29, 27, 25, 23, 21] + [0] * 8 + [3, 0])
+    zero_bad = pts.replace(" 0 0 0 0 0 0 0 0 3 0", " 0 0 9 0 0 0 0 0 3 0")
+    no_bonus = pts[:-4] + " 0 0"
+    if (split_points_faults(pts, "bel_first", lambda e: e) or not split_points_faults(zero_bad, "bel_first", lambda e: e)
+            or not split_points_faults(no_bonus, "bel_first", lambda e: e)
+            or not split_points_faults(pts.replace("hzzb", "hhhh"), "bel_first", lambda e: e)):
+        bad.append(("split points", split_points_faults(pts, "bel_first", lambda e: e)))
     print(("FAIL" if bad else "PASS") + " league_size_run self-test")
     return 1 if bad else 0
 

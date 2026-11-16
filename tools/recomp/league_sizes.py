@@ -155,6 +155,22 @@ CAPS = {f: max(n for _a, _r, n in stores) for _c, f, _u, stores in CLASSES if st
 #   allocates 18 rows (push 0x426 at 0x925b3b); create_schedule 0x9250f0 makes 34 dates for stage -1 only (D 0x22 at
 #   0x92512a, 0x8a2 bytes at 0x925125); set_up_rules 0x925c50 sets 2 meetings (0x925c9b) and does not write +0xd9:
 #   shuffled. Its cap stays 18: the row only takes the template engine (a cap equal to the class's count).
+# Slice 10. The table allocations are the pushes of 18 or 12 rows before the stores of CLASSES (sizes-check-north).
+# - HolFirst (Eerste Divisie, 18 to 20): create_schedule 0x5f5790 (HolFirst vtable 0x96b86c +0x3c) makes 34 dates for
+#   stage -1 (D 0x22 at 0x5f57ca); set_up_rules 0x5f6340 sets 2 meetings (0x5f6350) and does not write +0xd9:
+#   shuffled. Its four periods scale to the rounds (PERIOD_PATCHES).
+# - BelFirst (First Division, 16 and 18): create_schedule 0x41e010 (vtable 0x967940 +0x3c), 34 dates (0x41e04a);
+#   set_up_rules 0x41e9e0 writes +0xd9 0x43 (0x41ea6b): sequential. The cap is the class's 18: the row gives 16 and
+#   the split of Play-off I (slice 7, D7) with halved points.
+# - BelSecond (Second Division, 8 to 19): create_schedule 0x41f340 (vtable 0x9679f4 +0x3c), 34 dates (0x41f37e);
+#   set_up_rules 0x41fea0 writes +0xd9 0x43 (0x41ff34): sequential. Its three periods scale (PERIOD_PATCHES), and
+#   BelThird reads its row count - 3 (BEL_THIRD_ROW).
+# - DenPrm (Superliga, 12 and 14): create_schedule 0x552900 (vtable 0x9696e4 +0x3c), 33 dates (0x55293a);
+#   set_up_rules 0x553a00 sets 3 meetings (0x553a0d) and writes no +0xd9: shuffled. The rows give 2 meetings and the
+#   split after 26 or 22.
+# - FinPrm (Veikkausliiga, 12 to 14): create_schedule 0x5954b0 (vtable 0x96a4c0 +0x3c), 33 dates (0x5954ea);
+#   set_up_rules 0x595c90 sets 3 meetings (0x595ca2) and +0xd9 3 (0x595c94, 0x595cf3): shuffled. The rows give 2
+#   meetings from 2003 and the split after 22.
 GROWN = {
     "arg_prm": (30, 0x404570, "halves"),
     # - ArgSecond (second division, 25 in 2001/02 and 2017/18 to 2018/19, 20 to 2012/13, 22, 23, then 32 to 38; slice
@@ -195,6 +211,12 @@ GROWN = {
     # Slice 17 (D11): the cap stays the class's 28; the row changes the meetings, so the template needs the rounds.
     "bra_nat_first": (28, 0x429B50, "shuffled"),
     "bra_nat_second": (28, 0x42C140, "shuffled"),
+    # Slice 10 (Netherlands, Belgium, Denmark, Finland; periods D6, src/recomp_rt/win/season_sizes_periods.c).
+    "hol_first": (20, 0x5F5790, "shuffled"),
+    "bel_first": (18, 0x41E010, "sequential"),
+    "bel_second": (19, 0x41F340, "sequential"),
+    "den_prm": (14, 0x552900, "shuffled"),
+    "fin_prm": (14, 0x5954B0, "shuffled"),
     # Slice 11: Croatia and Greece. The four classes set +0xd9 bit 0x40 in set_up_rules (sequential: 0x514958,
     # 0x515e5a, 0x5eaf04, 0x5ebe4d). CroA1 keeps the class's 16 (10 and 12 clubs in 3 and 4 meetings).
     "cro_a1": (16, 0x5140E0, "sequential"),
@@ -414,7 +436,8 @@ PATCHES = {
 # A division leaves this set when the slice of its cup lands (lead merge of slices 4 and 5, and the merge of
 # slice 6: the floors any slice removed are gone). Slice 9 removes the Serie C1 groups: the regroup
 # ita_ser_a_regroup_serie_c1_clubs 0x642630 and the play-out rows take the counts (season_sizes_ita.c).
-FLOORS = {"bel_second"}
+# Slice 10 removes bel_second: BelThird reads the row count - 3 (BEL_THIRD_ROW).
+FLOORS = set()
 # The floor is the class's largest count.
 FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # The divisions whose places and exchange stay the class's, though the club moves give them the count of their row
@@ -440,7 +463,8 @@ assert not set(FIXED_EXCHANGE) & FLOORS
 # gives the clubs of the division there, up to the cap, with no floor. The floor keeps that number of clubs: it is the
 # target of the club moves at a new game (season_clubs.c class_size) and holds the exchange of the wrap of 0x689c80
 # (season_sizes.c). So with a floor of 16 or more, row 15 holds a club. tools/seasons/make_size_wraps.py checks it.
-ROW_READS = {"bel_second": (16, "BelThird::create_promotion_playoff_stage 0x423880 reads row 15 (0x423a6a..0x423a80)")}
+# Slice 10 (D22): BelThird reads the row count - 3 (BEL_THIRD_ROW below), so bel_second needs no floor; none is left.
+ROW_READS = {}
 
 CUP_INSNS = {
     0x5BAB90: ("add ebx, 0xb8", "ebx = ebx + rt_cup_add(0xb8u, ebx, 222u, 0x9cf5d0u, 0x9cf5ccu);"),
@@ -591,6 +615,26 @@ INSNS.update(DATES)
 # reached the matches of its own section, else the original.
 INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
                    "edi = (edi & 0xffff0000u) | (rt_league_played_target(esi, R16(esi + 0xa7u)) & 0xffffu);")
+# The sort 0x6827d0 writes each row's place at index played - 1 (0x682b0f, ebx the league, eax the played). After a
+# split the place after match N stays as the split read it (rt_league_keep_split_place, slice 10 test runs).
+INSNS[0x682B0F] = ("mov byte ptr [eax + esi - 1], cl",
+                   "if (!rt_league_keep_split_place(ebx, eax)) W8(eax + esi + 0xffffffffu, ecx & 0xffu);")
+# Gap 33: HolFirst::update_positions_and_status 0x5f6d20 pushes the period number for the news of a period winner
+# (0x5f7330); with six periods the wrap shows the fifth and sixth as the fourth, so the number gets the shift back.
+INSNS[0x5F6E05] = ("push edx", "t0 = edx + rt_hol_period_news(); esp -= 4; W32(esp, t0);")
+# Gap 33: the stage array of HolFirst has room for eight (rt_hol_stage_room) but +0x2c keeps the class's 6: the
+# League's update_for_date 0x6849aa ends the season when +0x30 reaches +0x2c - 1 (0x6849d1..0x6849da) and calls
+# advance_stage (vtable +0x28) before; HolFirst::advance_stage 0x5f6650 makes the same test (0x5f6659..0x5f6662).
+# With six periods the last stage is the second play-off group, 7 (rt_league_last_stage). A capacity of 8 for every
+# season sent a four-period season past its play-off into an empty slot (call to 0x1 from 0x6848fb, g10 hol2010).
+INSNS[0x6849D7] = ("dec eax", "eax = rt_league_last_stage(esi, eax - 1u);")
+INSNS[0x5F665F] = ("dec eax", "eax = rt_league_last_stage(esi, eax - 1u);")
+INSNS[0x4201AC] = ("dec edx", "edx = rt_league_last_stage(ecx, edx - 1u);")   # BelSecond::advance_stage
+# League::check_complete 0x689ad0 with its first argument 1 (the season change entry and season_playoffs.c) makes the
+# test too (0x689bdf..0x689be8): without this First Division B with two periods never ended its season (g13 bel2016).
+INSNS[0x689BE5] = ("dec ecx", "ecx = rt_league_last_stage(esi, ecx - 1u);")
+# League::load makes a stage array of +0x2c slots (0x688e4b); a HolFirst gets room for eight (rt_league_stage_bytes).
+INSNS[0x688E4B] = ("lea ecx, [ebp*4]", "ecx = rt_league_stage_bytes(esi, ebp * 4u);")
 # League::sort_table 0x6827d0 copies the table order +0xa3 into the global [0xb67a00] that the row comparators 0x683210
 # and 0x683410 call first (0x68287c..0x682884). With no tie rules list (+0xad, 0x682824) and the first tie rule 6
 # (+0xc5, 0x682835) it jumps past that copy to its own qsort with 0x683210 (0x682aa8..0x682ab9), so the comparator
@@ -621,6 +665,69 @@ INSNS[0x5B9320] = ("lea eax, [esp + 0x21c]", "edi = rt_fra_cfa_fill(esp + 0x21cu
 # The French Lower Division (constructor 0x5bd600): the same after its loop of the National and lower clubs (40).
 INSNS[0x5BD752] = ("lea edx, [esp + 0x1c]", "edi = rt_fra_lower_fill(esp + 0x1cu, edi); edx = esp + 0x1cu;")
 INSNS.update(CUP_INSNS)
+# Slice 10 (D22, src/recomp_rt/win/season_sizes_bel.c): BelThird::create_promotion_playoff_stage 0x423880 puts the
+# club of row 15 of the Second Division (+0x375, the table in ecx from 0x423a78) into the third tier's promotion
+# play-off; the third from the bottom is the row count - 3. esi is BelThird (+0x1c the id of the division above).
+BEL_THIRD_ROW = {0x423A80: ("mov edx, dword ptr [ecx + 0x375]", "edx = R32(ecx + rt_bel_third_row(esi, 0x375u));")}
+INSNS.update(BEL_THIRD_ROW)
+# Slice 10 (D6, src/recomp_rt/win/season_sizes_periods.c): the period bounds of add_result (the object in esi) and the
+# matches of each period stage (create_period_stage, the object in esi, the period in bl or al) scale to the rounds.
+PERIOD_PATCHES = {
+    0x5F65CE: (0x8, "rt_league_period_bound(esi, 0x8u)"),       # HolFirst::add_result 0x5f65b0: cmp ax, 8
+    0x5F65DA: (0x10, "rt_league_period_bound(esi, 0x10u)"),     # cmp ax, 0x10
+    0x5F65E6: (0x1A, "rt_league_period_bound(esi, 0x1au)"),     # cmp ax, 0x1a
+    0x5F6BD6: (0xA, "rt_league_period_length(esi, ebx & 0xffu, 0xau)"),   # create_period_stage 0x5f6ad0: period 2
+    0x5F6BE2: (0x8, "rt_league_period_length(esi, ebx & 0xffu, 0x8u)"),   # periods 0, 1 and 3
+    0x42012E: (0xA, "rt_league_period_bound(esi, 0xau)"),       # BelSecond::add_result 0x420110: cmp ax, 0xa
+    0x42013A: (0x16, "rt_league_period_bound(esi, 0x16u)"),     # cmp ax, 0x16
+    # Gap 33: BelSecond with the row's two periods: the play-off after stage 2 (advance_stage 0x4201a0, ecx the
+    # object), a final of the two period winners (create_playoff_group 0x420230, esi the object).
+    0x42021C: (0x3, "rt_bel_playoff_stage(ecx, 0x3u)"),         # cmp eax, 3
+    0x42028E: (0x4, "rt_bel_playoff_clubs(esi, 0x4u)"),         # cmp ebp, 4: the top-up
+    0x42036B: (0x4, "rt_bel_playoff_clubs(esi, 0x4u)"),         # cmp ebx, 4: the list
+    0x420412: (0x4, "rt_bel_playoff_clubs(esi, 0x4u)"),         # push 4: the group's clubs
+    # Gap 33: HolFirst with six periods (the Eerste Divisie 2005/06 to 2008/09): room for eight stages, the play-off
+    # groups at stages 6 and 7 (season_sizes_periods.c, rt_hol_playoff_stage: the original's 4 and 5 otherwise).
+    0x5F54F5: (0x18, "rt_hol_stage_room(0x18u)"),               # constructor: push 0x18, the stage array
+    0x5F6709: (0x4, "rt_hol_playoff_stage(esi, 0x4u)"),         # advance_stage 0x5f6650: cmp eax, 4
+    0x5F68EC: (0x4, "rt_hol_playoff_stage(esi, 0x4u)"),         # create_playoff 0x5f6720: dates of group 1
+    0x5F692C: (0x4, "rt_hol_playoff_stage(esi, 0x4u)"),         # group 1's stage number
+    0x5F697A: (0x10, "4u * rt_hol_playoff_stage(esi, 0x4u)"),   # mov [ecx + 0x10], eax
+    0x5F6992: (0x5, "rt_hol_playoff_stage(esi, 0x5u)"),         # dates of group 2
+    0x5F69D0: (0x5, "rt_hol_playoff_stage(esi, 0x5u)"),         # group 2's stage number
+    0x5F6A21: (0x14, "4u * rt_hol_playoff_stage(esi, 0x5u)"),   # mov [edx + 0x14], eax
+    0x5F6A35: (0x10, "4u * rt_hol_playoff_stage(esi, 0x4u)"),   # cmp [eax + 0x10], ebx
+    0x5F6A3A: (0x14, "4u * rt_hol_playoff_stage(esi, 0x5u)"),   # cmp [eax + 0x14], ebx
+    0x5F6A3F: (0x5, "rt_hol_playoff_stage(esi, 0x5u)"),         # mov [esi + 0x30], 5
+    0x5F604B: (0x4, "rt_hol_playoff_stage(edi, 0x4u)"),         # create_schedule 0x5f5790: cmp al, 4
+    0x5F604F: (0x5, "rt_hol_playoff_stage(edi, 0x5u)"),         # cmp al, 5
+    0x5F607A: (0x4, "rt_hol_playoff_stage(edi, 0x4u)"),         # the group's name: cmp al, 4
+    0x5F6F9C: (0x4, "rt_hol_playoff_stage(ebx, 0x4u)"),         # status news 0x5f6ee0: cmp al, 4
+    0x5F6FD1: (0x5, "rt_hol_playoff_stage(ebx, 0x5u)"),         # cmp al, 5
+    0x5F7117: (0x4, "rt_hol_playoff_stage(ecx, 0x4u)"),         # match news 0x5f7110: cmp al, 4
+    0x5F711D: (0x5, "rt_hol_playoff_stage(edi, 0x5u)"),         # cmp al, 5
+    # The group goes in the play-off's own slot of the stage array (+0xc), so no slot before it stays empty.
+    0x42042F: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # mov [ecx + 0xc], eax
+    0x420443: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # cmp [edx + 0xc], ebx
+    # The play-off's matches carry its stage number (+0x42 of the fixture), which League::add_result 0x685d30 checks
+    # against +0x30 (league.cpp 3214 at 0x685e5e): create_playoff_group 0x420230 gets the dates (vtable +0x3c,
+    # 0x4203a0) and makes the group (0x4203e1) with the play-off's own stage. create_schedule 0x41f340 makes the
+    # play-off dates for that stage (0x41f975, obj in edi) and the match news 0x420790 tells it (0x420839, obj in esi).
+    0x4203A0: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # push 3 (dates)
+    0x4203E1: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # push 3 (the group's stage)
+    0x41F975: (0x3, "rt_bel_playoff_stage(edi, 0x3u)"),         # cmp al, 3
+    0x420839: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # cmp al, 3
+    # Review: the news of a match (0x4209c0) and the +0x68 handlers (HolFirst 0x5f73d0, BelSecond 0x420d40; the
+    # object from rt_period_handler, as esi holds the table there).
+    0x420A09: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # BelSecond match news 0x4209c0: cmp al, 3
+    0x420DE4: (0x3, "rt_bel_playoff_stage(rt_period_handler(), 0x3u)"),   # cmp cl, 3
+    0x5F7480: (0x4, "rt_hol_playoff_stage(rt_period_handler(), 0x4u)"),   # cmp cl, 4
+    0x5F7485: (0x5, "rt_hol_playoff_stage(rt_period_handler(), 0x5u)"),   # cmp cl, 5
+    0x4205B9: (0xA, "rt_league_period_length(esi, eax & 0xffu, 0xau)"),   # create_period_stage 0x4204d0: period 0
+    0x4205CB: (0xC, "rt_league_period_length(esi, eax & 0xffu, 0xcu)"),   # periods 1 and 2
+}
+assert not set(PERIOD_PATCHES) & set(PATCHES)
+PATCHES.update(PERIOD_PATCHES)
 # 0.7.2 slice 6: the cups of eastern Europe and Asia (cup_sizes_east.py).
 import os as _os  # noqa: E402
 import sys as _sys  # noqa: E402

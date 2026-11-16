@@ -304,6 +304,10 @@ if(NOT WIN32)
     add_executable(season_template_test tests/seasons/test_season_template.c src/recomp_rt/win/season_template.c)
     target_include_directories(season_template_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_template COMMAND season_template_test)
+    # The periods of the Eerste Divisie and the Belgian Second Division at any size (0.7.2 league sizes, slice 10, D6).
+    add_executable(season_periods_test tests/seasons/test_season_periods.c src/recomp_rt/win/season_periods.c)
+    target_include_directories(season_periods_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_periods COMMAND season_periods_test)
     # The Irish calendar move of 2003 (gap row 2 of 0.7.2 league sizes).
     add_executable(season_calendar_test tests/seasons/test_season_calendar.c src/recomp_rt/win/season_calendar.c
         src/recomp_rt/win/season_template.c)

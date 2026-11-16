@@ -113,6 +113,62 @@ MEETINGS_FIX = {
     # standings (33 matches)": three meetings, the third set by the standings.
     ("cro_a1", 2006): (3, "33 matches of 12 clubs in the format cell"),
 }
+# First Division B 2016/17 to 2019/20: two periods of 14 rounds, each a double round robin of 8, so each pair meets four
+# times in a season of 28 rounds (check of 13 November 2026, sizes-check-north line 230; RSSSF belg2017 to belg2020).
+# The row has no halves: the season's meetings are 4 (lead decision, slice 10).
+for _y in range(2016, 2020):
+    MEETINGS_FIX[("bel_second", _y)] = (4, "two periods of 14 rounds of 8 clubs: four meetings (sizes-check-north 230)")
+
+# Splits that the size engine (slice 7, D7) cannot play as the text gives them, in their nearest form (D2; lead
+# decisions of slice 10, 13 November 2026): {(comp_file, first, last): (split, split_meet, evidence)}. The sections
+# add up to the count and each has its meetings.
+SPLIT_FORM_BY_HAND = {
+    # Pro League 2009/10 to 2018/19 (16 clubs, gap 34): Play-off I of the top 6 (points halved, a double round robin
+    # of 10 rounds); Play-off II from 0 points in two groups of four, the 7th, 9th, 12th, 14th and the 8th, 10th, 11th,
+    # 13th, each a double round robin (2016/17 to 2018/19 with the 15th in the second group and First Division B
+    # clubs, who cannot join here); the relegation play-off of the 15th and 16th in 2010/11 to 2014/15, five matches,
+    # the 15th starting with 3 points. In 2009/10 the 15th went to the Second Division final round and Mouscron (16th)
+    # left; from 2015/16 the 16th went down with no play-off: those places play no more (meetings 0). season_split.c
+    # GROUPS gives the places of the groups and the points of each section (en.wikipedia.org 2009-10 to
+    # 2015-16_Belgian_Pro_League and 2016-17 to 2018-19_Belgian_First_Division_A; RSSSF belg2010 to belg2019).
+    ("bel_first", 2009, 2009): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
+    ("bel_first", 2010, 2014): ("after 30: 6+4+4+2, points halved", "2+2+2+5",
+                                "Play-off I, Play-off II in two groups, the relegation play-off of five matches"),
+    ("bel_first", 2015, 2015): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
+    ("bel_first", 2016, 2018): ("after 30: 6+4+5+1, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in groups of 4 and 5 (with the 15th), the 16th plays no more"),
+    # Pro League 2023/24 to 2025/26: champions', Europe and relegation play-offs of 6, 6 and 4, each a double round
+    # robin of 10, 10 and 6 rounds, points halved (sizes-check-north line 214).
+    ("bel_first", 2023, 2025): ("after 30: 6+6+4, points halved", "2+2+2", "10, 10 and 6 rounds: two meetings each"),
+    # Superliga 2016/17 to 2019/20 (14 clubs): a championship round of 6 (a double round robin, 10 rounds) and two
+    # qualification groups of 4, the 7th, 10th, 11th, 14th and the 8th, 9th, 12th, 13th, each a double round robin of
+    # 6 rounds, points kept, with play-offs after them (gap 35; Wikipedia 2016-17 to 2019-20_Danish_Superliga). The
+    # groups are sections 2 and 3; season_split.c GROUPS gives their places.
+    ("den_prm", 2016, 2019): ("after 26: 6+4+4, points kept", "2+2+2",
+                              "a championship round of 6 and two groups of 4, each in two meetings"),
+    # Veikkausliiga (calendar year: row Y is the season Y + 1; the texts of rows 2019 and 2020 are one season apart).
+    # Real 2019 and 2021 (rows 2018, 2020): 22 rounds, then the top 6 and the bottom 6 play 5 more matches each, points
+    # carried in full; real 2020 (row 2019): the split was cancelled on 28 October 2020 (COVID-19) and the table
+    # after 22 rounds was final. The European play-off of the 4th to 6th and the Challenger Series winner is a
+    # play-off, not a split section (en.wikipedia.org 2019_Veikkausliiga, 2020_Veikkausliiga, 2021_Veikkausliiga;
+    # checked 15 November 2026).
+    ("fin_prm", 2018, 2018): ("after 22: 6+6, points kept", "1+1", "22 rounds, then sixes that meet once more"),
+    ("fin_prm", 2019, 2019): ("-", "-", "the split of 2020 was cancelled: one table of 22 rounds"),
+    ("fin_prm", 2020, 2020): ("after 22: 6+6, points kept", "1+1", "22 rounds, then sixes that meet once more"),
+    # Challenger Pro League 2022/23 (12 clubs): 22 rounds, then the top six and the bottom six play 10 more rounds
+    # each, points kept (sizes-check-north line 232: 32 matches): two meetings in each section.
+    ("bel_second", 2022, 2022): (None, "2+2", "22 rounds, then sections of 6 that play 10 more rounds"),
+}
+
+
+def split_by_hand(r):
+    """(split, split_meet) of SPLIT_FORM_BY_HAND for a row, None for the others; split None keeps the text's."""
+    for (file, first, last), (split, meet, _why) in SPLIT_FORM_BY_HAND.items():
+        if r["comp_file"] == file and first <= r["season"] <= last:
+            return split, meet
+    return None
 
 # The section meetings of split rows whose texts do not give them (0.7.2 league sizes, slice 11): {(comp_file, first
 # season, last season): (split_meet, evidence)}. Checked against the matches per club of the section tables.
@@ -174,6 +230,11 @@ SPLIT_POINTS_BY_HAND = {
 PERIODS_BY_HAND = {
     ("bel_second", 2016, 2019): (2, "First Division B: an opening and a closing period of 14 rounds (check of 13 "
                                     "November 2026, sizes-check-north line 230)"),
+    # Slice 10 review: rows of unknown periods that the research settles (lead decision, closest to real life).
+    ("hol_first", 2003, 2003): (0, "no period winners in 2001/02 to 2003/04: the nacompetitie took places 2 to 7 "
+                                   "(sizes-check-north line 83)"),
+    ("bel_second", 2009, 2009): (0, "spec D6: the Second Division has no periods in 2007/08 to 2009/10 (RSSSF "
+                                    "belg2010 and nl Wikipedia name none)"),
 }
 
 ORD = r"(\d+)(?:st|nd|rd|th)"
@@ -813,8 +874,11 @@ def encode():
             continue
         last[r["comp_file"]] = po
         split = encode_split(r)
+        hand = split_by_hand(r)
+        if hand and hand[0]:
+            split = hand[0]
         split_gap = SPLIT_GAPS.get((r["comp_file"], r["season"]))
-        if split_gap:
+        if split_gap and not (hand and hand[0]):
             split = "gap"
         e = {"id": r["id"], "season": r["season"], "comp_file": r["comp_file"], "tier": r["tier"],
              "clubs": r["clubs"] if isinstance(r["clubs"], int) else -1, "po_up": po[0], "po_down": po[1],
@@ -829,7 +893,8 @@ def encode():
                 continue
             zones, extra = encode_zones(r), encode_extra(r)
             e.update(meetings=meet[0], halves=encode_halves(split), zones=zones, extra=extra,
-                     periods=encode_periods(r), split_meet=encode_split_meetings(r, split),
+                     periods=encode_periods(r),
+                     split_meet=hand[1] if hand else encode_split_meetings(r, split),
                      rounds=encode_rounds(r, meet[0], zones, extra, split))
             if r["clubs"] == "unknown":
                 # A future row with no announcement: its structure is the last known row's (D20, the after-table

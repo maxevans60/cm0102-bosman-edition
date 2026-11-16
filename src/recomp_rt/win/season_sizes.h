@@ -159,6 +159,16 @@ int season_sizes_row_season(uint32_t obj, const char *file);
  * block (count to *count, the class's name code to *code). 0 when the plan gives none. */
 uint32_t season_sizes_split_dates(uint32_t obj, int meetings, int *count, uint32_t *code);
 
+/* The periods of the Eerste Divisie and the Belgian Second Division (slice 10, D6, season_sizes_periods.c): before
+ * the class's update_positions_and_status (vtable +0x94), a row with no periods sets every period flag, so no club
+ * wins a period; the target of check_complete for a period stage of an odd count (0 when its matches are played). */
+void season_periods_winners(uint32_t obj);
+uint32_t season_periods_played_target(uint32_t obj, uint32_t original);
+
+/* The row of the Belgian Second Division that the third tier's promotion play-off takes: the count less 3, row 15 in
+ * the base game (slice 10, season_sizes_bel.c). */
+int season_sizes_bel_third_row(uint32_t second);
+
 /* A template of `rounds` dates from the class's `have` dates at old (D4, D5; season_template_plan in `mode`), in a new
  * block of the game's heap; 0 when the plan has no room (the log says why). It does not free old. */
 uint32_t season_sizes_build_template(uint32_t obj, const char *file, uint32_t old, int have, int rounds, int mode);
@@ -179,5 +189,8 @@ void season_sizes_game_free(uint32_t p);
 /* The size step of a division pair that a class's own chain moves (not league_promote_and_relegate 0x689c80): the
  * Argentine Primera and second division (ArgPrm::process_promotion_relegation_chain 0x4067f0). */
 void season_sizes_step_note(uint32_t upper, uint32_t lower);
+
+/* The name of a period stage id that the original does not know (gap 33, season_sizes_periods.c), or NULL. */
+const char *season_sizes_period_name(int id, int abbreviated);
 
 #endif
