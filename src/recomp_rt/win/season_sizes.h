@@ -142,6 +142,9 @@ int season_sizes_irl_takes(const char *file, int n);
 void season_sizes_nir_rules(uint32_t obj, const char *file);
 uint32_t season_sizes_nation_lower(const char *file);
 int season_sizes_in_nation_lower(uint32_t record);
+/* The relegation places that the size step will use for a lowest division with a nation's lower division: the row's
+ * places as far as that division's clubs can replace them (as a lone division), -1 with changing rules off. */
+int season_sizes_lower_shown(uint32_t obj, const char *file);
 
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which

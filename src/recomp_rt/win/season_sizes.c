@@ -1445,6 +1445,14 @@ static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r)
     return season_size_lone_down(places, lone_pool(rec), clubs_in_division(obj), step_want(obj, file, year + 1));
 }
 
+int season_sizes_lower_shown(uint32_t obj, const char *file)
+{
+    /* Only with changing rules on: only then does the step send the clubs down (review of items 271 and 272). */
+    if (!readable(obj) || !sizes_on() || !season_changing_rules()) return -1;
+    const SeasonRule *r = row_now(obj, file);
+    return r && r->down >= 0 && r->down <= 30 ? lone_shown(obj, file, r) : -1;
+}
+
 static void size_step_run(uint32_t trigger)
 {
     if (!nstep_seen || step_running || rt_unwinding) return;
@@ -1489,6 +1497,8 @@ static void size_step_run(uint32_t trigger)
         const SeasonRule *r = row_of_edition(file, step_seen[d].year);
         int places = r && r->down > 0 ? r->down : 0, shown = (int8_t)g_mem[obj + DOWN];
         if (shown >= 0 && shown < places) places = shown;
+        /* Review: only as many as its nation's clubs can replace, as lone_exchange (season_size_lone_down). */
+        places = season_size_lone_down(places, lone_pool(step_seen[d].rec), clubs_in_division(obj), div[d].want);
         if (places > 0) lone_send(obj, file, d, places, low);
     }
     /* The clubs of the last tables. */

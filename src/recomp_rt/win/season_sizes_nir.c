@@ -105,7 +105,9 @@ void season_sizes_nir_rules(uint32_t obj, const char *file)
         return;
     }
     put(obj, UP, season_sizes_row_up(obj, file));
-    put(obj, DOWN, season_sizes_nation_lower(file) ? season_sizes_row_down(obj, file) : -1);
+    /* The relegation places only with changing rules on, and only as many as the step can replace from the lower
+     * division (review: with changing rules off no club goes down, so the class's 0 stays). */
+    put(obj, DOWN, season_sizes_nation_lower(file) ? season_sizes_lower_shown(obj, file) : -1);
     if (none) g_mem[obj + UP_PLAYOFF] = 0;
     /* Only before the play-off stage: the constructor and start_new_season call set_up_rules with +0x30 -1. A season
      * after one with no play-off gets the class's 1 back. A save of a season with no play-off holds +0x2c 0, and
