@@ -242,6 +242,18 @@ static void feeders(void)
     div[0].feed[div[0].nfeed++] = 1;
     n = season_size_step_plan(div, 2, club, nclub, mv, 200);
     CHECK(n == 0 && count_in(1) == 10 && div[0].short_by == 2, "feeders none: %d moves, short %d", n, div[0].short_by);
+
+    /* No feeder club may go up (up_ok 0): a club with no division never joins the division straight, as its entry
+     * check was made against the feeder (0.7.2 sz10 review). */
+    reset();
+    add_division(0, 13, 12);
+    int h = add_division(1, -1, 10);
+    div[0].feed[div[0].nfeed++] = 1;
+    for (int k = 0; k < 10; k++) club[h + k].up_ok = 0;
+    int f = add_free(1, 900, 1);
+    n = season_size_step_plan(div, 2, club, nclub, mv, 200);
+    CHECK(club[f].div == STEP_NONE && div[0].short_by == 1, "feeders barred: free club in %d, short %d", club[f].div,
+          div[0].short_by);
 }
 
 /* The Veikkausliiga from 14 to 13 (2006): AC Allianssi lost its licence. A club marked to leave goes to no division

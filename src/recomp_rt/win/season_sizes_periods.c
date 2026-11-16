@@ -281,6 +281,36 @@ uint32_t rt_hol_stage_room(uint32_t original)
     return season_sizes_on() && original == 0x18u ? 0x20u : original;
 }
 
+/* League::load 0x688e4b makes the stage array of +0x2c slots when the object has none (a HolFirst made for a load
+ * skips its own at 0x5f54ec). A HolFirst gets room for eight there too: a save made during the six-period play-off
+ * holds stages 6 and 7 (0x688f80..0x688fff), and a loaded 2005/06 game writes them (0x5f697a, 0x5f6a21). */
+#define HOL_FIRST_VTABLE 0x0096b86cu   /* 0x5f54d7 */
+uint32_t rt_league_stage_bytes(uint32_t obj, uint32_t original)
+{
+    return readable(obj) && rd32(g_mem, obj) == HOL_FIRST_VTABLE ? rt_hol_stage_room(original) : original;
+}
+
+/* HolFirst 0x5f73d0 and BelSecond 0x420d40 (vtable +0x68, a match of a stage: 0x48e380 passes the stage's +0x44) tell
+ * the play-off stages by number (`cmp cl, 4` at 0x5f7480, `cmp cl, 5` at 0x5f7485, `cmp cl, 3` at 0x420de4) after esi
+ * holds the table, so the wraps keep the object for the patches (rt_period_handler). */
+static uint32_t handler_obj;
+
+uint32_t rt_period_handler(void) { return handler_obj; }
+
+static void with_handler(void (*original)(void))
+{
+    uint32_t keep = handler_obj;
+    handler_obj = cpu.ecx;
+    original();
+    handler_obj = keep;
+}
+
+void o_005f73d0(void);
+RT_WRAP(005f73d0, hol_first_stage_match) { with_handler(o_005f73d0); }
+
+void o_00420d40(void);
+RT_WRAP(00420d40, bel_second_stage_match) { with_handler(o_00420d40); }
+
 /* The last stage of a season: League::update_for_date 0x6849aa ends it when +0x30 reaches +0x2c - 1 (0x6849d1..
  * 0x6849da) and else calls advance_stage, which makes the same test (HolFirst 0x5f6659, BelSecond 0x4201a0), as does
  * League::check_complete 0x689ad0 (0x689bdf). The capacity is the class's periods and its play-off stages (HolFirst 6:

@@ -74,8 +74,9 @@ int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub
                         out[n - 1].replaces = c;
                         need--;
                     }
-                /* The lowest division: the clubs of its nation with no division, the best reputation first. */
-                while (need > 0) {
+                /* The lowest division: the clubs of its nation with no division, the best reputation first. A
+                 * division with feeders takes none straight: their up_ok was checked against the feeder. */
+                while (need > 0 && !v->nfeed) {
                     int best = -1;
                     for (int c = 0; c < nclub; c++) {
                         if (club[c].div != STEP_NONE || club[c].nation != v->nation || !club[c].up_ok) continue;

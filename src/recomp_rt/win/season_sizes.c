@@ -1117,13 +1117,12 @@ static void step_note_alone(uint32_t upper, uint32_t lower)
 
 /* Gap 37: the clubs that lost their licence after an edition (file, the edition that ends): they leave the division
  * first when it has too many clubs. The Veikkausliiga 2006 lost AC Allianssi (fi.wikipedia.org/wiki/
- * Veikkausliiga_2006); 2011 lost Tampere United (removed) and AC Oulu, the Ykkonen winner, refused a licence
- * (fi.wikipedia.org/wiki/Veikkausliiga_2011). A club not in the division leaves no one in its place: the worst placed
- * clubs go. */
+ * Veikkausliiga_2006); 2011 lost Tampere United (removed) (fi.wikipedia.org/wiki/Veikkausliiga_2011). The Ykkonen
+ * winner AC Oulu was also refused a licence, but club.dat has no AC Oulu (only FC Oulu), so it has no row. A club not
+ * in the division leaves no one in its place: the worst placed clubs go. */
 static const struct { const char *file; int edition; const char *club; } licence_lost[] = {
     {"fin_prm", 2005, "AC Vantaan Allianssi"},
     {"fin_prm", 2010, "Tampere United"},
-    {"fin_prm", 2010, "AC Oulu"},
 };
 
 static int lost_licence(const char *file, int edition, uint32_t club)

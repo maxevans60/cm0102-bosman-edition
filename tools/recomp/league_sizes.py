@@ -539,6 +539,8 @@ INSNS[0x4201AC] = ("dec edx", "edx = rt_league_last_stage(ecx, edx - 1u);")   # 
 # League::check_complete 0x689ad0 with its first argument 1 (the season change entry and season_playoffs.c) makes the
 # test too (0x689bdf..0x689be8): without this First Division B with two periods never ended its season (g13 bel2016).
 INSNS[0x689BE5] = ("dec ecx", "ecx = rt_league_last_stage(esi, ecx - 1u);")
+# League::load makes a stage array of +0x2c slots (0x688e4b); a HolFirst gets room for eight (rt_league_stage_bytes).
+INSNS[0x688E4B] = ("lea ecx, [ebp*4]", "ecx = rt_league_stage_bytes(esi, ebp * 4u);")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and
@@ -604,6 +606,12 @@ PERIOD_PATCHES = {
     0x4203E1: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # push 3 (the group's stage)
     0x41F975: (0x3, "rt_bel_playoff_stage(edi, 0x3u)"),         # cmp al, 3
     0x420839: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # cmp al, 3
+    # Review: the news of a match (0x4209c0) and the +0x68 handlers (HolFirst 0x5f73d0, BelSecond 0x420d40; the
+    # object from rt_period_handler, as esi holds the table there).
+    0x420A09: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # BelSecond match news 0x4209c0: cmp al, 3
+    0x420DE4: (0x3, "rt_bel_playoff_stage(rt_period_handler(), 0x3u)"),   # cmp cl, 3
+    0x5F7480: (0x4, "rt_hol_playoff_stage(rt_period_handler(), 0x4u)"),   # cmp cl, 4
+    0x5F7485: (0x5, "rt_hol_playoff_stage(rt_period_handler(), 0x5u)"),   # cmp cl, 5
     0x4205B9: (0xA, "rt_league_period_length(esi, eax & 0xffu, 0xau)"),   # create_period_stage 0x4204d0: period 0
     0x4205CB: (0xC, "rt_league_period_length(esi, eax & 0xffu, 0xcu)"),   # periods 1 and 2
 }

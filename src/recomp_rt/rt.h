@@ -415,6 +415,8 @@ uint32_t rt_bel_third_row(uint32_t third, uint32_t original);
 uint32_t rt_bel_playoff_stage(uint32_t obj, uint32_t original);
 uint32_t rt_bel_playoff_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_hol_stage_room(uint32_t original);
+uint32_t rt_league_stage_bytes(uint32_t obj, uint32_t original);  /* League::load's stage array (0x688e4b) */
+uint32_t rt_period_handler(void);  /* the object of HolFirst 0x5f73d0 or BelSecond 0x420d40 while it runs */
 uint32_t rt_hol_playoff_stage(uint32_t obj, uint32_t original);
 uint32_t rt_hol_period_news(void);
 uint32_t rt_league_last_stage(uint32_t obj, uint32_t original);  /* the last stage index (0x6849d7) */
