@@ -19,6 +19,10 @@ and into edition 2025. The checks:
     next     edition 2025 makes its zones (row 2025) and both halves' fixtures after the load;
     champion the knockout winners of both halves of 2024 are the champions (gap row 48). --save-days 172 saves in the
              Apertura knockout (about 1 January 2025); give --play-days 220 then.
+--promocion: a 2010 game (the September 2010 database) instead, saved between the two legs of the promoción of
+edition 2010 (default --save-days 310, day 131 of 2011, between leg 1 on day 130 and leg 2 on day 134; --play-days 150). The checks: the first run played the
+first legs and not the second; after the load both second legs are played, both ties have a result, and the
+season change moves the losers and winners (the "chain" line), as league_size_run.py arg_promo_faults checks.
 Exit code 1 on a failure. A run takes about an hour.
 """
 import os
@@ -70,6 +74,35 @@ def faults_load(again, code):
     return fails
 
 
+def promo_first(work):
+    log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
+    fails = [x.strip() for x in log.split("\n") if "recomp: message box from" in x]
+    for st in (2, 3):
+        if not re.search(rf"arg_prm knockout match 2010: stage {st} round \d+: \d+-\d+", log):
+            fails.append(f"first: no first leg of promocion stage {st} before the save (save later)")
+        if len(re.findall(rf"arg_prm knockout match 2010: stage {st} round \d+: \d+-\d+", log)) > 1:
+            fails.append(f"first: both legs of promocion stage {st} before the save (save earlier)")
+    return fails
+
+
+def promo_load(work, code):
+    import league_size_run as lsr
+    fails = [] if code == 0 else [f"load: the run ended with code {code}"]
+    path = os.path.join(work, "stderr.txt")
+    if not os.path.exists(path):
+        return fails + ["load: no log"]
+    lines = open(path, encoding="latin-1").read().split("\n")
+    fails += [x.strip() for x in lines if "recomp: message box from" in x]
+    for st in (2, 3):
+        if not any(re.search(rf"arg_prm knockout match 2010: stage {st} round \d+: \d+-\d+", x) for x in lines):
+            fails.append(f"load: no second leg of promocion stage {st} after the load")
+    if len([x for x in lines if re.search(r"arg_prm promocion 2010: tie \d+: winner", x)]) != 2:
+        fails.append("load: not two promocion results of 2010 after the load")
+    if not any(re.search(r"arg_prm chain 2010:", x) for x in lines):
+        fails.append("load: no season change of 2010 after the load")
+    return fails
+
+
 def main(argv):
     if len(argv) < 2:
         print(__doc__)
@@ -78,19 +111,21 @@ def main(argv):
     import club_world_check as cwc
     program, game = os.path.abspath(argv[0]), os.path.abspath(argv[1])
     keep = rrc.arg(argv, "--keep", None)
-    save_days = int(rrc.arg(argv, "--save-days", "230"))
-    play_days = int(rrc.arg(argv, "--play-days", "160"))
+    promo = "--promocion" in argv
+    save_days = int(rrc.arg(argv, "--save-days", "310" if promo else "230"))
+    play_days = int(rrc.arg(argv, "--play-days", "150" if promo else "160"))
+    year = 2010 if promo else 2024
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix="cm0102-arg-prm-save-")
     again = os.path.join(work, "again")
     os.environ["RECOMP_SIZE_LOG"] = "1"     # the load run inherits it (fixtures.run)
     if "--reuse" not in argv:
-        db = rrc.run_database([], 2024, os.path.join(work, "owndb"))
-        code, _ = rrc.run(program, game, 2025, 2024, db, ["England", "Argentina"], [], work, 7200,
+        db = rrc.run_database([], year, os.path.join(work, "owndb"))
+        code, _ = rrc.run(program, game, year + 1, year, db, ["England", "Argentina"], [], work, 7200,
                           {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1", "RECOMP_SAVE_AFTER_DAYS": str(save_days)})
         if code != 0 and not os.path.exists(os.path.join(work, "user", "samesave.sav")):
             print(f"FAIL first: the run ended with code {code} and no save ({work})")
             return 1
-    fails = faults_first(work)
+    fails = promo_first(work) if promo else faults_first(work)
     if not fails:
         if "--reuse" not in argv:
             os.makedirs(again, exist_ok=True)
@@ -99,10 +134,11 @@ def main(argv):
             code = r.returncode if saved else (r.returncode or 1)
         else:
             code = 0
-        fails += faults_load(again, code)
+        fails += promo_load(again, code) if promo else faults_load(again, code)
     for f in fails:
         print("FAIL", f)
-    print(("FAIL" if fails else "PASS") + f" arg_prm save in the Clausura of 2024 ({work})")
+    what = "between the promocion legs of 2010" if promo else "in the Clausura of 2024"
+    print(("FAIL" if fails else "PASS") + f" arg_prm save {what} ({work})")
     return 1 if fails else 0
 
 
