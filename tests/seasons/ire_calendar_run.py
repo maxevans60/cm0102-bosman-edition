@@ -7,7 +7,8 @@ Usage:
         [--start 2001] [--last 2004] [--database <folder>] [--saves <days,days,...>] [--timeout 14400] [--reuse]
 
 --start 2002 or 2003 starts there (a 2003 start needs --database, the October 2003 folder); the checks follow the
-start. --saves 572,15 plays legs that save after those game days (from 12 July 2001: 4 February 2003, in the
+start. --main-ireland makes the Republic of Ireland the main nation (England off; a test-only switch of the steps)
+and checks that the game starts on 1 March of the start year, the start of Ireland's entry. --saves 572,15 plays legs that save after those game days (from 12 July 2001: 4 February 2003, in the
 short season's play-off, then 20 February 2003, the change day), each loaded by the next leg.
 
 A season game from 2001 with changing rules on, England and the Republic of Ireland, as the soak (soak_run.py: the
@@ -24,6 +25,8 @@ RECOMP_SEASON_CHANGE_LOG and RECOMP_SIZE_LOG write the lines that the checks rea
               2004 (2004), and no second-edition label (RECOMP_HISTORY_LOG names the Irish competitions, so the
               history wrap logs each second-edition label);
     save      each load gives the entry fields of its save (edition, update day, two years, start, end, years);
+    windows   Ireland keeps the game's window in 2003 and 2004 and takes the 2005 windows at the change of 2005
+              (open item 258; RECOMP_SEASON_NATION_LOG);
     soak      no box, no season change net, every division moves on (soak_run.py).
 --reuse checks the logs in --keep again. Exit code 1 on a failure.
 """
@@ -111,6 +114,18 @@ def faults(keep, start=2001, last=2004):
     bumps = re.findall(r"recomp: season history: a second edition in (\d+) gets the label (\d+)", text)
     if bumps:
         out.append(f"labels: second-edition labels {bumps} (check that none is Irish)")
+    # Open item 258: Ireland keeps the game's own window in 2003 and 2004 (not stated), and takes the real 2005
+    # windows (7 January to 4 March, 1 to 30 July) at its change of 20 February 2005.
+    if start <= 2004 <= last:
+        ch = text.find("recomp: season change: entry 20 starts 2005/06 on day 50 of 2005")
+        wins = [m.start() for m in re.finditer(r"recomp: season nation: Republic of Ireland windows \d+ -> 2: "
+                                                r"7\.1-4\.3\(#0\) 1\.7-30\.7\(#1\)", text)]
+        early = [m.group(0) for m in re.finditer(r"recomp: season nation: Republic of Ireland windows [^\n]*", text)
+                 if ch < 0 or m.start() < ch]
+        if ch < 0 or not [w for w in wins if w > ch]:
+            out.append("windows: no 2005 Irish windows (7 January to 4 March, 1 to 30 July) after the change of 2005")
+        if early:
+            out.append(f"windows: Irish windows changed before 2005: {early[:2]}")
     entry = re.compile(r"recomp: calendar: entry at (save|load) on day \d+ of \d+: (.*)")
     for i in range(len(legs) - 1):
         saves = [m.group(2) for m in entry.finditer(legs[i][1]) if m.group(1) == "save"]
@@ -119,6 +134,51 @@ def faults(keep, start=2001, last=2004):
             out.append(f"save: {legs[i][0]} saved {saves[-1:] or 'nothing'}, {legs[i + 1][0]} loaded "
                        f"{loads[:1] or 'nothing'}")
     return out
+
+
+ORIGINAL_STEPS = []          # rules_report_check.league_steps before --main-ireland replaces it
+
+
+def main_ireland_steps(nations, extra):
+    """The new game steps of rules_report_check.league_steps with the Republic of Ireland as the main nation (the
+    test-only switch --main-ireland): England's row (selected at first) is clicked off before Ireland's row is
+    clicked on, so Ireland is the first selected nation [0xae2d08] (setup_handle_select_leagues_input 0x81dd54..0x81e487)
+    whose league table entry gives the start date (setup_set_game_start_date 0x830520, 0x830537..0x830565)."""
+    import rules_report_check as rrc
+    steps = ORIGINAL_STEPS[0](["England", "Republic of Ireland"], [])
+    points = [f"390 {188 + 22 * rrc.NATION_ROWS.index('England')}"] + [rrc.DOWN_ARROW] * rrc.SCROLL + \
+        [f"390 {rrc.below_y('Republic of Ireland')}"]
+    picks = [f"{2000 + 1500 * i} click {p}" for i, p in enumerate(points)]
+    out, skipping, dropping = [], False, False
+    for s in steps:
+        if s.endswith(f"click {rrc.DOWN_ARROW}") and s.startswith("2000 "):
+            out += picks
+            skipping = True
+            continue
+        if skipping and (" click 390 " in s or s.endswith(f"click {rrc.DOWN_ARROW}")):
+            continue
+        if skipping and s.endswith("click 705 572"):
+            out.append(f"{2000 + 1500 * len(picks) + 1000} click 705 572")
+            skipping = False
+            dropping = True
+            continue
+        # With England off the game shows no Select Start Season screen after Select League(s) (a run of 16
+        # November 2026 waited for screen 0x81e8d0 in vain and was at 0x820f50, the game made): its wait and Next go.
+        if dropping and (s == "wait screen:0x81e8d0" or s == "2500 click 705 572"):
+            if s == "2500 click 705 572":
+                dropping = False
+            continue
+        out.append(s)
+    return out
+
+
+def main_start_faults(keep, start):
+    """--main-ireland: the start date is 1 March of the start year, from Ireland's entry (20)."""
+    text = "\n".join(t for _n, t in logs(keep))
+    m = re.search(r"recomp: calendar: game start date day (\d+) of (\d+), main nation entry (-?\d+)", text)
+    want = (59 if start % 4 else 60, start, 20)
+    got = tuple(int(x) for x in m.groups()) if m else None
+    return [] if got == want else [f"start: {got}, want day {want[0]} of {start} from entry 20"]
 
 
 def run_legs(o, keep, saves):
@@ -149,9 +209,17 @@ def main(argv):
     keep = os.path.abspath(soak_run.arg(argv, "--keep"))
     start, last = int(soak_run.arg(argv, "--start", "2001")), int(soak_run.arg(argv, "--last", "2004"))
     env = ["--env", "RECOMP_TIER_A=1", "--env", "RECOMP_CALENDAR_LOG=1", "--env", "RECOMP_SEASON_CHANGE_LOG=1",
-           "--env", "RECOMP_SIZE_LOG=1", "--env", "RECOMP_HISTORY_LOG=" + HISTORY]
+           "--env", "RECOMP_SIZE_LOG=1", "--env", "RECOMP_HISTORY_LOG=" + HISTORY, "--env", "RECOMP_SEASON_NATION_LOG=1"]
     code = 0
-    if "--reuse" not in argv and "--saves" in argv:
+    main_ireland = "--main-ireland" in argv
+    if main_ireland:
+        if start < 2003:
+            print("ire_calendar_run.py: --main-ireland needs --start 2003 or later (a calendar start)")
+            return 2
+        import rules_report_check as rrc
+        ORIGINAL_STEPS[:] = [rrc.league_steps]
+        rrc.league_steps = main_ireland_steps
+    if "--reuse" not in argv and ("--saves" in argv or main_ireland):
         for i in range(0, len(env), 2):
             name, value = env[i + 1].split("=", 1)
             soak_run.LEG_ENV[name] = value
@@ -159,7 +227,9 @@ def main(argv):
         o = {"program": os.path.abspath(argv[0]), "game": os.path.abspath(argv[1]), "start": start, "last": last,
              "seed": 1, "nations": ["England", "Republic of Ireland"], "database": os.path.abspath(db) if db else None,
              "rules": "on", "timeout": int(soak_run.arg(argv, "--timeout", "14400")), "extra": []}
-        code = run_legs(o, keep, [int(x) for x in soak_run.arg(argv, "--saves").split(",") if x])
+        if main_ireland:
+            o["nations"] = ["Republic of Ireland"]
+        code = run_legs(o, keep, [int(x) for x in soak_run.arg(argv, "--saves", "").split(",") if x])
     elif "--reuse" not in argv:
         soak_run.wait_for_room = wait_for_room
         code = soak_run.main(["soak_run.py", argv[0], argv[1], "--keep", keep, "--start", str(start), "--last",
@@ -167,7 +237,7 @@ def main(argv):
                               "--leg-days", soak_run.arg(argv, "--leg-days", "450"),
                               "--timeout", soak_run.arg(argv, "--timeout", "14400")] +
                              (["--database", soak_run.arg(argv, "--database")] if "--database" in argv else []) + env)
-    fails = faults(keep, start, last)
+    fails = faults(keep, start, last) + (main_start_faults(keep, start) if main_ireland else [])
     for f in fails:
         print("FAIL", f)
     ok = not fails and code == 0

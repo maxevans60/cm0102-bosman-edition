@@ -13,6 +13,7 @@
  * 0x6418e0..0x641939; the starts 0x64198d..0x6419b7). In the Serie C era the wraps below play the season of the
  * three groups, and the two patched loads of the C2/A object (0x6418d5, 0x641986) keep C2/B and C2/C out. */
 #include "win.h"
+#include "../rt_host.h"
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
@@ -395,10 +396,18 @@ static void c1_schedule(uint32_t key, void (*original)(void))
     if (schedule(key)) return;
     original();
     if (!rt_unwinding) season_sizes_schedule(self, stage, count_at);
+    if (!rt_unwinding) season_sizes_ita_playout_template(self, stage, cpu.eax);   /* open item 253 */
 }
 RT_WRAP(0064ad80, c1a_schedule) { c1_schedule(KEY_C1A, o_0064ad80); }
 RT_WRAP(0064ef30, c1b_schedule) { c1_schedule(KEY_C1B, o_0064ef30); }
-RT_WRAP(006531a0, c2a_schedule) { if (!schedule(KEY_C2A)) o_006531a0(); }
+RT_WRAP(006531a0, c2a_schedule)
+{
+    uint32_t self = cpu.ecx;
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    if (schedule(KEY_C2A)) return;
+    o_006531a0();
+    if (!rt_unwinding) season_sizes_ita_playout_template(self, stage, cpu.eax);   /* open item 253 */
+}
 /* ItaSerC2b::create_schedule 0x657660 (D 0x22 at 0x65769d, block 0x8a2 at 0x657698): C2/B of 20 in 2011/12. */
 RT_WRAP(00657660, c2b_schedule) { if (!schedule(KEY_C2B)) o_00657660(); }
 
@@ -598,6 +607,101 @@ static void set_status(uint32_t league, int k, uint8_t st)
     uint32_t row = call_this(F_LEAGUE_ROW, league, 1, a);
     if (!rt_unwinding && readable(row)) g_mem[row + ROW_STATUS] = st;
 }
+
+/* ---- The C1 play-out of the season (open item 253) ---- */
+
+/* create_playoff_stages of C1/A 0x64ba70, C1/B 0x64fc30 and C2/A 0x653e90 (group C of the Serie C era), thiscall, no
+ * arguments. It runs once the table is final: League::update_for_date (+0xdd 1, 0x684997..0x6849a4) calls
+ * advance_stage while +0x30 is below +0x2c - 1 (0x6849d1..0x6849e0), and advance_stage adds 1 to +0x30 and calls the
+ * builder when +0x30 becomes 0 (0x64ba5b..0x64ba63). The builder makes the play-off (stage 0) and the play-out (stage
+ * 1, stored at [+0xc] + 4 at 0x64bcd7) with the club count +0xbf for both (0x64bb99, 0x64bcb1), and sets +0x30 to 1
+ * (0x64bd5c). The constructor sets +0x2c to 2 (0x64aadd). With the sizes on the play-out takes the season's shape
+ * (season_ita_rules.h ita_c1_playout): its rows and seeds (rt_ita_c1_row, rt_ita_c1_seed), its club count 0, 2 or 4
+ * (rt_ita_playout_count) and its template (season_sizes_ita_playout_template). In a season of the points gap a tie
+ * whose clubs are more than 8 points apart is not played: its lower row gets status 3, which the chain sends down
+ * (as the play-out's loser, 0x654382), and its higher row 0xfe, the play-out winner's (0x654353). League::
+ * update_positions_and_status 0x684cd0 keeps both (0x684e46, 0x685125).
+ *
+ * A play-out of no tie makes no stage 1 (rt_ita_playout_block, tools/recomp/league_sizes_ita.py). Then +0x2c is 1
+ * and +0x30 0, so update_for_date reads stage 0 alone and ends the season when it is complete, start_new_season
+ * 0x64b820 deletes stage 0 alone (0x64b85c..0x64b87c), and the save keeps one stage. A later season of a play-out
+ * gets +0x2c 2 back before the builder writes slot 1. After a load of a season of one stage the array has one slot
+ * (League::load 0x688e3a..0x688e5b), so it grows to two first (load sweep). */
+static void stage_slots(uint32_t self)
+{
+    uint32_t stages = rd32(g_mem, self + 0xcu);
+    if (readable(stages) && rt_is_block(stages) && rt_block_size(stages) < 8u) {
+        uint32_t old_bytes = rt_block_size(stages), grown = season_sizes_game_malloc(8u);
+        /* A failed malloc of 8 bytes ends the game anyway (the original's own operator new 0x944cf1 has no fallback
+         * either), so nothing more is done here. */
+        if (rt_unwinding || !grown) return;
+        memcpy(g_mem + grown, g_mem + stages, old_bytes);
+        wr32(g_mem, self + 0xcu, grown);
+        season_sizes_game_free(stages);
+        if (rt_unwinding) return;
+    }
+    wr32(g_mem, self + 0x2cu, 2);
+}
+
+/* The play-out of the season once the table is final: the shape (season_sizes_ita_playout_shape) less the ties of the
+ * points gap, whose rows go to gone[] and safe[]. Returns the count of ties taken out. The builder below and the
+ * progress record (season_sizes_ita.c c1_progress) both use it. */
+int season_ita_playout_final(uint32_t self, ItaPlayout *p, int *gone, int *safe)
+{
+    int n = (int16_t)rd16(g_mem, self + 0x3e);
+    season_sizes_ita_playout_shape(self, p);
+    if (!ita_c1_gap_rule(season_rule_year((int16_t)rd16(g_mem, self + 0x40))) || p->ties <= 0 || n > MAX_CLUBS)
+        return 0;
+    int pts[MAX_CLUBS];
+    for (int k = 0; k < n && !rt_unwinding; k++) pts[k] = row_points(self, k);
+    if (rt_unwinding) return 0;
+    return ita_c1_playout_gap(p, pts, gone, safe);
+}
+
+static void playout_build(void (*original)(void), int group_c)
+{
+    uint32_t self = cpu.ecx;
+    int n = (int16_t)rd16(g_mem, self + 0x3e);
+    if (!season_sizes_on() || (group_c && !season_ita_serie_c(self)) || n < 6 || n > MAX_CLUBS) {
+        original();
+        return;
+    }
+    ItaPlayout p;
+    int gone[2], safe[2], year = season_rule_year((int16_t)rd16(g_mem, self + 0x40));
+    int out = season_ita_playout_final(self, &p, gone, safe);
+    if (rt_unwinding) return;
+    stage_slots(self);
+    if (rt_unwinding) return;
+    season_sizes_ita_playout_set(self, &p);
+    original();
+    season_sizes_ita_playout_set(self, NULL);
+    uint32_t block = season_sizes_ita_playout_block();
+    if (rt_unwinding) return;
+    if (p.ties == 0) {
+        season_sizes_game_free(block);
+        if (rt_unwinding) return;
+        wr32(g_mem, self + 0x30u, 0);
+        wr32(g_mem, self + 0x2cu, 1);
+    }
+    for (int k = 0; k < out && !rt_unwinding; k++) {
+        set_status(self, gone[k], 3);
+        if (!rt_unwinding) set_status(self, safe[k], 0xfe);
+    }
+    if (rt_unwinding) return;
+    fprintf(stderr, "recomp: league sizes: %.50s %d: play-out of %d ties", win_str(rd32(g_mem, self + 4) + 4), year,
+            p.ties);
+    for (int k = 0; k < 2 * p.ties; k++) fprintf(stderr, "%s%d", k % 2 ? " v " : k ? ", " : " (", p.slot[k] + 1);
+    fprintf(stderr, "%s", p.ties ? ")" : "");
+    for (int k = 0; k < out; k++) fprintf(stderr, "; %d down and %d safe by the points gap", gone[k] + 1, safe[k] + 1);
+    fprintf(stderr, "\n");
+}
+
+void o_0064ba70(void);
+void o_0064fc30(void);
+void o_00653e90(void);
+RT_WRAP(0064ba70, c1a_playout) { playout_build(o_0064ba70, 0); }
+RT_WRAP(0064fc30, c1b_playout) { playout_build(o_0064fc30, 0); }
+RT_WRAP(00653e90, c2a_playout) { playout_build(o_00653e90, 1); }
 
 /* The clubs that go up to Serie B (Q627). Each group's class keeps its own places and play-off (set_up_rules
  * 0x653bdd: +0xbe 1, +0xbf 4; the play-off of 0x653e90 reads +0xbf at 0x653f8f), so each group ends with two rows
@@ -1275,7 +1379,16 @@ void o_00653b90(void);
 void o_00658050(void);
 void o_0065c1e0(void);
 
-RT_WRAP(00653b90, c2a_set_up_rules) { uint32_t o = cpu.ecx; o_00653b90(); if (!rt_unwinding) { uint32_t a = cpu.eax; c2_link(o); cpu.eax = a; } }
+RT_WRAP(00653b90, c2a_set_up_rules)
+{
+    uint32_t o = cpu.ecx;
+    o_00653b90();
+    if (rt_unwinding) return;
+    uint32_t a = cpu.eax;
+    c2_link(o);
+    if (!rt_unwinding && season_ita_serie_c(o)) season_sizes_ita_playout_places(o);   /* group C, open item 253 */
+    cpu.eax = a;
+}
 RT_WRAP(00658050, c2b_set_up_rules) { uint32_t o = cpu.ecx; o_00658050(); if (!rt_unwinding) { uint32_t a = cpu.eax; c2_link(o); cpu.eax = a; } }
 RT_WRAP(0065c1e0, c2c_set_up_rules) { uint32_t o = cpu.ecx; o_0065c1e0(); if (!rt_unwinding) { uint32_t a = cpu.eax; c2_link(o); cpu.eax = a; } }
 

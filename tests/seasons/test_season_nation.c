@@ -69,6 +69,11 @@ int main(void)
     CHECK(s.squad_foreign == 6 && s.sign_foreign == 8, "Turkey 2001: %d %d", s.squad_foreign, s.sign_foreign);
     season_nation_state("Turkey", 2013, &s);
     CHECK(s.squad_foreign == 6 && s.sign_foreign == 10, "Turkey 2013: %d %d", s.squad_foreign, s.sign_foreign);
+    /* Gap row 6: 2027/28 is not announced, so the last known rule (14 foreigners signed, 2026/27) stays. */
+    season_nation_state("Turkey", 2026, &s);
+    CHECK(s.sign_foreign == 14, "Turkey 2026: %d", s.sign_foreign);
+    season_nation_state("Turkey", 2027, &s);
+    CHECK(s.sign_foreign == 14, "Turkey 2027: %d", s.sign_foreign);
     season_nation_state("Brazil", 2023, &s);
     CHECK(s.squad_foreign == 9, "Brazil 2023: %d", s.squad_foreign);
 
@@ -166,6 +171,27 @@ int main(void)
                   r->win[w].ed >= 1 && r->win[w].ed <= 31 && r->win[w].em >= 1 && r->win[w].em <= 12,
                   "row %d: window %d out of range", i, w);
     }
+    /* Open item 258 (gap row 2 of 0.7.2): the Irish windows after the calendar move. The rows hold the real season
+     * of the year after their season (row 2004/05 "2005"), so while the move is on, the season S of the game reads
+     * row S - 1 from 2003 (season_nation_row_season). 2003 and 2004 are not stated: the game's own window stays
+     * (IRELAND_RULES 0x63c210: 10 May to 31 January, 0x63c2e4..0x63c30f). 2005: 7 January to 4 March and July. */
+    CHECK(season_nation_row_season("Republic of Ireland", 2005, 1) == 2004 &&
+          season_nation_row_season("Republic of Ireland", 2003, 1) == 2002 &&
+          season_nation_row_season("Republic of Ireland", 2002, 1) == 2002 &&
+          season_nation_row_season("Republic of Ireland", 2005, 0) == 2005 &&
+          season_nation_row_season("England", 2005, 1) == 2005, "Irish seasons read the row of their real season");
+    SeasonNationState ie;
+    season_nation_state("Republic of Ireland", season_nation_row_season("Republic of Ireland", 2004, 1), &ie);
+    CHECK(ie.windows == SEASON_NATION_KEEP, "Ireland 2004: not stated, the game's own window stays");
+    season_nation_state("Republic of Ireland", season_nation_row_season("Republic of Ireland", 2005, 1), &ie);
+    CHECK(ie.windows == 2 && ie.win[0].sd == 7 && ie.win[0].sm == 1 && ie.win[0].ed == 4 && ie.win[0].em == 3 &&
+          ie.win[1].sd == 1 && ie.win[1].sm == 7 && ie.win[1].ed == 30 && ie.win[1].em == 7,
+          "Ireland 2005: 7 January to 4 March, 1 to 30 July");
+    season_nation_state("Republic of Ireland", season_nation_row_season("Republic of Ireland", 2010, 1), &ie);
+    CHECK(ie.windows == 2 && ie.win[0].sd == 1 && ie.win[0].sm == 12 && ie.win[0].ed == 22 && ie.win[0].em == 2,
+          "Ireland 2010: 1 December to 22 February");
+    season_nation_state("Republic of Ireland", season_nation_row_season("Republic of Ireland", 2023, 1), &ie);
+    CHECK(ie.windows == 2 && ie.win[1].sd == 1 && ie.win[1].ed == 28 && ie.win[1].em == 7, "Ireland 2023: 1 to 28 July");
     if (failures) {
         fprintf(stderr, "%d checks failed\n", failures);
         return 1;

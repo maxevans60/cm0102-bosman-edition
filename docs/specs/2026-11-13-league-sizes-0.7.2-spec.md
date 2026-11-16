@@ -187,8 +187,8 @@ Merge danger: two-way door. Blast radius: these four pyramids.
 Blocked by: 2, 3, 6, 7
 Delivers: the Croatian second tier at 18 (the tie-break array takes the count) and 12 to 15, the Croatian First Division at 10 and 12 with its meetings, the Greek Super League at 16 and 18 with its split from 2019/20, the Greek second tier up to 21 and down to 10.
 Merge danger: two-way door. Blast radius: these two pyramids.
-- [ ] `league_size_run.py` passes for cro_a2a 2020, cro_a1 2010, gre_prm 2005 and 2019, gre_second 2010 and 2014
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for cro_a2a 2020, cro_a1 2010, gre_prm 2005 and 2019, gre_second 2010 and 2014
+- [x] The same-save set is equal
 
 ### 12. Russia and Turkey
 Blocked by: 2, 3, 6

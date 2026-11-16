@@ -48,6 +48,10 @@ int main(int argc, char **argv)
     meet("jap_j2", 2010, 2);            /* a hand row: J2 of 19 clubs, 2 meetings */
     meet("ita_ser_a", 2027, 2);         /* unknown clubs: the row before */
     meet("ita_ser_a", 2300, 2);         /* after the table: the last row, then the row before */
+    meet("aus_nsl", 2019, 3);           /* gap row 7: 26 of 11 clubs, 3 meetings (30) are nearest */
+    meet("aus_nsl", 2020, 2);           /* 26 of 12 clubs (22 + 4 third meetings): 2 are nearest */
+    meet("aus_nsl", 2024, 2);           /* 26 of 13 clubs (24 + 2) */
+    meet("aus_nsl", 2027, 2);           /* unknown clubs: the 2026 row */
     meet("gre_cup", 2010, 0);           /* a cup */
     meet("no_such_file", 2010, 0);
 
@@ -105,6 +109,29 @@ int main(int argc, char **argv)
     CHECK(jap && jap->season == 2026, "jap_j1 2026: row 2026/27");
     const SeasonLeagueRule *h = season_league_rule("hol_first", 2005);
     CHECK(h && h->periods == 6, "hol_first 2005: six periods");
+    /* Gap rows 38, 39 and 41 (slice 11). */
+    for (int y = 2002; y <= 2005; y++) {
+        const SeasonLeagueRule *c = season_league_rule(y == 2003 ? "cro_a2b" : "cro_a2a", y);
+        CHECK(c && c->split_after == 22 && c->split_size[0] == 6 && c->split_size[1] == 6 &&
+              c->split_meetings[0] == 2 && c->split_meetings[1] == 2 && !c->split_halved[0] && !c->split_halved[1],
+              "cro_a2a and cro_a2b %d: 22, then 6 and 6 twice, points kept", y);
+    }
+    for (int y = 2024; y <= 2026; y++) {
+        const SeasonLeagueRule *g = season_league_rule("gre_prm", y);
+        CHECK(g && g->split_after == 26 && g->split_size[1] == 4 && !g->split_halved[0] && g->split_halved[1] &&
+              !g->split_halved[2], "gre_prm %d: only the 5th to 8th halve", y);
+    }
+    const SeasonLeagueRule *g23 = season_league_rule("gre_second", 2023), *g24 = season_league_rule("gre_second", 2024),
+                           *g25 = season_league_rule("gre_second", 2025);
+    CHECK(g23 && g23->split_after == 22 && g23->split_size[0] == 5 && g23->split_size[1] == 6 &&
+          g23->split_size[2] == 1 && g23->split_meetings[0] == 2 && g23->split_meetings[1] == 2 &&
+          g23->split_halved[0] && g23->split_halved[1], "gre_second 2023: 22, then 5, 6 and the 12th, halved");
+    CHECK(g24 && g24->split_after == 18 && g24->split_size[0] == 5 && g24->split_size[1] == 5 &&
+          g24->split_meetings[0] == 2 && g24->split_meetings[1] == 2 && g24->split_halved[0] && g24->split_halved[1],
+          "gre_second 2024: 18, then 5 and 5 twice, halved");
+    CHECK(g25 && g25->split_after == 18 && g25->split_size[0] == 4 && g25->split_size[1] == 6 &&
+          g25->split_meetings[0] == 2 && g25->split_meetings[1] == 2 && g25->split_halved[0] && g25->split_halved[1],
+          "gre_second 2025: 18, then 4 and 6 twice, halved");
 
     int checked = 0;
     for (int i = 0; i < season_league_rule_count; i++) {

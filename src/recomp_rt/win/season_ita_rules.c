@@ -29,9 +29,58 @@ int ita_cup_b_count(int scanned, int season, int start)
     return scanned;
 }
 
-int ita_c1_playout_row(int clubs, int row18)
+void ita_c1_playout(int year, int clubs, ItaPlayout *p)
 {
-    int row = row18 + clubs - 18;
-    if (clubs < 6 || row < 0 || row >= clubs) return row18;
-    return row;
+    p->ties = 0;
+    p->direct = clubs > 0 ? 1 : 0;
+    for (int k = 0; k < 4; k++) p->slot[k] = -1;
+    if (clubs < 6) return;
+    int n = clubs;
+    if (year == 2013) {
+        p->direct = 0;
+        return;
+    }
+    if (year == 2017) {
+        p->ties = 2;
+        p->direct = 0;
+        p->slot[0] = n - 1, p->slot[1] = n - 4, p->slot[2] = n - 2, p->slot[3] = n - 3;
+        return;
+    }
+    if (year == 2018) {
+        p->ties = 1;
+        p->direct = n >= 20 ? 1 : 0;
+        p->slot[0] = n - 1 - p->direct, p->slot[1] = n - 2 - p->direct;
+        return;
+    }
+    p->ties = 2;
+    p->slot[0] = n - 2, p->slot[1] = n - 5, p->slot[2] = n - 3, p->slot[3] = n - 4;
+}
+
+int ita_c1_gap_rule(int year) { return year >= 2016 && year != 2019; }
+
+int ita_c1_playout_gap(ItaPlayout *p, const int *points, int *down, int *safe)
+{
+    int kept[4], nk = 0, out = 0;
+    for (int t = 0; t < p->ties; t++) {
+        int lo = p->slot[2 * t], hi = p->slot[2 * t + 1];
+        if (points[hi] - points[lo] > ITA_PLAYOUT_GAP) {
+            down[out] = lo;
+            safe[out++] = hi;
+            continue;
+        }
+        kept[nk++] = lo;
+        kept[nk++] = hi;
+    }
+    for (int k = 0; k < 4; k++) p->slot[k] = k < nk ? kept[k] : -1;
+    p->ties = nk / 2;
+    return out;
+}
+
+int ita_serie_a_zone(int year, int clubs, int down, int row, int class_zone)
+{
+    if (row < 0 || row >= clubs) return 0;
+    int relegated = down > 0 && row >= clubs - down;
+    if (year <= ITA_SPAREGGIO_LAST) return relegated ? 5 : class_zone == 5 ? 0 : class_zone;
+    if (year < ITA_SERIE_A_SPAREGGIO_BACK) return 0;
+    return row == 0 ? 1 : relegated ? 5 : 0;
 }

@@ -75,7 +75,7 @@ check(po("aus_nsl", 2005) == ("-", "-", "title"), "A-League finals series")
 check(by[("sco_prm", 2001)]["split"] == "after 33: 6+6, points kept", "Scottish split")   # the points: docs/research/2026-11-15-split-points.md
 _bel_text = {(x["comp_file"], x["season"]): x for x in e.make_rules.read_rows()}[("bel_first", 2009)]
 check(e.encode_split(_bel_text) == "after 30: 6+8, points halved", "Belgian Play-off I, points halved (the text)")
-# Gap 34: Play-off I, Play-off II in two groups and the relegation play-off by season (SPLIT_BY_HAND).
+# Gap 34: Play-off I, Play-off II in two groups and the relegation play-off by season (SPLIT_FORM_BY_HAND).
 check(all(by[("bel_first", y)]["split"] == "after 30: 6+4+4+2, points halved" for y in range(2009, 2016)) and
       by[("bel_first", 2009)]["split_meet"] == "2+2+2+0" and by[("bel_first", 2012)]["split_meet"] == "2+2+2+5" and
       by[("bel_first", 2015)]["split_meet"] == "2+2+2+0" and
@@ -89,6 +89,15 @@ check(all(by[("den_prm", y)]["split"] == "after 26: 6+4+4, points kept" and by[(
 check(by[("pol_first", 2013)]["split"] == "after 30: 8+8, points halved", "Polish split 2013/14")
 check(by[("pol_first", 2017)]["split"] == "after 30: 8+8, points kept", "Polish split 2017/18")
 check(by[("den_prm", 2020)]["split"] == "after 22: 6+6, points kept", "Danish split from 2020/21")
+# Gap rows 38, 39 and 41 (slice 11).
+check(by[("gre_prm", 2024)]["split"] == "after 26: 4+4+6, points kept+halved+kept", "Super League 2024/25: 5th-8th halve")
+check(by[("gre_second", 2023)]["split"] == "after 22: 5+6+1, points halved" and by[("gre_second", 2023)]["split_meet"]
+      == "2+2+0", "Super League 2 2023/24: each group splits, the 12th plays no section")
+check(by[("gre_second", 2025)]["split"] == "after 18: 4+6, points halved", "Super League 2 2025/26")
+check(by[("cro_a2b", 2004)]["split"] == "after 22: 6+6, points kept" and by[("cro_a2b", 2004)]["split_meet"] == "2+2",
+      "Druga HNL South 2004/05: groups of 6, twice")
+check(e.section_points("kept+halved+kept", 3) == [0, 1, 0] and e.split_points("kept+halved")
+      == 3, "points by section")
 check(by[("arg_prm", 2001)]["split"] == "stages", "Apertura and Clausura")
 check(by[("eng_prm", 2001)]["split"] == "-", "one table")
 

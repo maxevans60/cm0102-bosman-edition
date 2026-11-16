@@ -6,6 +6,7 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_sizes_ita.h"
 #include "season_playoffs.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
@@ -318,6 +319,12 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     size_step_run(obj);
     const char *file = season_change_file(obj);
     int have = 0, cap = 0, n = league_count(obj, file, &have, &cap);
+    /* The Croatian South of a new game in a season of one group has no club: a table of no row (season_sizes_cro.c;
+     * its set-up leaves out the calls that need rows, sizes_cro.py). */
+    if (!n && clubs_in_division(obj) == 0 &&
+        season_sizes_cro_empty(obj, file, season_change_is_creating() || !season_changing_rules()
+                                              ? season_start_year() : (int16_t)rd16(g_mem, obj + COMP_YEAR)))
+        return 0;
     if (!n) return original;
     /* A grown league whose template had no room keeps the class's count, or fewer: create_table fills only the
      * clubs of the division and fails with more rows than clubs (NorPrm 0x7926a0..0x7926ce, box at 0x792845). */
@@ -731,10 +738,12 @@ void o_00687970(void);
 RT_WRAP(00687970, league_free_table)
 {
     uint32_t self = cpu.ecx, table = rt_arg(0);
-    if (!table && readable(self)) lone_exchange(self);
-    if (!table && readable(self)) note_alone(self, rd32(g_mem, cpu.esp));
-    if (!table && readable(self)) size_step_run(self);
-    if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self))) {
+    /* The section stage that the split deletes (season_split.c make_section) also runs free_table: none of this. */
+    int stage = season_split_deleting(self);
+    if (!table && readable(self) && !stage) lone_exchange(self);
+    if (!table && readable(self) && !stage) note_alone(self, rd32(g_mem, cpu.esp));
+    if (!table && readable(self) && !stage) size_step_run(self);
+    if (!table && logging() && sizes_on() && readable(self) && grown_of(season_change_file(self)) && !stage) {
         uint32_t t = rd32(g_mem, self + COMP_TABLE);
         int n = (int16_t)rd16(g_mem, self + COMP_CLUBS), lo = 999, hi = -1;
         if (readable(t) && n >= MIN_CLUBS && n <= MAX_CLUBS) {
@@ -995,6 +1004,10 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
     if (!rt_unwinding) season_arg_second_rules(obj);  /* 0.7.2 slice 16 */
+    /* The C1 play-out and direct places of the season (open item 253, season_sizes_ita.c). */
+    const char *f = season_change_file(obj);
+    if (!rt_unwinding && sizes_on() && (!strcmp(f, "ita_ser_c1a") || !strcmp(f, "ita_ser_c1b")))
+        season_sizes_ita_playout_places(obj);
 }
 
 /* ---- Promotion and relegation of a size change ---- */

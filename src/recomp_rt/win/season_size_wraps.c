@@ -649,7 +649,7 @@ const int season_size_caps[] = {
     28,       /* bra_nat_first */
     28,       /* bra_nat_second */
     16,       /* cro_a1 */
-    16,       /* cro_a2a */
+    18,       /* cro_a2a */
     16,       /* cro_a2b */
     16,       /* den_first */
     14,       /* den_prm */
@@ -664,8 +664,8 @@ const int season_size_caps[] = {
     21,       /* fra_third */
     18,       /* ger_first */
     18,       /* ger_second */
-    14,       /* gre_prm */
-    14,       /* gre_second */
+    18,       /* gre_prm */
+    21,       /* gre_second */
     20,       /* hol_first */
     18,       /* hol_prm */
     0,       /* ire_first */
@@ -825,14 +825,20 @@ const int season_size_fixed[] = {
 const SeasonGrown season_grown[] = {
     {"arg_prm", 20, 30, SEASON_TEMPLATE_HALVES},
     {"arg_second", 25, 38, SEASON_TEMPLATE_SHUFFLED},
+    {"aus_nsl", 13, 13, SEASON_TEMPLATE_SHUFFLED},
     {"bel_first", 18, 18, SEASON_TEMPLATE_SEQUENTIAL},
     {"bel_second", 18, 19, SEASON_TEMPLATE_SEQUENTIAL},
     {"bra_nat_first", 28, 28, SEASON_TEMPLATE_SHUFFLED},
     {"bra_nat_second", 28, 28, SEASON_TEMPLATE_SHUFFLED},
+    {"cro_a1", 16, 16, SEASON_TEMPLATE_SEQUENTIAL},
+    {"cro_a2a", 16, 18, SEASON_TEMPLATE_SEQUENTIAL},
+    {"cro_a2b", 16, 16, SEASON_TEMPLATE_SEQUENTIAL},
     {"den_prm", 12, 14, SEASON_TEMPLATE_SHUFFLED},
     {"eng_conf", 22, 24, SEASON_TEMPLATE_SHUFFLED},
     {"fin_prm", 12, 14, SEASON_TEMPLATE_SHUFFLED},
     {"fra_third", 20, 21, SEASON_TEMPLATE_MIRRORED},
+    {"gre_prm", 14, 18, SEASON_TEMPLATE_SEQUENTIAL},
+    {"gre_second", 14, 21, SEASON_TEMPLATE_SEQUENTIAL},
     {"hol_first", 18, 20, SEASON_TEMPLATE_SHUFFLED},
     {"ire_first", 0, 12, SEASON_TEMPLATE_SHUFFLED},
     {"ire_prm", 0, 12, SEASON_TEMPLATE_SHUFFLED},
@@ -853,7 +859,7 @@ const SeasonGrown season_grown[] = {
     {"tur_second", 20, 20, SEASON_TEMPLATE_SHUFFLED},
     {"wel_first", 18, 18, SEASON_TEMPLATE_SHUFFLED},
 };
-const int season_grown_count = 29;
+const int season_grown_count = 35;
 
 /* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */
 
@@ -875,6 +881,17 @@ RT_WRAP(00406f00, schedule_406f00)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_00406f00();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* AusNsl::create_schedule */
+void o_004111a0(void);
+RT_WRAP(004111a0, schedule_4111a0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_004111a0();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }
@@ -923,6 +940,39 @@ RT_WRAP(0042c140, schedule_42c140)
     season_sizes_schedule(self, stage, count_at);
 }
 
+/* CroA1::create_schedule */
+void o_005140e0(void);
+RT_WRAP(005140e0, schedule_5140e0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005140e0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* CroA2a::create_schedule */
+void o_005155e0(void);
+RT_WRAP(005155e0, schedule_5155e0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005155e0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* CroA2b::create_schedule */
+void o_00516700(void);
+RT_WRAP(00516700, schedule_516700)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_00516700();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
 /* DenPrm::create_schedule */
 void o_00552900(void);
 RT_WRAP(00552900, schedule_552900)
@@ -963,6 +1013,28 @@ RT_WRAP(005bfe30, schedule_5bfe30)
     uint32_t self = cpu.ecx, count_at = rt_arg(1);
     int stage = (int8_t)(rt_arg(0) & 0xff);
     o_005bfe30();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* GrePrm::create_schedule */
+void o_005ea6d0(void);
+RT_WRAP(005ea6d0, schedule_5ea6d0)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005ea6d0();
+    if (rt_unwinding) return;
+    season_sizes_schedule(self, stage, count_at);
+}
+
+/* GreSecond::create_schedule */
+void o_005eb570(void);
+RT_WRAP(005eb570, schedule_5eb570)
+{
+    uint32_t self = cpu.ecx, count_at = rt_arg(1);
+    int stage = (int8_t)(rt_arg(0) & 0xff);
+    o_005eb570();
     if (rt_unwinding) return;
     season_sizes_schedule(self, stage, count_at);
 }
