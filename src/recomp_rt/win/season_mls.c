@@ -289,13 +289,18 @@ static int new_form(uint32_t obj)
 
 /* The club count of the division in a season of the new form: the count of its row (row Y - 1 holds the real
  * season Y, season_sizes_edition), at most MLS_MAX_CLUBS. -1 when the original's form plays. */
+static int row_clubs(int season)
+{
+    int s = season_rules_last_season(season_sizes_edition("usa_mls", season), "usa_mls");
+    const SeasonRule *r = s ? season_rules_find(s, "usa_mls", 0) : NULL;
+    return r && r->clubs >= 4 && r->clubs <= MLS_MAX_CLUBS ? r->clubs : -1;
+}
+
 int season_mls_division_size(const char *division, int season)
 {
     if (!mls_on() || !division || strncmp(division, "American Major League", 52) || season < MLS_FIRST_SEASON)
         return -1;
-    int s = season_rules_last_season(season_sizes_edition("usa_mls", season), "usa_mls");
-    const SeasonRule *r = s ? season_rules_find(s, "usa_mls", 0) : NULL;
-    return r && r->clubs >= 4 && r->clubs <= MLS_MAX_CLUBS ? r->clubs : -1;
+    return row_clubs(season);
 }
 
 static uint32_t row_club(uint32_t obj, int i)
@@ -387,8 +392,16 @@ RT_WRAP(00908560, mls_create_table)
         call_this(F_INIT_ROW, obj, 4, a);
         if (rt_unwinding) return;
     }
-    fprintf(stderr, "recomp: mls: %d table of %d clubs (season %d form)\n", (int16_t)rd16(g_mem, obj + COMP_YEAR), k,
-            form_season(obj));
+    int edition = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    fprintf(stderr, "recomp: mls: %d table of %d clubs (season %d form)\n", edition, k, form_season(obj));
+    /* The MLS has no division below, so no club comes in or goes out (open item 269): a 2023 start has the 29 clubs
+     * of the October 2023 database and no San Diego FC (30 from 2025), a 2001 start keeps Miami Fusion and Tampa Bay
+     * Mutiny (folded in January 2002, no fold in the game: item 269, for 0.7.3). The run check (league_size_run.py)
+ * takes the count of this line for those editions only. */
+    int want = row_clubs(form_season(obj));
+    if (want > 0 && k != want)
+        fprintf(stderr, "recomp: mls: %d: %d clubs, the row %d: %s\n", edition, k, want,
+                k < want ? "the database has no other club of the division" : "no club can leave (no division below)");
     rt_ret_stdcall(k == n && n >= 2, 0);
 }
 

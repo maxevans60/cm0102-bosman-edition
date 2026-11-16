@@ -518,6 +518,10 @@ def shortages(log, file):
         m = pat.match(line)
         if m and int(m.group(2)) < int(m.group(3)):
             out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
+        m = MLS_COUNT.match(line) if file == "usa_mls" else None
+        if m and (int(m.group(2)) < int(m.group(3)) or
+                  MLS_FOLD.get(int(m.group(1))) == (int(m.group(2)), int(m.group(3)))):
+            out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
     return out
 # Gap 43: an exchange whose real places keep both counts. The lower file: (the upper file, the least clubs that move
 # each way). League of Ireland 2011 to 2015 (rows wal-nir-irl-266 to 367): the 12th of the Premier Division goes down,
@@ -541,10 +545,100 @@ def exchange_faults(log, file, year):
             for d, u in moves if d != u or d < least]
 
 
+# Gap row 7 (src/recomp_rt/win/season_mls.c): from 2002 the MLS plays one table of the division's clubs, an
+# unbalanced schedule of the season's games (season_mls_plan.c, SCHEDULES) and a play-off to a final. The row holds
+# the clubs and no meetings, so the generic counts (m x (n - 1) matches, the template of the row, the played lines of
+# the size engine) do not apply. Edition 2001 is the original's three groups of 4.
+MLS_FIRST = 2002
+MLS_PLAN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src", "recomp_rt", "win",
+                        "season_mls_plan.c")
+# The MLS has no division below, so no club comes in or goes out (open item 269). The log names each edition whose
+# count differs from its row, with the reason. The check takes the game's count only when the database has fewer
+# clubs than the row (a 2023 start has no San Diego FC, 30 from 2025): the count of a closed league is bounded by
+# its database clubs. More clubs than the row stay a fault, except editions 2002 to 2004 (MLS_FOLD): Miami Fusion
+# and Tampa Bay Mutiny folded in January 2002, and the game has no fold of named clubs (lead decision, 16 November
+# 2026: open item 269, for 0.7.3).
+MLS_COUNT = re.compile(r"recomp: mls: (\d+): (\d+) clubs, the row (\d+): (the database has no other club of the "
+                       r"division|no club can leave \(no division below\))$")
+MLS_FOLD = {2002: (12, 10), 2003: (12, 10), 2004: (12, 10)}
+MLS_PLAN_LINE = re.compile(r"recomp: mls: (\d+): (\d+) clubs \(East (\d+), West (\d+)\), (\d+) matches, (\d+) to "
+                           r"(\d+) games, (\d+) rounds ")
+
+
+def mls_games(path=MLS_PLAN):
+    """{season: games a club} of the SCHEDULES table of season_mls_plan.c."""
+    text = open(path, encoding="utf-8").read()
+    block = text.split("SCHEDULES[] = {", 1)[1].split("};", 1)[0]
+    return {int(y): int(g) for y, g in re.findall(r"\{(\d{4}), \d+, \d+, \d+, (\d+), \d+\}", block)}
+
+
+def mls_faults(log, rows, tmpl, file, year, last, row, games):
+    """The faults of an MLS run: each edition from 2002 holds the clubs of its row (or the count that the log names
+    with its reason), every club plays the season's games, the template holds the plan's rounds, and the play-off
+    ends in a final with one club out of each tie."""
+    fails = []
+    lines = log.split("\n")
+    for season, phase, ed, n, _meet, matches in rows:
+        if ed < MLS_FIRST:
+            continue
+        clubs = row(ed)[0]
+        if n != clubs:
+            fails.append(f"{file}: report {season} {phase}, edition {ed}: {n} clubs, want {clubs}")
+        elif matches not in (-1, games.get(ed)):
+            fails.append(f"{file}: report {season} {phase}, edition {ed}: {matches} matches a club, want "
+                         f"{games.get(ed)}")
+    plans = {}
+    for x in lines:
+        m = MLS_PLAN_LINE.match(x)
+        if m:
+            plans[int(m.group(1))] = [int(v) for v in m.groups()[1:]]
+    for ed in range(max(year, MLS_FIRST), last + 1):
+        if ed not in plans:
+            fails.append(f"{file} {ed}: no plan line")
+            continue
+        n, east, west, matches, lo, hi, rounds = plans[ed]
+        clubs, g = row(ed)[0], games.get(ed)
+        if (n, east + west, lo, hi, matches) != (clubs, clubs, g, g, clubs * g // 2):
+            fails.append(f"{file} {ed}: plan of {n} clubs ({east} and {west}), {matches} matches, {lo} to {hi} games; "
+                         f"want {clubs} clubs, {clubs * (g or 0) // 2} matches, {g} games each")
+        if not any(x.startswith(f"recomp: mls: {ed}: final ") for x in lines):
+            fails.append(f"{file} {ed}: no final")
+    for base, _cls, new in tmpl:
+        if base in plans and (new is None or len(new) != plans[base][6]):
+            fails.append(f"{file} template {base}: {len(new) if new else 'the class'} dates, want the plan's "
+                         f"{plans[base][6]} rounds")
+    fails += [f"{file}: {x[len('recomp: mls: '):]}" for x in lines if x.startswith("recomp: mls: ") and
+              (re.search(r" tie \d+: \d+ clubs go on", x) or " not built" in x or ": no plan for " in x or
+               ": no room for " in x)]
+    return fails
+
+
+def rules_faults(report, file, short):
+    """The rules report differences of the clubs of a file. A short edition (shortages) differs from its row by the
+    clubs the database lacks, and the log names it. The report's season of a calendar-year league is the edition
+    before (edition_row). Report season 2001 of the MLS also holds edition 2001, the original's groups of 4."""
+    import rules_report_check as rrc
+    rep_clubs = []
+    seasons, comps = rrc.read_report(report, rep_clubs)
+    diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
+             | rrc.division_differences(comps, rep_clubs))
+    diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
+
+    def named(d):
+        ed = d[0] + (1 if calendar_year(file) else 0)
+        if ed not in short:
+            return False
+        m = re.search(r"game ([\d/]+), table (\d+) ", d[2] + " ")
+        if not m or int(m.group(2)) != short[ed][1]:
+            return False
+        ok = {short[ed][0]} | ({4} if file == "usa_mls" and ed == MLS_FIRST else set())
+        return all(int(v) in ok for v in m.group(1).split("/"))
+    return [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs if not named(d)]
+
+
 def faults(work, file, year, last):
     """The faults of a run, edition by edition: each edition that the report, the template lines and the played
     lines show is checked against its own row (edition_row)."""
-    import rules_report_check as rrc
     report = os.path.join(work, "report.tsv")
     log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
     lines = log.split("\n")
@@ -563,6 +657,13 @@ def faults(work, file, year, last):
     rows = report_rows(report, file) if os.path.exists(report) else []
     if not any(r[0] == year and r[1] == "start" for r in rows):
         fails.append(f"{file} {year}: no row in the start report")
+    if file == "usa_mls":
+        fails += mls_faults(log, rows, templates(log, file), file, year, last, row, mls_games())
+        if os.path.exists(report):
+            fails += rules_faults(report, file, short)
+        print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows}))
+              + "; club counts of the database " + ", ".join(f"{ed}:{n} (row {w})" for ed, (n, w) in sorted(short.items())))
+        return fails
     for season, phase, ed, n, meet, matches in rows:
         clubs, m = row(ed)
         m = m or meet
@@ -637,17 +738,7 @@ def faults(work, file, year, last):
     fails += j1_faults(log, file, {ed for ed, *_x in done})
     fails += exchange_faults(log, file, year)
     if os.path.exists(report):
-        rep_clubs = []
-        seasons, comps = rrc.read_report(report, rep_clubs)
-        diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
-                 | rrc.division_differences(comps, rep_clubs))
-        diffs = sorted(d for d in diffs if d[1] in ("clubs", "division_clubs") and file in d[2])
-        # A short edition (shortages) differs from its row by the clubs the database lacks, and the log names it.
-        # The report's season of a calendar-year league is the edition before (edition_row).
-        def named(d):
-            ed = d[0] + (1 if calendar_year(file) else 0)
-            return ed in short and f"game {short[ed][0]}, table {short[ed][1]} " in d[2] + " "
-        fails += [f"{file} {d[0]}: rules report difference: {d[2]}" for d in diffs if not named(d)]
+        fails += rules_faults(report, file, short)
     print(f"{file}: editions in the report " + ", ".join(sorted({f"{ed}:{n}" for _s, _p, ed, n, _m, _x in rows})) +
           "; finished tables " + ", ".join(f"{ed}:{n}:{lo}-{hi}" for ed, n, _x, lo, hi in done) +
           "; splits " + ", ".join(f"{ed}:{'+'.join(map(str, v[1]))}" for ed, v in sorted(made.items())) +
@@ -869,6 +960,27 @@ def self_test():
         (template_faults("shrink", cls, shrink, 3), False),
         (template_faults("late", cls, late, 6), True),
         (template_faults("count", cls, good, 8), True),
+    ]
+    # Gap row 7: the MLS games of the plan table, the plan line and the shortage of a 2023 database.
+    games = mls_games()
+    if (games.get(2002), games.get(2025)) != (28, 34):
+        checks.append((["mls_games"], False))
+    mls_log = ("recomp: mls: 2025: 29 clubs, the row 30: the database has no other club of the division\n"
+               "recomp: mls: 2025: 29 clubs (East 15, West 14), 493 matches, 34 to 34 games, 37 rounds from day 80 "
+               "to 248\nrecomp: mls: 2025: final A v B\n")
+    short = shortages(mls_log, "usa_mls")
+    checks += [
+        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (short.get(ed, (30, 0))[0], 0), games), False),
+        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (30, 0), games), True),
+        (mls_faults(mls_log + "recomp: mls: stage 2, West tie 0: 0 clubs go on (x)\n", [], [], "usa_mls", 2025,
+                    2025, lambda ed: (29, 0), games), True),
+        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2026, lambda ed: (29, 0), games), True),
+        ([] if short == {2025: (29, 30)} else ["shortage"], False),
+        ([] if shortages(mls_log.replace("29 clubs, the row 30", "31 clubs, the row 30"), "usa_mls") == {}
+         else ["excess"], False),
+        ([] if shortages("recomp: mls: 2002: 12 clubs, the row 10: no club can leave (no division below)\n"
+                         "recomp: mls: 2005: 13 clubs, the row 12: no club can leave (no division below)\n",
+                         "usa_mls") == {2002: (12, 10)} else ["fold"], False),
     ]
     # A template of 7-day gaps only (the Brazilian classes) has no winter break: a Wednesday in a gap is good, and the
     # earlier starts go up to the class's limit.
