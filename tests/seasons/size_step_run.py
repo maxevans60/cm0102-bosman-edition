@@ -65,8 +65,10 @@ CASES = {
                    "winner) at each change; the Conference grows from 22 to 24 in 2006/07"),
 }
 
-# The extra divisions of the new game screen of a case (rules_report_check.EXTRA).
-EXTRA = {"conference": ["conference"]}
+# The extra divisions of the new game screen of a case (rules_report_check.EXTRA, ENV_EXTRA). portugal2015 needs the
+# Segunda Divisao B: without it PorSecond::set_up_rules sets no division below (0x7d1714..0x7d1728) and the PorPrm
+# chain returns before its Segunda Liga call (0x7cfc55), so no club of the Segunda Liga goes down there.
+EXTRA = {"conference": ["conference"], "portugal2015": ["portugal"]}
 
 # The exchanges of league_promote_and_relegate 0x689c80 between two leagues of a case (the log line of the wrap in
 # season_sizes.c): (upper, lower, clubs each way, the least count of such lines). The chain body 0x5752f0 makes no

@@ -53,6 +53,7 @@
 #define CLUB_NATION 0x53u           /* nation pointer */
 #define CLUB_LAST_DIVISION 0x5bu    /* club_comp pointer: the division of the last season (0x689d99) */
 #define CLUB_REPUTATION 0x80u       /* s16 */
+#define CLUB_ZONE 0x60u             /* club_comp pointer: the zone of a class of zones (PorSecondB 0x7d293b..0x7d2957) */
 #define NATION_COUNT 0xae2350u      /* the last 2 x nations rows of the club table are national teams (0x53b900) */
 #define REC_NATION 0x5du            /* club_comp record: nation pointer */
 #define ROW_POS 0x39u               /* s8: the place in the table, from 1 (0x685225) */
@@ -1312,6 +1313,13 @@ int season_sizes_plays_short(const char *file)
 
 static uint32_t current_division(uint32_t club) { return rd32(g_mem, club + CLUB_DIVISION); }
 
+/* 1 for the record of the Segunda Divisao B: the division and its zone stages carry it (the record id at +0 against
+ * [0x9cf7c0], as PorSecondB::create_zone_stage compares at 0x7d2959..0x7d2961). */
+static int por_second_b_record(uint32_t rec)
+{
+    return readable(rec) && rd32(g_mem, rec) == rd32(g_mem, 0x9cf7c0u);
+}
+
 static int is_human(uint32_t club)
 {
     uint32_t a[1] = {club};
@@ -1472,6 +1480,22 @@ static void size_step_run(uint32_t trigger)
         }
     }
     free(start);
+    /* The Segunda Divisao B keeps 20 clubs in each zone: PorSecondB::create_zone_stage takes the clubs of its
+     * division whose zone (+0x60) is the zone's record (0x7d293b..0x7d2969) and stops at por_second_b.cpp 612
+     * (0x7d2a2c) with fewer than 20. A club that the step moves in keeps the zone of its data, so a 2015 game with
+     * Portugal's extra divisions stopped there at the 2016 start. Each club that the step moves in takes the zone of
+     * a club that the step moves out, so each zone keeps its count. */
+    uint32_t zone_in[STEP_MAX_ROWS], zone_out[STEP_MAX_ROWS];
+    int nzone_in = 0, nzone_out = 0;
+    for (int i = 0; i < n; i++) {
+        int f = moves[i].from, t = moves[i].to;
+        if (t >= 0 && step_seen[t].keep && por_second_b_record(step_seen[t].rec) && nzone_in < STEP_MAX_ROWS)
+            zone_in[nzone_in++] = at[moves[i].club];
+        if (f >= 0 && step_seen[f].keep && por_second_b_record(step_seen[f].rec) && nzone_out < STEP_MAX_ROWS)
+            zone_out[nzone_out++] = at[moves[i].club];
+    }
+    for (int i = 0; i < nzone_in && i < nzone_out; i++)
+        wr32(g_mem, zone_in[i] + CLUB_ZONE, rd32(g_mem, zone_out[i] + CLUB_ZONE));
     for (int i = 0; i < n && !rt_unwinding; i++) {
         uint32_t c = at[moves[i].club], old = current_division(c);
         uint32_t to = moves[i].to >= 0 ? step_seen[moves[i].to].rec : 0;
