@@ -5,7 +5,8 @@
  * Premier Division in the seasons of 3 and 5, 3 and 7, 3 and 9, 5 and 9 substitutes), a count above what the
  * match engine holds (12 on the bench for the World Cup, clamped to 9), a file with no row, a file whose
  * count is unknown, the first row of a file that has qualifying rows after it (the European Champions Cup),
- * a season outside the table, and an unknown count that keeps the latest earlier count of the file (item 274). */
+ * a season outside the table, and an unknown count that keeps the latest earlier count of the file (item 274: the
+ * Major League Soccer, the A-League, Argentina, the Champions League, the EFL Cup and the EFL Trophy). */
 #include "season_rules.h"
 #include "season_subs_rule.h"
 
@@ -79,6 +80,15 @@ int main(int argc, char **argv)
     /* No count of a season before 2020 reaches 2020 or later (5 substitutes from 2020, IFAB): the Russian Premier
      * League of 2020 is unknown, 2019 has 3, so it keeps its own values. */
     expect(2020, "rus_prm", 0, 0, 0);
+    /* Item 274, the EFL Cup (forum report: 5 on the bench in 2026/27). The EFL Cup Rules 2025/26 (rule 8.1) give 9
+     * named and 5 used in all matches, and 2026/27 is unknown, so 2026 takes 2025. The EFL Trophy Rules 2025/26
+     * give 7 named and 5 used. The Trophy of 2024 has no count from 2020 on before it, so it keeps its own values. */
+    expect(2026, "eng_cc_cup", both, 5, 9);
+    expect_from(2026, "eng_cc_cup", 2025, 2025);
+    expect(2027, "eng_cc_cup", both, 5, 9);
+    expect(2026, "eng_auto_cup", both, 5, 7);
+    expect_from(2026, "eng_auto_cup", 2025, 2025);
+    expect(2024, "eng_auto_cup", 0, 0, 0);
     /* A count of the season itself gives its own season. */
     expect_from(2022, "eng_prm", 2022, 2022);
     /* NULL arguments do nothing. */
