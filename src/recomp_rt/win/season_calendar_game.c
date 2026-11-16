@@ -147,6 +147,21 @@ RT_WRAP(00669180, create_all_comps)
  * takes the start of the main nation's entry (+0x2a, 0x830565). A game that starts in 2003 or later with Ireland as the
  * main nation starts on the start of its calendar season, as a Japanese start takes the entry's March (decision 7). The
  * entry is set back after the call: the creator's wrap above writes it for a selected Ireland. */
+#define MAIN_NATION 0xae2d08u       /* the first selected nation of Select League(s) (0x81dd54..0x81e487) */
+#define START_DATE 0xdd6ec8u        /* the game's start date, set from the main nation's entry (0x83056e..0x830573) */
+
+/* RECOMP_CALENDAR_LOG: the start date that the call set, and the main nation's league table entry. */
+static void log_start(void)
+{
+    if (!logging()) return;
+    uint32_t main = rd32(g_mem, MAIN_NATION);
+    int e = -1;
+    for (int i = 0; i < 35 && main; i++)
+        if (rd32(g_mem, ENTRIES + (uint32_t)i * ENTRY_SIZE) == main) e = i;
+    fprintf(stderr, "recomp: calendar: game start date day %d of %d, main nation entry %d\n",
+            (int16_t)rd16(g_mem, START_DATE), (int16_t)rd16(g_mem, START_DATE + 2), e);
+}
+
 void o_00830520(void);
 RT_WRAP(00830520, set_game_start_date)
 {
@@ -154,6 +169,7 @@ RT_WRAP(00830520, set_game_start_date)
     set_moved();
     if (state_of(y) != SEASON_CAL_YEAR) {
         o_00830520();
+        if (!rt_unwinding) log_start();
         return;
     }
     uint8_t keep[ENTRY_SIZE];
@@ -161,6 +177,7 @@ RT_WRAP(00830520, set_game_start_date)
     write_entry(SEASON_CAL_YEAR, y, "the start date");
     o_00830520();
     memcpy(g_mem + ENTRY_AT, keep, ENTRY_SIZE);
+    if (!rt_unwinding) log_start();
 }
 
 /* The rule kind: after IrePrm's start_new_season (the change of 20 June 2002 and of each February from 2003). The
@@ -365,4 +382,10 @@ void season_calendar_log_history(uint32_t obj, int label)
     fprintf(stderr, "recomp: calendar: history row of %s edition %d: label %d on day %d of %d\n", file,
             (int16_t)rd16(g_mem, obj + COMP_YEAR), label, (int16_t)rd16(g_mem, GAME_DATE),
             (int16_t)rd16(g_mem, GAME_DATE + 2));
+}
+
+int season_calendar_edition(void)
+{
+    uint32_t p = ire_prm();
+    return p ? (int16_t)rd16(g_mem, p + COMP_YEAR) : 0;
 }
