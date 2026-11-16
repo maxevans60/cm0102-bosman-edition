@@ -150,8 +150,9 @@ ROWS = {
     "ire_first@2001": (2001, 2002, "League of Ireland from a 2001 start: 12 and 9, then 3 down and 1 up with the "
                        "play-off, and the size step fills the First Division to the row's 12 from Irish clubs with no "
                        "division (item 260, D12)"),
-    "ire_first@2002": (2002, 2005, "League of Ireland from a 2002 start: editions 2003 and 2004 both play row 2003, and "
-                       "only edition 2004 moves its 1 down and 3 up on their own (item 251b review); 12 and 10 in 2005"),
+    "ire_first@2002": (2002, 2005, "League of Ireland from a 2002 start: the calendar move (gap row 2) plays edition 2002 "
+                       "as the short season (rows 41 and 42), 2003 by rows 41b and 42b, 2004 by row 2003; 12 and 10 "
+                       "in 2005"),
     "ire_first@2003": (2003, 2005, "League of Ireland from a 2003 start: 10 and 12 at the start (item 260), 2004 1 down "
                        "and 3 up with no play-off, 12 and 10 in 2005"),
     "ire_first@2004": (2004, 2005, "League of Ireland from a 2004 start: 10 and 12 at the start, the list of row 2003 "
@@ -204,22 +205,53 @@ HALVES_IN_TABLE = {"jap_j1", "kor_league"}
 EXTRA = {"eng_conf": ["conference"]}
 
 
+class RowSeason(int):
+    """A season of a file whose rules hold more than one row (the Irish 2002 rows 41 and 41b, gap row 2): n picks
+    the row of that season by its order in the table, as season_rules_row_of (season_rules.c) finds it."""
+
+    def __new__(cls, season, n):
+        o = int.__new__(cls, season)
+        o.n = n
+        return o
+
+
+_ENC = []
+
+
+def encoded_rows():
+    """The rows of the encoded table, in file order."""
+    if not _ENC:
+        with open(ENCODED, encoding="utf-8") as f:
+            cols = f.readline().rstrip("\n").split("\t")
+            _ENC.extend(dict(zip(cols, line.rstrip("\n").split("\t"))) for line in f)
+    return _ENC
+
+
+def encoded_pick(file, season):
+    """The encoded row of a file in a season by the after-table rule (the last season before, its first row with
+    clubs), or for a RowSeason the n-th row of that season. None when there is none."""
+    best, seen = None, {}
+    for row in encoded_rows():
+        if row.get("comp_file") != file or not row.get("season", "").isdigit() or not row.get("clubs", "").isdigit():
+            continue
+        s = int(row["season"])
+        k = seen.get(s, 0)
+        seen[s] = k + 1
+        want = season.n if isinstance(season, RowSeason) and s == season else 0
+        if s <= season and k == want and (best is None or s > best[0]):
+            best = (s, row)
+    return best[1] if best else None
+
+
 def encoded_row(file, season):
     """(clubs, meetings) of the encoded row of a file in a season, by the after-table rule (the last row before)."""
-    best = None
-    with open(ENCODED, encoding="utf-8") as f:
-        cols = f.readline().rstrip("\n").split("\t")
-        for line in f:
-            row = dict(zip(cols, line.rstrip("\n").split("\t")))
-            if row.get("comp_file") != file or not row.get("season", "").isdigit():
-                continue
-            s = int(row["season"])
-            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                m = int(row["meetings"]) if row.get("meetings", "").isdigit() else 0
-                if file in HALVES_IN_TABLE and row.get("halves") == "1":
-                    m *= 2
-                best = (s, int(row["clubs"]), m)
-    return (best[1], best[2]) if best else (0, 0)
+    row = encoded_pick(file, season)
+    if not row:
+        return (0, 0)
+    m = int(row["meetings"]) if row.get("meetings", "").isdigit() else 0
+    if file in HALVES_IN_TABLE and row.get("halves") == "1":
+        m *= 2
+    return (int(row["clubs"]), m)
 
 
 def rounds_of(clubs, meetings):
@@ -229,16 +261,8 @@ def rounds_of(clubs, meetings):
 def encoded_split(file, season):
     """The split of the encoded row of a file in a season (the after-table rule): (after, [(size, meetings)]) or
     None for one table or a split the engine does not play (unknown section meetings)."""
-    best = None
-    with open(ENCODED, encoding="utf-8") as f:
-        cols = f.readline().rstrip("\n").split("\t")
-        for line in f:
-            row = dict(zip(cols, line.rstrip("\n").split("\t")))
-            if row.get("comp_file") != file or not row.get("season", "").isdigit():
-                continue
-            s = int(row["season"])
-            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                best = (s, row.get("split", "-"), row.get("split_meet", "-"))
+    row = encoded_pick(file, season)
+    best = (0, row.get("split", "-"), row.get("split_meet", "-")) if row else None
     if not best or not best[1].startswith("after "):
         return None
     head, sizes = best[1].split(",")[0][len("after "):].split(": ")
@@ -347,19 +371,9 @@ def split_points_logged(log, file):
 def encoded_form(file, season):
     """(clubs, meetings, zones, extra, rounds, halves) of the encoded row of a file in a season, by the after-table
     rule; zones is the list of zone counts ([] for none), rounds the encoded rounds (0 when not given)."""
-    best = None
-    with open(ENCODED, encoding="utf-8") as f:
-        cols = f.readline().rstrip("\n").split("\t")
-        for line in f:
-            row = dict(zip(cols, line.rstrip("\n").split("\t")))
-            if row.get("comp_file") != file or not row.get("season", "").isdigit():
-                continue
-            s = int(row["season"])
-            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                best = (s, row)
-    if not best:
+    row = encoded_pick(file, season)
+    if not row:
         return (0, 0, [], 0, 0, 0)
-    row = best[1]
     num = lambda k: int(row[k]) if row.get(k, "").isdigit() else 0  # noqa: E731
     zones = [int(z) for z in row.get("zones", "-").split("+") if z.isdigit()]
     return (num("clubs"), num("meetings"), zones, num("extra"), num("rounds"), num("halves"))
@@ -393,13 +407,18 @@ def real_season(file, season):
         import make_rules
         for r in make_rules.read_rows():
             if r.get("comp_file") and str(r.get("season", ""))[:4].isdigit():
-                _REAL[(r["comp_file"], int(str(r["season"])[:4]))] = r.get("real_season", "")
-    return _REAL.get((file, season), "")
+                _REAL.setdefault((r["comp_file"], int(str(r["season"])[:4])), []).append(r.get("real_season", ""))
+    rows = _REAL.get((file, int(season)), [])
+    n = season.n if isinstance(season, RowSeason) else 0
+    return rows[n] if n < len(rows) else ""
 
 
 # Classes that play over two years (August to June) whose rows hold calendar-year seasons from some year: edition Y
 # plays row Y, the real season that ends in it (season_sizes.c season_sizes_edition).
 TWO_YEAR_CLASSES = {"arg_prm"}
+
+# Classes whose rows follow the Irish calendar move (season_rules.c season_rules_moved: the files "ire_").
+MOVED_CLASSES = {"ire_prm", "ire_first"}
 
 
 def edition_season(file, edition):
@@ -408,6 +427,18 @@ def edition_season(file, edition):
     plays row Y."""
     if file in TWO_YEAR_CLASSES:
         return edition
+    if file in MOVED_CLASSES:
+        # Gap row 2: a size run has changing rules on, so the Irish calendar move can happen (season_calendar_game.c
+        # set_moved) and an edition plays the row whose real season begins with it, of its own season or the season
+        # before, in table order (season_rules_row_of): edition 2002 row 41 (2002-03, the short season), 2003 row
+        # 41b (2003), 2004 row 66 (2004).
+        real_season(file, edition)      # fills _REAL
+        for season in (edition, edition - 1):
+            for n in range(len(_REAL.get((file, season), []))):
+                key = RowSeason(season, n) if n else season
+                t = real_season(file, key)
+                if t[:4] == str(edition) and not t[4:5].isdigit():
+                    return key
     def starts(season):
         t = real_season(file, season)
         return t[:4] == str(edition) and not t[4:5].isdigit()
@@ -522,16 +553,8 @@ def calendar_year(file):
 def encoded_points(file, season):
     """The points of the split of the encoded row of a file in a season ("kept", "halved", "kept+halved+kept"), by
     the after-table rule; "unknown" plays as kept (season_split.c)."""
-    best = None
-    with open(ENCODED, encoding="utf-8") as f:
-        cols = f.readline().rstrip("\n").split("\t")
-        for line in f:
-            row = dict(zip(cols, line.rstrip("\n").split("\t")))
-            if row.get("comp_file") != file or not row.get("season", "").isdigit():
-                continue
-            s = int(row["season"])
-            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                best = (s, row.get("split", "-"))
+    row = encoded_pick(file, season)
+    best = (0, row.get("split", "-")) if row else None
     m = re.search(r"points (\S+)$", best[1]) if best else None
     if not m:
         return None
@@ -779,17 +802,8 @@ def bounds_faults(name, lines, sizes):
 
 def encoded_halves(file, season):
     """1 when the encoded row of a file in a season (the after-table rule) plays two halves."""
-    best = None
-    with open(ENCODED, encoding="utf-8") as f:
-        cols = f.readline().rstrip("\n").split("\t")
-        for line in f:
-            row = dict(zip(cols, line.rstrip("\n").split("\t")))
-            if row.get("comp_file") != file or not row.get("season", "").isdigit():
-                continue
-            s = int(row["season"])
-            if s <= season and row.get("clubs", "").isdigit() and (best is None or s > best[0]):
-                best = (s, row.get("halves") == "1")
-    return bool(best and best[1])
+    row = encoded_pick(file, season)
+    return bool(row and row.get("halves") == "1")
 
 
 def j1_faults(log, file, editions):
@@ -1004,6 +1018,10 @@ def faults(work, file, year, last):
         rounds = counts(base)[0] + (split_numbers(sp[1])[0] if sp else 0)
         if rounds == len(cls) and not sp:
             continue
+        if file in MOVED_CLASSES and "short season" in real_season(file, edition_season(file, base)):
+            # The short season of the Irish calendar move plans from the class's dates before 1 February of the next
+            # year, so the play-off ends before the update day (season_calendar.c season_calendar_move_cut).
+            cls = [d for d in cls if d < datetime.date(base + 1, 2, 1)]
         if new is None:
             fails.append(f"{file} template {base}: the class's {len(cls)} dates stay, want {rounds}")
         else:
@@ -1649,6 +1667,20 @@ def self_test():
         bad.append(("encoded", encoded_row("nor_prm", 2009), encoded_row("por_second", 2014)))
     # Slice 12: Russia changes from calendar years (edition 2006 plays row 2005, real season 2006) to two-year
     # seasons (edition 2012 plays row 2012, real season 2012–13).
+    # Gap row 2: the Irish editions follow the calendar move (season_rules_row_of): 2002 the short season, 2003 the
+    # second row of season 2002 (41b, 42b), 2004 row 2003. The short season's template takes the class's dates before
+    # the cut.
+    ire = [(f, y, edition_row(f, y), edition_counts(f, y)) for f, y in
+           (("ire_prm", 2002), ("ire_prm", 2003), ("ire_prm", 2004), ("ire_first", 2002), ("ire_first", 2003),
+            ("ire_first", 2004))]
+    if [x[2:] for x in ire] != [((10, 3), (27, 27)), ((10, 4), (36, 36)), ((10, 4), (36, 36)),
+                                ((12, 2), (22, 22)), ((12, 3), (33, 33)), ((12, 3), (33, 33))]:
+        bad.append(("Irish edition rows", ire))
+    if (real_season("ire_prm", edition_season("ire_prm", 2003)) != "2003" or
+            "short season" not in real_season("ire_first", edition_season("ire_first", 2002)) or
+            edition_row("ire_prm", 2001) != (12, 3)):
+        bad.append(("Irish real seasons", [real_season(f, edition_season(f, y)) for f in ("ire_prm", "ire_first")
+                                           for y in (2001, 2002, 2003)]))
     if (edition_row("rus_first", 2006) != (22, 2) or edition_row("rus_first", 2012) != (17, 2) or
             edition_row("rus_first", 2013) != (19, 2) or edition_row("tur_first", 2020) != (21, 2) or
             edition_row("tur_second", 2023) != (18, 2)):
