@@ -331,8 +331,13 @@ static int in_table(uint32_t table_obj, uint32_t club)
 
 /* The conference of a club in the new form: GROUP_A (East) or GROUP_C (West) by the conference stage that holds it,
  * else by its name; 0 when the original answers. */
+static uint32_t star_club[4];           /* the clubs of stage 0's rows while select_squads runs (its wrap below) */
+static int star_conf[4];
+
 static int new_conference(uint32_t club)
 {
+    for (int i = 0; i < 4; i++)
+        if (club && star_club[i] == club) return star_conf[i];
     if (!club || !mls_on() || !in_mls(club)) return 0;
     uint32_t obj = mls_object();
     if (!new_form(obj)) return 0;
@@ -594,6 +599,72 @@ RT_WRAP(00909bb0, mls_predicted)
     if (rt_unwinding) return;
     game_free(list);
     rt_ret_stdcall(0, 0);
+}
+
+/* UsaMlsAllStars::select_squads 0x90a980, thiscall, ret 0. It reads the MLS object ([0xadadfc][[0x9cf590]],
+ * 0x90a99b..0x90a9bd) and 4 rows (0x90aa1b, row step 0x3b at 0x90ab7d) of three tables. The East squad takes every
+ * club of the main table's rows (+0xb1, 0x90aaf2..0x90aafc) and the clubs of stage 0's rows that are East (0x90a000
+ * gives 0x413, 0x90aab1..0x90aacb). The West squad takes every club of stage 1's rows (0x90aceb..0x90acf5) and the
+ * clubs of stage 0's rows that are West (0x414, 0x90acaa..0x90acc4). The players of each club's squad (+0xd7, 50
+ * slots) who are fit and free join the list (0x90aaff..0x90ab50), and 0x6e2000 picks the squad from it (0x90ac8e).
+ * In the new form the main table holds every club and stage 0 is the East table, so an East club in the first 4 rows
+ * of both gave its players twice, and MATCH_MAN::pick_team 0x6dbc50 stopped at match_man..cpp 1225 (a player twice in
+ * the pick, test 0x6dd3c1) on day 214 of 2002 (run1 of gap row 7).
+ * New form: for the call, the three tables read 4 rows each that hold no club twice: the main table the first 4
+ * clubs of the East table, stage 0 the 5th and 6th clubs of each conference table, stage 1 the first 4 clubs of the
+ * West table. So each squad comes from the best 6 clubs of its conference. A missing club is an empty club record
+ * (no players, no division: 0x90a000 gives 0 at 0x90a00f). While the call runs, the conference of a club of stage
+ * 0's rows is the table it came from. The tables are set back after the call. */
+void o_0090a980(void);
+
+static void put_rows(uint32_t rows, const uint32_t *clubs, uint32_t empty)
+{
+    for (int i = 0; i < 4; i++) wr32(g_mem, rows + (uint32_t)i * ROW_SIZE, clubs[i] ? clubs[i] : empty);
+}
+
+RT_WRAP(0090a980, mls_all_star_squads)
+{
+    uint32_t obj = mls_object();
+    uint32_t stages = readable(obj) ? rd32(g_mem, obj + COMP_STAGES) : 0;
+    if (!new_form(obj) || !readable(stages) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) < 1 ||
+        !readable(rd32(g_mem, stages)) || !readable(rd32(g_mem, stages + 4))) {
+        o_0090a980();
+        return;
+    }
+    uint32_t east = rd32(g_mem, stages), west = rd32(g_mem, stages + 4);
+    uint32_t block = game_malloc(3u * 4u * ROW_SIZE + CLUB_SIZE);
+    if (rt_unwinding) return;
+    if (!block) {
+        o_0090a980();
+        return;
+    }
+    uint32_t empty = block + 3u * 4u * ROW_SIZE;
+    uint32_t first_east[4], first_west[4], next[4];
+    for (int i = 0; i < 4; i++) {
+        first_east[i] = row_club(east, i);
+        first_west[i] = row_club(west, i);
+        next[i] = row_club(i < 2 ? east : west, 4 + (i & 1));
+    }
+    put_rows(block, first_east, empty);
+    put_rows(block + 4u * ROW_SIZE, next, empty);
+    put_rows(block + 8u * ROW_SIZE, first_west, empty);
+    uint32_t saved[3] = {rd32(g_mem, obj + COMP_TABLE), rd32(g_mem, east + COMP_TABLE), rd32(g_mem, west + COMP_TABLE)};
+    wr32(g_mem, obj + COMP_TABLE, block);
+    wr32(g_mem, east + COMP_TABLE, block + 4u * ROW_SIZE);
+    wr32(g_mem, west + COMP_TABLE, block + 8u * ROW_SIZE);
+    for (int i = 0; i < 4; i++) {
+        star_club[i] = next[i];
+        star_conf[i] = i < 2 ? GROUP_A : GROUP_C;
+    }
+    o_0090a980();
+    memset(star_club, 0, sizeof star_club);
+    wr32(g_mem, obj + COMP_TABLE, saved[0]);
+    wr32(g_mem, east + COMP_TABLE, saved[1]);
+    wr32(g_mem, west + COMP_TABLE, saved[2]);
+    if (rt_unwinding) return;
+    game_free(block);
+    fprintf(stderr, "recomp: mls: %d all-star squads from the best 6 clubs of each conference\n",
+            form_season(obj));
 }
 
 /* ---- The play-off of the new form ----
