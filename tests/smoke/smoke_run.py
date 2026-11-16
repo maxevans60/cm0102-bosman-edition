@@ -25,8 +25,9 @@ days (default 14) after the first news screen (RECOMP_SAVE_AFTER_DAYS) and stops
     history-keep-all  RECOMP_HISTORY_SEASONS=0: the trim of the club records history and the fixtures to 50
                seasons (open item 192, history_trim.c) changes no game decision
     rules-on, rules-off  changing_rules (0.6.0 slice 11): a new game with it on has the season part
-               bosman_season.dat in its save; from slice 17 it also plays by the rules table of 2001/02 (RULES_ON_PARTS). Every new-game run has
-               changing_rules = off unless it sets it (new_game_runs), so the new game is the base game.
+               bosman_season.dat in its save, and it changes the parts of RULES_ON_PARTS. The new-game rules-on runs
+               with no rules table (item 257, NO_TABLE). Every new-game run has changing_rules = off unless it sets it
+               (new_game_runs), so the new game is the base game.
     host-loops-off  RECOMP_QSORT=original, RECOMP_HOT=original, RECOMP_FTOL=original, RECOMP_CALL_CACHE=0: the
                host copies of hot code of the original (qsort6.c, hot_loops.c, _ftol in crt.c) and the cache of
                calls through an address (rt.c, 0.6.2 item 110) change no game decision
@@ -690,13 +691,19 @@ def compare_runs(program, game, mode, runs, steps, days, save=None, timeout=600,
         with concurrent.futures.ThreadPoolExecutor(min(len(runs), JOBS) if JOBS else len(runs)) as pool:
             jobs = [(name, pool.submit(play, name, options, work)) for name, options in runs]
             failed_runs = 0
-            for name, job in jobs:
+            for (name, job), (_n, options) in zip(jobs, runs):
                 r, path, took = job.result()
                 if r.returncode != 0 or not os.path.exists(path):
                     print(r.stderr[-2000:])
                     for line in re.findall(r"^recomp: message box (?:from|stack).*$", r.stderr, re.M):
                         print(f"box   {name}: {line}")       # the game box of the run, if any (item 202)
                     print(f"FAIL  {name}: no saved game (code {r.returncode}) after {took:.0f} s")
+                    failed_runs += 1
+                    continue
+                # Item 257: a run that asks for no rules table must have read none.
+                if options.get("_env", {}).get("RECOMP_RULES_TABLE") == NO_TABLE and \
+                        "recomp: rules table: none" not in r.stderr:
+                    print(f"FAIL  {name}: the game read a rules table, though the run asks for none")
                     failed_runs += 1
                     continue
                 m = re.search(r"recomp: idle sleeps (\d+)", r.stderr)
@@ -881,11 +888,13 @@ def options_runs(load, holiday):
 # The season part of a save (0.6.0 slice 11, src/recomp_rt/win/season.c). A save of a new game with
 # changing_rules = on has it, and only that part may differ from the same game with it off.
 RULES_PART = "bosman_season.dat"
-# Slice 17: with changing rules on, the rules of 2001/02 from the rules table apply to a new game (named
-# substitutes, English windows, foreign player caps: Q232), so the game plays differently and these parts of the
-# save differ as well. These four are the parts that differ in the new-game run of 2026-10-18 (all four, no
-# other: transfer.dat, clubs and staff are equal), so a fifth part that differs fails the check. The base game
-# (changing_rules off) is compared as before.
+# Slice 17: a new game with changing rules on plays differently, so these parts of the save differ as well. These
+# four are the parts that differ in the new-game run of 2026-10-18 (all four, no other: transfer.dat, clubs and staff
+# are equal), so a fifth part that differs fails the check. That run, and every rules-on run of a new game since, has
+# no rules table (the game folder has no Seasons/, and the set did not set RECOMP_RULES_TABLE), so no row of the
+# table applies: the substitutes and nation rows (season_subs_rule.c, file_nation of season_kind_nation.c) read it.
+# Item 257 makes that fixed: the new-game rules-on runs with NO_TABLE. The base game (changing_rules off) is compared
+# as before.
 # contract.dat joins them with Setup Game menu B (O107, Max's play test of 0.6.0, accepted overnight for Max's
 # morning check): the same build with the menu of the preview (RECOMP_SETUP_TEXT=0.6.0-preview) differs only in
 # the four parts and bosman_season.dat, and a heap trace of Setup Game is the same with changing rules on and
@@ -916,6 +925,10 @@ NEW_GAME_LAYOUT_PARTS = ("club records.dat",)
 #   when the game writes its own 2001 final on 29 July. In any other saved game it must equal normal. In a new game it
 #   is the reference only: its difference from normal is the whole decision (first-season holders).
 Q48_REFERENCE = "history-q48-off"
+# Item 257: the value of RECOMP_RULES_TABLE that the new-game rules-on runs with. The game reads a table that does not
+# exist as no table (season_rules_init), and the other season files beside it (season_data_path) do not exist either.
+# A path with a "/" and no folder, so that the files beside it do not resolve against the working folder on Windows.
+NO_TABLE = "/cm0102-no-rules-table/rules.tsv"
 Q48_SAVE_PARTS = ("index.dat", "nation_comp_history.dat")
 Q48_COPA_2001 = (450, 2001)                 # (competition id, label year) of the row that goes
 Q48_SAVE_ROWS = {"start.sav": [Q48_COPA_2001], "prematch.sav": [Q48_COPA_2001]}
@@ -943,9 +956,9 @@ def q48_runs(runs, new_game):
                 out.append(("rules-on-q48-ref", dict(o, _program=REF_BUILD, _against="")))
             # Item 257: the pair is defined with no rules table (RULES_ON_PARTS). With a table, changing rules on
             # applies the 2001/02 rows at the new game (club moves, new competitions, names), so rules-on runs with
-            # none (the null device reads as no table) whatever the set's environment holds. history-q48-off keeps it,
-            # so with a table set the pair also shows that the base game with the table equals the game with none.
-            o = dict(o, _env=dict(o.get("_env", {}), RECOMP_HISTORY_AFTER_START="off", RECOMP_RULES_TABLE=os.devnull,
+            # none (NO_TABLE) whatever the set's environment holds. history-q48-off keeps the set's table. So with a
+            # table set, a difference of the pair is either the rules-on change or the base game reading the table.
+            o = dict(o, _env=dict(o.get("_env", {}), RECOMP_HISTORY_AFTER_START="off", RECOMP_RULES_TABLE=NO_TABLE,
                                   **PAIR_KEEP),
                      _against=Q48_REFERENCE)
         elif name == Q48_REFERENCE and new_game:
