@@ -14,4 +14,12 @@ int season_period_length(const int *starts, int parts, int class_rounds, int rou
  * played_sum. An even count plays clubs / 2 matches a round, an odd count (clubs - 1) / 2 (a club rests). */
 int season_period_stage_done(int clubs, int rounds, int played_sum);
 
+/* Gap 33 (0.7.2): a row whose count of periods p is not the class's plays p periods of rounds / p rounds each, from
+ * round 0; the rounds past p x (rounds / p) are in no period. The length, 0 when there is none (fewer rounds than
+ * periods, p below 2). */
+int season_period_own_length(int rounds, int p);
+
+/* The period (0..p-1) of a round (0-based) in that form, -1 for a round in no period or no form. */
+int season_period_own_of(int rounds, int p, int round);
+
 #endif

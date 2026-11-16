@@ -410,6 +410,14 @@ uint32_t rt_league_period_length(uint32_t obj, uint32_t period, uint32_t origina
 /* The byte offset of the Second Division row that BelThird's promotion play-off reads (0x423a80): the count less 3
  * (0.7.2 slice 10, win/season_sizes_bel.c). */
 uint32_t rt_bel_third_row(uint32_t third, uint32_t original);
+/* First Division B with the row's two periods (gap 33, win/season_sizes_periods.c): the stage of the play-off
+ * (0x42021c) and its clubs (0x42028e, 0x42036b, 0x420412). */
+uint32_t rt_bel_playoff_stage(uint32_t obj, uint32_t original);
+uint32_t rt_bel_playoff_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_hol_stage_room(uint32_t original);
+uint32_t rt_hol_playoff_stage(uint32_t obj, uint32_t original);
+uint32_t rt_hol_period_news(void);
+uint32_t rt_league_last_stage(uint32_t obj, uint32_t original);  /* the last stage index (0x6849d7) */
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
 uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);

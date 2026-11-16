@@ -525,6 +525,20 @@ INSNS[0x689B47] = ("mov di, word ptr [esi + 0xa7]",
 # split the place after match N stays as the split read it (rt_league_keep_split_place, slice 10 test runs).
 INSNS[0x682B0F] = ("mov byte ptr [eax + esi - 1], cl",
                    "if (!rt_league_keep_split_place(ebx, eax)) W8(eax + esi + 0xffffffffu, ecx & 0xffu);")
+# Gap 33: HolFirst::update_positions_and_status 0x5f6d20 pushes the period number for the news of a period winner
+# (0x5f7330); with six periods the wrap shows the fifth and sixth as the fourth, so the number gets the shift back.
+INSNS[0x5F6E05] = ("push edx", "t0 = edx + rt_hol_period_news(); esp -= 4; W32(esp, t0);")
+# Gap 33: the stage array of HolFirst has room for eight (rt_hol_stage_room) but +0x2c keeps the class's 6: the
+# League's update_for_date 0x6849aa ends the season when +0x30 reaches +0x2c - 1 (0x6849d1..0x6849da) and calls
+# advance_stage (vtable +0x28) before; HolFirst::advance_stage 0x5f6650 makes the same test (0x5f6659..0x5f6662).
+# With six periods the last stage is the second play-off group, 7 (rt_league_last_stage). A capacity of 8 for every
+# season sent a four-period season past its play-off into an empty slot (call to 0x1 from 0x6848fb, g10 hol2010).
+INSNS[0x6849D7] = ("dec eax", "eax = rt_league_last_stage(esi, eax - 1u);")
+INSNS[0x5F665F] = ("dec eax", "eax = rt_league_last_stage(esi, eax - 1u);")
+INSNS[0x4201AC] = ("dec edx", "edx = rt_league_last_stage(ecx, edx - 1u);")   # BelSecond::advance_stage
+# League::check_complete 0x689ad0 with its first argument 1 (the season change entry and season_playoffs.c) makes the
+# test too (0x689bdf..0x689be8): without this First Division B with two periods never ended its season (g13 bel2016).
+INSNS[0x689BE5] = ("dec ecx", "ecx = rt_league_last_stage(esi, ecx - 1u);")
 # FraCfa::FraCfa 0x5b91c0 fills a stack array of 72 (0x48) with every club of [0x9cf5cc] and [0x9cf5d0] and up to
 # 34 clubs of A Lower Division in the CFA zone (`cmp word ptr [esp + 0x10], 0x22`), then makes four groups of 18 of
 # an array it never clears. With those two divisions at 36 (18 and 18, 2024/25 on) two rows held stack values and
@@ -553,6 +567,43 @@ PERIOD_PATCHES = {
     0x5F6BE2: (0x8, "rt_league_period_length(esi, ebx & 0xffu, 0x8u)"),   # periods 0, 1 and 3
     0x42012E: (0xA, "rt_league_period_bound(esi, 0xau)"),       # BelSecond::add_result 0x420110: cmp ax, 0xa
     0x42013A: (0x16, "rt_league_period_bound(esi, 0x16u)"),     # cmp ax, 0x16
+    # Gap 33: BelSecond with the row's two periods: the play-off after stage 2 (advance_stage 0x4201a0, ecx the
+    # object), a final of the two period winners (create_playoff_group 0x420230, esi the object).
+    0x42021C: (0x3, "rt_bel_playoff_stage(ecx, 0x3u)"),         # cmp eax, 3
+    0x42028E: (0x4, "rt_bel_playoff_clubs(esi, 0x4u)"),         # cmp ebp, 4: the top-up
+    0x42036B: (0x4, "rt_bel_playoff_clubs(esi, 0x4u)"),         # cmp ebx, 4: the list
+    0x420412: (0x4, "rt_bel_playoff_clubs(esi, 0x4u)"),         # push 4: the group's clubs
+    # Gap 33: HolFirst with six periods (the Eerste Divisie 2005/06 to 2008/09): room for eight stages, the play-off
+    # groups at stages 6 and 7 (season_sizes_periods.c, rt_hol_playoff_stage: the original's 4 and 5 otherwise).
+    0x5F54F5: (0x18, "rt_hol_stage_room(0x18u)"),               # constructor: push 0x18, the stage array
+    0x5F6709: (0x4, "rt_hol_playoff_stage(esi, 0x4u)"),         # advance_stage 0x5f6650: cmp eax, 4
+    0x5F68EC: (0x4, "rt_hol_playoff_stage(esi, 0x4u)"),         # create_playoff 0x5f6720: dates of group 1
+    0x5F692C: (0x4, "rt_hol_playoff_stage(esi, 0x4u)"),         # group 1's stage number
+    0x5F697A: (0x10, "4u * rt_hol_playoff_stage(esi, 0x4u)"),   # mov [ecx + 0x10], eax
+    0x5F6992: (0x5, "rt_hol_playoff_stage(esi, 0x5u)"),         # dates of group 2
+    0x5F69D0: (0x5, "rt_hol_playoff_stage(esi, 0x5u)"),         # group 2's stage number
+    0x5F6A21: (0x14, "4u * rt_hol_playoff_stage(esi, 0x5u)"),   # mov [edx + 0x14], eax
+    0x5F6A35: (0x10, "4u * rt_hol_playoff_stage(esi, 0x4u)"),   # cmp [eax + 0x10], ebx
+    0x5F6A3A: (0x14, "4u * rt_hol_playoff_stage(esi, 0x5u)"),   # cmp [eax + 0x14], ebx
+    0x5F6A3F: (0x5, "rt_hol_playoff_stage(esi, 0x5u)"),         # mov [esi + 0x30], 5
+    0x5F604B: (0x4, "rt_hol_playoff_stage(edi, 0x4u)"),         # create_schedule 0x5f5790: cmp al, 4
+    0x5F604F: (0x5, "rt_hol_playoff_stage(edi, 0x5u)"),         # cmp al, 5
+    0x5F607A: (0x4, "rt_hol_playoff_stage(edi, 0x4u)"),         # the group's name: cmp al, 4
+    0x5F6F9C: (0x4, "rt_hol_playoff_stage(ebx, 0x4u)"),         # status news 0x5f6ee0: cmp al, 4
+    0x5F6FD1: (0x5, "rt_hol_playoff_stage(ebx, 0x5u)"),         # cmp al, 5
+    0x5F7117: (0x4, "rt_hol_playoff_stage(ecx, 0x4u)"),         # match news 0x5f7110: cmp al, 4
+    0x5F711D: (0x5, "rt_hol_playoff_stage(edi, 0x5u)"),         # cmp al, 5
+    # The group goes in the play-off's own slot of the stage array (+0xc), so no slot before it stays empty.
+    0x42042F: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # mov [ecx + 0xc], eax
+    0x420443: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # cmp [edx + 0xc], ebx
+    # The play-off's matches carry its stage number (+0x42 of the fixture), which League::add_result 0x685d30 checks
+    # against +0x30 (league.cpp 3214 at 0x685e5e): create_playoff_group 0x420230 gets the dates (vtable +0x3c,
+    # 0x4203a0) and makes the group (0x4203e1) with the play-off's own stage. create_schedule 0x41f340 makes the
+    # play-off dates for that stage (0x41f975, obj in edi) and the match news 0x420790 tells it (0x420839, obj in esi).
+    0x4203A0: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # push 3 (dates)
+    0x4203E1: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # push 3 (the group's stage)
+    0x41F975: (0x3, "rt_bel_playoff_stage(edi, 0x3u)"),         # cmp al, 3
+    0x420839: (0x3, "rt_bel_playoff_stage(esi, 0x3u)"),         # cmp al, 3
     0x4205B9: (0xA, "rt_league_period_length(esi, eax & 0xffu, 0xau)"),   # create_period_stage 0x4204d0: period 0
     0x4205CB: (0xC, "rt_league_period_length(esi, eax & 0xffu, 0xcu)"),   # periods 1 and 2
 }

@@ -78,11 +78,12 @@ typedef struct {
     int starts[3];                  /* the rounds where periods 1.. begin */
     int parts;
     uint32_t flags;                 /* the "winner given" flag of each period */
+    int most;                       /* the most periods of a row (gap 33: HolFirst six, stages 0..5, play-off 6, 7) */
 } PeriodClass;
 
 static const PeriodClass CLASSES[] = {
-    {"hol_first", 0x9cf56cu, {8, 16, 26}, 4, 0xeeu},
-    {"bel_second", 0x9cf5a0u, {10, 22, 0}, 3, 0xf6u},
+    {"hol_first", 0x9cf56cu, {8, 16, 26}, 4, 0xeeu, 6},
+    {"bel_second", 0x9cf5a0u, {10, 22, 0}, 3, 0xf6u, 3},
 };
 #define NCLASSES ((int)(sizeof CLASSES / sizeof CLASSES[0]))
 
@@ -121,6 +122,20 @@ static int rounds_of(uint32_t obj)
     return m * (n + (n & 1) - 1);
 }
 
+/* Gap 33: the row's own count of periods when it differs from the class's, else 0. Fewer: First Division B 2016/17 to
+ * 2019/20, two periods of 14 rounds (Wikipedia 2016-17_Belgian_First_Division_B to 2019-20; checked 15 November
+ * 2026); the stages of the later periods are never made (their bound is past the last round) and their flags are set,
+ * so no club wins them. More: the Eerste Divisie 2005/06 to 2008/09, six periods of six rounds, rounds 37 and 38 in
+ * none (RSSSF tablesn/ned06.html to ned09.html; checked 15 November 2026); see the HolFirst functions below. The class
+ * plays p periods of rounds / p each (season_period_own_length). */
+static int own_periods(uint32_t obj, const PeriodClass *c)
+{
+    int season = season_sizes_row_season(obj, c->file);
+    const SeasonLeagueRule *r = season < 0 ? NULL : season_league_row(c->file, season);
+    int p = r ? r->periods : 0;
+    return p >= 2 && p != c->parts && p <= c->most && season_period_own_length(rounds_of(obj), p) ? p : 0;
+}
+
 /* One log line a season of each class: the periods of the season (tests/seasons/league_size_run.py reads it). */
 static void log_periods(uint32_t obj, const PeriodClass *c, int rounds)
 {
@@ -131,8 +146,10 @@ static void log_periods(uint32_t obj, const PeriodClass *c, int rounds)
     int season = season_sizes_row_season(obj, c->file);
     const SeasonLeagueRule *r = season < 0 ? NULL : season_league_row(c->file, season);
     fprintf(stderr, "recomp: league sizes: %s periods %d: rounds %d, lengths", c->file, year, rounds);
-    for (int p = 0; p < c->parts; p++)
-        fprintf(stderr, "%s%d", p ? "+" : " ", season_period_length(c->starts, c->parts, CLASS_ROUNDS, rounds, p));
+    int own = own_periods(obj, c);
+    for (int p = 0; p < (own ? own : c->parts); p++)
+        fprintf(stderr, "%s%d", p ? "+" : " ", own ? season_period_own_length(rounds, own)
+                                                  : season_period_length(c->starts, c->parts, CLASS_ROUNDS, rounds, p));
     fprintf(stderr, ", winners %s\n", r && r->periods == 0 ? "off" : "on");
 }
 
@@ -145,6 +162,8 @@ uint32_t rt_league_period_bound(uint32_t obj, uint32_t original)
     for (int k = 0; k < c->parts - 1; k++)
         if ((uint32_t)c->starts[k] == original) {
             log_periods(obj, c, rounds);
+            int own = own_periods(obj, c);
+            if (own) return (uint32_t)(k < own - 1 ? (k + 1) * season_period_own_length(rounds, own) : rounds);
             return (uint32_t)season_period_bound(c->starts, c->parts, CLASS_ROUNDS, rounds, k);
         }
     return original;
@@ -154,7 +173,10 @@ uint32_t rt_league_period_length(uint32_t obj, uint32_t period, uint32_t origina
 {
     if (!season_sizes_on()) return original;
     const PeriodClass *c = class_of(obj);
-    if (!c || (int)period < 0 || (int)period >= c->parts) return original;
+    if (!c || (int)period < 0 || (int)period >= c->most) return original;
+    int own = own_periods(obj, c);
+    if (own) return (int)period < own ? (uint32_t)season_period_own_length(rounds_of(obj), own) : original;
+    if ((int)period >= c->parts) return original;
     int len = season_period_length(c->starts, c->parts, CLASS_ROUNDS, rounds_of(obj), (int)period);
     return len >= 1 && len <= 127 ? (uint32_t)len : original;
 }
@@ -185,17 +207,137 @@ void season_periods_winners(uint32_t obj)
     if (!c) return;
     int season = season_sizes_row_season(obj, c->file);
     const SeasonLeagueRule *r = season < 0 ? NULL : season_league_row(c->file, season);
-    if (!r || r->periods != 0) return;
-    for (int p = 0; p < c->parts; p++) g_mem[obj + c->flags + (uint32_t)p] = 1;
+    if (!r) return;
+    int own = own_periods(obj, c);
+    for (int p = r->periods == 0 ? 0 : own ? own : c->parts; p < c->parts; p++) g_mem[obj + c->flags + (uint32_t)p] = 1;
 }
+
+/* BelSecond::advance_stage 0x4201a0 makes the play-off group at stage 3 (`cmp eax, 3` at 0x42021c, after its three
+ * period stages); create_playoff_group 0x420230 tops the rows of status 1 up to four (`cmp ebp, 4` at 0x42028e), lists
+ * four (`cmp ebx, 4` at 0x42036b) and makes a League_Stage of four (`push 4` at 0x420412) that meets twice. Gap 33:
+ * with the row's two periods the play-off comes after stage 2 and holds the two period winners, a final over two
+ * matches. Known limit: the class gives a later period to the best club with no period title (0xfe in the later
+ * tables), so a club never wins both and the final always plays (real rule: a club that won both went up with no
+ * final; no season of 2016/17 to 2019/20 had one). */
+uint32_t rt_bel_playoff_stage(uint32_t obj, uint32_t original)
+{
+    if (!season_sizes_on()) return original;
+    const PeriodClass *c = class_of(obj);
+    int own = c ? own_periods(obj, c) : 0;
+    return own ? (uint32_t)own : original;
+}
+
+uint32_t rt_bel_playoff_clubs(uint32_t obj, uint32_t original)
+{
+    if (!season_sizes_on()) return original;
+    const PeriodClass *c = class_of(obj);
+    int own = c ? own_periods(obj, c) : 0;
+    if (!own) return original;
+    static uint32_t logged_obj;
+    static int logged_year;
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (logging() && (logged_obj != obj || logged_year != year)) {
+        logged_obj = obj;
+        logged_year = year;
+        fprintf(stderr, "recomp: league sizes: %s play-off %d: %d clubs (the period winners, two matches each)\n",
+                c->file, year, own);
+    }
+    return (uint32_t)own;
+}
+
+/* Gap 33, the Eerste Divisie with six periods (own_periods above 4). The class holds four periods (stages 0 to 3)
+ * and its play-off groups at stages 4 and 5:
+ * - The stage array has room for six (`push 0x18` at 0x5f54f5, `mov [esi + 0x2c], 6` at 0x5f54fd, HolFirst's
+ *   constructor); with the size step on it has room for eight (rt_hol_stage_room). +0x2c stays 6: the season ends
+ *   at the last stage that rt_league_last_stage gives (League::update_for_date 0x6849d7, advance_stage 0x5f665f).
+ * - advance_stage 0x5f6650 makes the play-off when +0x30 reaches 4 (`cmp eax, 4` at 0x5f6709); create_playoff
+ *   0x5f6720 gets the dates of stages 4 and 5 (vtable +0x3c, 0x5f68ec and 0x5f6992), makes the groups with those
+ *   numbers (0x5f692c, 0x5f69d0), stores them at +0x10 and +0x14 of the array (0x5f697a, 0x5f6a21), checks them
+ *   (0x5f6a35, 0x5f6a3a) and sets +0x30 to 5 (0x5f6a3f). create_schedule 0x5f5790 makes dates only for stages 4 and 5
+ *   (0x5f604b, 0x5f604f) and names them by `cmp al, 4` (0x5f607a). The news of a club's status (0x5f6ee0) and of a
+ *   match (0x5f7110) tell the play-off stages by 4 and 5 (0x5f6f9c, 0x5f6fd1, 0x5f7117, 0x5f711d). With six periods
+ *   each of these is the play-off's first stage, 6 (rt_hol_playoff_stage), or the one after it.
+ * - add_result 0x5f65b0 knows four periods: the wrap below gives a result the period of its round, rounds 37 and 38
+ *   none, and makes the period stages up to it with create_period_stage 0x5f6ad0 (as 0x5f65f3..0x5f6631).
+ * - update_positions_and_status 0x5f6d20 has four flags (+0xee..+0xf1) that the save keeps (0x5f7550, 0x5f75b0).
+ *   With six periods +0xf1 counts the periods given after the third (1, 2 or 3). For the fifth and sixth period the
+ *   wrap shows the function a window: the stage array from the period's stage on as its stage 3, +0x30 less the
+ *   shift, the fourth flag clear. The function then gives the winner of that stage (the period number of the news,
+ *   `push edx` at 0x5f6e05, gets the shift back: rt_hol_period_news). Known limit: periods 5 and 6 keep the name of
+ *   period 4 (0x43c at 0x5f6bdd, the game has no text for a fifth). */
+#define F_CREATE_PERIOD_STAGE 0x005f6ad0u  /* HolFirst::create_period_stage, thiscall (period, a byte), ret 4 */
+#define COMP_STAGES 0xcu
+#define COMP_STAGE_NOW 0x30u
+
+static int hol_six(uint32_t obj, const PeriodClass **pc)
+{
+    const PeriodClass *c = season_sizes_on() ? class_of(obj) : NULL;
+    if (pc) *pc = c;
+    return c && c == &CLASSES[0] && own_periods(obj, c) > c->parts ? own_periods(obj, c) : 0;
+}
+
+uint32_t rt_hol_stage_room(uint32_t original)
+{
+    return season_sizes_on() && original == 0x18u ? 0x20u : original;
+}
+
+/* The last stage of a season: League::update_for_date 0x6849aa ends it when +0x30 reaches +0x2c - 1 (0x6849d1..
+ * 0x6849da) and else calls advance_stage, which makes the same test (HolFirst 0x5f6659, BelSecond 0x4201a0), as does
+ * League::check_complete 0x689ad0 (0x689bdf). The capacity is the class's periods and its play-off stages (HolFirst 6:
+ * 4 + 2 groups, BelSecond 4 at 0x41f0a5: 3 + 1 group). With the row's own periods the play-off stages follow them. */
+uint32_t rt_league_last_stage(uint32_t obj, uint32_t original)
+{
+    if (!season_sizes_on()) return original;
+    const PeriodClass *c = class_of(obj);
+    int own = c ? own_periods(obj, c) : 0;
+    return own ? (uint32_t)(own + ((int)original - c->parts)) : original;
+}
+
+uint32_t rt_hol_playoff_stage(uint32_t obj, uint32_t original)
+{
+    int six = hol_six(obj, NULL);
+    return six ? (uint32_t)six + (original - 4u) : original;
+}
+
+static int hol_news_shift;
+
+uint32_t rt_hol_period_news(void) { return (uint32_t)hol_news_shift; }
 
 /* HolFirst::update_positions_and_status 0x5f6d20, thiscall, no arguments (BelSecond's 0x420680 is wrapped in
  * season_bel_second.c, which calls season_periods_winners). */
 void o_005f6d20(void);
 RT_WRAP(005f6d20, hol_first_status)
 {
-    season_periods_winners(cpu.ecx);
+    uint32_t self = cpu.ecx;
+    season_periods_winners(self);
+    int six = hol_six(self, NULL);
+    uint8_t *f = &g_mem[self + 0xeeu];
+    int given = (f[0] != 0) + (f[1] != 0) + (f[2] != 0) + f[3];
+    if (!six || given < 4 || given >= six || !f[0] || !f[1] || !f[2]) {
+        o_005f6d20();
+        return;
+    }
+    int shift = given - 3;
+    static uint32_t logged_obj;
+    static int logged_given;
+    if (logging() && (logged_obj != self || logged_given != given)) {
+        logged_obj = self;
+        logged_given = given;
+        fprintf(stderr, "recomp: league sizes: hol_first periods %d: period %d of %d (stage %d now %d)\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), given + 1, six, given, (int)rd32(g_mem, self + COMP_STAGE_NOW));
+    }
+    uint32_t stages = rd32(g_mem, self + COMP_STAGES), now = rd32(g_mem, self + COMP_STAGE_NOW);
+    wr32(g_mem, self + COMP_STAGES, stages + 4u * (uint32_t)shift);
+    wr32(g_mem, self + COMP_STAGE_NOW, now - (uint32_t)shift);
+    f[3] = 0;
+    hol_news_shift = shift;
     o_005f6d20();
+    hol_news_shift = 0;
+    if (rt_unwinding) return;
+    int done = f[3] != 0;
+    wr32(g_mem, self + COMP_STAGES, stages);
+    wr32(g_mem, self + COMP_STAGE_NOW, now);
+    f[3] = (uint8_t)(shift + done);
 }
 
 /* 1 for a HolFirst or BelSecond object after its split (the marker in +0x3c). */
@@ -225,8 +367,50 @@ static void add_result(void (*original)(void))
     rt_ret_stdcall(1, 2);
 }
 
+/* HolFirst with six periods: add_result 0x5f65b0 as the class does it, with the period of the round (season_period_
+ * own_of: rounds 37 and 38 none). */
+static void hol_six_add_result(uint32_t self, int six)
+{
+    uint32_t fixture = rt_arg(0), result = rt_arg(1);
+    uint32_t a[2] = {fixture, result};
+    log_periods(self, &CLASSES[0], rounds_of(self));
+    Cpu saved = cpu;
+    cpu.ecx = self;
+    rt_callback(F_LEAGUE_ADD_RESULT, 2, a);
+    if (rt_unwinding) return;
+    if (g_mem[fixture + 0x42u] == 0xffu) {
+        int p = season_period_own_of(rounds_of(self), six, (int16_t)rd16(g_mem, fixture + 0x34u));
+        while (p >= 0 && (int32_t)rd32(g_mem, self + COMP_STAGE_NOW) < p) {
+            uint32_t next = (rd32(g_mem, self + COMP_STAGE_NOW) + 1u) & 0xffu;
+            cpu.ecx = self;
+            rt_callback(F_CREATE_PERIOD_STAGE, 1, &next);
+            if (rt_unwinding) return;
+        }
+        uint32_t stage = p >= 0 ? rd32(g_mem, rd32(g_mem, self + COMP_STAGES) + 4u * (uint32_t)p) : 0;
+        if (readable(stage)) {
+            /* As 0x5f65d4..0x5f662e: the fixture holds its period while the stage takes the result, and +8 is
+             * cleared. */
+            g_mem[fixture + 0x42u] = (uint8_t)p;
+            uint32_t keep = rd32(g_mem, self + 8u);
+            wr32(g_mem, self + 8u, 0);
+            cpu.ecx = stage;
+            rt_callback(rd32(g_mem, rd32(g_mem, stage) + 4u), 2, a);
+            if (rt_unwinding) return;
+            wr32(g_mem, self + 8u, keep);
+        }
+        g_mem[fixture + 0x42u] = 0xffu;
+    }
+    cpu = saved;
+    rt_ret_stdcall(1, 2);
+}
+
 void o_005f65b0(void);
-RT_WRAP(005f65b0, hol_first_add_result) { add_result(o_005f65b0); }
+RT_WRAP(005f65b0, hol_first_add_result)
+{
+    int six = after_split(cpu.ecx) ? 0 : hol_six(cpu.ecx, NULL);
+    if (six) hol_six_add_result(cpu.ecx, six);
+    else add_result(o_005f65b0);
+}
 
 void o_00420110(void);
 RT_WRAP(00420110, bel_second_add_result) { add_result(o_00420110); }

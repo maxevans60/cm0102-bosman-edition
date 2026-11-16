@@ -33,6 +33,16 @@ static void check_parts(const char *name, const int *starts, int parts, int roun
 
 int main(void)
 {
+    /* Gap 33: a row's own count of periods, R / P rounds each from round 0, the rest in no period (-1). The Eerste
+     * Divisie 2005/06: six periods of six matches in 38 rounds; First Division B 2016/17: two periods of 14 in 28. */
+    CHECK(season_period_own_length(38, 6) == 6 && season_period_own_length(28, 2) == 14, "own lengths");
+    CHECK(season_period_own_length(5, 6) == 0 && season_period_own_length(28, 1) == 0, "own: no length");
+    CHECK(season_period_own_of(38, 6, 0) == 0 && season_period_own_of(38, 6, 5) == 0 &&
+          season_period_own_of(38, 6, 6) == 1 && season_period_own_of(38, 6, 35) == 5 &&
+          season_period_own_of(38, 6, 36) == -1 && season_period_own_of(38, 6, 37) == -1, "own: periods of 38/6");
+    CHECK(season_period_own_of(28, 2, 13) == 0 && season_period_own_of(28, 2, 14) == 1 &&
+          season_period_own_of(28, 2, 27) == 1, "own: periods of 28/2");
+
     /* The class's own rounds give the class's bounds and lengths (the base game and a league at its class count). */
     for (int k = 0; k < 3; k++)
         CHECK(season_period_bound(HOL, 4, 34, 34, k) == HOL[k], "HolFirst bound %d at 34", k);

@@ -122,20 +122,40 @@ for _y in range(2016, 2020):
 # decisions of slice 10, 13 November 2026): {(comp_file, first, last): (split, split_meet, evidence)}. The sections
 # add up to the count and each has its meetings.
 SPLIT_BY_HAND = {
-    # Pro League 2009/10 to 2018/19 (16 clubs): Play-off I of the top 6 (points halved, a double round robin of 10
-    # rounds), Play-off II of 7th to 14th in two groups of four (2016/17 to 2018/19: 7th to 15th with First Division B
-    # clubs in two groups of six) and the 15th v 16th relegation play-off (from 2010/11; 2016/17 on the 16th went
-    # down). Nearest form: sections 6, 8 and 2, meeting twice, once and twice, points halved (RSSSF belg2010 to
-    # belg2019, sizes-check-north lines 207 to 210).
-    ("bel_first", 2009, 2018): ("after 30: 6+8+2, points halved", "2+1+2",
-                                "Play-off I, Play-off II and the relegation play-off in their nearest form"),
+    # Pro League 2009/10 to 2018/19 (16 clubs, gap 34): Play-off I of the top 6 (points halved, a double round robin
+    # of 10 rounds); Play-off II from 0 points in two groups of four, the 7th, 9th, 12th, 14th and the 8th, 10th, 11th,
+    # 13th, each a double round robin (2016/17 to 2018/19 with the 15th in the second group and First Division B
+    # clubs, who cannot join here); the relegation play-off of the 15th and 16th in 2010/11 to 2014/15, five matches,
+    # the 15th starting with 3 points. In 2009/10 the 15th went to the Second Division final round and Mouscron (16th)
+    # left; from 2015/16 the 16th went down with no play-off: those places play no more (meetings 0). season_split.c
+    # GROUPS gives the places of the groups and the points of each section (en.wikipedia.org 2009-10 to
+    # 2015-16_Belgian_Pro_League and 2016-17 to 2018-19_Belgian_First_Division_A; RSSSF belg2010 to belg2019).
+    ("bel_first", 2009, 2009): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
+    ("bel_first", 2010, 2014): ("after 30: 6+4+4+2, points halved", "2+2+2+5",
+                                "Play-off I, Play-off II in two groups, the relegation play-off of five matches"),
+    ("bel_first", 2015, 2015): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
+    ("bel_first", 2016, 2018): ("after 30: 6+4+5+1, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in groups of 4 and 5 (with the 15th), the 16th plays no more"),
     # Pro League 2023/24 to 2025/26: champions', Europe and relegation play-offs of 6, 6 and 4, each a double round
     # robin of 10, 10 and 6 rounds, points halved (sizes-check-north line 214).
     ("bel_first", 2023, 2025): ("after 30: 6+6+4, points halved", "2+2+2", "10, 10 and 6 rounds: two meetings each"),
     # Superliga 2016/17 to 2019/20 (14 clubs): a championship round of 6 (a double round robin, 10 rounds) and two
-    # qualification groups of 4 (7th to 14th, 6 rounds) with play-offs after them. Nearest form: sections 6 and 8,
-    # meeting twice and once (sizes-check-north line 55).
-    ("den_prm", 2016, 2019): (None, "2+1", "a championship round of 6 in two meetings, 7th to 14th in one"),
+    # qualification groups of 4, the 7th, 10th, 11th, 14th and the 8th, 9th, 12th, 13th, each a double round robin of
+    # 6 rounds, points kept, with play-offs after them (gap 35; Wikipedia 2016-17 to 2019-20_Danish_Superliga). The
+    # groups are sections 2 and 3; season_split.c GROUPS gives their places.
+    ("den_prm", 2016, 2019): ("after 26: 6+4+4, points kept", "2+2+2",
+                              "a championship round of 6 and two groups of 4, each in two meetings"),
+    # Veikkausliiga (calendar year: row Y is the season Y + 1; the texts of rows 2019 and 2020 are one season apart).
+    # Real 2019 and 2021 (rows 2018, 2020): 22 rounds, then the top 6 and the bottom 6 play 5 more matches each, points
+    # carried in full; real 2020 (row 2019): the split was cancelled on 28 October 2020 (COVID-19) and the table
+    # after 22 rounds was final. The European play-off of the 4th to 6th and the Challenger Series winner is a
+    # play-off, not a split section (en.wikipedia.org 2019_Veikkausliiga, 2020_Veikkausliiga, 2021_Veikkausliiga;
+    # checked 15 November 2026).
+    ("fin_prm", 2018, 2018): ("after 22: 6+6, points kept", "1+1", "22 rounds, then sixes that meet once more"),
+    ("fin_prm", 2019, 2019): ("-", "-", "the split of 2020 was cancelled: one table of 22 rounds"),
+    ("fin_prm", 2020, 2020): ("after 22: 6+6, points kept", "1+1", "22 rounds, then sixes that meet once more"),
     # Challenger Pro League 2022/23 (12 clubs): 22 rounds, then the top six and the bottom six play 10 more rounds
     # each, points kept (sizes-check-north line 232: 32 matches): two meetings in each section.
     ("bel_second", 2022, 2022): (None, "2+2", "22 rounds, then sections of 6 that play 10 more rounds"),

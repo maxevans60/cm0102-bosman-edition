@@ -36,3 +36,15 @@ int season_period_stage_done(int clubs, int rounds, int played_sum)
     int per_round = clubs / 2;      /* an odd count: (clubs - 1) / 2, one club rests */
     return played_sum >= 2 * per_round * rounds;
 }
+
+int season_period_own_length(int rounds, int p)
+{
+    return p >= 2 && rounds >= p ? rounds / p : 0;
+}
+
+int season_period_own_of(int rounds, int p, int round)
+{
+    int len = season_period_own_length(rounds, p);
+    if (!len || round < 0 || round >= p * len) return -1;
+    return round / len;
+}
