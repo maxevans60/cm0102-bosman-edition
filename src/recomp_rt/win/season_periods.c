@@ -48,3 +48,9 @@ int season_period_own_of(int rounds, int p, int round)
     if (!len || round < 0 || round >= p * len) return -1;
     return round / len;
 }
+
+const char *season_period_name(int period, int abbreviated)
+{
+    static const char *const names[2][2] = {{"Fifth Period", "Sixth Period"}, {"Period 5", "Period 6"}};
+    return period == 5 || period == 6 ? names[abbreviated != 0][period - 5] : (const char *)0;
+}

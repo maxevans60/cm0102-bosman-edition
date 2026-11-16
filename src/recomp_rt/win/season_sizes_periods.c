@@ -70,6 +70,11 @@
 #define STAGE_VTABLE 0x0096d0f0u    /* League_Stage (0x68b196) */
 #define PERIOD_NAME_FIRST 0x439     /* "Period 1".."Period 4" (0x5f6bb9..0x5f6bdd, 0x4205b4..0x4205c6) */
 #define PERIOD_NAME_LAST 0x43c
+/* Gap 33: the names of periods 5 and 6, past the original's stage ids (0x41f..0x483, jump table 0x4b9a44 at 0x4b6012).
+ * The name function 0x4b4850 gives an id it does not know the caller's empty text (0x4b94bd), and the parent of a
+ * stage id 0x4b01d0 gives -1 as for 0x439..0x43c, so only the names differ (season_round_names_game.c). */
+#define PERIOD_NAME_FIFTH 0x7f05
+#define PERIOD_NAME_SIXTH 0x7f06
 #define CLASS_ROUNDS 34             /* both classes: 18 clubs, 2 meetings (D 0x22 at 0x5f57ca, 0x41f37e) */
 
 typedef struct {
@@ -185,7 +190,9 @@ uint32_t season_periods_played_target(uint32_t obj, uint32_t original)
 {
     if (!season_sizes_on() || !readable(obj) || rd32(g_mem, obj) != STAGE_VTABLE) return original;
     int name = (int16_t)rd16(g_mem, obj + COMP_NAME_CODE), n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
-    if (name < PERIOD_NAME_FIRST || name > PERIOD_NAME_LAST || n < 3 || n > 60 || !(n & 1)) return original;
+    int period_name = (name >= PERIOD_NAME_FIRST && name <= PERIOD_NAME_LAST) || name == PERIOD_NAME_FIFTH ||
+                      name == PERIOD_NAME_SIXTH;
+    if (!period_name || n < 3 || n > 60 || !(n & 1)) return original;
     const PeriodClass *c = NULL;
     for (int i = 0; i < NCLASSES && !c; i++) {
         uint32_t parent = league_of(CLASSES[i].key);
@@ -216,9 +223,11 @@ void season_periods_winners(uint32_t obj)
  * period stages); create_playoff_group 0x420230 tops the rows of status 1 up to four (`cmp ebp, 4` at 0x42028e), lists
  * four (`cmp ebx, 4` at 0x42036b) and makes a League_Stage of four (`push 4` at 0x420412) that meets twice. Gap 33:
  * with the row's two periods the play-off comes after stage 2 and holds the two period winners, a final over two
- * matches. Known limit: the class gives a later period to the best club with no period title (0xfe in the later
- * tables), so a club never wins both and the final always plays (real rule: a club that won both went up with no
- * final; no season of 2016/17 to 2019/20 had one). */
+ * matches. Every real season of the form had that final between two clubs (Wikipedia, "2016-17 Belgian First
+ * Division B" to "2019-20 ...": Antwerp v Roeselare 2017, Beerschot Wilrijk v Cercle Brugge 2018, Beerschot Wilrijk
+ * v Mechelen 2019, Beerschot v OH Leuven 2020), so the final plays in each. Known limit (0.7.3): the class gives a
+ * later period to the best club with no period title (0xfe in the later tables), so in a game a club never wins both;
+ * the real rule sent such a club up with no final. */
 uint32_t rt_bel_playoff_stage(uint32_t obj, uint32_t original)
 {
     if (!season_sizes_on()) return original;
@@ -263,8 +272,9 @@ uint32_t rt_bel_playoff_clubs(uint32_t obj, uint32_t original)
  *   With six periods +0xf1 counts the periods given after the third (1, 2 or 3). For the fifth and sixth period the
  *   wrap shows the function a window: the stage array from the period's stage on as its stage 3, +0x30 less the
  *   shift, the fourth flag clear. The function then gives the winner of that stage (the period number of the news,
- *   `push edx` at 0x5f6e05, gets the shift back: rt_hol_period_news). Known limit: periods 5 and 6 keep the name of
- *   period 4 (0x43c at 0x5f6bdd, the game has no text for a fifth). */
+ *   `push edx` at 0x5f6e05, gets the shift back: rt_hol_period_news). The game has no name for a fifth period (0x43c at
+ *   0x5f6bdd for each period after the third): the fifth and sixth stages get the ids PERIOD_NAME_FIFTH and
+ *   PERIOD_NAME_SIXTH when they are made, and season_sizes_period_name names them. */
 #define F_CREATE_PERIOD_STAGE 0x005f6ad0u  /* HolFirst::create_period_stage, thiscall (period, a byte), ret 4 */
 #define COMP_STAGES 0xcu
 #define COMP_STAGE_NOW 0x30u
@@ -415,6 +425,18 @@ static void hol_six_add_result(uint32_t self, int six)
             cpu.ecx = self;
             rt_callback(F_CREATE_PERIOD_STAGE, 1, &next);
             if (rt_unwinding) return;
+            /* create_period_stage names a period after the third "Period 4" (0x43c at 0x5f6bdd): the fifth and
+             * sixth get their own ids. */
+            uint32_t made = rd32(g_mem, rd32(g_mem, self + COMP_STAGES) + 4u * next);
+            if (next >= 4 && next <= 5 && readable(made) &&
+                (int16_t)rd16(g_mem, made + COMP_NAME_CODE) == PERIOD_NAME_LAST)
+            {
+                int id = next == 4 ? PERIOD_NAME_FIFTH : PERIOD_NAME_SIXTH;
+                wr16(g_mem, made + COMP_NAME_CODE, (uint16_t)id);
+                if (logging())
+                    fprintf(stderr, "recomp: league sizes: hol_first %d: period %u named %s\n",
+                            (int16_t)rd16(g_mem, self + COMP_YEAR), next + 1u, season_sizes_period_name(id, 0));
+            }
         }
         uint32_t stage = p >= 0 ? rd32(g_mem, rd32(g_mem, self + COMP_STAGES) + 4u * (uint32_t)p) : 0;
         if (readable(stage)) {
@@ -444,3 +466,11 @@ RT_WRAP(005f65b0, hol_first_add_result)
 
 void o_00420110(void);
 RT_WRAP(00420110, bel_second_add_result) { add_result(o_00420110); }
+
+/* The names of the fifth and sixth periods of the Eerste Divisie (gap 33) for the round name function
+ * (season_round_names_game.c): long and plural "Fifth Period", short "Period 5". NULL for another id. */
+const char *season_sizes_period_name(int id, int abbreviated)
+{
+    return id == PERIOD_NAME_FIFTH ? season_period_name(5, abbreviated)
+         : id == PERIOD_NAME_SIXTH ? season_period_name(6, abbreviated) : NULL;
+}

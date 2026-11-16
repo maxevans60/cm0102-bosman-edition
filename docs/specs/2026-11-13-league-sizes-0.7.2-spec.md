@@ -154,7 +154,7 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 
 ### 7. Split engine
 Blocked by: 2, 4
-Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 33 + 6 and 6, 2 meetings in place of 4) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
+Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 3 meetings in place of 4: 33 matches, then sections of 6 and 6 that meet once more, 38 matches; gap fix, sources in docs/research/2026-11-15-split-points.md) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
 Merge danger: one-way door for saves (a save holds the section stages). Blast radius: leagues with a split row.
 - [x] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
 - [x] A save during the split loads and the season completes
@@ -194,8 +194,9 @@ Merge danger: two-way door. Blast radius: these two pyramids.
 Blocked by: 2, 3, 6
 Delivers: the Russian First Division at 20 and 22 (the take loop and its array take the count) and 17, the Süper Lig at 19 to 21, the Turkish second tier at 17 to 19.
 Merge danger: two-way door. Blast radius: these two pyramids.
-- [ ] `league_size_run.py` passes for rus_first 2005 and 2012, tur_first 2020 and 2021, tur_second 2023
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for rus_first 2005 and 2012, tur_first 2020 and 2021, tur_second 2023 (session sz12, 16 Nov, build of d651b66e: all five PASS)
+- [x] `league_size_run.py` passes for rus_first 2011: the long 2011–12 season plays its first stage only, 20 clubs and 38 rounds, inside its game year. The split of row 2010, played in 2012, is a gap: a season that spans two game years (lead decision 16 Nov) (session sz12, 16 Nov, build of 9bfd7c91: PASS, 20 clubs, 38 rounds)
+- [x] The same-save set is equal (session sz12, 16 Nov: 9bfd7c91 against lead-072-base bf80a5e5, start, prematch, new and match PASS)
 
 ### 13. Northern Ireland and Ireland
 Blocked by: 4, 7
@@ -208,8 +209,8 @@ Merge danger: two-way door. Blast radius: the two Irish pyramids.
 Blocked by: 2, 3, 6, 7
 Delivers: J1 at 18 and 20 with halves and the final only in their seasons (D8), J2 at up to 22 with its row's meetings, the K League at 12 to 16 with its meetings and its split.
 Merge danger: two-way door. Blast radius: the Japanese and Korean leagues.
-- [ ] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
+- [x] The same-save set is equal
 
 ### 15. Argentine Primera: halves and zones
 Blocked by: 2, 3
@@ -223,8 +224,9 @@ Merge danger: one-way door for saves (zone stages in the save). Blast radius: Ar
 Blocked by: 15
 Delivers: the second division at its row's count and form (D10) with the zone code of slice 15, and the functions that need 25 taking the count.
 Merge danger: two-way door. Blast radius: Argentina's second tier and its promotion.
-- [ ] `league_size_run.py` passes for arg_second 2010 and 2016
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for arg_second 2010 and 2016
+  Halves and zones rows play as one table (no zone lists in any source), open item 252.
+- [x] The same-save set is equal
 
 ### 17. Brazil
 Blocked by: 2

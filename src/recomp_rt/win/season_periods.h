@@ -22,4 +22,8 @@ int season_period_own_length(int rounds, int p);
 /* The period (0..p-1) of a round (0-based) in that form, -1 for a round in no period or no form. */
 int season_period_own_of(int rounds, int p, int round);
 
+/* The name of period 5 or 6 (gap 33: the class names periods 1 to 4 only), long (also plural) or short; NULL for
+ * another period. */
+const char *season_period_name(int period, int abbreviated);
+
 #endif

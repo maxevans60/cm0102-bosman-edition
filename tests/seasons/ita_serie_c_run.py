@@ -24,6 +24,9 @@ Each run is a season jump of tests/seasons/rules_report_check.py with Italy. The
               three groups, then two groups from 2011/12 to 2013/14 (Q529: C2/C ends), then the Serie C
     c2-two-off September 2011 ODB, changing rules off, the extra division, 2011/12 and 2012/13: two C2 groups of 20
               from the new game on
+    after-table  October 2026, changing rules on, 2026/27 to the end of 2028/29: the 2027/28 group rows hold the
+              clubs "unknown", so 2027/28 keeps the last known row (Q248) and stays in the era (no box
+              "ita_ser_c2a..cpp 551" at the June 2027 change)
     c2-load   the same start: the game saves 270 days after the start (April 2012); a new program loads that save
               and plays 120 days, across the season change into 2012/13
 The checks: the jump ends with code 0 and shows no message box of the game; the report has the groups (files
@@ -324,6 +327,29 @@ def check_two(name, report, log, want):
     return fails
 
 
+def run_after(name):
+    """After the table (Q248): the 2027/28 rows of the groups hold the clubs "unknown", so the season takes the last
+    known row (2026/27: 20, 20 and 20), and so does 2028/29 after the file. When the era came from the 2027/28 row
+    alone it ended at the June 2027 change:
+    C1 sent 6 down to a C2 that is not held, and C2/A's create_table 0x653a90 counted 18 clubs for group C and gave
+    the box "ita_ser_c2a..cpp 551" (0x653dbf)."""
+    def run(program, game, work):
+        code, report = rrc.run(program, game, 2028, 2026, os.path.join(DB, "October 2026"), ["Italy"], [], work,
+                               14400, {"changing_rules": "on"}, {"RECOMP_SEASON_CHANGE_LOG": "1"})
+        fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
+        found, log = ufr.boxes(work)
+        fails += [f"{name}: message box {b}" for b in found]
+        fails += check_report(name, report, [2026, 2027, 2028], {y: [20, 20, 20] for y in (2026, 2027, 2028)})
+        for season in ("2027/28", "2028/29"):
+            if not re.search(rf"serie c {season}: 60 clubs in groups of 20, 20 and 20", log):
+                fails.append(f"{name}: no regroup into {season}")
+        # The module's C1 and C2 chain logs this line; it ran in the failing all-nations runs (sz15b r6-2026).
+        if re.search(r"serie c2: \d+ down from Serie C1", log):
+            fails.append(f"{name}: the C1 and C2 chain ran after the era")
+        return fails + check_moves(name, log)
+    return run
+
+
 def run_two(name, year, last, database, rules, want):
     def run(program, game, work):
         code, report = rrc.run(program, game, last, year, os.path.join(DB, database), ["Italy"], ["c2"], work,
@@ -358,6 +384,7 @@ RUNS = {
     "load-c2-no-table": run_load("load-c2-no-table", ["c2"], table="no-rules.tsv"),
     "c2-two": run_two("c2-two", 2010, 2014, "September 2010 ODB", "on", {2011: [20, 20], 2012: [18, 18], 2013: [18, 18]}),
     "c2-load": run_two_load("c2-load"),
+    "after-table": run_after("after-table"),
     "c2-two-off": run_two("c2-two-off", 2011, 2012, "September 2011 ODB", "off", {2011: [20, 20], 2012: [20, 20]}),
 }
 

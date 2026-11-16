@@ -57,6 +57,7 @@ void season_comps_reset(void);                         /* slice 26: season_comps
 extern const SeasonRuleKind season_kind_playoffs;      /* slice 19: season_playoffs.c */
 extern const SeasonRuleKind season_kind_intl;
 extern const SeasonRuleKind season_kind_ita_serie_c;  /* slice 20b: season_divisions_ita.c */
+extern const SeasonRuleKind season_kind_calendar;     /* gap row 2 of 0.7.2: season_calendar_game.c */
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
@@ -74,6 +75,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_playoffs,              /* slice 19: promotion play-offs of leagues with none (after sizes) */
     &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_divisions,             /* slice 20: new divisions (season_divisions.c) */
+    &season_kind_calendar,              /* gap row 2 of 0.7.2: the Irish calendar move (season_calendar.h) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))

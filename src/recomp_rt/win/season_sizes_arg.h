@@ -63,6 +63,19 @@ int season_arg_third(uint32_t record);
  * the swap 0x4068d0 finds them again. */
 uint32_t season_arg_third_record(void);
 
+/* The order of the Primera's clubs for the size step (season_sizes.c step_index, D13): best first by the relegation
+ * averages (the records of ArgPrm::update_relegation_averages 0x406570, sorted at 0x40671b; ArgPrm::
+ * record_season_honours 0x405ca0 sends down the last two), so the step sends down the worst averages. A club with no
+ * record keeps its table order after those with one. */
+void season_arg_step_order(uint32_t obj, uint32_t *club, int n);
+
+/* The relegation averages of an Argentine league object (+0x18, +0x34 records of 0x13 bytes: ArgPrm 0x405f02..0x405f16,
+ * ArgSecond 0x409402..0x409416, the same layout). _fit: the records of the clubs of the division and a free record (id
+ * -1, the edition) for each other place, n records (file names the league in the log). _empty: n free records, as the
+ * original's empty records (0x406538..0x40654a); the block is the game's. */
+void season_arg_averages_fit(uint32_t self, int n, const char *file);
+void season_arg_averages_empty(uint32_t self, int n);
+
 /* tools/recomp/arg_prm.py: a constant of the class for 20 clubs plus (count - 20) in a season game. */
 uint32_t rt_arg_count(uint32_t original);
 
@@ -81,5 +94,51 @@ int season_arg_zone_plan(int z, const int *rival, const int *draw, int draw_at,
 /* Pure: the rounds of one table of n clubs (n even), one meeting, and a derby round of derby[i] (the partner of club
  * i) at round derby_at. Returns the rounds (n), or 0. */
 int season_arg_derby_plan(int n, const int *derby, int derby_at, int round[][SEASON_ARG_MAX_CLUBS / 2][2]);
+
+/* Pure: the derby partners of n clubs (n even). listed[i] is the index of club i's partner in the research list when
+ * that partner is in the division, -2 when the list pairs club i with a club not in the division, -1 when club i is
+ * not in the list. A club of no list takes the partner of a listed club whose partner is not in the division (the
+ * place of the club it replaced), the best reputation (rep[i]) first. Clubs left over meet the club next to them by
+ * reputation. derby[i] gets the partner of club i. Returns the pairs made by replacement. */
+int season_arg_derby_pairs(int n, const int *listed, const int *rep, int *derby);
+
+/* The title stages of a season (season_arg_stages.c): none, two zone tables a half and a knockout of 16 after each
+ * half (2025, 2026), two zone tables and a final of the zone winners with a match of the runners-up (2016), or a
+ * knockout of the first 16 of each half's table (2027 on). */
+enum { SEASON_ARG_KO_NONE, SEASON_ARG_KO_ZONES, SEASON_ARG_KO_FINAL, SEASON_ARG_KO_TABLE, SEASON_ARG_KO_PROMO };
+/* The rows of the promoción that the Primera plays (2002/03 to 2011/12; row 2001 keeps the second division's own). */
+#define SEASON_ARG_PROMO_FIRST 2002
+#define SEASON_ARG_PROMO_LAST 2011
+int season_arg_stage_kind(uint32_t obj, int *season);
+/* The clubs of zone A and zone B of the Primera's plan this edition (made with its fixtures); returns the zone size,
+ * 0 when there is none. */
+int season_arg_zone_lists(uint32_t obj, uint32_t *a, uint32_t *b);
+/* The club records that go down at the end of the season (arg_down), for the Clausura's knockout. Returns the count. */
+int season_arg_relegated(uint32_t prm, uint32_t *club, int max);
+/* The 17th and 18th of the averages (club[0] the 17th), the clubs of the promoción. Returns 2, or 0. */
+int season_arg_promo_primera(uint32_t prm, uint32_t *club);
+/* The promoción's results once its ties are complete: the Primera clubs that lost (down) and the second division
+ * clubs that beat them (up), in pairs. Returns the count of pairs. */
+int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up);
+/* The complete ties of the promoción in stage order (the 17th's first): each winner and loser. Returns the count. */
+int season_arg_promo_ties(uint32_t prm, uint32_t *win, uint32_t *lose);
+
+/* season_arg_stages.c: after ArgPrm::create_stages 0x405950 (the wrap in season_sizes_arg.c). */
+void season_arg_stages_made(uint32_t self);
+/* After League::update_for_date 0x6847c0 of any league (season_split.c): the Apertura's knockout when its table is
+ * complete. */
+void season_arg_update(uint32_t obj);
+/* The empty advance_stage 0x5a8f60 (season_uefa_cup.c): 1 when it built the Primera's last stages. */
+int season_arg_advance(uint32_t obj);
+/* League's +0x44 base 0x686940 (season_playoffs.c): 1 when the result is of a knockout stage of the Primera. */
+int season_arg_ko_result(uint32_t obj, int stage);
+/* League::record_season_honours 0x684640 of the Primera or its Clausura: the winner and the finalist of the half's
+ * knockout take rows 0 and 1 for the call (their pointers swap with those rows'); restore puts every row back. saved
+ * holds SEASON_ARG_HONOURS_ROWS. */
+#define SEASON_ARG_HONOURS_ROWS 64
+int season_arg_honours_swap(uint32_t league, uint32_t *saved);
+void season_arg_honours_restore(uint32_t league, const uint32_t *saved);
+/* The round name wrap (season_round_names_game.c): the names of the zone tables of the Primera, or NULL. */
+const char *season_arg_stage_name(uint32_t context, int id);
 
 #endif

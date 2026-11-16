@@ -201,6 +201,8 @@ BY_HAND = {
     "then penalties)": ("-", "-", "tiebreak", "ok"),
     "In each tournament: top 8 of each zone play single-leg knockouts from the round of 16":
         ("-", "-", "title", "ok"),
+    "In each tournament: top 16 of the tournament table play single-leg knockouts from the round of 16":
+        ("-", "-", "title", "ok"),
     "Liguilla Pre-Libertadores (3rd to 6th) and Liguilla Pre-Sudamericana for continental places":
         ("-", "-", "europe", "ok"),
     "Final at a neutral ground between the two zone winners; play-off of the two zone runners-up for Copa "
@@ -441,6 +443,14 @@ KNOWN_GAPS = {
     # Slice 20b (Q520): the Serie C groups of 2014/15 on take the files of C1/A, C1/B and C2/A. Their play-offs are
     # one national phase of the clubs of all three groups and the cup winner: not a play-off of one league.
     "28 clubs: ": "a national phase of the clubs of the three Serie C groups: not a play-off of one league",
+}
+
+# Splits that the game cannot play, with the reason: {(comp_file, season): reason}. The split is a gap.
+SPLIT_GAPS = {
+    # The 2011-12 FNL: 38 rounds from April to November 2011, then the split of 8 and 12 in spring 2012, 52 rounds in
+    # all. The game year (class dates 3 April to 3 November) holds the first stage only: edition 2011 plays 20 clubs
+    # and 38 rounds (lead decision, 16 November 2026, slice 12).
+    ("rus_first", 2010): "a season that spans two game years: the game plays the first stage only",
 }
 
 # The forms of a whole text that mean no play-off.
@@ -794,6 +804,9 @@ def encode():
         hand = split_by_hand(r)
         if hand and hand[0]:
             split = hand[0]
+        split_gap = SPLIT_GAPS.get((r["comp_file"], r["season"]))
+        if split_gap and not (hand and hand[0]):
+            split = "gap"
         e = {"id": r["id"], "season": r["season"], "comp_file": r["comp_file"], "tier": r["tier"],
              "clubs": r["clubs"] if isinstance(r["clubs"], int) else -1, "po_up": po[0], "po_down": po[1],
              "po_other": po[2], "po_status": po[3], "split": split, "calendar": encode_calendar(r),
@@ -828,7 +841,7 @@ def encode():
         if po[3] != "ok":
             gaps.append((r["id"], r["season"], r["comp_file"], "playoffs", po[3], r["playoffs_text"]))
         if split == "gap":
-            gaps.append((r["id"], r["season"], r["comp_file"], "split", "the tool cannot read the split",
+            gaps.append((r["id"], r["season"], r["comp_file"], "split", split_gap or "the tool cannot read the split",
                          r["split_text"]))
     return out, gaps, problems
 

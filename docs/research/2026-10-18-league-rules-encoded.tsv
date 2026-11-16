@@ -24,8 +24,8 @@ arg-usa-22	2022	arg_prm	1	28	-	-	tiebreak	ok	-	calendar	1	0	-	0	0	-	27
 arg-usa-23	2023	arg_prm	1	28	-	-	-	ok	-	calendar	1	0	-	0	0	-	27
 arg-usa-24	2024	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	15+15	2	0	-	16
 arg-usa-25	2025	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	15+15	2	0	-	16
-arg-usa-26	2026	arg_prm	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
-arg-usa-27	2027	arg_prm	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
+arg-usa-26	2026	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	-	1	0	-	30
+arg-usa-27	2027	arg_prm	1	30	-	-	title	ok	stages	calendar	1	1	-	1	0	-	30
 arg-usa-28	2001	arg_second	2	25	-	-	-	partial: a final of the tournament winners (stages)	stages	split	1	1	gap	0	0	-	-
 arg-usa-29	2002	arg_second	2	20	-	-	-	partial: a final of the tournament winners (stages)	stages	split	1	1	-	0	0	-	19
 arg-usa-30	2003	arg_second	2	20	-	-	-	partial: a final of the tournament winners (stages)	stages	split	1	1	-	0	0	-	19
@@ -279,21 +279,21 @@ aus-jap-kor-331	2007	kor_league	1	14	-	-	title	ok	-	calendar	2	0	-	0	0	-	26
 aus-jap-kor-332	2008	kor_league	1	15	-	-	title	ok	-	calendar	2	0	-	0	0	-	30
 aus-jap-kor-333	2009	kor_league	1	15	-	-	title	ok	-	calendar	2	0	-	0	0	-	30
 aus-jap-kor-334	2010	kor_league	1	16	-	-	title	ok	-	calendar	2	0	-	0	0	-	30
-aus-jap-kor-335	2011	kor_league	1	16	-	-	-	ok	after 30: 8+8, points unknown	calendar	2	0	-	0	0	2+2	30
+aus-jap-kor-335	2011	kor_league	1	16	-	-	-	ok	after 30: 8+8, points kept	calendar	2	0	-	0	0	2+2	30
 aus-jap-kor-336	2012	kor_league	1	14	-	12	-	ok	after 26: 7+7, points kept	calendar	2	0	-	0	0	2+2	26
-aus-jap-kor-337	2013	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-338	2014	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-339	2015	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-340	2016	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-341	2017	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-342	2018	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-343	2019	kor_league	1	12	-	-	-	ok	after 22: 6+6, points unknown	calendar	2	0	-	0	0	1+1	22
-aus-jap-kor-344	2020	kor_league	1	12	-	11	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-345	2021	kor_league	1	12	-	10	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-346	2022	kor_league	1	12	-	10	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-347	2023	kor_league	1	12	-	10	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-348	2024	kor_league	1	12	-	10	-	ok	after 33: 6+6, points unknown	calendar	3	0	-	0	0	1+1	33
-aus-jap-kor-349	2025	kor_league	1	12	-	12	-	partial: only when one club does not finish last	after 33: 6+6, points unknown	calendar	3	0	-	0	0	?	33
+aus-jap-kor-337	2013	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-338	2014	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-339	2015	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-340	2016	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-341	2017	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-342	2018	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-343	2019	kor_league	1	12	-	-	-	ok	after 22: 6+6, points kept	calendar	2	0	-	0	0	1+1	22
+aus-jap-kor-344	2020	kor_league	1	12	-	11	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-345	2021	kor_league	1	12	-	10	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-346	2022	kor_league	1	12	-	10	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-347	2023	kor_league	1	12	-	10	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-348	2024	kor_league	1	12	-	10	-	ok	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
+aus-jap-kor-349	2025	kor_league	1	12	-	12	-	partial: only when one club does not finish last	after 33: 6+6, points kept	calendar	3	0	-	0	0	1+1	33
 aus-jap-kor-350	2026	kor_league	1	14	-	-	-	ok	-	calendar	3	0	-	0	0	-	39
 aus-jap-kor-351	2027	kor_league	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
 bra-28	2001	bra_nat_first	1	26	-	-	title	ok	-	calendar	1	0	-	0	0	-	25
@@ -1131,10 +1131,10 @@ gre-pol-cro-42	2015	gre_prm	1	16	-	-	europe	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-43	2016	gre_prm	1	16	-	-	europe	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-44	2017	gre_prm	1	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-45	2018	gre_prm	1	16	-	13	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-46	2019	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points unknown	split	2	0	-	0	0	?	26
-gre-pol-cro-47	2020	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points unknown	split	2	0	-	0	0	?	26
-gre-pol-cro-48	2021	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points unknown	split	2	0	-	0	0	?	26
-gre-pol-cro-49	2022	gre_prm	1	14	-	-	-	ok	after 26: 6+8, points unknown	split	2	0	-	0	0	2+1	26
+gre-pol-cro-46	2019	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
+gre-pol-cro-47	2020	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
+gre-pol-cro-48	2021	gre_prm	1	14	-	13	-	ok	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
+gre-pol-cro-49	2022	gre_prm	1	14	-	-	-	ok	after 26: 6+8, points kept	split	2	0	-	0	0	2+1	26
 gre-pol-cro-50	2023	gre_prm	1	14	-	-	-	ok	after 26: 6+8, points kept	split	2	0	-	0	0	?	26
 gre-pol-cro-51	2024	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points kept	split	2	0	-	0	0	?	26
 gre-pol-cro-52	2025	gre_prm	1	14	-	-	europe	ok	after 26: 4+4+6, points kept	split	2	0	-	0	0	?	26
@@ -1159,7 +1159,7 @@ gre-pol-cro-70	2016	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-71	2017	gre_second	2	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-72	2018	gre_second	2	16	2	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-73	2019	gre_second	2	12	2	-	-	ok	-	split	2	0	-	0	0	-	22
-gre-pol-cro-74	2020	gre_second	2	12	2	-	-	partial: the 2nd of the play-off round of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
+gre-pol-cro-74	2020	gre_second	2	12	2	-	-	partial: the 2nd of the play-off round of the split	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
 gre-pol-cro-75	2021	gre_second	2	17	1	-	title	partial: the winner of each group	-	split	2	0	-	0	0	-	-
 gre-pol-cro-76	2022	gre_second	2	15	-	-	-	ok	-	split	2	0	-	0	0	-	-
 gre-pol-cro-77	2023	gre_second	2	12	-	-	-	partial: split rounds (needs the split kind)	groups	split	2	0	-	0	0	-	-
@@ -1246,7 +1246,7 @@ gre-pol-cro-204	2015	pol_first	1	16	-	-	-	ok	after 30: 8+8, points halved	split	
 gre-pol-cro-205	2016	pol_first	1	16	-	-	-	ok	after 30: 8+8, points halved	split	2	0	-	0	0	1+1	30
 gre-pol-cro-206	2017	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
 gre-pol-cro-207	2018	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
-gre-pol-cro-208	2019	pol_first	1	16	-	-	-	ok	after 30: 8+8, points unknown	split	2	0	-	0	0	1+1	30
+gre-pol-cro-208	2019	pol_first	1	16	-	-	-	ok	after 30: 8+8, points kept	split	2	0	-	0	0	1+1	30
 gre-pol-cro-209	2020	pol_first	1	16	-	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-210	2021	pol_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 gre-pol-cro-211	2022	pol_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
@@ -1337,10 +1337,10 @@ gre-pol-cro-295	2025	pol_super	0	2	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-296	2026	pol_super	0	2	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-297	2027	pol_super	0	2	-	-	-	ok	-	split	-	-	-	-	-	-	-
 gre-pol-cro-325	2001	cro_a1	1	16	-	11-12	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-326	2002	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-gre-pol-cro-327	2003	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-328	2004	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-329	2005	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
+gre-pol-cro-326	2002	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+gre-pol-cro-327	2003	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-328	2004	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-329	2005	cro_a1	1	12	-	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
 gre-pol-cro-330	2006	cro_a1	1	12	-	11	-	ok	-	split	3	0	-	0	0	-	33
 gre-pol-cro-331	2007	cro_a1	1	12	-	11	-	ok	-	split	3	0	-	0	0	-	33
 gre-pol-cro-332	2008	cro_a1	1	12	-	12	-	ok	-	split	3	0	-	0	0	-	33
@@ -1364,10 +1364,10 @@ gre-pol-cro-349	2025	cro_a1	1	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 gre-pol-cro-350	2026	cro_a1	1	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 gre-pol-cro-351	2027	cro_a1	1	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 gre-pol-cro-352	2001	cro_a2a	2	16	1	10	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-353	2002	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-354	2003	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-355	2004	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-356	2005	cro_a2a	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
+gre-pol-cro-353	2002	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-354	2003	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-355	2004	cro_a2a	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-356	2005	cro_a2a	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
 gre-pol-cro-357	2006	cro_a2a	2	16	2	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-358	2007	cro_a2a	2	16	2	-	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-359	2008	cro_a2a	2	16	6	-	-	ok	-	split	2	0	-	0	0	-	30
@@ -1391,10 +1391,10 @@ gre-pol-cro-376	2025	cro_a2a	2	12	-	-	-	ok	-	split	3	0	-	0	0	-	33
 gre-pol-cro-377	2026	cro_a2a	2	16	-	15	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-378	2027	cro_a2a	2	16	-	15	-	ok	-	split	2	0	-	0	0	-	30
 gre-pol-cro-379	2001	cro_a2b	2	16	1	10	-	ok	-	split	2	0	-	0	0	-	30
-gre-pol-cro-380	2002	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-381	2003	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-382	2004	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
-gre-pol-cro-383	2005	cro_a2b	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points unknown	split	2	0	-	0	0	?	22
+gre-pol-cro-380	2002	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-381	2003	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-382	2004	cro_a2b	2	12	1	12	-	partial: places of the split groups (1st of 6, 5th of the play-out group of 6)	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
+gre-pol-cro-383	2005	cro_a2b	2	12	1	-	-	partial: the 1st of the play-off group of the split	after 22: 6+6, points kept	split	2	0	-	0	0	?	22
 gre-pol-cro-384	2006	cro_a2b	2	-1	-	-	-	ok	-	split	-	0	-	0	0	-	-
 gre-pol-cro-385	2007	cro_a2b	2	-1	-	-	-	ok	-	split	-	0	-	0	0	-	-
 gre-pol-cro-386	2008	cro_a2b	2	-1	-	-	-	ok	-	split	-	0	-	0	0	-	-
@@ -1965,7 +1965,7 @@ rus-tur-33	2006	rus_first	2	22	-	-	-	ok	-	calendar	2	0	-	0	0	-	42
 rus-tur-34	2007	rus_first	2	22	-	-	-	ok	-	calendar	2	0	-	0	0	-	42
 rus-tur-35	2008	rus_first	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
 rus-tur-36	2009	rus_first	2	20	-	-	-	ok	-	calendar	2	0	-	0	0	-	38
-rus-tur-37	2010	rus_first	2	20	-	-	-	ok	after 38: 8+12, points unknown	transition	2	0	-	0	0	?	38
+rus-tur-37	2010	rus_first	2	20	-	-	-	ok	gap	transition	2	0	-	0	0	-	38
 rus-tur-38	2011	rus_first	2	20	3-4	-	-	ok	groups	transition	2	0	-	0	0	-	-
 rus-tur-39	2012	rus_first	2	17	3-4	-	-	ok	-	split	2	0	-	0	0	-	34
 rus-tur-40	2013	rus_first	2	19	3-4	-	-	ok	-	split	2	0	-	0	0	-	38
@@ -2064,75 +2064,75 @@ rus-tur-240	2024	tur_second_b	3	36	-	-	-	ok	groups	split	2	0	-	0	0	-	-
 rus-tur-241	2025	tur_second_b	3	37	2-5	-	-	partial: the places of each group or zone	groups	split	2	0	-	0	0	-	-
 rus-tur-242	2026	tur_second_b	3	35	-	-	-	ok	groups	split	2	0	-	0	0	-	-
 rus-tur-243	2027	tur_second_b	3	-1	-	-	-	ok	-	split	-	?	?	?	?	-	-
-sco-2	2001	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-2	2001	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-3	2001	sco_first	2	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-4	2001	sco_second	3	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-5	2001	sco_third	4	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-10	2002	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-10	2002	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-11	2002	sco_first	2	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-12	2002	sco_second	3	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-13	2002	sco_third	4	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-18	2003	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-18	2003	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-19	2003	sco_first	2	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-20	2003	sco_second	3	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-21	2003	sco_third	4	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-26	2004	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-26	2004	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-27	2004	sco_first	2	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-28	2004	sco_second	3	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 sco-29	2004	sco_third	4	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-34	2005	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-34	2005	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-35	2005	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-36	2005	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-37	2005	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-42	2006	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-42	2006	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-43	2006	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-44	2006	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-45	2006	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-50	2007	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-50	2007	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-51	2007	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-52	2007	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-53	2007	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-58	2008	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-58	2008	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-59	2008	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-60	2008	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-61	2008	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-66	2009	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-66	2009	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-67	2009	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-68	2009	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-69	2009	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-74	2010	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-74	2010	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-75	2010	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-76	2010	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-77	2010	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-82	2011	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-82	2011	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-83	2011	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-84	2011	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-85	2011	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-90	2012	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-90	2012	sco_prm	1	12	-	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-91	2012	sco_first	2	10	-	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-92	2012	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-93	2012	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-98	2013	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-98	2013	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-99	2013	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-100	2013	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-101	2013	sco_third	4	10	2-4	-	-	ok	-	split	4	0	-	0	0	-	36
-sco-106	2014	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-106	2014	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-107	2014	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-108	2014	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-109	2014	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-114	2015	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-114	2015	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-115	2015	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-116	2015	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-117	2015	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-122	2016	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-122	2016	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-123	2016	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-124	2016	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-125	2016	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-130	2017	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-130	2017	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-131	2017	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-132	2017	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-133	2017	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-138	2018	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-138	2018	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-139	2018	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-140	2018	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-141	2018	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
@@ -2140,35 +2140,35 @@ sco-146	2019	sco_prm	1	12	-	11	-	ok	-	split	3	0	-	0	0	-	33
 sco-147	2019	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-148	2019	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-149	2019	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-154	2020	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-154	2020	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-155	2020	sco_first	2	10	2-4	9	-	ok	-	split	3	0	-	0	0	-	27
 sco-156	2020	sco_second	3	10	2-4	9	-	ok	gap	split	2	0	-	0	0	-	18
 sco-157	2020	sco_third	4	10	2-4	10	-	ok	gap	split	2	0	-	0	0	-	18
-sco-162	2021	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-162	2021	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-163	2021	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-164	2021	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-165	2021	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-170	2022	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-170	2022	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-171	2022	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-172	2022	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-173	2022	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-178	2023	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-178	2023	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-179	2023	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-180	2023	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-181	2023	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-186	2024	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-186	2024	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-187	2024	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-188	2024	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-189	2024	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-194	2025	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-194	2025	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-195	2025	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-196	2025	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-197	2025	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-202	2026	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-202	2026	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-203	2026	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-204	2026	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-205	2026	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
-sco-210	2027	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+sco-210	2027	sco_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 sco-211	2027	sco_first	2	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-212	2027	sco_second	3	10	2-4	9	-	ok	-	split	4	0	-	0	0	-	36
 sco-213	2027	sco_third	4	10	2-4	10	-	ok	-	split	4	0	-	0	0	-	36
@@ -2367,10 +2367,12 @@ wal-nir-irl-11	2001	nir_first	2	10	-	-	-	ok	-	split	4	0	-	0	0	-	36
 wal-nir-irl-16	2001	ire_prm	1	12	-	9	-	ok	-	split	3	0	-	0	0	-	33
 wal-nir-irl-17	2001	ire_first	2	9	2	-	-	ok	-	split	4	0	-	0	0	-	36
 wal-nir-irl-29	2002	wel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
-wal-nir-irl-35	2002	nir_prm	1	12	-	12	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	?	33
+wal-nir-irl-35	2002	nir_prm	1	12	-	12	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-36	2002	nir_first	2	8	-	5	-	ok	-	split	4	0	-	0	0	-	28
 wal-nir-irl-41	2002	ire_prm	1	10	-	9	-	ok	-	transition	3	0	-	0	0	-	27
-wal-nir-irl-42	2002	ire_first	2	12	2-4	-	-	ok	-	transition	-	0	-	0	0	-	-
+wal-nir-irl-41b	2002	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
+wal-nir-irl-42	2002	ire_first	2	12	2-4	-	-	ok	-	transition	2	0	-	0	0	-	22
+wal-nir-irl-42b	2002	ire_first	2	12	2-4	-	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-54	2003	wel_first	1	17	-	-	-	ok	-	split	2	0	-	0	0	-	34
 wal-nir-irl-60	2003	nir_prm	1	16	-	15	-	ok	-	split	2	0	-	0	0	-	30
 wal-nir-irl-61	2003	nir_first	2	12	2	-	-	ok	-	split	2	0	-	0	0	-	22
@@ -2397,101 +2399,101 @@ wal-nir-irl-161	2007	nir_first	2	12	-	-	-	ok	-	split	2	0	-	0	0	-	22
 wal-nir-irl-166	2007	ire_prm	1	12	-	-	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-167	2007	ire_first	2	10	-	10	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-179	2008	wel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
-wal-nir-irl-185	2008	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-185	2008	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-186	2008	nir_first	2	17	2	-	-	ok	-	split	2	0	-	0	0	-	34
 wal-nir-irl-191	2008	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-192	2008	ire_first	2	12	2-3	12	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-204	2009	wel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
-wal-nir-irl-210	2009	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-210	2009	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-211	2009	nir_first	2	14	2	-	-	ok	-	split	2	0	-	0	0	-	26
 wal-nir-irl-216	2009	ire_prm	1	10	-	8-9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-217	2009	ire_first	2	12	2-3	12	-	ok	-	calendar	3	0	-	0	0	-	33
-wal-nir-irl-229	2010	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-235	2010	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-229	2010	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-235	2010	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-236	2010	nir_first	2	14	2	-	-	ok	-	split	2	0	-	0	0	-	26
 wal-nir-irl-241	2010	ire_prm	1	10	-	10	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-242	2010	ire_first	2	11	3	-	-	ok	-	calendar	3	0	-	0	0	-	33
-wal-nir-irl-254	2011	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-260	2011	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-254	2011	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-260	2011	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-261	2011	nir_first	2	14	2	-	-	ok	-	split	2	0	-	0	0	-	26
 wal-nir-irl-266	2011	ire_prm	1	12	-	11	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-267	2011	ire_first	2	8	2-3	-	-	ok	-	calendar	4	0	-	0	0	-	28
-wal-nir-irl-279	2012	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-285	2012	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-279	2012	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-285	2012	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-286	2012	nir_first	2	13	2	-	-	ok	-	split	2	0	-	0	0	-	26
 wal-nir-irl-291	2012	ire_prm	1	12	-	11	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-292	2012	ire_first	2	8	2-3	-	-	ok	-	calendar	4	0	-	0	0	-	28
-wal-nir-irl-304	2013	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-310	2013	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-304	2013	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-310	2013	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-311	2013	nir_first	2	14	2	-	-	ok	-	split	2	0	-	0	0	-	26
 wal-nir-irl-316	2013	ire_prm	1	12	-	11	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-317	2013	ire_first	2	8	2-3	-	-	ok	-	calendar	4	0	-	0	0	-	28
-wal-nir-irl-329	2014	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-335	2014	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-329	2014	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-335	2014	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-336	2014	nir_first	2	14	2	-	-	ok	-	split	2	0	-	0	0	-	26
 wal-nir-irl-341	2014	ire_prm	1	12	-	11	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-342	2014	ire_first	2	8	2-3	-	-	ok	-	calendar	4	0	-	0	0	-	28
-wal-nir-irl-354	2015	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-360	2015	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-354	2015	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-360	2015	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-361	2015	nir_first	2	14	2	11	-	partial: the first club with a licence	-	split	2	0	-	0	0	-	26
 wal-nir-irl-366	2015	ire_prm	1	12	-	11	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-367	2015	ire_first	2	8	2-3	-	-	ok	-	calendar	4	0	-	0	0	-	28
-wal-nir-irl-379	2016	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-385	2016	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-386	2016	nir_first	2	12	2-3	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
+wal-nir-irl-379	2016	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-385	2016	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-386	2016	nir_first	2	12	2-3	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
 wal-nir-irl-391	2016	ire_prm	1	12	-	-	-	ok	-	calendar	3	0	-	0	0	-	33
 wal-nir-irl-392	2016	ire_first	2	8	-	-	-	ok	-	calendar	4	0	-	0	0	-	28
-wal-nir-irl-404	2017	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-410	2017	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-411	2017	nir_first	2	12	2-3	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
+wal-nir-irl-404	2017	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-410	2017	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-411	2017	nir_first	2	12	2-3	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
 wal-nir-irl-416	2017	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-417	2017	ire_first	2	10	2-4	-	-	ok	-	calendar	3	0	-	0	0	-	27
-wal-nir-irl-429	2018	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-435	2018	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-436	2018	nir_first	2	12	2-3	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
+wal-nir-irl-429	2018	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-435	2018	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-436	2018	nir_first	2	12	2-3	11	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
 wal-nir-irl-441	2018	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-442	2018	ire_first	2	10	2-4	-	-	ok	-	calendar	3	0	-	0	0	-	27
-wal-nir-irl-454	2019	wel_first	1	12	-	-	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-460	2019	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-454	2019	wel_first	1	12	-	-	-	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-460	2019	nir_prm	1	12	-	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-461	2019	nir_first	2	12	2	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
 wal-nir-irl-466	2019	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-467	2019	ire_first	2	10	2-5	-	-	ok	-	calendar	3	0	-	0	0	-	27
-wal-nir-irl-479	2020	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-485	2020	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-486	2020	nir_first	2	12	2	11	-	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
+wal-nir-irl-479	2020	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-485	2020	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-486	2020	nir_first	2	12	2	11	-	ok	-	split	2	0	-	0	0	-	22
 wal-nir-irl-491	2020	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-492	2020	ire_first	2	10	2-5	-	-	ok	-	calendar	3	0	-	0	0	-	27
-wal-nir-irl-504	2021	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-510	2021	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-511	2021	nir_first	2	12	2	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-504	2021	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-510	2021	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-511	2021	nir_first	2	12	2	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-516	2021	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-517	2021	ire_first	2	9	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
-wal-nir-irl-529	2022	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-535	2022	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-536	2022	nir_first	2	12	2	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-529	2022	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-535	2022	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-536	2022	nir_first	2	12	2	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-541	2022	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-542	2022	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
-wal-nir-irl-554	2023	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-560	2023	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-561	2023	nir_first	2	12	2	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-554	2023	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-560	2023	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-561	2023	nir_first	2	12	2	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-566	2023	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-567	2023	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
-wal-nir-irl-579	2024	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-585	2024	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-586	2024	nir_first	2	12	2	11	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-579	2024	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-585	2024	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-586	2024	nir_first	2	12	2	11	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-591	2024	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-592	2024	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
-wal-nir-irl-604	2025	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points unknown	split	2	0	-	0	0	2+2	22
-wal-nir-irl-610	2025	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
-wal-nir-irl-611	2025	nir_first	2	12	2	-	-	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-604	2025	wel_first	1	12	-	-	europe	ok	after 22: 6+6, points kept	split	2	0	-	0	0	2+2	22
+wal-nir-irl-610	2025	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
+wal-nir-irl-611	2025	nir_first	2	12	2	-	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-616	2025	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-617	2025	ire_first	2	10	2-5	-	-	ok	-	calendar	4	0	-	0	0	-	36
-wal-nir-irl-629	2026	wel_first	1	16	-	14	europe	ok	after 30: 6+4+6, points unknown	split	2	0	-	0	0	1+1+1	30
-wal-nir-irl-635	2026	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points unknown	split	3	0	-	0	0	1+1	33
+wal-nir-irl-629	2026	wel_first	1	16	-	14	europe	ok	after 30: 6+4+6, points kept	split	2	0	-	0	0	1+1+1	30
+wal-nir-irl-635	2026	nir_prm	1	12	-	11	europe	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
 wal-nir-irl-636	2026	nir_first	2	16	2	15	-	ok	after 30: 8+8, points unknown	split	2	0	-	0	0	1+1	30
 wal-nir-irl-641	2026	ire_prm	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
 wal-nir-irl-642	2026	ire_first	2	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-
-wal-nir-irl-654	2027	wel_first	1	16	-	14	europe	ok	after 30: 6+4+6, points unknown	split	2	0	-	0	0	1+1+1	30
+wal-nir-irl-654	2027	wel_first	1	16	-	14	europe	ok	after 30: 6+4+6, points kept	split	2	0	-	0	0	1+1+1	30
 wal-nir-irl-660	2027	nir_prm	1	-1	-	-	-	ok	-	split	-	?	?	?	?	-	-
 wal-nir-irl-661	2027	nir_first	2	16	2	15	-	ok	after 30: 8+8, points unknown	split	2	0	-	0	0	1+1	30
 wal-nir-irl-666	2027	ire_prm	1	-1	-	-	-	ok	-	calendar	-	?	?	?	?	-	-

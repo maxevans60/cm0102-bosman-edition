@@ -40,6 +40,7 @@
  * The base game and RECOMP_SEASON_CODE=off: the rule kinds do not run (season_change.c), so no league gets a
  * stage count, and both wraps pass to the original (a league with +0x2c 0 is never marked). The test switch
  * RECOMP_PLAYOFFS=off turns the kind off. */
+#include "season_sizes_arg.h"
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
@@ -50,6 +51,7 @@
 #include "season_playoffs.h"
 #include "season_pol_playoff.h"
 #include "season_cup_third_place.h"
+#include "season_second_teams.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -175,8 +177,7 @@ static const SeasonLeagueRule *league_rule(const char *file, int season)
  * season_sizes.c reads it. */
 static const SeasonRule *row_of_season(const char *file, int season)
 {
-    int s = season_rules_last_season(season, file);
-    return s ? season_rules_find(s, file, 0) : NULL;
+    return season_rules_row_of(file, season);
 }
 
 /* 1 when the row of season gives a play-off that this kind plays: 4 places in a row, directly below the direct
@@ -186,7 +187,8 @@ static const SeasonRule *row_of_season(const char *file, int season)
 int season_playoffs_shape(const char *file, int season, int *direct)
 {
     const SeasonRule *r = row_of_season(file, season);
-    const SeasonLeagueRule *e = r ? league_rule(file, r->season) : NULL;
+    const SeasonLeagueRule *e = !r ? NULL : season_rules_moved(file) ? season_league_rule_of(file, r)
+                                                                      : league_rule(file, r->season);
     if (!e || e->po_up != PLAYOFF_CLUBS || r->up < 0) return 0;
     /* Two ties whose winners both go up (Série B from 2025) are not one play-off for one place. The test is wider than
      * season_playoffs_winners_up ("the two winners go up"): the rows of Belgium and Portugal 2008/09 say "two
@@ -291,7 +293,10 @@ static int season_now(uint32_t obj, const char *file);
  * senior club (the rows' play-off text: "reserve teams excluded, next club moves up"). club_get_linked_b_team
  * 0x540a50 gives the paired club of a Spanish, German or Portuguese club from fixed key id pairs (the nation test
  * at 0x540af6..0x540b10, the pairs from 0x540b1b and 0x541871, *out 1 at 0x54187c), or 0. Which side is the
- * reserve one does not matter: a senior club's reserve side never plays in the division above it. */
+ * reserve one does not matter: a senior club's reserve side never plays in the division above it. A club with no
+ * pair asks the reserve-side rules of the nations (season_second_barred, items 111 to 122 and 232 to 244): 1 when
+ * the rule of its nation bars it from the division above (for example a Polish reserve side in the I liga play-off
+ * of issue 92, item 243). */
 static int barred(uint32_t obj, uint32_t club)
 {
     uint32_t above = league_above(obj);
@@ -301,7 +306,8 @@ static int barred(uint32_t obj, uint32_t club)
     uint32_t a[3] = {club, out, 0};
     uint32_t pair = call_cdecl(F_LINKED, 3, a);
     game_free(out);
-    if (rt_unwinding || !readable(pair)) return 0;
+    if (rt_unwinding) return 0;
+    if (!readable(pair)) return season_second_barred(club, rd32(g_mem, above + COMP_RECORD));
     uint32_t div = rd32(g_mem, pair + CLUB_DIVISION);
     return readable(div) && div == rd32(g_mem, above + COMP_RECORD);
 }
@@ -500,6 +506,15 @@ static void build_stage(uint32_t obj)
             two ? "a two-leg" : "a one-match");
 }
 
+/* The play-off of 4 places after the direct places of a league whose class has its own play-off code: the I liga's
+ * own play-off from 2019/20 (season_pol_first.c). The caller sets its places and one stage. */
+int season_playoffs_build_for(uint32_t obj)
+{
+    if (!readable(rd32(g_mem, obj + COMP_STAGES))) return 0;     /* +0x30 is 0 already: the caller is advance_stage */
+    build_stage(obj);
+    return 1;
+}
+
 int season_playoffs_advance(uint32_t obj)
 {
     if (!marked(obj) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1) return 0;
@@ -513,6 +528,11 @@ int season_playoffs_advance(uint32_t obj)
 void o_00686940(void);
 RT_WRAP(00686940, playoff_result)
 {
+    /* The Argentine Primera's knockouts (season_arg_stages.c): no news of promotion or relegation for their results. */
+    if (season_arg_ko_result(cpu.ecx, (int8_t)g_mem[cpu.esp + 0xc])) {
+        rt_ret_stdcall(0, 6);
+        return;
+    }
     if (marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
         if (getenv("RECOMP_PLAYOFF_LOG"))
             fprintf(stderr, "recomp: playoffs: %s: result club %x (%.30s) code %d stage %d, day %d of %d\n",
@@ -533,8 +553,10 @@ RT_WRAP(00686940, playoff_result)
  * takes row Y - 1). */
 static int season_now(uint32_t obj, const char *file)
 {
-    if (!season_changing_rules() || season_change_is_creating()) return season_sizes_edition(file, season_start_year());
-    return season_sizes_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                        : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    /* The Irish calendar move: the edition itself, which season_rules_row_of maps to its row (41b for 2003). */
+    return season_rules_moved(file) ? year : season_sizes_edition(file, year);
 }
 
 /* No stage of a season before: a stage object that the class's start_new_season did not free stays in the heap

@@ -49,4 +49,16 @@ typedef struct {
  * clubs take their new divisions as the plan goes. Returns the moves written to out (at most max). */
 int season_size_step_plan(StepDivision *div, int ndiv, StepClub *club, int nclub, StepMove *out, int max);
 
+/* A division with no chain (season_sizes.c lone_exchange) sends its row's down places to no division, and the step
+ * then fills it to want from its nation's clubs with no division (pool: those that may go up). Returns how many of
+ * down go: at most pool + have - want, so the pool can replace them (gap 47). want below 0 (no row): none goes, because the step
+ * takes no club into a division with no row, so the count stays. */
+int season_size_lone_down(int down, int pool, int have, int want);
+
+/* The clubs that a lone exchange sends to no division (lead decision of 15 November): from the worst place up, down
+ * clubs with no human manager (human[k] 0; rows are the best place first). A club with a human manager in the last
+ * down rows (the places) stays: kept gets its row. One above the places is skipped and is not kept. Returns the rows written to out, the worst first (fewer than down when too few
+ * clubs have no human manager); *nkept the rows written to kept. out and kept hold nrows each. */
+int season_size_lone_pick(const int *human, int nrows, int down, int *out, int *kept, int *nkept);
+
 #endif

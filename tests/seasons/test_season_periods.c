@@ -7,6 +7,7 @@
 #include "season_periods.h"
 
 #include <stdio.h>
+#include <string.h>
 
 static int fails;
 
@@ -79,6 +80,14 @@ int main(void)
     CHECK(season_period_stage_done(19, 11, 11 * 18), "19 clubs, 11 rounds, 99 matches played");
     CHECK(!season_period_stage_done(19, 11, 11 * 18 - 2), "19 clubs, 11 rounds, one match to play");
     CHECK(!season_period_stage_done(19, 0, 0), "a stage of no rounds is not a period");
+
+    /* The fifth and sixth periods of the Eerste Divisie 2005/06 to 2008/09 (gap 33): the original's words ("Fourth
+     * Period" long and plural, "Period 4" short: 0x4b9a44, 0x4ba0d0, 0x4ba758 at id 0x43c) with the next number. */
+    CHECK(!strcmp(season_period_name(5, 0), "Fifth Period") && !strcmp(season_period_name(6, 0), "Sixth Period"),
+          "long names of periods 5 and 6");
+    CHECK(!strcmp(season_period_name(5, 1), "Period 5") && !strcmp(season_period_name(6, 1), "Period 6"),
+          "short names of periods 5 and 6");
+    CHECK(season_period_name(4, 0) == NULL && season_period_name(7, 1) == NULL, "the game names periods 1 to 4");
 
     if (fails) printf("%d failures\n", fails);
     else printf("season_periods: all checks pass\n");
