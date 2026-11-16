@@ -179,6 +179,9 @@ CALLBACKS = {
     0x9452CA: ("558bec51568b7508", "free, cdecl"),
     0x5A8F60: ("c390909090909090", "the empty function (compared with vtable +0x28, wrapped in season_uefa_cup.c)"),
     0x686940: ("8a4424083c057519", "League +0x44, base (compared with vtable +0x44, wrapped in season_playoffs.c)"),
+    # Gap row 11 (season_playoffs.c): ScoFirst's own play-off slots, wrapped for the cross play-off.
+    0x7EF270: ("81ec00020000568b", "ScoFirst +0x28: advance_stage (the three-club stage with the Premier Division)"),
+    0x7EF5D0: ("8b15dcf59c00a1fc", "ScoFirst +0x44: a stage result, ret 0x18"),
     # season_divisions.c (slice 20): the 3. Liga in the German Regional object
     0x689C80: ("81ec100200008b84", "league_promote_and_relegate, stdcall (upper, lower, expire, pairwise, up, down)"),
     0x6830B0: ("8b0df07edd005556", "League::move_club_to_division, thiscall (club, record, 1), ret 0xc"),
