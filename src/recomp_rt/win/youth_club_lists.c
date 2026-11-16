@@ -26,15 +26,22 @@
  * on the day of a friendly at Angri. MATCH_MAN::pick_team 0x6dbc50 gave 10 players, and init_match 0x6b7f20 stopped
  * the game with match_eng.cpp 652 (0x6b8aca).
  *
- * The fix, in a season game only (season_game_changes), when England is loaded: the wrap of 0x7acfc0 calls it a
+ * The fix, in a season game only (season_game_changes), when England is loaded. At the first new player of Wales, the
+ * Republic of Ireland or Northern Ireland that comes to 0x7ad590 after a new game or load, the wrap calls 0x7acfc0 a
  * second time with the league flags of England at 0 for the call. Of that second table it keeps only the list of
  * England: every English club with a division, the list that a nation that is not loaded gets. Then it puts the first
- * table back in this[0] (the second table stays allocated; one per new game or load). For a new player of Wales, the
- * Republic of Ireland or Northern Ireland, the wrap of 0x7ad590 puts that list in the English row of the table for the
+ * table back in this[0] (the second table stays allocated; at most one per new game or load). For that new player
+ * and each later one of these nations, the wrap of 0x7ad590 puts that list in the English row of the table for the
  * call, and then the old list. For Northern Ireland the draw rand(5) still decides between its own list and the
  * English one. English new players and the lists of all other nations do not change. RECOMP_TEST_YOUTH_LIST=original
- * keeps the original lists. */
+ * keeps the original lists.
+ *
+ * A 2001 start with changing rules on plays its first season as the base game (Q152, as the under-21 rule of
+ * season_national_fill.c). So in that game the wrap changes nothing before 1 July 2002. The second call waits for
+ * the first new player that the change takes, because its allocations (0x944e46, 0x944cf1, the list adds 0x68d0d0)
+ * alone change the play: a call at the new game made the 14 days of the same-save check differ in that game. */
 #include "win.h"
+#include "season.h"
 #include "season_names.h"
 
 #include <stdio.h>
@@ -49,8 +56,9 @@
 #define KEY_IRELAND 0x9cf2dcu
 #define KEY_NORTHERN_IRELAND 0x9cf3e4u
 #define KEY_ENGLAND 0x9cf2e4u
+#define GAME_YEAR 0xae2c92u         /* the u16 game year, after the s16 day of the year from 0 */
 
-static uint32_t regen, english;     /* the PLAYER_REGEN of the lists and the list of all English clubs */
+static uint32_t regen, english;     /* the PLAYER_REGEN; the English list (0 not made, 1 none) */
 
 static int original(void)
 {
@@ -71,17 +79,32 @@ static uint32_t england_loaded(int32_t *row)
     return g_mem[rec + NATION_LOADED] ? rec : 0;
 }
 
+/* 1 when the change acts now: a start after 2001/02, or a 2001 start from the 2002/03 season (day 181 is 1 July). */
+static int rule_now(void)
+{
+    if (season_start_year() != SEASON_FIRST_YEAR) return 1;
+    int day = (int16_t)rd16(g_mem, GAME_YEAR - 2u), year = (int16_t)rd16(g_mem, GAME_YEAR);
+    return (day >= 181 ? year : year - 1) > SEASON_FIRST_YEAR;
+}
+
 void o_007acfc0(void);
 
-/* PLAYER_REGEN::build_nation_club_lists 0x7acfc0, thiscall, no arguments. */
+/* PLAYER_REGEN::build_nation_club_lists 0x7acfc0, thiscall, no arguments: a new game or load forgets the list. */
 RT_WRAP(007acfc0, youth_club_lists)
 {
     uint32_t self = cpu.ecx;
     regen = english = 0;
     o_007acfc0();
+    if (!rt_unwinding) regen = self;
+}
+
+/* The list of every English club with a division, from a second call of 0x7acfc0 with England not loaded. 0 when
+ * the change does not act in this game. */
+static uint32_t english_list(uint32_t self)
+{
     int32_t row;
     uint32_t rec;
-    if (rt_unwinding || !season_game_changes() || original() || !(rec = england_loaded(&row))) return;
+    if (!season_game_changes() || original() || !(rec = england_loaded(&row))) return 0;
     uint32_t first = rd32(g_mem, self), flags = g_mem[rec + NATION_LOADED];
     Cpu saved = cpu;
     g_mem[rec + NATION_LOADED] = 0;
@@ -91,13 +114,12 @@ RT_WRAP(007acfc0, youth_club_lists)
     g_mem[rec + NATION_LOADED] = (uint8_t)flags;
     uint32_t second = rd32(g_mem, self);
     wr32(g_mem, self, first);
-    if (rt_unwinding || !second || second == first) return;
+    if (rt_unwinding || !second || second == first) return 0;
     uint32_t all = rd32(g_mem, second + 4u * (uint32_t)row), own = rd32(g_mem, first + 4u * (uint32_t)row);
-    if (!all) return;
-    regen = self;
-    english = all;
+    if (!all) return 0;
     fprintf(stderr, "recomp: youth club lists: Welsh and Irish new players take the English list of %d clubs, not %d\n",
             (int16_t)rd16(g_mem, all), own ? (int16_t)rd16(g_mem, own) : 0);
+    return all;
 }
 
 void o_007ad590(void);
@@ -108,10 +130,19 @@ RT_WRAP(007ad590, youth_english_list)
     uint32_t self = cpu.ecx, nation = rd32(g_mem, rt_arg(0) + 0x1a), table = rd32(g_mem, self);
     int32_t row = (int32_t)rd32(g_mem, KEY_ENGLAND);
     uint32_t id = nation ? rd32(g_mem, nation) : 0xffffffffu;
-    if (!english || self != regen || !table || row < 0 ||
+    if (self != regen || english == 1 || !table || row < 0 || original() || !rule_now() ||
         (id != rd32(g_mem, KEY_WALES) && id != rd32(g_mem, KEY_IRELAND) && id != rd32(g_mem, KEY_NORTHERN_IRELAND))) {
         o_007ad590();
         return;
+    }
+    if (!english) {
+        english = english_list(self);
+        if (rt_unwinding) return;
+        if (!english) english = 1;          /* no change in this game: no second try until the next load */
+        if (english == 1) {
+            o_007ad590();
+            return;
+        }
     }
     uint32_t slot = table + 4u * (uint32_t)row, own = rd32(g_mem, slot);
     wr32(g_mem, slot, english);
