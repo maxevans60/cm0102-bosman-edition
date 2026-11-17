@@ -65,6 +65,9 @@ check(po("sco_prm", 2013) == ("-", "11", "-"), "Premiership 11th from 2013/14")
 check(po("sco_prm", 2012) == ("-", "-", "-"), "no Premiership play-off in 2012/13")
 check(po("ire_first", 2009) == ("2-3", "12", "-"), "Irish pos 2,3,12: two up, one down")
 check(po("nor_prm", 2001) == ("-", "12", "-"), "Tippeligaen 12th")
+# Open item 272 follow-up: the First Division 5th of 8 played the Premier 12th for promotion in 2002/03 (Bangor v
+# Newry), an up place in the bottom half of the table.
+check(po("nir_first", 2002) == ("5", "-", "-"), "Irish League First Division 2002/03: the 5th plays up")
 for y in range(2005, 2009):
     check(po("tur_second", y) == ("3-6", "-", "-"), "Turkish second tier %d: 3rd v 6th and 4th v 5th, a play-off of 4" % y)
 check(po("usa_mls", 2001)[2] == "title" and po("usa_mls", 2001)[:2] == ("-", "-"), "MLS play-offs move no club")

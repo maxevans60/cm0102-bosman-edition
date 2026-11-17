@@ -391,6 +391,9 @@ BY_HAND = {
     "12th v the losing K League 2 play-off finalist, only if Gimcheon Sangmu do not finish last":
         ("-", "12", "-", "partial: only when one club does not finish last"),
     # Northern Ireland, Wales: European play-offs and licences.
+    # The Irish League First Division 2002/03 (8 clubs): its 5th played the Premier Division 12th (Bangor v Newry) for
+    # a place in the Premier Division, so the place plays up, though it is in the bottom half (open item 272).
+    "pos 5: promotion/relegation play-off": ("5", "-", "-", "ok"),
     "pos 2 to 6: highest-ranked club with a promotion licence: promotion play-off; pos 11: play-off with the "
     "Championship 2 runner-up if that club holds a licence": ("2", "11", "-", "partial: the first club with a licence"),
     "2nd to 6th plus winner of the 7th to 10th group: European play-offs; 14th: relegation play-off with Cymru "
