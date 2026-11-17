@@ -47,7 +47,7 @@ A season game saved by 0.7.2 does not load safely in 0.7.1. Saves from 0.7.1 and
 - Bench and substitutes: a competition without a sourced bench or substitute count keeps the latest sourced one. The EFL Cup names 9 substitutes and allows 5 from 2025/26, and the EFL Trophy 7 and 5. 104 more cells in 61 competitions hold researched values (item 274).
 - The OFC preliminary round is built once and waits for the day after its section's season start, so a game with a level two-leg tie no longer stops at "Cup..cpp 1450" (item 245).
 - New players of Wales and Ireland join English clubs in the October 2026 data, where no English club has a reputation of 2 or less. Before, they found no club (item 262).
-- A club that loans a player to its own linked B side keeps him in one squad slot. Before, a Cottbus player on loan to Cottbus II was added to the squad twice and the game stopped with "match_man..cpp 1225" on day 208 of 2007 (item 280).
+- A player on loan to his club's own B side is no longer moved between the first team and the reserves by the computer. Before, a Cottbus player on loan to Cottbus II was added to the squad twice and the game stopped with "match_man..cpp 1225" on day 208 of 2007 (item 280).
 - The Segunda Divisão B and the Spanish Segunda B keep their zones when the size step moves clubs, so a 2001 game with Portugal no longer stops with "por_second_b..cpp 419" at the 2003/04 season change (item 287).
 - A reserve side with fewer than 11 fit players in a normal game keeps fewer players back, so the game no longer stops with "match_eng..cpp 612" (item 237). A friendly with nine youths no longer stops it with "match_eng..cpp 652" (item 262).
 
