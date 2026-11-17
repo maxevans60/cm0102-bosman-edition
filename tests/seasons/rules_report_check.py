@@ -444,6 +444,11 @@ def differences(seasons, comps, rows):
             # 2007 (season_sizes_edition, season_sizes.c, reads the rows in the same way).
             real = str(r.get("real_season", ""))
             c = next((x for x in both if real.isdigit() and x["year"] == int(real)), c)
+            # Item 286: edition Y of the Argentine second division plays row Y (season_league.c edition_is_year), the
+            # real season that ends in it ("2016" for row 2015). Its object moves on after the start line (14 July),
+            # so that line of season Y still holds edition Y - 1 and the end line holds edition Y, with row Y's places.
+            if c["file"] == "arg_second":
+                c = next((x for x in both if x["year"] == r["season"]), c)
             for key, extra in (("up", "playoff_up"), ("down", "playoff_down")):
                 want = r[key]
                 # A top division (no division above, -1) sends nobody up: the class's up places of the Série A (4 in

@@ -207,6 +207,12 @@ ROWS = {
     "arg_second": (2010, 2011, "Primera B Nacional 2010/11, 20 clubs in two meetings: 38 dates, no class stages"),
     "arg_second@2016": (2016, 2017, "Primera B Nacional 2016/17, 23 clubs in two meetings: 46 dates, then 25 in one "
                                     "meeting (the size step)"),
+    # Item 286: edition Y plays row Y, as the Primera (row 2014 "2015", row 2020 "2021").
+    "arg_second@2015": (2015, 2016, "Primera B Nacional row 2015 (the 2016 season): 22 clubs in one meeting, then 23"),
+    "arg_second@2021": (2021, 2022, "Primera Nacional row 2021 (the 2022 season): 37 clubs in one meeting, then 37 in "
+                                    "two zones as one table"),
+    "arg_second@2023": (2023, 2024, "Primera Nacional row 2023 (the 2024 season): 38 clubs in two zones as one table "
+                                    "of one meeting, then 36"),
     # Slice 17 (D11): the class plays one meeting on 27 dates and a play-off of the top 4. Rows are keyed one year
     # before the real season (row 2003 is the 2004 Série A).
     "bra_nat_first@2003": (2003, 2004, "Série A, 24 clubs in two meetings: 46 dates, no play-off"),
@@ -275,6 +281,12 @@ def encoded_row(file, season):
         return (0, 0)
     m = int(row["meetings"]) if row.get("meetings", "").isdigit() else 0
     if file in HALVES_IN_TABLE and row.get("halves") == "1":
+        m *= 2
+    # Slice 16 (season_sizes_arg_second.c form_of): the second division plays a row of zones as one table of one
+    # meeting, a row of halves as one table of twice the meetings; 2001/02 (25 clubs in halves) keeps the class.
+    if file == "arg_second" and "+" in row.get("zones", ""):     # zone sizes, "19+19"
+        m = 1
+    elif file == "arg_second" and row.get("halves") == "1" and row["clubs"] != "25":
         m *= 2
     return (int(row["clubs"]), m)
 
