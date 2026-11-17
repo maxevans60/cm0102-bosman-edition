@@ -349,6 +349,7 @@ static int build(uint32_t self)
     wr32(g_mem, rd32(g_mem, self + F_STAGES), cup);
     wr32(g_mem, self + F_STAGE, 0);
     test_stage = cup;
+    test_first_day = 0;
     uint32_t stats = rd32(g_mem, self + F_STATS), nt = rd32(g_mem, NATIONAL_TEAMS);
     for (int i = 0; i < 2 * w; i++) {
         uint32_t team = rd32(g_mem, teams + 4u * (uint32_t)i);
@@ -383,8 +384,9 @@ static int build(uint32_t self)
 }
 
 /* Item 245, RECOMP_TEST_OFC_LEVEL=1 (tests only): every fixture of the preliminary round's stage is processed as a
- * level tie, as the play-off test of season_playoffs.c. The first leg (the first match day of the stage) as 1-1.
- * Any later match as 0-0: level on aggregate with no away goals. When its match flags ask for extra time and
+ * level tie, as the play-off test of season_playoffs.c. Every match as 0-0, so after the second leg the tie is level
+ * on aggregate and on away goals (the round's +0x0f 3 keeps the away goals rule, 0x51f696). The first leg is the
+ * first match day of the stage. When a later match's flags ask for extra time and
  * penalties (bits 0x3: 0x51f696, 0x51c1c9) it gets what the engine would give, 0-0 in extra time and penalties
  * 5-4. The result block is fixture +0x43..: goals +0, +1, extra time +4, +5, penalties +6, +7 (as the play-off
  * test). Each match prints its flags (fixture +0x38) and its round (+0x34). */
@@ -399,16 +401,13 @@ void season_ofc_first_test_fixture(uint32_t cup, uint32_t fx)
     uint16_t flags = rd16(g_mem, fx + 0x38u);
     int first = day == test_first_day;
     for (int i = 0; i < 10; i++) g_mem[b + (uint32_t)i] = 0;
-    if (first) {
-        g_mem[b] = 1;
-        g_mem[b + 1] = 1;
-    } else if ((flags & 3u) == 3u) {
+    if (!first && (flags & 3u) == 3u) {
         g_mem[b + 6] = 5;
         g_mem[b + 7] = 4;
     }
     fprintf(stderr, "recomp: season intl: test: OFC preliminary match on day %ld, round %d, forced %s, match flags "
                     "%04x%s\n", day - season_abs_day((int16_t)rd16(g_mem, GAME_DATE + 2), 1, 1),
-            (int16_t)rd16(g_mem, fx + 0x34u), first ? "1-1" : "0-0 level on aggregate", flags,
+            (int16_t)rd16(g_mem, fx + 0x34u), first ? "0-0" : "0-0 level on aggregate", flags,
             first ? "" : (flags & 3u) == 3u ? ", extra time 0-0 and penalties 5-4 given"
                                              : ", no extra time or penalties asked for");
 }
@@ -465,8 +464,10 @@ static void finish(uint32_t self)
 
 static int draw_day(uint32_t self) { return today_abs() == group_draw_abs(self); }
 
-/* Item 245: 0 while the section's own season start of the window's year is still to come before the group draw
- * (the day of its league table entry, season_change_start_day: entry 0, 24 July in 2023). That start_new_season
+/* Item 245: 0 until the day after the section's own season start of the window's year, when that start comes
+ * before the group draw (the day of its league table entry, season_change_start_day: entry 0, 24 July in 2023).
+ * The start day itself waits too: the competitions' daily update (0x5ce060, where the update_for_date wrap below
+ * runs) comes before the season pass 0x5d5ae0 on the same day. That start_new_season
  * 0x91ef40 frees slot 0 (0x91ef99) and sets +0x30 to -1, but the fixtures of a round built before it stay in the
  * fixture store. The window then built a second round, and the store played both rounds' legs into the one
  * stage left: two first legs, and a leg without the second-leg flags (+0x0f, OR'd in by apply_round_rules 0x521d60
@@ -478,7 +479,7 @@ static int season_started(uint32_t self, long now)
     if (day < 0) return 1;
     season_from_abs_day(now, &y, &m, &d);
     long start = season_abs_day(y, 1, 1) + day;
-    return !(now < start && start < group_draw_abs(self));
+    return !(now <= start && start < group_draw_abs(self));
 }
 
 void o_0091f3d0(void);
