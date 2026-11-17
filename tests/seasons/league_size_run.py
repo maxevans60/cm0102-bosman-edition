@@ -484,6 +484,10 @@ def want_counts(file, season, meetings=0):
         # the derby repeat inside the second. The league is the first half, a League_Stage the second; each has its
         # own template of n/2 dates, and a club plays n/2 matches in each (arg_title_faults checks both together).
         return (clubs // 2, clubs // 2)
+    if file == "arg_second" and zones:
+        # Slice 16 (season_sizes_arg_second.c form_of): zones play as one table of one meeting, no inter-zone rounds.
+        # Since item 286 edition Y plays row Y, so the zone rows 2022 to 2024 now reach this check.
+        return (rounds_of(clubs, 1), clubs - 1)
     m = m or meetings or 2
     if zones:
         return (rounds or m * (max(zones) + (max(zones) & 1) - 1) + extra, m * (max(zones) - 1) + extra)
@@ -516,7 +520,7 @@ def real_season(file, season):
 
 # Classes that play over two years (August to June) whose rows hold calendar-year seasons from some year: edition Y
 # plays row Y, the real season that ends in it (season_sizes.c season_sizes_edition).
-TWO_YEAR_CLASSES = {"arg_prm"}
+TWO_YEAR_CLASSES = {"arg_prm", "arg_second"}   # arg_second: item 286 (season_league.c edition_is_year)
 
 # Classes whose rows follow the Irish calendar move (season_rules.c season_rules_moved: the files "ire_").
 MOVED_CLASSES = {"ire_prm", "ire_first"}
