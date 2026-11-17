@@ -176,15 +176,18 @@ test('a webhook for another price, without this server\'s mark, or not about a s
 });
 
 test('the legal pages: pricing, terms, refunds, privacy, with the seller, the contact, the price and both ways to pay', async () => {
-  for (const [page, want] of [['pricing', /\$5 a month[\s\S]*Buy Me a Coffee/], ['terms', /Buy Me a Coffee takes the payment[\s\S]*Paddle\.com is the Merchant of Record of\s+those orders/],
-    ['refunds', /full refund within 14 days of any payment[\s\S]*Buy Me a Coffee/], ['privacy', /Buy Me a Coffee[\s\S]*Paddle/]]) {
+  for (const [page, want] of [['pricing', /\$5 a month[\s\S]*Buy Me a Coffee/], ['terms', /Buy Me a Coffee takes the payment/],
+    ['refunds', /full refund within 14 days of any payment[\s\S]*Buy Me a Coffee/], ['privacy', /Buy Me a Coffee/]]) {
     const r = await fetch(`${base}/${page}`);
     assert.equal(r.status, 200, page);
     const html = await r.text();
     assert.match(html, want, page);
     assert.doesNotMatch(html, /\{\{/, `${page}: every placeholder is filled`);
     if (page !== 'pricing') assert.match(html, /help@example\.com/, `${page}: the contact`);
+    assert.doesNotMatch(html, /paddle/i, `${page}: Paddle is not named (no one bought through it)`);
+    assert.match(html, /<footer class="made">Made with <svg[^>]*aria-label="love"[\s\S]*?<\/svg> by A\. Seller<\/footer>/, `${page}: the footer`);
   }
   assert.match(await (await fetch(`${base}/terms`)).text(), /A\. Seller/);
   assert.equal((await fetch(`${base}/terms.html`)).status, 200);
+  assert.equal((await (await fetch(`${base}/files.json`)).json()).maker, 'A. Seller', 'the page\'s footer names the seller');
 });

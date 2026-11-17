@@ -271,6 +271,9 @@ function plansForStart(me) {
     backed up after each save. <a href="/auth/google/start?mode=page" id="go-signin">Sign in with Google</a> to get it, or to
     bring the cloud saves you have. Playing needs no account.</div>${links}`;
 }
+// The footer of the start box and Help: "Made with ♥ by <CM_SELLER>" (files.json maker), or without the name.
+const HEART = '<svg viewBox="0 0 24 24" aria-label="love" role="img"><path d="M12 21.2 10.6 20C5.4 15.3 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.8-8.6 11.5L12 21.2Z"/></svg>';
+const madeWith = (maker) => `Made with ${HEART}${maker ? ` by ${esc(maker)}` : ''}`;
 // Once in this browser, after its first save: a player without Cloud Saves hears that they exist.
 function cloudHintOnce() {
   const hint = account.promo();
@@ -1093,6 +1096,7 @@ async function start() {
   stats = startStats({ info, log, isRunning: () => running, state: folderState,
     extra: () => ({ engine: `${info.chosen.suspend ?? 'unknown'} ${info.chosen.version}`, vault: Boolean(vault?.active), cloud: Boolean(account.me?.user?.cloud) }) });
   mountStatsChoice(info);
+  $('help-made').innerHTML = madeWith(info.maker);
   // Buy me a coffee (CM_COFFEE_URL on the server): in the bar and in Help.
   if (info.coffee) {
     for (const a of document.querySelectorAll('a.coffee')) a.href = info.coffee;
@@ -1124,7 +1128,8 @@ async function start() {
       ${warnings.length ? `<ul>${warnings.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>` : ''}
       ${TOUCH ? '<p class="small">On a touch screen: tap to click, long press for the right button (keep the finger down to drag with it), two fingers to scroll. Help has the list.</p>' : ''}
       <div class="row"><button class="primary" id="go">Start the game</button><span class="free-note">Free · no account, no payment</span></div>
-      ${plansForStart(await Promise.race([account.ready, new Promise((r) => setTimeout(r, 1500))]))}`);
+      ${plansForStart(await Promise.race([account.ready, new Promise((r) => setTimeout(r, 1500))]))}
+      <p class="small made">${madeWith(info.maker)}</p>`);
     if ($('go-plans')) $('go-plans').onclick = (e) => { e.preventDefault(); account.open(); };
     await new Promise((r) => { $('go').onclick = r; });
   }

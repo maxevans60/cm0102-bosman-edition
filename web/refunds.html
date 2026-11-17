@@ -25,6 +25,8 @@
   .plan .price { color: var(--text); font-size: 22px; font-weight: 650; margin: 4px 0 8px; }
   .plan ul { margin: 0; padding-left: 18px; }
   .updated { font-size: 13px; }
+  .made { margin-top: 18px; text-align: center; color: var(--muted); font-size: 13px; }
+  .made svg { width: 14px; height: 14px; vertical-align: -2px; fill: #e5484d; }
   nav { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; }
   nav a { margin-right: 14px; }
 </style>
@@ -35,15 +37,13 @@
   <p class="updated">Last updated: 17 November 2026</p>
   <p><b>A full refund within 14 days of any payment for Cloud Saves, no questions asked.</b></p>
   <p>To ask for one, write to {{CONTACT}} with the email you joined Buy Me a Coffee with. We refund the payment through
-  Buy Me a Coffee, to the card or account you paid with. A payment of an older Paddle subscription: use the link in
-  the receipt that Paddle emailed you, find the order at <a href="https://paddle.net">paddle.net</a>, or write to us;
-  Paddle.com, the Merchant of Record of those orders, handles their refunds.</p>
+  Buy Me a Coffee, to the card or account you paid with.</p>
   <p>A refunded payment ends Cloud Saves for that period. The saves in your browsers stay, and so do the copies in the
   cloud (<a href="/terms">Terms</a>, Cloud Saves).</p>
-  <p>To stop future payments, cancel the membership on Buy Me a Coffee (an older Paddle subscription: Account, Manage
-  subscription, or paddle.net): Cloud Saves then run to the end of the period you paid for.</p>
+  <p>To stop future payments, cancel the membership on Buy Me a Coffee: Cloud Saves then run to the end of the period you paid for.</p>
 
   <nav><a href="/">The game</a><a href="/pricing">Pricing</a><a href="/terms">Terms</a><a href="/refunds">Refunds</a><a href="/privacy">Privacy</a></nav>
+  <footer class="made">Made with <svg viewBox="0 0 24 24" aria-label="love" role="img"><path d="M12 21.2 10.6 20C5.4 15.3 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.8-8.6 11.5L12 21.2Z"/></svg>{{MADE_BY}}</footer>
 </main>
 </body>
 </html>

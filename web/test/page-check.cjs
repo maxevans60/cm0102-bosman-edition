@@ -33,7 +33,7 @@ const PORT = 8097;
   fs.writeFileSync(path.join(game, 'Data/staff.dat.br'), zlib.brotliCompressSync(fs.readFileSync(path.join(game, 'Data/staff.dat'))));
 
   const server = spawn(process.execPath, [path.join(ROOT, 'web/server.mjs')], {
-    env: { ...process.env, CM_GAME_DIR: game, CM_WEB_BUILD: build, CM_WEB_BUILD_ASYNCIFY: asyncDir, PORT: String(PORT), CM_WEB_SKIP_VERIFY: '1', CM_ADMIN_TOKEN: 'page-check-admin-token', CM_COFFEE_URL: 'https://buymeacoffee.com/cm0102-test' },
+    env: { ...process.env, CM_GAME_DIR: game, CM_WEB_BUILD: build, CM_WEB_BUILD_ASYNCIFY: asyncDir, PORT: String(PORT), CM_WEB_SKIP_VERIFY: '1', CM_ADMIN_TOKEN: 'page-check-admin-token', CM_COFFEE_URL: 'https://buymeacoffee.com/cm0102-test', CM_SELLER: 'A. Maker' },
     stdio: ['ignore', 'pipe', 'inherit'],
   });
   await new Promise((r) => server.stdout.on('data', (d) => { process.stdout.write(`server: ${d}`); if (/open http/.test(d)) r(); }));
@@ -80,6 +80,7 @@ const PORT = 8097;
       /cannot compile the engine/.test(g.box) && /download of the game files was stopped/.test(g.box) && gameAsked < rows.length / 2,
       `${gameAsked} of ${rows.length} game files asked for`);
     g = await gate('touch only', { ctx: { hasTouch: true, isMobile: true } });
+    check('the start box ends with Made with a red heart by the seller (CM_SELLER)', /Made with by A\. Maker$/.test(g.box), g.box.slice(-80));
     check('a touch device is told the gestures and may start', /tap to click, long press for the right button \(keep the finger down to drag with it\), two fingers to scroll/.test(g.box) && g.start === 1, g.box.slice(0, 200));
 
     // The game stops (an exit code, as Restart Game gave before WinExec was replaced): the box names it and offers
@@ -512,6 +513,10 @@ const PORT = 8097;
         && coffee[0].shown, JSON.stringify(coffee));
     await p.click('#help-open');
     const helpText = (await p.textContent('#help')).replace(/\s+/g, ' ');
+    const made = await p.evaluate(() => { const m = document.getElementById('help-made'), svg = m.querySelector('svg');
+      return { text: m.textContent.replace(/\s+/g, ' '), shown: m.offsetParent !== null, fill: svg && getComputedStyle(svg).fill, label: svg?.getAttribute('aria-label') }; });
+    check('Help ends with Made with a red heart by the seller', made.text === 'Made with by A. Maker' && made.shown && made.fill === 'rgb(229, 72, 77)'
+      && made.label === 'love', JSON.stringify(made));
     check('Help lists the gestures, the right-button drag of a run (and the Mac\'s Control), and holds the engine log',
       /Long press \(a ring fills\), then lift or drag/.test(helpText) && /Right click, then a tap or a drag/.test(helpText) && /A tap with two fingers/.test(helpText)
         && /drag a player with the right button to give him a run/.test(helpText) && /On a Mac, Control and a click is the right button/.test(helpText)

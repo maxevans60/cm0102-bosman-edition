@@ -38,7 +38,7 @@ export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'auth.mjs', 'billing.mjs
 const PAGES = Object.fromEntries([['/', 'index.html'], ...['privacy', 'terms', 'refunds', 'pricing'].map((p) => [`/${p}`, `${p}.html`]),
   ...PAGE_FILES.map((f) => [`/${f}`, f])]);
 // The pages of the site's terms: the seller, the contact and the price come from the settings (CM_SELLER, CM_CONTACT,
-// CM_PRICE), as {{SELLER}}, {{CONTACT}} and {{PRICE}} in them.
+// CM_PRICE), as {{SELLER}}, {{CONTACT}} and {{PRICE}} in them; {{MADE_BY}} is " by <seller>" in the footer, or nothing.
 const TEMPLATED = new Set(['privacy.html', 'terms.html', 'refunds.html', 'pricing.html']);
 // What the page keeps for a start without a connection (web/sw.js): itself, without the service worker's own file.
 const SHELL = ['/', ...PAGE_FILES.filter((f) => f !== 'index.html' && f !== 'sw.js').map((f) => `/${f}`)];
@@ -128,7 +128,8 @@ function sendTemplated(req, res, file, site) {
   const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const contact = site.contact ? `<a href="mailto:${esc(site.contact)}">${esc(site.contact)}</a>` : 'the contact address on this site\'s project page';
   const body = Buffer.from(readFileSync(file, 'utf8').replaceAll('{{SELLER}}', esc(site.seller || 'the operator of this site'))
-    .replaceAll('{{CONTACT}}', contact).replaceAll('{{PRICE}}', esc(site.price || '$5 a month')));
+    .replaceAll('{{CONTACT}}', contact).replaceAll('{{PRICE}}', esc(site.price || '$5 a month'))
+    .replaceAll('{{MADE_BY}}', site.seller ? ` by ${esc(site.seller)}` : ''));
   res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': body.length, 'Cache-Control': 'no-cache' });
   res.end(req.method === 'HEAD' ? undefined : body);
 }
@@ -319,6 +320,7 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
           engines: inv.engines.map((e) => ({ base: e.base, suspend: e.suspend, version: e.version, bytes: e.wasm.size })),
           shell: SHELL,
           coffee: coffeeUrl(site.coffee),
+          maker: site.seller ? String(site.seller).slice(0, 80) : null,      // the footer's "Made with ♥ by" (CM_SELLER)
           stats: stats ? { mode: statsMode } : null,
           release: releaseOf(inv),
         });
