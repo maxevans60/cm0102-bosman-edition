@@ -511,6 +511,25 @@ const PORT = 8097;
     check('Buy me a coffee: in the bar and in Help, opening the page set on the server in a new tab',
       coffee.length === 2 && coffee.every((c) => c.href === 'https://buymeacoffee.com/cm0102-test' && c.target === '_blank' && /noopener/.test(c.rel))
         && coffee[0].shown, JSON.stringify(coffee));
+    // The bar's buttons are one height at every size (a phone showed Buy me a coffee shorter than Account and Help).
+    const barSizes = [];
+    for (const [name, opts] of [['computer', { viewport: { width: 1280, height: 800 } }],
+      ['phone', { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true }],
+      ['iPad', { viewport: { width: 1080, height: 810 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }],
+      ['small window', { viewport: { width: 600, height: 700 } }]]) {
+      const ctx = await b.newContext(opts);
+      const bp = await ctx.newPage();
+      await bp.goto(`http://127.0.0.1:${PORT}/`);
+      await bp.waitForSelector('#coffee-open:not([hidden])', { timeout: 30000 });
+      const hs = await bp.evaluate(() => [...document.querySelectorAll('#bar > button, #bar > a')].filter((e) => e.offsetParent !== null)
+        .map((e) => `${e.id}=${Math.round(e.getBoundingClientRect().height * 10) / 10}`));
+      const coarse = await bp.evaluate(() => matchMedia('(pointer: coarse)').matches);
+      barSizes.push(`${name}${coarse ? ' (touch)' : ''}: ${hs.join(' ')}`);
+      await ctx.close();
+    }
+    check('the bar\'s buttons, Buy me a coffee among them, are one height on a computer, a phone, an iPad and a small window',
+      barSizes.every((row) => { const hs = row.split(': ')[1].split(' ').map((x) => x.split('=')[1]); return hs.length >= 2 && hs.every((h) => h === hs[0]) && row.includes('coffee-open'); }),
+      barSizes.join(' | '));
     await p.click('#help-open');
     const helpText = (await p.textContent('#help')).replace(/\s+/g, ' ');
     const made = await p.evaluate(() => { const m = document.getElementById('help-made'), svg = m.querySelector('svg');
@@ -728,12 +747,28 @@ const PORT = 8097;
       await pg.click('#consent-no').catch(() => {});
       await pg.click('#go');
       await pg.waitForFunction(() => window.__fake && !document.getElementById('fullscreen').hidden, null, { timeout: 120000 });
+      await pg.waitForTimeout(100);
+      // Before full screen, with the game's buttons all there: each one inside the window, all of one height.
+      const bar = await pg.evaluate(() => {
+        const shown = [...document.querySelectorAll('#bar > button, #bar > a')].filter((e) => e.offsetParent !== null);
+        const r = shown.map((e) => e.getBoundingClientRect());
+        return { n: shown.length, inside: r.every((x) => x.left >= 0 && x.right <= innerWidth + 0.5), heights: [...new Set(r.map((x) => Math.round(x.height)))],
+          cls: document.getElementById('bar').className, title: document.querySelector('#bar .brand').offsetParent !== null };
+      });
       await pg.tap('#fullscreen');
       await pg.waitForFunction(() => document.getElementById('app').classList.contains('fs'), null, { timeout: 5000 }).catch(() => {});
       await pg.waitForTimeout(300);
-      return { ctx, pg, errs };
+      return { ctx, pg, errs, bar };
     }
+    const upright = await fullScreenOn({ width: 390, height: 844 });
+    const small = await fullScreenOn({ width: 360, height: 740 });
     const phone = await fullScreenOn({ width: 844, height: 390 });
+    check('the bar fits a phone held sideways, upright and a small phone: icons only, every button on screen, one height',
+      [phone, upright, small].every((x) => x.bar.n >= 6 && x.bar.inside && x.bar.heights.length === 1 && /compact/.test(x.bar.cls))
+        && upright.bar.title && !small.bar.title,
+      [phone, upright, small].map((x) => JSON.stringify(x.bar)).join(' | '));
+    await upright.ctx.close();
+    await small.ctx.close();
     const phoneBar = await phone.pg.locator('#bar').boundingBox(), phoneCanvas = await phone.pg.locator('#canvas').boundingBox();
     check('full screen on a phone held sideways: the buttons are a column beside the game, over none of it',
       (await phone.pg.evaluate(() => document.getElementById('app').dataset.bar)) === 'side' && !overlap(phoneBar, phoneCanvas)

@@ -38,14 +38,26 @@
   @media (pointer: coarse) { button { height: 38px; padding: 0 14px; } }
   button:hover { border-color: #3a4552; }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  #bar a.coffee { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid var(--line);
-    border-radius: 8px; color: var(--text); text-decoration: none; font-size: 13px; }
+  /* Buy me a coffee is a link that looks and sizes as the bar's buttons do (the button rules above, coarse pointer too). */
+  #bar a.coffee { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--raised); color: var(--text); text-decoration: none; font: inherit; white-space: nowrap; flex: none; }
+  #bar a.coffee:hover { border-color: #3a4552; }
+  #bar a.coffee:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (pointer: coarse) { #bar a.coffee { height: 38px; padding: 0 14px; } }
   #bar a.coffee svg { width: 18px; height: 18px; fill: none; stroke: #e3b341; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   @media (max-width: 720px) { #bar a.coffee span { display: none; } }
   button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 650; }
   button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
   button svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-  @media (max-width: 720px) { #bar button span { display: none; } #bar button { padding: 0 10px; } }
+  @media (max-width: 720px) { #bar button span { display: none; } #bar button, #bar a.coffee { padding: 0 10px; } }
+  /* Too many buttons for the bar's width, at any width (ui.js fitBar): icons only, the same height. */
+  #bar.compact button span, #bar.compact a.coffee span { display: none; }
+  #bar.compact button, #bar.compact a.coffee { padding: 0 10px; }
+  /* Still too many (a phone held upright with the game running): closer icons, then no title either. */
+  #bar.tight { gap: 6px; padding: 0 8px; }
+  #bar.tight button, #bar.tight a.coffee { padding: 0 8px; }
+  #bar.bare { justify-content: flex-end; }
+  #bar.bare .brand, #bar.bare #status { display: none; }
 
   /* The game. The size and place of the canvas come from layout.js, as variables on the stage; they are !important
      so that a size SDL writes on the canvas itself cannot take their place. */

@@ -17,7 +17,7 @@ import { LEGAL_LINKS, createCloudSync, mountAccount, plansHtml } from './account
 import { guardKeys, hasTouch, mountKeyboard } from './keyboard.js';
 import { mountLayout } from './layout.js';
 import { mountMacRightButton, mountTouch } from './touch.js';
-import { guardLeave, isFullAlready, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
+import { fitBar, guardLeave, isFullAlready, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
 import { mountReport, watchSaveInPlay } from './report.js';
 import { mountPlay } from './play.js';
 import { watchRelease } from './release.js';
@@ -176,6 +176,7 @@ $('right-click').onclick = () => {
   if (on) toast('Tap the game: that tap is a right click', { ms: 2500 });
 };
 mountBusy($('busy'));
+fitBar($('bar'), $('app'));                            // icons only when the buttons do not fit in one row
 
 function resumeAudio() {
   const ctx = window.Module?.SDL2?.audioContext;

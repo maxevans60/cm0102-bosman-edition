@@ -53,6 +53,29 @@ export function keepAwake() {
 // Full screen is not offered where the page is full already: an iPhone or iPad home-screen app (navigator.standalone),
 // or an app in the display mode fullscreen. A computer's app window (standalone) can still go full screen: it once got
 // no button either, and a player's Mac app had none.
+// The bar's buttons with their names when they fit in one row, else icons only (class compact), else icons closer
+// together (class tight), else without the title (class bare): a phone held sideways had the Full screen button past
+// the edge. Again at each resize and each button shown or hidden. Not in full screen,
+// where the bar has rules of its own.
+export function fitBar(bar, app) {
+  let queued = false;
+  const fit = () => {
+    queued = false;
+    bar.classList.remove('compact', 'tight', 'bare');
+    if (app.classList.contains('fs')) return;
+    const over = () => bar.scrollWidth > bar.clientWidth + 1;
+    if (over()) bar.classList.add('compact');
+    if (over()) bar.classList.add('tight');
+    if (over()) bar.classList.add('bare');
+  };
+  const soon = () => { if (!queued) { queued = true; requestAnimationFrame(fit); } };
+  new ResizeObserver(soon).observe(bar);
+  new MutationObserver(soon).observe(bar, { subtree: true, attributes: true, attributeFilter: ['hidden'], childList: true });
+  new MutationObserver(soon).observe(app, { attributes: true, attributeFilter: ['class'] });
+  fit();
+  return fit;
+}
+
 export function isFullAlready() {
   return matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
 }
