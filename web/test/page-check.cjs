@@ -1053,6 +1053,35 @@ const PORT = 8097;
       await ctx.close();
     }
 
+    // A start that stops on an error before the game (a page and a script of two versions): the page loads again once and
+    // starts; one that stops every time says so, instead of "Checking the files…" for good, and does not loop.
+    for (const times of [1, Infinity]) {
+      const ctx = await b.newContext({ viewport: { width: 1000, height: 700 }, serviceWorkers: 'block' });
+      let broken = 0, loads = 0;
+      await ctx.route(`http://127.0.0.1:${PORT}/files.json`, async (r) => {
+        if (broken >= times) return r.continue();
+        broken++;
+        const j = await (await r.fetch()).json();
+        return r.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...j, missing: null }) });   // info.missing.length throws
+      });
+      const pg = await ctx.newPage();
+      pg.on('load', () => { loads++; });
+      await pg.goto(`http://127.0.0.1:${PORT}/`);
+      if (times === 1) {
+        const started = await pg.waitForSelector('#go', { timeout: 30000 }).then(() => true, () => false);
+        check('a start that stops on an error loads the page again once, and then starts', started && loads === 2 && broken === 1, `loads ${loads}, broken ${broken}`);
+      } else {
+        await pg.waitForSelector('.box.error', { timeout: 30000 }).catch(() => {});
+        await pg.waitForTimeout(1500);
+        const box = (await pg.textContent('#overlay').catch(() => '')).replace(/\s+/g, ' ');
+        const logText = await pg.textContent('#log');
+        check('a start that stops every time: one more load, then the error box with the message, and the log has it',
+          loads === 2 && /The page did not start/.test(box) && /TypeError/.test(logText) && /the start stopped: TypeError: Cannot read properties of null/.test(logText),
+          `loads ${loads} | ${box.slice(0, 160)} | ${logText.split('\n').filter((l) => /start stopped/.test(l)).join(' / ').slice(0, 200)}`);
+      }
+      await ctx.close();
+    }
+
     // A flight: one start with a connection, then none. The service worker gives the page, files.json and the engine,
     // the browser's cache the game files, and the saves are there (checked with the real engine too, 14 November 2026:
     // the start took 4 s offline).
@@ -1065,7 +1094,31 @@ const PORT = 8097;
       await pg.waitForFunction(() => window.__fake, null, { timeout: 120000 });
       await pg.waitForFunction(async () => Boolean((await navigator.serviceWorker.getRegistration())?.active), null, { timeout: 20000 }).catch(() => {});
       await pg.waitForTimeout(4000);                    // primeOffline: the page's files, files.json and the engine
+      // The page from the kept copy, the server up again for the rest (an iPhone, 17 November 2026: the page from the
+      // copy while the Fly machine woke, then a newer loader.js from the server, which stopped on a missing element).
+      // The copy's loader.js is marked; with the page from the copy, the loader must be the copy's too.
+      await pg.evaluate(async () => {
+        const c = await caches.open('cm0102-shell');
+        const key = (await c.keys()).find((k) => new URL(k.url).pathname === '/loader.js');
+        const text = await (await c.match(key)).text();
+        await c.put(key, new Response(`window.__fromCopy = true;\n${text}`, { headers: { 'content-type': 'text/javascript' } }));
+      });
       await pg.close();
+      const home = `http://127.0.0.1:${PORT}/`;
+      await ctx.route(home, (r) => r.abort('connectionrefused'));
+      const mixed = await ctx.newPage();
+      await mixed.goto(home).catch(() => {});
+      await mixed.waitForSelector('#go, .box.error', { timeout: 30000 }).catch(() => {});
+      const copyLoader = await mixed.evaluate(() => window.__fromCopy === true).catch(() => false);
+      await mixed.close();
+      await ctx.unroute(home);
+      const fresh = await ctx.newPage();
+      await fresh.goto(home);
+      await fresh.waitForSelector('#go', { timeout: 30000 }).catch(() => {});
+      const serverLoader = await fresh.evaluate(() => window.__fromCopy !== true);
+      await fresh.close();
+      check('a page from the service worker\'s copy gets the copy\'s scripts too, one version; a page from the server, the server\'s',
+        copyLoader && serverLoader, `copy page ran the copy's loader: ${copyLoader}; server page ran the server's: ${serverLoader}`);
       await ctx.setOffline(true);
       pg = await ctx.newPage();
       const errs = [];

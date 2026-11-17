@@ -151,7 +151,9 @@ function logStack(e) {
 }
 
 addEventListener('error', (e) => { log(`page: ${e.message}`); logStack(e.error); });
-addEventListener('unhandledrejection', (e) => log(`page: ${e.reason?.stack ?? e.reason}`));
+// Safari's and an iPhone's stacks hold no message ("start@…/loader.js:1100:17"), so the message goes first.
+const errorText = (err) => { const m = err?.message ? `${err.name ?? 'Error'}: ${err.message}` : String(err); return err?.stack && !err.stack.includes(m) ? `${m}\n${err.stack}` : err?.stack ?? m; };
+addEventListener('unhandledrejection', (e) => log(`page: ${errorText(e.reason)}`));
 
 // ---- Before the engine: the listeners that must run ahead of SDL's, and the layout. ----
 
@@ -1097,7 +1099,7 @@ async function start() {
   stats = startStats({ info, log, isRunning: () => running, state: folderState,
     extra: () => ({ engine: `${info.chosen.suspend ?? 'unknown'} ${info.chosen.version}`, vault: Boolean(vault?.active), cloud: Boolean(account.me?.user?.cloud) }) });
   mountStatsChoice(info);
-  $('help-made').innerHTML = madeWith(info.maker);
+  if ($('help-made')) $('help-made').innerHTML = madeWith(info.maker);
   // Buy me a coffee (CM_COFFEE_URL on the server): in the bar and in Help.
   if (info.coffee) {
     for (const a of document.querySelectorAll('a.coffee')) a.href = info.coffee;
@@ -1176,4 +1178,20 @@ async function start() {
   runEngine(files, info);
 }
 
-start();
+// A start that stops on an error before the game: the page and its scripts may be of two versions (a page from the
+// service worker's copy, a script from a newer server), so it loads again once, fresh; a second time it says so,
+// instead of "Checking the files…" for good.
+const START_RELOAD = 'cm0102-start-reload';
+start().catch((err) => {
+  log(`page: the start stopped: ${errorText(err)}`);
+  if (running) return;
+  let last = 0;
+  try { last = Number(sessionStorage.getItem(START_RELOAD)) || 0; } catch { /* no storage: no reload */ last = Date.now(); }
+  if (Date.now() - last > 5 * 60e3) {
+    try { sessionStorage.setItem(START_RELOAD, String(Date.now())); } catch { /* ignore */ }
+    log('page: loading the page again, once');
+    location.reload();
+    return;
+  }
+  fail('The page did not start', `${err?.message ?? err}. Load the page again; if it stays, send the Engine log from Help.`);
+});

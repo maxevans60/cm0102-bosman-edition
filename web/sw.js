@@ -22,15 +22,24 @@ async function keptFirst(request) {
   return (await kept(request)) ?? fetch(request);
 }
 
-async function serverFirst(request) {
+// The kept copy is one version of the page: a page that came from it gets its scripts and files.json from it too, not
+// from the server. An iPhone opened the page while the stopped Fly machine woke (17 November 2026): the page came from
+// the copy after 6 s, then loader.js from the server, by then up with a newer version, and that loader stopped on an
+// element the old page did not have. onCopy: called when the answer is the copy.
+const fromCopy = new Set();          // the clients (tabs) whose page came from the kept copy
+
+async function serverFirst(request, onCopy = () => {}) {
   const copy = await kept(request);
   try {
     const answer = fetch(request);
     if (!copy) return await answer;
     const timeout = new Promise((resolve) => setTimeout(() => resolve(null), WAIT_MS));
-    return (await Promise.race([answer, timeout])) ?? copy;
+    const got = await Promise.race([answer, timeout]);
+    if (got) return got;
+    onCopy();
+    return copy;
   } catch (err) {
-    if (copy) return copy;
+    if (copy) { onCopy(); return copy; }
     throw err;
   }
 }
@@ -38,5 +47,12 @@ async function serverFirst(request) {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== self.location.origin || /^\/(game|api|auth)\//.test(url.pathname)) return;
-  e.respondWith(url.pathname.startsWith('/engine/') && url.searchParams.has('v') ? keptFirst(e.request) : serverFirst(e.request));
+  if (e.request.mode === 'navigate') {
+    const tab = e.resultingClientId;
+    if (tab) fromCopy.delete(tab);
+    e.respondWith(serverFirst(e.request, () => { if (tab) fromCopy.add(tab); }));
+    return;
+  }
+  const engine = url.pathname.startsWith('/engine/') && url.searchParams.has('v');
+  e.respondWith(engine || fromCopy.has(e.clientId) ? keptFirst(e.request) : serverFirst(e.request));
 });
