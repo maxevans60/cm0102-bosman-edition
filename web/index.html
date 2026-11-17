@@ -38,6 +38,10 @@
   @media (pointer: coarse) { button { height: 38px; padding: 0 14px; } }
   button:hover { border-color: #3a4552; }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #bar a.coffee { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid var(--line);
+    border-radius: 8px; color: var(--text); text-decoration: none; font-size: 13px; }
+  #bar a.coffee svg { width: 18px; height: 18px; fill: none; stroke: #e3b341; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  @media (max-width: 720px) { #bar a.coffee span { display: none; } }
   button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 650; }
   button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
   button svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -267,6 +271,7 @@
   @media (hover: none) { #app.fs #bar { opacity: .65; } }
   #app.fs .brand, #app.fs #status, #app.fs #bar button span { display: none; }
   #app.fs #bar button { padding: 0 9px; }
+  #app.fs #bar a.coffee { display: none; }          /* not over the game */
   /* Room beside the picture (layout.js, barPlace): the buttons as a column in it; room above it (a phone held
      upright): a row in it. Neither covers any of the game, so neither fades. */
   #app.fs[data-bar="side"] #bar { flex-direction: column; opacity: 1; max-height: calc(100% - 16px);
@@ -300,6 +305,8 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="m14 8 2 2"/></svg><span>Editor</span></button>
     <button id="account-open" hidden aria-label="Sign in">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5c.8-3.3 3.6-5.2 7-5.2s6.2 1.9 7 5.2"/></svg><span>Sign in</span><i class="dot" aria-hidden="true"></i></button>
+    <a id="coffee-open" class="button coffee" hidden target="_blank" rel="noopener" aria-label="Buy me a coffee" title="Like the game? Buy the developer a coffee">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V9Z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 4.5c0 1 1 1 1 2M11.5 4.5c0 1 1 1 1 2"/></svg><span>Buy me a coffee</span></a>
     <button id="update" hidden class="primary" aria-label="New version" title="A new version of the game is out: load it (your saves are stored first)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12a7 7 0 1 1-2.05-4.95M19 4.5V8h-3.5"/></svg><span>New version</span></button>
     <button id="help-open" aria-label="Help">
@@ -398,6 +405,8 @@
     <p class="small">The game runs in this tab, on your device. The mouse and the keys work as in the game. On the tactics
     board, drag a player with the right button to give him a run. On a Mac, Control and a click is the right button, and
     Control and a drag the right-button drag.</p>
+    <p class="small" id="help-coffee" hidden>Like the game in your browser? It is made in spare time:
+    <a class="coffee" target="_blank" rel="noopener">buy me a coffee</a>.</p>
     <h3>On a touch screen</h3>
     <table>
       <tr><td>Tap</td><td>A click</td></tr>

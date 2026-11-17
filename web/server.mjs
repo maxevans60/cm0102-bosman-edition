@@ -118,6 +118,12 @@ function sendFile(req, res, disk, type, immutable = false) {
   createReadStream(file).pipe(res);
 }
 
+// The Buy Me a Coffee page (CM_COFFEE_URL), when it is an https address: the page links to it (the bar, Help).
+export function coffeeUrl(v) {
+  try { const u = new URL(String(v ?? '')); return u.protocol === 'https:' ? u.href.replace(/\/$/, u.pathname === '/' ? '/' : '') : null; }
+  catch { return null; }
+}
+
 function sendTemplated(req, res, file, site) {
   const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const contact = site.contact ? `<a href="mailto:${esc(site.contact)}">${esc(site.contact)}</a>` : 'the contact address on this site\'s project page';
@@ -312,6 +318,7 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
           suspend: inv.suspend,
           engines: inv.engines.map((e) => ({ base: e.base, suspend: e.suspend, version: e.version, bytes: e.wasm.size })),
           shell: SHELL,
+          coffee: coffeeUrl(site.coffee),
           stats: stats ? { mode: statsMode } : null,
           release: releaseOf(inv),
         });
@@ -414,7 +421,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     : paddle ? `, sold with Paddle (${paddle.env})` : ', no payments (PADDLE_CLIENT_TOKEN, PADDLE_PRICE_ID, PADDLE_WEBHOOK_SECRET)'}`
     : `accounts and cloud saves: off${someSet ? `, missing ${missing.join(', ')}` : ''} (web/README.md, "Cloud saves")`);
   const port = Number(process.env.PORT ?? 8080), host = process.env.HOST ?? '127.0.0.1';
-  const site = { seller: process.env.CM_SELLER, contact: process.env.CM_CONTACT, price: process.env.CM_PRICE };
+  const site = { seller: process.env.CM_SELLER, contact: process.env.CM_CONTACT, price: process.env.CM_PRICE, coffee: process.env.CM_COFFEE_URL };
   if (process.env.PADDLE_CLIENT_TOKEN && (!site.seller || !site.contact))
     console.log('payments: set CM_SELLER and CM_CONTACT, which the terms, refunds and privacy pages name (Paddle checks them)');
   console.log(stats ? `statistics: on (${process.env.CM_STATS === 'optout' ? 'opt-out' : 'opt-in: the page asks first'}), ${s3FromEnv(process.env) ? 'kept in the bucket' : 'in memory only'}; admin page /admin for ${admins.filter((e) => e.trim()).length} email(s)${process.env.CM_ADMIN_TOKEN ? ' and the token' : ''}`

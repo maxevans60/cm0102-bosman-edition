@@ -143,6 +143,17 @@ of a Slack app. Telegram: a bot of @BotFather and your chat's id, as
 fails is logged (`stats: report notice not sent: …`), and the report itself is kept all the same. The link goes to
 `https://<your-app>.fly.dev/admin`; with your own domain, set `CM_SITE_URL=https://<your domain>`.
 
+## Buy me a coffee
+
+A Buy me a coffee button shows in the bar (next to Help) and a line in Help when the server knows your page:
+
+```bash
+fly secrets set CM_COFFEE_URL=https://buymeacoffee.com/<your name>
+```
+
+Only an `https` address is taken; without it nothing shows. The button opens the page in a new tab, and it hides in
+full screen so it never covers the game.
+
 ## Straight to Tigris
 
 Saves and data sets go from the browser to Tigris and back without passing the machine (`web/README.md`, "Straight to

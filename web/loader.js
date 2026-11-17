@@ -1093,6 +1093,12 @@ async function start() {
   stats = startStats({ info, log, isRunning: () => running, state: folderState,
     extra: () => ({ engine: `${info.chosen.suspend ?? 'unknown'} ${info.chosen.version}`, vault: Boolean(vault?.active), cloud: Boolean(account.me?.user?.cloud) }) });
   mountStatsChoice(info);
+  // Buy me a coffee (CM_COFFEE_URL on the server): in the bar and in Help.
+  if (info.coffee) {
+    for (const a of document.querySelectorAll('a.coffee')) a.href = info.coffee;
+    $('coffee-open').hidden = false;
+    $('help-coffee').hidden = false;
+  }
   if (info.stats) {
     report = mountReport({ FS: () => window.Module?.FS ?? null, lines: () => lines, who: () => stats?.who?.() ?? {}, inPlay: () => saveInPlay(), log });
     $('help-report').hidden = false;

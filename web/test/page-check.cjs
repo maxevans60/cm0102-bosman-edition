@@ -33,7 +33,7 @@ const PORT = 8097;
   fs.writeFileSync(path.join(game, 'Data/staff.dat.br'), zlib.brotliCompressSync(fs.readFileSync(path.join(game, 'Data/staff.dat'))));
 
   const server = spawn(process.execPath, [path.join(ROOT, 'web/server.mjs')], {
-    env: { ...process.env, CM_GAME_DIR: game, CM_WEB_BUILD: build, CM_WEB_BUILD_ASYNCIFY: asyncDir, PORT: String(PORT), CM_WEB_SKIP_VERIFY: '1', CM_ADMIN_TOKEN: 'page-check-admin-token' },
+    env: { ...process.env, CM_GAME_DIR: game, CM_WEB_BUILD: build, CM_WEB_BUILD_ASYNCIFY: asyncDir, PORT: String(PORT), CM_WEB_SKIP_VERIFY: '1', CM_ADMIN_TOKEN: 'page-check-admin-token', CM_COFFEE_URL: 'https://buymeacoffee.com/cm0102-test' },
     stdio: ['ignore', 'pipe', 'inherit'],
   });
   await new Promise((r) => server.stdout.on('data', (d) => { process.stdout.write(`server: ${d}`); if (/open http/.test(d)) r(); }));
@@ -505,6 +505,11 @@ const PORT = 8097;
     check('New version loads the page again (through Restart Game\'s path: the saves stored first)', await updated);
     fs.utimesSync(releaseFile, was.atime, was.mtime);
     await p.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+    const coffee = await p.evaluate(() => [...document.querySelectorAll('a.coffee')].map((a) => ({ href: a.href, target: a.target, rel: a.rel,
+      shown: a.offsetParent !== null })));
+    check('Buy me a coffee: in the bar and in Help, opening the page set on the server in a new tab',
+      coffee.length === 2 && coffee.every((c) => c.href === 'https://buymeacoffee.com/cm0102-test' && c.target === '_blank' && /noopener/.test(c.rel))
+        && coffee[0].shown, JSON.stringify(coffee));
     await p.click('#help-open');
     const helpText = (await p.textContent('#help')).replace(/\s+/g, ' ');
     check('Help lists the gestures, the right-button drag of a run (and the Mac\'s Control), and holds the engine log',
