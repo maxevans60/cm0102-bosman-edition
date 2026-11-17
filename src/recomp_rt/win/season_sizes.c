@@ -1449,10 +1449,19 @@ void season_sizes_step_note(uint32_t upper, uint32_t lower) { step_note_pair(upp
  * real tier below it, a division outside the table, as the chain does. That division keeps its count: the plan sends
  * its worst clubs that stayed to no division for each club that comes down, and fills it from its nation's clubs with
  * no division for each club that goes up, so a class of groups with fixed arrays (PorSecondB 0x7d2870, the
- * Regionalliga of exactly 36, cmp 0x24 at 0x5dbc3b) holds the clubs that it held after the chain. */
+ * Regionalliga of exactly 36, cmp 0x24 at 0x5dbc3b) holds the clubs that it held after the chain.
+ * Item 287: one record, one kept division. The 2002 chain calls 0x689c80 for the Segunda Liga with por_second_b and
+ * again with each of its zone stages (league_stage objects of the same record), and Spain's with its four groups. Each
+ * extra entry wanted the clubs of the whole record and held none (club[k].div takes one index), so the plan filled it
+ * from the spare divisions: 120 Portuguese clubs got the Segunda B record, and the 2003 start stopped at
+ * por_second_b.cpp 419 (PorSecondB 0x7d252f..0x7d258b counts the clubs of [0x9cf7c0] against the stage's +0x3e,
+ * box at 0x7d25e4). The first object noted for the record stays. */
 static void step_note_outside(uint32_t upper, uint32_t lower)
 {
     if (step_running) return;
+    uint32_t rec = readable(lower) ? rd32(g_mem, lower + COMP_RECORD) : 0;
+    for (int k = 0; k < nstep_seen; k++)
+        if (step_seen[k].obj != lower && step_seen[k].rec == rec) return;
     step_note_pair(upper, lower);
     for (int i = 0; i < nstep_seen; i++)
         if (step_seen[i].obj == lower) step_seen[i].keep = 1;
