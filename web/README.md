@@ -597,6 +597,14 @@ code addresses and the checks: `docs/research/2026-11-10-data-set-editor.md`.
   histories 45% · 0:38" while a new game is made (`progress.js`; the engine logs `recomp: progress: <stage>` when a
   stage starts, and `rt_web_progress` gives its share, display.c). A player of a new game on a phone waited minutes on
   one stage and thought the game had stopped.
+- A tab that the system closes while the game loads or runs (iOS for its memory, then "A problem repeatedly occurred
+  on …", an iPhone, 17 November 2026) is found at the next visit (`lastvisit.js`): the page keeps a mark in
+  localStorage with its step ("downloading the game files", "Loading game data", "in the game") and takes it off when
+  it closes or stops on its own. A mark that the next visit finds (and no other tab plays) puts a line in the start box,
+  "The game stopped suddenly on your last visit … most likely … too much memory", with an iPhone's own advice; the log
+  and the statistics (a report "sudden stop") have it too.
+- A start that stops on an error before the game loads the page again once, then shows "The page did not start" with
+  the message. A page that the service worker gave from its copy (a server slow to wake) gets the copy's scripts too.
 - The browser asks before the page is left while a game runs, and the screen stays on.
 - The second start needs no click: when the game files are in the browser, the game starts by itself.
 - **A new version (`release.js`).** The server names its release at `/version.json` (and in `files.json`): a hash of

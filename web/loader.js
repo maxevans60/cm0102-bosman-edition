@@ -18,6 +18,7 @@ import { guardKeys, hasTouch, mountKeyboard } from './keyboard.js';
 import { mountLayout } from './layout.js';
 import { mountMacRightButton, mountTouch } from './touch.js';
 import { fitBar, guardLeave, isFullAlready, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
+import { mountVisitMark, suddenStopText } from './lastvisit.js';
 import { mountReport, watchSaveInPlay } from './report.js';
 import { mountPlay } from './play.js';
 import { watchRelease } from './release.js';
@@ -33,8 +34,15 @@ const TOUCH = hasTouch();
 
 const lines = [];
 let progress = null;                                   // the game's long jobs in the bar (progress.js)
+// The mark of a visit that loads or runs the game (lastvisit.js): the next visit finds it when the system closed the tab.
+const visit = mountVisitMark({ storage: (() => { try { return localStorage; } catch { return null; } })() });
+addEventListener('pagehide', (e) => visit.end({ hide: e.persisted }));
+addEventListener('pageshow', (e) => { if (e.persisted) visit.resume(); });
+
 function log(text) {
   progress?.line(String(text));
+  const stage = /^recomp: progress: (.+)$/.exec(String(text));
+  if (stage) visit.step(/ took [\d.]+ s$/.test(stage[1]) ? 'in the game' : stage[1]);   // the game's long jobs: "Loading game data"…
   lines.push(String(text));
   if (lines.length > 3000) lines.splice(0, lines.length - 3000);
   $('log').textContent = lines.join('\n');
@@ -106,6 +114,7 @@ const OUT_OF_MEMORY = /Array buffer allocation failed|out of memory|Cannot alloc
 let stats = null;                                    // stats.js, once files.json told the server's mode
 let report = null, saveInPlay = () => null;          // Send to the developer (report.js), when the server takes reports
 function fail(title, detail) {
+  visit.end();                                       // the page stopped and says why: not a sudden stop
   status(title);
   stats?.report(`${title}: ${detail}`, lines.slice(-60), 'fail');
   const last = lines.slice(-8).join('\n');
@@ -744,6 +753,7 @@ function runEngine(files, info) {
       overlay('');
       status('');
       running = true;
+      visit.step('in the game');
       canvas.dataset.engine = '1';
       $('fullscreen').hidden = !layout.canFullscreen || isFullAlready();
       $('right-click').hidden = !TOUCH;
@@ -855,6 +865,7 @@ function runEngine(files, info) {
     },
     onExit: (code) => {
       running = false;
+      visit.end();
       // Exit right after a save: the save is stored before the box says the game ended (closing the tab meanwhile
       // asks first), where an ordinary write would leave a file of the last moment for later.
       const stored = storeEverything();
@@ -991,6 +1002,7 @@ function takeTurn(options = {}) {
 // there again and the lock goes.
 async function stopHere(store) {
   if (turnGone) return;
+  visit.end();
   turnGone = true;
   log(`page: the game moves to another tab${store ? ': it stops here, and the saves go to the browser\'s storage first' : ''}`);
   running = false;
@@ -1112,6 +1124,17 @@ async function start() {
     $('help-report-open').onclick = () => { $('help').close(); report.open({ where: 'Help' }); };
   }
   const { problems, warnings } = requirements(info);
+  // The last visit stopped without the page closing: the system closed the tab, most likely for its memory (iOS: "A
+  // problem repeatedly occurred"). The player hears it before the next start, the log and the statistics have it.
+  // A mark of a tab that plays now is no sudden stop: it is read only when no tab holds the game (a closed tab's lock goes
+  // with it).
+  const otherPlays = await Promise.resolve(navigator.locks?.query?.()).then((q) => Boolean(q?.held?.some((l) => l.name === TURN)), () => false);
+  const lastStop = otherPlays ? null : visit.takeLastStop();
+  if (lastStop) {
+    log(`page: the last visit stopped without the page closing, while ${lastStop.step} (${lastStop.device ?? 'a computer'}, ${lastStop.engine ?? '?'} engine)`);
+    stats.report(`sudden stop: the last visit stopped while ${lastStop.step}`, [], 'sudden stop');
+    warnings.unshift(suddenStopText(lastStop, { device: appleMobile() }));
+  }
   if (problems.length) { log(`page: blocked: ${problems.join(' ')}`); stats.report(`blocked: ${problems.join(' ')}`, [], 'requirements'); blocked(problems); return; }
   if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('/sw.js').catch((e) => log(`page: no service worker: ${e}`));
   const cache = await openCache();
@@ -1137,6 +1160,7 @@ async function start() {
     await new Promise((r) => { $('go').onclick = r; });
   }
   if (!await myTurn()) return;
+  visit.begin({ step: toGet > 0 ? 'downloading the game files' : 'reading the game files', device: appleMobile() ?? undefined, engine: info.chosen.suspend ?? undefined });
   overlay(`<h1>${toGet > 0 ? 'Loading the game files' : 'Starting'}</h1><div class="bar"><i id="bar-fill"></i></div><div class="small" id="bytes"></div>`);
   status('Loading the game files…');
   const t0 = performance.now();
@@ -1175,6 +1199,7 @@ async function start() {
   if (turnGone) return;
   overlay('<h1>Starting the engine</h1><div class="row"><i class="spin"></i>The first start can take a minute.</div>');
   status('Starting the engine…');
+  visit.step('starting the engine');
   runEngine(files, info);
 }
 

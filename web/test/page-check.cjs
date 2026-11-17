@@ -1082,6 +1082,40 @@ const PORT = 8097;
       await ctx.close();
     }
 
+    // A tab the system closes while the game runs (iOS for its memory: "A problem repeatedly occurred", an iPhone, 17
+    // November 2026): no pagehide, the page sees nothing. The next visit finds the mark and says so before its start;
+    // a visit that closed as usual (a reload) leaves none.
+    {
+      const ctx = await b.newContext({ viewport: { width: 1000, height: 700 }, serviceWorkers: 'block' });
+      let pg = await ctx.newPage();
+      await pg.goto(`http://127.0.0.1:${PORT}/`);
+      await pg.waitForSelector('#go');
+      await pg.click('#consent-no').catch(() => {});
+      await pg.click('#go');
+      await pg.waitForFunction(() => window.__fake, null, { timeout: 120000 });
+      const marked = await pg.evaluate(() => JSON.parse(localStorage.getItem('cm0102-visit') ?? 'null'));
+      const cdp = await ctx.newCDPSession(pg);
+      const crashed = pg.waitForEvent('crash', { timeout: 15000 }).then(() => true, () => false);
+      cdp.send('Page.crash').catch(() => {});            // never answers: the page it would answer from is gone
+      const didCrash = await crashed;
+      await pg.close().catch(() => {});
+      pg = await ctx.newPage();
+      await pg.goto(`http://127.0.0.1:${PORT}/`);
+      await pg.waitForSelector('#go', { timeout: 30000 }).catch(() => {});
+      const box = (await pg.textContent('#overlay').catch(() => '')).replace(/\s+/g, ' ');
+      const logText = await pg.textContent('#log');
+      check('a tab the system closed while the game ran: the next visit says so before its start, and the log has it',
+        didCrash && marked?.step === 'in the game' && /The game stopped suddenly on your last visit \(\d+ min ago, while in the game\): the browser most likely closed the tab because it used too much memory/.test(box)
+          && /the last visit stopped without the page closing, while in the game/.test(logText), `crashed ${didCrash} | ${JSON.stringify(marked)} | ${box.slice(0, 220)}`);
+      if (await pg.locator('#go').count()) await pg.click('#go');
+      await pg.waitForFunction(() => window.__fake, null, { timeout: 60000 }).catch(() => {});
+      await pg.reload();
+      await pg.waitForFunction(() => window.__fake || document.getElementById('go'), null, { timeout: 60000 }).catch(() => {});
+      const again = `${await pg.textContent('#overlay').catch(() => '')} ${await pg.textContent('#log')}`;
+      check('a visit that closed as usual (a reload) leaves no mark', !/stopped suddenly|stopped without the page closing/.test(again), again.slice(0, 200));
+      await ctx.close();
+    }
+
     // A flight: one start with a connection, then none. The service worker gives the page, files.json and the engine,
     // the browser's cache the game files, and the saves are there (checked with the real engine too, 14 November 2026:
     // the start took 4 s offline).
