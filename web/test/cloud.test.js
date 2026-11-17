@@ -439,15 +439,22 @@ test('direct, later: the rules read back in the log, a check again later that tu
   await new Promise((r) => setTimeout(r, 400));
   assert.equal(later.isDirect(), true, 'a later check turns direct on');
   assert.match(said.join(' '), /now go straight between the browser and the store/);
-  // Only the other address of the store lets pages in: the log says to use it.
+  // Only another address of the store lets pages in (as t3.storage.dev where fly.storage.tigris.dev does not): the
+  // pages' links name it, and the log says which.
   said.length = 0;
   const port = new URL(s3fake.endpoint).port;
-  const main = createS3({ endpoint: `http://localhost:${port}`, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
-  const other = createS3({ endpoint: `http://127.0.0.1:${port}`, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
+  const at = (host) => createS3({ endpoint: `http://${host}:${port}`, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
   s3fake.faults.corsHost = '127.0.0.1';
-  const two = make({ s3: main, otherStore: { s3: other, endpoint: 'http://127.0.0.1' }, recheck: [] });
-  assert.equal(await two.directReady, false);
-  assert.match(said.join(' '), /at http:\/\/127\.0\.0\.1 the same check works: set AWS_ENDPOINT_URL_S3=http:\/\/127\.0\.0\.1/);
+  const two = make({ s3: at('localhost'), linkStores: [{ s3: at('localhost'), name: 'a second way that fails too' }, { s3: at('127.0.0.1'), name: 'http://127.0.0.1' }], recheck: [] });
+  assert.equal(await two.directReady, true, 'the address that works is taken');
+  assert.equal(two.linkName(), 'http://127.0.0.1');
+  assert.match(said.join(' '), /go straight between the browser and the store .*the links name http:\/\/127\.0\.0\.1, in place of the configured address, which did not pass/);
+  // None works: each one's reason is logged.
+  said.length = 0;
+  s3fake.faults.corsHost = 'nowhere';
+  const none = make({ s3: at('localhost'), linkStores: [{ s3: at('127.0.0.1'), name: 'http://127.0.0.1' }], recheck: [] });
+  assert.equal(await none.directReady, false);
+  assert.match(said.join(' '), /do not let https:\/\/cm\.example send .*go through this server.* and at http:\/\/127\.0\.0\.1: the bucket's CORS rules do not let/);
   s3fake.faults.corsHost = null;
   assert.equal([...s3fake.objects.keys()].filter((k) => k.startsWith('meta/direct-check')).length, 0, 'the checks leave nothing in the store');
 });

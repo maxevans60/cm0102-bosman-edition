@@ -128,7 +128,7 @@ ${ok ? 'setTimeout(() => window.close(), 300);' : ''}</script>`;
 export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicUrl = null, cloudFor = 'listed', cloudUsers = [],
   upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, maxRaw = MAX_RAW, google = GOOGLE, paddle = null, coffee = null, price = '$5 a month', log = (t) => console.log(t),
   onAccountDeleted = () => {}, uploadBudget = 160 << 20, isAdmin = () => false, direct: directWanted = true, origins = ['*'],
-  storeTtl = 10 * 60e3, otherStore = null, recheck = [60e3, 5 * 60e3, 30 * 60e3] }) {
+  storeTtl = 10 * 60e3, linkStores = [], recheck = [60e3, 5 * 60e3, 30 * 60e3] }) {
   const seal = sealer(sessionSecret);
   // A save may be maxPacked bytes, compressed (MAX_GZ unless a test sets less); the saves list tells the page, so a save
   // larger than that is not sent at all (account.js).
@@ -142,26 +142,43 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   // direct: true (set the rules, and go direct when that works), 'given' (the rules were set by hand in the store's
   // console: CM_DIRECT=on) or false (CM_DIRECT=off).
   let direct = false;
+  // The store's address that the pages' links name (presign): s3's own, or another address of the same bucket that
+  // passed the check (linkStores, { s3, name }: Tigris has two hosts, each with the bucket in the host or the path; on
+  // the live site, 17 November 2026, fly.storage.tigris.dev answered the preflight without Access-Control-Allow-Origin).
+  let links = s3, linkName = null;
+  const candidates = () => [{ s3, name: null }, ...linkStores];
   // The way a page would go, tried by this server at its start: a signed upload link as the pages get them (content-type
   // and content-length signed), and first the browser's preflight for it from the site's own address. On the live site
   // the pages' uploads to the store failed, "the connection to the store failed", where the server had set the rules
-  // (15 November 2026): a page cannot tell a refused preflight from a refused signature. null: both work; else why not.
+  // (15 November 2026): a page cannot tell a refused preflight from a refused signature. The upload carries the headers
+  // of a save's (putSave), and the file then comes back with a download link as a page gets it, which must carry
+  // Access-Control-Allow-Origin too. null: all of it works; else why not.
   async function checkDirect(store = s3) {
     const key = `meta/direct-check-${randomBytes(6).toString('hex')}.txt`, body = Buffer.from('ok');
-    const link = store.presign('PUT', key, { headers: { 'content-type': 'text/plain', 'content-length': body.length } });
+    const link = store.presign('PUT', key, { headers: { 'content-type': 'text/plain', 'content-length': body.length,
+      'x-amz-meta-raw-size': body.length, 'x-amz-meta-saved': Date.now() } });
     const { 'content-length': _, ...headers } = link.headers;
     const origin = origins.find((o) => o !== '*') ?? null;
-    if (origin) {
-      const pre = await fetch(link.url, { method: 'OPTIONS', headers: { origin, 'access-control-request-method': 'PUT',
-        'access-control-request-headers': Object.keys(headers).join(',') } });
-      const allow = pre.headers.get('access-control-allow-origin');
-      if (!pre.ok || !(allow === '*' || allow === origin))
-        return `the bucket's CORS rules do not let ${origin} send (the preflight: HTTP ${pre.status}, ${allow ? `allowed ${allow}` : 'no Access-Control-Allow-Origin'})`;
+    const allowed = (r) => { const a = r.headers.get('access-control-allow-origin'); return a === '*' || a === origin; };
+    try {
+      if (origin) {
+        const pre = await fetch(link.url, { method: 'OPTIONS', headers: { origin, 'access-control-request-method': 'PUT',
+          'access-control-request-headers': Object.keys(headers).join(',') } });
+        const allow = pre.headers.get('access-control-allow-origin');
+        if (!pre.ok || !allowed(pre))
+          return `the bucket's CORS rules do not let ${origin} send (the preflight: HTTP ${pre.status}, ${allow ? `allowed ${allow}` : 'no Access-Control-Allow-Origin'})`;
+      }
+      const put = await fetch(link.url, { method: 'PUT', body, headers: { ...(origin ? { origin } : {}),
+        ...Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])) } });
+      if (!put.ok) return `the store refused a signed upload link (HTTP ${put.status}: ${(await put.text()).replace(/\s+/g, ' ').slice(0, 200)})`;
+      const get = await fetch(store.presign('GET', key).url, { headers: origin ? { origin } : {} });
+      const back = Buffer.from(await get.arrayBuffer());
+      if (!get.ok || !back.equals(body)) return `a signed download link did not bring the file back (HTTP ${get.status})`;
+      if (origin && !allowed(get)) return `a download from the store has no Access-Control-Allow-Origin for ${origin}`;
+      return null;
+    } finally {
+      await s3.delete(key).catch(() => {});
     }
-    const put = await fetch(link.url, { method: 'PUT', body, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])) });
-    if (!put.ok) return `the store refused a signed upload link (HTTP ${put.status}: ${(await put.text()).replace(/\s+/g, ' ').slice(0, 200)})`;
-    await store.delete(key).catch(() => {});
-    return null;
   }
   const tryDirect = async (store = s3) => {
     try { return await checkDirect(store); } catch (err) { return `the check of a signed upload link failed (${err.message})`; }
@@ -175,15 +192,22 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     } catch (err) { return `; its rules could not be read back (${err.message})`; }
   }
   const after = (ms) => (ms < 60e3 ? `${Math.round(ms / 1000)} s` : `${Math.round(ms / 60e3)} min`);
-  // A check that failed: once more after each pause of recheck (rules may take a while to reach every place of the
-  // store), and direct goes on at the first that works. The store's other address (Tigris has two) is tried too.
-  async function afterFailure(why) {
-    log(`cloud: ${why}${await rulesHeld()}: saves and data sets go through this server (web/deploy/README.md, "Straight to Tigris")`);
-    if (otherStore) {
-      const there = await tryDirect(otherStore.s3);
-      log(there ? `cloud: at ${otherStore.endpoint} the check fails too (${there})`
-        : `cloud: at ${otherStore.endpoint} the same check works: set AWS_ENDPOINT_URL_S3=${otherStore.endpoint} (fly secrets set), and saves and data sets go straight to the store`);
+  // Each address of the store in turn (candidates): the first that passes the check names the pages' links. null when
+  // one does, else each one's reason.
+  async function findWay() {
+    const whys = [];
+    for (const c of candidates()) {
+      const why = await tryDirect(c.s3);
+      if (!why) { links = c.s3; linkName = c.name; direct = true; return null; }
+      whys.push(c.name ? `at ${c.name}: ${why}` : why);
     }
+    return whys;
+  }
+  // No address passed: once more after each pause of recheck (rules may take a while to reach every place of the
+  // store), and direct goes on at the first that works.
+  async function afterFailure(whys) {
+    log(`cloud: ${whys[0]}${await rulesHeld()}: saves and data sets go through this server (web/deploy/README.md, "Straight to Tigris")`);
+    for (const w of whys.slice(1)) log(`cloud: and ${w}`);
     if (!recheck.length) return;
     log(`cloud: checks again in ${recheck.map(after).join(', ')}`);
     laterChecks(recheck).catch((err) => log(`cloud: the checks of the store stopped: ${err.message}`));
@@ -193,10 +217,8 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     for (const ms of recheck) {
       await new Promise((r) => { const t = setTimeout(r, ms - waited); t.unref?.(); });
       waited = ms;
-      const now = await tryDirect();
-      if (!now) {
-        direct = true;
-        log(`cloud: the check works ${after(ms)} after the start: saves and data sets now go straight between the browser and the store`);
+      if (!await findWay()) {
+        log(`cloud: the check works ${after(ms)} after the start${linkName ? ` at ${linkName}` : ''}: saves and data sets now go straight between the browser and the store`);
         sweepIncoming();
         return;
       }
@@ -212,15 +234,14 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
         return;
       }
     }
-    const why = await tryDirect();
-    if (why) {
-      await afterFailure(why);
+    const whys = await findWay();
+    if (whys) {
+      await afterFailure(whys);
       return;
     }
-    direct = true;
     const from = origins.find((o) => o !== '*');
     log(`cloud: saves and data sets go straight between the browser and the store (${directWanted === 'given' ? 'CORS rules set in the store\'s console, CM_DIRECT=on' : `CORS for ${origins.join(', ')}`}; checked${
-      from ? ` from ${from}` : ''}: a signed upload link and the browser's preflight work)`);
+      from ? ` from ${from}` : ''}: a signed upload link and the browser's preflight work${linkName ? `; the links name ${linkName}, in place of the configured address, which did not pass` : ''})`);
   })();
   // The store's own id (meta/store.json, made at the first start on a bucket): the lists name it, so a page whose saves
   // went to another bucket (BUCKET_NAME or the key changed) sends them again instead of taking them as removed.
@@ -558,7 +579,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     if (how === 'get' && method === 'GET') {
       const h = await s3.head(key);
       if (!h) { send(res, 404, { error: `${name} is not in the cloud` }); return; }
-      send(res, 200, { direct: true, url: s3.presign('GET', key).url, etag: h.etag, size: h.size,
+      send(res, 200, { direct: true, url: links.presign('GET', key).url, etag: h.etag, size: h.size,
         rawSize: Number(h.metadata['raw-size']) || null, saved: Number(h.metadata.saved) || null });
       return;
     }
@@ -583,7 +604,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       if (!(rawSize > 0) || rawSize > maxRaw) { send(res, 422, { error: `${name} was not stored: it is larger than ${maxRaw >> 20} MB` }); return; }
       if (await conflict(body.base ?? undefined)) return;
       const upload = incomingKey(user.sub, 'gz');
-      const link = s3.presign('PUT', upload, { headers: { 'content-type': 'application/gzip', 'content-length': size,
+      const link = links.presign('PUT', upload, { headers: { 'content-type': 'application/gzip', 'content-length': size,
         'x-amz-meta-raw-size': rawSize, 'x-amz-meta-saved': saved } });
       const { 'content-length': _, ...headers } = link.headers;    // the browser sets the length of the body itself
       send(res, 200, { direct: true, url: link.url, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])), key: upload });
@@ -633,7 +654,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     if (how === 'get' && method === 'GET') {
       const h = await s3.head(key);
       if (!h) { send(res, 404, { error: `${name} is not in the cloud` }); return; }
-      send(res, 200, { direct: true, url: s3.presign('GET', key).url, etag: h.etag, size: h.size, saved: Number(h.metadata.saved) || null });
+      send(res, 200, { direct: true, url: links.presign('GET', key).url, etag: h.etag, size: h.size, saved: Number(h.metadata.saved) || null });
       return;
     }
     if (method !== 'POST' || !body) { send(res, 400, { error: 'POST a JSON body' }); return; }
@@ -652,7 +673,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       if (!(size > 0) || size > MAX_SET_ZIP) { send(res, 413, { error: `a data set may be ${MAX_SET_ZIP >> 20} MB at most, zipped` }); return; }
       if (await conflict(body.base ?? undefined)) return;
       const upload = incomingKey(user.sub, 'zip');
-      const link = s3.presign('PUT', upload, { headers: { 'content-type': 'application/zip', 'content-length': size, 'x-amz-meta-saved': saved } });
+      const link = links.presign('PUT', upload, { headers: { 'content-type': 'application/zip', 'content-length': size, 'x-amz-meta-saved': saved } });
       const { 'content-length': _, ...headers } = link.headers;
       send(res, 200, { direct: true, url: link.url, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])), key: upload });
       return;
@@ -859,8 +880,12 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     userOf: (req) => sessionOf(req),
     // Resolves once the store's CORS rules are set, or found not to be: whether the page may go to the store directly.
     directReady: directReady.then(() => direct),
-    // Whether pages go straight to the store now (a later check may turn it on).
+    // Whether pages go straight to the store now (a later check may turn it on), and the address their links name
+    // (null: the configured one).
     isDirect: () => direct,
+    linkName: () => linkName,
+    // A link of the store at that address (a sent report's save, stats.mjs).
+    presign: (method, key, opts) => links.presign(method, key, opts),
     planOfSub,
     give,
     async handle(req, res, url) {
@@ -877,16 +902,20 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   };
 }
 
-// Tigris's other address for the same bucket (fly.storage.tigris.dev, which `fly storage create` sets, and
-// t3.storage.dev): the start's check of the direct way tries it too when the first fails, and the log names the one
-// that works. null for any other store.
-const TIGRIS = ['https://fly.storage.tigris.dev', 'https://t3.storage.dev'];
-export function otherStoreOf(env = process.env) {
+// The other addresses of a Tigris bucket for the pages' links, in the order they are tried after the configured one:
+// t3.storage.dev (Tigris's canonical endpoint) with the bucket in the host, then in the path, then
+// fly.storage.tigris.dev (which `fly storage create` sets) the other way round from the configured one. Each is
+// { s3, name }; none for any other store. All reach the same bucket with the same key (docs.fly.io/tigris).
+const T3 = 'https://t3.storage.dev', FLY_TIGRIS = 'https://fly.storage.tigris.dev';
+export function linkStoresOf(env = process.env) {
   const now = String(env.AWS_ENDPOINT_URL_S3 ?? '').replace(/\/+$/, '');
-  const i = TIGRIS.indexOf(now);
-  if (i < 0) return null;
-  const s3 = s3FromEnv({ ...env, AWS_ENDPOINT_URL_S3: TIGRIS[1 - i] });
-  return s3 ? { s3, endpoint: TIGRIS[1 - i] } : null;
+  if (now !== T3 && now !== FLY_TIGRIS) return [];
+  const path = env.CM_S3_PATH_STYLE === '1';
+  const ways = [[T3, false], [T3, true], [FLY_TIGRIS, false], [FLY_TIGRIS, true]].filter(([e, p]) => !(e === now && p === path));
+  return ways.map(([endpoint, p]) => ({
+    s3: s3FromEnv({ ...env, AWS_ENDPOINT_URL_S3: endpoint, CM_S3_PATH_STYLE: p ? '1' : '0' }),
+    name: `${endpoint}${p ? ', the bucket in the path' : ''}`,
+  })).filter((w) => w.s3);
 }
 
 // The origins the bucket's CORS rules let in: CM_CORS_ORIGINS (comma separated), else CM_PUBLIC_URL and the app's
@@ -918,7 +947,7 @@ export function cloudFromEnv(env = process.env, log, { onAccountDeleted, isAdmin
     // and the app's fly.dev address, or CM_CORS_ORIGINS (comma separated) in their place.
     direct: env.CM_DIRECT === 'off' ? false : env.CM_DIRECT === 'on' ? 'given' : true,
     origins: corsOrigins(env),
-    otherStore: otherStoreOf(env),
+    linkStores: linkStoresOf(env),
   });
   return { cloud, missing };
 }

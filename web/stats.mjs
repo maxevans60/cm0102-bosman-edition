@@ -275,8 +275,9 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
 
   // A link to send the save of a sent report with ({ key, token, name, size, rawSize }): the size is the packed one,
   // which the link signs. direct: the page may send it to the store (its CORS rules); { direct: false } else, and the page
-  // sends it through this server (saveBody).
-  async function saveLink(body, direct = false) {
+  // sends it through this server (saveBody). sign: the cloud's presign, whose links name the store's address that passed
+  // its check (cloud.mjs, "linkStores"); else the store's own.
+  async function saveLink(body, direct = false, sign = null) {
     const { r, status, error } = await sentReport(body?.key, body?.token);
     if (!r) return { status, error };
     const size = Math.floor(Number(body?.size)), rawSize = Math.floor(Number(body?.rawSize));
@@ -289,8 +290,9 @@ export function createStats({ store = null, log = (t) => console.log(t), now = (
     const saveKey = body.key.replace(/\.json$/, '.sav.gz');
     r.save = { name: text(body?.name, 120), size, rawSize: rawSize >= 0 ? rawSize : null, key: saveKey, done: false };   // 0: an empty file
     await store.put(body.key, Buffer.from(JSON.stringify(r, null, 1)));
-    if (!direct || !store.presign) return { direct: false };
-    const link = store.presign('PUT', saveKey, { headers: { 'content-type': 'application/gzip', 'content-length': size } });
+    const presign = sign ?? store.presign;
+    if (!direct || !presign) return { direct: false };
+    const link = presign('PUT', saveKey, { headers: { 'content-type': 'application/gzip', 'content-length': size } });
     const { 'content-length': _, ...headers } = link.headers;    // the browser sets the length of the body itself
     return { direct: true, url: link.url, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])) };
   }

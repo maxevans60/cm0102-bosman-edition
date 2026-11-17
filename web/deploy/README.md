@@ -195,18 +195,23 @@ says one of:
   address; fix it as above.
 - `the store refused a signed upload link (HTTP 403: …)`: the rule is fine, but the store does not take the link's
   signature (other Fly users saw Tigris refuse links that sign content-type). Send me that line.
-A failed check adds what the server learned (17 November 2026, the live site: the rules were set, and the preflight
-still had no `Access-Control-Allow-Origin`):
-- `…; the bucket holds: origins …; methods …`: the rules as Tigris gives them back. Your site's address missing there
-  means the rules were not kept; `no CORS rules`, that they were never set.
-- `at https://t3.storage.dev the same check works: set AWS_ENDPOINT_URL_S3=…`: Tigris's other address lets pages in
-  where `fly.storage.tigris.dev` does not (or the other way round). Do as it says: `fly secrets set
-  AWS_ENDPOINT_URL_S3=https://t3.storage.dev`. `at … the check fails too` means neither does.
-- `checks again in 1 min, 5 min, 30 min`, then `the check works … after the start: … now go straight`: the rules took
-  a while to reach Tigris's every place, and the server turned the direct way on by itself. `the last check failed
-  too`: it stays through the server until the next start.
-Tigris's own CORS page speaks of public buckets only, and the bucket of `fly storage create` is private: if every check
-fails, send me these lines.
+**Tigris's addresses.** One bucket answers at two hosts, `fly.storage.tigris.dev` (which `fly storage create` sets)
+and `t3.storage.dev` (Tigris's canonical one, docs.fly.io/tigris), each with the bucket in the host name or in the
+path. On the live site (17 November 2026) `fly.storage.tigris.dev` answered the browser's preflight with no
+`Access-Control-Allow-Origin`, so no page could go direct. When the configured address fails the check, the server
+now tries the others in turn (`t3.storage.dev`, then with the bucket in the path, then the other way at
+`fly.storage.tigris.dev`) and signs the pages' links with the first that passes; it keeps the configured address for
+its own work. `fly logs` then says `… go straight between the browser and the store (…; the links name
+https://t3.storage.dev, in place of the configured address, which did not pass)`. To make that address the configured
+one as well: `fly secrets set AWS_ENDPOINT_URL_S3=https://t3.storage.dev`.
+
+The check now tries what a page does: the preflight of an upload with a save's headers, the upload, and the download
+of that file with the site's `Origin`, which must come back with `Access-Control-Allow-Origin` too. When no address
+passes, the log has each one's reason (`cloud: and at …: …`) and the rules as Tigris gives them back
+(`the bucket holds: origins …; methods …`, or `no CORS rules`); the server checks again after 1, 5 and 30 minutes, in
+case the rules take a while to reach every place of the store, and goes direct at the first that works
+(`the check works … after the start`). Tigris's own CORS page speaks of public buckets only, and the bucket of `fly
+storage create` is private: if every address fails, send me these lines.
 In the last two cases the pages go through the server from the start. Saves a player sends with Send to the developer
 then go through the server too: it writes each to a file on its disk (at most two of 400 MB at once) and streams it
 to the store, so the machine's memory holds none of it.

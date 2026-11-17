@@ -202,7 +202,7 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
       const { status, ...r } = await stats.send(body, user, req.headers['user-agent']);
       json(res, r.error ? status ?? 400 : 201, r);
     } else {
-      const { status = 200, ...r } = path === '/api/report/save' ? await stats.saveLink(body, Boolean(await cloud?.directReady)) : await stats.saveDone(body);
+      const { status = 200, ...r } = path === '/api/report/save' ? await stats.saveLink(body, Boolean(await cloud?.directReady) || Boolean(cloud?.isDirect?.()), cloud?.presign ?? null) : await stats.saveDone(body);
       json(res, status, r);
     }
     return;

@@ -3,6 +3,7 @@
 // (fake-emscripten.js), and two small game files in place of the 760.
 // Needs Playwright: NODE_PATH=$(npm root -g) node web/test/cloud-check.mjs [screenshot folder]
 import { createRequire } from 'node:module';
+import net from 'node:net';
 import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
@@ -545,6 +546,43 @@ try {
     await shot(m, 'member');
     await mctx.close();
   } finally { coffeeServer.close(); }
+
+  // ---- The store's configured address refuses the page (as fly.storage.tigris.dev did, 17 November 2026) and another
+  // address of the same bucket lets it in (as t3.storage.dev): the server finds it at its start, and a save of the
+  // game goes from the browser straight to the store at that address. ----
+  const freePort = await new Promise((r) => { const t = net.createServer().listen(0, '127.0.0.1', () => { const { port } = t.address(); t.close(() => r(port)); }); });
+  const LBASE = `http://127.0.0.1:${freePort}`, fakePort = new URL(s3fake.endpoint).port;
+  const storeAt = (host) => createS3({ endpoint: `http://${host}:${fakePort}`, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
+  s3fake.faults.corsHost = '127.0.0.1';                 // only the address 127.0.0.1 lets pages in; localhost does not
+  const wayCloud = createCloud({ s3: storeAt('localhost'), clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'z'.repeat(40),
+    cloudFor: 'everyone', maxSaves: 10, maxPacked: 2 << 20, google: google.google, log: (t) => logs.push(t), storeTtl: 0, origins: [LBASE],
+    linkStores: [{ s3: storeAt('127.0.0.1'), name: 'the second address' }], recheck: [] });
+  const wayServer = createApp({ gameDir: game, buildDir: build, manifestPath: join(tmp, 'manifest.tsv'), cloud: wayCloud });
+  await new Promise((r) => wayServer.listen(freePort, '127.0.0.1', r));
+  try {
+    check('the configured address refused, another passed: the server takes it', await wayCloud.directReady === true && wayCloud.linkName() === 'the second address'
+      && logs.some((l) => /the links name the second address, in place of the configured address, which did not pass/.test(l)), logs.slice(-3).join(' | '));
+    google.user = { sub: '9000009', email: 'way@example.com', email_verified: true, name: 'Way Player' };
+    const wctx = await browser.newContext({ viewport: { width: 1200, height: 800 } });
+    const w = await wctx.newPage();
+    w.on('pageerror', (e) => errors.push(e.message));
+    const storeRequests = [];
+    w.on('request', (r) => { if (r.url().includes(`:${fakePort}/`)) storeRequests.push(`${r.method()} ${new URL(r.url()).host}`); });
+    await w.goto(`${LBASE}/auth/google/start?mode=page`);
+    await w.waitForSelector('#go');
+    await w.click('#go');
+    await w.waitForFunction(() => window.__fake, null, { timeout: 30000 });
+    const wayName = 'Second Way 2001-09-01.sav', wayBytes = fakeSaveBytes(61);
+    await w.evaluate(([name, bytes]) => window.Module.FS.writeFile(`/user/${name}`, new Uint8Array(bytes)), [wayName, Array.from(wayBytes)]);
+    const wayKey = `saves/9000009/${Buffer.from(wayName).toString('base64url')}.gz`;
+    await waitFor('the save to go up the second way', () => s3fake.objects.has(wayKey), 30000);
+    const wayLog = await w.textContent('#log');
+    check('a save goes from the browser straight to the store at the address that passed, not through the server',
+      s3fake.objects.has(wayKey) && gunzipSync(s3fake.objects.get(wayKey).body).equals(wayBytes)
+        && storeRequests.some((r) => r === `PUT 127.0.0.1:${fakePort}`) && !storeRequests.some((r) => r.includes('localhost'))
+        && !/did not answer this page directly/.test(wayLog), `${storeRequests.join(', ')} | ${wayLog.split('\n').filter((l) => /cloud|direct/.test(l)).slice(-4).join(' / ')}`);
+    await wctx.close();
+  } finally { s3fake.faults.corsHost = null; wayServer.close(); }
 
   check('no page errors', errors.length === 0, errors.join('; '));
   check('the server logged no failure', !logs.some((l) => /fail|not written|not read/.test(l)), logs.join('; '));
