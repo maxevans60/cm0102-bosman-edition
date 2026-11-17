@@ -13,6 +13,8 @@ int season_playoffs_build_for(uint32_t obj);
 /* 1 when the rules row of file and season gives a play-off that this kind plays (4 places in a row just below
  * the direct places); *direct (may be NULL) gets the direct promotion places. */
 int season_playoffs_shape(const char *file, int season, int *direct);
+/* The semi-finals of the play-off of six before Cup::draw_round 0x51c410 builds them (item 273). */
+void season_playoffs_draw_round(uint32_t cup, int round);
 
 /* The play-off winners that the rules row of file and season sends up although this kind plays no play-off for
  * them: 2 for 4 places just below the direct places in two ties whose winners both go up (Série B from 2025:
