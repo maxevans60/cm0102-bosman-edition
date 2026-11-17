@@ -1,6 +1,8 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
+2026	bench	asia_nations (AFC Asian Cup), row int-continental-284: game 7, table 15 (15)
 2026	bench	eur_super_cup (UEFA Super Cup), row uefa-208: game 9, table 12 (12 (23 players on the match sheet, Art. 40.01))
+2026	bench	euro_champ_qual (UEFA European Championship qualifying), row int-continental-277: game 9, table 12 (12)
 2026	bench	european_cup (UEFA Champions League), row uefa-202: game 9, table 12 (12)
 2026	bench	new_conference_league (UEFA Conference League), row uefa-206: game 9, table 12 (12)
 2026	bench	uefa_cup (UEFA Europa League), row uefa-205: game 9, table 12 (12)
@@ -22,6 +24,7 @@
 2026	not_in_game	eng-451 eng_fa_trophy 'FA Trophy' (England)
 2026	not_in_game	uefa-201 uefa_seeding 'UEFA access list and seeding' (UEFA)
 2026	playoffs	eng_first (EFL Championship), row eng-279: game 4 up and 0 down play-off places, table 6 and 0 ('3rd-8th: 5v8 and 6v7 single-leg eliminators (higher club at home), then semi-fin')
+2026	subs_used	asia_nations (AFC Asian Cup), row int-continental-284: game 3, table 5 (5)
 2027	clubs	african_nations (Africa Cup of Nations), row int-continental-293: game 0/4, table 24 (24)
 2027	clubs	euro_champ (UEFA European Championship), row int-continental-287: game 0/4, table 24 (24)
 2027	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-288: game 6, table 54 (54 (scheduled))
