@@ -174,6 +174,12 @@ ROWS = {
                        "and 3 up with no play-off, 12 and 10 in 2005"),
     "ire_first@2004": (2004, 2005, "League of Ireland from a 2004 start: 10 and 12 at the start, the list of row 2003 "
                        "(item 260), then 12 and 10 in 2005"),
+    "nir_first@2001": (2001, 2009, "Irish League from a 2001 start (items 271, 272): the First Division 10, 8, then 12 from "
+                                   "2003/04 with clubs of the lower division, 17 in 2008/09 and 14 in 2009/10; the "
+                                   "places of each row"),
+    "nir_prm@2001": (2001, 2009, "Irish League from a 2001 start, the same run (--reuse --keep of nir_first@2001): "
+                                 "no club down in 2001/02, the play-off only in 2002/03, 2 down and no play-off in "
+                                 "2007/08"),
     "ire_first@2010": (2010, 2012, "League of Ireland from a 2010 start: 2011 0 down and 2 up plus the play-off, each "
                        "club on its own (item 251b); 12 Premier clubs in 2012, and the size step leaves the First Division its "
                        "row's 8 (item 260)"),
@@ -1140,6 +1146,75 @@ def irl_place_faults(report):
     return fails
 
 
+_NIR = {}
+
+
+def nir_row(file, season):
+    """(up, down, play-off) of the Northern Irish rules row of a file and season: the direct places (the leading
+    number of the up and down texts, 0 for none) and 1 when the Premier Division's row of that season has a play-off
+    (the play-off of NirFirst::create_playoff_stage 0x78c0a0 is one stage of both divisions), or None."""
+    if not _NIR:
+        sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
+        import make_rules
+        for r in make_rules.read_rows():
+            if r.get("comp_file") in ("nir_prm", "nir_first") and str(r.get("season", ""))[:4].isdigit():
+                lead = [re.match(r"\s*(\d+)", str(r.get(k, ""))) for k in ("up", "down")]
+                _NIR[(r["comp_file"], int(str(r["season"])[:4]))] = (
+                    int(lead[0].group(1)) if lead[0] else 0, int(lead[1].group(1)) if lead[1] else 0,
+                    str(r.get("playoffs", "none")) != "none")
+    prm = _NIR.get(("nir_prm", season))
+    own = _NIR.get((file, season))
+    return None if not prm or not own else (own[0], own[1], 1 if prm[2] else 0)
+
+
+def nir_place_faults(report, log=""):
+    """Items 271 and 272 (slice 13): every Northern Irish edition in the report holds the places of its row. The
+    Premier Division: 0 up, the row's direct places down and the play-off place when the row has one
+    (NirPrm::set_up_rules 0x78ed80 writes 1 and 1, +0xc1 at 0x78ede0 and +0xc0 at 0x78edda). The First Division: the
+    row's direct places up, the play-off place, and the row's relegation places to the Northern Irish lower division
+    (NirFirst::set_up_rules 0x78bd70 writes 1 up and 1 play-off, +0xbe at 0x78bdb0 and +0xbf at 0x78bdb6, and 0
+    down). In the log: the clubs that go down from the First Division at each season change are its shown places."""
+    if not os.path.exists(report):
+        return ["nir: no rules report"]
+    fails, cols, shown = [], None, {}
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            p = line.rstrip("\n").split("\t")
+            if p[0] == "columns":
+                cols = p[1:]
+                continue
+            if p[0] != "comp" or not cols or len(p) < len(cols) + 1:
+                continue
+            row = dict(zip(cols, p[1:]))
+            file = row.get("file")
+            if file not in ("nir_prm", "nir_first") or not row.get("year", "").lstrip("-").isdigit():
+                continue
+            ed = int(row["year"])
+            want = nir_row(file, ed)
+            if not want:
+                continue
+            up, down, po = want
+            if file == "nir_prm":
+                got, exp = (row.get("up"), row.get("down"), row.get("playoff_down")), ("0", str(down), str(po))
+                what = "up, down and play-off down"
+            else:
+                got, exp = (row.get("up"), row.get("playoff_up"), row.get("down")), (str(up), str(po), str(down))
+                what = "up, play-off up and down"
+                if row.get("phase") == "end":
+                    shown[ed] = int(row.get("down") or 0)
+            if got != exp:
+                fails.append(f"{file} {ed} {row.get('phase')}: {what} {got}, want {exp}")
+    went = {}
+    for m in re.finditer(r"recomp: league sizes: nir_first \(.*?\) (\d+): .* goes down to the ", log):
+        went[int(m.group(1))] = went.get(int(m.group(1)), 0) + 1
+    ends = {int(m.group(1)) for m in re.finditer(r"recomp: league sizes: nir_first played (\d+):", log)}
+    for ed in sorted(ends):
+        if ed in shown and went.get(ed, 0) != shown[ed]:
+            fails.append(f"nir_first {ed}: {went.get(ed, 0)} clubs down to the lower division, the table showed "
+                         f"{shown[ed]}")
+    return fails
+
+
 def irl_change_faults(log, file, year, last=None):
     """In a run of ire_prm or ire_first: the play-off line of the First Division (season_sizes_irl.c) for exactly the
     editions of IRL_CHANGE among the editions of the run (the start to last, default the start and the next); and for
@@ -1423,7 +1498,10 @@ def faults(work, file, year, last):
     fails += irl_partner_faults(report, file, year)
     if file in ("ire_prm", "ire_first"):
         fails += irl_place_faults(report)
+    if file in ("nir_prm", "nir_first"):
+        fails += nir_place_faults(report, log)
     if os.path.exists(report):
+        import rules_report_check as rrc
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
