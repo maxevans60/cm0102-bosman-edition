@@ -769,45 +769,67 @@ void rt_squad_move_test(void)
 }
 
 /* A loan to the club's own linked B side (open item 280, group squad_loans). CONTRACT_MANAGER::sign_loan_contract
- * 0x4d01e0 sets bit 0x40 of the player's own contract +0x35 at 0x4d0380..0x4d03d9: for a club with a linked B side
- * (database_club_has_reserve_squad 0x542740 false, club_get_linked_b_team 0x540a50 at 0x4d03ac) it clears the bit
- * while the player is at his own club (0x4d03b8..0x4d03c8). It does not look at the loan club. So a loan from the club
- * to its own B side leaves the bit clear, and CONTRACT_MANAGER::get_squad_placement 0x4cbb60 still answers 4 (at the
- * first team, 0x4cbcff..0x4cbd07) while he plays for the B side. The next Shortlist_Manager::assess_club_squad 0x83cb40
- * calls move_to_reserves 0x4cc0f0, and toggle_squad_placement 0x4cbd20 (path 0x4cbfb0..0x4cc02d) removes him from the
- * first team (a miss) and adds him to the B side again (database_add_staff_to_club 0x53bd10). In run C of 0.7.2 FC
- * Energie Cottbus II held one player in two squad slots, and MATCH_MAN::pick_team 0x6dbc50 stopped at its duplicate
- * test (match_man..cpp 1225, 0x6dd3c1). Here, after a loan to the linked B side, the bit is set, as for a move to the
- * B side (rt_squad_move_set), so the placement answers 3 (on the B side). */
-void o_004d01e0(void);
-RT_WRAP(004d01e0, squad_loan)
+ * 0x4d01e0 adds the player to the loan club (0x4d041f) and does not take him out of his own club's squad (it never
+ * calls database_remove_staff_from_club 0x53c190), so a loaned player is in both squads. Nothing in the original stops
+ * a loan from a club to its own linked B side (club_get_linked_b_team 0x540a50, a fixed table of pairs): no offer code
+ * of TRANSFER_MANAGER tests the link. After such a loan Shortlist_Manager::assess_club_squad 0x83cb40 still moves him
+ * between the two sides: move_to_reserves 0x4cc0f0 or move_to_first_team 0x4cc0b0 call
+ * CONTRACT_MANAGER::toggle_squad_placement 0x4cbd20, which removes him from one side and adds him to the other
+ * (database_add_staff_to_club 0x53bd10). He is already in both, so the add puts him in a second slot of the side he
+ * goes to. In run C of the 0.7.2 full check FC Energie Cottbus II held one player in two squad slots on day 206 of
+ * 2007, and MATCH_MAN::pick_team 0x6dbc50 stopped at its duplicate test (match_man..cpp 1225, 0x6dd3c1). With the
+ * placement bit set after the loan the move went up instead and doubled him at FC Energie Cottbus. Here the two
+ * squad moves (returns 0x4cc0df and 0x4cc11f) leave a player alone while he is on loan from one side of a linked pair
+ * to the other: toggle_squad_placement returns 0 (no move, *out cleared as at 0x4cbd3f). A move that the human makes
+ * is not changed. */
+#define TOGGLE_FIRST_TEAM_RET 0x4cc0dfu   /* move_to_first_team 0x4cc0b0 */
+#define TOGGLE_RESERVES_RET 0x4cc11fu     /* move_to_reserves 0x4cc0f0 */
+
+static uint32_t contract_club(uint32_t manager, int32_t index)
 {
-    uint32_t manager = cpu.ecx, terms = rt_arg(0);
-    uint32_t sid = terms ? rd32(g_mem, terms) : 0xffffffffu, lid = terms ? rd32(g_mem, terms + 4u) : 0xffffffffu;
-    o_004d01e0();
-    if (rt_unwinding || !fixes_on_group(SQUAD_LOANS) || !manager || sid >= rd32(g_mem, STAFF_COUNT) ||
-        lid >= rd32(g_mem, CLUB_COUNT))
+    if (index < 0) return 0xffffffffu;
+    return rd32(g_mem, rd32(g_mem, manager) + (uint32_t)index * 0x50u + 4u);
+}
+
+static uint32_t linked_side(uint32_t club)
+{
+    uint32_t args[3] = {club, 0, 1};
+    return rt_callback(0x540a50u, 3, args);
+}
+
+void o_004cbd20(void);
+RT_WRAP(004cbd20, squad_loan_move)
+{
+    uint32_t ret = rd32(g_mem, cpu.esp), manager = cpu.ecx, staff = rt_arg(0), out = rt_arg(2);
+    uint32_t count = rd32(g_mem, STAFF_COUNT), clubs_n = rd32(g_mem, CLUB_COUNT);
+    uint32_t id = staff >= 0x10000u ? rd32(g_mem, staff) : 0xffffffffu;
+    if ((ret != TOGGLE_FIRST_TEAM_RET && ret != TOGGLE_RESERVES_RET) || !fixes_on_group(SQUAD_LOANS) || !manager ||
+        id >= count) {
+        o_004cbd20();
         return;
-    int32_t index = (int32_t)rd32(g_mem, rd32(g_mem, CONTRACT_INDEX) + sid * 0x4fu);
-    if (index < 0) return;
-    uint32_t contract = rd32(g_mem, manager) + (uint32_t)index * 0x50u, cid = rd32(g_mem, contract + 4u);
-    if (cid >= rd32(g_mem, CLUB_COUNT) || cid == lid || (g_mem[contract + 0x35u] & 0x40u)) return;
-    uint32_t clubs = rd32(g_mem, CLUBS), own = clubs + cid * CLUB_SIZE, loan = clubs + lid * CLUB_SIZE;
-    uint32_t staff = rd32(g_mem, 0xae23bcu) + sid * 0x6eu;
-    if (rd32(g_mem, staff + 0x39u) != loan) return;      /* the loan was not made */
-    static uint32_t senior;                              /* club_get_linked_b_team sets it for the senior side */
-    if (!senior) senior = rt_alloc(4);
+    }
+    uint32_t index = rd32(g_mem, CONTRACT_INDEX) + id * 0x4fu;
+    uint32_t own_id = contract_club(manager, (int32_t)rd32(g_mem, index));
+    uint32_t loan_id = contract_club(manager, (int32_t)rd32(g_mem, index + 4u));
+    if (own_id >= clubs_n || loan_id >= clubs_n || own_id == loan_id) {
+        o_004cbd20();
+        return;
+    }
+    uint32_t clubs = rd32(g_mem, CLUBS), own = clubs + own_id * CLUB_SIZE, loan = clubs + loan_id * CLUB_SIZE;
     Cpu saved = cpu;
-    uint32_t has[1] = {own}, link[3] = {own, senior, 1};
-    wr32(g_mem, senior, 0);
-    uint32_t reserve = rt_callback(0x542740u, 1, has);
-    uint32_t b = rt_unwinding || reserve ? 0 : rt_callback(0x540a50u, 3, link);
+    uint32_t a = linked_side(own);
+    uint32_t b = rt_unwinding ? 0 : linked_side(loan);
     if (rt_unwinding) return;
     cpu = saved;
-    if (b != loan || !rd32(g_mem, senior)) return;       /* a loan from the B side to its senior side: no change */
-    g_mem[contract + 0x35u] |= 0x40u;
+    if (a != loan && b != own) {
+        o_004cbd20();
+        return;
+    }
     char own_name[64];
     snprintf(own_name, sizeof own_name, "%s", log_name(own + 4u));
-    fprintf(stderr, "recomp: squad loan: staff %u goes on loan from %s to its B side %s: placement on the B side\n",
-            sid, own_name, log_name(loan + 4u));
+    fprintf(stderr, "recomp: squad loan: staff %u is on loan from %s to %s, a side of the same pair: no squad move\n",
+            id, own_name, log_name(loan + 4u));
+    if (out) wr32(g_mem, out, 0);
+    cpu.eax = 0;                        /* no move: thiscall, ret 0xc */
+    cpu.esp += 4 + 0xc;
 }
