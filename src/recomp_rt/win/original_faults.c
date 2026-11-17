@@ -795,13 +795,16 @@ RT_WRAP(004d01e0, squad_loan)
     uint32_t clubs = rd32(g_mem, CLUBS), own = clubs + cid * CLUB_SIZE, loan = clubs + lid * CLUB_SIZE;
     uint32_t staff = rd32(g_mem, 0xae23bcu) + sid * 0x6eu;
     if (rd32(g_mem, staff + 0x39u) != loan) return;      /* the loan was not made */
+    static uint32_t senior;                              /* club_get_linked_b_team sets it for the senior side */
+    if (!senior) senior = rt_alloc(4);
     Cpu saved = cpu;
-    uint32_t has[1] = {own}, link[3] = {own, 0, 1};
+    uint32_t has[1] = {own}, link[3] = {own, senior, 1};
+    wr32(g_mem, senior, 0);
     uint32_t reserve = rt_callback(0x542740u, 1, has);
     uint32_t b = rt_unwinding || reserve ? 0 : rt_callback(0x540a50u, 3, link);
     if (rt_unwinding) return;
     cpu = saved;
-    if (b != loan) return;
+    if (b != loan || !rd32(g_mem, senior)) return;       /* a loan from the B side to its senior side: no change */
     g_mem[contract + 0x35u] |= 0x40u;
     char own_name[64];
     snprintf(own_name, sizeof own_name, "%s", log_name(own + 4u));
