@@ -1436,6 +1436,7 @@ def faults(work, file, year, last):
     if file in ("ire_prm", "ire_first"):
         fails += irl_place_faults(report)
     if os.path.exists(report):
+        import rules_report_check as rrc
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
