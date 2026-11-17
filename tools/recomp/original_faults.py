@@ -226,6 +226,16 @@ to the B side and clears it for a move back (0x4cc03d), so the placement follows
 the registers: at placement 4 the path leaves from the club asked about (edi = ebx, 0x4cbede), at placement 3 it goes
 to it (ebp = ebx, 0x4cbed5). A bit that holds junk from an old save is then right after one move. A player with no
 contract (index below 0) has no bit to set.
+
+A loan to the linked B side (open item 280, same group). CONTRACT_MANAGER::sign_loan_contract 0x4d01e0 sets the bit
+of the player's own contract at 0x4d0380..0x4d03d9. For a club with a linked B side it clears the bit while the player
+is at his own club (0x4d03a3..0x4d03d6) and does not look at the loan club. So a loan from the senior side to its own
+B side leaves the bit clear, the placement still says 4, and the next assessment moves him to the B side again: the
+two-contract path of toggle_squad_placement (0x4cbfb0..0x4cc02d) removes him from the senior side (a miss) and adds
+him to the B side a second time. In run C of the 0.7.2 full check (seven European nations with the regional and c2
+extras) FC Energie Cottbus II held one player in two squad slots on day 206 of 2007, and pick_team stopped at
+match_man..cpp 1225 on day 208. Here a wrap of sign_loan_contract (original_faults.c) sets the bit after a loan to the
+linked B side of the player's contract club, so the placement answers 3 (on the B side).
 """
 
 # address: (the instruction in the original, C code)
