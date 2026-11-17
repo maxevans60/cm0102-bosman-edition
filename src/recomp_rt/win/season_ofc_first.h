@@ -37,4 +37,8 @@ int season_ofc_first_days(long group_draw, long today, long *draw, long *leg1, l
 int season_ofc_first_waiting(uint32_t self);
 void season_ofc_first_pool(uint32_t self);
 
+/* Item 245 (tests only): RECOMP_TEST_OFC_LEVEL=1 forces each preliminary tie level. Called from the
+ * Cup::process_fixture wrap 0x51a150 (season_playoffs.c) with the cup and the fixture, before the original. */
+void season_ofc_first_test_fixture(uint32_t cup, uint32_t fixture);
+
 #endif

@@ -39,6 +39,7 @@
 #include "season_change.h"
 #include "season_nation.h"
 #include "season_rules.h"
+#include "season_calendar.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,6 +67,13 @@
 #define IS_EU 0x0053d740u               /* cdecl (player, club nation or 0) -> 1 when of the EU */
 #define NEEDS_PERMIT 0x008c7560u
 #define BREXIT_YEAR 2021
+
+/* The state of a nation in a season of the game: Ireland after its calendar move reads the row of its real season
+ * (season_nation_row_season, open item 258). */
+static int state_in(const char *nation, int season, SeasonNationState *out)
+{
+    return season_nation_state(nation, season_nation_row_season(nation, season, season_rules_moved("ire_prm")), out);
+}
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -245,7 +253,8 @@ static void apply_caps(const SeasonNation *n, uint32_t rules, const SeasonNation
 }
 
 /* The rules of every nation for a season. */
-static void apply_all(int season)
+/* The rules of every nation for a season, of one nation (only), or of all but one ("!" and its name). */
+static void apply_some(int season, const char *only)
 {
     uint32_t m = manager();
     if (!m) {
@@ -255,13 +264,34 @@ static void apply_all(int season)
     int changed = 0;
     for (int i = 0; i < season_nation_count && !rt_unwinding; i++) {
         const SeasonNation *n = &season_nations[i];
+        if (only && (only[0] == '!' ? !strcmp(n->name, only + 1) : strcmp(n->name, only) != 0)) continue;
         uint32_t rules = rules_of(n);
         SeasonNationState st;
-        if (!rules || !season_nation_state(n->name, season, &st)) continue;
+        if (!rules || !state_in(n->name, season, &st)) continue;
         apply_caps(n, rules, &st);
         changed |= apply_windows(n, rules, &st);
     }
     if (changed && !rt_unwinding) rebuild_edges(m);
+}
+
+static void apply_all(int season) { apply_some(season, NULL); }
+
+/* Ireland's season for its rules after a load: the edition of IrePrm when its February change came after the last
+ * season point (open item 258), else 0. Only with changing rules on: off, the start season's rules stay (Q232). */
+static int ireland_ahead(int season)
+{
+    int ie = season_calendar_edition();
+    return season_changing_rules() && season_rules_moved("ire_prm") && ie > season ? ie : 0;
+}
+
+/* Open item 258: after its calendar move Ireland changes season on 20 February (season_calendar.h). Its rules of the
+ * real season S then hold from that change, so the first window of S (2005: 7 January to 4 March) is open from it and
+ * the July window follows; the season point in June gives the same row again. */
+static void nation_entry(const SeasonChange *c)
+{
+    if (!active() || !season_changing_rules() || c->entry != 20 || !season_rules_moved("ire_prm") || c->season < 2003)
+        return;
+    apply_some(c->season, "Republic of Ireland");
 }
 
 /* ---- The news ---- */
@@ -301,7 +331,7 @@ static int nation_in_game(const char *nation, int season)
     int n = season_change_comps(comps, 512);
     for (int i = 0; i < n; i++) {
         const char *file = season_change_file(comps[i]);
-        const SeasonRule *r = strcmp(file, "?") ? season_rules_find(season, file, 0) : NULL;
+        const SeasonRule *r = strcmp(file, "?") ? season_rules_row_of(file, season) : NULL;
         if (r && !strcmp(r->nation, nation)) return 1;
     }
     return 0;
@@ -310,8 +340,8 @@ static int nation_in_game(const char *nation, int season)
 static void news_for(const SeasonNation *n, int season)
 {
     SeasonNationState was, now;
-    season_nation_state(n->name, season - 1, &was);
-    if (!season_nation_state(n->name, season, &now) || !nation_in_game(n->name, season)) return;
+    state_in(n->name, season - 1, &was);
+    if (!state_in(n->name, season, &now) || !nation_in_game(n->name, season)) return;
     char a[160], b[160];
     if (!windows_same(&was, &now) && now.windows != SEASON_NATION_KEEP) {
         if (now.windows == SEASON_NATION_WINDOWS_NONE) {
@@ -369,7 +399,16 @@ static void nation_new_game(int start_year)
 static void nation_loaded(int start_year)
 {
     (void)start_year;
-    if (active()) apply_all(current_season());
+    if (!active()) return;
+    /* A load between Ireland's February change and the season point: Ireland takes the rules of its new edition (open
+     * item 258), the other nations those of the season. */
+    int season = current_season(), ie = ireland_ahead(season);
+    if (!ie) {
+        apply_all(season);
+        return;
+    }
+    apply_some(season, "!Republic of Ireland");
+    apply_some(ie, "Republic of Ireland");
 }
 
 static void nation_season(int season)
@@ -406,8 +445,7 @@ static const SeasonNation *file_nation(const char *file, int season, int *top)
             *top = file_cache[i].top;
             return file_cache[i].nation;
         }
-    int last = season_rules_last_season(season, file);
-    const SeasonRule *r = last ? season_rules_find(last, file, 0) : NULL;
+    const SeasonRule *r = season_rules_row_of(file, season);
     const SeasonNation *n = r ? season_nation_find(r->nation) : NULL;
     int t = r && r->tier == 1;
     if (file_cached < (int)(sizeof file_cache / sizeof file_cache[0])) file_cache[file_cached++] = (FileNation){file, season, n, t};
@@ -434,7 +472,7 @@ RT_WRAP(008cf6b0, restriction_lookup)
     int top = 0;
     const SeasonNation *n = strcmp(file, "?") ? file_nation(file, season, &top) : NULL;
     SeasonNationState st;
-    if (!n || !season_nation_state(n->name, season, &st)) return;
+    if (!n || !state_in(n->name, season, &st)) return;
     uint8_t before[6];
     memcpy(before, g_mem + rec, 6);
     int changed = season_nation_squad_record(g_mem + rec, &st, top);
@@ -791,4 +829,5 @@ RT_WRAP(008c7950, is_work_permit_granted)
     }
 }
 
-const SeasonRuleKind season_kind_nation = {"nation", nation_new_game, nation_loaded, nation_season, NULL, NULL, NULL};
+const SeasonRuleKind season_kind_nation = {"nation", nation_new_game, nation_loaded, nation_season, nation_entry, NULL,
+                                            NULL};

@@ -42,7 +42,26 @@ for _at, _dst, _base, _off in ((0x64BC2C, "eax", "edx", 0x3B0), (0x64BC3A, "edx"
                                (0x64FE09, "ecx", "eax", 0x375), (0x64FE18, "eax", "edx", 0x33A)):
     INSNS[_at] = (f"mov {_dst}, dword ptr [{_base} + {_off:#x}]",
                   f"{_dst} = R32({_base} + rt_ita_c1_row(esi, {_off:#x}u));")
-for _first in (0x64BC61, 0x64FE21):
+# Group C of the Serie C era (ItaSerC2a::create_playoff_stages 0x653e90, the same code, object in esi).
+for _at, _dst, _base, _off in ((0x654021, "eax", "edx", 0x3B0), (0x65402F, "edx", "ecx", 0x2FF),
+                               (0x65403E, "ecx", "eax", 0x375), (0x65404D, "eax", "edx", 0x33A)):
+    INSNS[_at] = (f"mov {_dst}, dword ptr [{_base} + {_off:#x}]",
+                  f"{_dst} = R32({_base} + rt_ita_c1_row(esi, {_off:#x}u));")
+# The club count of the play-out stage (the play-off count +0xbf, open item 253).
+for _at in (0x64BCB1, 0x64FE71, 0x6540A6):
+    INSNS[_at] = ("movsx dx, byte ptr [esi + 0xbf]",
+                  "edx = (edx & 0xffff0000u) | (rt_ita_playout_count(esi, (uint32_t)(int32_t)(int8_t)R8(esi + 0xbfu)) "
+                  "& 0xffffu);")
+# A play-out of no tie (open item 253): no play-out stage. The stage's block reads as 0 (0x64bc7d), so the builder
+# skips the stage constructor (je 0x64bc8e), and the empty slot (0x64bceb) jumps over the error box and set_up_round to
+# the end (0x64bd63), where +0x30 stays 0 (advance_stage 0x64ba5b set it). C1/B and C2/A have the same code.
+for _keep, _slot, _end in ((0x64BC7D, 0x64BCEB, 0x64BD63), (0x64FE3D, 0x64FEAB, 0x64FF23),
+                           (0x654072, 0x6540E0, 0x654158)):
+    INSNS[_keep] = ("mov dword ptr [esp + 0x1c], eax",
+                    "eax = rt_ita_playout_block(esi, eax); W32(esp + 0x1cu, eax);")
+    INSNS[_slot] = ("mov ecx, dword ptr [edx + 4]",
+                    f"ecx = R32(edx + 4u); if (ecx == 0 && rt_ita_playout_none(esi)) goto L_{_end:x};")
+for _first in (0x64BC61, 0x64FE21, 0x654056):
     for _k, _seed in enumerate((0x10, 0xD, 0xF, 0xE)):
         INSNS[_first + 5 * _k] = (f"mov byte ptr [esp + {0x14 + _k:#x}], {_seed:#x}",
                                   f"W8(esp + {0x14 + _k:#x}u, rt_ita_c1_seed(esi, {_seed:#x}u));")

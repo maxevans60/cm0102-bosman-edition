@@ -130,13 +130,21 @@ def folders(work):
 def settings(user, rules, database, option="3.9.68"):
     import custom_database_run as cdr
     lines = ["display = classic", f"changing_rules = {rules}", "faster_days = on"]
-    if database:
+    if database:                               # a leg with a database never falls back to the base data
+        database = rrc.database_folder(database)
         cdr.copy_data(database, os.path.join(user, "Databases", os.path.basename(database)))
         lines.append("database = folder:" + os.path.basename(database))
     else:
         lines.append("database = " + option)   # 3.9.68, or 3.9.60 / 3.9.65 (RECOMP_DATA_DIR names the data)
     with open(os.path.join(user, "settings.txt"), "w") as f:
         f.write("\n".join(lines) + "\n")
+
+
+def read_database(o, work, result):
+    """The result of a leg; stops when the leg has a database and the game fell back to its own Data."""
+    if o["database"]:
+        rrc.no_fallback(os.path.join(work, "stderr.txt"), o["database"])
+    return result
 
 
 def new_game_leg(o, work, save_days):
@@ -150,8 +158,8 @@ def new_game_leg(o, work, save_days):
     if save_days:
         extra["RECOMP_SAVE_AFTER_DAYS"] = str(save_days)
     env = leg_env(o["program"], o["game"], user, home, shots, steps, o["last"], os.path.join(work, "report.tsv"), extra)
-    return play([o["program"], "--game", o["game"], "-seed", str(o["seed"])], env, os.path.join(work, "stderr.txt"),
-                o["timeout"])
+    return read_database(o, work, play([o["program"], "--game", o["game"], "-seed", str(o["seed"])], env,
+                                       os.path.join(work, "stderr.txt"), o["timeout"]))
 
 
 def load_leg(o, work, save, save_days):
@@ -164,8 +172,8 @@ def load_leg(o, work, save, save_days):
     steps = [x for x in load if x != "wait first-news"] + [f"{o['timeout'] * 1000} quit"]
     extra = {"RECOMP_SAVE_AFTER_DAYS": str(save_days)} if save_days else {}
     env = leg_env(o["program"], o["game"], user, home, shots, steps, o["last"], os.path.join(work, "report.tsv"), extra)
-    return play([o["program"], "--game", o["game"], "-seed", str(o["seed"])], env, os.path.join(work, "stderr.txt"),
-                o["timeout"])
+    return read_database(o, work, play([o["program"], "--game", o["game"], "-seed", str(o["seed"])], env,
+                                       os.path.join(work, "stderr.txt"), o["timeout"]))
 
 
 def prune(work, season, every):

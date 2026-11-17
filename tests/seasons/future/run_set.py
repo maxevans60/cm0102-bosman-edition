@@ -452,7 +452,7 @@ def database_of(row, o):
         names = sorted(n for n in os.listdir(o["databases"]) if n.startswith(JUMP_DATABASE))
         if not names:
             raise SystemExit(f"run_set.py: no {JUMP_DATABASE} folder in {o['databases']}")
-        return os.path.join(o["databases"], names[0]), "3.9.68", None
+        return gate_run.data_folder(os.path.join(o["databases"], names[0])), "3.9.68", None
     args, _ = gate_run.database(row["start"], {"run": o["out"], "own": o["own"], "databases": o["databases"]})
     return (args[1] if args else None), "3.9.68", None
 

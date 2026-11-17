@@ -144,7 +144,7 @@ def database_folder(name):
     hits = sorted(d for d in os.listdir(DB) if d == name or d.startswith(name + " "))
     if not hits:
         raise SystemExit(f"season_nl_run.py: no database folder {name!r} in {DB}")
-    return os.path.join(DB, hits[0])
+    return rrc.database_folder(os.path.join(DB, hits[0]))
 
 
 def real_leagues(edition, confed="UEFA"):
@@ -333,6 +333,7 @@ def load_and_jump(program, game, database, save, work, last, timeout, extra_env=
                                   stderr=log, timeout=timeout).returncode
         except subprocess.TimeoutExpired:
             code = "timeout"
+    rrc.no_fallback(os.path.join(work, "stderr.txt"), database)
     print(f"run: load and jump: code {code} after {time.time() - start:.0f} s, log {os.path.join(work, 'stderr.txt')}")
     return code
 

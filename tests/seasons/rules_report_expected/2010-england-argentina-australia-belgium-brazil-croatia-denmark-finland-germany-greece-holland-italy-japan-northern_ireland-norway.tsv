@@ -1,9 +1,9 @@
 # Differences between the rules report and the rules table that the check accepts. Made by
 # tests/seasons/rules_report_check.py --update-expected. Columns: season, kind, text.
 2010	bench	world_club_champ (FIFA Club World Cup), row club-world-173: game 7/9, table 12 (12)
-2010	club_list	Belgian First Division: 16 of 16 listed clubs that the database holds (16 listed), 2 other clubs, 18 in all; not in it: -; others: KFC Dessel Sport, RFC Liège
 2010	club_list	Brazilian National Third Division: 20 of 20 listed clubs that the database holds (20 listed), 36 other clubs, 56 in all; not in it: -; others: Alagoinhas Atlético Clube, Americano FC (RJ), Associação Atlética Anapolina, Associação Cultural e Desportiva Potiguar, Atlético Roraima Clube, Brasília Futebol Clube, Brusque Futebol Clube, Central Sport Club, Centro Sportivo Alagoano, Clube Náutico Marcílio Dias, Clube Recreativo e Atlético Catalano, Clube Rio Branco, Clube do Remo, Cristal Atlético Clube, ECPP Vitória da Conquista, Esporte Clube Flamengo, Esporte Clube Pelotas, Ferroviário Atlético Clube, Fluminense de Feira Futebol Clube, Friburguense Atlético Clube, Iraty Sport Club, Ituano Futebol Clube, Londrina Esporte Clube, Mesquita Futebol Clube, Mirassol Futebol Clube, Mogi Mirim Esporte Clube, Moto Clube de São Luís, Nacional Atlético Clube, Nacional Futebol Clube (AM), Oeste Futebol Clube, Paulista Futebol Clube, Rio Branco Atlético Clube, Santa Cruz Futebol Clube, Sport Club Corinthians Paranaense, Vilhena Esporte Clube, Ypiranga Futebol Clube
 2010	club_list	Danish Second Division: 16 of 27 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: Boldklubben Avarta, Boldklubben af 1908, Fredrikssund Idrætsklub, Herlev Idrætsforening, IK Skovbakken, Lindholm Idrætsforening, Middelfart Gymnastik & Boldklub, Otterup Boldklub, Stenløse Boldklub, Tjørring Idrætsforening, Vedbæk Boldklub; others: -
+2010	club_list	Finnish Premier Division: 12 of 12 listed clubs that the database holds (12 listed), 2 other clubs, 14 in all; not in it: -; others: FC Lahti, Tampere United
 2010	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Olympiakos Volou, Panserraikos; others: -
 2010	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: Doxa Dramas, Ethnikos Piraeus, PAE Thrasyvoulos, Trikala AO; others: -
 2010	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Brescia, Cesena; others: -
@@ -29,6 +29,7 @@
 2010	clubs	den_second (Danish 2nd Divisions), row den-swe-58: game 16, table 32 (32)
 2010	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-101: game 5, table 51 (51)
 2010	clubs	fin_first (Ykkönen), row nor-fin-98: game 10, table 13 (13)
+2010	clubs	fin_prm (Veikkausliiga), row nor-fin-97: game 14, table 12 (12)
 2010	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-10: game 4, table 67 (67)
 2010	clubs	gre_prm (Super League Greece), row gre-pol-cro-37: game 14, table 16 (16)
 2010	clubs	gre_second (Football League), row gre-pol-cro-64: game 14, table 18 (18)
@@ -74,6 +75,7 @@
 2010	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-37: game 1, table 2
 2010	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-64: game 1, table 2
 2010	meetings	fin_first (Ykkönen), row nor-fin-98: game 3, table 2
+2010	meetings	fin_prm (Veikkausliiga), row nor-fin-97: game 2, table 3
 2010	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-226: game 4, table 2
 2010	meetings	nir_first (IFA Championship 1), row wal-nir-irl-236: game 4, table 2
 2010	meetings	nir_prm (IFA Premiership), row wal-nir-irl-235: game 4, table 3
@@ -114,10 +116,10 @@
 2010	playoffs	nor_first (Adeccoligaen), row nor-fin-93: game 1 up and 0 down play-off places, table 0 and 0 ('none')
 2010	playoffs	nor_prm (Tippeligaen), row nor-fin-92: game 0 up and 1 down play-off places, table 0 and 0 ('none')
 2010	rounds	arg_second (Primera B Nacional), row arg-usa-37: game 25, table 38 (2 meetings, zones -, extra 0)
-2010	rounds	bel_first (Belgian Pro League), row hol-bel-125: game 34, table 30 (2 meetings, zones -, extra 0)
 2010	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-37: game 19, table 38 (2 meetings, zones -, extra 0)
 2010	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-64: game 19, table 38 (2 meetings, zones -, extra 0)
 2010	rounds	fin_first (Ykkönen), row nor-fin-98: game 27, table 26 (2 meetings, zones -, extra 0)
+2010	rounds	fin_prm (Veikkausliiga), row nor-fin-97: game 26, table 33 (3 meetings, zones -, extra 0)
 2010	rounds	gre_prm (Super League Greece), row gre-pol-cro-37: game 26, table 30 (2 meetings, zones -, extra 0)
 2010	rounds	ita_ser_a (Serie A), row ita-155: game 34, table 38 (2 meetings, zones -, extra 0)
 2010	rounds	ita_ser_b (Serie B), row ita-156: game 38, table 42 (2 meetings, zones -, extra 0)

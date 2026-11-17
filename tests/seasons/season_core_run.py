@@ -58,6 +58,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "smoke"))
 sys.path.insert(0, os.path.join(HERE, "..", "fixtures"))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "tools", "save"))
 import custom_database_run as cdr  # noqa: E402
+import rules_report_check as rrc  # noqa: E402
 import fixtures  # noqa: E402
 import savfile  # noqa: E402
 import smoke_run  # noqa: E402
@@ -164,7 +165,8 @@ def play(program, game, work, name, options, steps, days, env_extra=None, databa
     user, home, shots = (os.path.join(run, d) for d in ("user", "home", "shots"))
     for d in (user, home, shots):
         os.makedirs(d)
-    if database:
+    if database:                               # never the base data in place of the database
+        database = rrc.database_folder(database)
         cdr.copy_data(database, os.path.join(user, "Databases", os.path.basename(database)))
         options = dict(options, database="folder:" + os.path.basename(database))
     if save:
@@ -190,6 +192,8 @@ def play(program, game, work, name, options, steps, days, env_extra=None, databa
     path = os.path.join(user, smoke_run.SAVE_NAME)
     with open(os.path.join(run, "stderr.txt"), "w") as f:
         f.write(r.stderr)
+    if database:
+        rrc.no_fallback(os.path.join(run, "stderr.txt"), database)
     return (path if r.returncode == 0 and os.path.exists(path) else None), r.stderr, time.time() - start
 
 

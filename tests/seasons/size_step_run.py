@@ -63,18 +63,54 @@ CASES = {
     "conference": (2005, 2007, ["England"], {"eng_conf": (2006, 24)},
                    "D15 (slice 8): League Two sends 2 down and the Conference 2 up (the champion and the play-off "
                    "winner) at each change; the Conference grows from 22 to 24 in 2006/07"),
+    # Gap rows of slice 8 (lead-notes/sizes-gaps.md rows 25 to 29, 15 November 2026).
+    "refuse": (2005, 2006, ["England"], {},
+               "Gap row 26: a Conference champion that may not go up (RECOMP_TEST_REFUSE_CHAMPION=1) gives its place "
+               "to the next club that may"),
+    "unplayed": (2005, 2006, ["England"], {},
+                 "Gap row 27: the unplayed Conference sends up its second club by the original's pick (0x4afbd0)"),
+    "ligue3": (2026, 2027, ["England", "France"], {},
+               "Gap row 29: the Ligue 3 play-off of the 3rd to 6th plays, and Ligue 2 sends down its 16th"),
+    # Item 273 (open-items-0.6.2.md): the National League of 2017/18 on.
+    "nl2019": (2019, 2020, ["England"], {},
+               "Item 273: the National League 2019/20 sends 4 down (row eng-212, Q278) and plays the play-off of "
+               "the 2nd to 7th"),
+    "nl2021": (2021, 2022, ["England"], {},
+               "Item 273: the National League 2021/22 sends 3 down (row eng-232) and plays the play-off of the 2nd "
+               "to 7th"),
 }
 
 # The extra divisions of the new game screen of a case (rules_report_check.EXTRA, ENV_EXTRA). portugal2015 needs the
 # Segunda Divisao B: without it PorSecond::set_up_rules sets no division below (0x7d1714..0x7d1728) and the PorPrm
 # chain returns before its Segunda Liga call (0x7cfc55), so no club of the Segunda Liga goes down there.
-EXTRA = {"conference": ["conference"], "portugal2015": ["portugal"]}
+EXTRA = {"conference": ["conference"], "refuse": ["conference"], "nl2019": ["conference"], "nl2021": ["conference"],
+         "portugal2015": ["portugal"]}
+
+# The environment of a case beyond RECOMP_SIZE_LOG=1.
+ENV = {"refuse": {"RECOMP_TEST_REFUSE_CHAMPION": "1"}}
+
+# Log lines a case must have: (pattern, the least count, groups that must be equal).
+LINES = {
+    "conference": [(r"recomp: league sizes: eng: the feeder exchange sent (\d+) down and (\d+) up \((\d+) rows", 1,
+                    True)],
+    "refuse": [(r"recomp: league sizes: eng: .* may not go up: .* \(place \d+\) goes up in its place", 1, False)],
+    "unplayed": [(r"recomp: league sizes: eng: .* goes up to League Two \(the original's pick\)", 1, False),
+                 (r"recomp: league sizes: eng: the unplayed Conference exchange moved 2 down", 1, False)],
+    "ligue3": [(r"recomp: playoffs: fra_third 2026: places 3 to 6", 1, False)],
+    "nl2019": [(r"recomp: playoffs: eng_conf 2019: play-off of places 2 to 7 drawn .*quarter-finals 4 v 7 and 5 v 6",
+                1, False),
+               (r"recomp: league sizes: eng: the feeder exchange sent (\d+) down and (\d+) up \((\d+) rows", 1,
+                True)],
+    "nl2021": [(r"recomp: playoffs: eng_conf 2021: play-off of places 2 to 7 drawn .*quarter-finals 4 v 7 and 5 v 6",
+                1, False)],
+}
 
 # The exchanges of league_promote_and_relegate 0x689c80 between two leagues of a case (the log line of the wrap in
 # season_sizes.c): (upper, lower, clubs each way, the least count of such lines). The chain body 0x5752f0 makes no
 # such call in a season whose Conference champion may not go up (0x57541a, return at 0x575468), so the least is 1 of
 # the 2 season changes of the case.
-EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 1)}
+EXCHANGES = {"conference": ("eng_third", "eng_conf", 2, 1), "refuse": ("eng_third", "eng_conf", 2, 1),
+             "nl2019": ("eng_third", "eng_conf", 2, 1), "nl2021": ("eng_third", "eng_conf", 2, 1)}
 EXCHANGE_LINE = re.compile(r"recomp: league sizes: (\S+) \(.*?\) down (-?\d+), (\S+) \(.*?\) up (-?\d+), pairs")
 
 # D23: the places of the season before a change (report season, up, down; None: not checked) and the files whose
@@ -82,7 +118,11 @@ EXCHANGE_LINE = re.compile(r"recomp: league sizes: (\S+) \(.*?\) down (-?\d+), (
 PLACES = {
     "grow": {"swe_prm": (2007, None, 1), "swe_first": (2007, 3, None)},
     "shrink": {"fra_first": (2022, None, 4), "fra_second": (2022, 2, None)},
-    "conference": {"eng_third": [(2005, None, 2), (2006, None, 2)], "eng_conf": [(2005, 2, None), (2006, 2, None)]},
+    "conference": {"eng_third": [(2005, None, 2), (2006, None, 2)], "eng_conf": [(2005, 2, 2), (2006, 2, 4)]},
+    "unplayed": {"eng_third": (2005, None, 2)},
+    "ligue3": {"fra_second": (2026, None, 3), "fra_third": (2026, 3, None)},
+    "nl2019": {"eng_conf": (2019, 2, 4)},
+    "nl2021": {"eng_conf": (2021, 2, 3)},
     "portugal2015": {"por_second": (2015, None, 5)},
     "brazil": {"bra_nat_second": (2005, None, 6)},
 }
@@ -150,6 +190,7 @@ def faults(work, case):
             if want is not None and want not in (c, c + (1 if extra else 0), c + extra):
                 fails.append(f"{file} {season}: {key} {c} (+{extra} play-off places), its row {want}")
     fails += exchange_faults(log, case)
+    fails += line_faults(log, case)
     for file in NO_STEP.get(case, []):
         names = {c["name"] for c in comps if c["file"] == file}
         moves = [m.group(0) for m in map(MOVE_LINE.match, log.split("\n")) if m and
@@ -179,6 +220,17 @@ def exchange_faults(log, case):
              if int(m.group(2)) != clubs or int(m.group(4)) != clubs]
     if len(lines) < least:
         fails.append(f"{len(lines)} exchanges of {upper} and {lower}, want at least {least}")
+    return fails
+
+
+def line_faults(log, case):
+    """The lines of LINES: each pattern at least its count of times; with same, each line's groups are equal."""
+    fails = []
+    for pattern, least, same in LINES.get(case, []):
+        found = [m for m in map(re.compile(pattern).search, log.split("\n")) if m]
+        if len(found) < least:
+            fails.append(f"{len(found)} lines of {pattern!r}, want at least {least}")
+        fails += [f"unequal counts: {m.group(0)}" for m in found if same and len(set(m.groups())) != 1]
     return fails
 
 
@@ -238,6 +290,11 @@ def self_test():
     if exchange_faults(x * 2, "conference") or not exchange_faults("", "conference") or \
             not exchange_faults(x.replace("down 2", "down 1") * 2, "conference"):
         bad.append(("exchange_faults", exchange_faults(x, "conference")))
+    f = ("recomp: league sizes: eng: the feeder exchange sent 4 down and 4 up (4 rows of status 3, 1 beyond the "
+         "original's 3)")
+    if line_faults(f, "conference") or not line_faults(f.replace("4 up", "3 up"), "conference") or \
+            not line_faults("", "conference"):
+        bad.append(("line_faults", line_faults(f, "conference")))
     for b in bad:
         print("FAIL self-test", b)
     print(("FAIL" if bad else "PASS") + " size_step_run self-test")
@@ -265,7 +322,7 @@ def main(argv):
     if "--reuse" not in argv:
         db = rrc.run_database(argv, year, os.path.join(work, "owndb"))
         code, _report = rrc.run(program, game, last, year, db, nations, EXTRA.get(case, []), work, timeout,
-                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1"})
+                                {"changing_rules": "on"}, {"RECOMP_SIZE_LOG": "1", **ENV.get(case, {})})
         if code != 0:
             print(f"FAIL {case}: the run ended with code {code} ({work})")
             return 1

@@ -26,7 +26,8 @@ The structured values (the same words in the TSV and in the C table):
                  match only when clubs are level), joined by "+", or "-".
     po_status    ok, or the reason the text is only partly encoded (the gaps file lists it too).
     split        "-" for one table; "after N: A+B[+C], points P" for a split after N matches into groups of A, B
-                 (and C) clubs with the points kept, halved or unknown (P is kept, halved or unknown);
+                 (and C) clubs with the points kept, halved or unknown (P is kept, halved or unknown, or the
+                 points of each section, "kept+halved+kept"; SPLIT_BY_HAND and SPLIT_POINTS_BY_HAND below);
                  "stages", "zones" or "groups" for a season of two tournaments, of zones, or of groups;
                  "gap" when the tool cannot read it.
     calendar     "split" (a season over two years, July to May), "calendar" (one calendar year), or
@@ -112,11 +113,128 @@ MEETINGS_FIX = {
     # standings (33 matches)": three meetings, the third set by the standings.
     ("cro_a1", 2006): (3, "33 matches of 12 clubs in the format cell"),
 }
+# First Division B 2016/17 to 2019/20: two periods of 14 rounds, each a double round robin of 8, so each pair meets four
+# times in a season of 28 rounds (check of 13 November 2026, sizes-check-north line 230; RSSSF belg2017 to belg2020).
+# The row has no halves: the season's meetings are 4 (lead decision, slice 10).
+for _y in range(2016, 2020):
+    MEETINGS_FIX[("bel_second", _y)] = (4, "two periods of 14 rounds of 8 clubs: four meetings (sizes-check-north 230)")
+
+# Splits that the size engine (slice 7, D7) cannot play as the text gives them, in their nearest form (D2; lead
+# decisions of slice 10, 13 November 2026): {(comp_file, first, last): (split, split_meet, evidence)}. The sections
+# add up to the count and each has its meetings.
+SPLIT_FORM_BY_HAND = {
+    # Pro League 2009/10 to 2018/19 (16 clubs, gap 34): Play-off I of the top 6 (points halved, a double round robin
+    # of 10 rounds); Play-off II from 0 points in two groups of four, the 7th, 9th, 12th, 14th and the 8th, 10th, 11th,
+    # 13th, each a double round robin (2016/17 to 2018/19 with the 15th in the second group and First Division B
+    # clubs, who cannot join here); the relegation play-off of the 15th and 16th in 2010/11 to 2014/15, five matches,
+    # the 15th starting with 3 points. In 2009/10 the 15th went to the Second Division final round and Mouscron (16th)
+    # left; from 2015/16 the 16th went down with no play-off: those places play no more (meetings 0). season_split.c
+    # GROUPS gives the places of the groups and the points of each section (en.wikipedia.org 2009-10 to
+    # 2015-16_Belgian_Pro_League and 2016-17 to 2018-19_Belgian_First_Division_A; RSSSF belg2010 to belg2019).
+    ("bel_first", 2009, 2009): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
+    ("bel_first", 2010, 2014): ("after 30: 6+4+4+2, points halved", "2+2+2+5",
+                                "Play-off I, Play-off II in two groups, the relegation play-off of five matches"),
+    ("bel_first", 2015, 2015): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
+    ("bel_first", 2016, 2018): ("after 30: 6+4+5+1, points halved", "2+2+2+0",
+                                "Play-off I, Play-off II in groups of 4 and 5 (with the 15th), the 16th plays no more"),
+    # Pro League 2023/24 to 2025/26: champions', Europe and relegation play-offs of 6, 6 and 4, each a double round
+    # robin of 10, 10 and 6 rounds, points halved (sizes-check-north line 214).
+    ("bel_first", 2023, 2025): ("after 30: 6+6+4, points halved", "2+2+2", "10, 10 and 6 rounds: two meetings each"),
+    # Superliga 2016/17 to 2019/20 (14 clubs): a championship round of 6 (a double round robin, 10 rounds) and two
+    # qualification groups of 4, the 7th, 10th, 11th, 14th and the 8th, 9th, 12th, 13th, each a double round robin of
+    # 6 rounds, points kept, with play-offs after them (gap 35; Wikipedia 2016-17 to 2019-20_Danish_Superliga). The
+    # groups are sections 2 and 3; season_split.c GROUPS gives their places.
+    ("den_prm", 2016, 2019): ("after 26: 6+4+4, points kept", "2+2+2",
+                              "a championship round of 6 and two groups of 4, each in two meetings"),
+    # Veikkausliiga (calendar year: row Y is the season Y + 1; the texts of rows 2019 and 2020 are one season apart).
+    # Real 2019 and 2021 (rows 2018, 2020): 22 rounds, then the top 6 and the bottom 6 play 5 more matches each, points
+    # carried in full; real 2020 (row 2019): the split was cancelled on 28 October 2020 (COVID-19) and the table
+    # after 22 rounds was final. The European play-off of the 4th to 6th and the Challenger Series winner is a
+    # play-off, not a split section (en.wikipedia.org 2019_Veikkausliiga, 2020_Veikkausliiga, 2021_Veikkausliiga;
+    # checked 15 November 2026).
+    ("fin_prm", 2018, 2018): ("after 22: 6+6, points kept", "1+1", "22 rounds, then sixes that meet once more"),
+    ("fin_prm", 2019, 2019): ("-", "-", "the split of 2020 was cancelled: one table of 22 rounds"),
+    ("fin_prm", 2020, 2020): ("after 22: 6+6, points kept", "1+1", "22 rounds, then sixes that meet once more"),
+    # Challenger Pro League 2022/23 (12 clubs): 22 rounds, then the top six and the bottom six play 10 more rounds
+    # each, points kept (sizes-check-north line 232: 32 matches): two meetings in each section.
+    ("bel_second", 2022, 2022): (None, "2+2", "22 rounds, then sections of 6 that play 10 more rounds"),
+}
+
+
+def split_by_hand(r):
+    """(split, split_meet) of SPLIT_FORM_BY_HAND for a row, None for the others; split None keeps the text's."""
+    for (file, first, last), (split, meet, _why) in SPLIT_FORM_BY_HAND.items():
+        if r["comp_file"] == file and first <= r["season"] <= last:
+            return split, meet
+    return None
+
+# The section meetings of split rows whose texts do not give them (0.7.2 league sizes, slice 11): {(comp_file, first
+# season, last season): (split_meet, evidence)}. Checked against the matches per club of the section tables.
+SPLIT_MEET_BY_HAND = {
+    ("cro_a1", 2003, 2005): ("2+2", "format cell: 22 rounds then split (32 matches), so 10 more in sections of 6, as "
+                                    "the 2002/03 row (championship and relegation groups of 6, 10 more matches)"),
+    ("gre_prm", 2019, 2021): ("2+1", "en.wikipedia.org 2019-20, 2020-21 and 2021-22 Super League Greece: top 6 meet "
+                                     "twice (10 matches), bottom 8 play 7 matches; the 2022/23 row of the table"),
+    ("gre_prm", 2023, 2023): ("2+1", "format cell: top 6 play-off (10 matches), bottom 8 play-out (7 matches)"),
+    ("gre_prm", 2024, 2026): ("2+2+2", "en.wikipedia.org 2024-25 and 2025-26 Super League Greece: top 4 and 5th to "
+                                       "8th 6 matches each, 9th to 14th 10 matches; 2026/27 row the same split"),
+    ("gre_second", 2020, 2020): ("1+1", "en.wikipedia.org 2020-21 Super League Greece 2: top 6 and bottom 6 meet "
+                                        "once (5 matches per team)"),
+    # Gap row 38 (slice 11): both groups of the Croatian second tier.
+    ("cro_a2a", 2002, 2005): ("2+2", "en.wikipedia.org 2002-03 to 2005-06 Croatian Second Football League: 12 clubs, "
+                                     "22 rounds, then groups of 6 with 10 more matches (32 in all)"),
+    ("cro_a2b", 2002, 2005): ("2+2", "en.wikipedia.org 2002-03 to 2005-06 Croatian Second Football League: 12 clubs, "
+                                     "22 rounds, then groups of 6 with 10 more matches (32 in all)"),
+    # Gap row 41 (slice 11): the sections of each group of Super League 2 (SPLIT_BY_HAND). The 12th of 2023/24 goes
+    # down at once and plays no section (0).
+    ("gre_second", 2023, 2023): ("2+2+0", "en.wikipedia.org 2023-24 Super League Greece 2: in each group the top 5 "
+                                          "play 8 more matches, 6th to 11th 10 more, the 12th is relegated"),
+    ("gre_second", 2024, 2024): ("2+2", "en.wikipedia.org 2024-25 Super League Greece 2: in each group the top 5 and "
+                                        "the 6th to 10th play 8 more matches"),
+    ("gre_second", 2025, 2025): ("2+2", "en.wikipedia.org 2025-26 Super League Greece 2: in each group the top 4 play "
+                                        "6 more matches, the 5th to 10th 10 more"),
+}
+
+# Splits that the split text does not give in numbers: {(comp_file, first season, last season): (split, evidence)}.
+SPLIT_BY_HAND = {
+    # Gap row 41 (slice 11): each group of Super League 2 splits on its own; the points are halved, rounded up.
+    ("gre_second", 2023, 2023): ("after 22: 5+6+1, points halved",
+                                 "en.wikipedia.org 2023-24 Super League Greece 2: 12 clubs a group after 22 matches, "
+                                 "play-off round of the top 5, play-out round of 6th to 11th, points halved (55 to 28)"),
+    ("gre_second", 2024, 2024): ("after 18: 5+5, points halved",
+                                 "en.wikipedia.org 2024-25 Super League Greece 2: 10 clubs a group after 18 matches, "
+                                 "play-off round of the top 5, play-out round of 6th to 10th, points halved"),
+    ("gre_second", 2025, 2025): ("after 18: 4+6, points halved",
+                                 "en.wikipedia.org 2025-26 Super League Greece 2: 10 clubs a group after 18 matches, "
+                                 "play-off round of the top 4, play-out round of 5th to 10th, points halved"),
+}
+
+# The points of each section where they differ: {(comp_file, first, last): (points of each section, evidence)}.
+SPLIT_POINTS_BY_HAND = {
+    # Gap row 39 (slice 11).
+    ("gre_prm", 2024, 2026): ("kept+halved+kept",
+                              "en.wikipedia.org 2024-25 and 2025-26 Super League Greece: the top 4 and the 9th to 14th "
+                              "keep their points, the 5th to 8th halve them, rounded up (35 to 18, 31 to 16); 2026-27 "
+                              "the same sections (slice 7 research, run-logs/0.7.2-sz07/gaps/research-points.tsv), no "
+                              "source gives its rounding: up, as the two seasons before"),
+    # Gap row 38 (slice 11).
+    ("cro_a2a", 2002, 2005): ("kept", "en.wikipedia.org 2003-04 Croatian Second Football League: the 32-match tables "
+                                      "carry the 22-match points (Medimurje 51, then 69)"),
+    ("cro_a2b", 2002, 2005): ("kept", "en.wikipedia.org 2003-04 Croatian Second Football League: the 32-match tables "
+                                      "carry the 22-match points"),
+}
 
 # The period titles of rows whose texts do not give them: {(comp_file, first, last): (periods, evidence)}.
 PERIODS_BY_HAND = {
     ("bel_second", 2016, 2019): (2, "First Division B: an opening and a closing period of 14 rounds (check of 13 "
                                     "November 2026, sizes-check-north line 230)"),
+    # Slice 10 review: rows of unknown periods that the research settles (lead decision, closest to real life).
+    ("hol_first", 2003, 2003): (0, "no period winners in 2001/02 to 2003/04: the nacompetitie took places 2 to 7 "
+                                   "(sizes-check-north line 83)"),
+    ("bel_second", 2009, 2009): (0, "spec D6: the Second Division has no periods in 2007/08 to 2009/10 (RSSSF "
+                                    "belg2010 and nl Wikipedia name none)"),
 }
 
 ORD = r"(\d+)(?:st|nd|rd|th)"
@@ -139,6 +257,8 @@ BY_HAND = {
     "One-match tie-breaker at a neutral venue when clubs tie for the aggregate-table relegation place (extra time, "
     "then penalties)": ("-", "-", "tiebreak", "ok"),
     "In each tournament: top 8 of each zone play single-leg knockouts from the round of 16":
+        ("-", "-", "title", "ok"),
+    "In each tournament: top 16 of the tournament table play single-leg knockouts from the round of 16":
         ("-", "-", "title", "ok"),
     "Liguilla Pre-Libertadores (3rd to 6th) and Liguilla Pre-Sudamericana for continental places":
         ("-", "-", "europe", "ok"),
@@ -382,6 +502,14 @@ KNOWN_GAPS = {
     "28 clubs: ": "a national phase of the clubs of the three Serie C groups: not a play-off of one league",
 }
 
+# Splits that the game cannot play, with the reason: {(comp_file, season): reason}. The split is a gap.
+SPLIT_GAPS = {
+    # The 2011-12 FNL: 38 rounds from April to November 2011, then the split of 8 and 12 in spring 2012, 52 rounds in
+    # all. The game year (class dates 3 April to 3 November) holds the first stage only: edition 2011 plays 20 clubs
+    # and 38 rounds (lead decision, 16 November 2026, slice 12).
+    ("rus_first", 2010): "a season that spans two game years: the game plays the first stage only",
+}
+
 # The forms of a whole text that mean no play-off.
 NONE_TEXTS = {"none", "n/a", "see split", "see format"}
 
@@ -506,6 +634,17 @@ def encode_playoffs(r, last_clubs=None):
 
 
 def encode_split(r):
+    split = encode_split_text(r)
+    for (file, first, last), (value, _why) in SPLIT_BY_HAND.items():
+        if r["comp_file"] == file and first <= int(r["season"]) <= last:
+            split = value
+    for (file, first, last), (value, _why) in SPLIT_POINTS_BY_HAND.items():
+        if r["comp_file"] == file and first <= int(r["season"]) <= last and split.startswith("after"):
+            split = re.sub(r"points \S+$", "points " + value, split)
+    return split
+
+
+def encode_split_text(r):
     code, text = r["split"], r["split_text"].strip()
     if code != "text":
         return "-"
@@ -667,6 +806,11 @@ def encode_split_meetings(r, split):
     if not m:
         return "-"
     after, sizes = int(m.group(1)), [int(x) for x in m.group(2).split("+")]
+    for (file, first, last), (value, _why) in SPLIT_MEET_BY_HAND.items():
+        if r["comp_file"] == file and first <= int(r["season"]) <= last:
+            if len(value.split("+")) != len(sizes):
+                raise SystemExit("encode_leagues.py: %s %s: %s for sections %s" % (file, r["season"], value, sizes))
+            return value
     low = r["split_text"].lower()
     # A text per section: "top 6 play a double round ..., bottom 6 a single round ...", "(double round robin, 10
     # matches) ... (single round robin, 7 matches)".
@@ -730,6 +874,12 @@ def encode():
             continue
         last[r["comp_file"]] = po
         split = encode_split(r)
+        hand = split_by_hand(r)
+        if hand and hand[0]:
+            split = hand[0]
+        split_gap = SPLIT_GAPS.get((r["comp_file"], r["season"]))
+        if split_gap and not (hand and hand[0]):
+            split = "gap"
         e = {"id": r["id"], "season": r["season"], "comp_file": r["comp_file"], "tier": r["tier"],
              "clubs": r["clubs"] if isinstance(r["clubs"], int) else -1, "po_up": po[0], "po_down": po[1],
              "po_other": po[2], "po_status": po[3], "split": split, "calendar": encode_calendar(r),
@@ -743,7 +893,8 @@ def encode():
                 continue
             zones, extra = encode_zones(r), encode_extra(r)
             e.update(meetings=meet[0], halves=encode_halves(split), zones=zones, extra=extra,
-                     periods=encode_periods(r), split_meet=encode_split_meetings(r, split),
+                     periods=encode_periods(r),
+                     split_meet=hand[1] if hand else encode_split_meetings(r, split),
                      rounds=encode_rounds(r, meet[0], zones, extra, split))
             if r["clubs"] == "unknown":
                 # A future row with no announcement: its structure is the last known row's (D20, the after-table
@@ -763,7 +914,7 @@ def encode():
         if po[3] != "ok":
             gaps.append((r["id"], r["season"], r["comp_file"], "playoffs", po[3], r["playoffs_text"]))
         if split == "gap":
-            gaps.append((r["id"], r["season"], r["comp_file"], "split", "the tool cannot read the split",
+            gaps.append((r["id"], r["season"], r["comp_file"], "split", split_gap or "the tool cannot read the split",
                          r["split_text"]))
     return out, gaps, problems
 
@@ -799,6 +950,26 @@ def c_list(values):
     return ", ".join(str(v) for v in (list(values) + [0] * 4)[:4])
 
 
+def split_points(points):
+    """The split_points value: 0 kept, 1 halved, 2 unknown, 3 by section (split_halved)."""
+    if "+" in points:
+        section_points(points, points.count("+") + 1)      # stops on a word other than kept and halved
+        return 3
+    if points not in ("kept", "halved", "unknown"):
+        raise SystemExit("encode_leagues.py: split points %r" % points)
+    return {"kept": 0, "halved": 1, "unknown": 2}[points]
+
+
+def section_points(points, sections):
+    """1 for each section that halves its points: "halved" for all, "kept+halved+kept" by section."""
+    parts = points.split("+")
+    if len(parts) == 1:
+        return [1 if points == "halved" else 0] * sections
+    if len(parts) != sections or any(x not in ("kept", "halved") for x in parts):
+        raise SystemExit("encode_leagues.py: points %r for %d sections" % (points, sections))
+    return [1 if x == "halved" else 0 for x in parts]
+
+
 def c_text(rows):
     lines = ["/* The structured league rules: play-off places, splits and calendars (0.6.0 slice 19), and the structure",
              " * of each league row (0.7.2 league sizes, slice 1). Made by",
@@ -807,7 +978,7 @@ def c_text(rows):
              '#include "season_league.h"', "",
              "const SeasonLeagueRule season_league_rules[] = {"]
     for e in rows:
-        m = re.match(r"after (\d+): ([\d+]+), points (\w+)", e["split"])
+        m = re.match(r"after (\d+): ([\d+]+), points ([\w+]+)", e["split"])
         after, groups = (int(m.group(1)), m.group(2).split("+")) if m else (0, [])
         top = int(groups[0]) if groups else 0
         zones = [int(x) for x in e["zones"].split("+")] if e["zones"] not in ("-", "gap", "?") else []
@@ -817,15 +988,16 @@ def c_text(rows):
             min(int(x) for x in re.findall(r"\d+", e["po_up"])) if e["po_up"] != "-" else 0,
             count(e["po_down"]), 1 if e["po_status"] == "ok" else 0, after, top,
             {"-": 0, "split": 0, "calendar": 1, "transition": 2}[e["calendar"]] if e["calendar"] != "split" else 0,
-            {"kept": 0, "halved": 1, "unknown": 2}[m.group(3)] if m else 0))
-        lines.append('     %d, %d, %d, {%s}, %d, %d, {%s}, {%s}, %d},' % (
+            split_points(m.group(3)) if m else 0))
+        halved = section_points(m.group(3), len(groups)) if m else []
+        lines.append('     %d, %d, %d, {%s}, %d, %d, {%s}, {%s}, %d, {%s}},' % (
             e["meetings"] if isinstance(e["meetings"], int) else 0,
             e["halves"] if isinstance(e["halves"], int) else -1 if e["halves"] == "?" else 0,
             -1 if e["zones"] == "?" else len(zones), c_list(zones),
             e["extra"] if isinstance(e["extra"], int) else -1,
             e["periods"] if isinstance(e["periods"], int) else -1,
             c_list([int(x) for x in groups]), c_list([int(x) if x != "?" else 0 for x in meet]),
-            e["rounds"] if isinstance(e["rounds"], int) else 0))
+            e["rounds"] if isinstance(e["rounds"], int) else 0, c_list(halved)))
     lines += ["};", "const int season_league_rule_count = %d;" % len(rows), ""]
     return "\n".join(lines)
 

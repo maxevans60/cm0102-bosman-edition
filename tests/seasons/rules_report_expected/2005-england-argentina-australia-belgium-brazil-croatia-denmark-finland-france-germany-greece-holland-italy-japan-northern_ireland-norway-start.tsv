@@ -10,8 +10,7 @@
 2005	club_list	Croatian Second Division North: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK Omladinac, NK Podravac, NK Valpovska Satnica, NK Ðakovo
 2005	club_list	Croatian Second Division South: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: NK GOSK, NK Imotska Krajina, NK Konavljanin, NK Krk
 2005	club_list	Danish Second Division: 16 of 19 listed clubs that the database holds (28 listed), 0 other clubs, 16 in all; not in it: Boldklubben Avarta, Boldklubben af 1893, Roskilde Boldklub Af 1906; others: -
-2005	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: AGOVV, FC Omniworld; others: -
-2005	club_list	Finnish Premier Division: 12 of 13 listed clubs that the database holds (13 listed), 0 other clubs, 12 in all; not in it: Kuopion Palloseura; others: -
+2005	club_list	Finnish Premier Division: 13 of 13 listed clubs that the database holds (13 listed), 1 other clubs, 14 in all; not in it: -; others: AC Vantaan Allianssi
 2005	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Ascoli, Treviso; others: -
 2005	club_list	Italian Serie B: 20 of 22 listed clubs that the database holds (22 listed), 0 other clubs, 20 in all; not in it: Avellino, Rimini; others: -
 2005	club_list	Japanese J-League 1: 16 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 16 in all; not in it: Avispa Fukuoka, Kyoto Purple Sanga; others: -
@@ -39,11 +38,10 @@
 2005	clubs	den_second (Danish 2nd Divisions), row den-swe-28: game 16, table 28 (28)
 2005	clubs	european_cup (UEFA Champions League), row uefa-34: game 55, table 74 (74 (32 in the group stage))
 2005	clubs	fin_first (Ykkönen), row nor-fin-48: game 10, table 14 (14)
-2005	clubs	fin_prm (Veikkausliiga), row nor-fin-47: game 12, table 13 (13)
+2005	clubs	fin_prm (Veikkausliiga), row nor-fin-47: game 14, table 13 (13)
 2005	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-5: game 4, table 65 (65)
 2005	clubs	gre_prm (Alpha Ethniki), row gre-pol-cro-32: game 14, table 16 (16)
 2005	clubs	gre_second (Beta Ethniki), row gre-pol-cro-59: game 14, table 16 (16)
-2005	clubs	hol_first (Eerste Divisie), row hol-bel-55: game 18, table 20 (20)
 2005	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-39: game 60, table 61 (61)
 2005	clubs	ita_c_cup (Coppa Italia Serie C), row ita-82: game 5, table 75 (75)
 2005	clubs	ita_cup (Coppa Italia), row ita-81: game 4, table 72 (72)
@@ -69,7 +67,6 @@
 2005	clubs	world_cup (FIFA World Cup), row int-world-50: game 0, table 32 (32)
 2005	down	arg_prm (Primera División), row arg-usa-5: game 0 (+0 play-off places), table 2 (2 (19th and 20th of the three-season average table, promedios))
 2005	down	arg_second (Primera B Nacional), row arg-usa-32: game 0 (+0 play-off places), table 3 (3 (infobox))
-2005	down	bel_first (Belgian First Division), row hol-bel-60: game 2 (+0 play-off places), table 1 (1 (18th); 17th to the second division final round)
 2005	down	bra_nat_third (Campeonato Brasileiro Série C), row bra-86: game 2 (+0 play-off places), table na (n/a)
 2005	down	cro_a1 (Prva HNL), row gre-pol-cro-329: game 2 (+0 play-off places), table 1 (1 (12th))
 2005	down	cro_a2a (Druga HNL North), row gre-pol-cro-356: game 2 (+0 play-off places), table 1 (1 (6th of play-out group))
@@ -83,7 +80,6 @@
 2005	meetings	bra_nat_first (Campeonato Brasileiro Série A), row bra-32: game 1, table 2
 2005	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-59: game 1, table 2
 2005	meetings	fin_first (Ykkönen), row nor-fin-48: game 3, table 2
-2005	meetings	fin_prm (Veikkausliiga), row nor-fin-47: game 3, table 2
 2005	meetings	nir_first (Irish First Division), row wal-nir-irl-111: game 4, table 2
 2005	meetings	nir_prm (Irish Premier League), row wal-nir-irl-110: game 4, table 2
 2005	no_row	friendly (Friendly): no table row
@@ -134,10 +130,8 @@
 2005	rounds	cro_a2a (Druga HNL North), row gre-pol-cro-356: game 30, table 22 (2 meetings, zones -, extra 0)
 2005	rounds	cro_a2b (Druga HNL South), row gre-pol-cro-383: game 30, table 22 (2 meetings, zones -, extra 0)
 2005	rounds	fin_first (Ykkönen), row nor-fin-48: game 27, table 26 (2 meetings, zones -, extra 0)
-2005	rounds	fin_prm (Veikkausliiga), row nor-fin-47: game 33, table 26 (2 meetings, zones -, extra 0)
 2005	rounds	gre_prm (Alpha Ethniki), row gre-pol-cro-32: game 26, table 30 (2 meetings, zones -, extra 0)
 2005	rounds	gre_second (Beta Ethniki), row gre-pol-cro-59: game 26, table 30 (2 meetings, zones -, extra 0)
-2005	rounds	hol_first (Eerste Divisie), row hol-bel-55: game 34, table 38 (2 meetings, zones -, extra 0)
 2005	rounds	ita_ser_a (Serie A), row ita-70: game 34, table 38 (2 meetings, zones -, extra 0)
 2005	rounds	ita_ser_b (Serie B), row ita-71: game 38, table 42 (2 meetings, zones -, extra 0)
 2005	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-194: game 30, table 34 (2 meetings, zones -, extra 0)

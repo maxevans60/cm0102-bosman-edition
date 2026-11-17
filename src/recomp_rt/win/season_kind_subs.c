@@ -18,7 +18,8 @@
  * changing rules on, as slice 15 defines it); the base game and RECOMP_SEASON_CODE=off keep the original's
  * values (Q342). The season is the start year with changing rules off (Q232), else the season of the pass that
  * starts the competition (the before hook), else the season year of the competition (+0x40). A competition with
- * no row, or a row with no count, keeps what it has.
+ * no row, or a row with no count, keeps what it has. A count given as "unknown" keeps the latest earlier count of the
+ * file (item 274, season_subs_rule), with a log line for each file and season.
  *
  * The kind has no new_game, loaded or season hook: the fixtures of the first season are made inside the game's
  * creation, after the start year is set, and the fixtures of each later season in start_new_season (before hook
@@ -81,7 +82,28 @@ static int lookup(const char *file, int season, int *used, int *bench)
             *bench = cache[i].bench;
             return cache[i].mask;
         }
-    int mask = season_subs_rule(season, file, used, bench);
+    /* The Irish calendar move: the season of the row of the edition (season_rules_row_of). */
+    const SeasonRule *row = season_rules_moved(file) ? season_rules_row_of(file, season) : NULL;
+    int rule_season = row ? row->season : season, used_from = 0, bench_from = 0;
+    int mask = season_subs_rule_from(rule_season, file, used, bench, &used_from, &bench_from);
+    /* Item 274: a count carried from an earlier season, once for each file and season (its own list, so a full
+     * cache does not print it again; a full list prints no more). */
+    int carried = ((mask & SEASON_SUBS_USED) && used_from != rule_season) ||
+                  ((mask & SEASON_SUBS_BENCH) && bench_from != rule_season);
+    if (carried) {
+        static struct { const char *file; int season; } logged[1024];
+        static int nlogged;
+        int seen = 0;
+        for (int i = 0; i < nlogged && !seen; i++) seen = logged[i].file == file && logged[i].season == rule_season;
+        if (seen || nlogged >= (int)(sizeof logged / sizeof logged[0])) used_from = bench_from = rule_season;
+        else logged[nlogged].file = file, logged[nlogged++].season = rule_season;
+    }
+    if ((mask & SEASON_SUBS_USED) && used_from != rule_season)
+        fprintf(stderr, "recomp: season subs: %s %d/%02d used %d from %d/%02d (unknown in its row)\n", file,
+                rule_season, (rule_season + 1) % 100, *used, used_from, (used_from + 1) % 100);
+    if ((mask & SEASON_SUBS_BENCH) && bench_from != rule_season)
+        fprintf(stderr, "recomp: season subs: %s %d/%02d bench %d from %d/%02d (unknown in its row)\n", file,
+                rule_season, (rule_season + 1) % 100, *bench, bench_from, (bench_from + 1) % 100);
     if (!(mask & SEASON_SUBS_USED)) *used = 0;
     if (!(mask & SEASON_SUBS_BENCH)) *bench = 0;
     if (cached < (int)(sizeof cache / sizeof cache[0]))

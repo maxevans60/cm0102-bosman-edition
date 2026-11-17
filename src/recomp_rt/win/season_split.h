@@ -18,13 +18,17 @@ typedef struct {
     int after;                              /* matches of each club before the split: meetings x (n - 1) */
     int parts;                              /* sections */
     int size[SEASON_LEAGUE_PARTS];          /* the clubs of each section, top first */
-    int meet[SEASON_LEAGUE_PARTS];          /* the meetings in each section */
+    int meet[SEASON_LEAGUE_PARTS];          /* the meetings in each section (gap 34: 0, a section that plays no more) */
     int rounds[SEASON_LEAGUE_PARTS];        /* the rounds of each section: meet x (size' - 1) */
     int matches[SEASON_LEAGUE_PARTS];       /* the matches of a club of each section: meet x (size - 1) */
     int rounds_max;                         /* the dates after the split */
     int matches_max;                        /* the most matches of a club after the split */
     int marker;                             /* +0x3c once the split is made: meetings + the most section meetings */
-    int halved;                             /* 1: the points are halved at the split */
+    int halved;                             /* 1: some section halves its points at the split */
+    signed char section_of_place[64];       /* the section of each place after match N (0-based), -1 past n */
+    char points[SEASON_LEAGUE_PARTS];       /* gap 34: each section's points at the split: 'h' halved, 'k' kept, 'z'
+                                             * zero, 'b' zero and 3 for its top club; 0 for all as +halved */
+    int halve[SEASON_LEAGUE_PARTS];         /* 1: the section halves its points (rounded up) */
 } SeasonSplit;
 
 /* 1 when a league object of a grown file with n clubs and the row's meetings plays a split this edition (the row
@@ -39,6 +43,9 @@ int season_split_matches(uint32_t obj, const char *file, int n, int meetings);
 /* After League::update_for_date 0x6847c0 of any league: makes the split on the first day that every club has
  * played N matches. */
 void season_split_update(uint32_t obj);
+
+/* 1 while the split deletes the section stage obj (made at the split; its fixtures stay with the parent). */
+int season_split_deleting(uint32_t obj);
 
 /* After League::load_from_temp_file 0x687b10 (season_load.c): a league loaded after its split takes the table
  * order of its sections again (+0xa3 is not in the save, as ScoPrm's load sets it at 0x7f0bf1..0x7f0c08). */

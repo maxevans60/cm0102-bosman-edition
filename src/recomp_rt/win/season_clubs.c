@@ -2,12 +2,14 @@
  * division pointer (+0x57) of club records in the game's memory, and only in a season game. */
 #include "win.h"
 #include "season.h"
+#include "season_mls.h"
 #include "season_clubs.h"
 #include "season_second_teams.h"
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
 #include "season_tur_groups.h"
+#include "season_pol_first.h"
 #include "season_arg_zones.h"
 #include "season_names.h"
 #include "season_records.h"
@@ -181,6 +183,11 @@ static uint32_t planned_division(uint32_t at)
     return moves_club[i].div;
 }
 
+uint32_t season_clubs_planned_division(uint32_t club)
+{
+    return planned_division(club);
+}
+
 /* One division of the game. */
 typedef struct {
     uint32_t at, nation;
@@ -284,6 +291,12 @@ static int class_size(const char *name, int season)
 {
     int new_division = season_divisions_class_size(name, season);   /* slice 20 */
     if (new_division >= 0) return new_division;
+    int mls = season_mls_division_size(name, season);                /* gap row 7: the MLS of real life */
+    if (mls >= 0) return mls;
+    if (!strncmp(name, "Polish First Division", 52)) {                 /* issue 92: one table of 14, 16 or 18 */
+        int one_table = season_pol_first_clubs(season);
+        if (one_table > 0) return one_table;
+    }
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
         if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
             int table = season_sizes_clubs(CLASS_SIZE[k].file, season);
@@ -293,7 +306,24 @@ static int class_size(const char *name, int season)
     /* A class that counts the clubs of its data plays the count of its row with the sizes on (0.7.2 slice 13): the
      * 2013 list holds 8 Irish First Division clubs, and the 3.9.68 data 10. Off, the data's count stays. */
     if (!strncmp(name, "Irish First Division", 52)) return season_sizes_data_clubs("ire_first", season);
+    /* Item 260: the Irish Premier Division too (IrePrm takes 10 or 12). Without a count the division kept the
+     * database's 12 after its list of 10, in a 2003 or 2004 start. */
+    if (!strncmp(name, "Irish Premier Division", 52)) return season_sizes_data_clubs("ire_prm", season);
     return -1;
+}
+
+/* Item 260: the season of the lists of a division in a start season. The lists are kept by the season of the rules
+ * table row ("2004 Irish Premier Division" holds the clubs of the real 2005, row 2004 of ire_prm), and a League of
+ * Ireland edition plays the row whose real season begins in its year (season_sizes_edition: edition 2004 plays row
+ * 2003, real 2004). So an Irish division takes the list of its edition's row; any other division the list of the
+ * season. With the sizes off the season stays. The club records of a division follow the same season
+ * (season_records_merge). */
+int season_clubs_list_season(const char *division, int season)
+{
+    if (!season_sizes_on()) return season;
+    if (!strncmp(division, "Irish Premier Division", 52)) return season_sizes_edition("ire_prm", season);
+    if (!strncmp(division, "Irish First Division", 52)) return season_sizes_edition("ire_first", season);
+    return season;
 }
 
 /* The file of a division's class, or NULL. */
@@ -556,7 +586,7 @@ static void move_clubs(int season)
 {
     int first = -1, last = -1;
     for (int i = 0; i < nrows; i++)
-        if (rows[i].season == season) {
+        if (rows[i].season == season_clubs_list_season(rows[i].division, season)) {
             if (first < 0) first = i;
             last = i;
         }
@@ -640,7 +670,7 @@ static void move_clubs(int season)
     for (int r = first; r <= last; r++) {
         by_list[r - first] = -1;
         to_div[r - first] = -1;
-        if (rows[r].season != season) continue;
+        if (rows[r].season != season_clubs_list_season(rows[r].division, season)) continue;
         if (!season_divisions_list_on(rows[r].division, season)) continue;     /* slice 20 */
         int t = find_division(div, ncomps, rows[r].division);
         if (t < 0) {
@@ -1034,5 +1064,6 @@ RT_WRAP(00524d70, trim_staff_tables)
     const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
     if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
     if (season_game_changes()) season_records_fill(season_start_year());     /* slice 15b: after the moves */
+    if (season_game_changes()) season_sizes_cro_new_game(season_start_year());   /* open item 255 */
     o_00524d70();
 }

@@ -20,9 +20,7 @@
 2003	clubs	oceania_nations (OFC Nations Cup), row int-continental-32: game 0, table 6 (6)
 2003	clubs	pol_first (I liga), row gre-pol-cro-192: game 8, table 14 (14)
 2003	clubs	por_cup (Taça de Portugal), row por-24: game 164, table 228 (228)
-2003	clubs	rus_first (Russian First Division), row rus-tur-30: game 18, table 22 (22)
 2003	clubs	spa_cup (Copa del Rey), row spa-23: game 83, table 81 (81)
-2003	clubs	tur_second (Second League Category A), row rus-tur-192: game 20, table 18 (18)
 2003	clubs	tur_second_b (Second League Category B), row rus-tur-219: game 10, table 51 (51)
 2003	clubs	usa_mls (Major League Soccer), row arg-usa-219: game 4, table 10 (10)
 2003	clubs	usa_open_cup (Lamar Hunt U.S. Open Cup), row arg-usa-273: game 32, table 40 (40)
@@ -38,7 +36,7 @@
 2003	down	wel_first (Welsh Premier League), row wal-nir-irl-54: game 0 (+0 play-off places), table 1 (1 (pos 17))
 2003	meetings	ire_first (League of Ireland First Division), row wal-nir-irl-67: game 4, table 3
 2003	meetings	ire_prm (League of Ireland Premier Division), row wal-nir-irl-66: game 3, table 4
-2003	meetings	kor_league (K League), row aus-jap-kor-327: game 3, table 1
+2003	meetings	kor_league (K League), row aus-jap-kor-327: game 3, table 2
 2003	no_row	friendly (Friendly): no table row
 2003	no_row	record_utils ('B' International): no table row
 2003	no_row	record_utils (Reserve): no table row
@@ -69,8 +67,6 @@
 2003	rounds	ire_first (League of Ireland First Division), row wal-nir-irl-67: game 36, table 33 (3 meetings, zones -, extra 0)
 2003	rounds	ire_prm (League of Ireland Premier Division), row wal-nir-irl-66: game 33, table 36 (4 meetings, zones -, extra 0)
 2003	rounds	pol_first (I liga), row gre-pol-cro-192: game 14, table 26 (2 meetings, zones -, extra 0)
-2003	rounds	rus_first (Russian First Division), row rus-tur-30: game 34, table 42 (2 meetings, zones -, extra 0)
-2003	rounds	tur_second (Second League Category A), row rus-tur-192: game 38, table 34 (2 meetings, zones -, extra 0)
 2003	up	pol_first (I liga), row gre-pol-cro-192: game 4 (+0 play-off places), table na (n/a)
 2003	up	tur_second_b (Second League Category B), row rus-tur-219: game 0 (+2 play-off places), table 3 (3)
 2003	up	usa_mls (Major League Soccer), row arg-usa-219: game 1 (+0 play-off places), table na (n/a (closed league))

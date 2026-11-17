@@ -57,6 +57,7 @@ void season_comps_reset(void);                         /* slice 26: season_comps
 extern const SeasonRuleKind season_kind_playoffs;      /* slice 19: season_playoffs.c */
 extern const SeasonRuleKind season_kind_intl;
 extern const SeasonRuleKind season_kind_ita_serie_c;  /* slice 20b: season_divisions_ita.c */
+extern const SeasonRuleKind season_kind_calendar;     /* gap row 2 of 0.7.2: season_calendar_game.c */
 static const SeasonRuleKind season_kind_test;
 static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_comps,                 /* slice 26: new competitions (season_comps.h), first */
@@ -74,6 +75,7 @@ static const SeasonRuleKind *const season_rule_kinds[] = {
     &season_kind_playoffs,              /* slice 19: promotion play-offs of leagues with none (after sizes) */
     &season_kind_intl,                  /* slice 27: international competitions (season_intl.c) */
     &season_kind_divisions,             /* slice 20: new divisions (season_divisions.c) */
+    &season_kind_calendar,              /* gap row 2 of 0.7.2: the Irish calendar move (season_calendar.h) */
     &season_kind_test,                  /* test only: RECOMP_SEASON_CHANGE_TEST=1 (below) */
 };
 #define KIND_COUNT ((int)(sizeof season_rule_kinds / sizeof season_rule_kinds[0]))
@@ -201,6 +203,17 @@ int season_change_entry_comps(int entry, uint32_t *out, int max)
     for (int32_t k = 0; readable(arr) && k < count && k < 256; k++)
         n = add_unique(out, n, max, rd32(g_mem, arr + 4u * (uint32_t)k));
     return n;
+}
+
+int season_change_start_day(uint32_t comp)
+{
+    uint32_t objs[256];
+    for (int e = 0; comp && e < ENTRY_COUNT; e++) {
+        int n = season_change_entry_comps(e, objs, 256);
+        for (int i = 0; i < n; i++)
+            if (objs[i] == comp) return (int16_t)rd16(g_mem, entry_at(e) + ENTRY_DAY);
+    }
+    return -1;
 }
 
 int season_change_comps(uint32_t *out, int max)
