@@ -267,6 +267,12 @@ def league_playoffs():
 
 
 
+# Open item 259: the pairs whose play-off is played between the two divisions (the lower class's stage, season_sizes.c
+# PLAYOFF_PAIRS) and whose places set_places sets. Their rows count only the direct places. Northern Ireland is a
+# fixed exchange. The places of Ireland are an open item of their own, so neither is here.
+CROSS_PLAYOFF = {"nor_prm", "nor_first", "swe_prm", "swe_first"}
+
+
 def two_winners_first(r):
     """0.6.2 open item 63: 1 for a row whose 4 play-off places, just below its direct places, are two ties whose
     winners both go up (Série B from 2025: up 2, places 3 to 6), else 0. Gap row 56 (0.7.2): the game plays the two
@@ -433,11 +439,28 @@ def differences(seasons, comps, rows):
                 game = "/".join(str(v) for v in values)
                 out.add((season, key, f"{label}: game {game}, table {r[key]} ({r[key + '_text'][:80]})"))
         if c["kind"] == "league" and isinstance(r["tier"], int):     # a division, not a group tournament
+            # The places of the row's edition. A calendar-year row (real season "2007" for 2006/07) is the edition of
+            # the end line: at the start of 2006/07 the Allsvenskan object still plays 2006 (year 2006), at its end
+            # 2007 (season_sizes_edition, season_sizes.c, reads the rows in the same way).
+            real = str(r.get("real_season", ""))
+            c = next((x for x in both if real.isdigit() and x["year"] == int(real)), c)
+            # Item 286: edition Y of the Argentine second division plays row Y (season_league.c edition_is_year), the
+            # real season that ends in it ("2016" for row 2015). Its object moves on after the start line (14 July),
+            # so that line of season Y still holds edition Y - 1 and the end line holds edition Y, with row Y's places.
+            if c["file"] == "arg_second":
+                c = next((x for x in both if x["year"] == r["season"]), c)
             for key, extra in (("up", "playoff_up"), ("down", "playoff_down")):
                 want = r[key]
-                if want == "na" and c[key] == 0:
+                # A top division (no division above, -1) sends nobody up: the class's up places of the Série A (4 in
+                # 2001/02) or the MLS (1) only mark rows.
+                if want == "na" and (c[key] == 0 or (key == "up" and c.get("above") == -1)):
                     continue
                 accept = {c[key], c[key] + (1 if c[extra] else 0), c[key] + c[extra]}
+                # Open item 259: the play-off of these pairs is between the two divisions, so no club surely moves
+                # through it and the row counts the direct places only (nor_prm 2005 "13th-14th (2)" and the 12th
+                # in the play-off). season_sizes.c set_places reads them in the same way.
+                if c["file"] in CROSS_PLAYOFF:
+                    accept = {c[key]}
                 # 0.6.2 open item 63: two ties whose winners both go up, 4 places just below the direct places (Série B
                 # from 2025). The game plays them (gap row 56), or with no stage array sends both winners' places up
                 # directly (Q247, season_playoffs_winners_up): the row's places and 2. Gap row 57: the two finalists
@@ -1051,7 +1074,9 @@ def main(argv):
         last = int(arg(argv, "--last", 2027))
         nations = arg(argv, "--nations", "england")
         words = [x.strip().lower().replace("_", " ") for x in nations.split(",")]
-        names = [next(n for n in NATION_ROWS if n.lower() == w.lstrip("-")) for w in words if w != "all"]
+        # A nation below the first view (Turkey) is a word too: the clicks take NATION_ROWS_BELOW.
+        names = [next(n for n in NATION_ROWS + NATION_ROWS_BELOW if n.lower() == w.lstrip("-"))
+                 for w in words if w != "all"]
         nations = (["all"] + names) if words[0] == "all" else names
         if nations[0] != "all" and "England" not in nations:
             nations = ["England"] + nations                      # Arsenal: England stays selected

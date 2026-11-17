@@ -51,8 +51,14 @@ static const SeasonRule *starting_row(const char *file, int year)
 /* The Argentine Primera plays over two years (August to June, ArgPrm::create_schedule 0x404570: the Apertura from
  * August at 0x404609, the Clausura from February at 0x404e34), while its rows hold calendar-year seasons from 2014
  * (row 2014 "2015", row 2015 "2016"). Edition Y plays row Y, the real season that ends in it, so every row plays
- * once: the 2016 tournament is edition 2015 (slice 15 fix, lead 15 November 2026; kept at the merge of gap row 2). */
-static int edition_is_year(const char *file) { return file && !strcmp(file, "arg_prm"); }
+ * once: the 2016 tournament is edition 2015 (slice 15 fix, lead 15 November 2026; kept at the merge of gap row 2).
+ * The second division (ArgSecond) plays in the same game season and has the same rows from
+ * 2014 (row 2014 "2015", row 2020 "2021"), and its clubs go up and down with the Primera's in one exchange (the
+ * Primera's chain 0x4067f0), so its editions take the same rows (item 286). */
+static int edition_is_year(const char *file)
+{
+    return file && (!strcmp(file, "arg_prm") || !strcmp(file, "arg_second"));
+}
 
 const SeasonRule *season_league_edition_row(const char *file, int year)
 {
