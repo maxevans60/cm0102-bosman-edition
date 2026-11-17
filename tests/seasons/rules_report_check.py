@@ -1024,7 +1024,9 @@ def main(argv):
         last = int(arg(argv, "--last", 2027))
         nations = arg(argv, "--nations", "england")
         words = [x.strip().lower().replace("_", " ") for x in nations.split(",")]
-        names = [next(n for n in NATION_ROWS if n.lower() == w.lstrip("-")) for w in words if w != "all"]
+        # A nation below the first view (Turkey) is a word too: the clicks take NATION_ROWS_BELOW.
+        names = [next(n for n in NATION_ROWS + NATION_ROWS_BELOW if n.lower() == w.lstrip("-"))
+                 for w in words if w != "all"]
         nations = (["all"] + names) if words[0] == "all" else names
         if nations[0] != "all" and "England" not in nations:
             nations = ["England"] + nations                      # Arsenal: England stays selected
