@@ -6,19 +6,18 @@ CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes 
 
 Leagues play their real number of clubs, meetings and dates in a season game. This release also fixes loans on the season databases, history years, the Tactics click and the rules of several nations. There are no new lines in `settings.txt`.
 
-A season game saved by 0.7.2 does not load safely in 0.7.1. Saves from 0.7.1 and earlier load in 0.7.2. A game with changing rules on takes the new league sizes at its next season change.
+A season game saved by 0.7.2 does not load safely in 0.7.1. Saves from 0.7.1 and earlier load in 0.7.2.
 
 ### Real league sizes
 
-- In a season game each league plays the club count, the meetings and the dates of its real season. Before, a league played the club count of its class in the original game. So Argentina, Serie A, Serie B, the Eerste Divisie, J1, J2, the K League and 16 other leagues held fewer clubs than in real life, and some leagues held more clubs than they have because a cup needed them. A league of any size now builds its table and its fixture dates from its row in the rules table. Each league also plays its real halves, zones, splits and periods.
-- New game and size step: a new game fills each division to the count of its row. With changing rules on, a division reaches its new size at the season change, through promotion and relegation, in the year when the real league changed size. With changing rules off, the sizes of the start season stay. A 0.7.1 save reaches the real size at its next season change.
+- In a season game each league plays the club count, the meetings and the dates of its real season in the season it starts in. Before, a league played the club count of its class in the original game. So Argentina, Serie A, Serie B, the Eerste Divisie, J1, J2, the K League and 16 other leagues held fewer clubs than in real life, and some leagues held more clubs than they have because a cup needed them. A league of any size now builds its table and its fixture dates from its row in the rules table. Each league also plays its real halves, zones, splits and periods.
 - Cups of every nation in the set take the clubs of the real divisions, so no cup leaves out or doubles a club. Examples: the Welsh League Cup counts the clubs of one group, and the French Lower Division fills its 40 places.
 - England and France: the Conference takes its places from the rows, with a six-club play-off from 2017/18 and four down places in 2019/20. Scotland has its cross play-offs from 2005/06 and its Premiership ladder from 2013/14.
 - Italy: Serie A holds 20 clubs and 38 rounds from 2004/05, Serie B has its top-eight knockout in 2002 to 2005, and the C1 play-outs and the Serie A tie-break zones follow real life.
 - The Netherlands, Belgium, Denmark and Finland: each league plays its real count and form. The Belgian First Division plays Play-off I with halved points.
 - Croatia and Greece: the championship group and the Croatian sections follow the real seasons.
 - Russia and Turkey: the Russian league moves to an autumn-to-spring season through one long 2011/12 season, and the Turkish leagues play their real counts.
-- Northern Ireland and Ireland: the Irish Premier Division and First Division hold their real counts from 2002, the League of Ireland moves to a calendar-year season in 2003, and the Northern Irish First Division takes its clubs from the lower division.
+- Ireland: the Irish Premier Division and First Division hold their real counts from 2002, the League of Ireland moves to a calendar-year season in 2003.
 - Japan and Korea: J1 and J2 play their real counts and meetings, and the K League plays its splits and its exchange of clubs between divisions.
 - Argentina: the Primera plays the form of each season. It has halves, one table, or two zones of 15 with the inter-zone rounds, 30 clubs in 2025. The second division and the promotion play-offs follow the same rules.
 - Argentina: a second division edition plays the row of its own year, and the 2019/20 season has no relegation, as in real life (item 286).
@@ -29,7 +28,7 @@ A season game saved by 0.7.2 does not load safely in 0.7.1. Saves from 0.7.1 and
   - Croatia, Greece, J1 and J2, the Veikkausliiga and the A-League: in a few seasons before a count change the places of promotion, relegation or play-off differ from real life. The counts are right, and 0.7.1 had the same lines (items 281 to 285). The Veikkausliiga plays a relegation play-off where the rows give none, and the A-League holds 13 clubs in every season from 2009/10.
   - Argentina: the Primera in 2013 and 2016 to 2018 and the second division in 2001/02 and 2018/19 have play-off or relegation details that differ from real life (item 286).
   - MLS: the club count follows the database, not the row. A 2001 start keeps the database's 12 clubs in 2002 (item 269).
-  - Portugal: with the extra divisions off, a 2015 start sends the Segunda Liga's surplus of two clubs to no division (item 278). The size step copies a club's zone only for the Segunda Divisão B and the Turkish Category B (item 279).
+  - A division does not change its size at a season change, and a new game does not fill each division to the count of its row. The size step, the Segunda B and Turkish zones, the places of Norway, Sweden, Brazil and Portugal through real rows (items 246 to 249 and 259), the Northern Irish sizes and places (items 271 and 272) and items 278, 279 and 287 wait for 0.7.3. They were reverted because the Northern Irish leagues did not start 2019/20 in a 2018 start (item 288).
 - Not in 0.7.2: regional groups of one division, the Danish 2nd Divisions, the Finnish Ykkönen as one division and new divisions. A few relegation play-offs over a four-club play-off are noted for 0.7.3.
 
 ### Seasons, leagues and cups
@@ -48,7 +47,6 @@ A season game saved by 0.7.2 does not load safely in 0.7.1. Saves from 0.7.1 and
 - The OFC preliminary round is built once and waits for the day after its section's season start, so a game with a level two-leg tie no longer stops at "Cup..cpp 1450" (item 245).
 - New players of Wales and Ireland join English clubs in the October 2026 data, where no English club has a reputation of 2 or less. Before, they found no club (item 262).
 - A player on loan to his club's own B side is no longer moved between the first team and the reserves by the computer. Before, a Cottbus player on loan to Cottbus II was added to the squad twice and the game stopped with "match_man..cpp 1225" on day 208 of 2007 (item 280).
-- The Segunda Divisão B and the Spanish Segunda B keep their zones when the size step moves clubs, so a 2001 game with Portugal no longer stops with "por_second_b..cpp 419" at the 2003/04 season change (item 287).
 - A reserve side with fewer than 11 fit players in a normal game keeps fewer players back, so the game no longer stops with "match_eng..cpp 612" (item 237). A friendly with nine youths no longer stops it with "match_eng..cpp 652" (item 262).
 
 ### Databases and new games

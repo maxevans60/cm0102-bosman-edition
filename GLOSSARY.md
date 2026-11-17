@@ -280,10 +280,6 @@ _Avoid_: rule handler, plugin
 The row of the rules table that gives a league its club count, meetings, halves, zones, splits and periods for one season. In a season game the shared engine builds the table and the fixture dates from it (0.7.2). The base game keeps the class's counts.
 _Avoid_: league class count (that is the original's count), league format
 
-**Size step**:
-The change at a season change that brings a division to the club count of its new row, through promotion and relegation. It runs only with changing rules on (0.7.2).
-_Avoid_: resize, league expansion
-
 **Bench**:
 The named substitutes of a match. The rules table column `bench` holds the count. The match engine holds at most 9.
 _Avoid_: reserves, subs list
