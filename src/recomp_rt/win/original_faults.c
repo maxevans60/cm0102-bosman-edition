@@ -1,7 +1,7 @@
 /* Faults of the original that long games reach (0.6.2 slice 11, tools/recomp/original_faults.py). The fixes act in
  * every game, the base game too (Q23, Q24, Q27). The test switch RECOMP_ORIGINAL_FAULTS turns them off: "keep" all
  * of them, "keep:" with a list of groups some of them ("keep:money,age"). The groups are managers, money, age,
- * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers and squad_moves. */
+ * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, squad_moves and squad_loans. */
 #include "win.h"
 #include "season_intl.h"
 #include "../rt.h"
@@ -16,7 +16,7 @@
 #define NATION_COUNT 0xae2350u
 
 enum { MANAGERS, MONEY, AGE, OLYMPICS, IRE_SUPER, NSL, HOLIDAY, CALLUPS, WC_POTS, CONFED, CLUB_REGULARS, MATCH_NUMBERS,
-       SQUAD_MOVES, GROUPS };
+       SQUAD_MOVES, SQUAD_LOANS, GROUPS };
 
 static int fixes_on_group(int group)
 {
@@ -24,7 +24,7 @@ static int fixes_on_group(int group)
     if (on[0] < 0) {
         static const char *const names[GROUPS] = {"managers", "money", "age", "olympics", "ire_super", "nsl",
                                                    "holiday", "callups", "wc_pots", "confed", "club_regulars",
-                                                   "match_numbers", "squad_moves"};
+                                                   "match_numbers", "squad_moves", "squad_loans"};
         const char *v = getenv("RECOMP_ORIGINAL_FAULTS");
         if (v && strcmp(v, "keep") && strncmp(v, "keep:", 5))
             fprintf(stderr, "recomp: RECOMP_ORIGINAL_FAULTS=%s is not keep or keep:<groups>: every fix acts\n", v);
@@ -37,7 +37,7 @@ static int fixes_on_group(int group)
                 fprintf(stderr,
                         "recomp: RECOMP_ORIGINAL_FAULTS: unknown group %.*s (managers, money, age, olympics, "
                         "ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, "
-                        "squad_moves)\n",
+                        "squad_moves, squad_loans)\n",
                         (int)n, p);
         }
         for (int g = 0; g < GROUPS; g++) {
@@ -768,7 +768,7 @@ void rt_squad_move_test(void)
     fprintf(stderr, "recomp: squad move test: no senior club with a one-way B side and a one-contract player at placement 4\n");
 }
 
-/* A loan to the club's own linked B side (open item 280, group squad_moves). CONTRACT_MANAGER::sign_loan_contract
+/* A loan to the club's own linked B side (open item 280, group squad_loans). CONTRACT_MANAGER::sign_loan_contract
  * 0x4d01e0 sets bit 0x40 of the player's own contract +0x35 at 0x4d0380..0x4d03d9: for a club with a linked B side
  * (database_club_has_reserve_squad 0x542740 false, club_get_linked_b_team 0x540a50 at 0x4d03ac) it clears the bit
  * while the player is at his own club (0x4d03b8..0x4d03c8). It does not look at the loan club. So a loan from the club
@@ -785,7 +785,7 @@ RT_WRAP(004d01e0, squad_loan)
     uint32_t manager = cpu.ecx, terms = rt_arg(0);
     uint32_t sid = terms ? rd32(g_mem, terms) : 0xffffffffu, lid = terms ? rd32(g_mem, terms + 4u) : 0xffffffffu;
     o_004d01e0();
-    if (rt_unwinding || !fixes_on_group(SQUAD_MOVES) || !manager || sid >= rd32(g_mem, STAFF_COUNT) ||
+    if (rt_unwinding || !fixes_on_group(SQUAD_LOANS) || !manager || sid >= rd32(g_mem, STAFF_COUNT) ||
         lid >= rd32(g_mem, CLUB_COUNT))
         return;
     int32_t index = (int32_t)rd32(g_mem, rd32(g_mem, CONTRACT_INDEX) + sid * 0x4fu);

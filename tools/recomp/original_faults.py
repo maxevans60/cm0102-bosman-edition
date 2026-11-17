@@ -2,7 +2,7 @@
 src/recomp_rt/win/original_faults.c). The fixes act in every game, the base game too. The test switch
 RECOMP_ORIGINAL_FAULTS=keep turns them all off. "keep:managers", "keep:money", "keep:age", "keep:olympics",
 "keep:ire_super", "keep:nsl", "keep:holiday", "keep:callups", "keep:wc_pots", "keep:confed", "keep:club_regulars",
-"keep:match_numbers" or "keep:squad_moves" (or a list: "keep:money,age") turns off one group or more.
+"keep:match_numbers", "keep:squad_moves" or "keep:squad_loans" (or a list: "keep:money,age") turns off one group or more.
 
 National managers (fault 26, Q23). `club_can_be_managed` 0x544820 takes a senior national team (club id from club
 count - 2 x nation count to club count - nation count, 0x544835..0x544857) only when its nation had more than 150
@@ -227,7 +227,7 @@ the registers: at placement 4 the path leaves from the club asked about (edi = e
 to it (ebp = ebx, 0x4cbed5). A bit that holds junk from an old save is then right after one move. A player with no
 contract (index below 0) has no bit to set.
 
-A loan to the linked B side (open item 280, same group). CONTRACT_MANAGER::sign_loan_contract 0x4d01e0 sets the bit
+A loan to the linked B side (open item 280, group squad_loans). CONTRACT_MANAGER::sign_loan_contract 0x4d01e0 sets the bit
 of the player's own contract at 0x4d0380..0x4d03d9. For a club with a linked B side it clears the bit while the player
 is at his own club (0x4d03a3..0x4d03d6) and does not look at the loan club. So a loan from the senior side to its own
 B side leaves the bit clear, the placement still says 4, and the next assessment moves him to the B side again: the
