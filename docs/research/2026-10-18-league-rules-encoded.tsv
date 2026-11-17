@@ -2368,7 +2368,7 @@ wal-nir-irl-16	2001	ire_prm	1	12	-	9	-	ok	-	split	3	0	-	0	0	-	33
 wal-nir-irl-17	2001	ire_first	2	9	2	-	-	ok	-	split	4	0	-	0	0	-	36
 wal-nir-irl-29	2002	wel_first	1	18	-	-	-	ok	-	split	2	0	-	0	0	-	34
 wal-nir-irl-35	2002	nir_prm	1	12	-	12	-	ok	after 33: 6+6, points kept	split	3	0	-	0	0	1+1	33
-wal-nir-irl-36	2002	nir_first	2	8	-	5	-	ok	-	split	4	0	-	0	0	-	28
+wal-nir-irl-36	2002	nir_first	2	8	5	-	-	ok	-	split	4	0	-	0	0	-	28
 wal-nir-irl-41	2002	ire_prm	1	10	-	9	-	ok	-	transition	3	0	-	0	0	-	27
 wal-nir-irl-41b	2002	ire_prm	1	10	-	9	-	ok	-	calendar	4	0	-	0	0	-	36
 wal-nir-irl-42	2002	ire_first	2	12	2-4	-	-	ok	-	transition	2	0	-	0	0	-	22
