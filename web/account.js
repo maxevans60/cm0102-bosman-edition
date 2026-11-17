@@ -342,7 +342,7 @@ export function mountAccount({ log, toast, isRunning, isStandalone, leave }) {
   let me = null, cloud = null;
   const listeners = new Set();
   const say = (text, bad = false) => { note.textContent = text; note.className = bad ? 'small bad' : 'small'; };
-  const buyable = () => Boolean(me?.offer?.paddle || me?.offer?.url);
+  const buyable = () => Boolean(me?.offer?.coffee || me?.offer?.paddle || me?.offer?.url);
 
   function render() {
     const u = me?.user, offer = me?.offer;
@@ -366,21 +366,31 @@ export function mountAccount({ log, toast, isRunning, isStandalone, leave }) {
       ${u.admin ? '<button id="account-admin">Admin panel</button>' : ''}</div>`;
     if (u.cloud) {
       const info = cloud?.info();
-      const term = u.cloudFrom === 'subscription'
+      const term = u.cloudFrom === 'subscription' || u.cloudFrom === 'membership'
         ? (u.cancelAt ? `Canceled: Cloud Saves end on ${esc(day(u.cancelAt))}.` : u.until ? `Renews every month; paid until ${esc(day(u.until))}.` : '')
         : offer?.free ? '' : 'Given to this account.';
+      const member = u.cloudFrom === 'membership' && offer?.url
+        ? `<div class="row"><button id="account-member">Your membership</button>
+          <span class="small">on Buy Me a Coffee: change, pause or cancel it there</span></div>` : '';
       body.innerHTML = `${signedIn}<p class="small">Cloud Saves are on. Each save you make here goes to the cloud, and when the
         game starts, this browser gets the saves you made elsewhere.${info?.count != null ? ` ${info.count} of ${info.max} saves are in the cloud.` : ''}</p>
         <p class="small">${term} ${cloud?.stopped ? 'Cloud saves stopped: sign in again.' : info?.last ? `Last sync: ${esc(when(info.last))}.` : ''}</p>
         ${u.manage ? '<div class="row"><button id="account-manage">Manage subscription</button><span class="small">cancel, card, invoices</span></div>' : ''}
-        ${own}${legal}`;
+        ${member}${own}${legal}`;
       if (u.manage) $('account-manage').onclick = manage;
+      if (member) $('account-member').onclick = () => window.open(offer.url, '_blank', 'noopener');
     } else {
       body.innerHTML = `${signedIn}<p class="small">Your saves stay in this browser, and Saved games downloads them as files.</p>
         ${plansHtml(offer, me.maxSaves)}
-        ${buyable() ? `<div class="row"><button class="primary" id="account-buy">Get Cloud Saves · ${esc(offer.price)}</button></div>
-          <p class="small">Renews every month; cancel any time. A full refund within 14 days of any payment. Payment by Paddle.</p>`
-          : '<p class="small">Cloud Saves are not on sale yet.</p>'}
+        ${u.member && !u.member.on && u.member.level && offer?.coffee
+          ? `<p class="small bad">Your Buy Me a Coffee membership (${esc(u.member.level)}) does not include Cloud Saves: change its level on Buy Me a Coffee.</p>` : ''}
+        ${!buyable() ? '<p class="small">Cloud Saves are not on sale yet.</p>'
+          : offer.coffee ? `<div class="row"><button class="primary" id="account-buy">Become a member · ${esc(offer.price)}</button></div>
+          <p class="small">Cloud Saves come with a Buy Me a Coffee membership. Join with this account's email,
+          <b>${esc(u.email)}</b>: Cloud Saves then turn on by themselves. Renews every month; cancel any time. A full refund
+          within 14 days of any payment. Joined with another email? Send us a report (the Report button) and we will link it.</p>`
+          : `<div class="row"><button class="primary" id="account-buy">Get Cloud Saves · ${esc(offer.price)}</button></div>
+          <p class="small">Renews every month; cancel any time. A full refund within 14 days of any payment. Payment by Paddle.</p>`}
         ${own}${legal}`;
       if (buyable()) $('account-buy').onclick = buy;
     }
@@ -411,8 +421,37 @@ export function mountAccount({ log, toast, isRunning, isStandalone, leave }) {
     toast('The payment is done. Cloud Saves turn on within a few minutes: reload the page if they do not.', { kind: 'bad', ms: 10000 });
   }
 
+  // While the player joins on Buy Me a Coffee (another tab): Buy Me a Coffee tells the server, and the page asks every
+  // few seconds for 20 minutes, and at once when the player comes back to this tab.
+  let memberWait = null;
+  function waitForMember() {
+    if (memberWait) return;
+    const until = Date.now() + 20 * 60e3;
+    const check = async () => {
+      if (!memberWait) return;
+      await refresh();
+      if (me?.user?.cloud) {
+        stop();
+        toast('Thank you for joining! Cloud Saves are on: your saves go to the cloud from now on.', { ms: 8000 });
+        log('page: Cloud Saves on after joining');
+      } else if (Date.now() > until) stop();
+    };
+    const seen = () => { if (document.visibilityState === 'visible') check(); };
+    const timer = setInterval(check, 5000);
+    const stop = () => { clearInterval(timer); document.removeEventListener('visibilitychange', seen); memberWait = null; };
+    document.addEventListener('visibilitychange', seen);
+    memberWait = { stop };
+  }
+
   async function buy() {
     const offer = me?.offer;
+    if (offer?.coffee) {
+      window.open(offer.url, '_blank', 'noopener');
+      say(`Join on Buy Me a Coffee with ${me.user.email}. Cloud Saves turn on here a moment after.`);
+      log('page: membership page opened');
+      waitForMember();
+      return;
+    }
     if (!offer?.paddle) { if (offer?.url) window.open(offer.url, '_blank', 'noopener'); return; }
     say('Opening the checkout…');
     try {

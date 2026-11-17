@@ -406,8 +406,9 @@ store does not answer a page
 `incoming/` go after a day.
 
 **Who has cloud saves.** The accounts in `CM_CLOUD_USERS`, every account with `CM_CLOUD_FOR=everyone`, and the
-accounts whose record in the store (`accounts/<id>.json`) says `"plan": "cloud"` until `planUntil`: a Paddle
-subscription sets that (Payments, below), or you by hand in the Tigris console. And the accounts an admin gave Cloud
+Google emails with a running Buy Me a Coffee membership of a level that gives them (`members/<sha256 of the
+email>.json`, Payments, below), the accounts whose record in the store (`accounts/<id>.json`) says `"plan": "cloud"`
+until `planUntil`: an older Paddle subscription sets that, or you by hand in the Tigris console. And the accounts an admin gave Cloud
 Saves on the admin page (Give, in the Cloud Saves column of People): the record then holds `"given": { by, at }`, a
 field of its own that Paddle's events leave as it is, and Take back removes it. A gift is as good as a payment: the
 player's Account dialog says "Given to this account", from the page's next load.
@@ -415,13 +416,35 @@ player's Account dialog says "Given to this account", from the page's next load.
 **What players see.** The start box of a first visit, the Account dialog and Saved games show the two plans: Free
 (the whole game, saves in the browser, download and upload) and Cloud Saves (`CM_PRICE`, "$5 a month"), with the
 links to `/pricing`, `/terms`, `/refunds` and `/privacy`. Signing in alone changes nothing; it is how cloud saves
-know their account. A signed-in account without Cloud Saves gets the "Get Cloud Saves · $5 a month" button, which
-opens Paddle's checkout over the page (the game keeps running). After the payment, the page turns Cloud Saves on by
-itself once Paddle's webhook has come (a few seconds), and the running game's saves go up. An account with a
-subscription has Manage subscription (Paddle's portal: cancel, card, invoices). After the first save in a browser, a
+know their account. A signed-in account without Cloud Saves gets the "Become a member · $5 a month" button and the
+email to join with; the button opens the membership page of Buy Me a Coffee in another tab (the game keeps running).
+The page then asks the server every 5 seconds for 20 minutes, and at once when the player comes back to its tab, and
+turns Cloud Saves on by itself once Buy Me a Coffee's webhook has come; the running game's saves go up. A member has a
+Your membership button (Buy Me a Coffee: change, pause, cancel); a member of a level without Cloud Saves is told so.
+An account of an older Paddle subscription keeps Manage subscription (Paddle's portal). After the first save in a browser, a
 player without Cloud Saves gets one message about them.
 
-**Payments (Paddle).** Paddle is the merchant of record: it sells the subscription, takes the payment and the sales
+**Payments (Buy Me a Coffee).** Cloud Saves are sold as a monthly membership on Buy Me a Coffee. Its webhook
+(`/api/coffee/webhook`, signed: `x-signature-sha256` is the hex HMAC-SHA256 of the body with the webhook's signing
+secret, `billing.mjs`) names the supporter's email; the server keeps the membership by that email
+(`members/<sha256 of the email>.json`: the email, the membership's id, level, state and the end of its period; no
+name, no amount), so a player may join before signing in. The account whose Google email is that email has Cloud
+Saves while the membership runs: an active one to the end of its period plus three days (for the renewal's webhook),
+one canceled for the period's end until then, a paused or canceled one none. `BMC_CLOUD_LEVELS` names the levels that
+give them (all, unset). An older event of the same membership than the last one (a retry) changes nothing; a test
+event of the dashboard (`live_mode` false) is only logged. A player who joined with another email: give Cloud Saves on
+the admin page. An account with a running membership cannot be deleted until it is canceled. In Buy Me a Coffee:
+
+1. Memberships: turn them on and make the levels (for example Supporter, Squad Player, Club Legend); the price of the
+   level with Cloud Saves goes in `CM_PRICE`.
+2. Integrations, Webhooks: a webhook `https://<your-app>.fly.dev/api/coffee/webhook` with the events
+   `membership.started`, `membership.updated`, `membership.cancelled` and `membership.paused`. Keep its signing secret.
+   Send test event: `fly logs` shows `Buy Me a Coffee test event …: the signature holds`.
+3. The settings below (`BMC_*`, `CM_COFFEE_URL`, `CM_SELLER`, `CM_CONTACT`).
+
+**Payments (Paddle, older subscriptions).** With `BMC_WEBHOOK_SECRET` set, the page sells memberships only; Paddle's
+webhook and Manage subscription keep working for the subscriptions bought through it while `PADDLE_*` stay set.
+Paddle is the merchant of record: it sells the subscription, takes the payment and the sales
 tax and VAT, and tells the server with signed webhooks (`billing.mjs`). The server keeps no payment data: the
 subscription's id, customer id and state in the account record. An active subscription gives Cloud Saves to the end
 of its billing period plus three days (for the renewal's webhook), a past-due one a week, a canceled or paused one
@@ -467,7 +490,10 @@ deleted until the subscription is canceled. In Paddle (start in the sandbox, `sa
 | `PADDLE_ENV` | `sandbox` for Paddle's sandbox; unset for real payments |
 | `PADDLE_API_KEY` | for Manage subscription; without it the button leads to paddle.net |
 | `CM_SELLER`, `CM_CONTACT` | your name (as in your Paddle account) and contact email, on the terms, refund, privacy and pricing pages |
-| `CM_UPGRADE_URL` | without Paddle: where "Get Cloud Saves" leads |
+| `CM_UPGRADE_URL` | without Buy Me a Coffee and Paddle: where "Get Cloud Saves" leads |
+| `BMC_WEBHOOK_SECRET` | the signing secret of the Buy Me a Coffee webhook; with it (and a membership page) Cloud Saves are sold as a membership |
+| `BMC_MEMBERSHIP_URL` | the membership page (`https://`); default `CM_COFFEE_URL` + `/membership` |
+| `BMC_CLOUD_LEVELS` | the membership levels that give Cloud Saves, names or ids, comma-separated (case does not matter); unset: every level |
 | `CM_CLOUD_MAX_SAVES` | the most saves an account keeps in the cloud (default 30) |
 | `CM_CLOUD_MAX_SETS` | the most data sets an account keeps in the cloud (default 5) |
 | `CM_DIRECT` | `off`: saves and data sets go through the server, not straight to the store; `on`: straight, with the bucket's CORS rules set in the store's console (the server does not set them) |
@@ -701,7 +727,9 @@ What to know about the Asyncify engine:
 - `cd web && npm test`: the server lists and serves only the clean files, the season tables and the page, and refuses
   the rest; brotli and versioned caching; the stage script and the staged server; the save logic; the layout's
   arithmetic; the sign-in (state, PKCE, a token for another app or with no verified email is refused), the cookies, the
-  cloud saves API (conflicts, limits, checks, account deletion) and the sync plan; Paddle's signatures, the
+  cloud saves API (conflicts, limits, checks, account deletion) and the sync plan; Buy Me a Coffee's signatures and
+  membership events (join, by email in any case, before the sign-in, cancel for the period's end, pause, a retry, a
+  level without Cloud Saves, a test event, the account deletion); Paddle's signatures, the
   subscription events (buy, cancel for the end of the period, a late event, the cancel), the portal link, and the
   pricing, terms, refunds and privacy pages; the save editor's model (the run code, Date.cpp dates, the ratings of
   0x544380 and 0x5442f0 and the bytes for them, a saved game read and written with only its staff and player tables
@@ -720,7 +748,8 @@ What to know about the Asyncify engine:
   Google, the S3 store (`test/fakes.mjs`, which checks every request's signature as S3 does), Paddle.js and the
   engine: the plans in the start box, the sign-in from the start box and from a small window while the game runs, the
   saves of the cloud before the game starts, a save going up, Remove, a save changed on two devices, a second device,
-  sign-out, and a free account that buys Cloud Saves while its game runs (checkout, webhook, the save goes up).
+  sign-out, a free account that buys Cloud Saves while its game runs (checkout, webhook, the save goes up), and one
+  that joins as a Buy Me a Coffee member in another tab (webhook, Cloud Saves on by themselves, Your membership).
   Needs Playwright.
 - `NODE_PATH=$(npm root -g) node web/test/editor-check.mjs`: the editors in Chromium, with a small saved game and a small
   data set in the game's formats (`test/fakes.mjs`). The save editor on a computer and a phone: Edit, search, change,

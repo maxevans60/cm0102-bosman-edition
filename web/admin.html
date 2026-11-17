@@ -85,7 +85,7 @@ const COLS = [
   ['browser', 'Browser'], ['engine', 'Engine'],
 ];
 const keyOf = (p, k) => (k === 'who' ? (p.email || p.id) : k === 'saves' || k === 'older' || k === 'sets' ? p[k]?.n ?? 0
-  : k === 'plan' ? (p.plan?.cloud ? (p.plan.from === 'subscription' ? 3 : 2) : p.kind === 'account' ? 1 : 0) : p[k] ?? '');
+  : k === 'plan' ? (p.plan?.cloud ? (p.plan.from === 'subscription' || p.plan.from === 'membership' ? 3 : 2) : p.kind === 'account' ? 1 : 0) : p[k] ?? '');
 const day = (t) => new Date(t).toLocaleDateString(undefined, { dateStyle: 'medium' });
 
 // The account's plan (the server reads each account record), and the button that gives Cloud Saves or takes back a gift.
@@ -95,6 +95,7 @@ function planCell(p) {
   if (!data.accountsOn) return '<span class="muted small">no accounts</span>';
   if (!pl) return '<span class="muted small">no record</span>';
   const what = pl.from === 'subscription' ? `paid${pl.until ? ` · to ${esc(day(pl.until))}` : ''}`
+    : pl.from === 'membership' ? `member${pl.level ? ` (${esc(pl.level)})` : ''}${pl.until ? ` · to ${esc(day(pl.until))}` : ''}`
     : pl.given ? `given by an admin${pl.givenAt ? ` · ${esc(day(pl.givenAt))}` : ''}` : pl.cloud ? 'given (server list)' : 'free';
   const button = pl.given ? `<button class="give" data-give="${esc(p.id)}" data-on="0">Take back</button>`
     : pl.cloud ? '' : `<button class="give on" data-give="${esc(p.id)}" data-on="1">Give</button>`;

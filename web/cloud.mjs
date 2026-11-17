@@ -4,18 +4,23 @@
 //
 // Who has cloud saves: CM_CLOUD_FOR=everyone gives them to every signed-in account; else the emails in CM_CLOUD_USERS
 // (comma-separated) and the accounts whose record says plan "cloud" until planUntil (accounts/<id>.json in the store:
-// set by a Paddle subscription, billing.mjs, or by hand) have them. Everyone else keeps saves in the browser only.
+// set by a Paddle subscription, billing.mjs, or by hand), the emails with a running Buy Me a Coffee membership
+// (members/..., billing.mjs) and the accounts an admin gave them to have them. Everyone else keeps saves in the browser
+// only.
 //
 // The store holds:
 //   accounts/<google id>.json            { sub, email, name, created, seen, plan, planUntil }
 //   grants/<google id>.json              { sub, email, by, at }: Cloud Saves an admin gave (the admin page)
+//   members/<sha256 of the email>.json   { email, on, until, cancelAt, id, status, level, levelId, eventAt, event, at }:
+//                                        the Buy Me a Coffee membership of an email, written by its webhook
 //   saves/<google id>/<name, base64url>.gz the save, gzip-compressed by the page; metadata raw-size and saved (ms)
 import { randomBytes } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { createGunzip } from 'node:zlib';
 import { spool, unspool } from './spool.mjs';
 import { GOOGLE, SignInError, googleFinish, googleStart, readCookies, sealer, setCookie } from './auth.mjs';
-import { PADDLE_API, accountRef, applySubscription, checkPaddleSignature, openAccountRef, portalUrl } from './billing.mjs';
+import { PADDLE_API, accountRef, applyMembership, applySubscription, checkCoffeeSignature, checkPaddleSignature, memberKey, normalEmail,
+  openAccountRef, portalUrl } from './billing.mjs';
 import { S3Error, s3FromEnv } from './s3.mjs';
 import { SAVE_HEADER, checkSave } from './saves.js';
 import { DATA_SET_FILES } from './dataset.js';
@@ -117,9 +122,11 @@ const popupPage = (ok, why) => `<!doctype html><meta charset="utf-8"><meta name=
 ${ok ? 'setTimeout(() => window.close(), 300);' : ''}</script>`;
 
 // paddle: { env, clientToken, priceIds, webhookSecret, apiKey, apiBase } to sell Cloud Saves with Paddle, or null.
+// coffee: { secret, url, levels } to sell Cloud Saves as a Buy Me a Coffee membership, or null: the webhook's signing
+// secret, the membership page, and the names or ids of the levels that give Cloud Saves (none named: every level).
 // price: how the page names the price ("$5 a month").
 export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicUrl = null, cloudFor = 'listed', cloudUsers = [],
-  upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, maxRaw = MAX_RAW, google = GOOGLE, paddle = null, price = '$5 a month', log = (t) => console.log(t),
+  upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, maxRaw = MAX_RAW, google = GOOGLE, paddle = null, coffee = null, price = '$5 a month', log = (t) => console.log(t),
   onAccountDeleted = () => {}, uploadBudget = 160 << 20, isAdmin = () => false, direct: directWanted = true, origins = ['*'],
   storeTtl = 10 * 60e3 }) {
   const seal = sealer(sessionSecret);
@@ -252,16 +259,37 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     return g;
   }
 
-  // { cloud, from: 'subscription' | 'given' | null, record, grant }. fresh: read the store, not the minute's copy.
+  // The Buy Me a Coffee membership of an email (members/..., billing.mjs), kept in memory for a minute like the record.
+  const members = new Map();
+  async function member(email, fresh = false) {
+    const e = normalEmail(email);
+    if (!coffee || !e) return null;
+    const c = members.get(e);
+    if (!fresh && c && Date.now() - c.at < 60000) return c.member;
+    const buf = await s3.getBuffer(memberKey(e));
+    const m = buf ? JSON.parse(buf.toString()) : null;
+    members.set(e, { member: m, at: Date.now() });
+    return m;
+  }
+  // Whether a membership gives Cloud Saves now: running, and of a level that gives them (BMC_CLOUD_LEVELS).
+  const levelGives = (m) => !coffee.levels.length
+    || coffee.levels.includes(String(m.levelId)) || coffee.levels.includes(String(m.level ?? '').trim().toLowerCase());
+  const memberOn = (m) => Boolean(m?.on && levelGives(m) && (!m.until || Date.parse(m.until) > Date.now()));
+
+  // { cloud, from: 'subscription' | 'membership' | 'given' | null, record, grant, member }. fresh: read the store, not
+  // the minute's copy.
   async function planOf(user, fresh = false) {
     let a = null, g = null;
     try { a = await account(user.sub, fresh); } catch (err) { log(`cloud: account ${user.sub} not read: ${err.message}`); }
     if (cloudFor === 'everyone' || users.has(user.email)) return { cloud: true, from: 'given', record: a, grant: null };
     const on = a?.plan === 'cloud' && (!a.planUntil || Date.parse(a.planUntil) > Date.now());
     if (on) return { cloud: true, from: a.paddle ? 'subscription' : 'given', record: a, grant: null };
+    let m = null;
+    try { m = await member(user.email, fresh); } catch (err) { log(`cloud: membership of ${user.sub} not read: ${err.message}`); }
+    if (memberOn(m)) return { cloud: true, from: 'membership', record: a, grant: null, member: m };
     try { g = await grant(user.sub, fresh); } catch (err) { log(`cloud: grant ${user.sub} not read: ${err.message}`); }
-    if (g || a?.given) return { cloud: true, from: 'given', record: a, grant: g ?? a.given };   // an admin gave it
-    return { cloud: false, from: null, record: a, grant: null };
+    if (g || a?.given) return { cloud: true, from: 'given', record: a, grant: g ?? a.given, member: m };   // an admin gave it
+    return { cloud: false, from: null, record: a, grant: null, member: m };
   }
 
   // The admin page (server.mjs): an account's plan, read fresh, and Cloud Saves that an admin gives or takes back.
@@ -270,7 +298,8 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     if (!a) return null;
     const p = await planOf({ sub, email: a.email }, fresh);
     return { cloud: p.cloud, from: p.from, given: Boolean(p.grant), givenAt: p.grant?.at ?? null,
-      until: p.from === 'subscription' ? a.planUntil ?? null : null };
+      until: p.from === 'subscription' ? a.planUntil ?? null : p.from === 'membership' ? p.member.until : null,
+      level: p.member?.level ?? null };
   }
   async function give(sub, on, by) {
     const a = await account(sub, true);
@@ -293,9 +322,11 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   }
   const hasCloud = async (user) => (await planOf(user)).cloud;
 
-  // What the page offers: the price, and how to buy (Paddle's checkout, or a link).
+  // What the page offers: the price, and how to buy (a Buy Me a Coffee membership, Paddle's checkout, or a link). With
+  // a membership to sell, Paddle only keeps the subscriptions bought through it.
   const offer = () => cloudFor === 'everyone'
     ? { price: 'Free with an account', free: true, paddle: null, url: null }
+    : coffee ? { price, free: false, url: coffee.url, coffee: true, paddle: null }
     : { price, free: false, url: upgradeUrl,
       paddle: paddle ? { env: paddle.env, token: paddle.clientToken, priceId: paddle.priceIds[0] } : null };
 
@@ -357,8 +388,11 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     setCookie(res, SESSION, seal.seal('s', user, SESSION_DAYS * 86400), { maxAge: SESSION_DAYS * 86400, secure: secure(req) });
     send(res, 200, { auth: true, offer: offer(), maxSaves, user: {
       email: user.email, name: user.name, picture: user.picture, cloud: p.cloud, cloudFrom: p.from,
-      until: p.from === 'subscription' ? p.record.planUntil : null, cancelAt: p.from === 'subscription' ? p.record.paddle?.cancelAt ?? null : null,
+      until: p.from === 'subscription' ? p.record.planUntil : p.from === 'membership' ? p.member.until : null,
+      cancelAt: p.from === 'subscription' ? p.record.paddle?.cancelAt ?? null : p.from === 'membership' ? p.member.cancelAt : null,
       manage: Boolean(p.record?.paddle?.customerId), ref: paddle ? accountRef(user.sub, sessionSecret) : null,
+      // A membership of a level that gives no Cloud Saves, or one that ended: the page says which.
+      member: p.member ? { level: p.member.level, on: memberOn(p.member), until: p.member.until } : null,
       admin: Boolean(isAdmin(String(user.email ?? '').toLowerCase())),   // the page shows the Admin panel button
     } });
   }
@@ -386,6 +420,29 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     await s3.put(accountKey(sub), Buffer.from(JSON.stringify(next)), { type: 'application/json' });
     accounts.set(sub, { account: next, at: Date.now() });
     log(`cloud: account ${sub}: ${event.event_type}, ${event.data.status}, plan ${next.plan}${next.planUntil ? ` until ${next.planUntil}` : ''}`);
+    send(res, 200, { ok: true });
+  }
+
+  // A notification of Buy Me a Coffee (billing.mjs). Membership events write the member record of the supporter's email;
+  // the others (coffees, extras) are taken and left. A test event of the dashboard (live_mode false) is only logged.
+  async function coffeeWebhook(req, res) {
+    if (!coffee) { req.resume(); send(res, 404, { error: 'no memberships here' }); return; }
+    const raw = await readBody(req, 1 << 20);
+    const why = checkCoffeeSignature(req.headers['x-signature-sha256'], raw, coffee.secret);
+    if (why) { log(`cloud: Buy Me a Coffee notification refused: ${why}`); send(res, 401, { error: why }); return; }
+    let event;
+    try { event = JSON.parse(raw.toString()); } catch { send(res, 400, { error: 'not JSON' }); return; }
+    const type = String(event?.type ?? '');
+    if (event?.live_mode === false) { log(`cloud: Buy Me a Coffee test event ${type}: the signature holds`); send(res, 200, { test: true }); return; }
+    if (!type.startsWith('membership.') || !event.data?.id) { send(res, 200, { ignored: type }); return; }
+    const email = normalEmail(event.data.supporter_email);
+    if (!email) { log(`cloud: Buy Me a Coffee ${type} ${event.data.id}: no supporter email`); send(res, 200, { ignored: 'no email' }); return; }
+    const had = await member(email, true);
+    const next = applyMembership(had, event);
+    if (!next) { send(res, 200, { ignored: 'older than the last event' }); return; }
+    await s3.put(memberKey(email), Buffer.from(JSON.stringify(next)), { type: 'application/json' });
+    members.set(email, { member: next, at: Date.now() });
+    log(`cloud: membership ${next.id} (${next.level ?? 'no level'}): ${type}, ${next.status}, Cloud Saves ${memberOn(next) ? `on until ${next.until}` : 'off'}`);
     send(res, 200, { ok: true });
   }
 
@@ -684,6 +741,12 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       send(res, 409, { error: 'Cancel your Cloud Saves subscription first (Manage subscription), then delete the account.' });
       return;
     }
+    const m = await member(user.email, true).catch(() => null);
+    if (m?.on && !m.cancelAt && m.status === 'active') {
+      send(res, 409, { error: 'Cancel your Buy Me a Coffee membership first (on Buy Me a Coffee), then delete the account.' });
+      return;
+    }
+    if (m) { await s3.delete(memberKey(user.email)); members.delete(normalEmail(user.email)); }
     for (const o of await s3.list(`saves/${user.sub}/`)) await s3.delete(o.key);
     for (const o of await s3.list(`sets/${user.sub}/`)) await s3.delete(o.key);
     for (const o of await s3.list(`incoming/${user.sub}/`)) await s3.delete(o.key);
@@ -700,6 +763,7 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   async function handle(req, res, url) {
     const path = url.pathname, method = req.method;
     if (path === '/api/paddle/webhook' && method === 'POST') return paddleWebhook(req, res);    // signed by Paddle instead
+    if (path === '/api/coffee/webhook' && method === 'POST') return coffeeWebhook(req, res);    // signed by Buy Me a Coffee
     // A change comes only from this site's page: a header that a form or another site cannot send without asking
     // first, and the Origin of this site when the browser names one. The cookies are SameSite=Lax as well.
     if (method !== 'GET' && method !== 'HEAD') {
@@ -794,7 +858,7 @@ export function cloudFromEnv(env = process.env, log, { onAccountDeleted, isAdmin
     cloudFor: env.CM_CLOUD_FOR === 'everyone' ? 'everyone' : 'listed', cloudUsers: (env.CM_CLOUD_USERS ?? '').split(','),
     upgradeUrl: env.CM_UPGRADE_URL || null, maxSaves: Number(env.CM_CLOUD_MAX_SAVES) || 30, maxSets: Number(env.CM_CLOUD_MAX_SETS) || 5, log,
     maxPacked: (Number(env.CM_CLOUD_MAX_PACKED_MB) || MAX_GZ >> 20) << 20, maxRaw: (Number(env.CM_CLOUD_MAX_RAW_MB) || MAX_RAW >> 20) << 20,
-    price: env.CM_PRICE || '$5 a month', paddle: paddleFromEnv(env), onAccountDeleted, isAdmin,
+    price: env.CM_PRICE || '$5 a month', paddle: paddleFromEnv(env), coffee: coffeeFromEnv(env), onAccountDeleted, isAdmin,
     uploadBudget: (Number(env.CM_UPLOAD_BUDGET_MB) || 160) << 20,
     // Direct to the store (createCloud, "direct"): off with CM_DIRECT=off; on without setting the rules with CM_DIRECT=on
     // (they were set in the store's console). The bucket's CORS rules let in the site's own addresses: CM_PUBLIC_URL
@@ -812,4 +876,15 @@ export function paddleFromEnv(env = process.env) {
   return { env: sandbox ? 'sandbox' : 'production', clientToken: env.PADDLE_CLIENT_TOKEN,
     priceIds: env.PADDLE_PRICE_ID.split(',').map((x) => x.trim()).filter(Boolean), webhookSecret: env.PADDLE_WEBHOOK_SECRET,
     apiKey: env.PADDLE_API_KEY || null, apiBase: PADDLE_API[sandbox ? 'sandbox' : 'production'] };
+}
+
+// Buy Me a Coffee's settings, or null (no membership on sale): BMC_WEBHOOK_SECRET, the webhook's signing secret, and
+// the membership page, BMC_MEMBERSHIP_URL or else CM_COFFEE_URL's /membership. BMC_CLOUD_LEVELS (comma separated):
+// the names or ids of the levels that give Cloud Saves; none named, every level gives them.
+export function coffeeFromEnv(env = process.env) {
+  const page = (env.CM_COFFEE_URL ?? '').trim().replace(/\/+$/, '');
+  const url = (env.BMC_MEMBERSHIP_URL ?? '').trim() || (page ? `${page}/membership` : '');
+  if (!env.BMC_WEBHOOK_SECRET || !/^https:\/\//.test(url)) return null;
+  return { secret: env.BMC_WEBHOOK_SECRET, url,
+    levels: (env.BMC_CLOUD_LEVELS ?? '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean) };
 }

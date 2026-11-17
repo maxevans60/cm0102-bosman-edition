@@ -303,3 +303,25 @@ export function fakeDataSet() {
   files['index.dat'] = index;
   return Object.fromEntries(Object.entries(files).map(([k, v]) => [k, new Uint8Array(v)]));
 }
+
+// A Buy Me a Coffee notification as it sends one (bmc-webhooks-openapi.json: the envelope and MembershipData), and
+// its x-signature-sha256: the HMAC-SHA256 of the raw body, hex.
+export function signCoffee(raw, secret) {
+  return createHmac('sha256', secret).update(raw).digest('hex');
+}
+export function coffeeEvent(type, { email = 'fan@example.com', id = 501, level = 'Squad Player', levelId = 2, status = 'active',
+  created = Math.floor(Date.now() / 1000), end = Math.floor(Date.now() / 1000) + 30 * 86400, atPeriodEnd = false, live = true } = {}) {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    event_id: 1234, type, live_mode: live, created, attempt: 1,
+    data: {
+      object: 'membership', id, psp_id: 'sub_1Test', duration_type: 'month', status,
+      canceled: String(status === 'canceled'), cancel_at_period_end: String(atPeriodEnd), paused: String(status === 'paused'),
+      paused_at: null, paused_until: null, unpaused_at: null, paused_by: null,
+      supporter_name: 'Fan', supporter_name_type: 'default', supporter_id: 42, supporter_email: email,
+      supporter_feedback: null, support_note: null, note_hidden: false, amount: 5, currency: 'GBP',
+      started_at: now - 86400, canceled_at: status === 'canceled' ? now : null, current_period_start: now - 86400, current_period_end: end,
+      membership_level_id: levelId, membership_level_name: level,
+    },
+  };
+}

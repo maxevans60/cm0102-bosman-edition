@@ -13,7 +13,7 @@ import { createApp } from '../server.mjs';
 import { createCloud } from '../cloud.mjs';
 import { createStats, statsStore } from '../stats.mjs';
 import { createS3 } from '../s3.mjs';
-import { fakeDataSet, fakeGoogle, fakeS3, fakeSaveBytes, paddleEvent, signPaddle } from './fakes.mjs';
+import { coffeeEvent, fakeDataSet, fakeGoogle, fakeS3, fakeSaveBytes, paddleEvent, signCoffee, signPaddle } from './fakes.mjs';
 import { writeZip } from '../zip.js';
 
 const require = createRequire(import.meta.url);
@@ -503,6 +503,48 @@ try {
     await inCloud('Small after big.sav') && await inCloud('Another after big.sav') && !(await inCloud('Big 2011-12-11.sav'))
       && bigRequests.length === 0 && /Too large for the cloud/.test(bigRow) && /Big 2011-12-11\.sav is too large for Cloud Saves/.test(await toasts(a)),
     `${bigRow} | requests: ${bigRequests.join(', ')} | ${await toasts(a)}`);
+
+  // ---- Sold as a Buy Me a Coffee membership (another server of the same store): join in another tab, the webhook,
+  // Cloud Saves turn on in the running game; the account dialog points to the membership. ----
+  const coffeeCloud = createCloud({ s3, clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'z'.repeat(40),
+    maxSaves: 10, maxPacked: 2 << 20, google: google.google, log: (t) => logs.push(t), price: '£5 a month', storeTtl: 0,
+    coffee: { secret: 'bmc_check', url: 'https://buymeacoffee.com/someone/membership', levels: [] } });
+  const coffeeServer = createApp({ gameDir: game, buildDir: build, manifestPath: join(tmp, 'manifest.tsv'), cloud: coffeeCloud });
+  await new Promise((r) => coffeeServer.listen(0, '127.0.0.1', r));
+  const CBASE = `http://127.0.0.1:${coffeeServer.address().port}`;
+  try {
+    google.user = { sub: '8000008', email: 'member@example.com', email_verified: true, name: 'Member Player' };
+    const mctx = await browser.newContext({ viewport: { width: 1200, height: 800 } });
+    await mctx.route('https://buymeacoffee.com/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>membership</title>' }));
+    const m = await mctx.newPage();
+    m.on('pageerror', (e) => errors.push(e.message));
+    await m.goto(`${CBASE}/auth/google/start?mode=page`);
+    await m.waitForSelector('#go');
+    await waitFor('the account', async () => (await m.textContent('#account-open span')) === 'Member');
+    await m.click('#go');
+    await m.waitForFunction(() => window.__fake, null, { timeout: 30000 });
+    await m.click('#account-open');
+    const offerText = (await m.innerText('#account-body')).replace(/\s+/g, ' ');
+    check('membership: the button, the price and the email to join with', (await m.textContent('#account-buy')) === 'Become a member · £5 a month'
+      && /Join with this account's email, member@example\.com/.test(offerText) && !/Paddle/.test(offerText), offerText.slice(0, 300));
+    await shot(m, 'member-offer');
+    const [tab] = await Promise.all([mctx.waitForEvent('page'), m.click('#account-buy')]);
+    check('the membership page opens in another tab', tab.url() === 'https://buymeacoffee.com/someone/membership', tab.url());
+    const raw = JSON.stringify(coffeeEvent('membership.started', { email: 'member@example.com', id: 880 }));
+    const hooked = await fetch(`${CBASE}/api/coffee/webhook`, { method: 'POST', body: raw, headers: { 'x-signature-sha256': signCoffee(raw, 'bmc_check') } });
+    check('the membership webhook is taken', hooked.status === 200);
+    await waitFor('Cloud Saves on', async () => /Thank you for joining/.test(await toasts(m)), 20000);
+    check('the page turns Cloud Saves on by itself after joining', /Thank you for joining/.test(await toasts(m)), await toasts(m));
+    const memberKeyOf = `saves/8000008/${Buffer.from(harbour).toString('base64url')}.gz`;
+    await waitFor('the save to go up', () => s3fake.objects.has(memberKeyOf));
+    check('a member\'s running game: its save goes up', s3fake.objects.has(memberKeyOf));
+    if (!(await m.evaluate(() => document.getElementById('account').open))) await m.click('#account-open');
+    const memberText = (await m.innerText('#account-body')).replace(/\s+/g, ' ');
+    check('Account of a member: Cloud Saves, renews, Your membership', /· Cloud Saves/.test(memberText) && /Renews every month; paid until/.test(memberText)
+      && await m.isVisible('#account-member') && !(await m.isVisible('#account-manage').catch(() => false)), memberText.slice(0, 260));
+    await shot(m, 'member');
+    await mctx.close();
+  } finally { coffeeServer.close(); }
 
   check('no page errors', errors.length === 0, errors.join('; '));
   check('the server logged no failure', !logs.some((l) => /fail|not written|not read/.test(l)), logs.join('; '));

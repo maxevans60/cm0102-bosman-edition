@@ -303,7 +303,7 @@ test('a plan of "cloud" in the account record gives cloud saves', async () => {
   assert.equal((await (await c.get('/api/me')).json()).user.cloud, false, 'a plan that ended');
 
   // An admin gives Cloud Saves (the admin page): a file of its own, grants/<id>.json; the record stays as it was.
-  assert.deepEqual(await cloudApi.planOfSub('3000004'), { cloud: false, from: null, given: false, givenAt: null, until: null });
+  assert.deepEqual(await cloudApi.planOfSub('3000004'), { cloud: false, from: null, given: false, givenAt: null, until: null, level: null });
   const given = await cloudApi.give('3000004', true, 'boss@example.com');
   assert.deepEqual([given.cloud, given.from, given.given], [true, 'given', true]);
   let me = (await (await c.get('/api/me')).json()).user;

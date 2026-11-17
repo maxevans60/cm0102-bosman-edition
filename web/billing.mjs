@@ -1,11 +1,15 @@
-// Payments for Cloud Saves through Paddle Billing (web/README.md, "Cloud saves", "Payments"). Paddle is the merchant
+// Payments for Cloud Saves (web/README.md, "Cloud saves", "Payments"). Players buy them as a Buy Me a Coffee membership
+// (the end of this file): Buy Me a Coffee takes the payment and tells this server about the membership with signed
+// webhooks that name the supporter's email; the account of that Google email has Cloud Saves while the membership runs.
+//
+// Paddle, the first way to buy them: Paddle Billing, kept for the subscriptions bought through it. Paddle is the merchant
 // of record: it sells the subscription to the player, takes the payment and the sales tax, and tells this server
 // about the subscription with signed webhooks. The server keeps no card or payment data; it keeps the subscription's
 // id and status in the account record, and the plan they give (cloud.mjs).
 //
 // The checkout runs in Paddle's overlay on the page (Paddle.js, account.js). It carries the account in custom_data:
 // the Google id and an HMAC of it with the server's secret, so a webhook can only name an account this server named.
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 
 const DAY = 86400000;
 export const PADDLE_API = { production: 'https://api.paddle.com', sandbox: 'https://sandbox-api.paddle.com' };
@@ -86,4 +90,51 @@ export async function portalUrl({ apiKey, apiBase, customerId, subscriptionId })
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(`Paddle portal session: HTTP ${r.status} ${j.error?.code ?? ''}`);
   return j.data?.urls?.general?.overview ?? null;
+}
+
+// ---- Buy Me a Coffee memberships ----
+// The webhook (bmc-webhooks-openapi.json, "Signature verification"): x-signature-sha256 is the hex HMAC-SHA256 of the
+// raw body with the webhook's signing secret. null when it holds, else why not.
+export function checkCoffeeSignature(header, rawBody, secret) {
+  if (typeof header !== 'string' || !header) return 'no x-signature-sha256';
+  const want = createHmac('sha256', secret).update(rawBody).digest();
+  const hex = header.trim().replace(/^sha256=/i, '');
+  const got = /^[0-9a-f]+$/i.test(hex) ? Buffer.from(hex, 'hex') : Buffer.alloc(0);
+  return got.length === want.length && timingSafeEqual(got, want) ? null : 'an x-signature-sha256 that does not match';
+}
+
+// The store's record of the memberships of an email: members/<sha256 of the email>.json. The key holds no email.
+export const normalEmail = (email) => String(email ?? '').trim().toLowerCase();
+export const memberKey = (email) => `members/${createHash('sha256').update(normalEmail(email)).digest('hex')}.json`;
+
+// Buy Me a Coffee's times are Unix seconds; one in milliseconds is read as such.
+const msOf = (t) => (t == null || !Number.isFinite(Number(t)) ? null : Number(t) < 1e11 ? Number(t) * 1000 : Number(t));
+const yes = (v) => v === true || v === 'true';
+
+// What a membership's state gives: { on, until, cancelAt }. An active one runs to the end of its period, plus three days
+// for the renewal's webhook to come; one canceled at the period's end runs to that end; one canceled at once or
+// paused ends Cloud Saves.
+export function membershipOf(m, now = Date.now()) {
+  const end = msOf(m.current_period_end);
+  const iso = (t) => new Date(t).toISOString();
+  const atEnd = yes(m.cancel_at_period_end);
+  if (m.status === 'active' && !yes(m.paused)) {
+    if (atEnd && end) return { on: true, until: iso(end), cancelAt: iso(end) };
+    return { on: true, until: iso((end ?? now) + 3 * DAY), cancelAt: null };
+  }
+  if (m.status === 'canceled' && atEnd && end && end > now) return { on: true, until: iso(end), cancelAt: iso(end) };
+  return { on: false, until: null, cancelAt: null };
+}
+
+// The member record after a membership event, or null when the event changes nothing (older than the last one of the
+// same membership; Buy Me a Coffee retries a delivery up to four times, an hour apart at most).
+export function applyMembership(record, event, now = Date.now()) {
+  const m = event.data;
+  if (record && record.id === m.id && Number(record.eventAt) > Number(event.created)) return null;
+  const p = membershipOf(m, now);
+  return {
+    email: normalEmail(m.supporter_email), on: p.on, until: p.until, cancelAt: p.cancelAt, id: m.id, status: m.status,
+    level: m.membership_level_name ?? null, levelId: m.membership_level_id ?? null, eventAt: event.created ?? null,
+    event: event.type, at: new Date(now).toISOString(),
+  };
 }

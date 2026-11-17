@@ -21,7 +21,7 @@ import { createHash } from 'node:crypto';
 import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cloudFromEnv, paddleFromEnv } from './cloud.mjs';
+import { cloudFromEnv, coffeeFromEnv, paddleFromEnv } from './cloud.mjs';
 import { MAX_SENT_SAVE, createStats, statsStore } from './stats.mjs';
 import { createNotifier } from './notify.mjs';
 import { s3FromEnv } from './s3.mjs';
@@ -416,14 +416,15 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const { cloud, missing } = cloudFromEnv(process.env, undefined, { onAccountDeleted: (sub) => stats?.forget(sub),
     isAdmin: (email) => Boolean(stats) && adminEmails.has(email) });
   const someSet = ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'CM_SESSION_SECRET', 'BUCKET_NAME'].some((k) => process.env[k]);
-  const paddle = paddleFromEnv(process.env);
+  const paddle = paddleFromEnv(process.env), coffee = coffeeFromEnv(process.env);
   console.log(cloud ? `accounts and cloud saves: on${process.env.CM_CLOUD_FOR === 'everyone' ? ', for every account'
-    : paddle ? `, sold with Paddle (${paddle.env})` : ', no payments (PADDLE_CLIENT_TOKEN, PADDLE_PRICE_ID, PADDLE_WEBHOOK_SECRET)'}`
+    : coffee ? `, sold as a Buy Me a Coffee membership (${coffee.levels.length ? `levels ${coffee.levels.join(', ')}` : 'every level'})${paddle ? '; Paddle keeps its subscriptions' : ''}`
+    : paddle ? `, sold with Paddle (${paddle.env})` : ', no payments (BMC_WEBHOOK_SECRET and CM_COFFEE_URL, web/deploy/README.md)'}`
     : `accounts and cloud saves: off${someSet ? `, missing ${missing.join(', ')}` : ''} (web/README.md, "Cloud saves")`);
   const port = Number(process.env.PORT ?? 8080), host = process.env.HOST ?? '127.0.0.1';
   const site = { seller: process.env.CM_SELLER, contact: process.env.CM_CONTACT, price: process.env.CM_PRICE, coffee: process.env.CM_COFFEE_URL };
-  if (process.env.PADDLE_CLIENT_TOKEN && (!site.seller || !site.contact))
-    console.log('payments: set CM_SELLER and CM_CONTACT, which the terms, refunds and privacy pages name (Paddle checks them)');
+  if ((paddle || coffee) && (!site.seller || !site.contact))
+    console.log('payments: set CM_SELLER and CM_CONTACT, which the terms, refunds and privacy pages name');
   console.log(stats ? `statistics: on (${process.env.CM_STATS === 'optout' ? 'opt-out' : 'opt-in: the page asks first'}), ${s3FromEnv(process.env) ? 'kept in the bucket' : 'in memory only'}; admin page /admin for ${admins.filter((e) => e.trim()).length} email(s)${process.env.CM_ADMIN_TOKEN ? ' and the token' : ''}`
     : 'statistics: off (CM_STATS=off)');
   if (stats) console.log(notify.on ? 'report notices: on (CM_REPORT_WEBHOOK)' : 'report notices: off (CM_REPORT_WEBHOOK, web/deploy/README.md)');

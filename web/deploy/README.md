@@ -99,8 +99,20 @@ With a key of your own Tigris account instead of `fly storage create`, add `AWS_
 AWS_ACCESS_KEY_ID=<key id> AWS_SECRET_ACCESS_KEY=<secret> AWS_REGION=auto BUCKET_NAME=<bucket>` to the
 `fly secrets set` line. The Google client and its redirect URI come first: `web/README.md`, "Set it up", step 1.
 
-To sell Cloud Saves with Paddle (`web/README.md`, "Payments"), add its settings and the seller's name and contact,
-which the terms, refunds, privacy and pricing pages show:
+To sell Cloud Saves as a Buy Me a Coffee membership (`web/README.md`, "Payments"), make the webhook in Buy Me a Coffee
+(Integrations, Webhooks: `https://<your-app>.fly.dev/api/coffee/webhook`, the four `membership.*` events), then add its
+signing secret, the levels that give Cloud Saves, their price, and the seller's name and contact, which the terms,
+refunds, privacy and pricing pages show:
+
+```bash
+fly secrets set BMC_WEBHOOK_SECRET=<signing secret> BMC_CLOUD_LEVELS="Squad Player,Club Legend" CM_PRICE="£5 a month" \
+  CM_COFFEE_URL=https://buymeacoffee.com/<your name> CM_SELLER="<your name>" CM_CONTACT=<your email>
+```
+
+`fly logs` shows `sold as a Buy Me a Coffee membership (levels …)`. The membership page is `CM_COFFEE_URL` +
+`/membership`; `BMC_MEMBERSHIP_URL` sets another. Send test event in Buy Me a Coffee: the log says the signature holds.
+
+Paddle, the first way (subscriptions bought through it keep working while its settings stay):
 
 ```bash
 fly secrets set PADDLE_ENV=sandbox PADDLE_CLIENT_TOKEN=test_… PADDLE_PRICE_ID=pri_… PADDLE_WEBHOOK_SECRET=pdl_ntfset_… \
@@ -232,7 +244,8 @@ vault off and lists none of the player's saves. So do not deploy a commit from b
 | Google says `redirect_uri_mismatch` | The client's Authorized redirect URI must be exactly `https://<your-app>.fly.dev/auth/google/callback` |
 | Only some Google accounts can sign in | The Google app is still "Testing": Audience, Publish app |
 | The checkout says "Something went wrong" | Paddle has not approved the domain yet (Website approval), or there is no Default payment link (Checkout settings: `https://<your-app>.fly.dev/`), or the token and the price are of different environments (`test_` is the sandbox) |
-| Paid, but Cloud Saves stay off | `fly logs`: a `Paddle notification refused` line means `PADDLE_WEBHOOK_SECRET` is not the destination's secret; `price … is not one of PADDLE_PRICE_ID` names the price to add |
+| Joined, but Cloud Saves stay off | `fly logs`: `Buy Me a Coffee notification refused` means `BMC_WEBHOOK_SECRET` is not the webhook's signing secret; `membership … Cloud Saves off` with a level means `BMC_CLOUD_LEVELS` leaves that level out; a `membership … on` line but the player is still off: they joined with another email than their Google account's (give Cloud Saves on the admin page) |
+| Paid with Paddle, but Cloud Saves stay off | `fly logs`: a `Paddle notification refused` line means `PADDLE_WEBHOOK_SECRET` is not the destination's secret; `price … is not one of PADDLE_PRICE_ID` names the price to add |
 
 The first visit after a quiet time wakes the machine, which takes a few seconds.
 
