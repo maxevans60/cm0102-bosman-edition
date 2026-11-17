@@ -186,6 +186,15 @@ export function createS3({ endpoint, bucket, accessKeyId, secretAccessKey, regio
         headers: { 'content-type': 'application/xml', 'content-md5': createHash('md5').update(body).digest('base64') } });
       if (r.status !== 200 && r.status !== 204) throw fail(r, 'put the bucket\'s CORS rules');
     },
+    // The bucket's CORS rules as the store gives them back: { origins, methods }, every rule's together; null when it
+    // has none.
+    async getCors() {
+      const r = await request('GET', '', { query: { cors: '' } });
+      if (r.status === 404) return null;
+      if (r.status !== 200) throw fail(r, 'read the bucket\'s CORS rules');
+      const xml = r.body.toString(), all = (name) => [...new Set([...xml.matchAll(new RegExp(`<${name}>([^<]*)</${name}>`, 'g'))].map((m) => unxml(m[1])))];
+      return { origins: all('AllowedOrigin'), methods: all('AllowedMethod') };
+    },
     async delete(key) {
       const r = await request('DELETE', key);
       if (r.status !== 204 && r.status !== 200 && r.status !== 404) throw fail(r, `delete ${key}`);

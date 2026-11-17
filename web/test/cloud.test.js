@@ -424,6 +424,34 @@ test('direct: the server tries the way a page would go (a signed upload link, th
   assert.equal([...s3fake.objects.keys()].filter((k) => k.startsWith('meta/direct-check')).length, 0, 'the check leaves nothing in the store');
 });
 
+test('direct, later: the rules read back in the log, a check again later that turns direct on, and the other address tried', async () => {
+  // The live site (17 November 2026): the rules were set, and the preflight still had no Access-Control-Allow-Origin.
+  const s3 = createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
+  const said = [];
+  const make = (extra = {}) => createCloud({ s3, clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'x'.repeat(40),
+    cloudFor: 'everyone', google: google.google, log: (t) => said.push(t), origins: ['https://cm.example'], ...extra });
+  s3fake.faults.corsGone = true;
+  const later = make({ recheck: [80] });
+  assert.equal(await later.directReady, false);
+  assert.match(said.join(' '), /do not let https:\/\/cm\.example send .*the bucket holds: origins https:\/\/cm\.example; methods GET, PUT, HEAD/);
+  assert.match(said.join(' '), /checks again in 0 s/);
+  s3fake.faults.corsGone = false;                     // the rules reach the store's every place
+  await new Promise((r) => setTimeout(r, 400));
+  assert.equal(later.isDirect(), true, 'a later check turns direct on');
+  assert.match(said.join(' '), /now go straight between the browser and the store/);
+  // Only the other address of the store lets pages in: the log says to use it.
+  said.length = 0;
+  const port = new URL(s3fake.endpoint).port;
+  const main = createS3({ endpoint: `http://localhost:${port}`, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
+  const other = createS3({ endpoint: `http://127.0.0.1:${port}`, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });
+  s3fake.faults.corsHost = '127.0.0.1';
+  const two = make({ s3: main, otherStore: { s3: other, endpoint: 'http://127.0.0.1' }, recheck: [] });
+  assert.equal(await two.directReady, false);
+  assert.match(said.join(' '), /at http:\/\/127\.0\.0\.1 the same check works: set AWS_ENDPOINT_URL_S3=http:\/\/127\.0\.0\.1/);
+  s3fake.faults.corsHost = null;
+  assert.equal([...s3fake.objects.keys()].filter((k) => k.startsWith('meta/direct-check')).length, 0, 'the checks leave nothing in the store');
+});
+
 test('direct off: a store that takes no CORS rules, or CM_DIRECT=off: the page is told to go through the server', async () => {
   s3fake.faults.noCors = true;
   const s3 = createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true });

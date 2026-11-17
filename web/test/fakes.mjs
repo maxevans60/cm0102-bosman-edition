@@ -19,7 +19,8 @@ export async function fakeS3({ bucket = 'cm-test', accessKeyId = 'tid_test', sec
   // corsGone: the rules it took no longer let any page in (as a bucket whose rules someone changed).
   // rejectLinks: the store refuses the signature of every signed link (other Fly users saw Tigris answer so for a link
   // that signs content-type).
-  const faults = { failPuts: 0, failMatch: /./, noCors: false, corsGone: false, rejectLinks: false };
+  // corsHost: the rules let pages in only at this host (as Tigris may at one of its addresses and not the other).
+  const faults = { failPuts: 0, failMatch: /./, noCors: false, corsGone: false, rejectLinks: false, corsHost: null };
   let cors = null;                            // the bucket's CORS rules: { origins }
   const server = http.createServer(async (req, res) => {
     const data = await body(req);
@@ -27,7 +28,8 @@ export async function fakeS3({ bucket = 'cm-test', accessKeyId = 'tid_test', sec
     requests.push(`${req.method} ${url.pathname}${url.search}`);
     // CORS, as S3 answers it: only with rules that name the page's origin (or *).
     const from = req.headers.origin;
-    const allowed = from && cors && !faults.corsGone && (cors.origins.includes('*') || cors.origins.includes(from));
+    const allowed = from && cors && !faults.corsGone && (!faults.corsHost || String(req.headers.host).startsWith(faults.corsHost))
+      && (cors.origins.includes('*') || cors.origins.includes(from));
     const corsHeaders = allowed ? { 'Access-Control-Allow-Origin': cors.origins.includes('*') ? '*' : from, 'Access-Control-Expose-Headers': 'ETag', Vary: 'Origin' } : {};
     const reply = (status, xml = '', headers = {}) => { res.writeHead(status, { 'Content-Type': 'application/xml', ...corsHeaders, ...headers }); res.end(xml); };
     const error = (status, code) => reply(status, `<?xml version="1.0"?><Error><Code>${code}</Code><Message>${code}</Message></Error>`);
@@ -63,8 +65,12 @@ export async function fakeS3({ bucket = 'cm-test', accessKeyId = 'tid_test', sec
     if (want !== auth) return error(403, 'SignatureDoesNotMatch');
     if ('cors' in query && req.method === 'PUT') {
       if (faults.noCors) return error(501, 'NotImplemented');
-      cors = { origins: [...data.toString().matchAll(/<AllowedOrigin>([^<]*)<\/AllowedOrigin>/g)].map((x) => x[1]) };
+      cors = { origins: [...data.toString().matchAll(/<AllowedOrigin>([^<]*)<\/AllowedOrigin>/g)].map((x) => x[1]), xml: data.toString() };
       return reply(200);
+    }
+    if ('cors' in query && req.method === 'GET') {
+      if (faults.noCors) return error(501, 'NotImplemented');
+      return cors ? reply(200, cors.xml) : error(404, 'NoSuchCORSConfiguration');
     }
     return objectRequest(url, query, data, req, res, reply, error, corsHeaders);
   });

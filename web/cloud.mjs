@@ -128,7 +128,7 @@ ${ok ? 'setTimeout(() => window.close(), 300);' : ''}</script>`;
 export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicUrl = null, cloudFor = 'listed', cloudUsers = [],
   upgradeUrl = null, maxSaves = 30, maxSets = 5, maxPacked = MAX_GZ, maxRaw = MAX_RAW, google = GOOGLE, paddle = null, coffee = null, price = '$5 a month', log = (t) => console.log(t),
   onAccountDeleted = () => {}, uploadBudget = 160 << 20, isAdmin = () => false, direct: directWanted = true, origins = ['*'],
-  storeTtl = 10 * 60e3 }) {
+  storeTtl = 10 * 60e3, otherStore = null, recheck = [60e3, 5 * 60e3, 30 * 60e3] }) {
   const seal = sealer(sessionSecret);
   // A save may be maxPacked bytes, compressed (MAX_GZ unless a test sets less); the saves list tells the page, so a save
   // larger than that is not sent at all (account.js).
@@ -146,9 +146,9 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
   // and content-length signed), and first the browser's preflight for it from the site's own address. On the live site
   // the pages' uploads to the store failed, "the connection to the store failed", where the server had set the rules
   // (15 November 2026): a page cannot tell a refused preflight from a refused signature. null: both work; else why not.
-  async function checkDirect() {
+  async function checkDirect(store = s3) {
     const key = `meta/direct-check-${randomBytes(6).toString('hex')}.txt`, body = Buffer.from('ok');
-    const link = s3.presign('PUT', key, { headers: { 'content-type': 'text/plain', 'content-length': body.length } });
+    const link = store.presign('PUT', key, { headers: { 'content-type': 'text/plain', 'content-length': body.length } });
     const { 'content-length': _, ...headers } = link.headers;
     const origin = origins.find((o) => o !== '*') ?? null;
     if (origin) {
@@ -160,8 +160,48 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     }
     const put = await fetch(link.url, { method: 'PUT', body, headers: Object.fromEntries(Object.entries(headers).map(([k, v]) => [k, String(v)])) });
     if (!put.ok) return `the store refused a signed upload link (HTTP ${put.status}: ${(await put.text()).replace(/\s+/g, ' ').slice(0, 200)})`;
-    await s3.delete(key).catch(() => {});
+    await store.delete(key).catch(() => {});
     return null;
+  }
+  const tryDirect = async (store = s3) => {
+    try { return await checkDirect(store); } catch (err) { return `the check of a signed upload link failed (${err.message})`; }
+  };
+  // What the bucket holds, as its rules come back from the store (for the log of a check that failed).
+  async function rulesHeld() {
+    try {
+      const r = await s3.getCors?.();
+      if (r === undefined) return '';
+      return r ? `; the bucket holds: origins ${r.origins.join(', ') || 'none'}; methods ${r.methods.join(', ') || 'none'}` : '; the bucket holds no CORS rules';
+    } catch (err) { return `; its rules could not be read back (${err.message})`; }
+  }
+  const after = (ms) => (ms < 60e3 ? `${Math.round(ms / 1000)} s` : `${Math.round(ms / 60e3)} min`);
+  // A check that failed: once more after each pause of recheck (rules may take a while to reach every place of the
+  // store), and direct goes on at the first that works. The store's other address (Tigris has two) is tried too.
+  async function afterFailure(why) {
+    log(`cloud: ${why}${await rulesHeld()}: saves and data sets go through this server (web/deploy/README.md, "Straight to Tigris")`);
+    if (otherStore) {
+      const there = await tryDirect(otherStore.s3);
+      log(there ? `cloud: at ${otherStore.endpoint} the check fails too (${there})`
+        : `cloud: at ${otherStore.endpoint} the same check works: set AWS_ENDPOINT_URL_S3=${otherStore.endpoint} (fly secrets set), and saves and data sets go straight to the store`);
+    }
+    if (!recheck.length) return;
+    log(`cloud: checks again in ${recheck.map(after).join(', ')}`);
+    laterChecks(recheck).catch((err) => log(`cloud: the checks of the store stopped: ${err.message}`));
+  }
+  async function laterChecks() {
+    let waited = 0;
+    for (const ms of recheck) {
+      await new Promise((r) => { const t = setTimeout(r, ms - waited); t.unref?.(); });
+      waited = ms;
+      const now = await tryDirect();
+      if (!now) {
+        direct = true;
+        log(`cloud: the check works ${after(ms)} after the start: saves and data sets now go straight between the browser and the store`);
+        sweepIncoming();
+        return;
+      }
+    }
+    log(`cloud: the last check failed too: saves and data sets go through this server until the next start`);
   }
   const directReady = (async () => {
     if (!directWanted || !s3.presign) return;
@@ -172,10 +212,9 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
         return;
       }
     }
-    let why;
-    try { why = await checkDirect(); } catch (err) { why = `the check of a signed upload link failed (${err.message})`; }
+    const why = await tryDirect();
     if (why) {
-      log(`cloud: ${why}: saves and data sets go through this server (web/deploy/README.md, "Straight to Tigris")`);
+      await afterFailure(why);
       return;
     }
     direct = true;
@@ -820,6 +859,8 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
     userOf: (req) => sessionOf(req),
     // Resolves once the store's CORS rules are set, or found not to be: whether the page may go to the store directly.
     directReady: directReady.then(() => direct),
+    // Whether pages go straight to the store now (a later check may turn it on).
+    isDirect: () => direct,
     planOfSub,
     give,
     async handle(req, res, url) {
@@ -834,6 +875,18 @@ export function createCloud({ s3, clientId, clientSecret, sessionSecret, publicU
       }
     },
   };
+}
+
+// Tigris's other address for the same bucket (fly.storage.tigris.dev, which `fly storage create` sets, and
+// t3.storage.dev): the start's check of the direct way tries it too when the first fails, and the log names the one
+// that works. null for any other store.
+const TIGRIS = ['https://fly.storage.tigris.dev', 'https://t3.storage.dev'];
+export function otherStoreOf(env = process.env) {
+  const now = String(env.AWS_ENDPOINT_URL_S3 ?? '').replace(/\/+$/, '');
+  const i = TIGRIS.indexOf(now);
+  if (i < 0) return null;
+  const s3 = s3FromEnv({ ...env, AWS_ENDPOINT_URL_S3: TIGRIS[1 - i] });
+  return s3 ? { s3, endpoint: TIGRIS[1 - i] } : null;
 }
 
 // The origins the bucket's CORS rules let in: CM_CORS_ORIGINS (comma separated), else CM_PUBLIC_URL and the app's
@@ -865,6 +918,7 @@ export function cloudFromEnv(env = process.env, log, { onAccountDeleted, isAdmin
     // and the app's fly.dev address, or CM_CORS_ORIGINS (comma separated) in their place.
     direct: env.CM_DIRECT === 'off' ? false : env.CM_DIRECT === 'on' ? 'given' : true,
     origins: corsOrigins(env),
+    otherStore: otherStoreOf(env),
   });
   return { cloud, missing };
 }
