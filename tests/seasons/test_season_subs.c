@@ -64,12 +64,13 @@ int main(int argc, char **argv)
      * which season gave it. The MLS bench of 2026 is unknown (9 in 2025), its substitutes are known (5). */
     expect(2026, "usa_mls", both, 5, 9);
     expect_from(2026, "usa_mls", 2026, 2025);
-    /* The A-League substitutes of 2026 are unknown (5 in 2024; 2025 is unknown too), its bench is known (5). */
-    expect(2026, "aus_nsl", both, 5, 5);
+    /* The A-League substitutes of 2026 are unknown (5 in 2024; 2025 is unknown too), its bench is known (7, the
+     * A-League 2026/27 competition rules). */
+    expect(2026, "aus_nsl", both, 5, 7);
     expect_from(2026, "aus_nsl", 2024, 2026);
-    /* Argentina 2027: both unknown, both from 2025 (substitutes 5) and 2021 (bench 12, clamped to 9). */
+    /* Argentina 2027: both unknown (2026 too), both from 2025 (substitutes 5, bench 12 clamped to 9). */
     expect(2027, "arg_prm", both, 5, SEASON_SUBS_MAX);
-    expect_from(2027, "arg_prm", 2025, 2021);
+    expect_from(2027, "arg_prm", 2025, 2025);
     /* The Champions League of 2027: its main row is unknown and its qualifying rows say "as the Champions League",
      * which follow the main row, so the main row takes 2026 (12 named, clamped to 9, and 5). */
     expect(2027, "european_cup", both, 5, SEASON_SUBS_MAX);
@@ -80,15 +81,16 @@ int main(int argc, char **argv)
     /* No count of a season before 2020 reaches 2020 or later (5 substitutes from 2020, IFAB): the Russian Premier
      * League of 2020 is unknown, 2019 has 3, so it keeps its own values. */
     expect(2020, "rus_prm", 0, 0, 0);
-    /* Item 274, the EFL Cup (forum report: 5 on the bench in 2026/27). The EFL Cup Rules 2025/26 (rule 8.1) give 9
-     * named and 5 used in all matches, and 2026/27 is unknown, so 2026 takes 2025. The EFL Trophy Rules 2025/26
-     * give 7 named and 5 used. The Trophy of 2024 has no count from 2020 on before it, so it keeps its own values. */
+    /* Item 274, the EFL Cup (forum report: 5 on the bench in 2026/27). The EFL Cup rows give 9 named and 5 used
+     * (2025/26: EFL Cup Rules rule 8.1; 2026/27 sourced), and 2027 is unknown, so 2027 takes 2026. The EFL Trophy
+     * Rules 2025/26 give 7 named and 5 used, and 2026 is unknown, so 2026 takes 2025. The Trophy of 2023 has no count
+     * from 2020 on before it (2020 to 2023 unknown, 2011 the last count), so it keeps its own values. */
     expect(2026, "eng_cc_cup", both, 5, 9);
-    expect_from(2026, "eng_cc_cup", 2025, 2025);
     expect(2027, "eng_cc_cup", both, 5, 9);
+    expect_from(2027, "eng_cc_cup", 2026, 2026);
     expect(2026, "eng_auto_cup", both, 5, 7);
     expect_from(2026, "eng_auto_cup", 2025, 2025);
-    expect(2024, "eng_auto_cup", 0, 0, 0);
+    expect(2023, "eng_auto_cup", 0, 0, 0);
     /* A count of the season itself gives its own season. */
     expect_from(2022, "eng_prm", 2022, 2022);
     /* NULL arguments do nothing. */
