@@ -28,12 +28,13 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "tools", "recomp"))
-from league_sizes import CAPS, CLASSES, FIXED_EXCHANGE, FLOOR_COUNT, GROWN, HELD, ROW_READS  # noqa: E402
+from league_sizes import (CAPS, CLASSES, FIXED_EXCHANGE, FLOOR_COUNT, GROWN, HELD, ROW_READS,  # noqa: E402
+                          SCHEDULE_TAKEN)
 
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_size_wraps.c")
 ENCODED = os.path.join(ROOT, "docs", "research", "2026-10-18-league-rules-encoded.tsv")
 MODES = {"shuffled": "SEASON_TEMPLATE_SHUFFLED", "sequential": "SEASON_TEMPLATE_SEQUENTIAL",
-         "mirrored": "SEASON_TEMPLATE_MIRRORED"}
+         "mirrored": "SEASON_TEMPLATE_MIRRORED", "halves": "SEASON_TEMPLATE_HALVES"}
 
 
 def make():
@@ -87,6 +88,9 @@ def make():
               "",
               "/* Each wrap: the original, then season_sizes_schedule(this, stage, &count). */"]
     for f, (_cap, sched, _mode) in sorted(GROWN.items(), key=lambda x: x[1][1]):
+        if f in SCHEDULE_TAKEN:
+            lines += ["", f"/* {names[f]}::create_schedule {sched:#x}: wrapped in {SCHEDULE_TAKEN[f]} */"]
+            continue
         lines += ["",
                   f"/* {names[f]}::create_schedule */",
                   f"void o_{sched:08x}(void);",

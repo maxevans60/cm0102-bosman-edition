@@ -52,15 +52,75 @@ NEAR = 1                    # the most years between the shown year and the righ
 # Competitions whose rows the tool finds but whose year the reference cannot settle: they go to unverified.tsv and the
 # game leaves them. The Irish cups: the 3.9.68 label of an edition may be the year where it starts or where its final
 # was, and no research row gives the final dates before 2002. The Brazilian Northeast record holds the champions of
-# several states (open items 176, 189): its rows match another state's champion of a nearby year.
+# several states (open items 176, 189): its rows match another state's champion of a nearby year. A competition with
+# a full sourced list in refs/ (full_lists) leaves this set: the list settles each row.
 UNVERIFIED = {"Irish League Cup", "Irish Dublin City Cup", "Irish Blaxnit Cup", "Irish Dublin and Belfast Inter-City Cup",
               "Brazilian Northeast State Championship"}
+MULTI = {"Brazilian Northeast State Championship"}
 BLOCK = 3                   # the fewest wrong rows of one offset in one competition of one database
+REFS = os.path.join(OUT, "refs")
+
+
+def all_pairs():
+    """{competition: [(label or None, first, second)]} of every row of refs/*.tsv, dated or not."""
+    out = collections.defaultdict(list)
+    for f in sorted(glob.glob(os.path.join(REFS, "*.tsv"))):
+        for r in read_tsv(f):
+            if r["note"].startswith("no real edition"):
+                continue
+            L = int(r["label"]) if r["label"].strip().isdigit() else None
+            for a, b in ((r.get("data_first") or r["first"], r.get("data_second") or r["second"]),
+                         (r["first"], r["second"])):
+                out[r["competition"]].append((L, a, b))
+    return out
+
+
+def no_edition():
+    """{competition: [(first, second, source)]}: the data pairs that the research names as no real edition (note
+    "no real edition: ..."): such a row is cleared when a corrected row takes its year."""
+    out = collections.defaultdict(list)
+    for f in sorted(glob.glob(os.path.join(REFS, "*.tsv"))):
+        for r in read_tsv(f):
+            if r["note"].startswith("no real edition"):
+                out[r["competition"]].append((r["first"], r["second"], r["source_url"]))
+    return out
+
+
+def full_lists():
+    """{competition: [(label, first, second, source)]} of refs/*.tsv: the full sourced list of the editions of a
+    competition (label: the year where the edition ended, its final or last match day). Such a list is the only
+    reference of its competition: it wins over the 3.9.68 rows and their conventions, a single wrong row moves (no
+    run of BLOCK rows is needed), and a year may hold as many rows as the list gives editions in it (the Brazilian
+    Northeast record holds the champions of several states). A row without a label (no source found) is left out."""
+    out = collections.defaultdict(list)
+    for f in sorted(glob.glob(os.path.join(REFS, "*.tsv"))):
+        for r in read_tsv(f):
+            if not r["label"].strip().isdigit() or not r["first"] or r["first"] == "not held":
+                continue
+            for a, b in ((r.get("data_first") or r["first"], r.get("data_second") or r["second"]),
+                         (r["first"], r["second"])):
+                out[r["competition"]].append((int(r["label"]), a, b, r["source_url"]))
+    return out
+
 REF68_LAST = 2002           # the 3.9.68 rows up to this label are real results (2002 Arsenal: 2001/02)
 STOP = {"fc", "sk", "bk", "cf", "sc", "ac", "fk", "if", "club", "cd", "de", "the", "afc", "ff", "ik", "bv", "sv",
         "vfb", "vfl", "fbc", "sporting", "clube", "futebol", "football", "calcio", "as", "ss", "us", "ud", "rc",
         "rcd", "ca", "cs", "fotball", "fotballklubb", "il", "da", "do", "and", "of", "united", "city", "kv", "kfc",
-        "rsc", "fotbal", "foot", "ball", "nk", "hnk", "gnk", "sk", "bc", "fbk", "ifk", "aik", "fotboll"}
+        "rsc", "fotbal", "foot", "ball", "nk", "hnk", "gnk", "sk", "bc", "fbk", "ifk", "aik", "fotboll",
+        # words that many clubs of one nation share (review of item 233: "Koninklijke" made two Belgian clubs one)
+        "koninklijke", "royal", "royale", "esporte", "sociedade", "associacao", "esportiva", "recreativa",
+        "atletico", "athletic", "athletico", "sportclub", "voetbalclub", "palloseura"}
+
+
+# Words that tell two clubs of one town apart (Club Brugge / Cercle Brugge, Manchester City / United): two names are
+# one club only when they hold the same of these words (review of item 233)
+DISTINCT = {"cercle", "city", "united", "inter", "internazionale", "rangers", "rovers", "athletic", "albion",
+            "wanderers", "dynamo", "dinamo", "lokomotiv", "spartak", "olympic", "olympique", "racing", "union"}
+
+
+def raw_words(s):
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower()
+    return set(re.split(r"[^a-z0-9]+", s)) & DISTINCT
 
 
 def norm(s):
@@ -89,6 +149,8 @@ def same(a, b):
         return True
     for x in {a} | ALIAS[a]:
         for y in {b} | ALIAS[b]:
+            if raw_words(x) != raw_words(y):
+                continue
             A, B = norm(x), norm(y)
             if A and B and (A <= B or B <= A):
                 return True
@@ -134,6 +196,9 @@ def double_labels():
 
 
 DOUBLE = double_labels()
+FULL = full_lists()
+PAIRS = all_pairs()
+NO_EDITION = no_edition()
 
 
 def history_rows(d):
@@ -173,6 +238,11 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
     """([wrong rows], [rows left for review]) of one database. Each row: (database, season, kind, file row,
     competition id, competition, data year, shown year, right year, first, second, reference).
 
+    A row whose pair the list names as no real edition, or (in a competition with a full list) whose pair is no row of
+    the list, dated or not, nor of the 3.9.68 or research references in any year (review: the 1948 final Nurnberg /
+    Kaiserslautern lies after the German list's 1944), and whose winner is no first or second of an edition within
+    2 years, is B: it moves inside a run, never
+    joins one at an end, and is cleared (right year 0) when it stands on a year that a moved row takes.
     Each row is right (R), wrong (W, with its right year), near a reference with no other result on its year (S, with
     that year) or unchecked (U). A run is the rows of one competition from
     a W row to the next W row of the same offset, in the order of their shown years, with no R row and no W row of
@@ -190,10 +260,16 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
     for comp, lst in rows.items():
         c = conv.get(comp, 0)
         refs = []                       # (accepted years, right year, first, second, reference)
+        # a full list wins in the years it covers (German First Division: 1903 to 1945 only)
+        lo_full = min((L for L, f, sc, src in FULL.get(comp, ())), default=0)
+        hi_full = max((L for L, f, sc, src in FULL.get(comp, ())), default=-1)
+        refs = [({L}, L, f, sc, src) for L, f, sc, src in FULL.get(comp, ())]
         for L, f, sc in ref68.get(("club", comp), ()) or ref68.get(("nation", comp), ()):
-            refs.append(({L, L + c}, L + c, f, sc, f"3.9.68 data: {comp} {L} {f} / {sc}"))
+            if not lo_full - 1 <= L + c <= hi_full + 1:
+                refs.append(({L, L + c}, L + c, f, sc, f"3.9.68 data: {comp} {L} {f} / {sc}"))
         for ended, label, f, sc, src in res.get(comp, ()):
-            refs.append(({label, ended}, ended, f, sc, src))
+            if not lo_full - 1 <= ended <= hi_full + 1:
+                refs.append(({label, ended}, ended, f, sc, src))
         if not refs:
             continue
         lst.sort(key=lambda x: (x[5], x[1]))
@@ -203,6 +279,17 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
                 marks.append(("X", 0, ""))      # cleared or dropped by the game: never moved
                 continue
             mine = [r for r in refs if same(r[2], first) and (not r[3] or not second or same(r[3], second))]
+            if any(first == a and second == b for a, b, src in NO_EDITION.get(comp, ())):
+                marks.append(("B", 0, ""))
+                continue
+            if comp in FULL and lo_full <= s <= hi_full and first and second and \
+                    not any(same(a, first) and same(b, second) for L, a, b in PAIRS[comp]) and \
+                    not any(same(f, first) and same(sc, second) for L, f, sc in
+                            ref68.get(("club", comp), ()) or ref68.get(("nation", comp), ())) and \
+                    not any(same(f, first) and same(sc, second) for e, L, f, sc, src in res.get(comp, ())) and \
+                    not any(same(a, first) or same(b, first) for L, a, b in PAIRS[comp] if L and abs(L - s) <= 2):
+                marks.append(("B", 0, ""))      # no real edition of the full list (Beveren / Beerschot 2013)
+                continue
             if any(s in r[0] for r in mine):
                 # the same pair in a year next to it too (Rosenborg / Molde 1998 and 1999): no proof either way
                 twice = any(s - 1 in r[0] or s + 1 in r[0] for r in mine if s not in r[0])
@@ -216,14 +303,14 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
                 marks.append(("S", near[0][1] - s, near[0][2]))     # no other result on its year: joins a run only
             else:
                 marks.append(("U", 0, ""))
-        moves = {}
+        runs = []
         j = 0
         while j < len(lst):
             if marks[j][0] != "W":
                 j += 1
                 continue
             delta, k, last_w, n_w = marks[j][1], j, j, 0
-            while k < len(lst) and marks[k][0] in ("W", "U", "S") and (marks[k][0] != "W" or marks[k][1] == delta):
+            while k < len(lst) and marks[k][0] in ("W", "U", "S", "B") and (marks[k][0] != "W" or marks[k][1] == delta):
                 if marks[k][0] == "W":
                     last_w, n_w = k, n_w + 1
                 k += 1
@@ -239,25 +326,52 @@ def check_db(name, D, v, nat, last, d, ref68, res, conv, skip):
                 lo -= 1
             while hi + 1 < len(lst) and joins(hi + 1, hi):
                 hi += 1
-            if n_w >= BLOCK:
+            if n_w >= (1 if comp in FULL else BLOCK):
+                run = {}
                 for t in range(lo, hi + 1):
                     ref = marks[t][2] if marks[t][0] in ("W", "S") else \
                         f"moved with the wrong rows of {lst[lo][5]} to {lst[hi][5]} of {comp} (shown years)"
-                    moves[t] = (delta, ref)
+                    run[t] = (delta, ref)
+                runs.append(run)
             j = last_w + 1
-        if not moves:
+        if not runs:
             continue
+        # several rows on one year only where the record holds several championships (the Brazilian Northeast
+        # record, one per state); two finals in one calendar year (Irish League Cup 1998) would show the year twice
+        room = collections.Counter(L for L, f, sc, src in FULL.get(comp, ())[::2]) if comp in MULTI else \
+            collections.Counter()
         before = collections.Counter(x[5] for x in lst)
-        after = collections.Counter(x[5] + moves.get(t, (0,))[0] for t, x in enumerate(lst))
-        out = [(name, D, x[0], x[1], x[2], comp, x[4], x[5], x[5] + moves[t][0], x[6], x[7], moves[t][1])
-               for t, x in enumerate(lst) if t in moves]
-        # a row moved after the start year would be dropped at the creation (season_history_drop_after_start):
-        # review it (review of open item 233: Belgian Second Division 2014 Westerlo pushed to 2015)
-        if any(n > max(1 + ((comp, y) in DOUBLE), before[y]) for y, n in after.items()) or \
-                any(x[8] > D for x in out):
-            review += out
-        else:
-            wrong += out
+
+        def plan(moves):
+            """(rows out, 1 when the moves are allowed). A row of no real edition on a year that a moved row takes is
+            cleared (a free row, as the duplicate clear of season_history.c): else the year would show two rows. No
+            year may hold more rows than before (two on a label that the research gives two rows, or for MULTI as many
+            as the full list gives editions), and no row may move after the start year: the creation drops it
+            (season_history_drop_after_start; review of open item 233: Belgian Second Division 2014 Westerlo)."""
+            targets = {lst[t][5] + d for t, (d, ref) in moves.items()}
+            clears = {t for t, x in enumerate(lst) if t not in moves and marks[t][0] == "B" and x[5] in targets}
+            after = collections.Counter(x[5] + moves.get(t, (0,))[0] for t, x in enumerate(lst) if t not in clears)
+            out = [(name, D, x[0], x[1], x[2], comp, x[4], x[5], x[5] + moves[t][0], x[6], x[7], moves[t][1])
+                   for t, x in enumerate(lst) if t in moves]
+            out += [(name, D, x[0], x[1], x[2], comp, x[4], x[5], 0, x[6], x[7],
+                     f"cleared: no real edition of {comp} holds {x[6]} / {x[7]} (" + next(
+                         (src for a, b, src in NO_EDITION.get(comp, ()) if a == x[6] and b == x[7]),
+                         FULL[comp][0][3] if comp in FULL else "") + ")")
+                    for t, x in enumerate(lst) if t in clears]
+            ok = not any(n > max(1 + ((comp, y) in DOUBLE), room[y], before[y]) for y, n in after.items()) and \
+                not any(x[8] > D for x in out)
+            return out, ok
+
+        # each run on its own (Belgian Super Cup: 1989 to 2011 moves, 1979 to 1985 meets the 1986 row and stays)
+        accepted = {}
+        for run in runs:
+            out, ok = plan({**accepted, **run})
+            if ok:
+                accepted.update(run)
+            else:
+                review += plan(run)[0]
+        if accepted:
+            wrong += plan(accepted)[0]
     return wrong, review
 
 
@@ -295,9 +409,9 @@ def main(argv):
     found.sort(key=lambda x: (x[1], x[0]))
     allw, unver = [], []
     for name, D, p in found:
-        w, rev = check_db(name, D, dec[name], nat[name], last, mds.Data(p), ref68, res, conv, several)
-        allw += [x for x in w if x[5] not in UNVERIFIED]
-        unver += [x for x in w if x[5] in UNVERIFIED] + rev
+        w, rev = check_db(name, D, dec[name], nat[name], last, mds.Data(p), ref68, res, conv, several - set(FULL))
+        allw += [x for x in w if x[5] not in UNVERIFIED or x[5] in FULL]
+        unver += [x for x in w if x[5] in UNVERIFIED and x[5] not in FULL] + rev
         by = collections.Counter((x[5], x[8] - x[7]) for x in w)
         print(f"{name} ({D}): {len(w)} wrong rows" + "".join(f"; {c} {d:+d} x{n}" for (c, d), n in sorted(by.items())))
     if "--write" in argv:

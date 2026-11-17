@@ -7,12 +7,9 @@
 2008	bench	ger_cup (DFB-Pokal), row ger-101: game 6, table 7 (7)
 2008	bench	world_club_champ (FIFA Club World Cup), row club-world-135: game 7, table 12 (12)
 2008	club_list	Argentine Second Division: 20 of 20 listed clubs that the database holds (20 listed), 5 other clubs, 25 in all; not in it: -; others: Almirante Brown, Ben Hur de Rafaela, Nueva Chicago, Racing de Córdoba, Sportivo Italiano
-2008	club_list	Belgian Second Division: 18 of 19 listed clubs that the database holds (19 listed), 0 other clubs, 18 in all; not in it: Union Royale Namur; others: -
 2008	club_list	Brazilian National Third Division: 19 of 19 listed clubs that the database holds (19 listed), 37 other clubs, 56 in all; not in it: -; others: Alagoinhas Atlético Clube, América Football Club (RJ), Anápolis Futebol Clube, Associação Atlética Coruripe, Atlético Progresso Clube, Bangu Atlético Clube, Barras Futebol Clube, Club Sportivo Sergipe, Clube Atlético Linense, Clube Esportivo Bento Gonçalves, Clube Recreativo e Atlético Catalano, Clube do Remo, Esporte Clube Dom Pedro II, Esporte Clube Noroeste, Esporte Clube Águia Negra, Horizonte Futebol Clube, Itabuna Esporte Clube, Ituano Futebol Clube, Joinville Esporte Clube, Macaé Sports, Mirassol Futebol Clube, Nacional Atlético Clube, Nacional Fast Clube, Operário Futebol Clube, Palmas Futebol e Regatas, Paulista Futebol Clube, Petrolina Social Futebol Clube, Rio Bananal Futebol Clube, Roma Esporte Apucarana, Santa Cruz Futebol Clube, Serra Futebol Clube, Sociedade Esportiva Picos, Sport Club Boavista, Sport Club Santa Cruz, Sport Club Ulbra, Treze Futebol Clube, Vilhena Esporte Clube
 2008	club_list	Croatian First Division: 12 of 12 listed clubs that the database holds (12 listed), 4 other clubs, 16 in all; not in it: -; others: HNK Vukovar '91, NK Belisce, NK Kamen Ingrad Velika, NK Marsonia
 2008	club_list	Danish Second Division: 16 of 22 listed clubs that the database holds (32 listed), 0 other clubs, 16 in all; not in it: IK Skovbakken, Skovlunde Idrætsforening, Svendborg forenede Boldklubber, Vanløse Idræts Forening, Vedbæk Boldklub, Værløse Boldklub; others: -
-2008	club_list	Dutch First Division: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: FC Eindhoven, HFC Haarlem; others: -
-2008	club_list	Finnish Premier Division: 12 of 14 listed clubs that the database holds (14 listed), 0 other clubs, 12 in all; not in it: Jyväskylän Jalkapalloklubi, Rovaniemen Palloseura; others: -
 2008	club_list	Greek National A Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: Panthrakikos, Thrasivoulos; others: -
 2008	club_list	Greek National B Division: 14 of 18 listed clubs that the database holds (18 listed), 0 other clubs, 14 in all; not in it: AO Kalamata, Anagenisi Karditsas, Diagoras Rodou, Ethnikos Piraeus; others: -
 2008	club_list	Italian Serie A: 18 of 20 listed clubs that the database holds (20 listed), 0 other clubs, 18 in all; not in it: Calcio Catania, Reggina; others: -
@@ -24,7 +21,6 @@
 2008	club_list	Norwegian Premier Division: 14 of 16 listed clubs that the database holds (16 listed), 0 other clubs, 14 in all; not in it: IK Start, Sandefjord Fotball; others: -
 2008	clubs	arg_second (Primera B Nacional), row arg-usa-35: game 25, table 20 (20)
 2008	clubs	asia_club_champ (AFC Champions League), row club-world-146: game 16, table 32 (32)
-2008	clubs	bel_second (Belgian Second Division), row hol-bel-100: game 18, table 19 (19)
 2008	clubs	bel_third (Belgian Third Division), row hol-bel-101: game 16, table 32 (32 (A 16, B 16))
 2008	clubs	bra_cup (Copa do Brasil), row bra-143: game 71, table 64 (64)
 2008	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-89: game 7, table 20 (20)
@@ -43,11 +39,9 @@
 2008	clubs	european_cup (UEFA Champions League), row uefa-58: game 55, table 76 (76 (32 in the group stage))
 2008	clubs	fifa_confed (FIFA Confederations Cup), row int-world-94: game 0, table 8 (8)
 2008	clubs	fin_first (Ykkönen), row nor-fin-78: game 10, table 14 (14)
-2008	clubs	fin_prm (Veikkausliiga), row nor-fin-77: game 12, table 14 (14)
 2008	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-8: game 4, table 70 (70)
 2008	clubs	gre_prm (Super League Greece), row gre-pol-cro-35: game 14, table 16 (16)
 2008	clubs	gre_second (Beta Ethniki), row gre-pol-cro-62: game 14, table 18 (18)
-2008	clubs	hol_first (Eerste Divisie), row hol-bel-94: game 18, table 20 (20)
 2008	clubs	intertoto_cup (UEFA Intertoto Cup), row uefa-63: game 60, table 50 (50)
 2008	clubs	ita_c_cup (Coppa Italia Lega Pro), row ita-133: game 5, table 102 (102)
 2008	clubs	ita_cup (Coppa Italia), row ita-132: game 4, table 78 (78)
@@ -81,7 +75,6 @@
 2008	down	cro_a2a (Druga HNL), row gre-pol-cro-359: game 2 (+0 play-off places), table 1 (1 (16th))
 2008	down	cro_a2b (Druga HNL South), row gre-pol-cro-386: game 2 (+0 play-off places), table na (n/a)
 2008	down	den_second (Danish 2nd Divisions), row den-swe-46: game 4 (+0 play-off places), table 2 (2)
-2008	down	eng_third (Football League Two), row eng-101: game 1 (+0 play-off places), table 2 (2)
 2008	down	ger_second (2. Bundesliga), row ger-93: game 4 (+0 play-off places), table 2 (2)
 2008	down	gre_prm (Super League Greece), row gre-pol-cro-35: game 2 (+0 play-off places), table 3 (3 (14th-16th))
 2008	down	gre_second (Beta Ethniki), row gre-pol-cro-62: game 2 (+0 play-off places), table 3 (3 (16th-18th))
@@ -95,7 +88,6 @@
 2008	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-62: game 1, table 2
 2008	meetings	cro_a1 (Prva HNL), row gre-pol-cro-332: game 2, table 3
 2008	meetings	fin_first (Ykkönen), row nor-fin-78: game 3, table 2
-2008	meetings	fin_prm (Veikkausliiga), row nor-fin-77: game 3, table 2
 2008	meetings	jap_j2 (J.League Division 2), row aus-jap-kor-224: game 4, table 3
 2008	meetings	nir_first (IFA Championship), row wal-nir-irl-186: game 4, table 2
 2008	meetings	nir_prm (IFA Premiership), row wal-nir-irl-185: game 4, table 3
@@ -137,15 +129,12 @@
 2008	playoffs	ita_ser_c1b (Lega Pro Prima Divisione girone B), row ita-124: game 4 up and 4 down play-off places, table 4 and 0 ('2nd to 5th: semi-finals and final over two legs, winner promoted to Serie B')
 2008	playoffs	nor_first (Adeccoligaen), row nor-fin-73: game 1 up and 0 down play-off places, table 3 and 0 ('3rd, 4th, 5th play off with Tippeligaen 14th for one place')
 2008	rounds	arg_second (Primera B Nacional), row arg-usa-35: game 25, table 38 (2 meetings, zones -, extra 0)
-2008	rounds	bel_second (Belgian Second Division), row hol-bel-100: game 34, table 38 (2 meetings, zones -, extra 0)
 2008	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-35: game 19, table 38 (2 meetings, zones -, extra 0)
 2008	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-62: game 19, table 38 (2 meetings, zones -, extra 0)
 2008	rounds	cro_a1 (Prva HNL), row gre-pol-cro-332: game 30, table 33 (3 meetings, zones -, extra 0)
 2008	rounds	fin_first (Ykkönen), row nor-fin-78: game 27, table 26 (2 meetings, zones -, extra 0)
-2008	rounds	fin_prm (Veikkausliiga), row nor-fin-77: game 33, table 26 (2 meetings, zones -, extra 0)
 2008	rounds	gre_prm (Super League Greece), row gre-pol-cro-35: game 26, table 30 (2 meetings, zones -, extra 0)
 2008	rounds	gre_second (Beta Ethniki), row gre-pol-cro-62: game 26, table 34 (2 meetings, zones -, extra 0)
-2008	rounds	hol_first (Eerste Divisie), row hol-bel-94: game 34, table 38 (2 meetings, zones -, extra 0)
 2008	rounds	ita_ser_a (Serie A), row ita-121: game 34, table 38 (2 meetings, zones -, extra 0)
 2008	rounds	ita_ser_b (Serie B), row ita-122: game 38, table 42 (2 meetings, zones -, extra 0)
 2008	rounds	jap_j1 (J.League Division 1), row aus-jap-kor-197: game 30, table 34 (2 meetings, zones -, extra 0)

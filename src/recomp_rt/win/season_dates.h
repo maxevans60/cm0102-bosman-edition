@@ -53,7 +53,8 @@ extern const int season_date_shifts_count;
  * tools/seasons/make_history_years_table.py, the rows found by tools/seasons/history_years_check.py. */
 typedef struct {
     uint8_t nation;                 /* 0: club_comp_history.dat, 1: nation_comp_history.dat */
-    int8_t delta;                   /* the years to add on top of the shift */
+    int8_t delta;                   /* the years to add on top of the shift; 0: the row matches no real edition and
+                                     * stands on a year that a corrected row takes, so it becomes a free row */
     uint16_t year;                  /* the year of the row in the file (+0x08): the row must still hold it */
     uint16_t comp;                  /* the competition id of the row (+0x04): the row must still hold it */
     uint32_t row;                   /* the row in its file */

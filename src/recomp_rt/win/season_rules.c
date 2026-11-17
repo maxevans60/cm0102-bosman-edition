@@ -366,3 +366,31 @@ int season_rules_last_season(int season, const char *file)
         if (season_rules_find(s, file, 0)) return s;
     return 0;
 }
+
+static int moved_on;
+
+void season_rules_set_moved(int on) { moved_on = on != 0; }
+
+int season_rules_moved(const char *file) { return moved_on && file && !strncmp(file, "ire_", 4); }
+
+/* 1 when the real season of a row begins with the year ("2004", "2002–03 (short season)"). */
+static int real_begins(const SeasonRule *r, int year)
+{
+    char y[8];
+    snprintf(y, sizeof y, "%d", year);
+    return r && r->real_season && !strncmp(r->real_season, y, 4) &&
+           (r->real_season[4] < '0' || r->real_season[4] > '9');
+}
+
+const SeasonRule *season_rules_row_of(const char *file, int year)
+{
+    if (!file) return NULL;
+    if (season_rules_moved(file)) {
+        const SeasonRule *r = season_rules_find(year, file, 0);
+        if (real_begins(r, year)) return r;
+        for (int n = 0; (r = season_rules_find(year - 1, file, n)) != NULL; n++)
+            if (real_begins(r, year)) return r;
+    }
+    int s = season_rules_last_season(year, file);
+    return s ? season_rules_find(s, file, 0) : NULL;
+}

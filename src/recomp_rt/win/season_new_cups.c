@@ -22,6 +22,7 @@
 #include "season_change.h"
 #include "season_comps.h"
 #include "season_cups.h"
+#include "season_playoffs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -696,6 +697,7 @@ RT_WRAP(0051c410, new_cups_draw_round)
         cpu = saved;
     }
     if (drawn) paired_cup = cup, paired_round = round;
+    season_playoffs_draw_round(cup, round);         /* item 273: the semi-finals of the National League play-off */
     o_0051c410();
     paired_cup = 0, paired_round = -1;
     if (drawn && !rt_unwinding) log_first_round(cup);

@@ -1,6 +1,9 @@
 /* Test runs: a save at a fixed game date, for the same-save check (tests/smoke/smoke_run.py
  * --same-save). Only the environment switches it on. Play is unchanged without it.
  *
+ * RECOMP_SAVE_AFTER_SPLIT=n (season_split.c, testrun_save_in): the same save n game days after the first split of a
+ * league (0.7.2 slice 7).
+ *
  * RECOMP_SAVE_AFTER_DAYS=n: at the first human turn n or more game days after the first human turn,
  * the runtime saves the game as samesave.sav in the game folder of the original (the write goes to the
  * user folder, files.c) and ends the program with code 0.
@@ -41,6 +44,14 @@ static int game_day(void)
 {
     int day = (int16_t)rd16(g_mem, GAME_DATE), year = (int16_t)rd16(g_mem, GAME_DATE + 2);
     return year * 366 + day;       /* only differences of a few months are used */
+}
+
+/* A save at the first human turn `days` game days from today (RECOMP_SAVE_AFTER_SPLIT, season_split.c): the same
+ * save and end as RECOMP_SAVE_AFTER_DAYS. Test runs only. */
+void testrun_save_in(int days)
+{
+    save_after = days;
+    first_day = game_day();
 }
 
 void o_005cde40(void);

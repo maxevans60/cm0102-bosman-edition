@@ -33,7 +33,6 @@
 2026	clubs	african_nations (Africa Cup of Nations), row int-continental-282: game 0, table 24 (24)
 2026	clubs	asia_club_champ (AFC Champions League Elite), row club-world-488: game 16, table 32 (32)
 2026	clubs	asia_nations (AFC Asian Cup), row int-continental-284: game 0, table 24 (24)
-2026	clubs	bel_second (Challenger Pro League), row hol-bel-334: game 18, table 15 (15)
 2026	clubs	bel_third (Belgian Division 1), row hol-bel-335: game 16, table 28 (28 (VV 16, FFA 12))
 2026	clubs	bra_cup (Copa do Brasil), row bra-161: game 71, table 128 (128)
 2026	clubs	bra_nat_third (Campeonato Brasileiro Série C), row bra-107: game 7, table 24 (24)
@@ -44,7 +43,6 @@
 2026	clubs	euro_champ_qual (UEFA European Championship qualifying), row int-continental-277: game 6, table 54 (54 (scheduled))
 2026	clubs	gre_cup (Greek Football Cup), row gre-pol-cro-26: game 4, table 28 (28 (Super League 1 and Super League 2 clubs, plus the 2025–26 Greek Amateur Cup )
 2026	clubs	gre_second (Super League 2), row gre-pol-cro-80: game 14, table 16 (16)
-2026	clubs	hol_first (Eerste Divisie), row hol-bel-328: game 18, table 20 (20)
 2026	clubs	ire_chal_cup (FAI Cup), row wal-nir-irl-644: game 42, table 44 (44 (2026 entry))
 2026	clubs	ire_leinster_cup (Leinster Senior Cup), row wal-nir-irl-646: game 16, table 29 (29 (inference: 13 qualifiers plus 11 LOI clubs and 5 group places))
 2026	clubs	ita_c1_super (Supercoppa Serie C), row ita-441: game 2, table 3 (3)
@@ -81,9 +79,7 @@
 2026	down	cro_a2b (Druga HNL South), row gre-pol-cro-404: game 2 (+0 play-off places), table na (n/a)
 2026	down	den_first (Danish 1st Division), row den-swe-153: game 3 (+0 play-off places), table 2 (2)
 2026	down	den_second (Danish 2nd Division), row den-swe-154: game 4 (+0 play-off places), table 2 (2)
-2026	down	eng_third (EFL League Two), row eng-281: game 1 (+0 play-off places), table 2 (2)
 2026	down	fin_first (Ykkösliiga), row nor-fin-258: game 2 (+1 play-off places), table 1 (10th (1))
-2026	down	fra_second (Ligue 2), row fra-228: game 3 (+0 play-off places), table 2 (2)
 2026	down	fra_third (Ligue 3), row fra-229: game 4 (+0 play-off places), table 3 (3)
 2026	down	ger_second (2. Bundesliga), row ger-327: game 4 (+0 play-off places), table 2 (2)
 2026	down	gre_prm (Super League 1), row gre-pol-cro-53: game 2 (+0 play-off places), table unknown (unknown)
@@ -116,8 +112,6 @@
 2026	meetings	bra_nat_second (Campeonato Brasileiro Série B), row bra-80: game 1, table 2
 2026	meetings	bra_nat_third (Campeonato Brasileiro Série C), row bra-107: game 2, table 1
 2026	meetings	cro_a1 (HNL), row gre-pol-cro-350: game 2, table 4
-2026	meetings	den_prm (Danish Superliga), row den-swe-152: game 3, table 2
-2026	meetings	fin_prm (Veikkausliiga), row nor-fin-257: game 3, table 2
 2026	meetings	jap_j2 (J2 League), row aus-jap-kor-242: game 4, table 2
 2026	meetings	nir_first (NIFL Championship), row wal-nir-irl-636: game 4, table 2
 2026	meetings	nir_prm (NIFL Premiership), row wal-nir-irl-635: game 4, table 3
@@ -176,6 +170,7 @@
 2026	playoffs	fin_first (Ykkösliiga), row nor-fin-258: game 0 up and 1 down play-off places, table 1 and 1 ('2nd v Veikkausliiga 11th, two legs; 9th v Ykkönen 2nd, two legs')
 2026	playoffs	fra_first (Ligue 1), row fra-227: game 0 up and 0 down play-off places, table 0 and 1 ('16th v winner of the Ligue 2 play-off semi-final (inference from the Ligue 2 pag')
 2026	playoffs	fra_second (Ligue 2), row fra-228: game 0 up and 0 down play-off places, table 3 and 1 ('4th v 5th, winner v 3rd, winner v Ligue 1 16th; 16th v the winner of the Ligue 3')
+2026	playoffs	fra_third (Ligue 3), row fra-229: game 0 up and 0 down play-off places, table 4 and 0 ('3rd to 6th play off; the winner plays the Ligue 2 16th over two legs')
 2026	playoffs	ger_first (Bundesliga), row ger-326: game 0 up and 0 down play-off places, table 0 and 1 ('16th v 2. Bundesliga 3rd, two legs, no away goals rule, extra time and penalties')
 2026	playoffs	ger_second (2. Bundesliga), row ger-327: game 0 up and 0 down play-off places, table 1 and 1 ('3rd v Bundesliga 16th; 16th v 3. Liga 3rd; two legs, no away goals rule')
 2026	playoffs	hol_prm (Eredivisie), row hol-bel-327: game 0 up and 2 down play-off places, table 0 and 1 ('16th to the promotion/relegation play-off; places 4 to 7 to the European play-of')
@@ -200,16 +195,11 @@
 2026	playoffs	tur_second (TFF 1. Lig), row rus-tur-215: game 0 up and 0 down play-off places, table 5 and 0 ('3rd goes straight to the play-off final; 4th v 7th and 5th v 6th single match at')
 2026	playoffs	tur_second_b (TFF 2. Lig), row rus-tur-242: game 2 up and 0 down play-off places, table 0 and 0 ('see format')
 2026	playoffs	wel_first (Cymru Premier), row wal-nir-irl-629: game 0 up and 0 down play-off places, table 0 and 1 ('2nd to 6th plus winner of the 7th to 10th group: European play-offs; 14th: releg')
-2026	rounds	bel_second (Challenger Pro League), row hol-bel-334: game 34, table 30 (2 meetings, zones -, extra 0)
 2026	rounds	bra_nat_first (Campeonato Brasileiro Série A), row bra-53: game 19, table 38 (2 meetings, zones -, extra 0)
 2026	rounds	bra_nat_second (Campeonato Brasileiro Série B), row bra-80: game 19, table 38 (2 meetings, zones -, extra 0)
 2026	rounds	cro_a1 (HNL), row gre-pol-cro-350: game 30, table 36 (4 meetings, zones -, extra 0)
 2026	rounds	den_first (Danish 1st Division), row den-swe-153: game 30, table 22 (2 meetings, zones -, extra 0)
-2026	rounds	den_prm (Danish Superliga), row den-swe-152: game 33, table 22 (2 meetings, zones -, extra 0)
 2026	rounds	den_second (Danish 2nd Division), row den-swe-154: game 30, table 22 (2 meetings, zones -, extra 0)
-2026	rounds	fin_prm (Veikkausliiga), row nor-fin-257: game 33, table 22 (2 meetings, zones -, extra 0)
-2026	rounds	fra_third (Ligue 3), row fra-229: game 38, table 34 (2 meetings, zones -, extra 0)
-2026	rounds	hol_first (Eerste Divisie), row hol-bel-328: game 34, table 38 (2 meetings, zones -, extra 0)
 2026	rounds	ita_ser_a (Serie A), row ita-427: game 34, table 38 (2 meetings, zones -, extra 0)
 2026	rounds	jap_j1 (J1 League), row aus-jap-kor-215: game 30, table 38 (2 meetings, zones -, extra 0)
 2026	rounds	jap_j2 (J2 League), row aus-jap-kor-242: game 44, table 38 (2 meetings, zones -, extra 0)
@@ -242,7 +232,6 @@
 2026	up	den_second (Danish 2nd Division), row den-swe-154: game 3 (+0 play-off places), table 2 (2)
 2026	up	fin_first (Ykkösliiga), row nor-fin-258: game 2 (+0 play-off places), table 1 (1st (1))
 2026	up	gre_cup (Greek Football Cup), row gre-pol-cro-26: game 2 (+0 play-off places), table na (n/a)
-2026	up	hol_first (Eerste Divisie), row hol-bel-328: game 1 (+0 play-off places), table 2 (2 (champion and runner-up; Jong teams cannot be promoted))
 2026	up	ire_first (League of Ireland First Division), row wal-nir-irl-642: game 1 (+1 play-off places), table unknown (unknown)
 2026	up	pol_first (Ekstraklasa), row gre-pol-cro-215: game 4 (+0 play-off places), table na (n/a)
 2026	up	sco_second (Scottish League One), row sco-204: game 2 (+0 play-off places), table 1 (1)

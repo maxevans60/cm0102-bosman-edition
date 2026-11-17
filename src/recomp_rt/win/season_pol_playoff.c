@@ -37,6 +37,7 @@
 #include "win.h"
 #include "season_names.h"
 #include "season_pol_playoff.h"
+#include "season_pol_first.h"
 
 #include <stdlib.h>
 
@@ -181,7 +182,14 @@ int season_pol_playoff_unfinished(int e, int year, const char **file)
         uint32_t t = readable(st) ? rd32(g_mem, st + 0xa3u) : 0;
         int upd = (int16_t)rd16(g_mem, at + ENTRY_UPDATE_DAY), base = (int16_t)rd16(g_mem, st + 0x40u);
         if (!readable(t) || upd < 0) return 0;
-        long leg2 = abs_day(base + (int8_t)g_mem[t + 5u], (int16_t)rd16(g_mem, t + 3u)) + g_mem[t + 0x22u];
+        /* The last match of the play-off: the I liga's own play-off has 2 rounds (the semi-finals, then the final 4 or
+         * more days later, season_playoffs.c), the play-off against the Ekstraklasa has 1. */
+        long leg2 = 0;
+        for (int r = 0, rounds = season_pol_first_own_playoff(c) ? 2 : 1; r < rounds; r++) {
+            uint32_t tr = t + 0x68u * (uint32_t)r;
+            long d = abs_day(base + (int8_t)g_mem[tr + 5u], (int16_t)rd16(g_mem, tr + 3u)) + g_mem[tr + 0x22u];
+            if (d > leg2) leg2 = d;
+        }
         return leg2 >= abs_day(year, upd) ? 1 : 0;
     }
     return 0;
@@ -219,6 +227,7 @@ RT_WRAP(007cb4a0, pol_second_schedule)
     uint32_t self = cpu.ecx, ret = rd32(g_mem, cpu.esp);
     int stage = (int8_t)g_mem[cpu.esp + 4u];
     o_007cb4a0();
+    if (!rt_unwinding && ret == MAKE_PLAYOFF_RET && stage == 0) season_pol_first_playoff_round(self, cpu.eax);
     if (!rt_unwinding && ret == MAKE_PLAYOFF_RET && stage == 0 && season_game_changes())
         dates_from_today(self, cpu.eax);
 }

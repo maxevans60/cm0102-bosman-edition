@@ -4,7 +4,7 @@
 # (the class's meetings stay, and the gaps file lists it). Evidence: sizes-check-<group>.md are the notes of the
 # check of 13 November 2026 (docs/research/2026-11-13-league-sizes-check.md), the rules table cells, and the pages named.
 comp_file	first_season	last_season	meetings	evidence
-arg_prm	2026	2027	-	unknown: clubs unknown (rows arg-usa-26 and arg-usa-27; sizes-check-americas.md lines 33-34)
+arg_prm	2026	2027	1	one round-robin of 30 plus a derby round (rows arg-usa-26 and arg-usa-27: LPF format of 29 October 2026, eleconomista.com.ar and diariopanorama.com)
 arg_second	2001	2001	1	sizes-check-americas.md line 95 (and line 72): Apertura one table of 25, one meeting, 24 MP, before the Clausura zones; first stage 24 / (25 - 1) = 1 (from matches)
 arg_second	2002	2006	1	sizes-check-americas.md lines 73 and 96: Apertura and Clausura of 19 rounds each, 20 clubs, 19 MP; halves, 19 / (20 - 1) = 1 per half (from matches)
 arg_second	2019	2019	2	sizes-check-americas.md line 102 (and line 82): 2 zones of 16, double round robin in the zone, stopped after 21 rounds (planned format counted)
@@ -14,11 +14,11 @@ aus_nsl	2005	2008	3	sizes-check-asia.md line 117: 8 clubs, 21 games; 21 / 7 = 3 
 aus_nsl	2009	2009	3	sizes-check-asia.md line 118: 10 clubs, 27 games; 27 / 9 = 3 (from matches)
 aus_nsl	2010	2010	3	sizes-check-asia.md line 119: 11 clubs, 30 games; 30 / 10 = 3 (from matches)
 aus_nsl	2011	2018	3	sizes-check-asia.md line 120: 10 clubs, 27 games; 27 / 9 = 3 (from matches)
-aus_nsl	2019	2019	-	unbalanced: 26 rounds for 11 clubs (sizes-check-asia.md lines 121 and 134)
-aus_nsl	2020	2022	-	unbalanced: 26 rounds for 12 clubs (sizes-check-asia.md lines 122 and 134)
-aus_nsl	2023	2023	-	unbalanced: 27 rounds for 12 clubs (sizes-check-asia.md lines 123 and 134)
-aus_nsl	2024	2024	-	unbalanced: 26 rounds for 13 clubs (sizes-check-asia.md lines 124 and 134)
-aus_nsl	2025	2026	-	unbalanced: 26 rounds for 12 clubs (sizes-check-asia.md lines 125-126 and 134; A-Leagues 2026/27 fixture page, line 12)
+aus_nsl	2019	2019	3	26 matches a club for 11 clubs (29 rounds, 3 byes; https://adelaideunited.com.au/?p=8968). The engine plays whole meetings: 3 gives 30, 2 gives 20, so 3 is nearest. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2020	2022	2	26 matches a club for 12 clubs: each pair twice (22) plus 4 third meetings (https://adelaideunited.com.au/?p=10645, https://aleagues.com.au/?p=95355). Nearest whole count: 2 (22), 3 gives 33. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2023	2023	2	26 rounds for 12 clubs ("The Isuzu UTE A-League season will have 26 rounds", https://aleagues.com.au/?p=97912), while https://en.wikipedia.org/wiki/2023%E2%80%9324_A-League_Men gives 27 games a club. 22 plus 4 or 5 third meetings. Nearest whole count: 2 (3 gives 33). Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2024	2024	2	26 matches a club for 13 clubs: 24 home and away plus 2 third meetings (https://aleagues.com.au/news/a-league-men-fixtures-2024-25-every-team-kick-off-times-venues-details/). Nearest whole count: 2. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
+aus_nsl	2025	2026	2	26 matches a club for 12 clubs: 22 home and away plus 4 third meetings (https://aleagues.com.au/news/a-league-men-fixtures-2025-26-every-team-kick-off-times-venues-details/, https://aleagues.com.au/news/aleague-men-2026-2027-fixture-list-revealed-key-dates-fixture-information/). Nearest whole count: 2. Gap row 7, run-logs/0.7.2-sz01/gaps-research.md section 7
 aus_nsl	2027	2027	-	unknown: clubs unknown (row aus-jap-kor-50; sizes-check-asia.md line 127)
 bel_first	2001	2008	2	sizes-check-north.md lines 117-124 and 205: 18 clubs, 34 rounds, double round robin; 34 / 17 = 2 (from rounds)
 bel_first	2019	2019	2	sizes-check-north.md lines 135 and 211: 16 clubs, 30 rounds scheduled (29 played, COVID-19); planned 30 / 15 = 2 (from rounds)
@@ -110,7 +110,7 @@ hol_prm	2020	2025	2	https://en.wikipedia.org/wiki/2020–21_Eredivisie to 2025�
 hol_prm	2026	2026	2	https://en.wikipedia.org/wiki/Eredivisie (each club meets every other club twice, once at home and once away); https://en.wikipedia.org/wiki/2026–27_Eredivisie in progress, 18 clubs, pld 12
 hol_prm	2027	2027	-	unknown: clubs unknown (row hol-bel-340)
 ire_first	2001	2001	4	sizes-check-west.md line 150: 2001/02, 9 clubs, pld 32; 32 / 8 = 4 (from matches)
-ire_first	2002	2002	?	row wal-nir-irl-42 holds two real seasons that the game plays in turn: 2002-03 (12 clubs, pld 22, two groups of six then a final per the row notes) and 2003 (12 clubs, pld 33, 3 meetings) (sizes-check-west.md line 151); no single value
+ire_first	2002	2002	2	https://en.wikipedia.org/wiki/2002%E2%80%9303_League_of_Ireland_First_Division: "It used a round-robin format which saw each team play 22 games", 12 clubs; 22 / 11 = 2. The game plays the short 2002-03 season in this row (August 2002 to January 2003, gap row 2 of 0.7.2) and the 2003 season in row wal-nir-irl-42b. The two groups of six were the First Division Cup.
 ire_first	2003	2003	3	sizes-check-west.md line 152: 2004, 12 clubs, pld 33; 33 / 11 = 3 (from matches)
 ire_first	2004	2007	4	sizes-check-west.md line 153: 2005 to 2008, 10 clubs, pld 36; 36 / 9 = 4 (from matches)
 ire_first	2008	2009	3	sizes-check-west.md line 154: 2009 and 2010, 12 clubs, pld 33; 33 / 11 = 3 (from matches)
@@ -197,7 +197,7 @@ nir_first	2009	2011	2	sizes-check-west.md lines 81 and 96: 14 clubs, pld 26; 26 
 nir_first	2012	2012	2	sizes-check-west.md lines 82 and 96: 13 clubs, pld 24; 24 / 12 = 2 (from matches)
 nir_first	2013	2015	2	sizes-check-west.md lines 83 and 96: 14 clubs, pld 26; 26 / 13 = 2 (from matches)
 nir_first	2019	2019	2	sizes-check-west.md lines 85 and 97: 12 clubs, two meetings (22 rounds) before the split; curtailed at pld 31, planned format counted; 22 / 11 = 2
-nir_first	2020	2020	?	no source shows a 2020/21 Championship season (sizes-check-west.md lines 86 and 202); planned format not stated anywhere
+nir_first	2020	2020	2	gap 42 (15 November 2026): the NIFL announced 22 matches for 12 clubs, 28 November 2020 to 22 May 2021 (wal-nir-irl-486 sources); cancelled before any match; 22 / 11 = 2, no split
 nir_first	2021	2021	3	sizes-check-west.md lines 87 and 98: 12 clubs, three meetings (33 rounds) before the split of 6 and 6; 33 / 11 = 3
 nir_first	2024	2025	3	sizes-check-west.md lines 87 and 98: 12 clubs, three meetings (33 rounds) before the split; 33 / 11 = 3
 nir_prm	2001	2001	4	sizes-check-west.md lines 49 and 62: 10 clubs, pld 36, four meetings; 36 / 9 = 4

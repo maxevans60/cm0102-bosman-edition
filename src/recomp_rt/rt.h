@@ -397,6 +397,31 @@ uint32_t rt_goals_full(uint32_t staff);
 uint32_t rt_league_clubs(uint32_t obj, uint32_t original);
 /* The bytes of the table that create_table of a grown class allocates (season_sizes.h, issue 106). */
 uint32_t rt_league_table_bytes(uint32_t obj, uint32_t original);
+/* The matches that League::check_complete 0x689ad0 wants of every row (0x689b47), the original's +0xa7 except in a
+ * league whose sections of a split play different matches (0.7.2 slice 7, win/season_split.c). */
+uint32_t rt_league_played_target(uint32_t obj, uint32_t original);
+/* 1 when the sort of a split league (0x682b0f) must keep a row's place after match N (win/season_split.c). */
+int rt_league_keep_split_place(uint32_t obj, uint32_t played);
+/* The periods of the Eerste Divisie and the Belgian Second Division at the rounds of the season (0.7.2 slice 10, D6,
+ * win/season_sizes_periods.c): the round where a period begins (HolFirst 0x5f65b0, BelSecond 0x420110) and the matches
+ * of a period stage (HolFirst 0x5f6ad0, BelSecond 0x4204d0). */
+uint32_t rt_league_period_bound(uint32_t obj, uint32_t original);
+uint32_t rt_league_period_length(uint32_t obj, uint32_t period, uint32_t original);
+/* The byte offset of the Second Division row that BelThird's promotion play-off reads (0x423a80): the count less 3
+ * (0.7.2 slice 10, win/season_sizes_bel.c). */
+uint32_t rt_bel_third_row(uint32_t third, uint32_t original);
+/* First Division B with the row's two periods (gap 33, win/season_sizes_periods.c): the stage of the play-off
+ * (0x42021c) and its clubs (0x42028e, 0x42036b, 0x420412). */
+uint32_t rt_bel_playoff_stage(uint32_t obj, uint32_t original);
+uint32_t rt_bel_playoff_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_hol_stage_room(uint32_t original);
+uint32_t rt_league_stage_bytes(uint32_t obj, uint32_t original);  /* League::load's stage array (0x688e4b) */
+uint32_t rt_period_handler(void);  /* the object of HolFirst 0x5f73d0 or BelSecond 0x420d40 while it runs */
+uint32_t rt_hol_playoff_stage(uint32_t obj, uint32_t original);
+uint32_t rt_hol_period_news(void);
+uint32_t rt_league_last_stage(uint32_t obj, uint32_t original);  /* the last stage index (0x6849d7) */
+void rt_split_sort_order(uint32_t obj);
+int rt_split_bounds(uint32_t obj);              /* season_split.c: best and worst places by section */
 /* The club count of the German Regional object, the 3. Liga from 2008/09 (0.6.0 slice 20,
  * win/season_divisions.c): the patched stores of tools/recomp/new_divisions.py at 0x5dd801 and 0x5dd809. */
 uint32_t rt_ger_regional_clubs(uint32_t obj, uint32_t original);
@@ -409,6 +434,22 @@ uint32_t rt_tur_table_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_tur_table_bytes(uint32_t obj, uint32_t original);
 uint32_t rt_tur_stage_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_tur_stage_bytes(uint32_t obj, uint32_t original);
+/* A constant of ArgPrm for 20 clubs plus (count - 20) in a season game (win/season_sizes_arg.c, tools/recomp/arg_prm.py). */
+uint32_t rt_arg_count(uint32_t original);
+uint32_t rt_arg_apertura_dates(uint32_t obj, uint32_t original);
+/* The count at which ArgSecond adds its fixed 25th club (win/season_sizes_arg_second.c, tools/recomp/arg_second.py). */
+uint32_t rt_arg_second_fixed_at(uint32_t obj, uint32_t original);
+/* The Ekstraklasa in one table (win/season_pol_first.c, GitHub issue 92): the 16 club slots of the constructor's
+ * predicted positions (0x7c8ce5, 0x7c8d09) and of set_predicted_positions (0x7ca264, 0x7ca288), tools/recomp/pol_first.py. */
+uint32_t rt_pol_first_slots(uint32_t obj, uint32_t original);
+/* The exchange of the Ekstraklasa and the I liga of each season (win/season_pol_first.c): the clubs of the play-off
+ * (0x7cc3d1), the chain's pairs (0x7ca4cc) and the clubs that come from the third tier (0x7ca132, 0x7ca13c, 0x7ca14a). */
+uint32_t rt_pol_playoff_clubs(uint32_t obj, uint32_t original);
+uint32_t rt_pol_first_pairwise(uint32_t obj, uint32_t original);
+uint32_t rt_pol_lower_intake(uint32_t obj, uint32_t original);
+uint32_t rt_pol_history_index(uint32_t table, uint32_t original);
+uint32_t rt_pol_split_index(uint32_t table, uint32_t original);
+uint32_t rt_pol_played_before(uint32_t table, uint32_t original);
 /* 1 when the Portuguese Cup takes a club with no division (0x7ce37d): a Portuguese club in a game with Liga 3. */
 uint32_t rt_por_cup_none(uint32_t club);
 /* The date count of a French league's template for the clubs that its division holds (slice 18). */
@@ -434,8 +475,66 @@ uint32_t rt_fra_cfa_fill(uint32_t array, uint32_t count);   /* FraCfa empty plac
 uint32_t rt_fra_lower_fill(uint32_t array, uint32_t count); /* French Lower Division places (0x5bd752) */
 uint32_t rt_cup_places_list(uint32_t list, uint32_t bytes);  /* a cup list from 0x944e46, cleared (season game) */
 uint32_t rt_promote_expected(uint32_t league, uint32_t up, uint32_t original);  /* ItaSerA chain counts (0x642476) */
+/* IreFirst::create_table 0x635910 at its real count (0.7.2 league sizes, slice 13, win/season_sizes_irl.c): the least
+ * count it takes (0x63596f) and its meetings for a count (0x63598f, 0x635997), the original's outside the engine. */
+uint32_t rt_ire_first_least(uint32_t obj, uint32_t original);
+uint32_t rt_ire_first_meetings(uint32_t obj, uint32_t original);
+uint32_t rt_ire_prm_down(uint32_t obj, uint32_t original);
+/* The Irish awards (IrelandAwards::daily_update 0x63bf10, OldIrelandAwards::daily_update 0x79f250) on the day of the
+ * calendar move (gap row 2 of 0.7.2, win/season_calendar_game.c), the original's 1 May in winter. */
+uint32_t rt_ire_award_day(uint32_t original);
+uint32_t rt_ire_award_month(uint32_t original);
+uint32_t rt_ire_prm_playoff(uint32_t obj, uint32_t original);
+/* The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6, win/season_cup_sizes_east.c,
+ * tools/recomp/cup_sizes_east.py). Each returns the original's constant in the base game. */
+uint32_t rt_gre_cup_lower(uint32_t pool);
+/* The CroA2a tie-break list of a table of more than 16 (0.7.2 slice 11, season_sizes_cro.c) */
+uint32_t rt_cro_tiebreak_slot(uint32_t obj, uint32_t array, uint32_t index);
+uint32_t rt_cro_tiebreak_list(uint32_t obj, uint32_t array);
+uint32_t rt_cro_regroup_max(uint32_t original);
+uint32_t rt_cro_regroup_slot(uint32_t array, uint32_t index);
+uint32_t rt_cro_regroup_list(uint32_t array, uint32_t count);
+uint32_t rt_cro_regroup_north(uint32_t original);
+uint32_t rt_cro_regroup_end(uint32_t original);
+uint32_t rt_cro_regroup_target(uint32_t chosen, uint32_t place);
+uint32_t rt_cro_regroup_sort_count(uint32_t count);
+uint32_t rt_cro_south_swap(void);
+uint32_t rt_cro_south_idle(void);
+uint32_t rt_cro_south_empty(uint32_t obj);
+uint32_t rt_gre_fix_count(uint32_t original, uint32_t second);
+uint32_t rt_rus_cup_lower(uint32_t pool);
+uint32_t rt_rus_cup_picks(uint32_t esp);
+uint32_t rt_rus_cup_premier_place(uint32_t placed);
+uint32_t rt_tur_cup_copy_from(uint32_t esp);
+uint32_t rt_tur_cup_lower(uint32_t esp);
+uint32_t rt_tur_cup_second_place(uint32_t esp);
+uint32_t rt_pol_lge_second(uint32_t cup);
+uint32_t rt_jap_j_cup_j2(uint32_t cup);
+uint32_t rt_jap_emp_lower(uint32_t pool);
+uint32_t rt_jap_emp_place(uint32_t original, uint32_t mult, uint32_t add);
+/* Russia and Turkey at their real counts (0.7.2 league sizes, slice 12, win/season_sizes_rus.c,
+ * tools/recomp/sizes_rus_tur.py): 18 in the base game. */
+uint32_t rt_rus_first_take(uint32_t obj);
+/* J1 halves of the row's count (0.7.2 league sizes, slice 14, D8; win/season_sizes_asia.c, tools/recomp/sizes_asia.py):
+ * the first round of the second half and the matches of a club in a half; the original in the base game. */
+uint32_t rt_jap_half_rounds(uint32_t league, uint32_t original);
+uint32_t rt_jap_half_matches(uint32_t league, uint32_t original);
 /* Italy's Serie C of three groups (0.6.0 slice 20b, win/season_divisions_ita.c, tools/recomp/new_divisions.py). */
 uint32_t rt_ita_table_bytes(uint32_t obj, uint32_t original);
+/* Italy at its real sizes (0.7.2 league sizes slice 9, season_sizes_ita.c, tools/recomp/league_sizes_ita.py). */
+uint32_t rt_ita_zone(uint32_t obj, uint32_t serie_b, uint32_t row, uint32_t at);
+uint32_t rt_ita_c1_row(uint32_t obj, uint32_t original);
+uint32_t rt_ita_c1_seed(uint32_t obj, uint32_t original);
+uint32_t rt_ita_playout_count(uint32_t obj, uint32_t original);
+int rt_ita_playout_none(uint32_t obj);
+uint32_t rt_ita_playout_block(uint32_t obj, uint32_t block);
+uint32_t rt_ita_regroup_max(uint32_t original);
+uint32_t rt_ita_regroup_buf(uint32_t stack);
+uint32_t rt_ita_regroup_count(uint32_t n);
+uint32_t rt_ita_regroup_split(uint32_t original);
+uint32_t rt_ita_regroup_end(uint32_t original);
+uint32_t rt_ita_c1_rows(uint32_t c1a, uint32_t c1b);
+uint32_t rt_ita_row_status(uint32_t obj, uint32_t i, uint32_t row);
 uint32_t rt_ita_c2a_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_end_clubs(uint32_t obj, uint32_t original);
 uint32_t rt_ita_c2_none(uint32_t group);

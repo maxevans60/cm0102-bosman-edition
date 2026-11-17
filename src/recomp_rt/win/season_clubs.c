@@ -2,12 +2,14 @@
  * division pointer (+0x57) of club records in the game's memory, and only in a season game. */
 #include "win.h"
 #include "season.h"
+#include "season_mls.h"
 #include "season_clubs.h"
 #include "season_second_teams.h"
 #include "season_fin_second.h"
 #include "season_bel_second.h"
 #include "season_esp_second.h"
 #include "season_tur_groups.h"
+#include "season_pol_first.h"
 #include "season_arg_zones.h"
 #include "season_names.h"
 #include "season_records.h"
@@ -181,6 +183,11 @@ static uint32_t planned_division(uint32_t at)
     return moves_club[i].div;
 }
 
+uint32_t season_clubs_planned_division(uint32_t club)
+{
+    return planned_division(club);
+}
+
 /* One division of the game. */
 typedef struct {
     uint32_t at, nation;
@@ -284,13 +291,39 @@ static int class_size(const char *name, int season)
 {
     int new_division = season_divisions_class_size(name, season);   /* slice 20 */
     if (new_division >= 0) return new_division;
+    int mls = season_mls_division_size(name, season);                /* gap row 7: the MLS of real life */
+    if (mls >= 0) return mls;
+    if (!strncmp(name, "Polish First Division", 52)) {                 /* issue 92: one table of 14, 16 or 18 */
+        int one_table = season_pol_first_clubs(season);
+        if (one_table > 0) return one_table;
+    }
     for (size_t k = 0; k < sizeof CLASS_SIZE / sizeof CLASS_SIZE[0]; k++)
         if (!strncmp(name, CLASS_SIZE[k].name, 52)) {
             int table = season_sizes_clubs(CLASS_SIZE[k].file, season);
             if (table > 0) return table;
             return season == SEASON_FIRST_YEAR ? CLASS_SIZE[k].first_season : CLASS_SIZE[k].size;
         }
+    /* A class that counts the clubs of its data plays the count of its row with the sizes on (0.7.2 slice 13): the
+     * 2013 list holds 8 Irish First Division clubs, and the 3.9.68 data 10. Off, the data's count stays. */
+    if (!strncmp(name, "Irish First Division", 52)) return season_sizes_data_clubs("ire_first", season);
+    /* Item 260: the Irish Premier Division too (IrePrm takes 10 or 12). Without a count the division kept the
+     * database's 12 after its list of 10, in a 2003 or 2004 start. */
+    if (!strncmp(name, "Irish Premier Division", 52)) return season_sizes_data_clubs("ire_prm", season);
     return -1;
+}
+
+/* Item 260: the season of the lists of a division in a start season. The lists are kept by the season of the rules
+ * table row ("2004 Irish Premier Division" holds the clubs of the real 2005, row 2004 of ire_prm), and a League of
+ * Ireland edition plays the row whose real season begins in its year (season_sizes_edition: edition 2004 plays row
+ * 2003, real 2004). So an Irish division takes the list of its edition's row; any other division the list of the
+ * season. With the sizes off the season stays. The club records of a division follow the same season
+ * (season_records_merge). */
+int season_clubs_list_season(const char *division, int season)
+{
+    if (!season_sizes_on()) return season;
+    if (!strncmp(division, "Irish Premier Division", 52)) return season_sizes_edition("ire_prm", season);
+    if (!strncmp(division, "Irish First Division", 52)) return season_sizes_edition("ire_first", season);
+    return season;
 }
 
 /* The file of a division's class, or NULL. */
@@ -316,7 +349,8 @@ static int data_class_count(const char *name, int n)
 {
     if (n <= 0) return n;
     if (!strncmp(name, "Irish Premier Division", 52) && n < 12) return n <= 10 ? 10 : 12;
-    if (!strncmp(name, "Irish First Division", 52) && n < 9) return 9;
+    /* In a season game with the sizes on, IreFirst takes any count from 2 (0.7.2 slice 13, season_sizes_irl.c). */
+    if (!strncmp(name, "Irish First Division", 52) && n < 9 && !season_sizes_on()) return 9;
     if (!strncmp(name, "Norwegian First Division", 52) && n < 16 && n != 14) return n < 14 ? 14 : 16;
     return n;
 }
@@ -497,17 +531,34 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
     if (season_tur_groups_tagged(c->at)) return 0;      /* Summer 2002: the first season places it in its group */
     int t = c->db_div >= comps ? (int)((c->db_div - comps) / COMP_SIZE) : -1;
     int reserve_ok = !season_clubs_reserve_name(win_str(c->at + CLUB_NAME)) || d->missing_reserve;
+    /* 0.7.2 slice 3 (D12): groups 2 and 3 take no reserve or B side either. Groups 5 and 6 are groups 2 and 3 with
+     * them, the last resort of a class that cannot play with fewer clubs (move_clubs). */
+    if (group == 5 || group == 6) group -= 3, reserve_ok = 1;
     if (group == 0)                     /* a club that left a division of a higher rank */
         return !c->div && t >= 0 && t < ncomps && div[t].rank > d->rank && reserve_ok;
     if (group == 4)                     /* a club that left a lower division with a list */
         return !c->div && t >= 0 && t < ncomps && div[t].target && !div[t].spare && div[t].rank < d->rank && reserve_ok;
     if (group == 1) return !c->div && !c->db_div && reserve_ok;
-    if (group == 2) return c->div && (c->div == spare1 || c->div == spare2) && c->nation != cup_pool_nation;
+    if (group == 2)
+        return c->div && (c->div == spare1 || c->div == spare2) && c->nation != cup_pool_nation && reserve_ok;
     if (c->div >= comps && c->div < comps + (uint32_t)ncomps * COMP_SIZE) {
         const Division *from = &div[(c->div - comps) / COMP_SIZE];
-        return !from->spare && !from->target && from->rank < d->rank;
+        return !from->spare && !from->target && from->rank < d->rank && reserve_ok;
     }
     return 0;
+}
+
+int season_clubs_in_spare(uint32_t club)
+{
+    uint32_t comps = rd32(g_mem, COMPS), now = rd32(g_mem, club + CLUB_DIVISION);
+    int32_t key_lower = (int32_t)rd32(g_mem, KEY_LOWER), key_premier = (int32_t)rd32(g_mem, KEY_PREMIER);
+    if (!comps || !now) return 0;
+    if (now != (key_lower >= 0 ? comps + (uint32_t)key_lower * COMP_SIZE : 0) &&
+        now != (key_premier >= 0 ? comps + (uint32_t)key_premier * COMP_SIZE : 0))
+        return 0;
+    /* As move_clubs: DenCup::collect_entrants 0x551240 takes its lower clubs from A Lower Division. */
+    uint32_t nations = rd32(g_mem, NATIONS);
+    return !nations || rd32(g_mem, club + CLUB_NATION) != nations + rd32(g_mem, DEN_NATION) * 0x122u;
 }
 
 /* FILL_BY_REP: the club of the group with the highest reputation (+0x80), or -1. A list of a lower division (the
@@ -535,7 +586,7 @@ static void move_clubs(int season)
 {
     int first = -1, last = -1;
     for (int i = 0; i < nrows; i++)
-        if (rows[i].season == season) {
+        if (rows[i].season == season_clubs_list_season(rows[i].division, season)) {
             if (first < 0) first = i;
             last = i;
         }
@@ -619,7 +670,7 @@ static void move_clubs(int season)
     for (int r = first; r <= last; r++) {
         by_list[r - first] = -1;
         to_div[r - first] = -1;
-        if (rows[r].season != season) continue;
+        if (rows[r].season != season_clubs_list_season(rows[r].division, season)) continue;
         if (!season_divisions_list_on(rows[r].division, season)) continue;     /* slice 20 */
         int t = find_division(div, ncomps, rows[r].division);
         if (t < 0) {
@@ -867,7 +918,10 @@ static void move_clubs(int season)
         /* The groups of a kind 1 place, in this order: 0 a club that left a higher division, 4 a club that left a
          * lower division with a list, 1 a club with no division, 2 a club of a spare division, 3 a club of a lower
          * division with no list. Groups 4 and 2 take the club with the highest reputation first (see FILL_BY_REP). */
-        static const int kind1_groups[] = {0, 4, 1, 2, 3};
+        static const int kind1_groups[] = {0, 4, 1, 2, 3, 5, 6};
+        /* D12: a class that plays with fewer clubs (season_sizes_plays_short) takes no reserve side of groups 5
+         * and 6. A class with a floor, or outside the size table, needs every place (open item 105). */
+        int kind1_count = season_sizes_plays_short(class_file(d->name)) ? 5 : 7;
         for (int kind = 0; kind < 2; kind++) {
             /* Open item 105: a class of CLASS_SIZE needs every place (BelSecond's period stages expect 10, 12 and
              * 12 matches a club, BelSecond::create_period_stage 0x4204d0 at 0x4205b4..0x4205cb). A new division of
@@ -876,9 +930,9 @@ static void move_clubs(int season)
                 places[1] += places[0];
                 places[0] = 0;
             }
-            for (int g = 0; g < (kind ? 5 : 1) && places[kind] > 0; g++) {
+            for (int g = 0; g < (kind ? kind1_count : 1) && places[kind] > 0; g++) {
                 int group = kind ? kind1_groups[g] : 1;
-                int by_rep = group == 4 || group == 2;
+                int by_rep = group == 4 || group == 2 || group == 5;
                 for (int i = 0; i < count && places[kind] > 0; i++) {
                     int pick = by_rep ? best_fill(club, count, div, ncomps, comps, d, group, spare1, spare2,
                                                   cup_pool_nation)
@@ -895,7 +949,7 @@ static void move_clubs(int season)
                     if (group == 0) d->filled_left++;
                     else if (group == 4) d->filled_up++;
                     else if (group == 1) d->filled_pool++;
-                    else if (group == 2) d->filled_spare++;
+                    else if (group == 2 || group == 5) d->filled_spare++;
                     else d->filled_lower++;
                     if (kind == 0 && d->tier <= 2 && reserve_places-- <= 0) d->stand_in++;
                 }
@@ -1010,5 +1064,6 @@ RT_WRAP(00524d70, trim_staff_tables)
     const char *off = getenv("RECOMP_CLUB_MOVES");     /* test switch: off moves no club */
     if (season_game_changes() && nrows && !(off && !strcmp(off, "off"))) move_clubs(season_start_year());
     if (season_game_changes()) season_records_fill(season_start_year());     /* slice 15b: after the moves */
+    if (season_game_changes()) season_sizes_cro_new_game(season_start_year());   /* open item 255 */
     o_00524d70();
 }

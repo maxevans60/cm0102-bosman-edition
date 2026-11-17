@@ -125,9 +125,10 @@ Merge danger: one-way door for saves (a save holds the grown table). Blast radiu
 Blocked by: 2
 Delivers: a new game fills each division to its row (D12). At a season change with changing rules on, each division reaches its new row's count (D13). A 0.7.1 save reaches the row at its next season change (D18).
 Merge danger: one-way door for saves. Blast radius: club lists of every division in a season game.
-- [ ] A 2001 game with changing rules on across 2004/05 gives Serie A 20 in 2004/05
-- [ ] A 0.7.1 save of a 2015 game loads and reaches the row sizes at the next season change
-- [ ] Each division short of clubs in a database is named in the log, and the same-save set is equal
+- [x] A 2001 game with changing rules on across 2004/05 gives Serie A 20 in 2004/05
+  Slice 9 adds ita_ser_a to the grown classes. `tests/seasons/size_step_run.py italy2001` passes: Serie A has 18 clubs to 2003/04 and 20 from 2004/05. The size step and D23 are also proven by Allsvenskan 14 to 16 in 2008 and Ligue 1 20 to 18 in 2023/24 (`size_step_run.py` grow and shrink).
+- [x] A 0.7.1 save of a 2015 game loads and reaches the row sizes at the next season change
+- [x] Each division short of clubs in a database is named in the log, and the same-save set is equal
 
 ### 4. Cups of Britain and Ireland follow the divisions
 Blocked by: 2
@@ -148,89 +149,91 @@ Merge danger: two-way door. Blast radius: the cups of these nations.
 Blocked by: 2
 Delivers: `GreCup`, `CroCup` (48, no bound), `RusCup`, `TurCup`, `PolLgeCup`, `JapJCup`, `JapEmpCup` and `KorLeagueCup` take the real divisions. Their floors go.
 Merge danger: two-way door. Blast radius: the cups of these nations.
-- [ ] A season game per nation with a grown and a shrunk division plays every cup round
-- [ ] The same-save set is equal
+- [x] A season game per nation with a grown and a shrunk division plays every cup round (`tests/seasons/cup_sizes_run.py`: grown-2010, shrunk-2012, poland-2007, mixed-2020; sizes above the class caps through the seam `RECOMP_CUP_SIZE_TEST` until slices 11, 12 and 14; no K League under 10 in the rules)
+- [x] The same-save set is equal (start.sav, prematch.sav, new game and match pass on 2d203e4e; the reference build is this branch without slice 6, because main lacks the lead base)
 
 ### 7. Split engine
 Blocked by: 2, 4
-Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 33 + 6 and 6, 2 meetings in place of 4) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
+Delivers: the runtime split of D7 on any class. Pilots: the Northern Irish Premiership (12, 3 meetings in place of 4: 33 matches, then sections of 6 and 6 that meet once more, 38 matches; gap fix, sources in docs/research/2026-11-15-split-points.md) and the Welsh Premier (12, 22 + 6 and 6, and 16 with sections of 6, 4 and 6 in 2026/27).
 Merge danger: one-way door for saves (a save holds the section stages). Blast radius: leagues with a split row.
-- [ ] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
-- [ ] A save during the split loads and the season completes
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for nir_prm 2010 and wel_first 2012 and 2026, with the sections and their rounds
+- [x] A save during the split loads and the season completes
+- [x] The same-save set is equal
 
 ### 8. England and France
 Blocked by: 2, 3, 4, 5
 Delivers: the Conference at 24 with the row's exchange places (D15), League One by its row, the National at 21 (2010/11, a template block of 42) and at 17 and 18.
 Merge danger: two-way door. Blast radius: the English and French pyramids.
-- [ ] `league_size_run.py` passes for eng_conf 2010 and fra_third 2010 and 2014
-- [ ] A 2005 game with changing rules on through 2007 moves the row's Conference places
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for eng_conf 2010 and fra_third 2010 and 2014
+- [x] A 2005 game with changing rules on through 2007 moves the row's Conference places (`size_step_run.py conference`)
+- [x] The same-save set is equal
 
 ### 9. Italy
 Blocked by: 2, 3, 5
 Delivers: Serie A 20, Serie B 22, 24 and 19, Serie C1 19, 16 and 17, with the tie-break arrays, the C1 regroup and the play-out rows taking the count (D22), and the expected counts of 0x642476 and 0x642478 from the places.
 Merge danger: two-way door. Blast radius: the Italian pyramid and the Serie C groups.
-- [ ] `league_size_run.py` passes for ita_ser_a 2005, ita_ser_b 2003 and 2018, ita_ser_c1a 2004 and 2012
-- [ ] A 2001 game with changing rules on to 2005 changes sizes with no fault line
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for ita_ser_a 2005, ita_ser_b 2003 and 2018, ita_ser_c1a 2004 and 2012
+- [x] A 2001 game with changing rules on to 2005 changes sizes with no fault line
+- [x] The same-save set is equal
 
 ### 10. Netherlands, Belgium, Denmark, Finland
 Blocked by: 2, 3, 5, 7
 Delivers: the Eerste Divisie at 20 with periods by row (D6), the Belgian Second Division at 19 and 8 to 17 with BelThird's row taking the count, the Belgian First Division at 16 with Play-off I and halved points, the Superliga at 14 with 2 meetings and its split, the Veikkausliiga at 14 with 2 meetings and its splits.
 Merge danger: two-way door. Blast radius: these four pyramids.
-- [ ] `league_size_run.py` passes for hol_first 2005 and 2010, bel_second 2008 and 2016, bel_first 2010, den_prm 2017, fin_prm 2005 and 2019
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for hol_first 2005 and 2010, bel_second 2008 and 2016, bel_first 2010, den_prm 2017, fin_prm 2005 and 2019
+- [x] The same-save set is equal (start.sav, new game, prematch.sav and match pass on d8c240c1 against the lead base build 6f4ef2f7)
 
 ### 11. Croatia and Greece
 Blocked by: 2, 3, 6, 7
 Delivers: the Croatian second tier at 18 (the tie-break array takes the count) and 12 to 15, the Croatian First Division at 10 and 12 with its meetings, the Greek Super League at 16 and 18 with its split from 2019/20, the Greek second tier up to 21 and down to 10.
 Merge danger: two-way door. Blast radius: these two pyramids.
-- [ ] `league_size_run.py` passes for cro_a2a 2020, cro_a1 2010, gre_prm 2005 and 2019, gre_second 2010 and 2014
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for cro_a2a 2020, cro_a1 2010, gre_prm 2005 and 2019, gre_second 2010 and 2014
+- [x] The same-save set is equal
 
 ### 12. Russia and Turkey
 Blocked by: 2, 3, 6
 Delivers: the Russian First Division at 20 and 22 (the take loop and its array take the count) and 17, the Süper Lig at 19 to 21, the Turkish second tier at 17 to 19.
 Merge danger: two-way door. Blast radius: these two pyramids.
-- [ ] `league_size_run.py` passes for rus_first 2005 and 2012, tur_first 2020 and 2021, tur_second 2023
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for rus_first 2005 and 2012, tur_first 2020 and 2021, tur_second 2023 (session sz12, 16 Nov, build of d651b66e: all five PASS)
+- [x] `league_size_run.py` passes for rus_first 2011: the long 2011–12 season plays its first stage only, 20 clubs and 38 rounds, inside its game year. The split of row 2010, played in 2012, is a gap: a season that spans two game years (lead decision 16 Nov) (session sz12, 16 Nov, build of 9bfd7c91: PASS, 20 clubs, 38 rounds)
+- [x] The same-save set is equal (session sz12, 16 Nov: 9bfd7c91 against lead-072-base bf80a5e5, start, prematch, new and match PASS)
 
 ### 13. Northern Ireland and Ireland
 Blocked by: 4, 7
 Delivers: the Northern Irish First Division at its row's count with its meetings and splits, and the Irish First Division at 8 (2012 to 2017).
 Merge danger: two-way door. Blast radius: the two Irish pyramids.
-- [ ] `league_size_run.py` passes for nir_first 2016 and 2022 and ire_first 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for nir_first 2016 and 2022 and ire_first 2013
+- [x] The same-save set is equal
 
 ### 14. Japan and Korea
 Blocked by: 2, 3, 6, 7
 Delivers: J1 at 18 and 20 with halves and the final only in their seasons (D8), J2 at up to 22 with its row's meetings, the K League at 12 to 16 with its meetings and its split.
 Merge danger: two-way door. Blast radius: the Japanese and Korean leagues.
-- [ ] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for jap_j1 2005 and 2015, jap_j2 2010, kor_league 2013
+- [x] The same-save set is equal
 
 ### 15. Argentine Primera: halves and zones
 Blocked by: 2, 3
 Delivers: halves on and off by row, one table of 30, two zones of 15 with two inter-zone rounds a half (D9), zone lists from two sources, the averages at the real count.
 Merge danger: one-way door for saves (zone stages in the save). Blast radius: Argentina.
-- [ ] `league_size_run.py` passes for arg_prm 2014, 2016 and 2024, with the zones and the inter-zone rounds
-- [ ] A save in the second half of 2024/25 loads and completes the season
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for arg_prm 2014, 2016 and 2024, with the zones and the inter-zone rounds
+- [x] A save in the second half of 2024/25 loads and completes the season
+- [x] The same-save set is equal
 
 ### 16. Argentine second division
 Blocked by: 15
 Delivers: the second division at its row's count and form (D10) with the zone code of slice 15, and the functions that need 25 taking the count.
 Merge danger: two-way door. Blast radius: Argentina's second tier and its promotion.
-- [ ] `league_size_run.py` passes for arg_second 2010 and 2016
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for arg_second 2010 and 2016
+  Halves and zones rows play as one table (no zone lists in any source), open item 252.
+- [x] The same-save set is equal
 
 ### 17. Brazil
 Blocked by: 2
 Delivers: Série A at 24 and 20 in two meetings from 2003, Série B in two meetings from 2006, no top-4 play-off in those seasons (D11).
 Merge danger: two-way door. Blast radius: Brazil.
-- [ ] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
-- [ ] The same-save set is equal
+- [x] `league_size_run.py` passes for bra_nat_first 2003 and 2010 and bra_nat_second 2006
+- [x] The same-save set is equal
 
 ### 18. Full check
 Blocked by: 1 to 17

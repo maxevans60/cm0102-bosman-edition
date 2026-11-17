@@ -40,6 +40,7 @@
  * The base game and RECOMP_SEASON_CODE=off: the rule kinds do not run (season_change.c), so no league gets a
  * stage count, and both wraps pass to the original (a league with +0x2c 0 is never marked). The test switch
  * RECOMP_PLAYOFFS=off turns the kind off. */
+#include "season_sizes_arg.h"
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
@@ -50,6 +51,8 @@
 #include "season_playoffs.h"
 #include "season_pol_playoff.h"
 #include "season_cup_third_place.h"
+#include "season_second_teams.h"
+#include "season_ofc_first.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -93,6 +96,7 @@
 
 #define COMPS_MAX 256                   /* the most competitions of an entry that season_change.c reads (its own cap) */
 #define PLAYOFF_CLUBS 4
+#define SIX_CLUBS 6                     /* the Conference from 2017/18: 2nd to 7th (six_form) */
 #define ROUND_SIZE 0x68u
 #define PLAYOFF_DAYS 12                 /* the last match on day 11 after the table is complete */
 #define FINAL_LEG_DAYS 3                /* a two-leg final: the second leg 3 days after the first (0x425f99) */
@@ -158,11 +162,15 @@ static int plain_league(uint32_t obj)
            season_change_file(obj)[0] != '?';
 }
 
-/* A league that this kind gave a play-off: a plain league with one stage and 4 play-off places. */
+static int cross_marked(uint32_t obj);
+
+/* A league that this kind gave a play-off: a plain league with one stage and 4 play-off places, or the lower
+ * division of a Scottish play-off between two divisions (cross_marked, below). */
 static int marked(uint32_t obj)
 {
-    return plain_league(obj) && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1 &&
-           (int8_t)g_mem[obj + UP_PLAYOFF] == PLAYOFF_CLUBS;
+    int places = (int8_t)g_mem[obj + UP_PLAYOFF];
+    return (plain_league(obj) && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1 &&
+            (places == PLAYOFF_CLUBS || places == SIX_CLUBS)) || cross_marked(obj);
 }
 
 /* The encoded row of a file and season (season_league_table.c), or NULL. */
@@ -175,19 +183,30 @@ static const SeasonLeagueRule *league_rule(const char *file, int season)
  * season_sizes.c reads it. */
 static const SeasonRule *row_of_season(const char *file, int season)
 {
-    int s = season_rules_last_season(season, file);
-    return s ? season_rules_find(s, file, 0) : NULL;
+    return season_rules_row_of(file, season);
 }
 
-/* 1 when the row of season gives a play-off that this kind plays: 4 places in a row, directly below the direct
- * places of the row. The up column counts the play-off winner in most parts ("2 direct + 1 via play-offs":
- * the first play-off place is up) and only the direct places in the English part (the Conference 2002/03: up 1,
- * places 2 to 5). *direct gets the direct places. */
-int season_playoffs_shape(const char *file, int season, int *direct)
+/* 1 when the row's play-off is the National League's of 2017/18 on (item 273): 2nd to 7th, quarter-finals 4th v 7th
+ * and 5th v 6th, semi-finals at the grounds of the 2nd and the 3rd, a final; all single matches (rows eng-192 to
+ * eng-292, "2nd-7th: 4v7 and 5v6 single-leg quarter-finals, single-leg semi-finals hosted by 2nd and 3rd, final").
+ * The other rows with 6 places (EngFirst, Eredivisie, Serie B, Segunda B) are classes with their own play-off. */
+static int six_form(const SeasonRule *r, const SeasonLeagueRule *e)
+{
+    return e->po_up == SIX_CLUBS && r->playoffs_text && strstr(r->playoffs_text, "4v7 and 5v6") != NULL;
+}
+
+/* The clubs of the play-off of a row that this kind plays (4, or 6 for six_form), else 0: places in a row, directly
+ * below the direct places of the row. The up column counts the play-off winner in most parts ("2 direct + 1 via
+ * play-offs": the first play-off place is up) and only the direct places in the English part (the Conference 2002/03:
+ * up 1, places 2 to 5). *direct gets the direct places. season_playoffs_shape gives 1 for such a row. */
+static int shape_clubs(const char *file, int season, int *direct)
 {
     const SeasonRule *r = row_of_season(file, season);
-    const SeasonLeagueRule *e = r ? league_rule(file, r->season) : NULL;
-    if (!e || e->po_up != PLAYOFF_CLUBS || r->up < 0) return 0;
+    const SeasonLeagueRule *e = !r ? NULL : season_rules_moved(file) ? season_league_rule_of(file, r)
+                                                                      : league_rule(file, r->season);
+    if (!e || r->up < 0) return 0;
+    int clubs = e->po_up == PLAYOFF_CLUBS ? PLAYOFF_CLUBS : six_form(r, e) ? SIX_CLUBS : 0;
+    if (!clubs) return 0;
     /* Two ties whose winners both go up (Série B from 2025) are not one play-off for one place. The test is wider than
      * season_playoffs_winners_up ("the two winners go up"): the rows of Belgium and Portugal 2008/09 say "two
      * winners" too, and are no play-off of this kind either. */
@@ -196,9 +215,14 @@ int season_playoffs_shape(const char *file, int season, int *direct)
     if (e->po_up_first == r->up && r->up >= 1) d = r->up - 1;
     else if (e->po_up_first == r->up + 1) d = r->up;
     else return 0;
-    if (r->clubs > 0 && e->po_up_first + PLAYOFF_CLUBS - 1 > r->clubs) return 0;
+    if (r->clubs > 0 && e->po_up_first + clubs - 1 > r->clubs) return 0;
     if (direct) *direct = d;
-    return 1;
+    return clubs;
+}
+
+int season_playoffs_shape(const char *file, int season, int *direct)
+{
+    return shape_clubs(file, season, direct) != 0;
 }
 
 /* ---- Dates ---- */
@@ -291,7 +315,10 @@ static int season_now(uint32_t obj, const char *file);
  * senior club (the rows' play-off text: "reserve teams excluded, next club moves up"). club_get_linked_b_team
  * 0x540a50 gives the paired club of a Spanish, German or Portuguese club from fixed key id pairs (the nation test
  * at 0x540af6..0x540b10, the pairs from 0x540b1b and 0x541871, *out 1 at 0x54187c), or 0. Which side is the
- * reserve one does not matter: a senior club's reserve side never plays in the division above it. */
+ * reserve one does not matter: a senior club's reserve side never plays in the division above it. A club with no
+ * pair asks the reserve-side rules of the nations (season_second_barred, items 111 to 122 and 232 to 244): 1 when
+ * the rule of its nation bars it from the division above (for example a Polish reserve side in the I liga play-off
+ * of issue 92, item 243). */
 static int barred(uint32_t obj, uint32_t club)
 {
     uint32_t above = league_above(obj);
@@ -301,17 +328,18 @@ static int barred(uint32_t obj, uint32_t club)
     uint32_t a[3] = {club, out, 0};
     uint32_t pair = call_cdecl(F_LINKED, 3, a);
     game_free(out);
-    if (rt_unwinding || !readable(pair)) return 0;
+    if (rt_unwinding) return 0;
+    if (!readable(pair)) return season_second_barred(club, rd32(g_mem, above + COMP_RECORD));
     uint32_t div = rd32(g_mem, pair + CLUB_DIVISION);
     return readable(div) && div == rd32(g_mem, above + COMP_RECORD);
 }
 
-/* The rows of the play-off: the 4 rows from the first play-off place on that no reserve side holds. Gives the
- * count found (fewer than 4 only at the foot of a short table). */
-static int playoff_rows(uint32_t obj, int first, int rows[PLAYOFF_CLUBS])
+/* The rows of the play-off: the `want` rows from the first play-off place on that no reserve side holds. Gives the
+ * count found (fewer only at the foot of a short table). */
+static int playoff_rows(uint32_t obj, int first, int rows[], int want)
 {
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS), k = 0;
-    for (int i = first; i < n && k < PLAYOFF_CLUBS && !rt_unwinding; i++) {
+    for (int i = first; i < n && k < want && !rt_unwinding; i++) {
         if (barred(obj, row_club(obj, i))) {
             fprintf(stderr, "recomp: playoffs: %s: place %d is a reserve side of a club above, the next place plays\n",
                     season_change_file(obj), i + 1);
@@ -363,6 +391,7 @@ RT_WRAP(0051a150, playoff_level_test)
                 leg == 1 ? "" : (flags & 3u) == 3u ? ", extra time 0-0 and penalties 5-4 given"
                                                     : ", no extra time or penalties asked for");
     }
+    season_ofc_first_test_fixture(cpu.ecx, fx);  /* item 245, tests only */
     ThirdPlaceTies third;                       /* open item 73: season_cup_third_place.h */
     season_cup_third_place_before(cpu.ecx, &third);
     o_0051a150();
@@ -400,15 +429,194 @@ void season_playoffs_fixture_log(uint32_t f)
     fprintf(stderr, "recomp: fixtures: %.30s season %d: first match day %d of %d\n", name, key, d, y);
 }
 
+/* The ties of the play-off of six, before Cup::draw_round 0x51c410 builds a round's fixtures (the wrap in
+ * season_new_cups.c; item 273). The rounds have the fixed pairs bit (+0x0d 0x200), so the draw 0x51e220 does not run
+ * (0x51c5e4..0x51c5f1) and the round plays the ties as they are here. The stage does not keep the list order (read
+ * from built stages: the home and away slots of a quarter-final, and the order of the 2nd and 3rd, change from game
+ * to game), and it fills the semi-finals in tie order: tie 1 the two quarter-final winners, tie 2 the 2nd and the 3rd.
+ * So the ties are set here by table place. Quarter-finals: the higher place at home. Semi-finals: the 2nd at home to
+ * the winner of 5th v 6th, the 3rd at home to the winner of 4th v 7th. A side of a tie (0x35 bytes, the round's ties at
+ * stage +0xad) is its list slot (+0 home, +2 away; the list +0xa7, 6 bytes a slot, the club at +0) and the tie and
+ * round it came from (home +0x0a and +0x0e, away +0x0c and +0x10; Cup::set_home_teams_for_round 0x51e870 swaps these
+ * with the slots, 0x51e93a..0x51e978). The stage is known by its round table (+0xa3, saved with it: 3 rounds, round 2
+ * with 2 new clubs from list slot 4, build_six) and its league by its record (+4; the record's id indexes the object
+ * table [0xadadfc], as 0x51c936 reads it). */
+typedef struct { int16_t slot, tie, round; } SixSide;
+
+static void six_side_get(uint32_t tie, int side, SixSide *v)
+{
+    v->slot = (int16_t)rd16(g_mem, tie + 2u * (uint32_t)side);
+    v->tie = (int16_t)rd16(g_mem, tie + 0x0au + 2u * (uint32_t)side);
+    v->round = (int16_t)rd16(g_mem, tie + 0x0eu + 2u * (uint32_t)side);
+}
+
+static void six_side_set(uint32_t tie, int side, const SixSide *v)
+{
+    wr16(g_mem, tie + 2u * (uint32_t)side, (uint16_t)v->slot);
+    wr16(g_mem, tie + 0x0au + 2u * (uint32_t)side, (uint16_t)v->tie);
+    wr16(g_mem, tie + 0x0eu + 2u * (uint32_t)side, (uint16_t)v->round);
+}
+
+static int place_of(uint32_t obj, uint32_t club);
+
+/* The table place of a slot's club (1 for the top), 0 when not found. */
+static int six_place(uint32_t cup, uint32_t league, int16_t slot)
+{
+    uint32_t list = rd32(g_mem, cup + 0xa7);
+    if (slot < 0 || slot > 5 || !readable(list)) return 0;
+    return place_of(league, rd32(g_mem, list + 6u * (uint32_t)slot));
+}
+
+void season_playoffs_draw_round(uint32_t cup, int round)
+{
+    if (!playoffs_on() || (round != 0 && round != 1) || !readable(cup) || (int16_t)rd16(g_mem, cup + 0x3c) != 3) return;
+    uint32_t rounds = rd32(g_mem, cup + 0xa3), arr = rd32(g_mem, cup + 0xad), rec = rd32(g_mem, cup + COMP_RECORD);
+    uint32_t objects = rd32(g_mem, 0x00adadfcu);
+    if (!readable(rounds) || !readable(arr) || !readable(rec) || !readable(objects)) return;
+    uint32_t r1 = rounds + ROUND_SIZE;
+    if (rd16(g_mem, r1 + 0x07) != 130 || rd16(g_mem, r1 + 0x1c) != 2 || rd16(g_mem, r1 + 0x1e) != 4 ||
+        rd16(g_mem, rounds + 0x1c) != 4 || !(rd16(g_mem, rounds + ROUND_SIZE * (uint32_t)round + 0x0d) & 0x200u))
+        return;
+    int32_t id = (int32_t)rd32(g_mem, rec), slots = (int32_t)rd32(g_mem, 0x00adadf8u);
+    uint32_t league = id >= 0 && id < slots ? rd32(g_mem, objects + 4u * (uint32_t)id) : 0;
+    if (!readable(league) || !marked(league) || (int8_t)g_mem[league + UP_PLAYOFF] != SIX_CLUBS) return;
+    uint32_t t0 = rd32(g_mem, arr + 4u * (uint32_t)round), t1 = t0 + 0x35u;
+    if (!readable(t0) || g_mem[t0 + 0x34] || g_mem[t1 + 0x34]) return;      /* a round already built */
+    SixSide s[4];
+    six_side_get(t0, 0, &s[0]), six_side_get(t0, 1, &s[1]), six_side_get(t1, 0, &s[2]), six_side_get(t1, 1, &s[3]);
+    int p[4];
+    for (int k = 0; k < 4; k++) {
+        p[k] = six_place(cup, league, s[k].slot);
+        if (!p[k]) return;                       /* a winner to come, or a club not in the table */
+    }
+    if (round == 0) {
+        for (int t = 0; t < 2; t++)
+            if (p[2 * t] > p[2 * t + 1]) {
+                SixSide x = s[2 * t];
+                s[2 * t] = s[2 * t + 1], s[2 * t + 1] = x;
+            }
+    } else {
+        /* The new clubs are the sides that came from no tie; the higher of them is the 2nd. */
+        int fresh[2], won[2], nf = 0, nw = 0;
+        for (int k = 0; k < 4; k++) {
+            if (s[k].tie < 0 && nf < 2) fresh[nf++] = k;
+            else if (s[k].tie >= 0 && nw < 2) won[nw++] = k;
+        }
+        if (nf != 2 || nw != 2) return;
+        int second = p[fresh[0]] < p[fresh[1]] ? fresh[0] : fresh[1], third = fresh[0] + fresh[1] - second;
+        /* The winner of 5th v 6th comes from quarter-final 2 (tie index 1: list 2 v 3, build_six), whatever places
+         * a reserve side skipped (playoff_rows). */
+        int mid = s[won[0]].tie == 1 ? won[0] : won[1], out = won[0] + won[1] - mid;
+        SixSide n[4] = {s[second], s[mid], s[third], s[out]};
+        memcpy(s, n, sizeof s);
+    }
+    six_side_set(t0, 0, &s[0]), six_side_set(t0, 1, &s[1]), six_side_set(t1, 0, &s[2]), six_side_set(t1, 1, &s[3]);
+}
+
+/* The play-off of six (six_form, item 273): three rounds of the stage, all single matches. The rounds start from
+ * EngFirst's final (one match, its flags 3 in +0x0d: extra time and penalties, 0x572b78), as the cross play-off starts
+ * from its semi-final. Quarter-finals: 4 new clubs, 2 ties, fixed pairs (+0x0d bit 0x200: Cup::set_up_round's tie
+ * builder 0x51c410 skips the draw 0x51e220 at 0x51c5e4..0x51c5f1), at the clubs' grounds (venue 0). Semi-finals: 2
+ * new clubs (the 2nd and the 3rd), fixed pairs. The final: 2 clubs, 1 tie, no fixed pairs, neutral venue 4 (as
+ * build_stage). Days 3, 7 and 11 after the table, as the play-off of four (PLAYOFF_DAYS). Returns 0 when it did
+ * not build (the caller then sends the first play-off place up). */
+static int build_six(uint32_t obj, int rows[SIX_CLUBS])
+{
+    const char *file = season_change_file(obj);
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, obj + COMP_YEAR);
+    uint32_t outs = game_malloc(8);
+    if (!outs) return 0;
+    uint32_t ra[4] = {0, outs, outs + 4, 0};
+    uint32_t eng = call_this(F_ENG_ROUNDS, obj, 4, ra);
+    int eng_rounds = (int16_t)rd16(g_mem, outs);
+    game_free(outs);
+    if (rt_unwinding) return 0;
+    if (!readable(eng) || eng_rounds != 2) {
+        game_free(eng);
+        return 0;
+    }
+    uint32_t table = game_malloc(3 * ROUND_SIZE);
+    if (!table) {
+        game_free(eng);
+        return 0;
+    }
+    static const uint16_t id[3] = {120, 130, 150}, clubs[3] = {4, 4, 2}, ties[3] = {2, 2, 1}, add[3] = {4, 2, 0},
+                          from[3] = {0, 4, 0};
+    for (int r = 0; r < 3; r++) {
+        uint32_t t = table + (uint32_t)r * ROUND_SIZE;
+        memcpy(g_mem + t, g_mem + eng + ROUND_SIZE, ROUND_SIZE);
+        wr16(g_mem, t + 0x07, id[r]);
+        wr16(g_mem, t + 0x09, (uint16_t)r);
+        wr16(g_mem, t + 0x18, clubs[r]);
+        wr16(g_mem, t + 0x1a, ties[r]);
+        wr16(g_mem, t + 0x1c, add[r]);
+        wr16(g_mem, t + 0x1e, from[r]);
+        uint16_t flags = rd16(g_mem, t + 0x0d) & ~0x200u;
+        wr16(g_mem, t + 0x0d, r < 2 ? flags | 0x200u : flags);
+        /* The higher place at home: no home swap of Cup::set_home_teams_for_round 0x51e870 (+0x0b bit 1 asks
+         * Cup_Stage +0x90 at 0x51e8b7..0x51e92f, bit 8 compares the list's byte +4 at 0x51e9c7..0x51ea3d); with
+         * neither, only a host nation (+0x24, -1 here) swaps (0x51eac3). */
+        if (r < 2) g_mem[t + 0x0b] &= (uint8_t)~0x09u;
+    }
+    game_free(eng);
+    for (int r = 0; r < 3 && !rt_unwinding; r++)
+        set_dates(table, r, 1 + 4 * r, 3 + 4 * r, r == 2 ? 2 : 1, r == 2 ? 4 : 0, year);
+    if (rt_unwinding) return 0;
+    /* Entrant order: the quarter-finals 4th v 7th and 5th v 6th (list 0 v 1, 2 v 3), then the 2nd and the 3rd. */
+    int order[SIX_CLUBS] = {rows[2], rows[5], rows[3], rows[4], rows[0], rows[1]};
+    uint32_t list = game_malloc(4 * SIX_CLUBS);
+    if (!list) {
+        game_free(table);
+        return 0;
+    }
+    for (int i = 0; i < SIX_CLUBS; i++) wr32(g_mem, list + 4u * (uint32_t)i, row_club(obj, order[i]));
+    uint32_t sz[1] = {0xb2};
+    uint32_t stage = call_cdecl(F_NEW, 1, sz);
+    if (rt_unwinding || !readable(stage)) {
+        game_free(list);
+        game_free(table);
+        return 0;
+    }
+    uint32_t args[15] = {obj, SIX_CLUBS, list, 3, rd32(g_mem, obj + COMP_RECORD), table, year, 0, 1, 0xa0, 0x14,
+                         0, 0, 0, 0};                /* as build_stage */
+    call_this(F_CUP_STAGE, stage, 15, args);
+    if (rt_unwinding) return 1;
+    wr32(g_mem, rd32(g_mem, obj + COMP_STAGES), stage);
+    test_stage = stage;
+    test_final_seen = 0;
+    game_free(list);
+    game_free(table);
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, stage, 1, r0);
+    if (rt_unwinding) return 1;
+    wr32(g_mem, obj + COMP_STAGE_NOW, 0);
+    fprintf(stderr, "recomp: playoffs: %s %u: play-off of places %d to %d drawn on day %d: quarter-finals %d v %d and "
+                    "%d v %d, semi-finals at places %d and %d, a one-match final\n", file, year, rows[0] + 1,
+            rows[5] + 1, (int16_t)rd16(g_mem, GAME_DATE), rows[2] + 1, rows[5] + 1, rows[3] + 1, rows[4] + 1,
+            rows[0] + 1, rows[1] + 1);
+    return 1;
+}
+
 /* Builds the play-off stage of a marked league on the day its table is complete. */
 static void build_stage(uint32_t obj)
 {
     const char *file = season_change_file(obj);
     int first = (int8_t)g_mem[obj + UP];             /* row index of the first play-off place */
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if ((int8_t)g_mem[obj + UP_PLAYOFF] == SIX_CLUBS) {
+        int rows[SIX_CLUBS], left = days_to_change(obj);
+        int found = playoff_rows(obj, first, rows, SIX_CLUBS);
+        if (rt_unwinding) return;
+        if (found == SIX_CLUBS && left >= 0 && PLAYOFF_DAYS <= left + WAIT_DAYS && build_six(obj, rows)) return;
+        if (rt_unwinding) return;
+        fprintf(stderr, "recomp: playoffs: %s %u: no play-off of six (%d days to the season change), place %d goes "
+                        "up\n", file, year, left, (found ? rows[0] : first) + 1);
+        promote_first(obj, found ? rows[0] : first);
+        return;
+    }
     int left = days_to_change(obj), two = two_leg_final(obj, file);
     int rows[PLAYOFF_CLUBS] = {first, first + 1, first + 2, first + 3};
-    if (playoff_rows(obj, first, rows) < PLAYOFF_CLUBS) left = -1;
+    if (playoff_rows(obj, first, rows, PLAYOFF_CLUBS) < PLAYOFF_CLUBS) left = -1;
     if (rt_unwinding) return;
     uint32_t clubs[PLAYOFF_CLUBS] = {row_club(obj, rows[3]), row_club(obj, rows[0]), row_club(obj, rows[2]),
                                      row_club(obj, rows[1])};
@@ -500,12 +708,61 @@ static void build_stage(uint32_t obj)
             two ? "a two-leg" : "a one-match");
 }
 
+/* The play-off of 4 places after the direct places of a league whose class has its own play-off code: the I liga's
+ * own play-off from 2019/20 (season_pol_first.c). The caller sets its places and one stage. */
+int season_playoffs_build_for(uint32_t obj)
+{
+    if (!readable(rd32(g_mem, obj + COMP_STAGES))) return 0;     /* +0x30 is 0 already: the caller is advance_stage */
+    build_stage(obj);
+    return 1;
+}
+static void build_cross(uint32_t obj);
+static void cross_result(uint32_t obj);
+
 int season_playoffs_advance(uint32_t obj)
 {
+    if (cross_marked(obj)) {
+        if ((int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) == -1 && readable(rd32(g_mem, obj + COMP_STAGES)))
+            build_cross(obj);
+        return 1;
+    }
     if (!marked(obj) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1) return 0;
     if (!readable(rd32(g_mem, obj + COMP_STAGES))) return 0;
     build_stage(obj);
     return 1;
+}
+
+/* RECOMP_PLAYOFF_LOG (tests): the ties of each round of a league's play-off stage, at the final's result. The stage
+ * (a Cup) holds its rounds' ties at +0xad (one block per round, 0x35 bytes a tie), the home and away slots at +0 and
+ * +2 (-1 for none), each slot a 6-byte entry of the list +0xa7 whose +0 is the club (Cup::set_up_round 0x51c800:
+ * 0x51c8a5..0x51c8be); the round count is +0x3c and the ties of a round its +0x1a (0x51c88f). */
+static int place_of(uint32_t obj, uint32_t club)
+{
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    for (int i = 0; club && i < n && i < 64; i++)
+        if (row_club(obj, i) == club) return i + 1;
+    return 0;
+}
+
+static void log_ties(uint32_t obj)
+{
+    uint32_t stage = rd32(g_mem, rd32(g_mem, obj + COMP_STAGES));
+    if (!readable(stage)) return;
+    uint32_t ties = rd32(g_mem, stage + 0xad), slots = rd32(g_mem, stage + 0xa7), rounds = rd32(g_mem, stage + 0xa3);
+    int n = (int16_t)rd16(g_mem, stage + 0x3c);
+    for (int r = 0; r < n && r < 8 && readable(ties) && readable(slots) && readable(rounds); r++) {
+        uint32_t block = rd32(g_mem, ties + 4u * (uint32_t)r);
+        int k = (int16_t)rd16(g_mem, rounds + (uint32_t)r * ROUND_SIZE + 0x1a);
+        for (int t = 0; t < k && t < 16 && readable(block); t++) {
+            uint32_t tie = block + 0x35u * (uint32_t)t;
+            int16_t h = (int16_t)rd16(g_mem, tie), a = (int16_t)rd16(g_mem, tie + 2);
+            uint32_t hc = h >= 0 ? rd32(g_mem, slots + 6u * (uint32_t)h) : 0;
+            uint32_t ac = a >= 0 ? rd32(g_mem, slots + 6u * (uint32_t)a) : 0;
+            fprintf(stderr, "recomp: playoffs: %s: round %d tie %d: %.40s (place %d) v %.40s (place %d)\n",
+                    season_change_file(obj), r + 1, t + 1, readable(hc) ? win_str(hc + 4) : "?", place_of(obj, hc),
+                    readable(ac) ? win_str(ac + 4) : "?", place_of(obj, ac));
+        }
+    }
 }
 
 /* League +0x44, base 0x686940 (club, code, stage id, &status, fixture, arg; ret 0x18): a result of the play-off
@@ -513,6 +770,11 @@ int season_playoffs_advance(uint32_t obj)
 void o_00686940(void);
 RT_WRAP(00686940, playoff_result)
 {
+    /* The Argentine Primera's knockouts (season_arg_stages.c): no news of promotion or relegation for their results. */
+    if (season_arg_ko_result(cpu.ecx, (int8_t)g_mem[cpu.esp + 0xc])) {
+        rt_ret_stdcall(0, 6);
+        return;
+    }
     if (marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
         if (getenv("RECOMP_PLAYOFF_LOG"))
             fprintf(stderr, "recomp: playoffs: %s: result club %x (%.30s) code %d stage %d, day %d of %d\n",
@@ -520,6 +782,8 @@ RT_WRAP(00686940, playoff_result)
                     readable(rd32(g_mem, cpu.esp + 4)) ? win_str(rd32(g_mem, cpu.esp + 4) + 4) : "?",
                     (int8_t)g_mem[cpu.esp + 8],
                     (int8_t)g_mem[cpu.esp + 0xc], (int16_t)rd16(g_mem, GAME_DATE), (int16_t)rd16(g_mem, GAME_DATE + 2));
+        if (getenv("RECOMP_PLAYOFF_LOG") && (int8_t)g_mem[cpu.esp + 8] == 1) log_ties(cpu.ecx);
+        cross_result(cpu.ecx);
         rt_jump(F_ENG_RESULT);
         return;
     }
@@ -533,8 +797,10 @@ RT_WRAP(00686940, playoff_result)
  * takes row Y - 1). */
 static int season_now(uint32_t obj, const char *file)
 {
-    if (!season_changing_rules() || season_change_is_creating()) return season_sizes_edition(file, season_start_year());
-    return season_sizes_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR));
+    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
+                                                                        : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    /* The Irish calendar move: the edition itself, which season_rules_row_of maps to its row (41b for 2003). */
+    return season_rules_moved(file) ? year : season_sizes_edition(file, year);
 }
 
 /* No stage of a season before: a stage object that the class's start_new_season did not free stays in the heap
@@ -571,15 +837,19 @@ static int balanced(uint32_t obj, int direct)
     return above && (int8_t)g_mem[above + DOWN] == direct + 1;
 }
 
+static int cross_rules(uint32_t obj);
+
 void season_playoffs_rules(uint32_t obj)
 {
-    if (!playoffs_on() || !plain_league(obj)) return;
+    if (!playoffs_on() || cross_rules(obj) || !plain_league(obj)) return;
     const char *file = season_change_file(obj);
     int direct = 0, season = season_now(obj, file);
-    int want = season_playoffs_shape(file, season, &direct) && balanced(obj, direct);
+    int clubs = shape_clubs(file, season, &direct), want = clubs && balanced(obj, direct);
     int have = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1;
     if (!want) {
-        if (have) {                                  /* the play-off ends: no stage count, no stage */
+        /* The class set_up_rules rewrites +0xbf (ScoFirst 0x7eee9a), so after a cross season the mark can be gone
+         * while the stage count stays. ScoSecond and ScoThird are plain leagues with no stage of their own. */
+        if (have || (strcmp(file, "sco_first") && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1)) {                                  /* the play-off ends: no stage count, no stage */
             drop_stage(obj);
             wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
         }
@@ -593,13 +863,328 @@ void season_playoffs_rules(uint32_t obj)
     drop_stage(obj);
     wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
     g_mem[obj + UP] = (uint8_t)direct;
-    g_mem[obj + UP_PLAYOFF] = PLAYOFF_CLUBS;
-    fprintf(stderr, "recomp: playoffs: %s %d: places %d to %d\n", file, season, direct + 1, direct + PLAYOFF_CLUBS);
+    g_mem[obj + UP_PLAYOFF] = (uint8_t)clubs;
+    fprintf(stderr, "recomp: playoffs: %s %d: places %d to %d\n", file, season, direct + 1, direct + clubs);
     if (getenv("RECOMP_PLAYOFF_LOG"))                /* the reserve sides that the play-off would skip */
         for (int i = 0; i < (int16_t)rd16(g_mem, obj + COMP_CLUBS) && i < 64 && !rt_unwinding; i++)
             if (barred(obj, row_club(obj, i)))
                 fprintf(stderr, "recomp: playoffs: %s %d: %.51s is a reserve side of a club above\n", file, season,
                         win_str(row_club(obj, i) + 4));
+}
+
+/* ---- Scotland: the play-off between two divisions (0.7.2 gap row 11) ----
+ *
+ * Real life (the rules rows of Scotland; research note sz04-exchange-research, the SPFL rules of June 2026 C18 to C34):
+ * from 2005/06 the 9th club of a division plays the 2nd to 4th of the division below for one place in the upper
+ * division, semi-finals 4th v 9th and 3rd v 2nd, a final, all two legs ("2nd to 4th play off with Championship 9th").
+ * From 2013/14 the Premiership's 11th plays the Championship's play-off as a ladder: 3rd v 4th, the winner v 2nd,
+ * that winner v the 11th, all two legs (the row's text "quarter-final 3rd v 4th, semi-final 2nd v winner"). The
+ * encoded rows hold it: the lower division has 3 promotion play-off places from 2nd (po_up 3, po_up_first 2) and the
+ * upper division 1 relegation play-off place (po_down 1). The League Two 10th's play-off with the Highland or Lowland
+ * League winner (from 2014/15) has no league below in the game, so that club stays (the nearest form).
+ *
+ * The original has no such play-off. ScoSecond and ScoThird are plain leagues (advance_stage 0x5a8f60, result
+ * 0x686940). ScoFirst has its own: advance_stage 0x7ef270 builds a League_Stage of three clubs (0x68b100 at
+ * 0x7ef517), its two rows of status 1 and the Premier Division's row of status 2 (0x7ef3e1, 0x7ef48a), when its +0xbf
+ * places give two rows of status 1 (0x7ef3fb). The class data never sets those places, so it never runs; the wraps
+ * below take its two slots for the cross play-off only.
+ *
+ * How. The lower division is marked as a plain league of this kind is (stage count +0x2c 1, no stage +0x30 -1) with 3
+ * promotion play-off places (+0xbf); the upper division gets 1 relegation play-off place (+0xc0). League::
+ * update_positions_and_status 0x684cd0 then gives the lower rows 2 to 4 status 1 and the upper's place status 2,
+ * as ScoFirst's own play-off reads them. On the days after the lower table is complete, advance_stage builds the stage
+ * once the upper table (and the Premier Division's split stages) is complete: four clubs, one of them from the upper
+ * division, a Cup_Stage as in build_stage with two-leg semi-finals and final, or the three rounds of the ladder (one
+ * tie each, new entrants 2, 1 and 1: +0x1c and +0x1e as the English play-off rounds, 0x572b09 and 0x572b15). The
+ * final's winner (result code 1, the English handler 0x576c50 gives a row of the lower table status 0 at 0x576d9e)
+ * goes up; when it is a lower club, the upper club's row gets status 3 (cross_result). The chain moves the rows of
+ * status 3 of the upper division with those of status 0 or 5 of the lower one in pairs (0x689c20 passes pairs at
+ * 0x689c5a, expected counts -1), so 2 and 2 move when a lower club wins and 1 and 1 when the upper club wins. */
+
+#define CROSS_LOWER 3                   /* the play-off places of the lower division: 2nd to 4th */
+#define CROSS_SPAN 22                   /* days from the table to the last leg of the ladder */
+#define F_SCO_FIRST_ADVANCE 0x007ef270u /* ScoFirst +0x28: advance_stage */
+#define F_SCO_FIRST_RESULT 0x007ef5d0u  /* ScoFirst +0x44: a stage result (ret 0x18, as 0x686940) */
+#define STATUS_PLAYOFF_DOWN 2           /* a row of the relegation play-off places (0x7ef48a) */
+#define STATUS_DOWN 3
+
+static int sco_division(const char *f)
+{
+    return f && (!strcmp(f, "sco_prm") || !strcmp(f, "sco_first") || !strcmp(f, "sco_second") ||
+                 !strcmp(f, "sco_third"));
+}
+
+/* The division below (league +0x20, the record id, -1 for none; 0x689c35), or 0. */
+static uint32_t league_below(uint32_t obj)
+{
+    int32_t id = (int32_t)rd32(g_mem, obj + 0x20u), slots = (int32_t)rd32(g_mem, 0x00adadf8u);
+    uint32_t table = rd32(g_mem, 0x00adadfcu);
+    if (id < 0 || id >= slots || !readable(table)) return 0;
+    uint32_t other = rd32(g_mem, table + 4u * (uint32_t)id);
+    return readable(other) ? other : 0;
+}
+
+/* 1 when the rows of season give lower and the division above it a play-off between them; *ladder 1 for the
+ * Premiership's three rounds. Both rows are read for one season: the divisions of a nation change their season in
+ * one pass, but not at once, so the year +0x40 of the other division can still be the old one. */
+static int cross_shape(uint32_t lower, int season, uint32_t *upper, int *ladder)
+{
+    const char *lf = readable(lower) ? season_change_file(lower) : NULL;
+    if (!sco_division(lf) || !strcmp(lf, "sco_prm")) return 0;
+    uint32_t up = league_above(lower);
+    const char *uf = up ? season_change_file(up) : NULL;
+    if (!sco_division(uf)) return 0;
+    const SeasonRule *lr = row_of_season(lf, season), *ur = row_of_season(uf, season);
+    const SeasonLeagueRule *le = lr ? league_rule(lf, lr->season) : NULL, *ue = ur ? league_rule(uf, ur->season) : NULL;
+    if (!le || !ue || le->po_up != CROSS_LOWER || le->po_up_first != 2 || ue->po_down != 1 || lr->up != 1) return 0;
+    if (upper) *upper = up;
+    if (ladder) *ladder = lr->playoffs_text && strstr(lr->playoffs_text, "quarter-final") != NULL;
+    return 1;
+}
+
+/* The lower division of a play-off between two divisions this season: a Scottish division below the top with one
+ * stage and 3 play-off places (cross_rules). */
+static int cross_marked(uint32_t obj)
+{
+    if (!readable(obj) || !playoffs_on()) return 0;
+    const char *f = season_change_file(obj);
+    return sco_division(f) && strcmp(f, "sco_prm") && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1 &&
+           (int8_t)g_mem[obj + UP_PLAYOFF] == CROSS_LOWER;
+}
+
+/* The places of a Scottish division (after its set_up_rules, as season_playoffs_rules). 1 for a Scottish division:
+ * the plain play-off of this kind is not theirs. */
+static int cross_rules(uint32_t obj)
+{
+    const char *file = readable(obj) ? season_change_file(obj) : NULL;
+    if (!sco_division(file)) return 0;
+    int season = season_now(obj, file), ladder = 0;
+    uint32_t upper = 0, below = league_below(obj);
+    if (below && cross_shape(below, season, &upper, NULL) && upper == obj && (int8_t)g_mem[obj + DOWN_PLAYOFF] != 1) {
+        g_mem[obj + DOWN_PLAYOFF] = 1;
+        fprintf(stderr, "recomp: playoffs: %s %d: place %d plays off with %s\n", file, season,
+                (int16_t)rd16(g_mem, obj + COMP_CLUBS) - (int8_t)g_mem[obj + DOWN], season_change_file(below));
+    }
+    if (!strcmp(file, "sco_prm")) return 1;
+    int want = cross_shape(obj, season, &upper, &ladder), have = cross_marked(obj);
+    if (!want) {
+        /* The class set_up_rules rewrites +0xbf (ScoFirst 0x7eee9a), so after a cross season the mark can be gone
+         * while the stage count stays. ScoSecond and ScoThird are plain leagues with no stage of their own. */
+        if (have || (strcmp(file, "sco_first") && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1)) {
+            drop_stage(obj);
+            wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+            g_mem[obj + UP_PLAYOFF] = 0;
+        }
+        return 1;
+    }
+    if (!readable(rd32(g_mem, obj + COMP_STAGES))) {
+        uint32_t arr = game_malloc(4);
+        if (!arr) return 1;
+        wr32(g_mem, obj + COMP_STAGES, arr);
+    }
+    drop_stage(obj);
+    wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
+    g_mem[obj + UP] = 1;
+    g_mem[obj + UP_PLAYOFF] = CROSS_LOWER;
+    fprintf(stderr, "recomp: playoffs: %s %d: places 2 to 4 play off with %s%s\n", file, season,
+            season_change_file(upper), ladder ? " (3 rounds)" : "");
+    return 1;
+}
+
+/* League::check_complete 0x689ad0 of a table, read only (as season_pol_playoff.c league_complete): a table (+0xb1)
+ * that is not locked (+0xb5) of a league that is made (+0x45), each row (0x3b bytes) at its matches (+0xa7, or
+ * (clubs - 1) * meetings before the first test, 0x689b1d..0x689b36), or the complete flag +0xdd (0x689b01). */
+static int table_complete(uint32_t lg)
+{
+    if (!readable(lg) || !readable(rd32(g_mem, lg + COMP_TABLE)) || g_mem[lg + 0xb5u] || !rd32(g_mem, lg + 0x45u))
+        return 0;
+    if (rd32(g_mem, lg + 0xddu)) return 1;
+    int clubs = (int16_t)rd16(g_mem, lg + COMP_CLUBS), matches = (int16_t)rd16(g_mem, lg + 0xa7u);
+    if (matches == -1 && clubs > 0) matches = (int16_t)((clubs - 1) * (int16_t)rd16(g_mem, lg + 0x3cu));
+    uint32_t rows = rd32(g_mem, lg + COMP_TABLE);
+    for (int i = 0; i < clubs; i++)
+        if ((int8_t)g_mem[rows + ROW_SIZE * (uint32_t)i + 0x11u] < matches) return 0;
+    return 1;
+}
+
+/* The upper division's places are final: its table, and for the Premier Division its split stages (+0x2c of them,
+ * built up to +0x30; the stage part of check_complete 0x689bb6..0x689be8). Another division's stage is its own
+ * play-off as a lower division, which does not move its places. */
+static int upper_done(uint32_t up)
+{
+    if (!table_complete(up)) return 0;
+    if (strcmp(season_change_file(up), "sco_prm")) return 1;
+    int32_t built = (int32_t)rd32(g_mem, up + COMP_STAGE_NOW), count = (int32_t)rd32(g_mem, up + COMP_STAGE_COUNT);
+    uint32_t stages = rd32(g_mem, up + COMP_STAGES);
+    if (built < count - 1) return 0;
+    for (int32_t i = 0; i <= built && i < 64; i++)
+        if (!readable(stages) || !table_complete(rd32(g_mem, stages + 4u * (uint32_t)i))) return 0;
+    return 1;
+}
+
+/* The upper division's play-off club: its row of status 2, else the place above its direct relegation places. -1 for
+ * none. */
+static int upper_row(uint32_t up)
+{
+    uint32_t table = rd32(g_mem, up + COMP_TABLE);
+    int n = (int16_t)rd16(g_mem, up + COMP_CLUBS);
+    if (!readable(table) || n <= 0 || n > 64) return -1;
+    for (int i = 0; i < n; i++)
+        if (g_mem[table + (uint32_t)i * ROW_SIZE + ROW_STATUS] == STATUS_PLAYOFF_DOWN) return i;
+    int i = n - (int8_t)g_mem[up + DOWN] - 1;
+    return i >= 0 && i < n ? i : -1;
+}
+
+static int in_table(uint32_t obj, uint32_t club)
+{
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    for (int i = 0; i < n && i < 64; i++)
+        if (row_club(obj, i) == club) return 1;
+    return 0;
+}
+
+static void build_cross(uint32_t obj)
+{
+    const char *file = season_change_file(obj);
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR), ladder = 0;
+    uint32_t up = 0;
+    int shape = cross_shape(obj, season_now(obj, file), &up, &ladder), left = days_to_change(obj);
+    int time = left >= 0 && CROSS_SPAN <= left + WAIT_DAYS;
+    /* The next day again while the upper division plays and the play-off still fits before the change. */
+    if (shape && time && !upper_done(up)) return;
+    int urow = shape ? upper_row(up) : -1;
+    uint32_t u = urow >= 0 ? row_club(up, urow) : 0, l2 = row_club(obj, 1), l3 = row_club(obj, 2),
+             l4 = row_club(obj, 3);
+    if (!shape || !time || !readable(u) || !readable(l2) || !readable(l3) || !readable(l4)) {
+        /* No play-off: both play-off places stay (1 and 1 move, the direct places). */
+        fprintf(stderr, "recomp: playoffs: %s %d: no cross play-off (%d days to the season change)\n", file, year,
+                left);
+        wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+        return;
+    }
+    uint32_t outs = game_malloc(8);
+    if (!outs) return;
+    uint32_t ra[4] = {0, outs, outs + 4, 0};
+    uint32_t eng = call_this(F_ENG_ROUNDS, obj, 4, ra);
+    int eng_rounds = (int16_t)rd16(g_mem, outs);
+    game_free(outs);
+    if (rt_unwinding) return;
+    if (!readable(eng) || eng_rounds != 2) {
+        game_free(eng);
+        wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+        return;
+    }
+    int rounds = ladder ? 3 : 2;
+    uint32_t table = game_malloc((uint32_t)rounds * ROUND_SIZE);
+    if (!table) {
+        game_free(eng);
+        return;
+    }
+    /* Every round as EngFirst's semi-finals (two legs, 4 days apart, extra time and penalties in the second leg,
+     * 0x572af3..0x572b20); the final keeps its id 150 (+0x07, 0x572b6e). */
+    for (int r = 0; r < rounds; r++) memcpy(g_mem + table + (uint32_t)r * ROUND_SIZE, g_mem + eng, ROUND_SIZE);
+    uint32_t fin = table + (uint32_t)(rounds - 1) * ROUND_SIZE;
+    wr16(g_mem, fin + 0x07, rd16(g_mem, eng + ROUND_SIZE + 0x07));
+    if (ladder) {
+        /* One tie in each round: 2 new clubs, then 1 and 1 (+0x18 clubs, +0x1a ties, +0x1c new, +0x1e the first
+         * entrant). No fixed pairs after the first round (+0x0d bit 0x200): a winner meets the new club. */
+        static const uint16_t id[3] = {120, 130, 150}, add[3] = {2, 1, 1}, first[3] = {0, 2, 3};
+        for (int r = 0; r < 3; r++) {
+            uint32_t t = table + (uint32_t)r * ROUND_SIZE;
+            wr16(g_mem, t + 0x07, id[r]);
+            wr16(g_mem, t + 0x09, (uint16_t)r);
+            wr16(g_mem, t + 0x18, 2);
+            wr16(g_mem, t + 0x1a, 1);
+            wr16(g_mem, t + 0x1c, add[r]);
+            wr16(g_mem, t + 0x1e, first[r]);
+            if (r) wr16(g_mem, t + 0x0d, rd16(g_mem, t + 0x0d) & ~0x200u);
+        }
+    } else {
+        /* The final: 2 clubs, 1 tie, no new club, no fixed pairs (as EngFirst's final, 0x572b63..0x572b86). */
+        wr16(g_mem, fin + 0x09, 1);
+        wr16(g_mem, fin + 0x18, 2);
+        wr16(g_mem, fin + 0x1a, 1);
+        wr16(g_mem, fin + 0x1c, 0);
+        wr16(g_mem, fin + 0x1e, 0);
+        wr16(g_mem, fin + 0x0d, rd16(g_mem, fin + 0x0d) & ~0x200u);
+    }
+    game_free(eng);
+    for (int r = 0; r < rounds && !rt_unwinding; r++)
+        set_dates(table, r, 1 + 7 * r, 3 + 7 * r, r == rounds - 1 ? 2 : 1, 0, (uint32_t)year);
+    if (rt_unwinding) return;
+    /* The list in entrant order. Semi-finals of fixed pairs (list 0 v 1, 2 v 3, home side of the first leg drawn
+     * by map_fixture_tree 0x519302): 4th v 9th, 3rd v 2nd. The ladder: 4th v 3rd, then the 2nd, then the 11th. */
+    uint32_t clubs[PLAYOFF_CLUBS] = {l4, u, l3, l2};
+    if (ladder) clubs[1] = l3, clubs[2] = l2, clubs[3] = u;
+    uint32_t list = game_malloc(4 * PLAYOFF_CLUBS);
+    if (!list) {
+        game_free(table);
+        return;
+    }
+    for (int i = 0; i < PLAYOFF_CLUBS; i++) wr32(g_mem, list + 4u * (uint32_t)i, clubs[i]);
+    uint32_t sz[1] = {0xb2};
+    uint32_t stage = call_cdecl(F_NEW, 1, sz);
+    if (rt_unwinding || !readable(stage)) {
+        game_free(list);
+        game_free(table);
+        return;
+    }
+    uint32_t args[15] = {obj, PLAYOFF_CLUBS, list, (uint32_t)rounds, rd32(g_mem, obj + COMP_RECORD), table,
+                         (uint32_t)year, 0, 1, 0xa0, 0x14, 0, 0, 0, 0};    /* as build_stage, 0x573180..0x573189 */
+    call_this(F_CUP_STAGE, stage, 15, args);
+    if (rt_unwinding) return;
+    wr32(g_mem, rd32(g_mem, obj + COMP_STAGES), stage);
+    game_free(list);
+    game_free(table);
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, stage, 1, r0);
+    if (rt_unwinding) return;
+    wr32(g_mem, obj + COMP_STAGE_NOW, 0);
+    fprintf(stderr, "recomp: playoffs: cross\t%s\t%d\tdrawn\t%.51s\t%.51s\t%.51s\t%.51s\t%s\tday %d\n", file, year,
+            win_str(clubs[0] + 4), win_str(clubs[1] + 4), win_str(clubs[2] + 4), win_str(clubs[3] + 4),
+            ladder ? "ladder" : "semi-finals", (int16_t)rd16(g_mem, GAME_DATE));
+}
+
+/* A result of the stage of a marked lower division (the args of +0x44: club, code, stage id; the stage id is not
+ * 0xff). Code 1 is the final's winner (0x576d71). A lower club goes up (the English handler gives its row status 0
+ * after this) and the upper club down (status 3 here); the upper club that wins stays. */
+static void cross_result(uint32_t obj)
+{
+    if (!cross_marked(obj) || (int8_t)g_mem[cpu.esp + 8] != 1) return;
+    uint32_t club = rd32(g_mem, cpu.esp + 4), up = league_above(obj);
+    int urow = up ? upper_row(up) : -1;
+    if (!readable(club) || urow < 0) return;
+    uint32_t uclub = row_club(up, urow);
+    int lower_won = in_table(obj, club);
+    if (lower_won) g_mem[rd32(g_mem, up + COMP_TABLE) + (uint32_t)urow * ROW_SIZE + ROW_STATUS] = STATUS_DOWN;
+    fprintf(stderr, "recomp: playoffs: cross\t%s\t%d\tfinal\t%.51s\t%s\t%.51s\t%s\n", season_change_file(obj),
+            (int16_t)rd16(g_mem, obj + COMP_YEAR), win_str(club + 4),
+            season_change_file(lower_won ? obj : up), readable(uclub) ? win_str(uclub + 4) : "?",
+            season_change_file(up));
+}
+
+/* ScoFirst's own advance_stage and result handler (thiscall; advance_stage has no argument, the handler ret 0x18):
+ * the cross play-off when it is the lower division, else the original. */
+void o_007ef270(void);
+RT_WRAP(007ef270, sco_first_advance)
+{
+    if (cross_marked(cpu.ecx)) {
+        season_playoffs_advance(cpu.ecx);
+        if (!rt_unwinding) rt_ret_cdecl(0);
+        return;
+    }
+    o_007ef270();
+}
+
+void o_007ef5d0(void);
+RT_WRAP(007ef5d0, sco_first_result)
+{
+    if (cross_marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
+        cross_result(cpu.ecx);
+        if (!rt_unwinding) rt_jump(F_ENG_RESULT);
+        return;
+    }
+    o_007ef5d0();
 }
 
 /* ---- The season change waits for the play-off ---- */
@@ -633,9 +1218,14 @@ static int entry_playoffs(int e, int year, const char **file)
     uint32_t buf[COMPS_MAX];
     int n = season_change_entry_comps(e, buf, COMPS_MAX), seen = 0;
     for (int i = 0; i < n && !rt_unwinding; i++) {
-        if (!marked(buf[i]) || (int32_t)rd32(g_mem, buf[i] + COMP_STAGE_NOW) < 0 ||
-            (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year)
-            continue;
+        if (!marked(buf[i]) || (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year) continue;
+        /* A Scottish cross play-off is built only once the upper division is done (build_cross): until then the
+         * entry waits for it, as for a stage that is not complete. */
+        if ((int32_t)rd32(g_mem, buf[i] + COMP_STAGE_NOW) < 0) {
+            if (!cross_marked(buf[i])) continue;
+            *file = season_change_file(buf[i]);
+            return 2;
+        }
         seen = 1;
         uint32_t vt = rd32(g_mem, buf[i]), args[2] = {1, 1};
         if (!(call_this(rd32(g_mem, vt + 0x10), buf[i], 2, args) & 0xff)) {   /* check_complete(1, 1) */
@@ -780,12 +1370,11 @@ void season_playoffs_final_places(void)
 static void playoffs_after(const SeasonChange *c)
 {
     if (!playoffs_on() || !c->started || c->start || !plain_league(c->comp)) return;
-    int direct = 0;
-    if (marked(c->comp) && season_playoffs_shape(c->file, c->season, &direct) &&
-        !season_playoffs_shape(c->file, c->season - 1, NULL))
+    int direct = 0, clubs = shape_clubs(c->file, c->season, &direct);
+    if (marked(c->comp) && clubs && !season_playoffs_shape(c->file, c->season - 1, NULL))
         season_change_news("The %.50s now has promotion play-offs: places %d to %d play for one place.",
                            (const char *)g_mem + rd32(g_mem, c->comp + COMP_RECORD) + 4, direct + 1,
-                           direct + PLAYOFF_CLUBS);
+                           direct + clubs);
 }
 
 const SeasonRuleKind season_kind_playoffs = {"playoffs", NULL, NULL, NULL, NULL, NULL, playoffs_after};

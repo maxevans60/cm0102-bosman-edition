@@ -75,6 +75,20 @@ const SeasonRule *season_rules_find_scan(int season, const char *file, int n);
  * row stays, with no lookback limit, so the league, play-off, size and nation rules go on (0.6.2 faults 8 and 9). */
 int season_rules_last_season(int season, const char *file);
 
+/* The Irish calendar move of 2003 (gap row 2 of 0.7.2, season_calendar.h). From 2003/04 the rows of the League of
+ * Ireland and of its FAI, League, Leinster and President's Cups hold calendar years ("2004" in row 2003/04), and while
+ * the move is on in a game their edition Y (also the season S of the February change of Y) plays the row that holds
+ * the real season Y. The game sets the switch at each new game and load (season_calendar_game.c); off it the rows of
+ * a season stand, as before. */
+void season_rules_set_moved(int on);
+/* 1 for a file of the move (ire_*) while the move is on. */
+int season_rules_moved(const char *file);
+/* The one mapping of a season or edition to its row, for every reader of the rules table that a file of the move can
+ * reach (tests/seasons/rules_readers_check.py lists them): for a file of the move while it is on, row Y when its real
+ * season begins with Y, else a row of Y - 1 (any of its rows) whose real season does, else as below; for any other
+ * file, the row of season Y or the last before it (Q248). NULL when none. */
+const SeasonRule *season_rules_row_of(const char *file, int year);
+
 /* The competition classes of the original (comp_classes.c of the build, tools/seasons/make_comp_classes.py). */
 typedef enum { SEASON_KIND_COMP, SEASON_KIND_LEAGUE, SEASON_KIND_CUP } SeasonCompKind;
 typedef struct {

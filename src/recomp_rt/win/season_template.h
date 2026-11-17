@@ -18,7 +18,9 @@
 #define SEASON_TEMPLATE_EARLIER 4      /* at most this many earlier starts of 7 days (lead decision, 13 November 2026) */
 #define SEASON_TEMPLATE_WEDNESDAY 2    /* weekday 0 Monday .. 6 Sunday (Date::get_weekday 0x54a3f0) */
 
-enum { SEASON_TEMPLATE_SHUFFLED, SEASON_TEMPLATE_SEQUENTIAL, SEASON_TEMPLATE_MIRRORED };
+/* SEASON_TEMPLATE_HALVES: a class of halves (ArgPrm), whose runtime makes its own templates (season_sizes_arg.h);
+ * season_template_plan never takes it. */
+enum { SEASON_TEMPLATE_SHUFFLED, SEASON_TEMPLATE_SEQUENTIAL, SEASON_TEMPLATE_MIRRORED, SEASON_TEMPLATE_HALVES };
 
 typedef struct {
     int day;        /* days from 1 January of the base year (the year argument of 0x68a160) */
@@ -40,7 +42,8 @@ void season_template_split(int base_year, int day, int *year_offset, int *day_of
  * base_year, in any order: a class date that snaps to its weekday can come before the one ahead of it). Mode
  * SEASON_TEMPLATE_MIRRORED plans each half of the template on its own.
  * - More rounds (D4): the class's dates stay; each extra round goes on the Wednesday of a gap of 7 to 14 days that
- *   is not the largest gap of the template (the winter break), at most one in a gap, spread evenly over the gaps.
+ *   is not the largest gap of the template (the winter break; a template with no gap over 7 days has none), at most
+ *   one in a gap, spread evenly over the gaps.
  *   When the gaps run out, the season starts earlier in steps of 7 days (at most SEASON_TEMPLATE_EARLIER, and not
  *   before 1 January of base_year). Mirrored: the same number of new dates in each half; the second half has no
  *   earlier start. The last date stays the class's last date.
@@ -48,5 +51,10 @@ void season_template_split(int base_year, int day, int *year_offset, int *day_of
  * Returns rounds, or 0 when no room is left (why then holds the reason). */
 int season_template_plan(int base_year, const int *days, int count, int rounds, int mode, SeasonTemplateDate *out,
                       char *why, int why_size);
+
+/* The same with at most earlier_max earlier starts in place of SEASON_TEMPLATE_EARLIER (a class whose real season
+ * starts months before the class's first date: the Brazilian classes, season_sizes_bra_earlier). */
+int season_template_plan_from(int base_year, const int *days, int count, int rounds, int mode, int earlier_max,
+                              SeasonTemplateDate *out, char *why, int why_size);
 
 #endif
