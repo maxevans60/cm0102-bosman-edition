@@ -52,6 +52,7 @@
 #include "season_pol_playoff.h"
 #include "season_cup_third_place.h"
 #include "season_second_teams.h"
+#include "season_ofc_first.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -390,6 +391,7 @@ RT_WRAP(0051a150, playoff_level_test)
                 leg == 1 ? "" : (flags & 3u) == 3u ? ", extra time 0-0 and penalties 5-4 given"
                                                     : ", no extra time or penalties asked for");
     }
+    season_ofc_first_test_fixture(cpu.ecx, fx);  /* item 245, tests only */
     ThirdPlaceTies third;                       /* open item 73: season_cup_third_place.h */
     season_cup_third_place_before(cpu.ecx, &third);
     o_0051a150();

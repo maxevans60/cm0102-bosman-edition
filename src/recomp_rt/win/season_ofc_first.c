@@ -23,8 +23,9 @@
  *   AFC first round; the holder is off in a season game, rt_intl_wc_holder), sorted by the original's compare.
  *   P of them and G places (+0xf3): when P > G the list becomes the best G in that order, so the original's
  *   groups, predictions and draw take them as before; the W = P - G weakest wait outside it.
- * - The round (from OFC_FIRST_LEAD days before the group draw, on the first update day while +0x45 is 0 and +0x30
- *   is -1): the W outside play two-leg ties against the W weakest of the list (season_ofc_first_plan, as the AFC
+ * - The round (from OFC_FIRST_LEAD days before the group draw and not before the section's own season start of
+ *   that year, item 245, season_started; on the first update day while +0x45 is 0 and +0x30 is -1): the W
+ *   outside play two-leg ties against the W weakest of the list (season_ofc_first_plan, as the AFC
  *   first round of item 196, season_afc_first.c) on FIFA days (season_ofc_first_days), as a Cup_Stage (0x522e00)
  *   in slot 0 with +0x30 = 0. The legs come in the autumn before the group draw (September of +0x40 - 1: real
  *   2018 cycle, 31 August to 4 September 2015). While slot 0 holds the ties the wrap of update_for_date calls the stage's update
@@ -42,6 +43,7 @@
  * its competition cleared (0x775000 at 0x91e8a1). */
 #include "win.h"
 #include "season.h"
+#include "season_change.h"
 #include "season_intl.h"
 #include "season_ofc_first.h"
 #include "season_uefa_days.h"
@@ -134,6 +136,9 @@ static void game_free(uint32_t p)
     uint32_t a[1] = {p};
     if (p) call_cdecl(GAME_FREE, 1, a);
 }
+
+static uint32_t test_stage;               /* item 245 test: the preliminary round's stage */
+static long test_first_day;
 
 static int year_of(uint32_t self) { return (int16_t)rd16(g_mem, self + F_YEAR); }
 
@@ -343,6 +348,7 @@ static int build(uint32_t self)
     }
     wr32(g_mem, rd32(g_mem, self + F_STAGES), cup);
     wr32(g_mem, self + F_STAGE, 0);
+    test_stage = cup;
     uint32_t stats = rd32(g_mem, self + F_STATS), nt = rd32(g_mem, NATIONAL_TEAMS);
     for (int i = 0; i < 2 * w; i++) {
         uint32_t team = rd32(g_mem, teams + 4u * (uint32_t)i);
@@ -374,6 +380,37 @@ static int build(uint32_t self)
     call_this(CUP_START, cup, 1, z);
     if (rt_unwinding) return 0;
     return 1;
+}
+
+/* Item 245, RECOMP_TEST_OFC_LEVEL=1 (tests only): every fixture of the preliminary round's stage is processed as a
+ * level tie, as the play-off test of season_playoffs.c. The first leg (the first match day of the stage) as 1-1.
+ * Any later match as 0-0: level on aggregate with no away goals. When its match flags ask for extra time and
+ * penalties (bits 0x3: 0x51f696, 0x51c1c9) it gets what the engine would give, 0-0 in extra time and penalties
+ * 5-4. The result block is fixture +0x43..: goals +0, +1, extra time +4, +5, penalties +6, +7 (as the play-off
+ * test). Each match prints its flags (fixture +0x38) and its round (+0x34). */
+void season_ofc_first_test_fixture(uint32_t cup, uint32_t fx)
+{
+    static int on = -1;
+    if (on < 0) on = getenv("RECOMP_TEST_OFC_LEVEL") && *getenv("RECOMP_TEST_OFC_LEVEL") == '1';
+    if (!on || !test_stage || cup != test_stage || !readable(fx)) return;
+    long day = season_abs_day((int16_t)rd16(g_mem, GAME_DATE + 2), 1, 1) + (int16_t)rd16(g_mem, GAME_DATE);
+    if (!test_first_day) test_first_day = day;
+    uint32_t b = fx + 0x43u;
+    uint16_t flags = rd16(g_mem, fx + 0x38u);
+    int first = day == test_first_day;
+    for (int i = 0; i < 10; i++) g_mem[b + (uint32_t)i] = 0;
+    if (first) {
+        g_mem[b] = 1;
+        g_mem[b + 1] = 1;
+    } else if ((flags & 3u) == 3u) {
+        g_mem[b + 6] = 5;
+        g_mem[b + 7] = 4;
+    }
+    fprintf(stderr, "recomp: season intl: test: OFC preliminary match on day %ld, round %d, forced %s, match flags "
+                    "%04x%s\n", day - season_abs_day((int16_t)rd16(g_mem, GAME_DATE + 2), 1, 1),
+            (int16_t)rd16(g_mem, fx + 0x34u), first ? "1-1" : "0-0 level on aggregate", flags,
+            first ? "" : (flags & 3u) == 3u ? ", extra time 0-0 and penalties 5-4 given"
+                                             : ", no extra time or penalties asked for");
 }
 
 /* The winner of tie k of the stage (rows 2k and 2k + 1, status +5 = 1), as season_wcq26.c tie_winner. */
@@ -428,6 +465,22 @@ static void finish(uint32_t self)
 
 static int draw_day(uint32_t self) { return today_abs() == group_draw_abs(self); }
 
+/* Item 245: 0 while the section's own season start of the window's year is still to come before the group draw
+ * (the day of its league table entry, season_change_start_day: entry 0, 24 July in 2023). That start_new_season
+ * 0x91ef40 frees slot 0 (0x91ef99) and sets +0x30 to -1, but the fixtures of a round built before it stay in the
+ * fixture store. The window then built a second round, and the store played both rounds' legs into the one
+ * stage left: two first legs, and a leg without the second-leg flags (+0x0f, OR'd in by apply_round_rules 0x521d60
+ * from 0x51a6b3 after the first leg) that ended level, so Cup::process_fixture 0x51a150 asked for a third match
+ * (box 0x5aa at 0x51ab0f). The AFC round waits for 1 August for the same reason (season_afc_first.c). */
+static int season_started(uint32_t self, long now)
+{
+    int day = season_change_start_day(self), y, m, d;
+    if (day < 0) return 1;
+    season_from_abs_day(now, &y, &m, &d);
+    long start = season_abs_day(y, 1, 1) + day;
+    return !(now < start && start < group_draw_abs(self));
+}
+
 void o_0091f3d0(void);
 
 /* update_for_date 0x91f3d0 (vtable +0x14), thiscall (Date *today, int full), ret 8. */
@@ -439,7 +492,8 @@ RT_WRAP(0091f3d0, ofc_first_update)
         long now = today_abs(), gd = group_draw_abs(self);
         /* Each day of the window while slot 0 holds no ties: a day with no FIFA window left or no nation outside
          * the list builds nothing (season_ofc_first_days, the pool), and the next day asks again. */
-        if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && now >= gd - OFC_FIRST_LEAD - 30 && now < gd) {
+        if ((int32_t)rd32(g_mem, self + F_STAGE) == -1 && now >= gd - OFC_FIRST_LEAD - 30 && now < gd &&
+            season_started(self, now)) {
             build(self);
             if (rt_unwinding) {
                 update_date = 0;
@@ -447,6 +501,7 @@ RT_WRAP(0091f3d0, ofc_first_update)
             }
         }
         if (ties_live(self)) {
+            test_stage = slot0(self);
             if (full && draw_day(self)) {
                 finish(self);
             } else {

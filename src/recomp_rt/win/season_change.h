@@ -152,6 +152,11 @@ int season_change_comps(uint32_t *out, int max);
 /* The competition objects of one league table entry (its array, +0xc count, +0x10 array). */
 int season_change_entry_comps(int entry, uint32_t *out, int max);
 
+/* The day of the year (0 is 1 January) on which the league table entry that holds comp starts its season: the
+ * entry's +0x15, which the season update 0x5d5ae0 compares with the game day (0x5d5b2c..0x5d5b35) before it calls
+ * the entry's start_new_season. -1 when no entry holds comp. */
+int season_change_start_day(uint32_t comp);
+
 /* Keeps a competition idle for the season that starts (a league cup that ends, the Intertoto Cup after 2008).
  * Only inside a before hook. The start_new_season of that competition does not run: it keeps its finished
  * season, makes no fixtures and plays no matches. The object stays in its entry's array, so the game saves it,
