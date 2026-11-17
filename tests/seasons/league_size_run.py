@@ -1289,6 +1289,7 @@ def faults(work, file, year, last):
     if file in ("nir_prm", "nir_first"):
         fails += nir_place_faults(report, log)
     if os.path.exists(report):
+        import rules_report_check as rrc
         rep_clubs = []
         seasons, comps = rrc.read_report(report, rep_clubs)
         diffs = (set(rrc.differences(seasons, comps, rrc.make_rules.read_rows()))
