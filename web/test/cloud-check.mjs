@@ -190,6 +190,7 @@ try {
   await waitFor('the save through the server', () => cloudBytes(through)?.equals(throughBytes), 40000);
   check('the store refuses the page: the save goes up through the server, and the log says why',
     cloudBytes(through)?.equals(throughBytes) && /did not answer this page directly/.test(await a.textContent('#log'))
+      && /Through 2001-08-03\.sav is in the cloud \([\d.]+ MB compressed, through the server\)/.test(await a.textContent('#log'))
       && s3fake.requests.slice(before).some((r) => r.startsWith('PUT') && r.includes(Buffer.from(through).toString('base64url')) && !r.includes('X-Amz-Signature')));
   s3fake.faults.corsGone = false;
   // The server is pointed at another bucket (BUCKET_NAME or its key changed): the saves of this page are not in it.
@@ -240,6 +241,9 @@ try {
   await b.waitForFunction(() => window.__fake, null, { timeout: 30000 });
   check('the second device gets both versions of Harbour City before its game starts',
     same(await localBytes(b, harbour), here) && same(await localBytes(b, other), elsewhere));
+  const bLog = await b.textContent('#log');
+  check('and its log says each one came straight from the store', /Harbour City 2001-07-14\.sav came from the cloud \([\d.]+ MB, straight from the store\)/.test(bLog),
+    bLog.split('\n').filter((l) => /came from the cloud/.test(l)).join(' / '));
   check('and not the save removed from the cloud', (await localBytes(b, 'From iPad.sav')) === null, (await localNames(b)).join(', '));
   await waitFor('the data set from the cloud', () => b.evaluate(() => { try { return window.Module.FS.readdir('/user/Databases/My squads').length > 20; } catch { return false; } }), 20000);
   const setHere = await b.evaluate(async () => {
@@ -580,7 +584,7 @@ try {
     check('a save goes from the browser straight to the store at the address that passed, not through the server',
       s3fake.objects.has(wayKey) && gunzipSync(s3fake.objects.get(wayKey).body).equals(wayBytes)
         && storeRequests.some((r) => r === `PUT 127.0.0.1:${fakePort}`) && !storeRequests.some((r) => r.includes('localhost'))
-        && !/did not answer this page directly/.test(wayLog), `${storeRequests.join(', ')} | ${wayLog.split('\n').filter((l) => /cloud|direct/.test(l)).slice(-4).join(' / ')}`);
+        && !/did not answer this page directly/.test(wayLog) && /Second Way 2001-09-01\.sav is in the cloud \([\d.]+ MB compressed, straight to the store\)/.test(wayLog), `${storeRequests.join(', ')} | ${wayLog.split('\n').filter((l) => /cloud|direct/.test(l)).slice(-4).join(' / ')}`);
     await wctx.close();
   } finally { s3fake.faults.corsHost = null; wayServer.close(); }
 

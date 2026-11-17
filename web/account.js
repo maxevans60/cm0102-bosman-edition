@@ -142,9 +142,12 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const body = await gzip(bytes);                             // a Blob: the same body for each try
     if (limits.packed && body.size > limits.packed) return tooBig(name, before, `${mb(body.size)} packed; the cloud takes ${mb(limits.packed)}`);
     // Straight to the store (direct.js), or through the server when that is off.
-    const r = await retrying(`${name} up`, async () => (await upDirect({ url: at(name), body, base, signal, log,
-      fields: { rawSize: bytes.size ?? bytes.length, saved: before.mtime } }))
-      ?? fetch(at(name), { method: 'PUT', body, signal, headers: { ...CHANGE, 'x-base-etag': base, 'x-save-time': String(before.mtime) } }), signal);
+    let way = 'through the server';                              // for the log: which way the file went
+    const r = await retrying(`${name} up`, async () => {
+      const d = await upDirect({ url: at(name), body, base, signal, log, fields: { rawSize: bytes.size ?? bytes.length, saved: before.mtime } });
+      way = d ? 'straight to the store' : 'through the server';
+      return d ?? fetch(at(name), { method: 'PUT', body, signal, headers: { ...CHANGE, 'x-base-etag': base, 'x-save-time': String(before.mtime) } });
+    }, signal);
     if (r.status === 409) return { conflict: (await r.json()).cloud };
     if (r.status === 413 || r.status === 422) {                 // the server's own word on its size (an older page's limit)
       const why = (await r.json().catch(() => ({}))).error ?? `HTTP ${r.status}`;
@@ -159,7 +162,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     if (!r.ok) throw fail(`${name} up`, r);
     const j = await r.json();
     state.saves[name] = { etag: j.etag, size: bytes.size ?? bytes.length, mtime: before.mtime, upAt: Date.now() };   // a Blob, or bytes
-    log(`page: ${name} is in the cloud (${(j.size / 1048576).toFixed(1)} MB compressed)`);
+    log(`page: ${name} is in the cloud (${(j.size / 1048576).toFixed(1)} MB compressed, ${way})`);
     return { up: true };
   }
 
@@ -176,6 +179,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const blob = await new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).blob();
     const why = await storeSave(FS, file, blob, { mtime: saved });
     if (why) { log(`page: ${name} from the cloud was not taken: ${why}`); return null; }
+    log(`page: ${name} came from the cloud (${(blob.size / 1048576).toFixed(1)} MB, ${link?.response === r ? 'straight from the store' : 'through the server'})`);
     onWrote();
     return { etag, saved, ...stat(file) };
   }
