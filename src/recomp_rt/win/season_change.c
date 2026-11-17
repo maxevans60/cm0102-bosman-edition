@@ -205,6 +205,17 @@ int season_change_entry_comps(int entry, uint32_t *out, int max)
     return n;
 }
 
+int season_change_start_day(uint32_t comp)
+{
+    uint32_t objs[256];
+    for (int e = 0; comp && e < ENTRY_COUNT; e++) {
+        int n = season_change_entry_comps(e, objs, 256);
+        for (int i = 0; i < n; i++)
+            if (objs[i] == comp) return (int16_t)rd16(g_mem, entry_at(e) + ENTRY_DAY);
+    }
+    return -1;
+}
+
 int season_change_comps(uint32_t *out, int max)
 {
     int n = 0;
