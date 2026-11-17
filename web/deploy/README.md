@@ -92,11 +92,15 @@ cd ~/Documents/Projects/cm0102-web/web/deploy/stage
 fly storage create                     # a private Tigris bucket; sets AWS_* and BUCKET_NAME on the app
 fly secrets set GOOGLE_CLIENT_ID=<client id> GOOGLE_CLIENT_SECRET=<client secret> \
   CM_SESSION_SECRET="$(openssl rand -base64 48)" CM_PUBLIC_URL=https://<your-app>.fly.dev \
-  CM_CLOUD_USERS=<your email>
+  CM_CLOUD_USERS=<your email> AWS_ENDPOINT_URL_S3=https://t3.storage.dev CM_S3_PATH_STYLE=1
 ```
 
-With a key of your own Tigris account instead of `fly storage create`, add `AWS_ENDPOINT_URL_S3=https://t3.storage.dev
-AWS_ACCESS_KEY_ID=<key id> AWS_SECRET_ACCESS_KEY=<secret> AWS_REGION=auto BUCKET_NAME=<bucket>` to the
+The last two point the server at Tigris's canonical address with the bucket in the path, the one that lets players'
+browsers send and get their saves directly (Straight to Tigris, below): `fly storage create` sets
+`fly.storage.tigris.dev`, which answered the browser's preflight without `Access-Control-Allow-Origin` on the live
+site (17 November 2026). The server finds a working address by itself either way; with these two it passes at once.
+
+With a key of your own Tigris account instead of `fly storage create`, add `AWS_ACCESS_KEY_ID=<key id> AWS_SECRET_ACCESS_KEY=<secret> AWS_REGION=auto BUCKET_NAME=<bucket>` to the
 `fly secrets set` line. The Google client and its redirect URI come first: `web/README.md`, "Set it up", step 1.
 
 To sell Cloud Saves as a Buy Me a Coffee membership (`web/README.md`, "Payments"), make the webhook in Buy Me a Coffee
