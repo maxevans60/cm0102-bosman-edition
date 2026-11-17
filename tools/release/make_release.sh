@@ -36,6 +36,8 @@
 #                  and four games through the real lobby and relay) and stops unless it passes. Not needed with
 #                  --stage-only.
 #   --program      the cm0102_recomp for online release test 1. Default build/cm0102_recomp of this checkout.
+#   --no-run-set   skip the run set check (run_set.py --verify) and the --run-set option. Online release test 1 still
+#                  runs. Only on a decision of Max to release without the full run set (0.7.2, 17 November 2026).
 #   --check-set    a dry run: print the seed and the rows of the release set, run the release check on --run-set and
 #                  stop (no build, no online test). It needs only --run-set. Exit 1 when the run does not pass.
 #   --stage-only   stop after the game folder and its manifest are staged in build/release-<version> (before the
@@ -50,7 +52,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 GH_REPO="maxevans60/cm0102-bosman-edition"
 GAME=""; DATA_3960=""; DATA_3965=""; SDL_MAC=""; SDL_MINGW=""; SITE=""; SEASON_DBS=""; OWN_DBS=""; RUN_SET=""; STAGE_ONLY=0
-PUBLISH=0; CHECK_SET=0; PROGRAM=""
+PUBLISH=0; CHECK_SET=0; PROGRAM=""; NO_RUN_SET=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --game) GAME="$2"; shift 2 ;;
@@ -64,12 +66,14 @@ while [ $# -gt 0 ]; do
         --run-set) RUN_SET="$2"; shift 2 ;;
         --program) PROGRAM="$2"; shift 2 ;;
         --check-set) CHECK_SET=1; shift ;;
+        --no-run-set) NO_RUN_SET=1; shift ;;
         --stage-only) STAGE_ONLY=1; shift ;;
         --publish) PUBLISH=1; shift ;;
         *) echo "make_release.sh: unknown option $1" >&2; exit 2 ;;
     esac
 done
 NEEDED="GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE SEASON_DBS OWN_DBS RUN_SET"
+[ "$NO_RUN_SET" = 1 ] && NEEDED="GAME DATA_3960 DATA_3965 SDL_MAC SDL_MINGW SITE SEASON_DBS OWN_DBS"
 [ "$STAGE_ONLY" = 1 ] && NEEDED="GAME DATA_3960 DATA_3965 SITE SEASON_DBS OWN_DBS"
 [ "$CHECK_SET" = 1 ] && NEEDED="RUN_SET"
 for v in $NEEDED; do
@@ -99,13 +103,19 @@ fi
 if [ "$STAGE_ONLY" = 0 ]; then
     echo "make_release.sh: release set of $VERSION, seed $SEED"
     python3 -I "$REPO/tests/seasons/future/run_set.py" --list --set release --seed "$SEED"
-    python3 -I "$REPO/tests/seasons/future/run_set.py" --verify "$RUN_SET" --seed "$SEED" ||
-        { echo "make_release.sh: the run set in $RUN_SET does not pass (above)." >&2; exit 1; }
+    if [ "$NO_RUN_SET" = 1 ]; then
+        echo "make_release.sh: WARNING: the run set check is skipped (--no-run-set)." >&2
+    else
+        python3 -I "$REPO/tests/seasons/future/run_set.py" --verify "$RUN_SET" --seed "$SEED" ||
+            { echo "make_release.sh: the run set in $RUN_SET does not pass (above)." >&2; exit 1; }
+    fi
     PROGRAM="${PROGRAM:-$REPO/build/cm0102_recomp}"
     [ -x "$PROGRAM" ] || { echo "make_release.sh: no program $PROGRAM for online release test 1. Give --program." >&2; exit 2; }
     # The online test must run the program that played the set (its sha256 is in the head line of results.tsv).
-    grep -q "$(shasum -a 256 "$PROGRAM" | cut -d' ' -f1)" "$RUN_SET/results.tsv" ||
-        { echo "make_release.sh: $PROGRAM is not the program that played the run set. Give --program." >&2; exit 2; }
+    if [ "$NO_RUN_SET" = 0 ]; then
+        grep -q "$(shasum -a 256 "$PROGRAM" | cut -d' ' -f1)" "$RUN_SET/results.tsv" ||
+            { echo "make_release.sh: $PROGRAM is not the program that played the run set. Give --program." >&2; exit 2; }
+    fi
     python3 -I "$REPO/tests/online/release_mac_run.py" "$PROGRAM" "$GAME" ||
         { echo "make_release.sh: online release test 1 did not pass (above)." >&2; exit 1; }
 fi
