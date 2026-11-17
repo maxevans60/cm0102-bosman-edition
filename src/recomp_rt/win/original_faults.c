@@ -778,10 +778,14 @@ void rt_squad_move_test(void)
  * (database_add_staff_to_club 0x53bd10). He is already in both, so the add puts him in a second slot of the side he
  * goes to. In run C of the 0.7.2 full check FC Energie Cottbus II held one player in two squad slots on day 206 of
  * 2007, and MATCH_MAN::pick_team 0x6dbc50 stopped at its duplicate test (match_man..cpp 1225, 0x6dd3c1). With the
- * placement bit set after the loan the move went up instead and doubled him at FC Energie Cottbus. Here the two
- * squad moves (returns 0x4cc0df and 0x4cc11f) leave a player alone while he is on loan from one side of a linked pair
- * to the other: toggle_squad_placement returns 0 (no move, *out cleared as at 0x4cbd3f). A move that the human makes
- * is not changed. */
+ * placement bit set after the loan the move went up instead and doubled him at FC Energie Cottbus. Here the calls
+ * from move_to_first_team and move_to_reserves (returns 0x4cc0df and 0x4cc11f) leave a player alone while he is on
+ * loan from one side of a linked pair to the other: toggle_squad_placement returns 0 (no move, *out cleared as at
+ * 0x4cbd3f). Their callers are assess_club_squad, TRANSFER_MANAGER::add_config_loan (0x8bf61b, a loan of the data at
+ * the game start) and player_regen_sign_for_club (0x7a7098). The staff screens call 0x4cbd20 directly (0x888760,
+ * 0x88a11d), so a move that the human makes is not changed. The loan contract is slot +4 of the contract index
+ * (sign_loan_contract 0x4d0444..0x4d0467), and end_loan 0x4d07e0 sets it to -1 (0x4d0983..0x4d09aa), so the moves
+ * come back when the loan ends. */
 #define TOGGLE_FIRST_TEAM_RET 0x4cc0dfu   /* move_to_first_team 0x4cc0b0 */
 #define TOGGLE_RESERVES_RET 0x4cc11fu     /* move_to_reserves 0x4cc0f0 */
 
@@ -825,10 +829,17 @@ RT_WRAP(004cbd20, squad_loan_move)
         o_004cbd20();
         return;
     }
-    char own_name[64];
-    snprintf(own_name, sizeof own_name, "%s", log_name(own + 4u));
-    fprintf(stderr, "recomp: squad loan: staff %u is on loan from %s to %s, a side of the same pair: no squad move\n",
-            id, own_name, log_name(loan + 4u));
+    static uint32_t logged[64];         /* one line per player (the assessment repeats while the loan lasts) */
+    static unsigned next;
+    int seen = 0;
+    for (unsigned k = 0; k < 64u; k++) seen |= logged[k] == id + 1u;
+    if (!seen) {
+        logged[next++ % 64u] = id + 1u;
+        char own_name[64];
+        snprintf(own_name, sizeof own_name, "%s", log_name(own + 4u));
+        fprintf(stderr, "recomp: squad loan: staff %u is on loan from %s to %s, a side of the same pair: no squad "
+                        "move\n", id, own_name, log_name(loan + 4u));
+    }
     if (out) wr32(g_mem, out, 0);
     cpu.eax = 0;                        /* no move: thiscall, ret 0xc */
     cpu.esp += 4 + 0xc;
