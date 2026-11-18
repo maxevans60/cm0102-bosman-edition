@@ -319,7 +319,7 @@ static int has_row(uint32_t hist, uint32_t count, uint32_t comp, uint16_t label)
     return 0;
 }
 
-void season_history_fill(const char *name, int N, int duplicates)
+static void fill_rows(const char *name, int N, int duplicates)
 {
     season_history_undo();
     saved_n = 0;
@@ -427,6 +427,145 @@ void season_history_fill(const char *name, int N, int duplicates)
     free(freed);
     free(nw);
     log_rows("load");
+}
+
+/* --- The corrected rows of issues 145 and 165 (docs/research/history-rows/, season_history.h). --- */
+
+/* The pointer of the first spelling of `names` (joined by '|') that a club or national side holds, or 0. */
+static uint32_t find_spelling(uint32_t clubs, const char *names)
+{
+    char one[NAME_LEN + 1];
+    for (const char *p = names; *p; ) {
+        size_t n = strcspn(p, "|");
+        int missing = 0;
+        snprintf(one, sizeof one, "%.*s", (int)n, p);
+        uint32_t c = find_club(clubs, one, "", &missing);
+        if (c) return c;
+        p += n + (p[n] == '|');
+    }
+    return 0;
+}
+
+/* 1 when the club at pointer c has one of the names of `names`. */
+static int named(uint32_t c, const char *names)
+{
+    char have[NAME_LEN + 1];
+    text_at(c ? c + 4 : 0, have, sizeof have);
+    size_t len = strlen(have);
+    for (const char *p = names; len && *p; ) {
+        size_t n = strcspn(p, "|");
+        if (n == len && !memcmp(p, have, n)) return 1;
+        p += n + (p[n] == '|');
+    }
+    return 0;
+}
+
+/* The record of a competition of the tables: a record that the season code added, else one of the data. */
+static uint32_t rows_comp(const char *want)
+{
+    uint32_t c = find_record(want);
+    return c ? c : find_comp(want);
+}
+
+/* Clears row `index` for the undo record: its competition becomes 0, the free row of the original (0x4afce0). */
+static void free_row(uint32_t hist, uint32_t index)
+{
+    save_row(index);
+    wr32(g_mem, hist + index * HISTORY_SIZE + 4, 0);
+}
+
+/* The end of the fill in a season game: the corrections, then the rows of editions that never took place, then the
+ * whole lists. A list row goes into a row that the list freed, else into a new row of 0x527f60. A name that a
+ * database lacks leaves its place empty; a list row with no winner stays out. */
+static void apply_rows(int N)
+{
+    if (!season_code_on() || (N == SEASON_FIRST_YEAR && !season_next_rules())) return;
+    uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
+    uint32_t clubs = rd32(g_mem, CLUBS_PTR), n_clubs = rd32(g_mem, CLUB_COUNT);
+    if (!hist || !clubs) return;
+    if (!filled) {
+        filled = 1;
+        old_count = count;
+    }
+    index_comps(hist, count);
+    index_clubs(clubs, n_clubs);
+    uint32_t fixed = 0, cleared = 0, written = 0, lost = 0;
+
+    for (int k = 0; k < season_history_row_fixes_count; k++) {
+        const SeasonHistRowFix *x = &season_history_row_fixes[k];
+        uint32_t c = rows_comp(x->comp), at = 0xa + 4u * x->field;
+        for (uint32_t i = 0; c && i < count; i++) {
+            uint32_t r = hist + i * HISTORY_SIZE;
+            if (rd32(g_mem, r + 4) != c || rd16(g_mem, r + 8) != x->label || !named(rd32(g_mem, r + 0xa), x->guard))
+                continue;
+            uint32_t now = rd32(g_mem, r + at);
+            if (x->write[0] ? named(now, x->accept) : !now) continue;
+            uint32_t to = x->write[0] ? find_spelling(clubs, x->write) : 0;
+            if (x->write[0] && !to) { lost++; continue; }
+            save_row(i);
+            wr32(g_mem, r + at, to);
+            fixed++;
+        }
+    }
+    for (int k = 0; k < season_history_clears_from_count; k++) {
+        uint32_t c = rows_comp(season_history_clears_from[k].comp);
+        for (uint32_t i = 0; c && i < count; i++) {
+            uint32_t r = hist + i * HISTORY_SIZE;
+            if (rd32(g_mem, r + 4) != c || rd16(g_mem, r + 8) < season_history_clears_from[k].from_label) continue;
+            free_row(hist, i);
+            cleared++;
+        }
+    }
+
+    /* The lists: the rows of this start year first, so that a list with no row here leaves its competition alone. */
+    typedef struct { uint32_t comp, place[4]; uint16_t label; } ListNew;
+    ListNew *nw = malloc(((size_t)season_history_list_rows_count + 1) * sizeof *nw);
+    uint32_t *freed = malloc(((size_t)count + 1) * sizeof *freed), n_new = 0, n_freed = 0;
+    if (!nw || !freed) rt_fatal("season history: no memory");
+    for (int k = 0; k < season_history_list_rows_count; k++) {
+        const SeasonHistListRow *x = &season_history_list_rows[k];
+        uint32_t c = x->from <= N && x->label <= N ? rows_comp(x->comp) : 0;
+        if (!c) continue;
+        ListNew *w = &nw[n_new];
+        w->comp = c;
+        w->label = x->label;
+        for (int f = 0; f < 4; f++) {
+            w->place[f] = x->place[f][0] ? find_spelling(clubs, x->place[f]) : 0;
+            if (x->place[f][0] && !w->place[f]) lost++;
+        }
+        if (w->place[0]) n_new++;
+    }
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t c = rd32(g_mem, hist + i * HISTORY_SIZE + 4), k;
+        for (k = 0; c && k < n_new && nw[k].comp != c; k++) {}
+        if (c && k < n_new) freed[n_freed++] = i;
+    }
+    for (uint32_t k = 0; k < n_freed; k++) free_row(hist, freed[k]);
+    cleared += n_freed;
+    int grown = 1;
+    if (n_new > n_freed) {
+        uint32_t grow = n_new - n_freed;
+        grown = rt_callback(GROW_HISTORY, 1, &grow) && !rt_unwinding;
+        if (!grown) fprintf(stderr, "recomp: season history: the history table could not grow by %u rows\n", grow);
+        hist = rd32(g_mem, HISTORY_PTR);
+    }
+    for (uint32_t k = 0; grown && k < n_new; k++) {
+        uint32_t index = k < n_freed ? freed[k] : count + (k - n_freed), r = hist + index * HISTORY_SIZE;
+        wr32(g_mem, r + 4, nw[k].comp);
+        wr16(g_mem, r + 8, nw[k].label);
+        for (int f = 0; f < 4; f++) wr32(g_mem, r + 0xa + 4 * (uint32_t)f, nw[k].place[f]);
+        written++;
+    }
+    free(nw);
+    free(freed);
+    fprintf(stderr, "recomp: season history: corrected rows in %d: %u fields corrected, %u rows cleared, %u rows "
+                    "written, %u names not found\n", N, fixed, cleared, written, lost);
+}
+
+void season_history_fill(const char *name, int N, int duplicates)
+{
+    fill_rows(name, N, duplicates);
+    if (!rt_unwinding) apply_rows(N);
 }
 
 /* --- Rows after the start (0.6.2 slice 7, open items 3 and 17; the head of season_history.h). --- */

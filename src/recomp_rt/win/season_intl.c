@@ -677,10 +677,13 @@ static void hosts_apply(uint32_t self, int from_season, int sort)
  * of every year holds a random nation (0x5fab70), or the edition's host while it plays (season_kind_club_world.c). */
 uint32_t rt_intl_history_host(uint32_t cup, uint32_t club)
 {
-    if (club || !season_intl_on() || !readable(cup) || !readable(rd32(g_mem, cup + 4u))) return club;
+    if (!season_intl_on() || !readable(cup) || !readable(rd32(g_mem, cup + 4u))) return club;
     uint32_t key = rd32(g_mem, rd32(g_mem, cup + 4u));
     int year = (int16_t)rd16(g_mem, cup + 0x40u), ids[6], id = -1;
-    int n = season_intl_host_ids(key, year, ids);
+    /* Issue 145: the World Cup of 2026 names the nation of the final over the host that 0x519bdc..0x519beb chose. */
+    const char *final_host = key == rd32(g_mem, host_comps[0].key) ? season_intl_history_host("world_cup", year) : NULL;
+    if (club && !final_host) return club;
+    int n = final_host ? 0 : season_intl_host_ids(key, year, ids);
     if (n > 0) id = ids[0];
     /* Two hosts: the one of the higher reputation (+0x8e), the first on a tie, as the original (0x519bdc..0x519beb). */
     if (n > 1 && (int16_t)rd16(g_mem, nation_at(ids[1]) + 0x8eu) > (int16_t)rd16(g_mem, nation_at(ids[0]) + 0x8eu))
@@ -691,6 +694,7 @@ uint32_t rt_intl_history_host(uint32_t cup, uint32_t club)
         names = e ? e->hosts : NULL;
     }
     if (id < 0 && key == rd32(g_mem, KEY_EURO)) names = season_intl_history_host("euro_champ", year);
+    if (final_host) names = final_host;
     if (id < 0 && names && *names) {
         char one[64];
         snprintf(one, sizeof one, "%.*s", (int)strcspn(names, ";"), names);
