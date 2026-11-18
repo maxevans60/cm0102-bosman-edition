@@ -32,6 +32,8 @@ sys.path.insert(0, HERE)
 import make_clubs  # noqa: E402
 
 RECORDS = os.path.join(os.path.dirname(os.path.dirname(HERE)), "docs", "research", "club-records-0.6.0")
+CLOSED = os.path.join(RECORDS, "closed-leagues.tsv")
+FIRST_START = 2001
 COLUMNS = ["season", "division", "real", "name", "short", "city", "stadium", "capacity", "colour1", "colour2",
            "source", "source_club"]
 
@@ -66,7 +68,22 @@ def build():
             errors.append(f"{season} {c['club']}: an empty name or a tab")
             continue
         out.append(row)
+    out += closed_league_rows(errors)
     return out, errors
+
+
+def closed_league_rows(errors):
+    """0.7.3 slice 6 (issue 157, decision L7): one record for each start season before a closed league's club joins.
+    The game makes no record when the start database holds the club (season_records_merge), and the club waits with
+    no division until its first season (season_mls.c)."""
+    rows = []
+    for c in csv.DictReader(open(CLOSED, encoding="utf-8"), delimiter="\t"):
+        if not c["source"].startswith("https://"):
+            errors.append(f"{c['real']}: no source in closed-leagues.tsv")
+        for season in range(FIRST_START, int(c["first"])):
+            rows.append([season, c["division"], c["real"], c["name"], c["short"], c["city"], c["stadium"], c["capacity"],
+                         c["colour1"], c["colour2"], "", "-1"])
+    return rows
 
 
 def short_name_clashes(out, databases):
@@ -116,6 +133,7 @@ def main(argv):
     if not (a.out or a.check):
         ap.error("give --out or --check")
     out, errors = build()
+    out.sort(key=lambda r: r[0])
     if a.databases:
         errors += short_name_clashes(out, a.databases)
     for e in errors:

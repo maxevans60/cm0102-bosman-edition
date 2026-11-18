@@ -3,6 +3,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_mls.h"
+#include "season_closed.h"
 #include "season_clubs.h"
 #include "season_second_teams.h"
 #include "season_fin_second.h"
@@ -175,6 +176,7 @@ typedef struct {
 static const Club *moves_club;
 static uint32_t moves_table;
 static int moves_count;
+static int moves_season;
 
 static uint32_t planned_division(uint32_t at)
 {
@@ -524,6 +526,8 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
                       uint32_t spare1, uint32_t spare2, uint32_t cup_pool_nation)
 {
     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) return 0;
+    /* 0.7.3 slice 6: a record of a closed league's later club has no division until its season (season_mls.c). */
+    if (!c->db_div && season_closed_member("usa_mls", win_str(c->at + CLUB_NAME), moves_season) == 0) return 0;
     if (season_second_barred(c->at, d->at)) return 0;   /* open items 111, 114 to 122: a second team's bar */
     if (season_fin_barred(c->at, d->at)) return 0;      /* open item 118: no Finnish second team in the Veikkausliiga */
     if (season_bel_barred(c->at, d->at)) return 0;      /* open item 115: a Belgian U23 side below its first team */
@@ -631,6 +635,7 @@ static void move_clubs(int season)
     moves_club = club;
     moves_table = table;
     moves_count = count;
+    moves_season = season;
     season_esp_second_moves();
     /* The divisions: every club_comp record, its club count in the database and the count it keeps. */
     for (int i = 0; i < ncomps; i++) {

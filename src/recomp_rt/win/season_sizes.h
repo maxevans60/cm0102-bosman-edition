@@ -176,6 +176,8 @@ uint32_t season_sizes_build_template(uint32_t obj, const char *file, uint32_t ol
 /* The club count of a grown league this edition (the clubs of its division up to its cap), 0 outside a season game
  * with the sizes on. */
 int season_sizes_count(uint32_t obj);
+/* 1 when a human manages the club. */
+int season_sizes_is_human(uint32_t club);
 
 /* The objects whose template had no room this edition (D4) keep the class's count and form: on 1 marks the object,
  * 0 clears it; season_sizes_kept gives the mark of the object's edition. */
