@@ -106,7 +106,14 @@ int season_arg_second_one_table(uint32_t obj)
  * edition of the class keeps the class's stages to its end. */
 static int playing_one_table(uint32_t obj)
 {
-    return season_arg_second_one_table(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0;
+    return season_arg_second_one_table(obj) &&
+           (rd32(g_mem, obj + COMP_STAGE_COUNT) == 0 || season_arg_reducido_marked(obj));
+}
+
+int season_arg_second_row_up(int row)
+{
+    const SeasonRule *r = season_rules_find(row, FILE_SECOND, 0);
+    return r ? r->up : -1;
 }
 
 int season_arg_second_meetings(uint32_t obj, int meetings)
@@ -150,6 +157,8 @@ void season_arg_second_rules(uint32_t obj)
     g_mem[obj + COMP_UP_PLAYOFF] = 0;
     g_mem[obj + COMP_DOWN_PLAYOFF] = 0;
     g_mem[obj + COMP_DOWN] = (uint8_t)down;
+    season_arg_reducido_rules(obj);     /* item 291: its ties are the stages of the edition */
+    if (rt_unwinding) return;
     if (logging())
         fprintf(stderr, "recomp: league sizes: arg_second %d: row %d, %s, %d meetings, %d up, %d down, no stages\n",
                 (int16_t)rd16(g_mem, obj + COMP_YEAR), f.season, f.why, f.meetings, (int8_t)g_mem[obj + COMP_UP], down);
@@ -303,6 +312,45 @@ int season_arg_second_no_stage(uint32_t obj)
 {
     /* Not by the sizes: a one-table save loaded with the sizes off ends its season with no stage too. The base game
      * never has +0x2c 0. */
+    if (season_arg_reducido_marked(obj)) return 1;      /* the stages are the Reducido's ties: the table is the season */
     return is_second(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0 &&
            (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) < 0;
+}
+
+/* ArgSecond::advance_stage 0x4080c0 (thiscall, no argument) makes the class's next stage; League::update_for_date 0x6847c0
+ * calls it while a stage is to come and the stages made are complete (0x6849d1..0x6849e3). */
+void o_004080c0(void);
+RT_WRAP(004080c0, arg_second_advance)
+{
+    uint32_t self = cpu.ecx;
+    if (!season_arg_reducido_marked(self)) {
+        o_004080c0();
+        return;
+    }
+    season_arg_reducido_advance(self);
+    if (rt_unwinding) return;
+    rt_ret_stdcall(0, 0);
+}
+
+/* ArgSecond's result handler 0x408cd0 (thiscall (club, result, stage, ...), ret 0x18): stage 3 is the class's Reducido,
+ * whose winner gets status 0 in the table (0x408d54) and so goes up in the Primera's chain (0x406839). The last tie of an
+ * edition's Reducido is that stage; the earlier ties only send their winner to the next round. */
+void o_00408cd0(void);
+RT_WRAP(00408cd0, arg_second_result)
+{
+    uint32_t self = cpu.ecx;
+    int stage = (int8_t)(rt_arg(2) & 0xff);
+    if (!season_arg_reducido_marked(self) || stage < 0) {
+        o_00408cd0();
+        return;
+    }
+    if (stage + 1 < (int32_t)rd32(g_mem, self + COMP_STAGE_COUNT)) {
+        rt_ret_stdcall(0xffffffffu, 6);         /* ret 0x18, as the class's own stages, 0x408d6e */
+        return;
+    }
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: arg_second reducido %d: result %d of club %u in the final\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), (int8_t)(rt_arg(1) & 0xff), rd32(g_mem, rt_arg(0)));
+    wr32(g_mem, cpu.esp + 4 + 4 * 2, 3);
+    o_00408cd0();
 }

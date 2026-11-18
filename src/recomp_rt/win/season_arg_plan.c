@@ -29,6 +29,37 @@ int season_arg_second_class_down(int clubs, int next_clubs)
     return SEASON_ARG_CLASS_DOWN + (next_clubs > 0 && clubs > next_clubs ? clubs - next_clubs : 0);
 }
 
+int season_arg_reducido_of(int row, SeasonArgReducido *out)
+{
+    static const struct { int row, places, rounds, pens; SeasonArgReducidoRound r[SEASON_ARG_REDUCIDO_ROUNDS]; } rows[] = {
+        {2014, 4, 2, 1, {{4, 2, 2}, {0, 1, 2}}},
+        {2017, 8, 3, 1, {{8, 4, 1}, {0, 2, 2}, {0, 1, 2}}},
+        {2018, 8, 3, 1, {{8, 4, 2}, {0, 2, 2}, {0, 1, 2}}},
+        {2021, 12, 4, 0, {{10, 5, 1}, {1, 3, 1}, {1, 2, 2}, {0, 1, 2}}},
+    };
+    for (unsigned i = 0; i < sizeof rows / sizeof rows[0]; i++) {
+        if (rows[i].row != row) continue;
+        out->places = rows[i].places;
+        out->rounds = rows[i].rounds;
+        out->final_pens = rows[i].pens;
+        out->stages = 0;
+        for (int r = 0; r < SEASON_ARG_REDUCIDO_ROUNDS; r++) {
+            out->round[r] = rows[i].r[r];
+            out->stages += rows[i].r[r].ties;
+        }
+        return 1;
+    }
+    return 0;
+}
+
+void season_arg_reducido_pairs(const int *sorted, int n, int *out)
+{
+    for (int i = 0; i < n / 2; i++) {
+        out[2 * i] = sorted[i];
+        out[2 * i + 1] = sorted[n - 1 - i];
+    }
+}
+
 static void pair(int round[][SEASON_ARG_MAX_CLUBS / 2][2], int r, int k, int home, int away)
 {
     round[r][k][0] = home;

@@ -36,6 +36,8 @@
 #include "season_change.h"
 #include "season_sizes.h"
 #include "season_sizes_arg.h"
+#include "season_sizes_arg_second.h"
+#include "season_league.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -809,6 +811,147 @@ int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up)
             up[n++] = win[i];
         }
     return n;
+}
+
+/* ---- The Torneo Reducido of the second division (item 291) ---- */
+
+#define NAME_REDUCIDO 0x45a             /* the class's name of its Reducido (ArgSecond::create_schedule 0x4078a7) */
+#define COMP_UP_PLAYOFF 0xbfu
+#define ROW_STATUS 0x37u
+#define REDUCIDO_MAX 12
+#define DAYS_ONE_MATCH 5                /* the draw tomorrow, the match in 3 days, the next draw after it */
+#define DAYS_TWO_LEGS 9                 /* as PROMO_DAYS and one day for the next draw */
+
+static int reducido_spec(uint32_t obj, SeasonArgReducido *s)
+{
+    if (!season_sizes_on() || !season_changing_rules() || !readable(obj) || !season_arg_second_one_table(obj)) return 0;
+    int row = season_sizes_row_season(obj, "arg_second");
+    const SeasonLeagueRule *l = row >= 0 ? season_league_row("arg_second", row) : NULL;
+    return l && season_arg_reducido_of(row, s) && l->po_up == s->places && season_arg_second_row_up(row) == 2;
+}
+
+int season_arg_reducido_marked(uint32_t obj)
+{
+    SeasonArgReducido s;
+    return reducido_spec(obj, &s) && (int32_t)rd32(g_mem, obj + STAGE_COUNT) == s.stages;
+}
+
+/* The champion goes up directly (+0xbe 1) and the Reducido's winner takes the row's second place. The class's array holds
+ * 6 stages (0x406c55), so an edition gets one slot for each tie. Only before any stage of the edition is made. */
+void season_arg_reducido_rules(uint32_t obj)
+{
+    SeasonArgReducido s;
+    if (!reducido_spec(obj, &s) || (int32_t)rd32(g_mem, obj + STAGE_LAST) >= 0) return;
+    uint32_t block = season_sizes_game_malloc(4u * (uint32_t)s.stages);
+    if (rt_unwinding || !block) return;
+    memset(g_mem + block, 0, 4u * (size_t)s.stages);
+    season_sizes_game_free(rd32(g_mem, obj + STAGES));
+    wr32(g_mem, obj + STAGES, block);
+    wr32(g_mem, obj + STAGE_COUNT, (uint32_t)s.stages);
+    g_mem[obj + COMP_UP] = 1;
+    g_mem[obj + COMP_UP_PLAYOFF] = (uint8_t)s.places;
+}
+
+/* One tie at index. One match: the better placed club at home (first in the tree), extra time and penalties. Two legs:
+ * the better placed club plays the second leg at home and goes through on a level aggregate (+0xf 0x804, as promo_tie;
+ * 2018-19 and 2022 sources), except in a final that goes to penalties (+0xf 7: extra time and penalties, no away goals;
+ * 2015 and 2018-19 finals). */
+static uint32_t reducido_tie(uint32_t self, int index, uint32_t better, uint32_t worse, int legs, int code, int pens)
+{
+    uint32_t year = (uint32_t)(int16_t)rd16(g_mem, self + COMP_YEAR);
+    uint32_t table = season_sizes_game_malloc(ROUND_SIZE);
+    if (!table) return 0;
+    memset(g_mem + table, 0, ROUND_SIZE);
+    wr16(g_mem, table + 7, (uint16_t)code);
+    wr16(g_mem, table + 0xd, legs == 2 ? 0x200 : 0x203);
+    wr16(g_mem, table + 0xf, legs == 2 ? (pens ? 0x7 : 0x804) : 0);
+    g_mem[table + 0x17] = 6;
+    wr16(g_mem, table + 0x18, 2);
+    wr16(g_mem, table + 0x1a, 1);
+    wr16(g_mem, table + 0x1c, 2);
+    g_mem[table + 0x21] = (uint8_t)legs;
+    g_mem[table + 0x22] = legs == 2 ? 4 : 0;
+    set_dates(table, 0, 1, 3, VENUE_HOME, year);
+    if (rt_unwinding) return 0;
+    uint32_t club[2] = {legs == 2 ? worse : better, legs == 2 ? better : worse};
+    uint8_t seed[2] = {legs == 2 ? 2 : 1, legs == 2 ? 1 : 2};
+    return make_cup(self, index, club, seed, 2, 1, table, NAME_REDUCIDO);
+}
+
+/* No Reducido this edition: the next club of the table takes the second place (status 0 goes up, 0x406839). */
+static void reducido_none(uint32_t self, const uint32_t *table, int n, const char *why)
+{
+    uint32_t rows = rd32(g_mem, self + COMP_TABLE);
+    for (int r = 0; readable(rows) && n > 1 && r < n; r++)
+        if (rd32(g_mem, rows + (uint32_t)r * ROW_SIZE) == table[1]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0;
+    wr32(g_mem, self + STAGE_COUNT, (uint32_t)((int32_t)rd32(g_mem, self + STAGE_LAST) + 1));
+    fprintf(stderr, "recomp: league sizes: arg_second reducido %d: %s; the next club of the table goes up\n",
+            (int16_t)rd16(g_mem, self + COMP_YEAR), why);
+}
+
+void season_arg_reducido_advance(uint32_t self)
+{
+    SeasonArgReducido s;
+    if (!reducido_spec(self, &s)) return;
+    uint32_t t[TABLE_MAX];
+    int nt = zone_order(self, t), made = (int32_t)rd32(g_mem, self + STAGE_LAST) + 1;
+    if (rt_unwinding) return;
+    if (made >= s.stages) return;
+    if (nt < s.places + 1) {
+        reducido_none(self, t, nt, "too few clubs");
+        return;
+    }
+    if (!made) {
+        int span = 0, left = days_to_change(self);
+        for (int r = 0; r < s.rounds; r++) span += s.round[r].legs == 2 ? DAYS_TWO_LEGS : DAYS_ONE_MATCH;
+        if (left >= 0 && left < span) {
+            reducido_none(self, t, nt, "no days before the season change");
+            return;
+        }
+    }
+    /* The round whose ties are still to be made, and the places that entered before it. */
+    int r = 0, before = 0, entered = 0;
+    while (r < s.rounds && before + s.round[r].ties <= made) {
+        before += s.round[r].ties;
+        entered += s.round[r].fresh;
+        r++;
+    }
+    if (r >= s.rounds || before != made) return;
+    /* The places of the survivors (index in the table order): the winners, and the next better places. */
+    int place[REDUCIDO_MAX], n = 0;
+    for (int k = 0; r > 0 && k < s.round[r - 1].ties; k++) {
+        uint32_t win = 0, lose = 0;
+        if (!ko_winners(stage_at(self, made - 1 - k), &win, &lose)) return;     /* the next day */
+        for (int i = 0; i < nt; i++)
+            if (t[i] == win && n < REDUCIDO_MAX) place[n++] = i;
+    }
+    for (int k = 0; k < s.round[r].fresh && n < REDUCIDO_MAX; k++) place[n++] = s.places - entered - k;
+    for (int i = 1; i < n; i++) {
+        int v = place[i], j = i;
+        for (; j > 0 && place[j - 1] > v; j--) place[j] = place[j - 1];
+        place[j] = v;
+    }
+    if (n != 2 * s.round[r].ties) {
+        reducido_none(self, t, nt, "the clubs of a round do not match its ties");
+        return;
+    }
+    int ties[REDUCIDO_MAX];
+    season_arg_reducido_pairs(place, n, ties);
+    int last = r == s.rounds - 1, code = last ? CODE_FINAL : r == s.rounds - 2 ? CODE_SF : CODE_QF;
+    for (int k = 0; k < s.round[r].ties; k++) {
+        uint32_t a = t[ties[2 * k]], b = t[ties[2 * k + 1]];
+        uint32_t st = reducido_tie(self, made + k, a, b, s.round[r].legs, code, last && s.final_pens);
+        if (rt_unwinding) return;
+        if (!st) {
+            reducido_none(self, t, nt, "a tie not made");
+            return;
+        }
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_second reducido %d: round %d tie %d, stage %d: %u (place %d) v %u "
+                            "(place %d), %d legs, day %d\n", (int16_t)rd16(g_mem, self + COMP_YEAR), r + 1, k + 1, made + k,
+                    rd32(g_mem, a), ties[2 * k] + 1, rd32(g_mem, b), ties[2 * k + 1] + 1, s.round[r].legs,
+                    (int16_t)rd16(g_mem, GAME_DATE));
+    }
 }
 
 /* The Apertura's knockout, the day its table is complete: only while both knockouts are still to come (+0x2c holds

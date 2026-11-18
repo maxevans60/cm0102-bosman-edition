@@ -189,6 +189,34 @@ int main(void)
     CHECK(season_arg_second_class_down(25, 25) == 2, "the class alone sends 2 down");
     CHECK(season_arg_second_class_down(25, -1) == 2, "no next row: the class's 2");
     CHECK(season_arg_second_class_down(20, 25) == 2, "a bigger next row sends no more down");
+    /* Item 291: the Torneo Reducido of each row, and the pairs of a round. */
+    SeasonArgReducido rd;
+    CHECK(!season_arg_reducido_of(2016, &rd), "no Reducido in row 2016");
+    CHECK(season_arg_reducido_of(2014, &rd) && rd.places == 4 && rd.rounds == 2 && rd.stages == 3 && rd.final_pens,
+          "row 2014: 4 clubs, semi-finals and a final");
+    CHECK(rd.round[0].fresh == 4 && rd.round[0].ties == 2 && rd.round[0].legs == 2, "row 2014: two legs");
+    CHECK(season_arg_reducido_of(2017, &rd) && rd.places == 8 && rd.stages == 7 && rd.round[0].legs == 1 &&
+          rd.round[1].legs == 2 && rd.round[2].legs == 2, "row 2017: one-match quarter-finals");
+    CHECK(season_arg_reducido_of(2018, &rd) && rd.places == 8 && rd.round[0].legs == 2, "row 2018: two legs");
+    CHECK(season_arg_reducido_of(2021, &rd) && rd.places == 12 && rd.rounds == 4 && rd.stages == 11 && !rd.final_pens,
+          "row 2021: 12 clubs in four rounds");
+    CHECK(rd.round[0].fresh == 10 && rd.round[0].ties == 5 && rd.round[1].fresh == 1 && rd.round[1].ties == 3 &&
+          rd.round[2].fresh == 1 && rd.round[2].ties == 2 && rd.round[3].fresh == 0 && rd.round[3].ties == 1,
+          "row 2021: 4th to 13th, then the 3rd, then the 2nd");
+    for (int row = 2014; row <= 2021; row++) {
+        if (!season_arg_reducido_of(row, &rd)) continue;
+        int in = 0, left = 0;
+        for (int r = 0; r < rd.rounds; r++) {
+            in += rd.round[r].fresh;
+            CHECK(left + rd.round[r].fresh == 2 * rd.round[r].ties, "every club of a round plays");
+            left = rd.round[r].ties;
+        }
+        CHECK(in == rd.places && left == 1, "every place enters and one club wins");
+    }
+    int seeds[6] = {0, 2, 3, 6, 8, 11}, ties[6];
+    season_arg_reducido_pairs(seeds, 6, ties);
+    CHECK(ties[0] == 0 && ties[1] == 11 && ties[2] == 2 && ties[3] == 8 && ties[4] == 3 && ties[5] == 6,
+          "the best place meets the worst");
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;

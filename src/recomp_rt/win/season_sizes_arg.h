@@ -120,6 +120,29 @@ void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, i
 /* The second division's clubs for the size step in the class's form, best average first (item 291). */
 void season_arg_second_step_order(uint32_t obj, uint32_t *club, int n);
 
+/* The Torneo Reducido of the second division (item 291). Each tie is a Cup_Stage of its own, so that the survivors of a
+ * round can be paired again by their places. Sources: en.wikipedia.org 2015 Primera B Nacional (2nd to 5th, two legs),
+ * 2017-18 (2nd to 9th, one-match quarter-finals), 2018-19 (two legs, paired again after the first round), 2022 Primera
+ * Nacional (4th to 13th, the 3rd in round two and the 2nd in the semi-finals; two-leg semi-finals and final). */
+#define SEASON_ARG_REDUCIDO_ROUNDS 4
+typedef struct { int fresh, ties, legs; } SeasonArgReducidoRound;
+typedef struct {
+    int places;             /* the clubs that take part, from the 2nd place on */
+    int rounds, stages;     /* the rounds, and the ties of all rounds */
+    int final_pens;         /* 1: a level final goes to penalties; 0: the better placed club goes through */
+    SeasonArgReducidoRound round[SEASON_ARG_REDUCIDO_ROUNDS];
+} SeasonArgReducido;
+/* Pure: the Reducido of a rules row of the second division. Returns 0 for a row with none. */
+int season_arg_reducido_of(int row, SeasonArgReducido *out);
+/* Pure: the ties of n survivors (n even) sorted best place first: out[2i] the better, out[2i + 1] the worse place. */
+void season_arg_reducido_pairs(const int *sorted, int n, int *out);
+/* The second division's edition plays this Reducido now. */
+int season_arg_reducido_marked(uint32_t obj);
+/* The places and the stage array of an edition with a Reducido, after the row's places. */
+void season_arg_reducido_rules(uint32_t obj);
+/* The next round, the day every tie made so far is complete (ArgSecond::advance_stage 0x4080c0). */
+void season_arg_reducido_advance(uint32_t obj);
+
 /* The title stages of a season (season_arg_stages.c): none, two zone tables a half and a knockout of 16 after each
  * half (2025, 2026), two zone tables and a final of the zone winners with a match of the runners-up (2016), or a
  * knockout of the first 16 of each half's table (2027 on). */
