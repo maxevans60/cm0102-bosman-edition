@@ -102,6 +102,30 @@ def season_checks(name, log, report, season, ecl):
     return fails
 
 
+def pot_faults(name, log, season, changing):
+    """The pots of each league phase (decision L8 of the 0.7.3 spec). Changing rules on: no club of a lower pot has a
+    higher reputation than a club of the pot above, unless the log names clubs that changed pots for the nation rules.
+    Changing rules off: the entry codes of the original's seed order 0x586f60 never fall."""
+    key = f"{season}/{(season + 1) % 100:02d}"
+    fails, phases = [], []
+    for days, pot, text in re.findall(rf"league phase {key}: (\d) matches, pot (\d):((?: \d+:-?\d+:-?\d+)+)", log):
+        if pot == "1":
+            phases.append([])
+        phases[-1].append([tuple(int(x) for x in c.split(":")) for c in text.split()])
+    if len(phases) < 2:
+        fails.append(f"{name}: {len(phases)} league phases with pot lines in {key}")
+    moved = re.search(rf"league phase {key}: \d+ clubs change pots", log) is not None
+    for pots in phases:
+        clubs = [c for pot in pots for c in pot]
+        if not changing and [c[0] for c in clubs] != sorted(c[0] for c in clubs):
+            fails.append(f"{name}: changing rules off, the pots of {key} left the seed order")
+        if changing and not moved:
+            for upper, lower in zip(pots, pots[1:]):
+                if max(c[1] for c in lower) > min(c[1] for c in upper):
+                    fails.append(f"{name}: a lower pot of {key} holds a higher reputation")
+    return fails
+
+
 def has_ecl(log, season):
     return re.search(rf"new competition {ECL_FILE} made for {season}", log) is not None
 
@@ -113,6 +137,7 @@ def run_season(name, season, database):
         found, log = ufr.boxes(work)
         fails += [f"{name}: message box {b}" for b in found]
         fails += season_checks(name, log, report, season, has_ecl(log, season))
+        fails += pot_faults(name, log, season, False)
         m = re.search(r"suspended Russia: (\d+) clubs with a place", log)
         if not m or m.group(1) != "0":
             fails.append(f"{name}: Russia: {m.group(0) if m else 'no log line of the suspension'}")
@@ -132,6 +157,7 @@ def run_change(program, game, work):
     if re.search(r"league phase 2023/24", log):
         fails.append("change: a league phase in 2023/24")
     fails += season_checks("change", log, report, 2024, has_ecl(log, 2024))
+    fails += pot_faults("change", log, 2024, True)
     for sentence in NEWS:
         if sentence not in log:
             fails.append(f"change: no news sentence {sentence!r}")

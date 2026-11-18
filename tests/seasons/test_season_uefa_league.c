@@ -131,8 +131,32 @@ static void check_pots(void)
     }
 }
 
+/* Decision L8: no club of a lower pot has a higher reputation than a club of the pot above, and clubs of equal
+ * reputation keep the seed order they come in. */
+static void check_reputation(void)
+{
+    for (unsigned seed = 1; seed <= 200; seed++) {
+        int rep[36], order[36], used[36] = {0};
+        unsigned r = seed;
+        for (int i = 0; i < 36; i++) rep[i] = 1000 + 500 * lcg(17, &r);
+        season_league_by_reputation(rep, order);
+        for (int i = 0; i < 36; i++) {
+            CHECK(order[i] >= 0 && order[i] < 36 && !used[order[i]], "seed %u: order is no permutation", seed);
+            if (order[i] >= 0 && order[i] < 36) used[order[i]] = 1;
+        }
+        for (int s = 9; s >= 6; s -= 3)
+            for (int i = 0; i < 36; i++)
+                for (int j = (i / s + 1) * s; j < 36; j++)
+                    CHECK(rep[order[i]] >= rep[order[j]], "seed %u: pot %d holds %d, a lower pot %d", seed, i / s,
+                          rep[order[i]], rep[order[j]]);
+        for (int i = 0; i < 35; i++)
+            CHECK(rep[order[i]] != rep[order[i + 1]] || order[i] < order[i + 1], "seed %u: a tie left the seed order", seed);
+    }
+}
+
 int main(void)
 {
+    check_reputation();
     check_pots();
     int relaxed[2][3] = {{0}};
     for (int days = 8; days >= 6; days -= 2)

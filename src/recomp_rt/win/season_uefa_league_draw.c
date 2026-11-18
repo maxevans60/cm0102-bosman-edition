@@ -275,6 +275,15 @@ static int make_days(Draw *d, int days, SeasonLeagueDraw *out)
     return 0;
 }
 
+void season_league_by_reputation(const int *reputation, int order[SEASON_LEAGUE_CLUBS])
+{
+    for (int i = 0; i < N; i++) {                           /* an insertion sort: equal clubs keep their order */
+        int j = i;
+        for (; j > 0 && reputation[order[j - 1]] < reputation[i]; j--) order[j] = order[j - 1];
+        order[j] = i;
+    }
+}
+
 /* The clubs of nation x in pot p of size s. */
 static int pot_count(const int *nation, const int *order, int s, int p, int x)
 {
