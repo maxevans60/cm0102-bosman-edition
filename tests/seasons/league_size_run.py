@@ -180,6 +180,8 @@ ROWS = {
     "nir_prm@2001": (2001, 2009, "Irish League from a 2001 start, the same run (--reuse --keep of nir_first@2001): "
                                  "no club down in 2001/02, the play-off only in 2002/03, 2 down and no play-off in "
                                  "2007/08"),
+    "nir_first@2018": (2018, 2019, "Irish League from a 2018 start (item 288): every section match of 2018/19 is played, "
+                                   "so both leagues finish and start 2019/20"),
     "ire_first@2010": (2010, 2012, "League of Ireland from a 2010 start: 2011 0 down and 2 up plus the play-off, each "
                        "club on its own (item 251b); 12 Premier clubs in 2012, and the size step leaves the First Division its "
                        "row's 8 (item 260)"),
