@@ -189,7 +189,7 @@ static uint32_t screen_holder(uint32_t club, uint32_t list, int number)
 {
     for (uint32_t i = 0; i < 50; i++) {
         uint32_t person = rd32(g_mem, list + i * 4u);
-        if (!person || rd32(g_mem, person) >= rd32(g_mem, STAFF_COUNT)) continue;
+        if (!person || (int32_t)rd32(g_mem, person) >= (int32_t)rd32(g_mem, STAFF_COUNT)) continue;
         uint32_t a[2] = {person, club};
         Cpu saved = cpu;
         cpu.ecx = rd32(g_mem, 0xdd7ef0u);
@@ -225,10 +225,10 @@ static void strip_button(uint32_t area, int column, int row, int number, uint32_
     display_call(WIDGET_CREATE, 18, w);
 }
 
-/* 0x477640: draws both strips with the option on and returns the lower area. 0xffffffff: the original draws them. */
+/* 0x477640: draws both strips with the option on and returns the lower area. 0x80000000: the original draws them. */
 uint32_t rt_squad_screen_strips(uint32_t club, uint32_t list)
 {
-    if (rt_squad_number_top() <= LOW_TOP) return 0xffffffffu;
+    if (rt_squad_number_top() <= LOW_TOP) return 0x80000000u;
     const char *test = getenv("RECOMP_TEST_SQUAD_NUMBERS");
     int log_rows = test && !strcmp(test, "screen");
     uint32_t upper = strip_area(TOP_STRIP), lower = strip_area(BOTTOM_STRIP_END - STRIP_HEIGHT);
@@ -257,6 +257,7 @@ uint32_t rt_squad_screen_strips(uint32_t club, uint32_t list)
 
 static int test_failures;
 static int screen_pending;      /* RECOMP_TEST_SQUAD_NUMBERS=screen: the screen waits for the first news screen */
+static uint32_t watch_person, watch_club;   /* the player whose number the test reads on the open screen */
 
 static uint32_t manager_call(uint32_t fn, int n, const uint32_t *args)
 {
@@ -433,12 +434,17 @@ static void open_numbers_screen(void)
         fprintf(stderr, "recomp: squad numbers screen: FAIL no player of the human club\n");
         return;
     }
-    /* The handler leaves a confirmed (negative) number alone (0x47ba06), so the player who holds 1 gets none. */
+    /* The handler leaves a confirmed (negative) number alone (0x47ba06), so the player who holds 1 gets none. With the
+     * option off he gets 75, as in a save made with the option on. */
+    int on = rt_squad_number_top() > LOW_TOP;
     for (int i = 0; i < 50; i++) {
         uint32_t p = squad_slot(club, i);
         if (!is_player(p) || abs(number_of(p, club)) != 1) continue;
-        set_number(p, club, 0);
-        fprintf(stderr, "recomp: squad numbers screen: staff %u has no number\n", rd32(g_mem, p));
+        set_number(p, club, on ? 0 : 75);
+        fprintf(stderr, on ? "recomp: squad numbers screen: staff %u has no number\n"
+                           : "recomp: squad numbers screen: staff %u has number 75\n", rd32(g_mem, p));
+        watch_person = p;
+        watch_club = club;
         break;
     }
     uint32_t push[5] = {0x475520u, 0x47a9e0u, 1, 0x47c070u, 0};
@@ -459,8 +465,14 @@ static void open_numbers_screen(void)
 /* The input poll 0x55f620: the screen opens on top of the first news screen. */
 void squad_numbers_test_poll(void)
 {
-    if (!screen_pending) return;
+    static int polls;
     uint32_t node = rd32(g_mem, 0xb74c32u);
+    if (watch_person && node && rd32(g_mem, node) == 0x475520u && ++polls == 50) {     /* the screen is built */
+        fprintf(stderr, "recomp: squad numbers screen: staff %u shows number %d\n", rd32(g_mem, watch_person),
+                abs(number_of(watch_person, watch_club)));
+        watch_person = 0;
+    }
+    if (!screen_pending) return;
     if (!node || rd32(g_mem, node) != 0x7881e0u) return;
     screen_pending = 0;
     open_numbers_screen();
@@ -473,7 +485,7 @@ void squad_numbers_test_turn(void)
     static int state = -1, last_day = -1;
     if (state < 0) {
         const char *v = getenv("RECOMP_TEST_SQUAD_NUMBERS");
-            state = !v ? 0 : !strcmp(v, "screen") ? 3 : strcmp(v, "count") ? 1 : 2;
+        state = !v ? 0 : !strcmp(v, "screen") ? 3 : strcmp(v, "count") ? 1 : 2;
     }
     if (!state) return;
     if (state == 3) {

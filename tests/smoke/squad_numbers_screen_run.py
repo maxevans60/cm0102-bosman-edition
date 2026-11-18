@@ -8,7 +8,8 @@ Loads start.sav, takes number 1 from its holder and opens the screen of the huma
 squad_numbers.c). Real mouse steps drag number button 75 onto that player's name (the handler sets it at 0x47ba3c).
     on      squad_numbers_99 = on. The screen has 99 buttons, and the player holds 75 after the drop.
     classic the same in the classic display.
-    off     squad_numbers_99 = off. The runtime draws no button and no number above 50 appears.
+    off     squad_numbers_99 = off, with a player on 75 as in a save made with the option on. The original strips draw,
+            the screen opens with no error box and the player keeps 75.
 The pass rule is the log lines above, no error box and code 0. The pictures stay in the out folder.
 """
 import os
@@ -25,6 +26,8 @@ PLAYER_ROW = (528, 273)         # the name of the player who held number 1 (Seam
 BUTTON_75 = (766, 503)          # number 75: the last column of the first row of the lower strip
 HELD = re.compile(r"squad numbers screen: number (\d+) has staff (\d+)")
 CLEARED = re.compile(r"squad numbers screen: staff (\d+) has no number")
+KEPT = re.compile(r"squad numbers screen: staff (\d+) has number 75")
+SHOWN = re.compile(r"squad numbers screen: staff (\d+) shows number (\d+)")
 failures = []
 
 
@@ -34,13 +37,14 @@ def check(ok, text):
         failures.append(text)
 
 
-def steps():
+def steps(drag=True):
     x0, y0 = BUTTON_75
     x1, y1 = PLAYER_ROW
     # The screen opens over the first news screen, so the steps wait for it in place of "wait first-news".
-    return [s for s in fixtures.LOAD_STEPS if s != "wait first-news"] + [
-        "wait screen:0x475520",
-        "2000 dump {d}/1-open.bmp",
+    start = [s for s in fixtures.LOAD_STEPS if s != "wait first-news"] + ["wait screen:0x475520", "2000 dump {d}/1-open.bmp"]
+    if not drag:
+        return start + ["5000 dump {d}/2-open.bmp", "6000 quit"]
+    return start + [
         f"2500 move {x0} {y0}",
         f"3000 down {x0} {y0}",
         f"3500 move {x0 + 20} {y0 + 20}",
@@ -60,7 +64,7 @@ def play(program, game, out, name, value, mode="widescreen"):
     shutil.copyfile(os.path.join(fixtures.DEFAULT_DIR, "start.sav"), os.path.join(user, "start.sav"))
     fixtures.write_settings(user, mode, [("changing_rules", "off"), ("squad_numbers_99", value)])
     env = {"RECOMP_SCREEN_LOG": "1", "RECOMP_TEST_SQUAD_NUMBERS": "screen"}
-    r, _ = fixtures.run(program, game, mode, user, smoke_run.scaled_steps(mode, folder, steps()), env, 600)
+    r, _ = fixtures.run(program, game, mode, user, smoke_run.scaled_steps(mode, folder, steps(value == "on")), env, 600)
     with open(os.path.join(folder, "stderr.txt"), "w") as f:
         f.write(r.stderr)
     shutil.rmtree(work, ignore_errors=True)
@@ -84,7 +88,8 @@ def main(argv):
     check(len(cleared) == 1 and ("75", cleared[0]) in HELD.findall(log), f"classic: staff {cleared} holds 75 after the drop")
     log = play(program, game, out, "off", "off")
     check("squad numbers screen: 99 buttons" not in log, "off: the runtime draws no button")
-    check(not HELD.findall(log), "off: no number above 50 on the screen")
+    kept = KEPT.findall(log)
+    check(len(kept) == 1 and (kept[0], "75") in SHOWN.findall(log), f"off: staff {kept} keeps 75 on the open screen")
     print("squad numbers screen:", "FAILED" if failures else "passed")
     return 1 if failures else 0
 
