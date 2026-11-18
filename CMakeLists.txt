@@ -210,6 +210,8 @@ if(NOT WIN32)
     add_test(NAME same_save_rules_pair_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/smoke/rules_pair_table_check.py")
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
+    # Issue 138 (0.7.3): the site roadmap shows Done only for issues closed as completed.
+    add_test(NAME site_roadmap COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/site/roadmap_check.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
     # Open item 233 (0.7.2): the year fix table matches docs/research/history-years/wrong-rows.tsv.
@@ -547,6 +549,8 @@ if(NOT WIN32)
     add_test(NAME future_competitions COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/competitions_check.py")
     # The run set and its release check (0.6.2 slice 15), without a game: tests/seasons/future/run_set_test.py.
     add_test(NAME future_run_set COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/run_set_test.py")
+    # The speed benchmark (0.8.0 slice 1), without a game: tests/seasons/speed_bench_test.py.
+    add_test(NAME speed_bench COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/speed_bench_test.py")
     # The network scripts watch the address their games meet on (item 216): tests/smoke/address_watch_test.py.
     add_test(NAME address_watch COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/smoke/address_watch_test.py")
     # A rules report run with --year and no --database plays the season database of its expected files (item 129).
