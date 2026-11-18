@@ -7,7 +7,7 @@
  * FUN_0058f500 (cdecl, 14 arguments) at 0x763fb3 with the buffer as argument 5 and the save routine
  * 0x838e10 as argument 6. The wrap writes the suggested name into the buffer when the dialog is
  * opened with that buffer and that routine. Other dialogs (printouts, scout searches, the load dialogs and
- * the network host's Save Game Before Exit at 0x762c13, which pass another buffer) do not change.
+ * Save Game Before Exit at 0x762c13, which pass another buffer) do not change.
  *
  * The club: the manager of the player slot that has the turn (0xb74c26 + slot * 0x300, slot at
  * 0xb77c7a), club pointer at manager + 0x39, short name at club + 0x38, long name at club + 4. The side
@@ -15,7 +15,7 @@
  *
  * The nation: a manager with no club and the job 5 or 12 at manager + 0x28 manages the national team at
  * manager + 0x24 (MANAGER_MANAGER::appoint_manager_to_club reads both at 0x69ebeb..0x69ebf9). The team's
- * nation is at team + 0x53 and the nation's name at nation + 4. A manager with a club and a national team
+ * nation is at team + 0x53 and the nation's name at nation + 4 (0x460db4..0x460db7). A manager with a club and a national team
  * keeps the club's name. A manager with neither job keeps the original name.
  *
  * The club name is in code page 1252 (club.dat). The path code passes a name to the host as it is, and
@@ -33,9 +33,10 @@
 #define NAME_BUFFER 0xdd6ed4u      /* the text of the name entry of the file dialog */
 #define SAVE_ROUTINE 0x00838e10u   /* the save callback of Save Game */
 #define JOB_MANAGER 5              /* staff + 0x28: manager of the national team (0x69ebf5) */
-#define JOB_CARETAKER 12           /* the other job that 0x69ebf9 accepts */
+#define JOB_PLAYER_MANAGER 12      /* the other job that 0x69ebf9 accepts */
 #define CLUB_MAX 24                /* characters of the club name in the suggestion */
-#define CLUB_BYTES 49              /* its bytes as UTF-8 (cp1252.h), with the end */
+#define NATION_MAX 50              /* characters of the nation's name: the whole field */
+#define NAME_BYTES 101             /* the bytes of either name as UTF-8 (cp1252.h), with the end */
 
 static int leap(int y) { return (y % 4 == 0 && y % 100 != 0) || y % 400 == 0; }
 
@@ -56,11 +57,11 @@ int win_game_date(int *year, int *month, int *day)
 static void nation_name(char *out, size_t size, uint32_t manager)
 {
     int job = (int8_t)g_mem[manager + 0x28];
-    uint32_t team = job == JOB_MANAGER || job == JOB_CARETAKER ? rd32(g_mem, manager + 0x24) : 0;
+    uint32_t team = job == JOB_MANAGER || job == JOB_PLAYER_MANAGER ? rd32(g_mem, manager + 0x24) : 0;
     uint32_t nation = team ? rd32(g_mem, team + 0x53) : 0;
     out[0] = 0;
-    if (nation) cp1252_file_name(out, size, (const char *)(g_mem + nation + 4), CLUB_MAX);
-    if (team && !out[0]) cp1252_file_name(out, size, (const char *)(g_mem + team + 4), CLUB_MAX);
+    if (nation) cp1252_file_name(out, size, (const char *)(g_mem + nation + 4), NATION_MAX);
+    if (team && !out[0]) cp1252_file_name(out, size, (const char *)(g_mem + team + 4), NATION_MAX);
 }
 
 /* The suggested name in out, or 0 when the player has no club and no national team. */
@@ -70,7 +71,7 @@ static int suggest(char *out, size_t size)
     uint32_t manager = rd32(g_mem, PLAYER_MANAGER + slot * 0x300u);
     if (!manager) return 0;
     uint32_t club = rd32(g_mem, manager + 0x39);
-    char name[CLUB_BYTES];
+    char name[NAME_BYTES];
     name[0] = 0;
     if (club) {
         cp1252_file_name(name, sizeof name, (const char *)(g_mem + club + 0x38), CLUB_MAX);
@@ -91,7 +92,7 @@ void o_0058f500(void);
 /* The file dialog, cdecl (14 arguments). */
 RT_WRAP(0058f500, file_dialog)
 {
-    char name[80];
+    char name[NAME_BYTES + 16];
     if (rt_arg(5) == NAME_BUFFER && rt_arg(6) == SAVE_ROUTINE && suggest(name, sizeof name)) {
         memcpy(g_mem + NAME_BUFFER, name, strlen(name) + 1);
         fprintf(stderr, "recomp: save name suggested: %s\n", name);

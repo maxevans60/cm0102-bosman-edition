@@ -31,9 +31,9 @@
  * and managed it at every human turn between (the fixture has no manager field), and whether the match was played.
  * tests/seasons/future/run_set.py reads the lines.
  *
- * Test switch RECOMP_TEST_NATION_JOB_ONLY=1, with the switch above: the appointment comes at the first human turn,
- * with no holiday, and the human also leaves his club, through MANAGER_MANAGER::remove_staff_from_club 0x690890 (thiscall on [0xb67a44], staff and club, ret 8,
- * called so at 0x83ee6c..0x83ee72). tests/smoke/save_name_run.py saves such a game to read the save name of a national
+ * Test switch RECOMP_TEST_NATION_JOB_NOW=1, with the switch above: the appointment comes at the first human turn,
+ * with no holiday. Test switch RECOMP_TEST_NATION_JOB_ONLY=1, with both: the human also leaves his club, through
+ * MANAGER_MANAGER::remove_staff_from_club 0x690890 (staff and club, ret 8; it reloads ecx itself, call at 0x83ee72). tests/smoke/save_name_run.py saves such a game to read the save name of a national
  * team manager with no club. */
 #include "win.h"
 #include "season_uefa_days.h"
@@ -179,8 +179,8 @@ void nation_job_turn(void)
             return;
         }
         uint32_t record = rd32(g_mem, rd32(g_mem, HUMANS)) + (uint32_t)slot * HUMAN_RECORD;
-        const char *only = getenv("RECOMP_TEST_NATION_JOB_ONLY");
-        if (!(only && *only) && !rd32(g_mem, record + ON_HOLIDAY)) {
+        const char *now_switch = getenv("RECOMP_TEST_NATION_JOB_NOW");
+        if (!(now_switch && *now_switch) && !rd32(g_mem, record + ON_HOLIDAY)) {
             human = 0;                                      /* not on holiday yet: look again at the next turn */
             return;
         }
@@ -204,6 +204,7 @@ void nation_job_turn(void)
         fprintf(stderr, "recomp: nation job test: the human manages %s from day %d of %d (%s)\n", long_name(team),
                 doy + 1, year, now ? "appointed" : "the call did not appoint him");
         if (!now) return;
+        const char *only = getenv("RECOMP_TEST_NATION_JOB_ONLY");
         uint32_t club = rd32(g_mem, human + STAFF_CLUB);
         if (only && *only && club) {
             uint32_t leave[2] = {human, club};

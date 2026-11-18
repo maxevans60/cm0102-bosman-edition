@@ -52,12 +52,14 @@ def national_save(program, game, work, name, only):
     user = os.path.join(work, name)
     os.makedirs(user)
     shutil.copyfile(os.path.join(fixtures.DEFAULT_DIR, "start.sav"), os.path.join(user, "start.sav"))
-    env = {"RECOMP_TEST_NATION_JOB": "England", "RECOMP_SAVE_AFTER_DAYS": "0"}
+    env = {"RECOMP_TEST_NATION_JOB": "England", "RECOMP_TEST_NATION_JOB_NOW": "1", "RECOMP_SAVE_AFTER_DAYS": "0"}
     if only:
         env["RECOMP_TEST_NATION_JOB_ONLY"] = "1"
     r = play(program, game, user, fixtures.LOAD_STEPS + ["120000 quit"], env)
     save = os.path.join(user, fixtures.smoke_run.SAVE_NAME)
-    return save if r.returncode == 0 and os.path.exists(save) else None
+    appointed = "the human manages Republic of Ireland" in r.stderr
+    left = "the human left his club (club job empty)" in r.stderr
+    return save if r.returncode == 0 and os.path.exists(save) and appointed and left == only else None
 
 
 def sav_files(folder):
