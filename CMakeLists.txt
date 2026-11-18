@@ -308,6 +308,9 @@ if(NOT WIN32)
     add_executable(season_periods_test tests/seasons/test_season_periods.c src/recomp_rt/win/season_periods.c)
     target_include_directories(season_periods_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_periods COMMAND season_periods_test)
+    add_executable(season_ned_playoff_test tests/seasons/test_season_ned_playoff.c src/recomp_rt/win/season_ned_playoff_plan.c)
+    target_include_directories(season_ned_playoff_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_ned_playoff COMMAND season_ned_playoff_test)
     # The Irish calendar move of 2003 (gap row 2 of 0.7.2 league sizes).
     add_executable(season_calendar_test tests/seasons/test_season_calendar.c src/recomp_rt/win/season_calendar.c
         src/recomp_rt/win/season_template.c)

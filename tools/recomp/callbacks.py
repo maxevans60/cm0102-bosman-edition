@@ -16,7 +16,7 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "foreign.c", "season.c", "season_dates.c", "season_history.c",
                   "season_change.c", "season_kind_club_world.c", "season_comps.c", "season_bra_states.c",
                   "season_super_cups.c", "season_new_cups.c", "season_cup_groups.c",
-                  "season_club_cups.c", "season_playoffs.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
+                  "season_club_cups.c", "season_playoffs.c", "season_ned_playoff.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
                   "season_gold_cup.c", "season_divisions.c", "season_tur_groups.c", "season_pol_first.c", "screen_sweep.c",
                   "season_national_fill.c")
                                 # in src/recomp_rt/win
@@ -179,6 +179,9 @@ CALLBACKS = {
     0x9452CA: ("558bec51568b7508", "free, cdecl"),
     0x5A8F60: ("c390909090909090", "the empty function (compared with vtable +0x28, wrapped in season_uefa_cup.c)"),
     0x686940: ("8a4424083c057519", "League +0x44, base (compared with vtable +0x44, wrapped in season_playoffs.c)"),
+    # Issue 150 (season_ned_playoff.c): the news of a club that goes up or down.
+    0x869480: ("6aff68962b960064", "news: a club wins promotion, thiscall (club, record, code)"),
+    0x86A1C0: ("6aff68062c960064", "news: a club goes down, thiscall (club, record)"),
     # Gap row 11 (season_playoffs.c): ScoFirst's own play-off slots, wrapped for the cross play-off.
     0x7EF270: ("81ec00020000568b", "ScoFirst +0x28: advance_stage (the three-club stage with the Premier Division)"),
     0x7EF5D0: ("8b15dcf59c00a1fc", "ScoFirst +0x44: a stage result, ret 0x18"),
