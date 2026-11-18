@@ -482,6 +482,10 @@ def differences(seasons, comps, rows):
                 want = (encode_leagues.count(e["po_up"]), encode_leagues.count(e["po_down"]))
                 game = (c["playoff_up"], c["playoff_down"])
                 same = game == want if e["po_status"] == "ok" else bool(sum(game)) == bool(sum(want))
+                # Item 291: rows 2002 and 2003 of the second division name the promoción in their text, and the encoded
+                # row holds no places for it: the game plays it with the two clubs after the direct places.
+                if c["file"] == "arg_second" and game == (2, 0) and "promoci" in r["playoffs_text"].lower():
+                    same = True
                 if two_winners_first(r) and game[0] != 4:   # open item 63: no stage, the places go up directly
                     same = game == (0, want[1])
                 if not same:

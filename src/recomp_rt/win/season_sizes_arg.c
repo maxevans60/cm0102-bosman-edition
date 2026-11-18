@@ -932,8 +932,7 @@ int season_arg_promo_primera(uint32_t self, uint32_t *club)
  * after them (arg_record_honours), so the 17th and 18th of the averages are its 2 play-off places to row 2011.
  * The second division in the class's form (2001/02): the Apertura's winner (+0xbe 1) and the Reducido's winner (status 0
  * at 0x408d54) go up; 2 go down by the averages (0x408666) and the size step sends down the surplus over the next row.
- * In one table of rows 2002 to 2011 the clubs after the direct places play the Primera's promoción (promo_advance), where
- * the row names those places. */
+ * In one table of rows 2002 to 2011 the two clubs after the direct places play the Primera's promoción (promo_advance). */
 void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, int *down)
 {
     int year = readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_YEAR) : 0;
@@ -956,8 +955,7 @@ void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, i
         return;
     }
     int row = season_sizes_row_season(obj, "arg_second");
-    const SeasonLeagueRule *l = row >= 0 ? season_league_row("arg_second", row) : NULL;
-    if (l && l->po_up > 0 && row >= SEASON_ARG_PROMO_FIRST && row <= SEASON_ARG_PROMO_LAST) *po_up = 2;
+    if (row >= SEASON_ARG_PROMO_FIRST && row <= SEASON_ARG_PROMO_LAST) *po_up = 2;
 }
 
 /* Item 291: the row of 2001/02 sends down the worst coefficients. The records hold each club's average (+4, as

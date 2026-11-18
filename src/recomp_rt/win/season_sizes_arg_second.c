@@ -106,8 +106,8 @@ int season_arg_second_one_table(uint32_t obj)
  * edition of the class keeps the class's stages to its end. */
 static int playing_one_table(uint32_t obj)
 {
-    return season_arg_second_one_table(obj) &&
-           (rd32(g_mem, obj + COMP_STAGE_COUNT) == 0 || season_arg_reducido_marked(obj));
+    return season_arg_reducido_marked(obj) ||
+           (season_arg_second_one_table(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0);
 }
 
 int season_arg_second_row_up(int row)
@@ -283,7 +283,13 @@ RT_WRAP(00409c20, arg_second_update_averages)
         if (n >= 2 && n <= SEASON_ARG_MAX_CLUBS) season_arg_averages_fit(self, n, FILE_SECOND);
         if (rt_unwinding) return;
     }
+    /* The class's loop reads each stage after the first as a league table (0x409d31..0x409d80). The ties of a Reducido are
+     * Cup_Stages and hold no table: the averages come from the league's own table. */
+    int reducido = season_arg_reducido_marked(self);
+    uint32_t now = rd32(g_mem, self + COMP_STAGE_NOW);
+    if (reducido) wr32(g_mem, self + COMP_STAGE_NOW, 0xffffffffu);
     o_00409c20();
+    if (reducido) wr32(g_mem, self + COMP_STAGE_NOW, now);
 }
 
 /* ArgSecond::set_predicted_positions 0x409fe0 (thiscall, no argument): a block of 25 pointers (push 0x64 at 0x40a022),
@@ -351,6 +357,11 @@ RT_WRAP(00408cd0, arg_second_result)
     if (logging())
         fprintf(stderr, "recomp: league sizes: arg_second reducido %d: result %d of club %u in the final\n",
                 (int16_t)rd16(g_mem, self + COMP_YEAR), (int8_t)(rt_arg(1) & 0xff), rd32(g_mem, rt_arg(0)));
+    /* The loser: the class records a place in its promotion ties (0x408d75..0x408d94), which this edition does not play. */
+    if ((int8_t)(rt_arg(1) & 0xff) != 1) {
+        rt_ret_stdcall(0xffffffffu, 6);
+        return;
+    }
     wr32(g_mem, cpu.esp + 4 + 4 * 2, 3);
     o_00408cd0();
 }

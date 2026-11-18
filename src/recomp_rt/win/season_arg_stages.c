@@ -819,6 +819,8 @@ int season_arg_promo_results(uint32_t prm, uint32_t *down, uint32_t *up)
 #define COMP_UP_PLAYOFF 0xbfu
 #define ROW_STATUS 0x37u
 #define REDUCIDO_MAX 12
+#define VT_ARG_SECOND 0x009673d8u       /* ArgSecond's vtable (0x406e5e) */
+#define CLASS_STAGES_SECOND 6           /* ArgSecond::ArgSecond 0x406c61 */
 #define DAYS_ONE_MATCH 5                /* the draw tomorrow, the match in 3 days, the next draw after it */
 #define DAYS_TWO_LEGS 9                 /* as PROMO_DAYS and one day for the next draw */
 
@@ -830,10 +832,14 @@ static int reducido_spec(uint32_t obj, SeasonArgReducido *s)
     return l && season_arg_reducido_of(row, s) && l->po_up == s->places && season_arg_second_row_up(row) == 2;
 }
 
+/* The class always holds 6 stages (0x406c61) and a table with no stage 0, so any other count of an ArgSecond object is an
+ * edition with a Reducido. Read from the object, not from the rules: a save made during a Reducido can load with the sizes
+ * off (the same reason as plan_live for the Primera). */
 int season_arg_reducido_marked(uint32_t obj)
 {
-    SeasonArgReducido s;
-    return reducido_spec(obj, &s) && (int32_t)rd32(g_mem, obj + STAGE_COUNT) == s.stages;
+    if (!readable(obj) || rd32(g_mem, obj) != VT_ARG_SECOND) return 0;
+    int32_t n = (int32_t)rd32(g_mem, obj + STAGE_COUNT);
+    return n >= 1 && n != CLASS_STAGES_SECOND;
 }
 
 /* The champion goes up directly (+0xbe 1) and the Reducido's winner takes the row's second place. The class's array holds
@@ -852,7 +858,9 @@ void season_arg_reducido_rules(uint32_t obj)
     g_mem[obj + COMP_UP_PLAYOFF] = (uint8_t)s.places;
 }
 
-/* One tie at index. One match: the better placed club at home (first in the tree), extra time and penalties. Two legs:
+/* One tie at index. One match: the better placed club at home (first in the tree), and it goes through on a level score
+ * (+0xd 0x800: Cup::create_tie_fixtures 0x51cd91..0x51cdce gives the fixture 0x800, home through, when the home seed
+ * number is the lower; 2017-18 and 2022 sources). Two legs:
  * the better placed club plays the second leg at home and goes through on a level aggregate (+0xf 0x804, as promo_tie;
  * 2018-19 and 2022 sources), except in a final that goes to penalties (+0xf 7: extra time and penalties, no away goals;
  * 2015 and 2018-19 finals). */
@@ -863,7 +871,7 @@ static uint32_t reducido_tie(uint32_t self, int index, uint32_t better, uint32_t
     if (!table) return 0;
     memset(g_mem + table, 0, ROUND_SIZE);
     wr16(g_mem, table + 7, (uint16_t)code);
-    wr16(g_mem, table + 0xd, legs == 2 ? 0x200 : 0x203);
+    wr16(g_mem, table + 0xd, legs == 2 ? 0x200 : 0xa00);
     wr16(g_mem, table + 0xf, legs == 2 ? (pens ? 0x7 : 0x804) : 0);
     g_mem[table + 0x17] = 6;
     wr16(g_mem, table + 0x18, 2);
@@ -892,7 +900,11 @@ static void reducido_none(uint32_t self, const uint32_t *table, int n, const cha
 void season_arg_reducido_advance(uint32_t self)
 {
     SeasonArgReducido s;
-    if (!reducido_spec(self, &s)) return;
+    if (!reducido_spec(self, &s)) {
+        /* Loaded with the sizes off: the ties made end the season, and no new stage is made. */
+        wr32(g_mem, self + STAGE_COUNT, (uint32_t)((int32_t)rd32(g_mem, self + STAGE_LAST) + 1));
+        return;
+    }
     uint32_t t[TABLE_MAX];
     int nt = zone_order(self, t), made = (int32_t)rd32(g_mem, self + STAGE_LAST) + 1;
     if (rt_unwinding) return;
