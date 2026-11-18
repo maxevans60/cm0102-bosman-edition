@@ -54,6 +54,12 @@ CASES = {
     "italy2001": (2001, 2005, ["England", "Italy"],
                   {"ita_ser_a": (2004, 20), "ita_ser_b": (2004, 22), "ita_ser_c1a": (2005, 18)},
                   "Italy from 2001 to 2005/06: Serie B 24 then 22, Serie A 20, Serie C1/A 19 then 18"),
+    "portugal2015": (2014, 2016, ["England", "Portugal"], {"por_second": (2016, 22), "por_prm": (2016, 18)},
+                     "D23 towards a division outside the size table: LigaPro 24 to 22 in 2016/17 through the real "
+                     "places of 2015/16 (5 down, open item 248)"),
+    "brazil": (2004, 2006, ["England", "Brazil"], {"bra_nat_second": (2006, 20)},
+               "D23 towards a division outside the size table: Serie B 22 to 20 in 2006 through the real places of "
+               "2005 (6 down, open item 249)"),
     "conference": (2005, 2007, ["England"], {"eng_conf": (2006, 24)},
                    "D15 (slice 8): League Two sends 2 down and the Conference 2 up (the champion and the play-off "
                    "winner) at each change; the Conference grows from 22 to 24 in 2006/07"),
@@ -74,8 +80,11 @@ CASES = {
                "to 7th"),
 }
 
-# The extra divisions of the new game screen of a case (rules_report_check.EXTRA).
-EXTRA = {"conference": ["conference"], "refuse": ["conference"], "nl2019": ["conference"], "nl2021": ["conference"]}
+# The extra divisions of the new game screen of a case (rules_report_check.EXTRA, ENV_EXTRA). portugal2015 needs the
+# Segunda Divisao B: without it PorSecond::set_up_rules sets no division below (0x7d1714..0x7d1728) and the PorPrm
+# chain returns before its Segunda Liga call (0x7cfc55), so no club of the Segunda Liga goes down there.
+EXTRA = {"conference": ["conference"], "refuse": ["conference"], "nl2019": ["conference"], "nl2021": ["conference"],
+         "portugal2015": ["portugal"]}
 
 # The environment of a case beyond RECOMP_SIZE_LOG=1.
 ENV = {"refuse": {"RECOMP_TEST_REFUSE_CHAMPION": "1"}}
@@ -114,8 +123,16 @@ PLACES = {
     "ligue3": {"fra_second": (2026, None, 3), "fra_third": (2026, 3, None)},
     "nl2019": {"eng_conf": (2019, 2, 4)},
     "nl2021": {"eng_conf": (2021, 2, 3)},
+    "portugal2015": {"por_second": (2015, None, 5)},
+    "brazil": {"bra_nat_second": (2005, None, 6)},
 }
 NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
+# Gap row 8 (lead-notes/sizes-gaps.md): the lowest division of the size table trades with the real tier below it, so
+# the step sends none of its clubs to no division.
+NO_EXIT = {"portugal2015": ["por_second"], "brazil": ["bra_nat_second"]}
+# Gap row 9: the rows of the Allsvenskan and the Superettan for 2007 say no play-off, so neither plays the class's
+# kvalspel (report season, the line of the edition).
+NO_PLAYOFF = {"grow": {"swe_prm": 2007, "swe_first": 2007}}
 
 MOVE_LINE = re.compile(r"recomp: league sizes: step: (.*) from (.*) to (.*)$")
 
@@ -179,6 +196,16 @@ def faults(work, case):
         moves = [m.group(0) for m in map(MOVE_LINE.match, log.split("\n")) if m and
                  (m.group(2) in names or m.group(3) in names)]
         fails += [f"{file}: the step moved a club: {m}" for m in moves]
+    for file, season in NO_PLAYOFF.get(case, {}).items():
+        for c in comps:
+            if c["file"] == file and c["season"] == season and c["phase"] == "start" and c["kind"] == "league" \
+                    and c["year"] and (c["playoff_up"] or c["playoff_down"]):
+                fails.append(f"{file} {season}: {c['playoff_up']} up and {c['playoff_down']} down play-off places, "
+                             f"its row none")
+    for file in NO_EXIT.get(case, []):
+        names = {c["name"] for c in comps if c["file"] == file}
+        fails += [f"{file}: the step sent a club to no division: {m.group(0)}"
+                  for m in map(MOVE_LINE.match, log.split("\n")) if m and m.group(2) in names and m.group(3) == "no division"]
     fails += [f"{d[0]} {d[2]}" for d in sorted(rrc.division_differences(comps, clubs))]
     return fails
 
