@@ -925,8 +925,9 @@ int season_arg_promo_primera(uint32_t self, uint32_t *club)
 }
 
 /* Item 286: ArgPrm::set_up_rules writes 0 relegation places (0x4056d1), because the class sends down by its averages.
- * The rules report shows the clubs that the season sends down: the row's places, or the last two records of the class
- * (0x405cb3, 0x405d6a) when the edition plays the class's form. */
+ * The rules report shows the direct places of the season: the row's places, or the last two records of the class
+ * (0x405cb3, 0x405d6a) when the edition plays the class's form. A loser of the promoción of rows 2002 to 2011 goes down
+ * after them (arg_record_honours) and counts as a play-off result, as the row's text counts it. */
 int season_arg_report_down(uint32_t obj, int places)
 {
     if (!is_prm(obj)) return places;

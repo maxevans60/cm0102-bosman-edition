@@ -168,7 +168,9 @@ uint32_t rt_arg_second_fixed_at(uint32_t obj, uint32_t original)
  * 0x40573f) sends at most 4 rows of status 3 down (cmp bl, 4 at 0x4069fb) and brings as many clubs up. The row of
  * 2017/18 has 6 places. With changing rules on the other rows of status 3 go down as the swap sends its own
  * (0x406a1c..0x406a38), and the size step, which runs at the free_table of 0x405789, fills the division to its next
- * row with other clubs of the third division. */
+ * row with other clubs of the third division. No club that went down this season change comes back in that step. A
+ * third division with no club to exchange makes the swap move nobody (0x4069c9..0x4069e1): then no club goes down
+ * here either, because no club could take its place. */
 void o_004068d0(void);
 RT_WRAP(004068d0, arg_swap)
 {
@@ -180,15 +182,21 @@ RT_WRAP(004068d0, arg_swap)
     uint32_t second = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
     if (!third || !is_second(second) || !playing_one_table(second)) return;
     uint32_t rows = rd32(g_mem, second + COMP_TABLE), record = rd32(g_mem, second + COMP_RECORD);
-    int n = (int16_t)rd16(g_mem, second + COMP_CLUBS);
+    int n = (int16_t)rd16(g_mem, second + COMP_CLUBS), swapped = 0;
     for (int r = 0; readable(rows) && r < n; r++) {
         uint32_t row = rows + (uint32_t)r * ROW_SIZE, club = rd32(g_mem, row);
-        if (g_mem[row + ROW_STATUS] != STATUS_DOWN || !readable(club) || rd32(g_mem, club + CLUB_DIVISION) != record)
-            continue;
+        swapped += g_mem[row + ROW_STATUS] == STATUS_DOWN && readable(club) &&
+                   rd32(g_mem, club + CLUB_DIVISION) != record;
+    }
+    if (!swapped) return;
+    for (int r = 0; readable(rows) && r < n; r++) {
+        uint32_t row = rows + (uint32_t)r * ROW_SIZE, club = rd32(g_mem, row);
+        if (g_mem[row + ROW_STATUS] != STATUS_DOWN || !readable(club)) continue;
+        season_sizes_step_bar(club);
+        if (rd32(g_mem, club + CLUB_DIVISION) != record) continue;
         uint32_t a[3] = {club, third, 1};
         call_this(F_RELEGATE, self, 3, a);
         if (rt_unwinding) return;
-        season_sizes_step_bar(club);
         if (logging())
             fprintf(stderr, "recomp: league sizes: arg_second %d: club %u goes down past the swap's %d\n",
                     (int16_t)rd16(g_mem, second + COMP_YEAR), rd32(g_mem, club), SEASON_ARG_SWAP_DOWN);
