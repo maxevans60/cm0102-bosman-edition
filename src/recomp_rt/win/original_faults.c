@@ -672,6 +672,21 @@ uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fix
     return 1;
 }
 
+/* Issue 132: the known crash sites of the original. The fixes and guards are in
+ * tools/recomp/crashguards.py (0x84aebb, 0x85d8b8, 0x409e25), and two lookups of HolFirst::set_club_progress 0x5f73d0
+ * (0x5f73e1, 0x5f74a7) are log-only in tools/recomp/original_faults.py. Each logs its first hit in a run, so that
+ * the logs of the run set show whether the port reaches it. Notes: run-logs/0.8.0-s817/site-*.md. */
+void rt_crash_site(uint32_t site)
+{
+    static uint32_t seen[16];
+    static unsigned n;
+    for (unsigned i = 0; i < n; i++)
+        if (seen[i] == site) return;
+    if (n < sizeof seen / sizeof seen[0]) seen[n++] = site;
+    fprintf(stderr, "recomp: crash site %#x reached, day %d, year %d (issue 132)\n", site, (int16_t)rd16(g_mem, 0xae2c90u),
+            (int16_t)rd16(g_mem, 0xae2c92u));
+}
+
 /* The move of a one-contract player to or from the linked side (open item 187, tools/recomp/original_faults.py at
  * 0x4cc03d). CONTRACT_MANAGER::get_squad_placement 0x4cbb60 reads bit 0x40 of the player's contract +0x35 (0x4cbcb8):
  * set gives 3 (on the B side), clear gives 4 (at the senior club). CONTRACT_MANAGER::toggle_squad_placement 0x4cbd20
