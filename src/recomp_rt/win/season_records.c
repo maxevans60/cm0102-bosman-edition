@@ -730,8 +730,9 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
     log[0] = 0;
     int first = -1, n = 0;
     for (int i = 0; i < nrows; i++)
-        /* 0.7.3 slice 6: the clubs of a closed league come with changing rules on only (decision L7). */
-        if (season_closed_league(rows[i].division) && !season_next_rules()) continue;
+        /* 0.7.3 slice 6: the clubs of a closed league come with changing rules on only (decision L7). The rows of
+         * closed-leagues.tsv have no source. A row with a source belongs to the club list of its season. */
+        if (season_closed_league(rows[i].division) && !rows[i].source[0] && !season_next_rules()) continue;
         else if (rows[i].season == season_clubs_list_season(rows[i].division, season)) {   /* item 260 */
             if (first < 0) first = i;
             result.row_of[n] = i;
@@ -776,6 +777,14 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
                 fprintf(stderr, "recomp: club records: %s: this database holds the club (record %d), no new record\n",
                         rr->name, gets32(cl));
             }
+        }
+        /* 0.7.3 slice 7: two rows of one closed league's club make one record. The row with a source comes first
+         * (make_club_records.py): 2005 lists Queensland Roar, and the closed league table has Brisbane Roar. */
+        const char *closed_league = season_closed_league(rr->division);
+        int closed_row = closed_league ? season_closed_row(closed_league, rr->real) : -1;
+        for (int e = 0; closed_row >= 0 && e < r && !skip[r]; e++) {
+            const RecordRow *er = &rows[result.row_of[e]];
+            skip[r] = !strcmp(er->division, rr->division) && season_closed_row(closed_league, er->real) == closed_row;
         }
         will += !skip[r];
     }

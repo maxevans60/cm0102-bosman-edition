@@ -14,6 +14,7 @@
 #define FOREVER 9999
 #define A_LEAGUE_FIRST 2005            /* row aus-jap-kor-28; the National Soccer League plays before it */
 #define MAX_WORDS 4
+#define A_LEAGUE_CAP 13                 /* AusNsl::create_table stores 13 rows (0x411b82) */
 
 typedef struct {
     const char *league, *real;
@@ -256,6 +257,23 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
         if (worst < 0) break;
         actions[worst] = CLOSED_CUT;
         r.cut++;
+        r.count--;
+    }
+    /* A human manager can keep a club beside the real clubs. The class makes no table row past its count, so a club
+     * that would join waits a season, and then the club with the lowest reputation leaves. */
+    int cap = strcmp(league, "aus_nsl") ? 0 : A_LEAGUE_CAP;
+    while (cap > 0 && r.count > cap) {
+        int drop = -1, joining = 0;
+        for (int i = 0; i < n; i++)
+            if (actions[i] == CLOSED_JOIN && (!joining || clubs[i].reputation < clubs[drop].reputation)) drop = i, joining = 1;
+        for (int i = 0; i < n && !joining; i++)
+            if (clubs[i].in_league && actions[i] == CLOSED_STAY && !clubs[i].human &&
+                (drop < 0 || clubs[i].reputation < clubs[drop].reputation))
+                drop = i;
+        if (drop < 0) break;
+        actions[drop] = joining ? CLOSED_STAY : CLOSED_CUT;
+        r.joined -= joining;
+        r.cut += !joining;
         r.count--;
     }
     *result = r;

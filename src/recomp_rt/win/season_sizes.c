@@ -532,6 +532,9 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         season_calendar_stage(self, season_change_file(self), stage, count_at);
         return;
     }
+    /* 0.7.3 slice 7: the A-League's clubs of the new edition, before the dates count them. */
+    if (!probe_meetings) season_closed_rules(self);
+    if (rt_unwinding) return;
     size_step_run(self);
     const char *file = season_change_file(self);
     const SeasonGrown *g = grown_of(file);
@@ -1013,8 +1016,6 @@ static void sizes_rules(uint32_t obj)
 
 void season_sizes_rules(uint32_t obj)
 {
-    if (readable(obj)) season_closed_rules(obj);    /* 0.7.3 slice 7: the A-League's clubs, before its dates */
-    if (rt_unwinding) return;
     if (readable(obj)) size_step_run(obj);
     /* Item 251: the Irish seasons with no play-off between the divisions, before the places (season_sizes_irl.c). */
     if (!rt_unwinding && readable(obj)) season_sizes_irl_rules(obj, season_change_file(obj));

@@ -82,9 +82,10 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
 }
 
 /* AusNsl::start_new_season 0x411de0 frees the last table (League::free_table 0x687970 with 0 at 0x411df0 clears +0xb1
- * at 0x687a10), adds 1 to the edition (0x411e1e) and calls set_up_rules (slot +0x8c at 0x411e24) before create_table
- * 0x411e62 and the fixtures 0x411e9d. create_table takes the clubs of the division (0x411c1a..0x411c2a), so the clubs
- * of the edition are right from here on. An empty table marks that call: a loaded game keeps its table. */
+ * at 0x687a10), adds 1 to the edition (0x411e1e) and calls set_up_rules (slot +0x8c at 0x411e24). set_up_rules asks for
+ * the dates of stage -1 (create_schedule 0x4111a0, slot +0x3c, at 0x411d74), and the size code counts the clubs of the
+ * division for them, so the clubs move here, first. create_table 0x411e62 then takes the clubs of the division
+ * (0x411c1a..0x411c2a). A game that loads keeps its table, so an empty table marks the season change. */
 void season_closed_rules(uint32_t obj)
 {
     if (!season_changing_rules() || season_change_is_creating()) return;

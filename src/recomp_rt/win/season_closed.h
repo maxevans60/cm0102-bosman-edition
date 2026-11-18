@@ -68,7 +68,8 @@ int season_closed_first(const char *league, int i);
 /* The plan of a season change. actions[i] takes the CLOSED_ value of clubs[i]. want is the count of the league's row
  * (0 or less: no count). Clubs that the table folds leave first. Then each club of the season that the league lacks
  * joins. A club that the table does not name leaves only while the league holds more clubs than want, the lowest
- * reputation first. A club with a human manager never leaves. */
+ * reputation first. A club with a human manager never leaves. The A-League never holds more than the 13 clubs of its
+ * class: past that count a club that would join waits, then the named club with the lowest reputation leaves. */
 void season_closed_plan(const char *league, int season, int want, const ClosedClub *clubs, int n, int *actions,
                         ClosedResult *result);
 

@@ -201,6 +201,23 @@ static void test_a_league_plan(void)
     CHECK(r.count == 13 && !r.joined && !r.cut && !r.folded && !r.missing, "2004: %d clubs, %d join, %d cut", r.count,
           r.joined, r.cut);
     for (int i = 0; i < 18; i++) CHECK(a[i] == CLOSED_STAY, "2004 club %d: %d", i, a[i]);
+    /* 2024: a human manager keeps a club of no row beside the 12 real clubs. The class holds 13 rows, so Auckland waits. */
+    ClosedClub y2024[] = {{"Adelaide United", 1, 0, 0, 50},   {"Brisbane Roar", 1, 0, 0, 50},
+                          {"Central Coast Mariners", 1, 0, 0, 50}, {"Melbourne Victory", 1, 0, 0, 50},
+                          {"Newcastle Jets", 1, 0, 0, 50},    {"Perth Glory", 1, 0, 0, 50},
+                          {"Sydney FC", 1, 0, 0, 50},         {"Wellington Phoenix", 1, 0, 0, 50},
+                          {"Melbourne City", 1, 0, 0, 50},    {"Western Sydney Wanderers", 1, 0, 0, 50},
+                          {"Western United", 1, 0, 0, 20},    {"Macarthur FC", 1, 0, 0, 50},
+                          {"Marconi Stallions", 1, 1, 0, 30}, {"Sydney United", 0, 0, 0, 30},
+                          {"Auckland FC", 0, 0, 0, 10}};
+    season_closed_plan("aus_nsl", 2024, 13, y2024, 15, a, &r);
+    CHECK(r.count == 13 && r.joined == 0 && a[14] == CLOSED_STAY && a[12] == CLOSED_STAY, "2024 human: %d clubs, %d join",
+          r.count, r.joined);
+    /* Two human managers: the real club with the lowest reputation leaves as well. */
+    y2024[13].in_league = y2024[13].human = 1;
+    season_closed_plan("aus_nsl", 2024, 13, y2024, 15, a, &r);
+    CHECK(r.count == 13 && a[10] == CLOSED_CUT && a[12] == CLOSED_STAY && a[13] == CLOSED_STAY, "2024 two humans: %d, %d",
+          r.count, a[10]);
 }
 
 int main(void)

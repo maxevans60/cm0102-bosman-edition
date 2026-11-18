@@ -9,7 +9,8 @@
  * the league in the log. Returns the clubs of the division after the plan. */
 int season_closed_step(uint32_t rec, const char *league, const char *tag, int season, int edition, int want);
 
-/* AusNsl::set_up_rules 0x411ce0 (the wrap calls season_sizes_rules): the clubs of the A-League's new edition. */
+/* The date template of stage -1 (season_sizes_schedule, from AusNsl::create_schedule 0x4111a0): the clubs of the
+ * A-League's new edition. */
 void season_closed_rules(uint32_t obj);
 
 #endif
