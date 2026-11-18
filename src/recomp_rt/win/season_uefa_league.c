@@ -197,6 +197,28 @@ uint32_t season_uefa_league_make(uint32_t parent, uint32_t *clubs, int days, int
         if (!readable(clubs[i])) return 0;
     if (!season_uefa_league_sort(clubs, SEASON_LEAGUE_CLUBS)) return 0;
     for (int i = 0; i < SEASON_LEAGUE_CLUBS; i++) nation[i] = (int)rd32(g_mem, clubs[i] + 0x53);
+    /* Decision L8 of the 0.7.3 spec: a pot that holds too many clubs of one nation has no draw under the nation
+     * rules, so its surplus clubs change pots before the draw. */
+    int pot_order[SEASON_LEAGUE_CLUBS], moved = 0;
+    uint32_t seeded[SEASON_LEAGUE_CLUBS];
+    season_league_pots(days, nation, pot_order);
+    for (int i = 0; i < SEASON_LEAGUE_CLUBS; i++) seeded[i] = clubs[i];
+    for (int i = 0; i < SEASON_LEAGUE_CLUBS; i++) {
+        clubs[i] = seeded[pot_order[i]];
+        nation[i] = (int)rd32(g_mem, clubs[i] + 0x53);
+        moved += pot_order[i] != i;
+    }
+    if (moved) fprintf(stderr, "recomp: uefa: league phase %u/%02u: %d clubs change pots for the nation rules\n", year,
+                       (year + 1) % 100, moved);
+    /* The test seam of the pots: entry code (+0x1df), reputation (+0x80) and nation of each club, in pot order. */
+    for (int p = 0, s = days == 8 ? 9 : 6; p < SEASON_LEAGUE_CLUBS / s; p++) {
+        char line[16 * 9] = "";
+        for (int i = p * s; i < (p + 1) * s; i++)
+            snprintf(line + strlen(line), sizeof line - strlen(line), " %d:%d:%d", g_mem[clubs[i] + 0x1df],
+                     (int16_t)rd16(g_mem, clubs[i] + 0x80), nation[i]);
+        fprintf(stderr, "recomp: uefa: league phase %u/%02u: %d matches, pot %d:%s\n", year, (year + 1) % 100, days,
+                p + 1, line);
+    }
     static SeasonLeagueDraw d;
     if (!season_league_draw(days, nation, game_random, NULL, &d)) {
         if (!rt_unwinding)
