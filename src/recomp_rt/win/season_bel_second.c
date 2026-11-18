@@ -549,7 +549,7 @@ RT_WRAP(00420230, bel_second_playoff)
         hand_on(cpu.ecx, 2, "before the play-off");
     season_bel_po_entrants_in(cpu.ecx);         /* issue 150: First Division clubs in the final round */
     o_00420230();
-    if (!rt_unwinding) season_bel_po_entrants_out();
+    season_bel_po_entrants_out();               /* also on an unwind: the rows get their own clubs back */
 }
 
 /* The row index that the original's top-up of 0x423880 leaves as the best placed row of 0xff (0x4238c9..0x42393c:

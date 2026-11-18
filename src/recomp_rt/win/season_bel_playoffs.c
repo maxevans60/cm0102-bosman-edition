@@ -89,16 +89,21 @@
 #define PLAYOFF_ONE 6                   /* the clubs of Play-off I */
 #define GROUP_CLUBS 6
 #define GROUP_ROUNDS 10
-#define NAME_PLAYOFF 0xa0               /* the stage name of the English play-off (0x573180..0x573189) */
+#define NAME_PLAYOFF 0xa0               /* the name of a play-off stage: BelSecond's group 0x41f9a8, England's 0x57316b */
 #define CODE_FINAL 150                  /* the round id of a final (0x572b6e) */
 #define LEG_GAP 4                       /* days between two legs, as the English semi-finals (0x572b20) */
 #define MAX_ROWS 64
+#define CLASS_SECOND_STAGES 4           /* BelSecond: three periods and the group (0x41f0a5) */
+#define TEST_SAVE_GROUP_DAYS 14
+#define CUP_WAIT_LAST_DAY 165           /* the Europa match waits for the cup final until this day of the year */
 #define B_ROUNDS 28                     /* First Division B: 8 clubs that meet four times */
 #define WINTER_DAY 353                  /* 20 December, the day of the year */
 #define WINTER_BREAK 21                 /* days */
 #define FINAL_AFTER 4                   /* days from First Division B's table to the first leg of its final */
 
 uint32_t rt_bel_playoff_stage(uint32_t obj, uint32_t original);    /* season_sizes_periods.c */
+
+void testrun_save_in(int days);    /* testrun.c */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -107,6 +112,13 @@ static int on(void)
     static int off = -1;
     if (off < 0) off = getenv("RECOMP_BEL_PLAYOFFS") && !strcmp(getenv("RECOMP_BEL_PLAYOFFS"), "off");
     return !off && season_sizes_on() && season_game_changes();
+}
+
+/* Tests only (tests/seasons/bel_playoffs_run.py): RECOMP_TEST_BEL_SAVE=group or tie saves while that stage is played. */
+static int test_save(const char *what)
+{
+    const char *v = getenv("RECOMP_TEST_BEL_SAVE");
+    return v && !strcmp(v, what);
 }
 
 /* One log line of an edition, with the day of the year (tests/seasons/bel_playoffs_run.py reads them). */
@@ -261,7 +273,7 @@ static void move_dates_on(uint32_t dates, int days)
 
 /* ---- The groups of Play-off II with second-division clubs ---- */
 
-static uint32_t make_group(uint32_t first, int index, const uint32_t *club, uint32_t dates, uint32_t code)
+static uint32_t make_group(uint32_t first, int index, const uint32_t *club, uint32_t dates)
 {
     uint32_t list = season_sizes_game_malloc(4u * GROUP_CLUBS), places = season_sizes_game_malloc(4);
     uint32_t tmpl = season_sizes_game_malloc(GROUP_ROUNDS * DATE_SIZE), sz[1] = {0xee};
@@ -273,7 +285,7 @@ static uint32_t make_group(uint32_t first, int index, const uint32_t *club, uint
         memcpy(g_mem + tmpl, g_mem + dates, GROUP_ROUNDS * DATE_SIZE);
         uint32_t a[22] = {first, GROUP_CLUBS, list, 2, rd32(g_mem, first + COMP_RECORD), tmpl, GROUP_ROUNDS,
                           g_mem[first + 0xc2u], g_mem[first + 0xc3u], g_mem[first + 0xc4u], first + 0xc5u, places,
-                          (uint32_t)(int16_t)rd16(g_mem, first + COMP_YEAR), (uint32_t)index, code, 0x14, 1, 0, 0x22,
+                          (uint32_t)(int16_t)rd16(g_mem, first + COMP_YEAR), (uint32_t)index, NAME_PLAYOFF, 0x14, 1, 0, 0x22,
                           0xffffffffu, 0, 2};     /* as 0x4203d4..0x420414 */
         stage = call_this(F_LEAGUE_STAGE, stage, 22, a);
         if (rt_unwinding) return 0;
@@ -324,12 +336,16 @@ static void build_groups(uint32_t first, const SeasonBelForm *f)
     }
     move_dates_on(dates, GROUP_ROUNDS);
     for (int g = 0; g < 2 && !rt_unwinding; g++) {
-        if (!make_group(first, g, group[g], dates, code) && !rt_unwinding) no_more(first, "a group was not made");
+        if (!make_group(first, g, group[g], dates)) {
+            if (!rt_unwinding) no_more(first, "a group was not made");
+            break;
+        }
         say("group %c:", year, 'A' + g);
         for (int k = 0; k < GROUP_CLUBS; k++) fprintf(stderr, "%s%.40s", k ? ", " : " ", club_name(group[g][k]));
         fprintf(stderr, "\n");
     }
     season_sizes_game_free(dates);
+    if (!rt_unwinding && test_save("group")) testrun_save_in(TEST_SAVE_GROUP_DAYS);
 }
 
 void season_bel_po_update(uint32_t obj)
@@ -437,6 +453,7 @@ static void build_final(uint32_t first, const SeasonBelForm *f, int index)
     int a_home = f->final_legs == 1 && place_of_club(first, a) < place_of_club(first, b);
     uint32_t club[2] = {a_home ? a : b, a_home ? b : a};
     if (!make_tie(first, index, club, f->final_legs) && !rt_unwinding) no_more(first, "the final was not made");
+    if (!rt_unwinding && test_save("tie")) testrun_save_in(1);
     say("Play-off II final, %d leg(s): %.40s v %.40s\n",
             (int16_t)rd16(g_mem, first + COMP_YEAR), f->final_legs, club_name(club[0]), club_name(club[1]));
 }
@@ -449,7 +466,11 @@ static void build_europa(uint32_t first, const SeasonBelForm *f, int index)
         no_more(first, "the final has no winner");
         return;
     }
-    uint32_t cup = season_uefa_cup_winner(rd32(g_mem, win + CLUB_NATION));
+    /* The honours of the cup final are written after the day's league updates (0x51f920): the draw waits for them. */
+    uint32_t nation = rd32(g_mem, win + CLUB_NATION);
+    int played = season_uefa_cup_final_played(nation);
+    if (rt_unwinding || (!played && (int16_t)rd16(g_mem, GAME_DATE) < CUP_WAIT_LAST_DAY)) return;
+    uint32_t cup = season_uefa_cup_winner(nation);
     if (rt_unwinding) return;
     /* 2010/11: the Play-off II winner held a European place from the cup, and the match was not played. */
     if (cup == win) {
@@ -536,6 +557,8 @@ RT_WRAP(0068aa30, league_final_places)
     uint8_t keep = g_mem[win + CLUB_LAST_PLACE];
     g_mem[win + CLUB_LAST_PLACE] = g_mem[lose + CLUB_LAST_PLACE];
     g_mem[lose + CLUB_LAST_PLACE] = keep;
+    say("places for Europe: %.40s %d, %.40s %d\n", (int16_t)rd16(g_mem, self + COMP_YEAR), club_name(win),
+        (int8_t)g_mem[win + CLUB_LAST_PLACE], club_name(lose), (int8_t)g_mem[lose + CLUB_LAST_PLACE]);
     say("%.40s takes the European place of %.40s\n",
             (int16_t)rd16(g_mem, self + COMP_YEAR), club_name(win), club_name(lose));
 }
@@ -576,7 +599,16 @@ void o_004201a0(void);
 RT_WRAP(004201a0, bel_second_advance)
 {
     uint32_t self = cpu.ecx, first = league_of(KEY_FIRST);
-    int row[2];
+    int row[2], next = (int32_t)rd32(g_mem, self + COMP_STAGE_LAST) + 1;
+    /* 2015/16: no final round, the champion alone goes up. The season closes with the stages it has (0x6849d1); the
+     * class's count of 4 (0x41f0a5) comes back after the chain, season_bel_po_moved. */
+    if (on() && self == league_of(KEY_SECOND) && first && next == (int)rt_bel_playoff_stage(self, 3) &&
+        season_bel_second_up(first_season(first)) == SEASON_BEL_UP_CHAMPION) {
+        wr32(g_mem, self + COMP_STAGE_COUNT, (uint32_t)next);
+        say("no final round this season\n", (int16_t)rd16(g_mem, self + COMP_YEAR));
+        if (!rt_unwinding) rt_ret_cdecl(0);
+        return;
+    }
     if (on() && self == league_of(KEY_SECOND) && first &&
         (int32_t)rd32(g_mem, self + COMP_STAGE_LAST) + 1 == (int)rt_bel_playoff_stage(self, 3) &&
         season_bel_top_entrants(first_season(first), row_count(first), row) && !first_table_done(first)) {
@@ -608,7 +640,7 @@ static void weekly_rounds(uint32_t tmpl, int rounds, int base)
 }
 
 /* BelSecond::create_schedule 0x41f340 (thiscall: stage, &count, &code, &flag). The final round that waited for the First
- * Division takes dates from tomorrow on. The class dates its play-off group in May (0x41fcba..0x41fcdb). First Division
+ * Division takes dates from tomorrow on. The class dates its play-off group in May (stage 3: 0x41f975..0x41f9ff). First Division
  * B's final of 2016/17 to 2018/19 comes soon after its table instead (real life: 5 and 11 March 2017), as Play-off II
  * waits for that final and its clubs: the dates move up to start in FINAL_AFTER days. */
 void o_0041f340(void);
@@ -685,6 +717,14 @@ void season_bel_po_settle(void)
     uint32_t first = league_of(KEY_FIRST), second = league_of(KEY_SECOND), club[2] = {0, 0}, loser = 0;
     ndecided = 0;
     if (!on() || !first || !second) return;
+    /* First Division B 2016/17 to 2019/20: the winner of the final goes up (status 0), and the table's first place
+     * (status 5) does not, unless it is that club. */
+    if (season_bel_second_up(first_season(first)) == SEASON_BEL_UP_FINAL) {
+        int won = 0;
+        for (int i = 0; i < row_count(second); i++) won |= g_mem[row_at(second, i) + ROW_STATUS] == ST_UP;
+        for (int i = 0; won && i < row_count(second); i++)
+            if (g_mem[row_at(second, i) + ROW_STATUS] == ST_TITLE) g_mem[row_at(second, i) + ROW_STATUS] = ST_NONE;
+    }
     int k = entrants_of(first, club, &loser), year = (int16_t)rd16(g_mem, first + COMP_YEAR);
     if (k <= 0) return;
     int index = (int)rt_bel_playoff_stage(second, 3);
@@ -717,7 +757,9 @@ void season_bel_po_settle(void)
 
 void season_bel_po_moved(void)
 {
-    uint32_t first = league_of(KEY_FIRST);
+    uint32_t first = league_of(KEY_FIRST), second = league_of(KEY_SECOND);
+    if (second && (int32_t)rd32(g_mem, second + COMP_STAGE_COUNT) == CLASS_SECOND_STAGES - 1)
+        wr32(g_mem, second + COMP_STAGE_COUNT, CLASS_SECOND_STAGES);
     for (int i = 0; first && i < ndecided; i++) {
         int up = rd32(g_mem, decided[i].club + CLUB_DIVISION) == rd32(g_mem, first + COMP_RECORD);
         say("%.40s %s the First Division next season%s\n", (int16_t)rd16(g_mem, first + COMP_YEAR),

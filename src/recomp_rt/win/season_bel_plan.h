@@ -35,4 +35,10 @@ int season_bel_top_entrants(int season, int n, int row[2]);
  * club. */
 int season_bel_final_round_down(int entrants, int winner, int k);
 
+/* Who goes up from the second division. */
+#define SEASON_BEL_UP_BOTH 0        /* the champion and the winner of the final round */
+#define SEASON_BEL_UP_CHAMPION 1    /* the champion alone: no final round */
+#define SEASON_BEL_UP_FINAL 2       /* the winner of the final between the period winners alone */
+int season_bel_second_up(int season);
+
 #endif

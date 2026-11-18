@@ -78,6 +78,13 @@ int season_bel_top_entrants(int season, int n, int row[2])
     return 0;
 }
 
+/* 2015/16: no final round (reform year; RSSSF belg2016). 2016/17 to 2019/20: the final of First Division B. */
+int season_bel_second_up(int season)
+{
+    return season == 2015 ? SEASON_BEL_UP_CHAMPION
+         : season >= 2016 && season <= 2019 ? SEASON_BEL_UP_FINAL : SEASON_BEL_UP_BOTH;
+}
+
 int season_bel_final_round_down(int entrants, int winner, int k)
 {
     return k >= 0 && k < entrants && k != winner;

@@ -95,6 +95,14 @@ static void final_round(void)
     want("the other goes down", 2, season_bel_final_round_down(2, 1, 0), 1);
 }
 
+static void second_up(void)
+{
+    want("who goes up", 2014, season_bel_second_up(2014), SEASON_BEL_UP_BOTH);
+    want("who goes up", 2015, season_bel_second_up(2015), SEASON_BEL_UP_CHAMPION);
+    for (int y = 2016; y <= 2019; y++) want("who goes up", y, season_bel_second_up(y), SEASON_BEL_UP_FINAL);
+    want("who goes up", 2020, season_bel_second_up(2020), SEASON_BEL_UP_BOTH);
+}
+
 int main(void)
 {
     forms();
@@ -102,6 +110,7 @@ int main(void)
     groups();
     entrants();
     final_round();
+    second_up();
     printf(fails ? "FAILED\n" : "PASS\n");
     return fails != 0;
 }

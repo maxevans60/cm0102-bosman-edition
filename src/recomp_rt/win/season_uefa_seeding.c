@@ -227,6 +227,20 @@ static uint32_t cup_club(uint32_t nation, uint32_t off, int k)
 
 uint32_t season_uefa_cup_winner(uint32_t nation) { return cup_club(nation, 0x1e, 0); }
 
+/* 1 when the final of the nation's cup is played: Cup +0xb1 (Cup::check_complete 0x521e00). 1 when the game has no such
+ * cup. The object of a record is g_comp_object_table [0xadadfc] at the record's index in the table [0xae23d0]. */
+int season_uefa_cup_final_played(uint32_t nation)
+{
+    uint32_t a[1] = {nation};
+    int idx = (int8_t)call_cdecl(F_NATION_INDEX, 1, a);
+    if (rt_unwinding || idx < 0 || idx >= 35) return 1;
+    uint32_t entry = LEAGUE_TABLE + 0x48u * (uint32_t)idx, rec = rd32(g_mem, entry + 0x1e), recs = rd32(g_mem, 0xae23d0u);
+    uint32_t objects = rd32(g_mem, 0xadadfcu);
+    if (rd32(g_mem, entry) != nation || !readable(rec) || !readable(recs) || !readable(objects) || rec < recs) return 1;
+    uint32_t obj = rd32(g_mem, objects + 4u * ((rec - recs) / 0x6bu));
+    return !readable(obj) || g_mem[obj + 0xb1u] != 0;
+}
+
 /* The club that takes the cup place when the cup winner has a place already (0.6.2 open item 222). The original
  * gives it to the cup runner-up (0x9047e2). From 2015/16 UEFA gives it to the best league club with no place:
  * "the highest-ranked club in their domestic league not already qualified for the UEFA Europa League will
