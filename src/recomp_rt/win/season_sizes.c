@@ -1029,21 +1029,6 @@ static int outside_now(uint32_t obj)
     return r && outside_change(obj, file, r);
 }
 
-/* Gap row 29: Ligue 2's 16th meets the winner of the Ligue 3 play-off of the 3rd to 6th (rows 2026/27 on, its po_down
- * place). The game plays no tie between two divisions, and slice 19 plays the Ligue 3 play-off only when the division
- * above relegates its direct places and the winner (season_playoffs.c balanced). So the 16th's place counts as a
- * relegation place in a season whose Ligue 3 row has that play-off: the play-off plays and its winner goes up. Only
- * Ligue 2 over Ligue 3: other rows with a relegation play-off over a play-off of four (Norway, Japan, Ireland,
- * Greece, Belgium, Argentina) have their own code or gap rows. 1 for that place, else 0. */
-static int below_playoff_place(const char *file, int season, int down)
-{
-    if (!file || strcmp(file, "fra_second")) return 0;
-    const SeasonLeagueRule *e = season_league_rule(file, season);
-    int direct = -1;
-    /* Only when the direct places match (balanced: the 16th's place is the winner's), else the play-off stays off. */
-    return e && e->po_down > 0 && season_playoffs_shape("fra_third", season, &direct) && down == direct;
-}
-
 static void sizes_rules(uint32_t obj)
 {
     if (!sizes_on() || !readable(obj)) return;
@@ -1085,8 +1070,7 @@ static void sizes_rules(uint32_t obj)
     int outside = !open_neighbour(obj, BELOW) && !season_sizes_eng_below(file) && outside_change(obj, file, r);
     int changed = 0;
     if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file) || outside)
-        changed = set_places(obj, DOWN, DOWN_PLAYOFF, r->down + below_playoff_place(file, r->season, r->down),
-                             "relegation");
+        changed = set_places(obj, DOWN, DOWN_PLAYOFF, r->down, "relegation");
     /* Each edition: the set holds a division only in the edition whose places this slice set (review 1). */
     note_outside(obj, outside && changed);
     /* A division with no chain (open item 250, below): the row's places go to no division at the season change. The
