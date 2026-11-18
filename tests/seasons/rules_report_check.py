@@ -455,8 +455,8 @@ def differences(seasons, comps, rows):
                 # 2001/02) or the MLS (1) only mark rows.
                 if want == "na" and (c[key] == 0 or (key == "up" and c.get("above") == -1)):
                     continue
-                # Open item 281: the research found no number for this row (Druga HNL 2008/09, 2009/10 and 2012/13), so
-                # the game's places have nothing to differ from.
+                # Open item 281: a row of any league with no number from the research (the Druga HNL of 2008/09, 2009/10
+                # and 2012/13 among them) gives the game's places nothing to differ from.
                 if want == "unknown":
                     continue
                 accept = {c[key], c[key] + (1 if c[extra] else 0), c[key] + c[extra]}

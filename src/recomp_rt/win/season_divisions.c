@@ -1141,8 +1141,8 @@ static void gre_rules(uint32_t obj)
         if (r->down >= 0) g_mem[obj + DOWN] = (uint8_t)r->down;
     } else if (!strcmp(season_change_file(obj), "gre_second") && gre_held(s)) {
         /* The National B Division in a season with the group: the two groups of one tier promote by one rule
-         * (review 2). It is a floor division of slice 18 (its class keeps 2 up and 2 down), and its relegations stay
-         * 2: the original's exchange 0x5eb120 brings 2 clubs back from the Lower Division (0x5eb219). */
+         * (review 2). Its relegation places come from its row (season_sizes_cro_rules, item 282). The original's
+         * exchange 0x5eb120 brings 2 clubs back from the Lower Division (0x5eb219), and the size step closes the gap. */
         g_mem[obj + UP] = (uint8_t)gre_up(s, 0);
         g_mem[obj + UP_PLAYOFF] = 0;
     } else if (!strcmp(season_change_file(obj), "gre_prm") && gre_held(s)) {

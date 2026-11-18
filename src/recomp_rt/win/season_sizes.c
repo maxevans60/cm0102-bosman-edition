@@ -1360,6 +1360,7 @@ static struct {
     int lower[STEP_MAX_LOWER];
     int nfeed, feed[STEP_MAX_LOWER];        /* gap 37: the divisions below that play as now */
     uint32_t club[STEP_MAX_ROWS];
+    uint8_t went_down[STEP_MAX_ROWS];       /* item 282: the row had status 3, a relegation place */
 } step_seen[STEP_DIVS];
 static int nstep_seen;
 
@@ -1388,10 +1389,12 @@ static int step_index(uint32_t obj)
         while (k > 0 && pos[k - 1] > p) {
             pos[k] = pos[k - 1];
             step_seen[i].club[k] = step_seen[i].club[k - 1];
+            step_seen[i].went_down[k] = step_seen[i].went_down[k - 1];
             k--;
         }
         pos[k] = p;
         step_seen[i].club[k] = c;
+        step_seen[i].went_down[k] = g_mem[row + ROW_STATUS] == STATUS_DOWN;
         step_seen[i].nrows++;
     }
     /* The Argentine Primera sends down by its averages (promedios), not by its table (slice 15 fix). */
@@ -1759,8 +1762,9 @@ static void size_step_run(uint32_t trigger)
     StepClub *club = calloc((size_t)nmax, sizeof *club);
     uint32_t *at = calloc((size_t)nmax, sizeof *at);
     StepMove *moves = calloc((size_t)nmax, sizeof *moves);
+    uint8_t *relegated = calloc((size_t)nmax, sizeof *relegated);
     int nclub = 0;
-    if (!club || !at || !moves) goto done;
+    if (!club || !at || !moves || !relegated) goto done;
     for (int d = 0; d < ndiv; d++) {
         uint32_t obj = step_seen[d].obj;
         const char *file = season_change_file(obj);
@@ -1781,6 +1785,7 @@ static void size_step_run(uint32_t trigger)
             while (k < nclub && at[k] != c) k++;
             if (k == nclub) at[nclub++] = c;
             div[d].rows[div[d].nrows++] = k;
+            if (step_seen[d].went_down[r]) relegated[k] = 1;
         }
     int from_tables = nclub;
     /* Every other club of a noted division (a club that joined it outside the noted pairs, such as the Conference
@@ -1806,9 +1811,10 @@ static void size_step_run(uint32_t trigger)
     }
     for (int k = 0; k < nclub; k++) {
         uint32_t c = at[k], now = current_division(c);
-        /* Item 282: a club of a last table that GrePrm's exchange 0x5eb120 has just sent to the Greek Lower Division
-         * went down on its results, so the step does not bring it back in the same change. */
-        int just_down = k < from_tables && season_sizes_gre_lower(now);
+        /* Item 282: a club that a relegation place (status 3) has just sent to the Greek Lower Division (GrePrm's
+         * exchange 0x5eb25d..0x5eb28a) does not come back in the same change. The safe clubs of a second group that
+         * ends also go there (gre_swap, season_divisions.c), and they can take a free place. */
+        int just_down = relegated[k] && season_sizes_gre_lower(now);
         if (now && (season_clubs_in_spare(c) || season_arg_third(now) || season_sizes_gre_lower(now))) now = 0;
         club[k].div = now || just_down ? -3 : STEP_NONE;     /* -3: a division outside the step */
         for (int d = 0; d < ndiv; d++)
@@ -1946,6 +1952,7 @@ done:
     free(club);
     free(at);
     free(moves);
+    free(relegated);
     nstep_seen = 0;
     nlone_down = 0;
     step_running = 0;
