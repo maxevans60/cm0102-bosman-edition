@@ -447,8 +447,11 @@ def differences(seasons, comps, rows):
             # Item 286: edition Y of the Argentine second division plays row Y (season_league.c edition_is_year), the
             # real season that ends in it ("2016" for row 2015). Its object moves on after the start line (14 July),
             # so that line of season Y still holds edition Y - 1 and the end line holds edition Y, with row Y's places.
-            if c["file"] == "arg_second":
+            # The Primera moves on in the same way (season_league.c edition_is_year): a running game's start line of 2021
+            # holds edition 2020, so its places and rounds are those of row 2020.
+            if c["file"] in CALENDAR_START_FILES:
                 c = next((x for x in both if x["year"] == r["season"]), c)
+                both = [x for x in both if x["year"] == r["season"]] or both
             for key, extra in (("up", "playoff_up"), ("down", "playoff_down")):
                 want = r[key]
                 # A top division (no division above, -1) sends nobody up: the class's up places of the Série A (4 in
