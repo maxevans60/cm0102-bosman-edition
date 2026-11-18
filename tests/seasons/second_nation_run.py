@@ -108,7 +108,7 @@ def main(argv):
     steps = rrc.league_steps(NATIONS, []) + ["3000000 quit"]
     save, log, _ = scr.play(program, game, out, "new", {"changing_rules": "on"}, steps, DAYS,
                             {"RECOMP_START_SEASON": "2026"}, database=DB, timeout=3600)
-    with open(os.path.join(out, "new.log"), "w", encoding="latin-1") as f:
+    with open(os.path.join(out, "new.log"), "w", encoding="utf-8", errors="replace") as f:
         f.write(log)
     if not save:
         print("FAIL  no save")

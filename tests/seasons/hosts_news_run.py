@@ -2,12 +2,13 @@
 """Hosts of future tournaments (0.7.3 slice 16, issue 146).
 
 Usage:
-    python3 tests/seasons/hosts_news_run.py <cm0102_recomp> <game folder> [--only 2026,2019,2022] [--jobs n] [--keep <folder>]
+    python3 tests/seasons/hosts_news_run.py <cm0102_recomp> <game folder> [--only 2026,2018,2022] [--jobs n] [--keep <folder>]
 
 Each run is a season jump of tests/seasons/rules_report_check.py (England, changing rules on) with the test log
 RECOMP_SEASON_INTL_LOG=1. The runs:
     2026    October 2026, 2026/27 to 2028/29: the qualifiers of Euro 2028 and the host rows of 2028, 2030 and 2032
-    2019    October 2019, 2019/20 to 2020/21: the qualifiers of Euro 2020
+    2018    October 2018, 2018/19 to 2019/20: the qualifiers of Euro 2020 (a start in 2019 takes the real draw, with no
+            qualifiers and so no news)
     2022    October 2022, 2022/23 to 2023/24: the qualifiers of Euro 2024, with older host rows in the table
 
 The checks:
@@ -35,7 +36,7 @@ RUNS = {
         r"host world_cup 2030: Morocco;Portugal;Spain;Argentina;Paraguay;Uruguay",
         r"host euro_champ 2032: Italy;T",
     ]),
-    "2019": (2019, 2020, "October 2019", [
+    "2018": (2018, 2019, "October 2018", [
         r"qualified news of [^\n]* 2020 names the hosts England\n",
         r"host euro_champ 2020: -",
     ]),
