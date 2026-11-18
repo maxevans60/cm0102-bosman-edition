@@ -774,6 +774,12 @@ What to know about the Asyncify engine:
   sign-out, a free account that buys Cloud Saves while its game runs (checkout, webhook, the save goes up), and one
   that joins as a Buy Me a Coffee member in another tab (webhook, Cloud Saves on by themselves, Your membership).
   Needs Playwright.
+- `NODE_PATH=$(npm root -g) node web/test/make-videos.mjs <folder> [editor|app]`: the two how-to videos for players,
+  `editor.mp4` (Saved games, Edit, a search, a change, Apply, Save; the Editor button, a new data set, Use) and
+  `app.mp4` (the start, Saved games: Play, Download, Upload, Download all; Full screen, Cloud Saves, Help, Add to Home
+  Screen), about 1.5 minutes each, 1280x800 H.264. Recorded in Chromium on the stand-in engine with the checks' small
+  saves and data set, a caption bar and a pointer drawn on the page; the game's own screen is not in them (a panel says
+  where the game runs). CM_SELLER and CM_COFFEE_URL as on the server. Make them again after the page changes.
 - `NODE_PATH=$(npm root -g) node web/test/editor-check.mjs`: the editors in Chromium, with a small saved game and a small
   data set in the game's formats (`test/fakes.mjs`). The save editor on a computer and a phone: Edit, search, change,
   Apply, a rating out of reach, Save, the backup, a file that is not a full save. The data set editor: a name refused,
