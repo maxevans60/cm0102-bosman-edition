@@ -26,8 +26,20 @@ typedef struct {
     int count;          /* the clubs of the league after the plan */
 } ClosedResult;
 
-/* The closed league of a database division ("usa_mls" for "American Major League"), or NULL. */
+/* The closed league of a database division ("usa_mls" for "American Major League", "aus_nsl" for "Australian National
+ * Soccer League"), or NULL. The key is the league's file in the rules table. */
 const char *season_closed_league(const char *division);
+
+/* 1 when the table decides the clubs of the league in the season. The A-League starts in 2005/06: the National Soccer
+ * League of the seasons before keeps the clubs of its database. */
+int season_closed_active(const char *league, int season);
+
+/* 1 for a club of the league from another nation (New Zealand in the A-League). A database can hold it under that
+ * nation, so the nation of the division does not find it. */
+int season_closed_abroad(const char *league, const char *name, const char *short_name);
+
+/* 1 when a closed league's table names the club for other seasons only: its record has no division until it joins. */
+int season_closed_waits(const char *name, const char *short_name, int season);
 
 /* The table row that has this name of a club, or -1. Two names of one club give the same row. */
 int season_closed_row(const char *league, const char *name);
@@ -56,7 +68,8 @@ int season_closed_first(const char *league, int i);
 /* The plan of a season change. actions[i] takes the CLOSED_ value of clubs[i]. want is the count of the league's row
  * (0 or less: no count). Clubs that the table folds leave first. Then each club of the season that the league lacks
  * joins. A club that the table does not name leaves only while the league holds more clubs than want, the lowest
- * reputation first. A club with a human manager never leaves. */
+ * reputation first. A club with a human manager never leaves. The A-League never holds more than the 13 clubs of its
+ * class: past that count a club that would join waits, then the named club with the lowest reputation leaves. */
 void season_closed_plan(const char *league, int season, int want, const ClosedClub *clubs, int n, int *actions,
                         ClosedResult *result);
 

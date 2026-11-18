@@ -2,13 +2,19 @@
  *
  * MLS: docs/research/rules-0.6.0/arg-usa.tsv (rows arg-usa-217 and on, the notes of each season name the clubs that
  * join and fold) and docs/research/club-records-0.6.0/closed-leagues.tsv (one source for each new club). San Jose
- * Earthquakes stopped after 2005, when the club's players and staff moved to Houston, and came back in 2008. */
+ * Earthquakes stopped after 2005, when the club's players and staff moved to Houston, and came back in 2008.
+ *
+ * A-League: docs/research/rules-0.6.0/aus-jap-kor.tsv (rows aus-jap-kor-28 to -49, the notes of each season name the
+ * clubs that join and leave). Edition Y is the season Y/Y+1. Football Kingz became New Zealand Knights in 2004, and
+ * Newcastle United became Newcastle Jets, so the clubs of the older databases keep their place. */
 #include <stdlib.h>
 #include <string.h>
 #include "season_closed.h"
 
 #define FOREVER 9999
+#define A_LEAGUE_FIRST 2005            /* row aus-jap-kor-28; the National Soccer League plays before it */
 #define MAX_WORDS 4
+#define A_LEAGUE_CAP 13                 /* AusNsl::create_table stores 13 rows (0x411b82) */
 
 typedef struct {
     const char *league, *real;
@@ -50,6 +56,22 @@ static const ClosedRow ROWS[] = {
     {"usa_mls", "Charlotte FC", 2022, FOREVER, 0, 0, {"charlotte fc"}},
     {"usa_mls", "St. Louis City SC", 2023, FOREVER, 0, 0, {"st. louis city", "st louis city", "saint louis city"}},
     {"usa_mls", "San Diego FC", 2025, FOREVER, 0, 0, {"san diego fc"}},
+    {"aus_nsl", "Adelaide United", 2005, FOREVER, 0, 0, {"adelaide united"}},
+    {"aus_nsl", "Brisbane Roar", 2005, FOREVER, 0, 0, {"queensland roar", "brisbane roar"}},
+    {"aus_nsl", "Central Coast Mariners", 2005, FOREVER, 0, 0, {"central coast mariners"}},
+    {"aus_nsl", "Melbourne Victory", 2005, FOREVER, 0, 0, {"melbourne victory"}},
+    {"aus_nsl", "Newcastle Jets", 2005, FOREVER, 0, 0, {"newcastle united", "newcastle jets"}},
+    {"aus_nsl", "New Zealand Knights", 2005, 2006, 0, 0, {"new zealand knights", "football kingz"}},
+    {"aus_nsl", "Perth Glory", 2005, FOREVER, 0, 0, {"perth glory"}},
+    {"aus_nsl", "Sydney FC", 2005, FOREVER, 0, 0, {"sydney fc", "sydney football club"}},
+    {"aus_nsl", "Wellington Phoenix", 2007, FOREVER, 0, 0, {"wellington phoenix"}},
+    {"aus_nsl", "Gold Coast United", 2009, 2011, 0, 0, {"gold coast united"}},
+    {"aus_nsl", "North Queensland Fury", 2009, 2010, 0, 0, {"north queensland fury"}},
+    {"aus_nsl", "Melbourne City", 2010, FOREVER, 0, 0, {"melbourne heart", "melbourne city"}},
+    {"aus_nsl", "Western Sydney Wanderers", 2012, FOREVER, 0, 0, {"western sydney wanderers"}},
+    {"aus_nsl", "Western United", 2019, 2024, 0, 0, {"western united"}},
+    {"aus_nsl", "Macarthur FC", 2020, FOREVER, 0, 0, {"macarthur fc", "macarthur bulls"}},
+    {"aus_nsl", "Auckland FC", 2024, FOREVER, 0, 0, {"auckland fc"}},
 };
 #define NROWS ((int)(sizeof ROWS / sizeof ROWS[0]))
 
@@ -124,7 +146,29 @@ const char *season_closed_real_name(const char *league, const char *name, const 
 
 const char *season_closed_league(const char *division)
 {
-    return division && !strncmp(division, "American Major League", 52) ? "usa_mls" : NULL;
+    if (division && !strncmp(division, "American Major League", 52)) return "usa_mls";
+    if (division && !strncmp(division, "Australian National Soccer League", 52)) return "aus_nsl";
+    return NULL;
+}
+
+int season_closed_active(const char *league, int season)
+{
+    return strcmp(league, "aus_nsl") || season >= A_LEAGUE_FIRST;
+}
+
+int season_closed_abroad(const char *league, const char *name, const char *short_name)
+{
+    static const char *const ABROAD[] = {"New Zealand Knights", "Wellington Phoenix", "Auckland FC"};
+    int row = strcmp(league, "aus_nsl") ? -1 : season_closed_club(league, name, short_name);
+    for (size_t k = 0; row >= 0 && k < sizeof ABROAD / sizeof ABROAD[0]; k++)
+        if (!strcmp(ROWS[row].real, ABROAD[k])) return 1;
+    return 0;
+}
+
+int season_closed_waits(const char *name, const char *short_name, int season)
+{
+    return season_closed_member("usa_mls", name, short_name, season) == 0 ||
+           season_closed_member("aus_nsl", name, short_name, season) == 0;
 }
 
 int season_closed_member(const char *league, const char *name, const char *short_name, int season)
@@ -163,10 +207,12 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
                         ClosedResult *result)
 {
     ClosedResult r = {0, 0, 0, 0, 0, 0};
+    int active = season_closed_active(league, season);
     for (int i = 0; i < n; i++) {
         actions[i] = CLOSED_STAY;
         if (!clubs[i].in_league) continue;
         r.count++;
+        if (!active) continue;
         if (season_closed_member(league, clubs[i].name, clubs[i].short_name, season) != 0) continue;
         if (clubs[i].human) {
             r.human_stays++;
@@ -175,6 +221,10 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
         actions[i] = CLOSED_FOLD;
         r.folded++;
         r.count--;
+    }
+    if (!active) {
+        *result = r;
+        return;
     }
     /* Each club of the season that the league lacks: the club of the data with the highest reputation that has one
      * of its names. A reserve side never joins. */
@@ -207,6 +257,23 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
         if (worst < 0) break;
         actions[worst] = CLOSED_CUT;
         r.cut++;
+        r.count--;
+    }
+    /* A human manager can keep a club beside the real clubs. The class makes no table row past its count, so a club
+     * that would join waits a season, and then the club with the lowest reputation leaves. */
+    int cap = strcmp(league, "aus_nsl") ? 0 : A_LEAGUE_CAP;
+    while (cap > 0 && r.count > cap) {
+        int drop = -1, joining = 0;
+        for (int i = 0; i < n; i++)
+            if (actions[i] == CLOSED_JOIN && (!joining || clubs[i].reputation < clubs[drop].reputation)) drop = i, joining = 1;
+        for (int i = 0; i < n && !joining; i++)
+            if (clubs[i].in_league && actions[i] == CLOSED_STAY && !clubs[i].human &&
+                (drop < 0 || clubs[i].reputation < clubs[drop].reputation))
+                drop = i;
+        if (drop < 0) break;
+        actions[drop] = joining ? CLOSED_STAY : CLOSED_CUT;
+        r.joined -= joining;
+        r.cut += !joining;
         r.count--;
     }
     *result = r;

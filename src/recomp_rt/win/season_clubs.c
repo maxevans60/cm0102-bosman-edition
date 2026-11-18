@@ -530,7 +530,7 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) return 0;
     /* 0.7.3 slice 6: a record of a closed league's later club has no division until its season (season_mls.c). */
     if (season_changing_rules() && !c->db_div &&
-        season_closed_member("usa_mls", win_str(c->at + CLUB_NAME), win_str(c->at + CLUB_SHORT), moves_season) == 0)
+        season_closed_waits(win_str(c->at + CLUB_NAME), win_str(c->at + CLUB_SHORT), moves_season))
         return 0;
     if (season_second_barred(c->at, d->at)) return 0;   /* open items 111, 114 to 122: a second team's bar */
     if (season_fin_barred(c->at, d->at)) return 0;      /* open item 118: no Finnish second team in the Veikkausliiga */
@@ -606,11 +606,13 @@ static void closed_moves(Club *club, int count, const Division *div, int ncomps,
         if (!list || !of || !action) rt_fatal("club moves: no memory for a closed league");
         int n = 0;
         for (int i = 0; i < count; i++) {
-            if (club[i].national || club[i].nation != d->nation) continue;
-            const char *name = win_str(club[i].at + CLUB_NAME);
+            if (club[i].national) continue;
+            const char *name = win_str(club[i].at + CLUB_NAME), *short_name = win_str(club[i].at + CLUB_SHORT);
+            if (club[i].nation != d->nation && club[i].div != d->at && !season_closed_abroad(league, name, short_name))
+                continue;
             of[n] = i;
             list[n].name = name;
-            list[n].short_name = win_str(club[i].at + CLUB_SHORT);
+            list[n].short_name = short_name;
             list[n].in_league = club[i].div == d->at;
             list[n].reserve = season_clubs_reserve_name(name);
             list[n].reputation = (int16_t)rd16(g_mem, club[i].at + CLUB_REPUTATION);

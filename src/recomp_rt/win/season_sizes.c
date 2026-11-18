@@ -6,6 +6,8 @@
 #include "season_names.h"
 #include "season_rules.h"
 #include "season_sizes.h"
+#include "season_closed.h"
+#include "season_closed_step.h"
 #include "season_sizes_ita.h"
 #include "season_ned_playoff.h"
 #include "season_playoffs.h"
@@ -532,6 +534,9 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         season_calendar_stage(self, season_change_file(self), stage, count_at);
         return;
     }
+    /* 0.7.3 slice 7: the A-League's clubs of the new edition, before the dates count them. */
+    if (!probe_meetings) season_closed_rules(self);
+    if (rt_unwinding) return;
     size_step_run(self);
     const char *file = season_change_file(self);
     const SeasonGrown *g = grown_of(file);
@@ -1281,6 +1286,8 @@ static void step_note_pair(uint32_t upper, uint32_t lower)
 static int step_want(uint32_t obj, const char *file, int year)
 {
     const SeasonRule *r = row_of_edition(file, year);
+    /* 0.7.3 slice 7: the table of the closed league names the clubs of the A-League (season_closed_step.c). */
+    if (!strcmp(file, "aus_nsl") && season_closed_active(file, year)) return -1;
     /* Item 260: the two Irish classes count the clubs of their data (cap 0) and take some counts only (IrePrm 10 or
      * 12, IreFirst 2 to 12: season_sizes_irl_takes). With no part in the step, a 2001 game kept the Premier
      * Division at 12 and the First Division at 9 in 2002, where the rows give 10 and 12: the First Division never
