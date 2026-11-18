@@ -242,7 +242,7 @@ try {
   check('the second device gets both versions of Harbour City before its game starts',
     same(await localBytes(b, harbour), here) && same(await localBytes(b, other), elsewhere));
   const bLog = await b.textContent('#log');
-  check('and its log says each one came straight from the store, and how this browser keeps it', /Harbour City 2001-07-14\.sav came from the cloud \([\d.]+ MB, straight from the store\)/.test(bLog)
+  check('and its log says each one came straight from the store, and how this browser keeps it', /Harbour City 2001-07-14\.sav came from the cloud \([\d.]+ MB, straight from the store, unpacked whole\)/.test(bLog)
     && /the browser's storage keeps references to files: a save is copied by the browser before it is stored/.test(bLog),
     bLog.split('\n').filter((l) => /came from the cloud/.test(l)).join(' / '));
   check('and not the save removed from the cloud', (await localBytes(b, 'From iPad.sav')) === null, (await localNames(b)).join(', '));

@@ -179,10 +179,60 @@ const WEB = path.resolve(__dirname, '..');
         out.junk = await storeSave(FS, 'Junk.sav', new Blob([new Uint8Array(3 * MB)]));
         out.junkStored = Boolean(nodes.get('/user/Junk.sav'));
         out.empty = await storeSave(FS, 'Empty.sav', new Blob([]));
+        // A cloud download as a stream (storeSaveStream, vault.adoptStream): stored in parts of 4 MB as it comes, never one
+        // Blob of the whole save (an iPhone could not hold a 446 MB one, 18 November 2026). The parts are no files.
+        const { storeSaveStream } = await import('/saves.js');
+        const { PART } = await import('/vault.js');
+        const partKeys = async () => {
+          const db = await new Promise((ok, bad) => { const q = indexedDB.open('cm0102-vault'); q.onsuccess = () => ok(q.result); q.onerror = () => bad(q.error); });
+          const store = db.objectStoreNames[0];
+          const all = await new Promise((ok, bad) => { const q = db.transaction(store).objectStore(store).getAllKeys(); q.onsuccess = () => ok(q.result); q.onerror = () => bad(q.error); });
+          db.close();
+          return all.filter((k) => typeof k === 'string' && k.startsWith(PART));
+        };
+        const inChunks = (bytes, size) => new ReadableStream({ start(c) { for (let i = 0; i < bytes.length; i += size) c.enqueue(bytes.slice(i, i + size)); c.close(); } });
+        const streamed = save(9 * MB + 12345, 3);
+        const partsBefore = (await partKeys()).length;
+        reads.length = 0;
+        out.streamWhy = await storeSaveStream(FS, 'Streamed.sav', inChunks(streamed, 1000003), { mtime: 1762770000000 });
+        out.streamReads = Math.max(0, ...reads);                // what the store read back of it: its header at most
+        const sn = nodes.get('/user/Streamed.sav');
+        out.streamNode = { state: sn?.vault, inMemory: sn?.contents.length, size: FS.stat('/user/Streamed.sav').size, mtime: +FS.stat('/user/Streamed.sav').mtime };
+        out.streamParts = (await partKeys()).length - partsBefore;
+        out.streamListed = (await vault.records()).map((r) => r.key).filter((k) => k.startsWith(PART) || k === '/user/Streamed.sav');
+        const sback = new Uint8Array(await (await vault.blob('/user/Streamed.sav')).arrayBuffer());
+        out.streamSame = sback.length === streamed.length && sback.every((b, i) => b === streamed[i]);
+        // The game reads it in pieces through the parts.
+        await vault.openForGame(sn, 0);
+        await vault.readForGame(sn, 5 * MB - 10, 30);
+        const piece = new Uint8Array(30);
+        out.streamPiece = { state: sn.vault, n: sn.stream_ops.read({ node: sn }, piece, 0, 30, 5 * MB - 10), same: piece.every((b, i) => b === streamed[5 * MB - 10 + i]) };
+        vault.settle(sn);
+        // A rename keeps its parts; an older copy shares them.
+        FS.rename('/user/Streamed.sav', '/user/Streamed 2.sav');
+        await vault.persist();
+        out.streamCopied = await vault.copy('/user/Streamed 2.sav', '/user/backups/Streamed (before edit).sav');
+        const renamed = new Uint8Array(await (await vault.blob('/user/Streamed 2.sav')).arrayBuffer());
+        out.streamRenamed = renamed.length === streamed.length && renamed[renamed.length - 1] === 3;
+        // A stream that is no save: refused, and none of its parts stay.
+        const before2 = (await partKeys()).length;
+        out.streamBad = await storeSaveStream(FS, 'Bad.sav', inChunks(new Uint8Array(5 * MB), 700000));
+        out.streamBadParts = (await partKeys()).length - before2;
+        out.streamBadFile = nodes.has('/user/Bad.sav');
         const other = createVault({ FS: (() => { const n2 = new Map(); return { ...FS, lookupPath(p) { if (n2.has(p)) return { node: n2.get(p) }; if (dirs.has(p)) return { node: { path: p } }; throw enoent(p); },
           writeFile(p, data) { const n = n2.get(p) ?? { path: p }; n2.set(p, n); n.contents = data; n.usedBytes = data.length; n.mtime = Date.now(); }, stat(p) { return { mode: 0o100644, size: n2.get(p).usedBytes, mtime: new Date(n2.get(p).mtime) }; } }; })(), stable: 0 });
         await other.open(); other.active = true;
         out.nextVisit = (await other.mount()).files;
+        // The parts stay while a record names them (the save and its older copy), and go at the next start once none does.
+        out.partsKept = (await partKeys()).length;
+        FS.unlink('/user/Streamed 2.sav');
+        FS.unlink('/user/backups/Streamed (before edit).sav');
+        await vault.persist();
+        const third = createVault({ FS: (() => { const n3 = new Map(); return { ...FS, lookupPath(p) { if (n3.has(p)) return { node: n3.get(p) }; if (dirs.has(p)) return { node: { path: p } }; throw enoent(p); },
+          writeFile(p, data) { const n = n3.get(p) ?? { path: p }; n3.set(p, n); n.contents = data; n.usedBytes = data.length; n.mtime = Date.now(); }, stat(p) { return { mode: 0o100644, size: n3.get(p).usedBytes, mtime: new Date(n3.get(p).mtime) }; } }; })(), stable: 0 });
+        await third.open(); third.active = true;
+        await third.mount();
+        out.partsAfter = (await partKeys()).length;
         // Without the vault (an Asyncify engine): the file is in the user folder, in memory, as before.
         useVault(null);
         out.plainWhy = await storeSave(FS, 'Plain.sav', new Blob([save(1000, 1)]));
@@ -208,6 +258,14 @@ const WEB = path.resolve(__dirname, '..');
         && r.upload.size === 0x416ec + 9 * MB && r.upload.mtime === 1762770000000, JSON.stringify(r.upload));
     check('a cloud save goes into the vault as bytes the vault keeps, and leaves no file on the browser\'s disk',
       r.diskWhy === null && r.diskSame === true && r.diskLeft === 0, JSON.stringify([r.copiesFiles, r.diskWhy, r.diskSame, r.diskLeft]));
+    check('a cloud download as a stream goes into the vault in parts of 4 MB, never read whole; the user folder gets a placeholder',
+      r.streamWhy === null && r.streamNode?.state === 'out' && r.streamNode.inMemory === 0 && r.streamNode.size === 9 * MB + 12345 + 0x416ec
+        && r.streamNode.mtime === 1762770000000 && r.streamParts === 3 && r.streamReads <= 0x416ec, JSON.stringify([r.streamWhy, r.streamNode, r.streamParts, r.streamReads]));
+    check('its parts are no files: the vault lists the save once', JSON.stringify(r.streamListed) === '["/user/Streamed.sav"]', JSON.stringify(r.streamListed));
+    check('it reads back whole, and the game reads a piece across two parts', r.streamSame && r.streamPiece?.n === 30 && r.streamPiece.same && r.streamPiece.state === 'lazy', JSON.stringify(r.streamPiece));
+    check('renamed and copied (the editor\'s older copy), it keeps its bytes', r.streamRenamed && r.streamCopied === true, JSON.stringify([r.streamRenamed, r.streamCopied]));
+    check('a stream that is no save is refused, and leaves no parts and no file', typeof r.streamBad === 'string' && r.streamBadParts === 0 && !r.streamBadFile, JSON.stringify([r.streamBad, r.streamBadParts]));
+    check('the parts stay while a record names them, and go at the next start once none does', r.partsKept >= 3 && r.partsAfter === 0, JSON.stringify([r.partsKept, r.partsAfter]));
     check('a save the player picked (Upload) stays readable after its file is deleted (Chromium kept only a reference)',
       r.copiesFiles === false && r.pickedWhy === null && r.pickedSame === true, JSON.stringify([r.copiesFiles, r.pickedWhy, r.pickedSame]));
     check('it stays through the vault\'s round, reads back the same, and the next visit lists it', r.uploadKept === 0 && r.uploadSame && r.nextVisit >= 2, JSON.stringify([r.uploadKept, r.uploadSame, r.nextVisit]));

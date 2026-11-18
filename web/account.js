@@ -11,9 +11,9 @@
 //
 // What was last the same is kept in the user folder itself (.cloud-sync.json): per save, the cloud's ETag and the size
 // and time of the local file at that moment.
-import { SAVE_DIR, listSaves, readBlobNow, saveName, storeSave } from './saves.js';
+import { SAVE_DIR, listSaves, readBlobNow, saveName, storeSaveStream } from './saves.js';
 import { downDirect, upDirect } from './direct.js';
-import { toDisk, toStoredBlob } from './disk.js';
+import { toDisk } from './disk.js';
 
 const STATE = `${SAVE_DIR}/.cloud-sync.json`;
 const CHANGE = { 'x-cm': '1' };                   // what the server wants on a change (cloud.mjs)
@@ -106,6 +106,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
   const listeners = new Set();
   const changed = () => { for (const f of listeners) f(); };
   const keep = () => { FS.writeFile(STATE, JSON.stringify(state)); sync(); };
+  const inVault = (name) => { try { return Boolean(FS.lookupPath(`${SAVE_DIR}/${name}`).node?.vault); } catch { return false; } };
   const stat = (name) => {
     const st = FS.stat(`${SAVE_DIR}/${name}`);
     return { size: st.size, mtime: +new Date(st.mtime) };
@@ -195,13 +196,11 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     }, signal);
     if (!r.ok) throw fail(`${name} down`, r);
     const etag = link?.etag ?? r.headers.get('etag'), saved = Number(link?.saved ?? r.headers.get('x-saved')) || Date.now();
-    // Unpacked into a file on the browser's disk as it comes (disk.js), then stored as it is: never whole in the page's
-    // memory. An iPhone kept new Response(…).blob() in memory, and iOS closed the tab at each start (18 November 2026).
-    const unpacked = await toStoredBlob(r.body.pipeThrough(new DecompressionStream('gzip'))), blob = unpacked.blob;
-    let why;
-    try { why = await storeSave(FS, file, blob, { mtime: saved, owned: unpacked.owned }); } finally { await unpacked.done(); }
+    // Unpacked as it comes and stored in parts (storeSaveStream, vault.adoptStream): never whole in the page's memory. An
+    // iPhone kept the whole save in memory, and iOS closed the tab at each start (18 November 2026).
+    const why = await storeSaveStream(FS, file, r.body.pipeThrough(new DecompressionStream('gzip')), { mtime: saved });
     if (why) { log(`page: ${name} from the cloud was not taken: ${why}`); return null; }
-    log(`page: ${name} came from the cloud (${(blob.size / 1048576).toFixed(1)} MB, ${link?.response === r ? 'straight from the store' : 'through the server'}${unpacked.onDisk ? ', unpacked on disk' : ''})`);
+    log(`page: ${name} came from the cloud (${(stat(file).size / 1048576).toFixed(1)} MB, ${link?.response === r ? 'straight from the store' : 'through the server'}, ${inVault(file) ? 'into the browser\'s storage in parts' : 'unpacked whole'})`);
     onWrote();
     return { etag, saved, ...stat(file) };
   }

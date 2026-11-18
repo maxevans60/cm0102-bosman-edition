@@ -180,7 +180,11 @@ one the player picked for Upload), which broke when the file went (a save upload
 The page finds out once per browser version which its storage does (a 16-byte file), and gives the vault a copy that
 the browser makes where it keeps references (`ownable`, `toStoredBlob`); the log says which. A cloud save whose download
 closed the tab is left in the cloud on that device at the next start (the sudden-stop mark names it), and Account
-brings it with "Get it here".
+brings it with "Get it here". A cloud save does not come as one Blob at all where the vault is on: it is unpacked as it comes and
+stored in part records of 4 MB, each written on its own (`vault.adoptStream`; keys `~part:<id>:<n>`, and a main record
+`{ size, mtime, partsId, parts }`), so no more than a part is in memory; even with the cloud route through the server,
+an iPhone still closed the tab when the whole save was one Blob. Readers join the parts into one Blob of the storage
+(`blobOf`), a rename or an older copy keeps or shares them, and each start removes the parts that no record names.
 
 **Where the saves live (the vault, `vault.js`).** IDBFS keeps every file of the user folder in memory and reads all of
 it at the start, so a player with many saves ran the tab out of memory. With the vault on, saves, older copies and the

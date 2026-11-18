@@ -34,6 +34,13 @@ const IDBFS_STORE = 'FILE_DATA', IDBFS_VERSION = 21;   // Emscripten's IDBFS: on
 const O_TRUNC = 512, O_ACCMODE = 3;                     // Emscripten's flags (musl); O_RDONLY is 0
 const ENOENT = 44, EIO = 29;
 export const PIECE = 4 << 20;                           // a save is read from the storage in pieces of this size
+// A file that comes as a stream (a cloud download, adoptStream) is stored as part records of PIECE bytes, written one at
+// a time as it comes, and a main record that names them ({ size, mtime, partsId, parts }): an iPhone could not hold a
+// 446 MB cloud save as one Blob, and iOS closed the tab at every start (18 November 2026). A part's key starts with PART
+// (a file's key starts with /), so records() and the rounds never take a part for a file; mount() removes the parts
+// that no record names any more (a copy shares its parts, a rename keeps them).
+export const PART = '~part:';
+const partKey = (id, i) => `${PART}${id}:${String(i).padStart(6, '0')}`;
 const KEEP_PIECES = 12;                                 // the pieces kept in memory, the last used (48 MB)
 // A placeholder: the file's contents are in the browser's storage, not in its node ('lazy' while the game reads it in
 // pieces). The page reads such a file with bytes, view or blob.
@@ -118,6 +125,15 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   const put = (key, value) => request('readwrite', (s) => committed(s, s.put(value, key)));
   const del = (key) => request('readwrite', (s) => committed(s, s.delete(key)));
   const keys = () => request('readonly', (s) => done(s.getAllKeys()));
+  // A record's Blob: its own, or its parts joined (a Blob of the storage's own, read from disk; never in memory whole).
+  async function blobOf(rec) {
+    if (rec.blob) return rec.blob;
+    if (!rec.partsId) return new Blob([]);
+    const parts = rec.parts ? await request('readonly', (s) => done(s.getAll(IDBKeyRange.bound(partKey(rec.partsId, 0), partKey(rec.partsId, rec.parts - 1))))) : [];
+    if (parts.length !== rec.parts) throw new Error(`the browser's storage has ${parts.length} of the ${rec.parts} parts of this file`);
+    return new Blob(parts.map((x) => x.blob));
+  }
+  const dropParts = (id) => request('readwrite', (s) => committed(s, s.delete(IDBKeyRange.bound(`${PART}${id}:`, `${PART}${id}:\uffff`))));
 
   const lookup = (path) => { try { return FS.lookupPath(path).node; } catch { return null; } };
   const pathOf = (node) => { try { return FS.getPath(node); } catch { return null; } };
@@ -166,7 +182,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       const rec = await get(node.vaultKey);
       if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
       if (node.vault !== 'out') return;
-      readInPieces(node, rec.blob);
+      readInPieces(node, await blobOf(rec));
       lazy(node);
     });
   }
@@ -229,9 +245,22 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     return request('readonly', (s) => new Promise((ok, bad) => {
       const out = [];
       const c = s.openCursor();
-      c.onsuccess = () => { const cur = c.result; if (!cur) { ok(out); return; } out.push({ key: cur.key, size: cur.value.size, mtime: cur.value.mtime }); cur.continue(); };
+      c.onsuccess = () => {
+        const cur = c.result;
+        if (!cur) { ok(out); return; }
+        if (!(typeof cur.key === 'string' && cur.key.startsWith(PART))) out.push({ key: cur.key, size: cur.value.size, mtime: cur.value.mtime, partsId: cur.value.partsId ?? null });
+        cur.continue();
+      };
       c.onerror = () => bad(c.error);
     }));
+  }
+
+  // The parts that no record names (a deleted or replaced file, a download that stopped): removed at the start.
+  async function dropUnnamedParts(named) {
+    const ids = await request('readonly', (s) => done(s.getAllKeys(IDBKeyRange.bound(PART, `${PART}\uffff`))));
+    const gone = new Set(ids.map((k) => k.slice(PART.length, k.lastIndexOf(':'))).filter((id) => !named.has(id)));
+    for (const id of gone) await dropParts(id);
+    return gone.size;
   }
 
   // A placeholder for each record: the game sees the file, its size and its time; its contents stay in the vault.
@@ -248,7 +277,9 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
   async function mount() {
     let n = 0, bytes = 0;
-    for (const r of await records()) {
+    const all = await records();
+    await dropUnnamedParts(new Set(all.map((r) => r.partsId).filter(Boolean)));
+    for (const r of all) {
       mine.add(r.key);
       if (lookup(r.key)) continue;              // a file there already (an older page put it in IDBFS): it wins
       placeholder(r.key, r.size, r.mtime);
@@ -271,6 +302,54 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       if (old) managed.delete(old);
       placeholder(path, blob.size, mtime);
     });
+  }
+
+  // A file that comes as a stream (a cloud download) straight into the vault, in parts of PIECE bytes written as it comes:
+  // never more than a part of it in the page's memory (an iPhone, 18 November 2026: a 446 MB cloud save as one Blob,
+  // and iOS closed the tab). check(head, size): why the file is refused (its first bytes, at most a part, and its size),
+  // or null. Resolves to why, or null once it is stored and the user folder has its placeholder.
+  async function adoptStream(path, stream, mtime = Date.now(), check = () => null) {
+    const id = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+    const reader = stream.getReader();
+    let buf = new Uint8Array(PIECE), fill = 0, n = 0, size = 0, head = null;
+    const flush = async () => {
+      if (!fill) return;
+      const part = buf.subarray(0, fill);
+      if (!head) head = part.slice();
+      await put(partKey(id, n), { part: true, blob: new Blob([part]) });
+      n++;
+      fill = 0;
+    };
+    try {
+      for (;;) {
+        const { value, done: end } = await reader.read();
+        if (end) break;
+        let at = 0;
+        while (at < value.length) {
+          const take = Math.min(PIECE - fill, value.length - at);
+          buf.set(value.subarray(at, at + take), fill);
+          fill += take; at += take; size += take;
+          if (fill === PIECE) await flush();
+        }
+      }
+      await flush();
+      buf = null;
+      const why = check(head ?? new Uint8Array(0), size);
+      if (why) { await dropParts(id); return why; }
+    } catch (e) {
+      reader.cancel().catch(() => {});
+      await dropParts(id).catch(() => {});
+      throw e;
+    }
+    await serial(async () => {
+      for (const other of [...managed]) if (other.vaultKey === path) { const q = alive(other); if (q && q !== path) await rekey(other, q); }
+      await put(path, { size, mtime, partsId: id, parts: n });
+      mine.add(path);
+      const old = lookup(path);
+      if (old) managed.delete(old);
+      placeholder(path, size, mtime);
+    });
+    return null;
   }
 
   // A file of the vault copied under another name, as a record of its own: the browser copies the Blob, not the page,
@@ -302,7 +381,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       if (lookup(r.key)) continue;
       const rec = await get(r.key);
       FS.mkdirTree(r.key.slice(0, r.key.lastIndexOf('/')));
-      FS.writeFile(r.key, new Uint8Array(await rec.blob.arrayBuffer()));
+      FS.writeFile(r.key, new Uint8Array(await (await blobOf(rec)).arrayBuffer()));
       const node = lookup(r.key);
       node.mtime = node.atime = node.ctime = r.mtime;
       n++;
@@ -318,7 +397,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       if (!isAway(node)) return;
       const rec = await get(node.vaultKey);
       if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
-      const bytes = new Uint8Array(await rec.blob.arrayBuffer());
+      const bytes = new Uint8Array(await (await blobOf(rec)).arrayBuffer());
       if (!isAway(node)) return;
       node.contents = bytes;
       node.usedBytes = bytes.length;
@@ -477,7 +556,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
   async function bytes(path) {
     const node = lookup(path);
-    if (isAway(node)) return new Uint8Array(await (await record(node, path)).blob.arrayBuffer());
+    if (isAway(node)) return new Uint8Array(await (await blobOf(await record(node, path))).arrayBuffer());
     return FS.readFile(path);
   }
   async function view(path) {
@@ -488,7 +567,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
   async function blob(path) {
     const node = lookup(path);
-    if (isAway(node)) return (await record(node, path)).blob;
+    if (isAway(node)) return blobOf(await record(node, path));
     const n = node ?? FS.lookupPath(path).node;
     return new Blob([n.contents instanceof Uint8Array ? n.contents.subarray(0, n.usedBytes ?? n.contents.length) : FS.readFile(path)]);
   }
@@ -515,7 +594,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     stop,
     set active(on) { active = Boolean(on); },
     open, migrateFrom, mount, materialize, clear, instantiate, wrapFS, persist, bytes, view, blob, owns, records,
-    openForGame, readForGame, settle, adopt, copy,
+    openForGame, readForGame, settle, adopt, adoptStream, copy, dropUnnamedParts,
     held: () => [...managed].filter((n) => n.vault === 'in').length,
   };
 }

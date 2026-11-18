@@ -6,7 +6,7 @@
 // The game writes *.sav files in the user folder (src/recomp_rt/win/files.c; the option save_folder can name another
 // folder, which the browser build does not use). A save in progress is temp_save_file.sav, renamed when it is done;
 // older copies are in backups/ (option save_backups).
-import { ownable } from './disk.js';
+import { ownable, toStoredBlob } from './disk.js';
 import { zipOfBlobs } from './zip.js';
 import { sortUpload } from './upload.js';
 import { TACTICS_DIR, listTactics, tacticName } from './tactics.js';
@@ -145,6 +145,17 @@ export async function storeSave(FS, name, blob, { mtime = Date.now(), owned = fa
     try { FS.utime(path, mtime, mtime); } catch { /* an older file system: the time of the copy */ }
   }
   return null;
+}
+
+// A save that comes as a stream (a cloud download, unpacked as it comes) into the save folder under name. With the
+// vault it goes in parts as it comes (vault.adoptStream): never whole in the page's memory, which an iPhone could not
+// hold for a 446 MB save (18 November 2026). Without it, as storeSave. Resolves to why it was refused, or null.
+export async function storeSaveStream(FS, name, stream, { mtime = Date.now() } = {}) {
+  const path = `${SAVE_DIR}/${name}`;
+  if (vaultRef?.active && typeof vaultRef.adoptStream === 'function')
+    return vaultRef.adoptStream(path, stream, mtime, (head, size) => checkSave(head.subarray(0, Math.min(head.length, HEADER)), size));
+  const kept = await toStoredBlob(stream);
+  try { return await storeSave(FS, name, kept.blob, { mtime, owned: kept.owned }); } finally { await kept.done(); }
 }
 
 // A copy of a file of the user folder under another name (the save editor's older copy). A file of the vault is copied
