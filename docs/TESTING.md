@@ -185,6 +185,45 @@ Results:
 
 The game ships for Mac, Windows and Linux. At each release the release script builds all three packages. The Windows build runs its smoke test under wine on the Mac. The Linux build is made and checked in a linux/amd64 container. Then `tools/linux/arch_check.sh` runs the AppImage on a current Arch image with Mesa, under X11 and Wayland, with a graphics renderer (the other Linux checks use the SDL dummy drivers). Each platform runs the smoke test in both screen modes and a season change with a save and load.
 
+## Speed benchmark
+
+The speed benchmark measures two numbers for one build on one machine. Every speed change (issue 76) compares its numbers with the numbers of the build before it.
+
+- **New game:** a game of 2001/02 with all nations, from Start New Game to the first human turn. The number is the sum of the progress steps of the game (`RECOMP_PROGRESS_LOG`), in seconds.
+- **Holiday:** four weeks of holiday with the match engine on, from a fixed full-world save of 1 September 2001. The number is the time between the first and the fifth game date line of the screen log. The load of the save and the write of the next save are not in it.
+
+The script is `tests/seasons/speed_bench.py`. Each part plays three games one after the other. A part passes when every game ends with code 0 and no error box, and the longest game is less than 5 percent above the shortest. A part that fails the spread gives no number. Repeat it when the machine is quiet. Every game adds a line to `bench.tsv` in the keep folder, with the time, the platform, the build label and the 1-minute load at the start and end. The script starts no game while the load is 20 or more. ctest `speed_bench` tests the script without a game.
+
+The fixed save comes from `--make-save`. It plays a new game with all nations, goes on holiday and saves after 60 game days. Make it once with the build of the first "before" numbers, keep it with its SHA-256, and play every later build on that same file. A faster build may play the same days differently, so a save from a later build is another save.
+
+Steps on the Mac:
+
+1. Build the commit to measure. Use `build-slot.sh` and `-j4`. Close other test games if you can: a load above 10 makes the spread rule fail.
+2. Make the fixed save once: `python3 tests/seasons/speed_bench.py build/cm0102_recomp <clean game folder> --keep <run-logs/0.8.0-speed/save> --make-save --label <commit>`
+3. Run both parts: `python3 tests/seasons/speed_bench.py build/cm0102_recomp <clean game folder> --keep <run-logs/0.8.0-speed/<commit>> --save <fixed save> --label <commit>`
+4. Copy the two medians into the table below with the commit, the date and the load.
+
+Steps on Windows (not run yet, to do when a Windows machine is free; the spec asks for a spot check, not for every change):
+
+1. Use a real Windows 10 or 11 machine with Python 3.10 or later. A wine run on the Mac measures wine, so it gives no Windows number.
+2. Unpack the release zip of the Windows build and the clean game files into one folder. The program is `cm0102_recomp.exe`.
+3. Copy `tests/`, the fixed save and `seasons/rules.tsv` from the zip to the machine. Keep the folder layout of the repo, because the script reads `tests/seasons`, `tests/smoke` and `tests/fixtures`.
+4. Run the same two commands as on the Mac with the `.exe` path and a keep folder on a local disk. The script has no load check on Windows. Close other programs and stop the virus scanner for the folder, and write that in the label.
+5. The fixed save is the Mac file. If the Windows game refuses it, make a Windows save with `--make-save` and keep it as the Windows fixed save with its SHA-256.
+
+Steps on Linux:
+
+1. Use a real Linux machine, not the amd64 container on the Mac, which runs under emulation. Give the machine's CPU model in the label.
+2. Build with `tools/linux/make_appimage.sh` on that machine or unpack the AppImage with `--appimage-extract`. The program is `AppRun` or `usr/bin/cm0102_recomp`.
+3. Set `SDL_VIDEODRIVER=dummy` and `SDL_AUDIODRIVER=dummy`. The script sets both, so no display is needed.
+4. Run the same two commands as on the Mac. The script checks the load with `os.getloadavg()`, which Linux has.
+
+Numbers (seconds, median of three):
+
+| Date | Platform and machine | Commit | Load | New game | Holiday | Note |
+|---|---|---|---|---|---|---|
+| 2026-11-13 | Mac, M5 Max | 3c6af155 (trial, one run each) | 18 to 29 (new game), 18 to 20 (holiday) | 709 | 432 | Trial under the 0.7.2 test games. Not a before number. |
+
 ## Rules source checks
 
 The season rules come from a table with one row per competition and season. `tools/research/rules_lint.py` checks that every filled fact has a source. `tests/seasons/rules_report_check.py` compares the competitions that the game holds each season with that table. `tools/release/rule_changes_report.py` writes the list of rule changes for players, and marks each real club count that the league code of the game cannot hold. `tests/seasons/rule_changes_report_check.py` tests it. All three run at each change to the rules and at each release. The pass rule is no missing source, no difference and a passing test.

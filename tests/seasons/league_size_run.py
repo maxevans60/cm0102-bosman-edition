@@ -174,6 +174,14 @@ ROWS = {
                        "and 3 up with no play-off, 12 and 10 in 2005"),
     "ire_first@2004": (2004, 2005, "League of Ireland from a 2004 start: 10 and 12 at the start, the list of row 2003 "
                        "(item 260), then 12 and 10 in 2005"),
+    "nir_first@2001": (2001, 2009, "Irish League from a 2001 start (items 271, 272): the First Division 10, 8, then 12 from "
+                                   "2003/04 with clubs of the lower division, 17 in 2008/09 and 14 in 2009/10; the "
+                                   "places of each row"),
+    "nir_prm@2001": (2001, 2009, "Irish League from a 2001 start, the same run (--reuse --keep of nir_first@2001): "
+                                 "no club down in 2001/02, the play-off only in 2002/03, 2 down and no play-off in "
+                                 "2007/08"),
+    "nir_first@2018": (2018, 2019, "Irish League from a 2018 start (item 288): every section match of 2018/19 is played, "
+                                   "so both leagues finish and start 2019/20"),
     "ire_first@2010": (2010, 2012, "League of Ireland from a 2010 start: 2011 0 down and 2 up plus the play-off, each "
                        "club on its own (item 251b); 12 Premier clubs in 2012, and the size step leaves the First Division its "
                        "row's 8 (item 260)"),
@@ -345,11 +353,11 @@ GROUPS = {("den_prm", 2016, 2019): [0] * 6 + [1, 2, 2, 1, 1, 2, 2, 1],
           # (2016/17 to 2018/19 with the 15th), then the 15th and 16th (en.wikipedia.org 2009-10 to
           # 2015-16_Belgian_Pro_League, 2016-17 to 2018-19_Belgian_First_Division_A).
           ("bel_first", 2009, 2015): [0] * 6 + [1, 2, 1, 2, 2, 1, 2, 1, 3, 3],
-          ("bel_first", 2016, 2018): [0] * 6 + [1, 2, 1, 2, 2, 1, 2, 1, 2, 3]}
+          ("bel_first", 2016, 2018): [0] * 6 + [1] * 10}
 # Gap 34: the points of each section at the split (season_split.c GROUPS): h halved, k kept, z from 0, b from 0 with
 # 3 for the section's best placed club (the 15th of the relegation play-off 2010/11 to 2014/15).
 SPLIT_POINTS = {("bel_first", 2009, 2009): "hzzk", ("bel_first", 2010, 2014): "hzzb",
-                ("bel_first", 2015, 2015): "hzzk", ("bel_first", 2016, 2018): "hzzk"}
+                ("bel_first", 2015, 2015): "hzzk", ("bel_first", 2016, 2018): "hk"}
 
 
 def split_points_faults(log, file, season_of):
@@ -1077,10 +1085,6 @@ def shortages(log, file):
         m = pat.match(line)
         if m and int(m.group(2)) < int(m.group(3)):
             out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
-        m = MLS_COUNT.match(line) if file == "usa_mls" else None
-        if m and (int(m.group(2)) < int(m.group(3)) or
-                  MLS_FOLD.get(int(m.group(1))) == (int(m.group(2)), int(m.group(3)))):
-            out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
     return out
 # Gap 43: an exchange whose real places keep both counts. The lower file: (the upper file, the least clubs that move
 # each way). League of Ireland 2011 to 2015 (rows wal-nir-irl-266 to 367): the 12th of the Premier Division goes down,
@@ -1156,6 +1160,84 @@ def irl_place_faults(report):
     return fails
 
 
+_NIR = {}
+
+
+def nir_row(file, season):
+    """(up, down, play-off) of the Northern Irish rules row of a file and season: the direct places (the leading
+    number of the up and down texts, 0 for none) and 1 when the Premier Division's row of that season has a play-off
+    (the play-off of NirFirst::create_playoff_stage 0x78c0a0 is one stage of both divisions), or None."""
+    if not _NIR:
+        sys.path.insert(0, os.path.join(ROOT, "tools", "seasons"))
+        import make_rules
+        for r in make_rules.read_rows():
+            if r.get("comp_file") in ("nir_prm", "nir_first") and str(r.get("season", ""))[:4].isdigit():
+                lead = [re.match(r"\s*(\d+)", str(r.get(k, ""))) for k in ("up", "down")]
+                _NIR[(r["comp_file"], int(str(r["season"])[:4]))] = (
+                    int(lead[0].group(1)) if lead[0] else 0, int(lead[1].group(1)) if lead[1] else 0,
+                    str(r.get("playoffs", "none")) != "none")
+    prm = _NIR.get(("nir_prm", season))
+    own = _NIR.get((file, season))
+    return None if not prm or not own else (own[0], own[1], 1 if prm[2] else 0)
+
+
+def nir_start_faults(log, year, last):
+    """Item 288: both Northern Irish leagues start every season after the first (the season change log of
+    RECOMP_SEASON_CHANGE_LOG=1; a run without that log has no lines to read)."""
+    if "recomp: season change:" not in log:
+        return []
+    return [f"{file} does not start {ed}" for ed in range(year + 1, last + 1) for file in ("nir_prm", "nir_first")
+            if not re.search(rf"^recomp: season change: {file} \(.*\) starts {ed},", log, re.M)]
+
+
+def nir_place_faults(report, log=""):
+    """Items 271 and 272 (slice 13): every Northern Irish edition in the report holds the places of its row. The
+    Premier Division: 0 up, the row's direct places down and the play-off place when the row has one
+    (NirPrm::set_up_rules 0x78ed80 writes 1 and 1, +0xc1 at 0x78ede0 and +0xc0 at 0x78edda). The First Division: the
+    row's direct places up, the play-off place, and the row's relegation places to the Northern Irish lower division
+    (NirFirst::set_up_rules 0x78bd70 writes 1 up and 1 play-off, +0xbe at 0x78bdb0 and +0xbf at 0x78bdb6, and 0
+    down). In the log: the clubs that go down from the First Division at each season change are its shown places."""
+    if not os.path.exists(report):
+        return ["nir: no rules report"]
+    fails, cols, shown = [], None, {}
+    with open(report, encoding="latin-1") as f:
+        for line in f:
+            p = line.rstrip("\n").split("\t")
+            if p[0] == "columns":
+                cols = p[1:]
+                continue
+            if p[0] != "comp" or not cols or len(p) < len(cols) + 1:
+                continue
+            row = dict(zip(cols, p[1:]))
+            file = row.get("file")
+            if file not in ("nir_prm", "nir_first") or not row.get("year", "").lstrip("-").isdigit():
+                continue
+            ed = int(row["year"])
+            want = nir_row(file, ed)
+            if not want:
+                continue
+            up, down, po = want
+            if file == "nir_prm":
+                got, exp = (row.get("up"), row.get("down"), row.get("playoff_down")), ("0", str(down), str(po))
+                what = "up, down and play-off down"
+            else:
+                got, exp = (row.get("up"), row.get("playoff_up"), row.get("down")), (str(up), str(po), str(down))
+                what = "up, play-off up and down"
+                if row.get("phase") == "end":
+                    shown[ed] = int(row.get("down") or 0)
+            if got != exp:
+                fails.append(f"{file} {ed} {row.get('phase')}: {what} {got}, want {exp}")
+    went = {}
+    for m in re.finditer(r"recomp: league sizes: nir_first \(.*?\) (\d+): .* goes down to the ", log):
+        went[int(m.group(1))] = went.get(int(m.group(1)), 0) + 1
+    ends = {int(m.group(1)) for m in re.finditer(r"recomp: league sizes: nir_first played (\d+):", log)}
+    for ed in sorted(ends):
+        if ed in shown and went.get(ed, 0) != shown[ed]:
+            fails.append(f"nir_first {ed}: {went.get(ed, 0)} clubs down to the lower division, the table showed "
+                         f"{shown[ed]}")
+    return fails
+
+
 def irl_change_faults(log, file, year, last=None):
     """In a run of ire_prm or ire_first: the play-off line of the First Division (season_sizes_irl.c) for exactly the
     editions of IRL_CHANGE among the editions of the run (the start to last, default the start and the next); and for
@@ -1188,15 +1270,8 @@ def irl_change_faults(log, file, year, last=None):
 MLS_FIRST = 2002
 MLS_PLAN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src", "recomp_rt", "win",
                         "season_mls_plan.c")
-# The MLS has no division below, so no club comes in or goes out (open item 269). The log names each edition whose
-# count differs from its row, with the reason. The check takes the game's count only when the database has fewer
-# clubs than the row (a 2023 start has no San Diego FC, 30 from 2025): the count of a closed league is bounded by
-# its database clubs. More clubs than the row stay a fault, except editions 2002 to 2004 (MLS_FOLD): Miami Fusion
-# and Tampa Bay Mutiny folded in January 2002, and the game has no fold of named clubs (lead decision, 16 November
-# 2026: open item 269, for 0.7.3).
-MLS_COUNT = re.compile(r"recomp: mls: (\d+): (\d+) clubs, the row (\d+): (the database has no other club of the "
-                       r"division|no club can leave \(no division below\))$")
-MLS_FOLD = {2002: (12, 10), 2003: (12, 10), 2004: (12, 10)}
+# 0.7.3 slice 6 (issue 157): clubs fold and join in their real seasons (season_closed.c), so each edition holds the
+# clubs of its row. No shortage of the MLS is accepted.
 MLS_PLAN_LINE = re.compile(r"recomp: mls: (\d+): (\d+) clubs \(East (\d+), West (\d+)\), (\d+) matches, (\d+) to "
                            r"(\d+) games, (\d+) rounds ")
 
@@ -1439,6 +1514,9 @@ def faults(work, file, year, last):
     fails += irl_partner_faults(report, file, year)
     if file in ("ire_prm", "ire_first"):
         fails += irl_place_faults(report)
+    if file in ("nir_prm", "nir_first"):
+        fails += nir_place_faults(report, log)
+        fails += nir_start_faults(log, year, last)
     if os.path.exists(report):
         import rules_report_check as rrc
         rep_clubs = []
@@ -2009,21 +2087,18 @@ def self_test():
     mls_log = ("recomp: mls: 2025: 29 clubs, the row 30: the database has no other club of the division\n"
                "recomp: mls: 2025: 29 clubs (East 15, West 14), 493 matches, 34 to 34 games, 37 rounds from day 80 "
                "to 248\nrecomp: mls: 2025: final A v B\n")
-    short = shortages(mls_log, "usa_mls")
     checks += [
-        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (short.get(ed, (30, 0))[0], 0), games), False),
+        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (29, 0), games), False),
         (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (30, 0), games), True),
         (mls_faults(mls_log + "recomp: mls: stage 2, West tie 0: 0 clubs go on (x)\n", [], [], "usa_mls", 2025,
                     2025, lambda ed: (29, 0), games), True),
         (mls_faults(mls_log, [], [], "usa_mls", 2025, 2026, lambda ed: (29, 0), games), True),
-        ([] if short == {2025: (29, 30)} else ["shortage"], False),
+        # 0.7.3 slice 6: the log line of a count that differs from the row excuses no edition.
+        ([] if shortages(mls_log, "usa_mls") == {} else ["shortage"], False),
+        ([] if shortages("recomp: mls: 2002: 12 clubs, the row 10: a club that folds has a human manager\n",
+                         "usa_mls") == {} else ["fold"], False),
         (mls_faults(mls_log.replace("2025", "2027"), [(2026, "end", 2027, 29, 0, 34)], [], "usa_mls", 2027, 2027,
                     lambda ed: (29, 0), games), False),
-        ([] if shortages(mls_log.replace("29 clubs, the row 30", "31 clubs, the row 30"), "usa_mls") == {}
-         else ["excess"], False),
-        ([] if shortages("recomp: mls: 2002: 12 clubs, the row 10: no club can leave (no division below)\n"
-                         "recomp: mls: 2005: 13 clubs, the row 12: no club can leave (no division below)\n",
-                         "usa_mls") == {2002: (12, 10)} else ["fold"], False),
     ]
     # A template of 7-day gaps only (the Brazilian classes) has no winter break: a Wednesday in a gap is good, and the
     # earlier starts go up to the class's limit.

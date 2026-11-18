@@ -728,6 +728,14 @@ document.documentElement.classList.add('js');
   // from GitHub, so the site follows the build without edits. The list in the HTML stays when the request fails.
   var api = 'https://api.github.com/repos/maxevans60/cm0102-bosman-edition/';
   var esc = function (t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+  // roadmap-filter-begin
+  // The roadmap lists open issues and issues closed as completed. An issue closed as not planned or as a
+  // duplicate stays off the list, so it never shows as Done.
+  function roadmapDone(i) { return i.state === 'closed' && i.state_reason === 'completed'; }
+  function roadmapIssues(list) {
+    return list.filter(function (i) { return !i.pull_request && (i.state !== 'closed' || roadmapDone(i)); });
+  }
+  // roadmap-filter-end
   fetch(api + 'milestones?state=open&per_page=20')
     .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
     .then(function (ms) {
@@ -736,7 +744,7 @@ document.documentElement.classList.add('js');
       return Promise.all(ms.map(function (m) {
         return fetch(api + 'issues?milestone=' + m.number + '&state=all&labels=enhancement&per_page=50')
           .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-          .then(function (issues) { return { title: m.title, note: m.description || '', issues: issues.filter(function (i) { return !i.pull_request; }) }; });
+          .then(function (issues) { return { title: m.title, note: m.description || '', issues: roadmapIssues(issues) }; });
       }));
     })
     .then(function (groups) {
@@ -747,7 +755,7 @@ document.documentElement.classList.add('js');
         return '<div class="panel"><h3 class="sub">' + (/^\d/.test(g.title) ? 'Version ' : '') + esc(g.title) + '</h3>' +
           (g.note ? '<p class="plan-note">' + esc(g.note) + '</p>' : '') +
           (g.issues.length ? '<ul>' + g.issues.map(function (i) {
-            var done = i.state === 'closed';
+            var done = roadmapDone(i);
             return '<li' + (done ? ' class="done"' : '') + '>' + esc(i.title) + (done ? '<span class="tag">Done</span>' : '') + '</li>';
           }).join('') + '</ul>' : '') + '</div>';
       }).join('');

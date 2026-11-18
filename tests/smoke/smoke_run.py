@@ -246,7 +246,8 @@ SAME_SAVE_RUNS = [
              "clickable_names": "off", "attribute_colours": "off", "faster_days": "off",
              "match_columns": "off", "condition_colours": "off", "save_backups": "off", "remember_window": "off",
              "squad_views": "off", "attribute_groups": "off", "foreign_colours": "off",
-             "full_player_search": "off", "changing_rules": "off", "online_play": "off"}),
+             "full_player_search": "off", "changing_rules": "off", "online_play": "off",
+             "squad_numbers_99": "off"}),
     ("foreign-on", {"faster_days": "off", "foreign_colours": "on"}),
     ("foreign-off", {"faster_days": "off", "foreign_colours": "off"}),
     ("search-on", {"faster_days": "off", "full_player_search": "on"}),
@@ -260,6 +261,8 @@ SAME_SAVE_RUNS = [
     ("rules-off", {"faster_days": "off", "changing_rules": "off"}),
     # Online play (0.7.0 slice 4): acts only in network games, so a single-player game must not change.
     ("online-on", {"faster_days": "off", "online_play": "on"}),
+    # Squad numbers 1 to 99 (issue 140): off is the original. On is compared only in a saved game (SQUAD_ON_RUN).
+    ("squad99-off", {"faster_days": "off", "squad_numbers_99": "off"}),
     ("online-off", {"faster_days": "off", "online_play": "off"}),
     # Idle CPU (#58) has no option: a test-only variable turns the sleep of an idle pass off.
     ("sleep-off", {"faster_days": "off", "_env": {"RECOMP_IDLE_SLEEP": "0"}}),
@@ -417,6 +420,8 @@ MATCH_RUNS = [
     ("rules-off", {"changing_rules": "off"}),
     ("online-on", {"online_play": "on"}),
     ("online-off", {"online_play": "off"}),
+    ("squad99-on", {"squad_numbers_99": "on"}),
+    ("squad99-off", {"squad_numbers_99": "off"}),
     ("sleep-off", {"_env": {"RECOMP_IDLE_SLEEP": "0"}}),
     ("history-keep-all", {"_env": {"RECOMP_HISTORY_SEASONS": "0"}}),
     ("season-code-off", {"_env": {"RECOMP_SEASON_CODE": "off"}}),
@@ -427,6 +432,9 @@ MATCH_RUNS = [
     ("save-parts-keep", {"_env": {"RECOMP_SAVE_PARTS": "keep"}}),
     ("files-off", {"_env": {"RECOMP_FOLDER_CACHE": "0", "RECOMP_KEEP_FILES": "0"}}),
 ]
+# A saved game holds no number above 50 and no full squad, so the option changes nothing in it. A new game differs by
+# plan: it keeps the database numbers from 51 to 99.
+SQUAD_ON_RUN = ("squad99-on", {"faster_days": "off", "squad_numbers_99": "on"})
 MATCH_DAYS = 5      # 16.7.01 to 21.7.01
 # --match --sleep-danger adds this run: the idle sleep without its time rules (RECOMP_IDLE_SLEEP=force), so
 # it also sleeps while background matches play. It keeps the original's shared random stream (group match_numbers,
@@ -1101,7 +1109,7 @@ def same_save(program, game, mode, days, save_name=None, search=False, options=F
         load[load.index("wait first-news")] = LOAD_END[save_name]
     steps = without_intro_click(load) + holiday + ["400000 quit"]
     q48 = {Q48_REFERENCE: Q48_SAVE_PARTS} if save_name in Q48_SAVE_ROWS else {}
-    return compare_runs(program, game, mode, q48_runs(keep_runs(SAME_SAVE_RUNS, save_name), False), steps, days, save,
+    return compare_runs(program, game, mode, q48_runs(keep_runs(SAME_SAVE_RUNS + [SQUAD_ON_RUN], save_name), False), steps, days, save,
                         allowed=q48, rows={Q48_REFERENCE: Q48_SAVE_ROWS[save_name]} if q48 else None,
                         text_050=True)
 

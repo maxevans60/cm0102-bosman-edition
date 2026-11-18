@@ -302,6 +302,20 @@ uint32_t rt_euro_cfg_year(void);       /* win/season_uefa_seeding.c: 0x9041ec, t
 /* The league load's row arrays (win/league_load.c, tools/recomp/league_load.py at 0x68c898): 0 when the read
  * of a row's result array failed only because the array has 0 bytes (a league of one club), else 1. */
 uint32_t rt_league_row_read_failed(uint32_t league);
+/* Squad numbers 1 to 99 (win/squad_numbers.c, tools/recomp/squad_numbers.py). */
+uint32_t rt_squad_number_top(void);
+void rt_squad_assign_begin(void);
+uint32_t rt_squad_assign_taken(uint32_t esp, uint32_t number);
+uint32_t rt_squad_assign_slot(uint32_t esp, uint32_t number);
+void rt_squad_assign_keep(uint32_t slot, uint32_t ebx, uint32_t player);
+uint32_t rt_squad_assign_holder(uint32_t slot, int32_t n);
+void rt_squad_allocate_begin(void);
+uint32_t rt_squad_allocate_mark(uint32_t number);
+uint32_t rt_squad_allocate_high(uint32_t club);
+uint32_t rt_squad_carried(uint32_t number);
+uint32_t rt_squad_screen_strips(uint32_t club, uint32_t list);
+uint32_t rt_squad_screen_list_top(void);
+uint32_t rt_squad_screen_list_bottom(void);
 /* The ban release's nation index (win/discipline_ban.c, tools/recomp/discipline_ban.py at 0x556dcf): the entry
  * of the staff id under any nation, 0 for none, or 1 when the fix is off (the original's box). */
 uint32_t rt_discipline_ban_entry(uint32_t discipline, uint32_t staff);
@@ -339,8 +353,16 @@ uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fix
 /* Open item 187 (win/original_faults.c, tools/recomp/original_faults.py at 0x4cc03d): the move of a one-contract
  * player to the linked side sets his contract's placement bit and the move back clears it, as the other moves do.
  * rt_squad_move_test: RECOMP_SQUAD_MOVE_TEST=1 at the first start report (season_report.c). */
+/* Issue 132 (win/original_faults.c): a crash site of the original was reached. One stderr line per site and run,
+ * "recomp: crash site <addr> reached", so that the run set's logs show whether a site can happen in the port. */
+void rt_crash_site(uint32_t site);
 void rt_squad_move_set(uint32_t manager, uint32_t staff, int down);
 void rt_squad_move_test(void);
+/* Test runs at the first start report (season_report.c): RECOMP_SQUAD_LOAN_TEST=1, a human move of a loanee of a linked
+ * pair (issue 159, win/original_faults.c); RECOMP_COMP_MENU_TEST=1, the competition menu of each history screen (issue
+ * 163, win/screen_sweep.c). */
+void rt_squad_loan_test(void);
+void rt_comp_menu_test(void);
 /* Money above 2,147,483,647 (0.6.2 slice 11, Q24; win/original_faults.c, tools/recomp/original_faults.py). */
 uint32_t rt_budget_hi(uint32_t lo, uint32_t hi);          /* get_transfer_budget: the high word in place of cdq */
 uint32_t rt_budget_floor(uint32_t finance, uint32_t less); /* the balance less 10m or 15m (0x599135, 0x599185) */
@@ -418,6 +440,7 @@ uint32_t rt_hol_stage_room(uint32_t original);
 uint32_t rt_league_stage_bytes(uint32_t obj, uint32_t original);  /* League::load's stage array (0x688e4b) */
 uint32_t rt_period_handler(void);  /* the object of HolFirst 0x5f73d0 or BelSecond 0x420d40 while it runs */
 uint32_t rt_hol_playoff_stage(uint32_t obj, uint32_t original);
+uint32_t rt_hol_match_news_stage(uint32_t obj, uint32_t original);   /* the match news 0x5f7110 (issue 150) */
 uint32_t rt_hol_period_news(void);
 uint32_t rt_league_last_stage(uint32_t obj, uint32_t original);  /* the last stage index (0x6849d7) */
 void rt_split_sort_order(uint32_t obj);
