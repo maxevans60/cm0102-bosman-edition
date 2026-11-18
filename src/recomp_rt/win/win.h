@@ -162,6 +162,7 @@ void holiday_widget_after(void);               /* after that create: adds the ne
 void screen_sweep_turn(void);                  /* RECOMP_SCREEN_SWEEP, at each human turn (screen_sweep.c) */
 void screen_sweep_build_now(void);             /* test runs: builds and draws the current screen now */
 void screen_sweep_menu_item(uint32_t text);    /* RECOMP_COMP_MENU_TEST: an item of the competition menu 0x49d070 */
+void squad_numbers_test_poll(void);            /* RECOMP_TEST_SQUAD_NUMBERS=screen, at each input poll (squad_numbers.c) */
 void squad_numbers_test_turn(void);            /* RECOMP_TEST_SQUAD_NUMBERS, at each human turn (squad_numbers.c) */
 void nation_job_turn(void);                    /* RECOMP_TEST_NATION_JOB, at each human turn (nation_job.c, Q15) */
 void holiday_next_turn(void);                  /* at each human turn, before the original */
