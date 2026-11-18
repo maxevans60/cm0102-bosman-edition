@@ -1,9 +1,8 @@
 /* The Bosman Edition Options box (spec 2026-10-16-features-0.5.0, slice 6; #56).
  *
  * A box the size of the original's Game Settings box (build 0x823950), with every option of the settings
- * file (options.h) on three tabs, Graphics and Game with nine rows each (Graphics was Screen until 0.6.0, Max's
- * play test), and Network (0.7.0 slice 4: Online play). The tab buttons share their row 2:2:1, so Graphics and
- * Game keep their places of the two-tab box. Labels and notes come from the mockup docs/research/mockups/2026-10-16-options-screen.html, variant B.
+ * file (options.h) on four tabs, Graphics and Game with nine rows each (Graphics was Screen until 0.6.0),
+ * Network (0.7.0 slice 4: Online play) and Squads (0.7.3 slice 13: both other tabs were full). Labels and notes come from the mockup docs/research/mockups/2026-10-16-options-screen.html, variant B.
  * The version line shows the project version (CMakeLists.txt, CM0102_VERSION).
  *
  * The box is a screen of the runtime on the game's own screen stack, as Team views (views.c). The push of
@@ -72,7 +71,7 @@
  * one's ping (nc_ping_ms of the player slot's socket). With many human managers the list rows get closer, so that
  * 15 fit above Close.
  *
- * Node slots: 0 the tab (1 Graphics, 2 Game, 3 Network), 1 the place that opened the box (1 start screen, 2 game). Only
+ * Node slots: 0 the tab (1 Graphics, 2 Game, 3 Network, 4 Squads), 1 the place that opened the box (1 start screen, 2 game). Only
  * numbers, so the box needs no leave function. */
 #include "win.h"
 #include "options.h"
@@ -123,7 +122,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 
 #define VALUE_ID 0x7d3au            /* data: row index * 16 + value index. Ids that the original does not use. */
 #define TAB_ID 0x7d3bu              /* data: the tab, 1 to TABS */
-#define TABS 3
+#define TABS 4
 #define CLOSE_ID 0x7d3cu
 #define ITEM_ID 0x4b8u              /* the side bar item; the side bar input 0x7615d0 uses no such id */
 #define REBUILD 0xfffffff5u         /* -0xb: build the box again */
@@ -150,7 +149,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_PATH } RowKind;
 
 typedef struct {
-    int tab;                        /* 1 Graphics, 2 Game, 3 Network */
+    int tab;                        /* 1 Graphics, 2 Game, 3 Network, 4 Squads */
     OptionId id;
     RowKind kind;
     const char *label;
@@ -177,6 +176,7 @@ static const Row rows[] = {
     {2, OPT_CHANGING_RULES, ROW_SWITCH, "Changing rules", "Default for a new game\nSetup Game sets each game"},
     {2, OPT_SAVE_FOLDER, ROW_PATH, "Save folder", "Applies at the next start\nOld saves do not move"},
     {3, OPT_ONLINE_PLAY, ROW_SWITCH, "Online play", "Off: LAN games only"},
+    {4, OPT_SQUAD_NUMBERS_99, ROW_SWITCH, "Squad numbers 1 to 99", "New numbers from now on\nNew games keep database numbers"},
 };
 #define ROW_COUNT ((int)(sizeof rows / sizeof rows[0]))
 
@@ -596,12 +596,14 @@ static void options_build(void)
     box_text(490, 115, 724, 135, 1, 0, 1, 1, light, "Changes save at once to settings.txt");
 
     /* The tabs: the open tab as a framed label, the other as a button. */
-    static const uint8_t weights_tabs[TABS] = {2, 2, 1};
+    /* Squads (tab 4) stands second, so the clicks at x 304, 584 and 680 still reach Graphics, Game and Network. */
+    static const uint8_t weights_tabs[TABS] = {8, 7, 7, 6};
+    static const uint8_t tab_of_column[TABS] = {1, 4, 2, 3};
     int t = area(165, 142, 724, 168, TABS, weights_tabs, 1, 0);
-    static const char *const tab_names[TABS] = {"Graphics", "Game", "Network"};
-    for (int i = 1; i <= TABS; i++) {
-        if (i == tab) current(t, i - 1, tab_names[i - 1]);
-        else choice(t, i - 1, tab_names[i - 1], TAB_ID, (uint32_t)i, green);
+    static const char *const tab_names[TABS] = {"Graphics", "Squads", "Game", "Network"};
+    for (int i = 0; i < TABS; i++) {
+        if (tab_of_column[i] == tab) current(t, i, tab_names[i]);
+        else choice(t, i, tab_names[i], TAB_ID, tab_of_column[i], green);
     }
 
     int y = 176;
