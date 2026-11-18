@@ -295,4 +295,13 @@ INSNS = {
     0x76BBA8: ("je 0x76bc10", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x1cu), edi, esi)) goto L_76bc10;"),
     0x76BE1B: ("je 0x76be83", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x20u), edi, esi)) goto L_76be83;"),
     0x4CC03D: ("mov ecx, dword ptr [0xb74350]", "rt_squad_move_set(R32(esp + 0x10u), esi, edi == ebx); ecx = R32(0xb74350u);"),
+    # Issue 132, log only (no change of the game): HolFirst::set_club_progress 0x5f73d0 (vtable 0x96b86c slot +0x68)
+    # writes progress bytes +0x73..+0x75 of the club's Comp_Stats entry, which Comp_Stats::find_club_entry 0x4a4850
+    # gives or NULL. The first lookup (call 0x5f73e1) is read at 0x5f742e, the Eredivisie one (call 0x5f74a7)
+    # at 0x5f74ec and 0x5f74fe. No path to a NULL is known (run-logs/0.8.0-s817/
+    # site-netherlands.md), so these lines log a hit for the run set and the game goes on as before.
+    0x5F73E6: ("mov bp, word ptr [esi + 0x3e]",
+               "if (eax == 0u) rt_crash_site(0x5f73e1u); ebp = (ebp & 0xffff0000u) | R16(esi + 0x3eu);"),
+    0x5F74AC: ("mov bl, byte ptr [esp + 0x20]",
+               "if (eax == 0u) rt_crash_site(0x5f74a7u); ebx = (ebx & 0xffffff00u) | R8(esp + 0x20u);"),
 }

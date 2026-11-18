@@ -549,6 +549,8 @@ if(NOT WIN32)
     add_test(NAME future_competitions COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/competitions_check.py")
     # The run set and its release check (0.6.2 slice 15), without a game: tests/seasons/future/run_set_test.py.
     add_test(NAME future_run_set COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/future/run_set_test.py")
+    # The speed benchmark (0.8.0 slice 1), without a game: tests/seasons/speed_bench_test.py.
+    add_test(NAME speed_bench COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/speed_bench_test.py")
     # The network scripts watch the address their games meet on (item 216): tests/smoke/address_watch_test.py.
     add_test(NAME address_watch COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/smoke/address_watch_test.py")
     # A rules report run with --year and no --database plays the season database of its expected files (item 129).
