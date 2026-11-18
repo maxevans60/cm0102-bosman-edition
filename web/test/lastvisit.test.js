@@ -66,6 +66,19 @@ test('tabs share the storage: a tab takes off only its own mark', () => {
   assert.equal(now.takeLastStop(), null, 'a tab does not tell its own mark');
 });
 
+test('a step\'s own details go with it: the cloud save that came when the tab closed', () => {
+  const s = store();
+  const a = mountVisitMark({ storage: s, id: 'a' });
+  a.begin({ step: 'downloading the game files', device: 'iPhone' });
+  a.step('getting Hertha BSC 2011-12-11.sav from the cloud', { cloudFile: 'Hertha BSC 2011-12-11.sav' });
+  assert.equal(JSON.parse(s.m.get('cm0102-visit')).cloudFile, 'Hertha BSC 2011-12-11.sav');
+  a.step('in the game');
+  assert.equal(JSON.parse(s.m.get('cm0102-visit')).cloudFile, undefined, 'the next step has none');
+  a.step('getting Big.sav from the cloud', { cloudFile: 'Big.sav' });
+  const last = mountVisitMark({ storage: s, id: 'b' }).takeLastStop();
+  assert.deepEqual([last.step, last.cloudFile, last.device], ['getting Big.sav from the cloud', 'Big.sav', 'iPhone']);
+});
+
 test('the words: when, the step, the likely cause, and an iPhone\'s own advice', () => {
   const now = 10 * 60000;
   const phone = suddenStopText({ step: 'Loading game data', at: now - 3 * 60000 }, { device: 'iPhone', now });

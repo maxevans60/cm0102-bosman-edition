@@ -6,6 +6,7 @@
 // The game writes *.sav files in the user folder (src/recomp_rt/win/files.c; the option save_folder can name another
 // folder, which the browser build does not use). A save in progress is temp_save_file.sav, renamed when it is done;
 // older copies are in backups/ (option save_backups).
+import { ownable } from './disk.js';
 import { zipOfBlobs } from './zip.js';
 import { sortUpload } from './upload.js';
 import { TACTICS_DIR, listTactics, tacticName } from './tactics.js';
@@ -132,11 +133,13 @@ export function checkSave(bytes, total = bytes.length) {
 // header alone. With the vault it goes to the browser's storage as it is (vault.adopt) and is never in the page's memory:
 // the page once read the whole file and copied it into the user folder, 3.4 GB in the tab for a save of 690 MB (15
 // November 2026). Without the vault it is a file in memory, as before. Resolves to null, or to why it is not a save.
-export async function storeSave(FS, name, blob, { mtime = Date.now() } = {}) {
+export async function storeSave(FS, name, blob, { mtime = Date.now(), owned = false } = {}) {
   const why = checkSave(new Uint8Array(await blob.slice(0, HEADER).arrayBuffer()), blob.size);
   if (why) return why;
   const path = `${SAVE_DIR}/${name}`;
-  if (vaultRef?.active) await vaultRef.adopt(path, blob, mtime);
+  // The vault keeps the Blob's bytes, not a reference to a file they came from (disk.js, ownable: an uploaded save, in
+  // Chromium, was a reference to the player's file, and broke when that file was deleted). owned: made for it already.
+  if (vaultRef?.active) await vaultRef.adopt(path, owned ? blob : await ownable(blob), mtime);
   else {
     FS.writeFile(path, new Uint8Array(await blob.arrayBuffer()), { canOwn: true });   // the file system takes the array, no copy
     try { FS.utime(path, mtime, mtime); } catch { /* an older file system: the time of the copy */ }

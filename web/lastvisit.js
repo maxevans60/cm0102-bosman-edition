@@ -13,7 +13,7 @@ const DAY = 86400e3;
 // visit reads the last one (takeLastStop) only when no other tab plays (loader.js asks the game's Web Lock first).
 export function mountVisitMark({ storage = null, now = () => Date.now(), id = Math.random().toString(36).slice(2) } = {}) {
   const read = () => { try { return JSON.parse(storage?.getItem(KEY) ?? 'null'); } catch { return null; } };
-  let mark = null;
+  let mark = null, base = {};
   const write = () => { try { if (mark) storage?.setItem(KEY, JSON.stringify({ ...mark, id })); } catch { /* not kept */ } };
   const takeOff = () => { try { if (read()?.id === id) storage?.removeItem(KEY); } catch { /* nothing to take off */ } };
   return {
@@ -28,9 +28,9 @@ export function mountVisitMark({ storage = null, now = () => Date.now(), id = Ma
       return last;
     },
     // The game starts loading: from now on a sudden stop is found by the next visit.
-    begin(info = {}) { mark = { ...info, step: info.step ?? 'starting', at: now() }; write(); },
-    // What it does now (only once begun).
-    step(step) { if (!mark || mark.hidden) return; mark = { ...mark, step: String(step).slice(0, 80), at: now() }; write(); },
+    begin(info = {}) { base = { ...info }; delete base.step; mark = { ...base, step: info.step ?? 'starting', at: now() }; write(); },
+    // What it does now (only once begun); extra: what goes with this step only ({ cloudFile }: the cloud save coming).
+    step(step, extra = {}) { if (!mark || mark.hidden) return; mark = { ...base, ...extra, step: String(step).slice(0, 120), at: now() }; write(); },
     // The page closes (pagehide) or stops on its own: no sudden stop. hide: a page that may come back (the browser's
     // back-forward cache) keeps its mark in memory, and resume() writes it again.
     end({ hide = false } = {}) { const kept = mark; mark = null; takeOff(); if (hide && kept) mark = { ...kept, hidden: true }; },

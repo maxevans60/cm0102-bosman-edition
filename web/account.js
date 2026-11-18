@@ -13,6 +13,7 @@
 // and time of the local file at that moment.
 import { SAVE_DIR, listSaves, readBlobNow, saveName, storeSave } from './saves.js';
 import { downDirect, upDirect } from './direct.js';
+import { toDisk, toStoredBlob } from './disk.js';
 
 const STATE = `${SAVE_DIR}/.cloud-sync.json`;
 const CHANGE = { 'x-cm': '1' };                   // what the server wants on a change (cloud.mjs)
@@ -33,7 +34,21 @@ export async function fetchMe(timeoutMs = 8000) {
 }
 
 const PAUSES = [3000, 10000];   // the pauses before a request of the cloud saves is tried again
-const gzip = (bytes) => new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip'))).blob();
+// A save packed for the cloud, and a cloud save unpacked: through a file on the browser's disk (disk.js), not whole in the
+// page's memory. { blob, done, onDisk }; done() once the bytes are kept elsewhere.
+const gzip = (bytes) => toDisk(new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')));
+
+// Cloud saves that this device does not bring down by itself: the last try closed the tab (an iPhone, 18 November 2026:
+// iOS closed it while a 446 MB save came at the start, and again at each start after). The next start leaves such a
+// save in the cloud (loader.js, from the sudden-stop mark of lastvisit.js), and the Account dialog has it with "Get it
+// here". { name: since (ms) } in localStorage, for this browser.
+const KEPT_KEY = 'cm0102-cloud-kept';
+export function keptInCloud() { try { return JSON.parse(localStorage.getItem(KEPT_KEY) ?? '{}') ?? {}; } catch { return {}; } }
+export function keepInCloud(name, on = true) {
+  const k = keptInCloud();
+  if (on) k[name] = Date.now(); else delete k[name];
+  try { localStorage.setItem(KEPT_KEY, JSON.stringify(k)); } catch { /* not kept: it comes down as before */ }
+}
 
 // A name for the other device's version of name, free among the names taken (lower case).
 export function otherDeviceName(name, taken) {
@@ -139,12 +154,17 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const rawSize = bytes.size ?? bytes.length;
     const mb = (n) => `${(n / 1048576).toFixed(0)} MB`;
     if (limits.raw && rawSize > limits.raw) return tooBig(name, before, `${mb(rawSize)}; the cloud takes ${mb(limits.raw)}`);
-    const body = await gzip(bytes);                             // a Blob: the same body for each try
+    const packed = await gzip(bytes), body = packed.blob;       // a Blob: the same body for each try
+    bytes = null;
+    try { return await send(name, base, signal, before, body, rawSize); } finally { await packed.done(); }
+  }
+  async function send(name, base, signal, before, body, rawSize) {
+    const mb = (n) => `${(n / 1048576).toFixed(0)} MB`;
     if (limits.packed && body.size > limits.packed) return tooBig(name, before, `${mb(body.size)} packed; the cloud takes ${mb(limits.packed)}`);
     // Straight to the store (direct.js), or through the server when that is off.
     let way = 'through the server';                              // for the log: which way the file went
     const r = await retrying(`${name} up`, async () => {
-      const d = await upDirect({ url: at(name), body, base, signal, log, fields: { rawSize: bytes.size ?? bytes.length, saved: before.mtime } });
+      const d = await upDirect({ url: at(name), body, base, signal, log, fields: { rawSize, saved: before.mtime } });
       way = d ? 'straight to the store' : 'through the server';
       return d ?? fetch(at(name), { method: 'PUT', body, signal, headers: { ...CHANGE, 'x-base-etag': base, 'x-save-time': String(before.mtime) } });
     }, signal);
@@ -161,7 +181,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     if (r.status === 401 || r.status === 403) { stopped = true; return {}; }
     if (!r.ok) throw fail(`${name} up`, r);
     const j = await r.json();
-    state.saves[name] = { etag: j.etag, size: bytes.size ?? bytes.length, mtime: before.mtime, upAt: Date.now() };   // a Blob, or bytes
+    state.saves[name] = { etag: j.etag, size: rawSize, mtime: before.mtime, upAt: Date.now() };
     log(`page: ${name} is in the cloud (${(j.size / 1048576).toFixed(1)} MB compressed, ${way})`);
     return { up: true };
   }
@@ -175,11 +195,13 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     }, signal);
     if (!r.ok) throw fail(`${name} down`, r);
     const etag = link?.etag ?? r.headers.get('etag'), saved = Number(link?.saved ?? r.headers.get('x-saved')) || Date.now();
-    // Unpacked as a Blob (the browser keeps a large one on disk) and stored as it is: not in the page's memory whole.
-    const blob = await new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).blob();
-    const why = await storeSave(FS, file, blob, { mtime: saved });
+    // Unpacked into a file on the browser's disk as it comes (disk.js), then stored as it is: never whole in the page's
+    // memory. An iPhone kept new Response(…).blob() in memory, and iOS closed the tab at each start (18 November 2026).
+    const unpacked = await toStoredBlob(r.body.pipeThrough(new DecompressionStream('gzip'))), blob = unpacked.blob;
+    let why;
+    try { why = await storeSave(FS, file, blob, { mtime: saved, owned: unpacked.owned }); } finally { await unpacked.done(); }
     if (why) { log(`page: ${name} from the cloud was not taken: ${why}`); return null; }
-    log(`page: ${name} came from the cloud (${(blob.size / 1048576).toFixed(1)} MB, ${link?.response === r ? 'straight from the store' : 'through the server'})`);
+    log(`page: ${name} came from the cloud (${(blob.size / 1048576).toFixed(1)} MB, ${link?.response === r ? 'straight from the store' : 'through the server'}${unpacked.onDisk ? ', unpacked on disk' : ''})`);
     onWrote();
     return { etag, saved, ...stat(file) };
   }
@@ -224,13 +246,14 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     Object.assign(state.saves, plan.settle);
     for (const n of plan.forget) delete state.saves[n];
     let i = 0;
-    const failed = [];
+    const failed = [], kept = [], keptHere = keptInCloud();
     for (const job of plan.jobs) {
       i++;
       if (full && job.do === 'up' && job.base === 'none') continue;
+      if (job.do !== 'up' && keptHere[job.name]) { kept.push(job.name); continue; }   // left in the cloud on this device
       busy.add(job.name);
       changed();
-      onStep(`${job.do === 'down' ? 'Getting' : 'Saving'} ${job.name} (${i} of ${plan.jobs.length})`);
+      onStep(`${job.do === 'down' ? 'Getting' : 'Saving'} ${job.name} (${i} of ${plan.jobs.length})`, job);
       try {
         if (job.do === 'down') {
           const got = await down(job.name, job.name, signal);
@@ -258,14 +281,15 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     last = Date.now();
     if (plan.jobs.some((j) => j.do !== 'down')) count = null;     // the count changed; the next list tells it
     changed();
-    // failed: the names that go at the next sync; held: the large saves that wait their time (BIG_EVERY_MS)
-    return Object.assign([...plan.jobs], { failed, held: plan.held });
+    // failed: the names that go at the next sync; held: the large saves that wait their time (BIG_EVERY_MS); kept: the
+    // cloud saves left in the cloud on this device (keepInCloud)
+    return Object.assign(plan.jobs.filter((j) => !kept.includes(j.name)), { failed, held: plan.held, kept });
   }
 
   // Runs one sync after the ones before it. Resolves to the jobs (with failed: the saves that wait for the next sync),
   // or null when it failed as a whole (no connection, or the cloud's list not read).
   function run(opts = {}) {
-    const job = chain.then(() => once(opts)).then((jobs) => jobs ?? Object.assign([], { failed: [], held: [] })).catch((err) => {
+    const job = chain.then(() => once(opts)).then((jobs) => jobs ?? Object.assign([], { failed: [], held: [], kept: [] })).catch((err) => {
       if (err.name === 'AbortError' || err.name === 'TimeoutError') return null;
       log(`page: cloud saves: ${err.message ?? err}`);
       return null;
@@ -373,6 +397,11 @@ export function mountAccount({ log, toast, isRunning, isStandalone, leave }) {
       const term = u.cloudFrom === 'subscription' || u.cloudFrom === 'membership'
         ? (u.cancelAt ? `Canceled: Cloud Saves end on ${esc(day(u.cancelAt))}.` : u.until ? `Renews every month; paid until ${esc(day(u.until))}.` : '')
         : offer?.free ? '' : 'Given to this account.';
+      // Saves left in the cloud on this device (keepInCloud): bringing one here closed the tab last time.
+      const keptNames = Object.keys(keptInCloud());
+      const kept = keptNames.length ? `<p class="small">Left in the cloud on this device: the last try to bring ${keptNames.length > 1 ? 'them' : 'it'}
+        here closed the tab, most likely for its memory. The game here runs without ${keptNames.length > 1 ? 'them' : 'it'}.</p>
+        ${keptNames.map((n, i) => `<div class="row"><span class="small">${esc(n)}</span><button data-kept="${i}">Get it here</button></div>`).join('')}` : '';
       const member = u.cloudFrom === 'membership' && offer?.url
         ? `<div class="row"><button id="account-member">Your membership</button>
           <span class="small">on Buy Me a Coffee: change, pause or cancel it there</span></div>` : '';
@@ -380,8 +409,16 @@ export function mountAccount({ log, toast, isRunning, isStandalone, leave }) {
         game starts, this browser gets the saves you made elsewhere.${info?.count != null ? ` ${info.count} of ${info.max} saves are in the cloud.` : ''}</p>
         <p class="small">${term} ${cloud?.stopped ? 'Cloud saves stopped: sign in again.' : info?.last ? `Last sync: ${esc(when(info.last))}.` : ''}</p>
         ${u.manage ? '<div class="row"><button id="account-manage">Manage subscription</button><span class="small">cancel, card, invoices</span></div>' : ''}
-        ${member}${own}${legal}`;
+        ${kept}${member}${own}${legal}`;
       if (u.manage) $('account-manage').onclick = manage;
+      for (const b of body.querySelectorAll('button[data-kept]')) b.onclick = () => {
+        const name = keptNames[Number(b.dataset.kept)];
+        if (!confirm(`Bring ${name} to this device? The last try closed the tab; if it closes again, the game leaves it in the cloud once more.`)) return;
+        keepInCloud(name, false);
+        log(`page: cloud saves: ${name}: brought here again, as asked`);
+        render();
+        cloud?.run?.({ replace: false });
+      };
       if (member) $('account-member').onclick = () => window.open(offer.url, '_blank', 'noopener');
     } else {
       body.innerHTML = `${signedIn}<p class="small">Your saves stay in this browser, and Saved games downloads them as files.</p>

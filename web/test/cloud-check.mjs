@@ -242,7 +242,8 @@ try {
   check('the second device gets both versions of Harbour City before its game starts',
     same(await localBytes(b, harbour), here) && same(await localBytes(b, other), elsewhere));
   const bLog = await b.textContent('#log');
-  check('and its log says each one came straight from the store', /Harbour City 2001-07-14\.sav came from the cloud \([\d.]+ MB, straight from the store\)/.test(bLog),
+  check('and its log says each one came straight from the store, and how this browser keeps it', /Harbour City 2001-07-14\.sav came from the cloud \([\d.]+ MB, straight from the store\)/.test(bLog)
+    && /the browser's storage keeps references to files: a save is copied by the browser before it is stored/.test(bLog),
     bLog.split('\n').filter((l) => /came from the cloud/.test(l)).join(' / '));
   check('and not the save removed from the cloud', (await localBytes(b, 'From iPad.sav')) === null, (await localNames(b)).join(', '));
   await waitFor('the data set from the cloud', () => b.evaluate(() => { try { return window.Module.FS.readdir('/user/Databases/My squads').length > 20; } catch { return false; } }), 20000);
@@ -587,6 +588,52 @@ try {
         && !/did not answer this page directly/.test(wayLog) && /Second Way 2001-09-01\.sav is in the cloud \([\d.]+ MB compressed, straight to the store\)/.test(wayLog), `${storeRequests.join(', ')} | ${wayLog.split('\n').filter((l) => /cloud|direct/.test(l)).slice(-4).join(' / ')}`);
     await wctx.close();
   } finally { s3fake.faults.corsHost = null; wayServer.close(); }
+
+  // ---- A device whose tab the system closes while a cloud save comes at the start (an iPhone, 18 November 2026: a
+  // 446 MB save, closed at every start, then "A problem repeatedly occurred"). The next start says so, leaves that save
+  // in the cloud on this device and starts the game; Account brings it with "Get it here". ----
+  {
+    google.user = PLAYER;
+    const kctx = await browser.newContext({ viewport: { width: 1200, height: 800 } });
+    const k = await kctx.newPage();
+    k.on('pageerror', (e) => errors.push(e.message));
+    const held = 'Fine 2001-08-02.sav', heldB64 = Buffer.from(held).toString('base64url');   // one that only the cloud has (the stand-in game makes Harbour City)
+    const isHeld = (url) => { const u = new URL(url); return u.pathname.endsWith(`${heldB64}.gz`) || u.pathname === `/api/saves/${encodeURIComponent(held)}`; };
+    await kctx.route(isHeld, () => {});           // never answered: the tab is closed while it comes
+    await k.goto(`${BASE}/auth/google/start?mode=page`);
+    await k.waitForSelector('#go');
+    await k.click('#go');
+    const waiting = await waitFor('the start to get Fine', async () => (await k.textContent('#overlay').catch(() => '')).includes(`Getting ${held}`), 30000);
+    const mark = await k.evaluate(() => JSON.parse(localStorage.getItem('cm0102-visit') ?? 'null'));
+    const crashed = k.waitForEvent('crash', { timeout: 15000 }).then(() => true, () => false);
+    (await kctx.newCDPSession(k)).send('Page.crash').catch(() => {});
+    const didCrash = await crashed;
+    await k.close().catch(() => {});
+    const k2 = await kctx.newPage();
+    k2.on('pageerror', (e) => errors.push(e.message));
+    k2.on('dialog', (d) => d.accept());
+    await k2.goto(`${BASE}/`);
+    await k2.waitForSelector('#go', { timeout: 30000 });
+    const box = (await k2.textContent('#overlay')).replace(/\s+/g, ' ');
+    check('the tab closed while a cloud save came: the next start says which, and that it stays in the cloud here',
+      waiting && didCrash && mark?.cloudFile === held && /stopped suddenly on your last visit/.test(box)
+        && box.includes(`${held} stays in the cloud on this device for now, so the game can start`), `${JSON.stringify(mark)} | ${box.slice(0, 300)}`);
+    await k2.click('#go');
+    await k2.waitForFunction(() => window.__fake, null, { timeout: 30000 });
+    await k2.waitForTimeout(1500);
+    const others = await localNames(k2);
+    check('and the game starts with the other cloud saves, without that one',
+      !others.includes(held) && others.length > 0 && /stays in the cloud on this device/.test(await k2.textContent('#log')), others.join(', '));
+    await kctx.unroute(isHeld);
+    await k2.click('#account-open');
+    const acct = (await k2.innerText('#account-body')).replace(/\s+/g, ' ');
+    const offered = acct.includes(held) && await k2.isVisible('button[data-kept]');
+    await k2.click('button[data-kept]');
+    await waitFor('Fine to come', async () => (await localNames(k2)).includes(held), 30000);
+    check('Account lists it with Get it here, which brings it to this device', offered && same(await localBytes(k2, held), cloudBytes(held))
+      && !(await k2.innerText('#account-body')).includes('Left in the cloud on this device'), acct.slice(0, 300));
+    await kctx.close();
+  }
 
   check('no page errors', errors.length === 0, errors.join('; '));
   check('the server logged no failure', !logs.some((l) => /fail|not written|not read/.test(l)), logs.join('; '));

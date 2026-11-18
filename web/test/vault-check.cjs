@@ -132,6 +132,30 @@ const WEB = path.resolve(__dirname, '..');
         out.uploadKept = (await vault.persist()).removed;
         const back = new Uint8Array(await (await vault.blob('/user/Uploaded 2002-01-05.sav')).arrayBuffer());
         out.uploadSame = back.length === big.length && back[SAVE_HEADER + 5] === 5 && back[back.length - 1] === 5;
+        // A cloud download (disk.js, toStoredBlob) and a save the player picked (Upload): the vault keeps their bytes,
+        // not a reference to a file. Chromium's IndexedDB keeps a reference to a file's Blob, and the save then broke
+        // when that file went; storeSave gives the vault a copy the browser makes there (ownable).
+        const { toStoredBlob, storageCopiesFiles } = await import('/disk.js');
+        out.copiesFiles = await storageCopiesFiles();
+        const fromCloud = save(6 * MB, 7);
+        const unpacked = await toStoredBlob(new Blob([fromCloud]).stream());
+        out.diskWhy = await storeSave(FS, 'From the cloud.sav', unpacked.blob, { mtime: 1762770000000, owned: unpacked.owned });
+        await unpacked.done();
+        const opfs = await (await navigator.storage.getDirectory()).getDirectoryHandle('cm0102-tmp', { create: true });
+        const fromVault = new Uint8Array(await (await vault.blob('/user/From the cloud.sav')).arrayBuffer());
+        out.diskSame = fromVault.length === fromCloud.length && fromVault[SAVE_HEADER + 1] === 7 && fromVault[fromVault.length - 1] === 7;
+        const picked = save(5 * MB, 4);
+        const ph = await opfs.getFileHandle('picked.sav', { create: true });
+        const pw = await ph.createWritable(); await pw.write(picked); await pw.close();
+        out.pickedWhy = await storeSave(FS, 'Picked.sav', await ph.getFile(), { mtime: 1762770000000 });
+        await opfs.removeEntry('picked.sav');                        // the player deletes the file from Downloads
+        try {
+          const b2 = new Uint8Array(await (await vault.blob('/user/Picked.sav')).arrayBuffer());
+          out.pickedSame = b2.length === picked.length && b2[SAVE_HEADER + 1] === 4 && b2[b2.length - 1] === 4;
+        } catch (e) { out.pickedSame = `${e.name}`; }
+        const left = [];
+        for await (const [n] of opfs.entries()) left.push(n);
+        out.diskLeft = left.length;
         // The save editor keeps the save as it was as an older copy (a rename), then stores the edited one under the
         // name (adopt) before the vault's round moved the renamed file's record: each keeps its own bytes.
         dirs.add('/user/backups');
@@ -182,6 +206,10 @@ const WEB = path.resolve(__dirname, '..');
     check('an upload goes into the storage as it is: only its header is read, the user folder gets a placeholder',
       r.upload?.why === null && r.upload.largestRead <= 0x416ec && r.upload.state === 'out' && r.upload.inMemory === 0
         && r.upload.size === 0x416ec + 9 * MB && r.upload.mtime === 1762770000000, JSON.stringify(r.upload));
+    check('a cloud save goes into the vault as bytes the vault keeps, and leaves no file on the browser\'s disk',
+      r.diskWhy === null && r.diskSame === true && r.diskLeft === 0, JSON.stringify([r.copiesFiles, r.diskWhy, r.diskSame, r.diskLeft]));
+    check('a save the player picked (Upload) stays readable after its file is deleted (Chromium kept only a reference)',
+      r.copiesFiles === false && r.pickedWhy === null && r.pickedSame === true, JSON.stringify([r.copiesFiles, r.pickedWhy, r.pickedSame]));
     check('it stays through the vault\'s round, reads back the same, and the next visit lists it', r.uploadKept === 0 && r.uploadSame && r.nextVisit >= 2, JSON.stringify([r.uploadKept, r.uploadSame, r.nextVisit]));
     check('a renamed save keeps its bytes when a new file is stored under its old name before the vault\'s round',
       JSON.stringify(r.renamedThenAdopted) === JSON.stringify({ old: [0x416ec + 9 * MB, 5], now: [0x416ec + 2 * MB, 9] }), JSON.stringify(r.renamedThenAdopted));

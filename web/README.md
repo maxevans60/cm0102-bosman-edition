@@ -171,6 +171,17 @@ whole game world. A new or changed save goes to IndexedDB about 2 seconds after 
 the same address every time: `127.0.0.1:8080` and `localhost:8080` are two sites to the browser, each with its own
 saves.
 
+**Big files and the browser's memory (`disk.js`).** A cloud save is unpacked, and a save is packed for the cloud or a
+report, through a file of the origin's private file system (OPFS) as it streams, not as one Blob in the page's memory:
+an iPhone kept a 446 MB cloud save in the tab's memory at the start, beside the game files, and iOS closed the tab at
+every start ("A problem repeatedly occurred", 18 November 2026; iOS gives a tab about 2 GB). The vault must keep the
+bytes, not a reference: Chromium's IndexedDB keeps only a reference to a Blob that comes from a file (an OPFS file, or
+one the player picked for Upload), which broke when the file went (a save uploaded from Downloads and deleted there).
+The page finds out once per browser version which its storage does (a 16-byte file), and gives the vault a copy that
+the browser makes where it keeps references (`ownable`, `toStoredBlob`); the log says which. A cloud save whose download
+closed the tab is left in the cloud on that device at the next start (the sudden-stop mark names it), and Account
+brings it with "Get it here".
+
 **Where the saves live (the vault, `vault.js`).** IDBFS keeps every file of the user folder in memory and reads all of
 it at the start, so a player with many saves ran the tab out of memory. With the vault on, saves, older copies and the
 files of the data sets live in an IndexedDB store of their own (`cm0102-vault`), as Blobs that the browser keeps on

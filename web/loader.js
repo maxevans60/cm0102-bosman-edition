@@ -13,12 +13,13 @@ import { mountEditor } from './editor.js';
 import { mountSetsPanel } from './setspanel.js';
 import { mountTacticsPanel } from './tactics.js';
 import { createSetSync, listDataSets } from './datasets.js';
-import { LEGAL_LINKS, createCloudSync, mountAccount, plansHtml } from './account.js';
+import { LEGAL_LINKS, createCloudSync, keepInCloud, mountAccount, plansHtml } from './account.js';
 import { guardKeys, hasTouch, mountKeyboard } from './keyboard.js';
 import { mountLayout } from './layout.js';
 import { mountMacRightButton, mountTouch } from './touch.js';
 import { fitBar, guardLeave, isFullAlready, isStandalone, keepAwake, mountBusy, toast } from './ui.js';
 import { mountVisitMark, suddenStopText } from './lastvisit.js';
+import { storageCopiesFiles, sweepDisk } from './disk.js';
 import { mountReport, watchSaveInPlay } from './report.js';
 import { mountPlay } from './play.js';
 import { watchRelease } from './release.js';
@@ -735,7 +736,12 @@ function runEngine(files, info) {
             <p style="margin:14px 0 0"><button id="cloud-skip" hidden>Start without them</button></p>`);
           status('Getting your cloud saves…');
           const skip = setTimeout(() => { if ($('cloud-skip')) { $('cloud-skip').hidden = false; $('cloud-skip').onclick = () => abort.abort(); } }, 5000);
-          const onStep = (t) => { if ($('cloud-step')) $('cloud-step').textContent = t; };
+          const onStep = (t, job) => {
+            if ($('cloud-step')) $('cloud-step').textContent = t;
+            // The cloud save that comes now: a tab closed meanwhile leaves it in the cloud at the next start.
+            if (job && job.do !== 'up') visit.step(`getting ${job.name} from the cloud`, { cloudFile: job.name });
+            else visit.step('sending saves to the cloud');
+          };
           onStep.signal = abort.signal;
           try { await startCloud(FS, { replace: true, onStep }); }
           catch (e) { log(`page: cloud saves: ${e?.stack ?? e}`); }       // the game starts all the same
@@ -1124,6 +1130,10 @@ async function start() {
     $('help-report-open').onclick = () => { $('help').close(); report.open({ where: 'Help' }); };
   }
   const { problems, warnings } = requirements(info);
+  sweepDisk().then((n) => { if (n) log(`page: ${n} unfinished file${n > 1 ? 's' : ''} of an earlier visit removed from the browser's disk`); });
+  // How this browser's storage keeps a file's Blob (disk.js): the way cloud saves and uploads are stored follows it.
+  storageCopiesFiles().then((c) => log(c ? 'page: the browser\'s storage copies files: cloud saves are unpacked on disk, not in memory'
+    : 'page: the browser\'s storage keeps references to files: a save is copied by the browser before it is stored'));
   // The last visit stopped without the page closing: the system closed the tab, most likely for its memory (iOS: "A
   // problem repeatedly occurred"). The player hears it before the next start, the log and the statistics have it.
   // A mark of a tab that plays now is no sudden stop: it is read only when no tab holds the game (a closed tab's lock goes
@@ -1133,7 +1143,15 @@ async function start() {
   if (lastStop) {
     log(`page: the last visit stopped without the page closing, while ${lastStop.step} (${lastStop.device ?? 'a computer'}, ${lastStop.engine ?? '?'} engine)`);
     stats.report(`sudden stop: the last visit stopped while ${lastStop.step}`, [], 'sudden stop');
-    warnings.unshift(suddenStopText(lastStop, { device: appleMobile() }));
+    let words = suddenStopText(lastStop, { device: appleMobile() });
+    // A cloud save that came when the tab closed: it stays in the cloud on this device, or each start would close the
+    // tab again on it (an iPhone, 18 November 2026: a 446 MB save, "A problem repeatedly occurred").
+    if (lastStop.cloudFile) {
+      keepInCloud(lastStop.cloudFile);
+      log(`page: cloud saves: ${lastStop.cloudFile} stays in the cloud on this device; Account has it ("Get it here")`);
+      words += ` ${lastStop.cloudFile} stays in the cloud on this device for now, so the game can start; Account has it, with "Get it here".`;
+    }
+    warnings.unshift(words);
   }
   if (problems.length) { log(`page: blocked: ${problems.join(' ')}`); stats.report(`blocked: ${problems.join(' ')}`, [], 'requirements'); blocked(problems); return; }
   if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('/sw.js').catch((e) => log(`page: no service worker: ${e}`));

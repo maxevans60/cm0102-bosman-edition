@@ -4,6 +4,7 @@
 // server signs, as the cloud saves do; when the store does not let the page in (its CORS rules: the first try on the
 // live site failed so, 13 November 2026), it goes through the server (saveBody). The admin page lists the report.
 import { SAVE_HEADER, listSaves, readBlob } from './saves.js';
+import { toDisk } from './disk.js';
 
 export const REPORT_LOG_LINES = 2000;
 // A read that starts this far into a save is a load: the Load Game list reads each save's header only, 270,336 bytes
@@ -29,11 +30,12 @@ async function post(path, body) {
   return j;
 }
 
-// The save packed with gzip, read from its Blob in pieces (a save of the vault from disk). onBytes(n): read so far.
+// The save packed with gzip, read from its Blob in pieces (a save of the vault from disk), into a file on the browser's
+// disk where it can (disk.js): { blob, done, onDisk }, done() once it is sent. onBytes(n): read so far.
 export function pack(blob, onBytes = () => {}) {
   let done = 0;
   const count = new TransformStream({ transform(chunk, c) { done += chunk.byteLength; onBytes(done); c.enqueue(chunk); } });
-  return new Response(blob.stream().pipeThrough(count).pipeThrough(new CompressionStream('gzip'))).blob();
+  return toDisk(blob.stream().pipeThrough(count).pipeThrough(new CompressionStream('gzip')));
 }
 
 // An upload with progress (fetch tells none for an upload). onPart(0..1). who: 'the store' or 'the server', for the
@@ -112,7 +114,7 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
     if (sending) return;
     sending = true;
     sendBtn.disabled = true;
-    let save = null, sent = null;
+    let save = null, sent = null, packed = null;
     if (unsent) ({ sent, save } = unsent);             // Send the save again: the same report, its save only
     else {
       const value = choice.value, fs = FS();
@@ -139,7 +141,8 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
       }
       if (save) {
         say(`Packing ${save.name}…`);
-        const gz = await pack(await save.blob(), (n) => say(`Packing ${save.name}: ${Math.min(100, Math.floor((100 * n) / Math.max(1, save.size)))}%`));
+        packed = await pack(await save.blob(), (n) => say(`Packing ${save.name}: ${Math.min(100, Math.floor((100 * n) / Math.max(1, save.size)))}%`));
+        const gz = packed.blob;
         const link = await post('/api/report/save', { key: sent.key, token: sent.token, name: save.name, size: gz.size, rawSize: save.size });
         const onPart = (part) => say(`Sending ${save.name} (${size(gz.size)} packed): ${Math.floor(100 * part)}%`);
         let direct = false;
@@ -171,6 +174,7 @@ export function mountReport({ FS = () => null, lines = () => [], who = () => ({}
       sendBtn.disabled = Boolean(sent && !save);
     } finally {
       sending = false;
+      await packed?.done();
     }
   };
   $('report-close').onclick = () => dialog.close();
