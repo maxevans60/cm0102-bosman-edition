@@ -123,10 +123,92 @@ static void test_plan(void)
     CHECK(r.cut == 0 && r.count == 4, "no cut at the count: %d", r.cut);
 }
 
+/* The A-League: rows aus-jap-kor-28 to -49 of docs/research/rules-0.6.0/aus-jap-kor.tsv (0.7.3 slice 7, issue 157). */
+static const int AUS_ROW[][2] = {
+    {2005, 8},  {2006, 8},  {2007, 8},  {2008, 8},  {2009, 10}, {2010, 11}, {2011, 10}, {2012, 10},
+    {2013, 10}, {2014, 10}, {2015, 10}, {2016, 10}, {2017, 10}, {2018, 10}, {2019, 11}, {2020, 12},
+    {2021, 12}, {2022, 12}, {2023, 12}, {2024, 13}, {2025, 12}, {2026, 12},
+};
+
+static void test_a_league(void)
+{
+    for (size_t k = 0; k < sizeof AUS_ROW / sizeof AUS_ROW[0]; k++)
+        CHECK(season_closed_count("aus_nsl", AUS_ROW[k][0]) == AUS_ROW[k][1], "%d: %d clubs, the row %d", AUS_ROW[k][0],
+              season_closed_count("aus_nsl", AUS_ROW[k][0]), AUS_ROW[k][1]);
+    CHECK(!strcmp(season_closed_league("Australian National Soccer League"), "aus_nsl"), "the division");
+    CHECK(!season_closed_active("aus_nsl", 2004) && season_closed_active("aus_nsl", 2005), "the first season");
+    CHECK(season_closed_active("usa_mls", 2002), "the MLS has no first season");
+    /* The clubs that join and fold in the notes of the rows. */
+    CHECK(season_closed_member("aus_nsl", "New Zealand Knights", NULL, 2006) == 1, "Knights 2006");
+    CHECK(season_closed_member("aus_nsl", "New Zealand Knights", NULL, 2007) == 0, "Knights 2007");
+    CHECK(season_closed_member("aus_nsl", "Football Kingz", "Kingz", 2005) == 1, "the Kingz became the Knights");
+    CHECK(season_closed_member("aus_nsl", "Wellington Phoenix", NULL, 2006) == 0, "Phoenix 2006");
+    CHECK(season_closed_member("aus_nsl", "Wellington Phoenix", NULL, 2007) == 1, "Phoenix 2007");
+    CHECK(season_closed_member("aus_nsl", "North Queensland Fury", NULL, 2010) == 1, "Fury 2010");
+    CHECK(season_closed_member("aus_nsl", "North Queensland Fury", NULL, 2011) == 0, "Fury 2011");
+    CHECK(season_closed_member("aus_nsl", "Gold Coast United", NULL, 2011) == 1, "Gold Coast 2011");
+    CHECK(season_closed_member("aus_nsl", "Gold Coast United", NULL, 2012) == 0, "Gold Coast 2012");
+    CHECK(season_closed_member("aus_nsl", "Western United FC", NULL, 2024) == 1, "Western United 2024");
+    CHECK(season_closed_member("aus_nsl", "Western United FC", NULL, 2025) == 0, "Western United 2025");
+    CHECK(season_closed_member("aus_nsl", "Auckland FC", NULL, 2023) == 0, "Auckland 2023");
+    CHECK(season_closed_member("aus_nsl", "Auckland FC", NULL, 2024) == 1, "Auckland 2024");
+    /* The names of the databases: one row for each name of a club. */
+    CHECK(season_closed_row("aus_nsl", "Queensland Roar") == season_closed_row("aus_nsl", "Brisbane Roar FC"), "Roar");
+    CHECK(season_closed_row("aus_nsl", "Melbourne Heart") == season_closed_row("aus_nsl", "Melbourne City FC"), "City");
+    CHECK(season_closed_row("aus_nsl", "Newcastle United FC") == season_closed_row("aus_nsl", "Newcastle United Jets"),
+          "Newcastle");
+    CHECK(season_closed_row("aus_nsl", "Sydney Football Club") == season_closed_row("aus_nsl", "Sydney FC"), "Sydney");
+    /* Clubs of the same towns that never played in the A-League. */
+    CHECK(season_closed_member("aus_nsl", "Sydney United", "Sydney Utd", 2010) == -1, "Sydney United");
+    CHECK(season_closed_member("aus_nsl", "Sydney Olympic Sharks", "Olympic Sharks", 2010) == -1, "Sydney Olympic");
+    CHECK(season_closed_member("aus_nsl", "Melbourne Knights", NULL, 2010) == -1, "Melbourne Knights");
+    CHECK(season_closed_member("aus_nsl", "Brisbane Strikers", NULL, 2010) == -1, "Brisbane Strikers");
+    CHECK(season_closed_member("aus_nsl", "Adelaide City Force", "Adelaide City", 2010) == -1, "Adelaide City");
+    /* The clubs of New Zealand can stand under their own nation in a database. */
+    CHECK(season_closed_abroad("aus_nsl", "Wellington Phoenix", NULL), "Phoenix abroad");
+    CHECK(season_closed_abroad("aus_nsl", "Auckland FC", NULL), "Auckland abroad");
+    CHECK(season_closed_abroad("aus_nsl", "New Zealand Knights", NULL), "Knights abroad");
+    CHECK(!season_closed_abroad("aus_nsl", "Newcastle United FC", "Newcastle"), "the English Newcastle stays out");
+    CHECK(!season_closed_abroad("usa_mls", "Toronto FC", NULL), "no abroad row in the MLS");
+    /* A record waits for its season in any league of the table. */
+    CHECK(season_closed_waits("Sydney FC", "Sydney FC", 2004), "Sydney FC waits in 2004");
+    CHECK(!season_closed_waits("Sydney FC", "Sydney FC", 2005), "Sydney FC plays in 2005");
+    CHECK(season_closed_waits("San Diego FC", "San Diego FC", 2024), "San Diego FC waits in 2024");
+    CHECK(!season_closed_waits("Marconi Stallions", "Marconi", 2004), "a club of no row");
+}
+
+static void test_a_league_plan(void)
+{
+    int a[20];
+    ClosedResult r;
+    /* The 13 clubs of the last NSL edition become the 8 of 2005: five new records join, ten stand-ins leave. */
+    ClosedClub y2005[] = {{"Adelaide City Force", 1, 0, 0, 25, "Adelaide City"}, {"Brisbane Strikers", 1, 0, 0, 35},
+                          {"Football Kingz", 1, 0, 0, 25, "Kingz"},              {"Marconi Stallions", 1, 0, 0, 30},
+                          {"Melbourne Knights", 1, 0, 0, 35},                    {"Newcastle United FC", 1, 0, 0, 35},
+                          {"Northern Spirit", 1, 0, 0, 30},                      {"Sydney Olympic Sharks", 1, 0, 0, 35},
+                          {"Parramatta Power", 1, 0, 0, 30},                     {"Perth Glory", 1, 0, 0, 40},
+                          {"South Melbourne", 1, 0, 0, 35},                      {"Sydney United", 1, 0, 0, 25},
+                          {"Wollongong Wolves", 1, 0, 0, 30},                    {"Adelaide United", 0, 0, 0, 10},
+                          {"Brisbane Roar", 0, 0, 0, 10},                        {"Central Coast Mariners", 0, 0, 0, 10},
+                          {"Melbourne Victory", 0, 0, 0, 10},                    {"Sydney FC", 0, 0, 0, 10}};
+    season_closed_plan("aus_nsl", 2005, 8, y2005, 18, a, &r);
+    CHECK(r.count == 8 && r.joined == 5 && r.cut == 10 && r.folded == 0 && r.missing == 0,
+          "2005: %d clubs, %d join, %d cut, %d fold, %d missing", r.count, r.joined, r.cut, r.folded, r.missing);
+    CHECK(a[2] == CLOSED_STAY && a[5] == CLOSED_STAY && a[9] == CLOSED_STAY, "2005 stays %d %d %d", a[2], a[5], a[9]);
+    CHECK(a[0] == CLOSED_CUT && a[12] == CLOSED_CUT && a[13] == CLOSED_JOIN, "2005 %d %d %d", a[0], a[12], a[13]);
+    /* Before the first season the table moves no club. */
+    season_closed_plan("aus_nsl", 2004, 13, y2005, 18, a, &r);
+    CHECK(r.count == 13 && !r.joined && !r.cut && !r.folded && !r.missing, "2004: %d clubs, %d join, %d cut", r.count,
+          r.joined, r.cut);
+    for (int i = 0; i < 18; i++) CHECK(a[i] == CLOSED_STAY, "2004 club %d: %d", i, a[i]);
+}
+
 int main(void)
 {
     test_table();
     test_plan();
+    test_a_league();
+    test_a_league_plan();
     printf(fails ? "season_closed: %d failures\n" : "season_closed: ok\n", fails);
     return fails != 0;
 }

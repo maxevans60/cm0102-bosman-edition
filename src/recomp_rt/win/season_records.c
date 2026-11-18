@@ -770,7 +770,7 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
             int closed = league && season_closed_row(league, rr->real) >= 0;
             int same = closed ? season_closed_club(league, nm, sh) == season_closed_row(league, rr->real)
                               : !strcmp(nm, rr->name) || !strcmp(nm, rr->real);
-            if (gets32(cl + 0x53) == nation_id && same) {
+            if ((gets32(cl + 0x53) == nation_id || (closed && season_closed_abroad(league, nm, sh))) && same) {
                 skip[r] = 1;
                 result.held++;
                 fprintf(stderr, "recomp: club records: %s: this database holds the club (record %d), no new record\n",
