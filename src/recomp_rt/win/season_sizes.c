@@ -7,6 +7,7 @@
 #include "season_rules.h"
 #include "season_sizes.h"
 #include "season_sizes_ita.h"
+#include "season_ned_playoff.h"
 #include "season_playoffs.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
@@ -1015,6 +1016,7 @@ void season_sizes_rules(uint32_t obj)
     /* Item 251: the Irish seasons with no play-off between the divisions, before the places (season_sizes_irl.c). */
     if (!rt_unwinding && readable(obj)) season_sizes_irl_rules(obj, season_change_file(obj));
     sizes_rules(obj);
+    if (!rt_unwinding) season_ned_playoff_rules(obj);  /* issue 150: the Eredivisie's places from 2020/21 */
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */

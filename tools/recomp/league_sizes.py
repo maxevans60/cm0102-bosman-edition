@@ -704,8 +704,8 @@ PERIOD_PATCHES = {
     0x5F607A: (0x4, "rt_hol_playoff_stage(edi, 0x4u)"),         # the group's name: cmp al, 4
     0x5F6F9C: (0x4, "rt_hol_playoff_stage(ebx, 0x4u)"),         # status news 0x5f6ee0: cmp al, 4
     0x5F6FD1: (0x5, "rt_hol_playoff_stage(ebx, 0x5u)"),         # cmp al, 5
-    0x5F7117: (0x4, "rt_hol_playoff_stage(ecx, 0x4u)"),         # match news 0x5f7110: cmp al, 4
-    0x5F711D: (0x5, "rt_hol_playoff_stage(edi, 0x5u)"),         # cmp al, 5
+    0x5F7117: (0x4, "rt_hol_match_news_stage(ecx, 0x4u)"),      # match news 0x5f7110: cmp al, 4
+    0x5F711D: (0x5, "rt_hol_match_news_stage(edi, 0x5u)"),      # cmp al, 5
     # The group goes in the play-off's own slot of the stage array (+0xc), so no slot before it stays empty.
     0x42042F: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # mov [ecx + 0xc], eax
     0x420443: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # cmp [edx + 0xc], ebx
