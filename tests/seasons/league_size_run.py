@@ -1185,6 +1185,15 @@ def nir_row(file, season):
     return None if not prm or not own else (own[0], own[1], 1 if prm[2] else 0)
 
 
+def nir_start_faults(log, year, last):
+    """Item 288: both Northern Irish leagues start every season after the first (the season change log of
+    RECOMP_SEASON_CHANGE_LOG=1; a run without that log has no lines to read)."""
+    if "recomp: season change:" not in log:
+        return []
+    return [f"{file} does not start {ed}" for ed in range(year + 1, last + 1) for file in ("nir_prm", "nir_first")
+            if not re.search(rf"^recomp: season change: {file} \(.*\) starts {ed},", log, re.M)]
+
+
 def nir_place_faults(report, log=""):
     """Items 271 and 272 (slice 13): every Northern Irish edition in the report holds the places of its row. The
     Premier Division: 0 up, the row's direct places down and the play-off place when the row has one
@@ -1518,6 +1527,7 @@ def faults(work, file, year, last):
         fails += irl_place_faults(report)
     if file in ("nir_prm", "nir_first"):
         fails += nir_place_faults(report, log)
+        fails += nir_start_faults(log, year, last)
     if os.path.exists(report):
         import rules_report_check as rrc
         rep_clubs = []
