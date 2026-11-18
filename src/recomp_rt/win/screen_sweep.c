@@ -23,7 +23,7 @@
  * that screen's line (waits.c).
  *
  * RECOMP_SCREEN_SWEEP_DUMP=<folder> also writes the picture of each history screen to <folder>/history-<record id>.bmp
- * (issue 145: a test reads what the screen shows). */
+ * (issue 145: the pictures show the rows that the screen draws). */
 #include "win.h"
 #include "season_change.h"
 

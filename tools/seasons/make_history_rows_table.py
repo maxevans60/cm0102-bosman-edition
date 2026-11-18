@@ -115,7 +115,7 @@ def main(argv):
     text = table()
     if "--check" in argv:
         have = open(OUT, encoding="latin-1", newline="").read() if os.path.exists(OUT) else ""
-        if have != text:
+        if have.replace("\r\n", "\n") != text:
             print("season_history_rows_table.c is not the table of docs/research/history-rows: run the tool")
             return 1
         print("season_history_rows_table.c ok")

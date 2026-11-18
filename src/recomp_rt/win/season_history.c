@@ -40,6 +40,7 @@
 #define CLUB_COMP_SIZE 0x6bu
 #define FRIENDLY_RECORDS 0x7fu     /* the last records belong to the friendly object (new-comp-records doc 1.6) */
 
+#define NATIONAL_SIDES_PTR 0xae23b8u /* the first national side inside the club block (0x52715c to 0x527187) */
 #define GROW_HISTORY 0x00527f60u   /* database_grow_comp_history_table (count): blank rows at the end, 1 on success */
 #define GAME_DAY 0xae2c90u          /* s16, the day of the year of the game date (from 0) */
 #define GAME_YEAR 0xae2c92u         /* u16, the year of the game date: the label year that 0x4afce0 writes */
@@ -507,6 +508,15 @@ static void apply_rows(int N)
             fixed++;
         }
     }
+    /* A national team tournament never has a club as its host: the data of some databases points there (Olot). */
+    uint32_t sides = rd32(g_mem, NATIONAL_SIDES_PTR);
+    for (uint32_t i = 0; sides > clubs && i < count; i++) {
+        uint32_t r = hist + i * HISTORY_SIZE, host = rd32(g_mem, r + 0x16);
+        if (!rd32(g_mem, r + 4) || rd32(g_mem, r + 0xa) < sides || !host || host >= sides) continue;
+        save_row(i);
+        wr32(g_mem, r + 0x16, 0);
+        fixed++;
+    }
     for (int k = 0; k < season_history_clears_from_count; k++) {
         uint32_t c = rows_comp(season_history_clears_from[k].comp);
         for (uint32_t i = 0; c && i < count; i++) {
@@ -540,8 +550,7 @@ static void apply_rows(int N)
         for (k = 0; c && k < n_new && nw[k].comp != c; k++) {}
         if (c && k < n_new) freed[n_freed++] = i;
     }
-    for (uint32_t k = 0; k < n_freed; k++) free_row(hist, freed[k]);
-    cleared += n_freed;
+    /* The grow comes first: when it fails, the competitions keep the rows they hold. */
     int grown = 1;
     if (n_new > n_freed) {
         uint32_t grow = n_new - n_freed;
@@ -549,6 +558,8 @@ static void apply_rows(int N)
         if (!grown) fprintf(stderr, "recomp: season history: the history table could not grow by %u rows\n", grow);
         hist = rd32(g_mem, HISTORY_PTR);
     }
+    for (uint32_t k = 0; grown && k < n_freed; k++) free_row(hist, freed[k]);
+    if (grown) cleared += n_freed;
     for (uint32_t k = 0; grown && k < n_new; k++) {
         uint32_t index = k < n_freed ? freed[k] : count + (k - n_freed), r = hist + index * HISTORY_SIZE;
         wr32(g_mem, r + 4, nw[k].comp);

@@ -19,7 +19,7 @@ const SeasonHistListRow season_history_list_rows[] = {
     {"UEFA Europa Conference League", 2025, 2025, {"Chelsea", "Real Betis Balompi\351", "", ""}},
     {"UEFA Europa Conference League", 2026, 2026, {"Crystal Palace", "Rayo Vallecano de Madrid", "", ""}},
     {"Asian Cup Qualifying", 2019, 2019, {"Portugal", "Holland", "England", "Portugal"}},
-    {"Asian Cup Qualifying", 2021, 2022, {"France", "Spain", "Italy", "Italy"}},
+    {"Asian Cup Qualifying", 2021, 2021, {"France", "Spain", "Italy", "Italy"}},
     {"Asian Cup Qualifying", 2023, 2023, {"Spain", "Croatia", "Italy", "Holland"}},
     {"Asian Cup Qualifying", 2025, 2025, {"Portugal", "Spain", "France", "Germany"}},
 };
@@ -45,6 +45,10 @@ const SeasonHistRowFix season_history_row_fixes[] = {
     {"European Football Championship", 2008, 2, "Spain", "", ""},
     {"European Football Championship", 2024, 2, "Spain", "", ""},
     {"South American Copa Libertadores", 2022, 1, "Clube de Regatas do Flamengo", "Clube Atl\351tico Paranaense", "Clube Atl\351tico Paranaense"},
+    {"European Football Championship", 1984, 2, "France", "", ""},
+    {"European Football Championship", 1988, 2, "Holland", "", ""},
+    {"European Football Championship", 1992, 2, "Denmark", "", ""},
+    {"European Football Championship", 1996, 2, "Germany", "", ""},
 };
 const int season_history_row_fixes_count = (int)(sizeof season_history_row_fixes / sizeof season_history_row_fixes[0]);
 

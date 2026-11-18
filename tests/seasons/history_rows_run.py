@@ -5,13 +5,14 @@ Usage:
     python3 tests/seasons/history_rows_run.py <cm0102_recomp> <game folder> <folder of databases> [--jobs 2]
         [--keep <folder>] [--only <run>,...]
 
-Each run is a new game with England and Greece, seed 1, played for 3 days to a save. The test reads the rows of the
+Each run is a new game with England and Greece, seed 1, played for 3 days to a save (played2026: through the World
+Cup of 2026, which the game plays itself). The test reads the rows of the
 save (tests/seasons/future/history_check.py), so a row that the game drops at the creation counts as missing. The
 expected rows below are written here by hand from the sources of docs/research/history-rows/, apart from the table
 that the game uses.
 
-The runs: the three databases that hold the reported faults, one database of each era of the Conference League and
-the Nations League, a 2001 game with changing rules on, and the base game, which takes no row (Q152).
+The runs: the databases that hold the reported faults, with changing rules on and off, a database with club hosts on
+old editions, a 2001 game with changing rules on, and the base game, which takes no row (Q152).
 """
 import concurrent.futures
 import os
@@ -61,7 +62,8 @@ RUNS = {
         "hosts": {(WC, 2026): "United States", (WC, 2022): "Qatar", (EURO, 2024): "Germany", (EURO, 2020): "England"},
         "third": {(EURO, 2024): "", (EURO, 2020): "", (WC, 2026): "England"},
         "second": {(LIB, 2022): "Paranaense", (LIB, 2021): "Flamengo", (LIB, 2025): "Palmeiras"},
-        "ecl": ECL_ROWS, "nl": NL_ROWS, "greek": greek(2026), "no_cwc_from": 2000}),
+        "ecl": ECL_ROWS, "nl": NL_ROWS, "greek": greek(2026), "no_cwc_from": 2000, "no_club_hosts": True,
+        "log": "Conference League holder Crystal Palace"}),
     "dec2025": ("December 2025", 2025, "on", {
         "hosts": {(EURO, 2024): "Germany", (EURO, 2020): "England"}, "third": {(EURO, 2024): ""},
         "second": {(LIB, 2022): "Paranaense"},
@@ -70,7 +72,14 @@ RUNS = {
         "hosts": {(EURO, 2020): "England"}, "ecl": upto(ECL_ROWS, 2022), "nl": upto(NL_ROWS, 2021),
         "greek": greek(2022), "no_cwc_from": 2000}),
     "oct2021": ("October 2021", 2021, "on", {
-        "hosts": {(EURO, 2020): "England"}, "ecl": {}, "nl": upto(NL_ROWS, 2019), "greek": greek(2021)}),
+        "hosts": {(EURO, 2020): "England"}, "ecl": {}, "nl": upto(NL_ROWS, 2021), "greek": greek(2021)}),
+    "aut2013": ("Autumn 2013", 2013, "on", {
+        "hosts": {(WC, 2010): "South Africa", (EURO, 2012): "Ukraine"}, "ecl": {}, "nl": {}, "greek": greek(2013),
+        "no_club_hosts": True}),
+    "off2026": ("October 2026", 2026, "off", {
+        "hosts": {(WC, 2026): "United States", (EURO, 2020): "England"}, "second": {(LIB, 2022): "Paranaense"},
+        "ecl": ECL_ROWS, "nl": NL_ROWS, "greek": greek(2026), "no_cwc_from": 2000}),
+    "played2026": ("December 2025", 2025, "on", {"days": 400, "hosts": {(WC, 2026): "United States"}}),
     "r2001": (None, 2001, "on", {"ecl": {}, "nl": {}, "greek": greek(2001)}),
     "base": (None, 2001, "off", {"ecl": {}, "nl": {}, "greek": {}}),
 }
@@ -104,6 +113,8 @@ def check(save, want):
             if r and not has(name(r[at]), text):
                 fails.append(f"{comp} {year} {field}: {name(r[at])!r}, wanted {text!r}")
     for key, names in (("ecl", ECL), ("nl", NL), ("greek", (GREEK,))):
+        if key not in want:
+            continue
         got = {}
         for r in rows_of(names):
             if r[1] in got:
@@ -115,6 +126,11 @@ def check(save, want):
             for at, text in enumerate(parts, 2):
                 if year in got and not has(name(got[year][at]), text):
                     fails.append(f"{names[0]} {year} place {at - 1}: {name(got[year][at])!r}, wanted {text!r}")
+    if want.get("no_club_hosts"):
+        bad = sorted({(game.comps[r[0]]["name"], r[1], name(r[5])) for r in game.rows
+                      if r[2] in game.sides and r[5] >= 0 and r[5] not in game.sides})
+        if bad:
+            fails.append(f"a club as host: {bad[:6]}")
     if "no_cwc_from" in want:
         late = sorted(r[1] for r in rows_of((CWC,)) if r[1] >= want["no_cwc_from"])
         if late:
@@ -127,10 +143,14 @@ def run(key, program, game, dbs, work):
     leg = os.path.join(work, key)
     o = {"program": program, "game": game, "rules": rules, "seed": 1, "start": start, "last": 2300, "extra": [],
          "database": os.path.join(dbs, db) if db else None, "nations": ["England", "Greece"], "timeout": 3600}
-    code, took, box = soak_run.new_game_leg(o, leg, 3)
+    code, took, box = soak_run.new_game_leg(o, leg, want.get("days", 3))
     save = os.path.join(leg, "user", "samesave.sav")
     fails = [] if code == 0 and not box else [f"the run ended with code {code}, box {box}"]
     fails += check(save, want) if os.path.exists(save) else ["no save"]
+    if "log" in want:
+        with open(os.path.join(leg, "stderr.txt"), encoding="latin-1") as f:
+            if want["log"] not in f.read():
+                fails.append(f"no log line {want['log']!r}")
     return key, fails, took
 
 
