@@ -17,7 +17,7 @@ The game reads the seasons from the rows. The lower row needs 4 play-off places 
 | jap_j2 | jap_j1 | 2017, 2018, 2021 | 3rd to 6th v 16th | one match | one match | one match at the J1 club | aus-jap-kor-206, aus-jap-kor-233 and later |
 | fra_third | fra_second | 2026, 2027 | 3rd to 6th v 16th | one match | one match | two legs | fra-228, fra-229 and later |
 
-J1 and J2 are calendar-year leagues, so an edition Y plays row Y - 1.
+Norway, Ireland, J1 and J2 are calendar-year leagues, so an edition Y plays row Y - 1. In Norway, rows 2019 and 2020 (nor-fin-183, nor-fin-193) play the last tie as one match on neutral ground.
 
 ## Candidates that do not have this shape
 
@@ -39,6 +39,7 @@ J1 and J2 are calendar-year leagues, so an edition Y plays row Y - 1.
 - The rows do not give the legs of each Irish round. Sources show that the format changed between seasons: the semi-finals were one match in 2020 only, and the 2025 last tie was one match. I don't know the legs of every season, so the game plays one form for all Irish rows.
 - The rows do not give the legs of the Ligue 3 semi-finals and final. The game plays one match in each.
 - In J2 a level semi-final in real life sends the higher place through. The game plays extra time and penalties.
+- Item 276 also asks for a check of the down counts of Greece. This slice did not check Greece 2013.
 
 ## Sources
 

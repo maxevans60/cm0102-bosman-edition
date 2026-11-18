@@ -12,9 +12,10 @@ Each run starts a new game of one nation with changing rules on, plays on holida
 the days of the run, past the season change after the play-off. The checks of each run:
     drawn    the lower division logs one draw of five clubs (the cross play-off line with "over four");
     final    the last tie logs its winner;
-    moves    in the save the winner plays in the upper division, and the upper club plays in the lower division when a
-             lower club won, else it stays;
-    count    both divisions hold their clubs of the start;
+    moves    at the start of the next season (the club lines of the report) the winner plays in the upper division, and
+             the upper club plays in the lower division when a lower club won, else it stays;
+    count    both divisions hold their clubs of the start at that season;
+    home     J2 only: the J1 club is at home in the last tie;
     box      no message box of the game, and the program saves and ends with code 0.
 A run fails on a build without the play-off, because the draw line is missing.
 """
@@ -27,7 +28,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), "tools", "save"))
 import rules_report_check as rrc  # noqa: E402
 import soak_run  # noqa: E402
-from sco_playoffs_run import cross_lines, save_divisions  # noqa: E402
+from sco_playoffs_run import cross_lines  # noqa: E402
 
 # run: (start year, nation, lower file, upper file, days to play, what it shows)
 RUNS = {
@@ -74,13 +75,35 @@ def check(name, work):
     save = os.path.join(work, "user", "samesave.sav")
     if not os.path.isfile(report) or not os.path.isfile(save):
         return failed + ["no report or no save"]
-    _seasons, comps = rrc.read_report(report, [])
-    start = {c["file"]: c for c in comps if c["phase"] == "start" and c["season"] >= year and c["file"] in (lower, upper)}
+    clubs = []
+    _seasons, comps = rrc.read_report(report, clubs)
+    start = {c["file"]: c for c in comps if c["phase"] == "start" and c["season"] == year and c["file"] in (lower, upper)}
     if set(start) != {lower, upper}:
         return failed + [f"no start lines of {lower} and {upper}"]
     record = {f: c["record"] for f, c in start.items()}
     counts = {f: c["clubs"] for f, c in start.items()}
-    return failed + judge(cross_lines(log), lower, upper, record, save_divisions(save), counts)
+    lines = cross_lines(log)
+    # The divisions at the start of the season after the first final: the save can lie a season change later.
+    finals = [x for x in lines if x[0] == lower and x[2] == "final"]
+    after = finals[0][1] + 1 if finals else year + 1
+    division = {c["name"]: c["division"] for c in clubs if c["season"] == after and c["phase"] == "start"}
+    if finals and not division:
+        return failed + [f"moves: no club lines at the start of {after}"]
+    failed += judge(lines, lower, upper, record, division, counts)
+    if lower == "jap_j2":
+        failed += home_failures(log, lower, [x for x in lines if x[0] == lower and x[2] == "final"])
+    return failed
+
+
+def home_failures(log, lower, finals):
+    """The J1 club is at home in the last tie: the first club of the "round 3 tie 1" line (RECOMP_PLAYOFF_LOG)."""
+    mark = f"recomp: playoffs: {lower}: round 3 tie 1: "
+    with open(log, encoding="latin-1") as f:
+        ties = [line[len(mark):] for line in f if line.startswith(mark)]
+    if not finals or not ties:
+        return ["home: no last tie in the log"]
+    upper_club = finals[0][3][2]
+    return [] if ties[0].startswith(f"{upper_club} (place") else [f"home: {upper_club} is not at home: {ties[0].strip()}"]
 
 
 def self_test():
@@ -110,6 +133,7 @@ def main(argv):
         print(__doc__)
         return 2
     program, game = os.path.abspath(argv[1]), os.path.abspath(argv[2])
+    os.environ["RECOMP_PLAYOFF_LOG"] = "1"      # the ties of each round, for the home check
     only = soak_run.arg(argv, "--only")
     names = only.split(",") if only else list(RUNS)
     keep = os.path.abspath(soak_run.arg(argv, "--keep")) if "--keep" in argv else tempfile.mkdtemp(prefix="overfour-")

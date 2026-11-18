@@ -273,6 +273,19 @@ static int days_to_change(uint32_t obj)
     return -1;
 }
 
+/* 1 when the league's table entry has its update day from LATE_DAY on (a calendar-year change). */
+static int change_is_late(uint32_t obj)
+{
+    uint32_t buf[COMPS_MAX];
+    for (int e = 0; e < ENTRY_COUNT; e++) {
+        int n = season_change_entry_comps(e, buf, COMPS_MAX);
+        for (int i = 0; i < n; i++)
+            if (buf[i] == obj)
+                return (int16_t)rd16(g_mem, ENTRIES + (uint32_t)e * ENTRY_SIZE + ENTRY_UPDATE_DAY) >= LATE_DAY;
+    }
+    return 0;
+}
+
 static void set_dates(uint32_t table, int round, int draw_in, int match_in, uint32_t a7, uint32_t venue,
                       uint32_t year)
 {
@@ -1054,19 +1067,13 @@ static int cross_marked(uint32_t obj)
 }
 
 /* The places of a division of a pair, after its set_up_rules. 1 when this form owns the division this season. The
- * upper division's place: NorPrm 0x792758 and IrePrm 0x63a957 write it themselves, JapJ1 and FraSecond do not, so it
- * is written here and taken back in a season with no such play-off. */
+ * upper division's place: each class writes +0xc0 in every set_up_rules (NorPrm 0x792758, IrePrm 0x63a957, JapJ1
+ * 0x66367e, FraSecond 0x5bf104), so a season with no such play-off needs no reset here. */
 static int over_rules(uint32_t obj, const char *file)
 {
     int season = season_now(obj, file), direct = 0;
     uint32_t below = league_below(obj);
-    if (over_pair(file, 1) && below && over_pair(season_change_file(below), 0)) {
-        const SeasonRule *r = row_of_season(file, season);
-        const SeasonLeagueRule *e = r ? league_rule(file, r->season) : NULL;
-        if (over_shape(below, season, NULL, NULL)) g_mem[obj + DOWN_PLAYOFF] = 1;
-        else if (e && e->po_down == 0 && (!strcmp(file, "jap_j1") || !strcmp(file, "fra_second")))
-            g_mem[obj + DOWN_PLAYOFF] = 0;
-    }
+    if (over_pair(file, 1) && below && over_shape(below, season, NULL, NULL)) g_mem[obj + DOWN_PLAYOFF] = 1;
     if (!over_pair(file, 0) || !over_shape(obj, season, NULL, &direct)) return 0;
     if (!readable(rd32(g_mem, obj + COMP_STAGES))) {
         uint32_t arr = game_malloc(4);
@@ -1183,7 +1190,9 @@ static void build_over(uint32_t obj, const OverFour *o)
     const char *file = season_change_file(obj);
     uint32_t year = (uint32_t)(int16_t)rd16(g_mem, obj + COMP_YEAR), up = 0;
     int shape = over_shape(obj, season_now(obj, file), &up, NULL), left = days_to_change(obj);
-    int time = left >= 0 && CROSS_SPAN <= left + WAIT_DAYS;
+    /* season_playoffs_hold does not wait for an update day from LATE_DAY (Norway: 27 November), so there the stage must
+     * end before the change. */
+    int time = left >= 0 && CROSS_SPAN <= left + (change_is_late(obj) ? 0 : WAIT_DAYS);
     if (shape && time && !upper_done(up)) return;   /* the next day again while the upper division plays */
     int rows[OVER_LOWER], found = shape ? playoff_rows(obj, (int8_t)g_mem[obj + UP], rows, OVER_LOWER) : 0;
     if (rt_unwinding) return;
@@ -1210,22 +1219,29 @@ static void build_over(uint32_t obj, const OverFour *o)
     }
     static const uint16_t id[3] = {120, 130, 150}, clubs[3] = {4, 2, 2}, ties[3] = {2, 1, 1}, add[3] = {4, 0, 1},
                           from[3] = {0, 0, 4};
+    /* A row can name one match on neutral ground for the last tie (Norway, rows nor-fin-183 and nor-fin-193). */
+    const SeasonRule *row = row_of_season(file, season_now(obj, file));
+    int neutral = row && row->playoffs_text && strstr(row->playoffs_text, "one match on neutral ground");
+    int last_legs = neutral ? 1 : o->legs[2], last_venue = neutral ? 4 : o->last_venue;
     for (int r = 0; r < 3; r++) {
         uint32_t t = table + (uint32_t)r * ROUND_SIZE;
-        memcpy(g_mem + t, g_mem + eng + (o->legs[r] == 2 ? 0 : ROUND_SIZE), ROUND_SIZE);
+        memcpy(g_mem + t, g_mem + eng + ((r == 2 ? last_legs : o->legs[r]) == 2 ? 0 : ROUND_SIZE), ROUND_SIZE);
         wr16(g_mem, t + 0x07, id[r]);
         wr16(g_mem, t + 0x09, (uint16_t)r);
         wr16(g_mem, t + 0x18, clubs[r]);
         wr16(g_mem, t + 0x1a, ties[r]);
         wr16(g_mem, t + 0x1c, add[r]);
         wr16(g_mem, t + 0x1e, from[r]);
+        /* Fixed pairs keep the sides that over_draw_round sets: without bit 0x200 the draw 0x51e220 runs after the
+         * hook (0x51c5e4..0x51c5f1) and can swap them. */
+        int fixed = r == 0 || (r == 2 && last_legs == 1 && last_venue == 0);
         uint16_t flags = rd16(g_mem, t + 0x0d) & ~0x200u;
-        wr16(g_mem, t + 0x0d, r == 0 ? flags | 0x200u : flags);
-        if (r == 0) g_mem[t + 0x0b] &= (uint8_t)~0x09u;   /* no home swap, as build_six */
+        wr16(g_mem, t + 0x0d, fixed ? flags | 0x200u : flags);
+        if (fixed) g_mem[t + 0x0b] &= (uint8_t)~0x09u;    /* no home swap, as build_six */
     }
     game_free(eng);
     for (int r = 0; r < 3 && !rt_unwinding; r++)
-        set_dates(table, r, 1 + 7 * r, 3 + 7 * r, r == 2 ? 2 : 1, r == 2 ? o->last_venue : 0, year);
+        set_dates(table, r, 1 + 7 * r, 3 + 7 * r, r == 2 ? 2 : 1, r == 2 ? (uint32_t)last_venue : 0, year);
     if (rt_unwinding) return;
     /* The list: semi-finals of the last place against the first and the third against the second, then the upper club. */
     uint32_t order[OVER_CLUBS] = {row_club(obj, rows[3]), row_club(obj, rows[0]), row_club(obj, rows[2]),
