@@ -104,6 +104,16 @@ const char *season_intl_history_host(const char *file, int year)
     return NULL;
 }
 
+/* The news of the qualified nations (NationalTeams::write_qualified_nations_text 0x777ca0) has room for two hosts
+ * (parts 4 and 5, 0x777ce7..0x777cfb). Euro 2020 names the nation of the final, as its history row does. Euro 2028
+ * names the first two of the four hosts that stage matches: UEFA's decision of 10 October 2023 names five hosts, and
+ * Northern Ireland stages no match (season_nl_euro.c, kept_places). */
+const char *season_intl_news_hosts(const char *file, int year)
+{
+    if (strcmp(file, "euro_champ")) return NULL;
+    return year == 2020 ? "England" : year == 2028 ? "England;Republic of Ireland" : NULL;
+}
+
 /* Q4: the original's rows (host-rule.md, read in HostCountry::init_default_table 0x5f9970): the World Cup 1998 to
  * 2026 (0x5f99bb), the Euro (0x5f9c09) and the Olympics (0x5f9ff2) 2000 to 2028, every 4 years, moving on 32; the
  * Africa Cup of Nations 2000 to 2014 every 2 years, moving on 16 (0x5f9eb7). The Copa America and Asian Cup rows

@@ -74,6 +74,7 @@
                                          * +0x1f with the day of the year, 0x5faa1f, 0x5faa75) */
 #define KEY_OFC 0x9cf8a0u               /* the key of the OFC Nations Cup (no host row: it calls no find_hosts) */
 #define KEY_EURO 0x9cf7a4u
+#define COMP_OBJECTS 0xadadfcu       /* the competition objects by key id (read at 0x777b29) */
 #define CHOICE_OPEN 0xfeu               /* not decided: drawn 5 years before (0x5faa9b..0x5faaae) */
 
 /* The key global of each class with host rows (the comp column of init, read by find_hosts). The Oceania
@@ -703,6 +704,28 @@ uint32_t rt_intl_history_host(uint32_t cup, uint32_t club)
         fprintf(stderr, "recomp: season intl: history host of %s %d: %s\n", win_str(rd32(g_mem, cup + 4u) + NATION_NAME),
                 year, win_str(nation_at(id) + NATION_NAME));
     return rt_unwinding ? club : side;
+}
+
+/* Issue 146. NationalTeams::post_qualified_nations_news 0x7779e0 asks find_next_hosts 0x5fa7d0 for the hosts (0x777b02)
+ * and stores them in parts 4 and 5 of the news. The host row of a Euro with no host place (2020, 2028) holds none, so
+ * the text (0x777e0d) read the name of nation row -1. The row stays empty, because a host of the row takes a place at
+ * the finals (0x57be34): only the news takes the hosts of the edition. */
+void rt_intl_news_hosts(uint32_t key, uint32_t first_at, uint32_t second_at)
+{
+    if (!season_intl_on() || (int32_t)rd32(g_mem, first_at) >= 0 || key != rd32(g_mem, KEY_EURO)) return;
+    uint32_t comp = rd32(g_mem, rd32(g_mem, COMP_OBJECTS) + key * 4u);
+    if (!readable(comp)) return;
+    int year = (int16_t)rd16(g_mem, comp + 0x40u);
+    const char *names = season_intl_news_hosts("euro_champ", year);
+    if (!names) return;
+    char one[64];
+    size_t len = strcspn(names, ";");
+    snprintf(one, sizeof one, "%.*s", (int)len, names);
+    int first = nation_by_names(one), second = names[len] ? nation_by_names(names + len + 1) : -1;
+    if (first < 0) return;
+    wr32(g_mem, first_at, (uint32_t)first);
+    wr32(g_mem, second_at, (uint32_t)second);
+    if (logging()) fprintf(stderr, "recomp: season intl: qualified news of euro_champ %d names the hosts %s\n", year, names);
 }
 
 /* A save made before 0.6.2 holds no rows after the table (a 0.6.0 or 0.6.1 game, or a game past 2030 whose

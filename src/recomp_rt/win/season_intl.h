@@ -62,6 +62,9 @@ uint32_t rt_intl_host_pick(uint32_t row, uint32_t r);
  * first host when club is 0 in a season game (0.6.2 open item 18). */
 uint32_t rt_intl_history_host(uint32_t cup, uint32_t club);
 
+/* The hosts of the news of the qualified nations (0x777b07, issue 146): the two host fields on the stack. */
+void rt_intl_news_hosts(uint32_t key, uint32_t first_at, uint32_t second_at);
+
 /* A new game (season.c, before the original makes it): the start of Australia's move to Asia. */
 void season_intl_at_create(void);
 
@@ -189,6 +192,10 @@ const char *season_intl_announced_hosts(const char *file, int year);
 /* The host of an edition with no host of its own in the history row only (the Euros of 2020 and 2028: hosts with
  * no automatic places), or NULL. */
 const char *season_intl_history_host(const char *file, int year);
+
+/* The hosts that the news of the qualified nations names for an edition whose host row stays empty (the Euros of
+ * 2020 and 2028), or NULL: ";" between at most two nations. */
+const char *season_intl_news_hosts(const char *file, int year);
 
 /* The original's host rows of a class after the table (Q4): `rows` rows from `base` every `step` years, each
  * moving on by rows * step years (HostCountry::init_default_table 0x5f9970, daily_update 0x5faafa). Gives 0 for a
