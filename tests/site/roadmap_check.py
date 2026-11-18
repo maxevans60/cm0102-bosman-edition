@@ -1,6 +1,9 @@
 """Site roadmap check (issue 138): Done shows only for issues closed as completed.
 Issues closed as not planned stay off the list. Runs the roadmap filter from site/index.html in node."""
-import json, re, subprocess, sys, pathlib
+import json, re, shutil, subprocess, sys, pathlib
+
+if not shutil.which("node"):
+    sys.exit("FAIL: node is not on the PATH")
 
 html = (pathlib.Path(__file__).resolve().parents[2] / "site" / "index.html").read_text()
 m = re.search(r"// roadmap-filter-begin\n(.*?)// roadmap-filter-end", html, re.S)
