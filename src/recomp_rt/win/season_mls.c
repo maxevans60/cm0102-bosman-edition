@@ -44,6 +44,7 @@
 #define CLOSED_CLUB_NATION 0x53u    /* club: nation pointer */
 #define CLOSED_LAST_DIVISION 0x5bu  /* club: the division of the last season */
 #define CLOSED_REPUTATION 0x80u     /* club: s16 */
+#define CLOSED_SHORT 0x38u          /* club: short name */
 
 #define GROUP_A 0x413u
 #define GROUP_B 0x47bu
@@ -215,6 +216,14 @@ uint32_t rt_mls_round_flags(uint32_t flags)
 #define STADIUMS 0x00dd7ef4u
 #define FIXTURES 0x00ae2a58u
 #define CLUB_NAME 4u
+
+/* The conference of a club by its real name: an update database gives a retired record to a newer club
+ * (season_closed.h). */
+static int club_conference(uint32_t club, int season)
+{
+    return season_mls_conference(season_closed_real_name("usa_mls", win_str(club + CLUB_NAME),
+                                                         win_str(club + CLOSED_SHORT)), season);
+}
 #define ROW_SIZE 0x3bu
 #define DATE_SIZE 0x41u
 #define FIXTURE_SIZE 0x4fu
@@ -359,7 +368,7 @@ static int new_conference(uint32_t club)
         if (in_table(rd32(g_mem, stages), club)) return GROUP_A;
         if (in_table(rd32(g_mem, stages + 4), club)) return GROUP_C;
     }
-    return season_mls_conference(win_str(club + CLUB_NAME), form_season(obj)) == MLS_WEST ? GROUP_C : GROUP_A;
+    return club_conference(club, form_season(obj)) == MLS_WEST ? GROUP_C : GROUP_A;
 }
 
 /* The clubs that fold and join at the season change (0.7.3 slice 6, issue 157, decision L7). UsaMls::start_new_season
@@ -387,6 +396,7 @@ static void closed_step(uint32_t obj)
         const char *name = win_str(c + CLUB_NAME);
         at[n] = c;
         club[n].name = name;
+        club[n].short_name = win_str(c + CLOSED_SHORT);
         club[n].in_league = in_league;
         club[n].human = season_sizes_is_human(c);
         club[n].reserve = season_clubs_reserve_name(name);
@@ -407,7 +417,8 @@ static void closed_step(uint32_t obj)
             wr32(g_mem, at[i] + CLUB_DIVISION, rec);
             int players = season_records_fill_club(at[i], edition);
             fprintf(stderr, "recomp: mls: %d: %.50s joins with %d players\n", edition, club[i].name, players);
-        } else if (club[i].in_league && club[i].human && season_closed_member("usa_mls", club[i].name, season) == 0) {
+        } else if (club[i].in_league && club[i].human &&
+                   season_closed_member("usa_mls", club[i].name, club[i].short_name, season) == 0) {
             fprintf(stderr, "recomp: mls: %d: %.50s stays: a human manages it\n", edition, club[i].name);
         }
     }
@@ -523,7 +534,7 @@ static int make_season(uint32_t obj)
     int conf[MLS_MAX_CLUBS];
     for (int i = 0; i < n; i++) {
         clubs[i] = row_club(obj, i);
-        conf[i] = season_mls_conference(win_str(clubs[i] + CLUB_NAME), season);
+        conf[i] = club_conference(clubs[i], season);
     }
     static MlsPlan plan;
     char why[160];

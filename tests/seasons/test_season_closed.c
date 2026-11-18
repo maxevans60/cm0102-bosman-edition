@@ -21,30 +21,50 @@ static void test_table(void)
     for (size_t k = 0; k < sizeof ROW / sizeof ROW[0]; k++)
         CHECK(season_closed_count("usa_mls", ROW[k][0]) == ROW[k][1], "%d: %d clubs, the row %d", ROW[k][0],
               season_closed_count("usa_mls", ROW[k][0]), ROW[k][1]);
-    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", 2001) == 1, "Miami Fusion 2001");
-    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", 2002) == 0, "Miami Fusion 2002");
-    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", 2002) == 0, "Tampa Bay 2002");
-    CHECK(season_closed_member("usa_mls", "Inter Miami CF", 2019) == 0, "Inter Miami 2019");
-    CHECK(season_closed_member("usa_mls", "Inter Miami CF", 2020) == 1, "Inter Miami 2020");
-    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", 2005) == 1, "San Jose 2005");
-    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", 2006) == 0, "San Jose 2006");
-    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", 2008) == 1, "San Jose 2008");
-    CHECK(season_closed_member("usa_mls", "Chivas USA", 2014) == 1, "Chivas 2014");
-    CHECK(season_closed_member("usa_mls", "Chivas USA", 2015) == 0, "Chivas 2015");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", NULL, 2001) == 1, "Miami Fusion 2001");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", NULL, 2002) == 0, "Miami Fusion 2002");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", NULL, 2002) == 0, "Tampa Bay 2002");
+    CHECK(season_closed_member("usa_mls", "Inter Miami CF", NULL, 2019) == 0, "Inter Miami 2019");
+    CHECK(season_closed_member("usa_mls", "Inter Miami CF", NULL, 2020) == 1, "Inter Miami 2020");
+    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", NULL, 2005) == 1, "San Jose 2005");
+    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", NULL, 2006) == 0, "San Jose 2006");
+    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", NULL, 2008) == 1, "San Jose 2008");
+    CHECK(season_closed_member("usa_mls", "Chivas USA", NULL, 2014) == 1, "Chivas 2014");
+    CHECK(season_closed_member("usa_mls", "Chivas USA", NULL, 2015) == 0, "Chivas 2015");
     /* The names of the databases. */
-    CHECK(season_closed_member("usa_mls", "NY/NJ Metrostars", 2010) == 1, "Metrostars");
-    CHECK(season_closed_member("usa_mls", "NYNJ Metrostars", 2010) == 1, "NYNJ Metrostars");
-    CHECK(season_closed_member("usa_mls", "Washington DC United", 2010) == 1, "DC United");
-    CHECK(season_closed_member("usa_mls", "Dallas Burn", 2010) == 1, "Dallas Burn");
-    CHECK(season_closed_member("usa_mls", "CF Montr\xe9" "al", 2012) == 1, "CF Montreal");
-    CHECK(season_closed_member("usa_mls", "Montreal Impact", 2011) == 0, "Montreal 2011");
+    CHECK(season_closed_member("usa_mls", "NY/NJ Metrostars", NULL, 2010) == 1, "Metrostars");
+    CHECK(season_closed_member("usa_mls", "NYNJ Metrostars", NULL, 2010) == 1, "NYNJ Metrostars");
+    CHECK(season_closed_member("usa_mls", "Washington DC United", NULL, 2010) == 1, "DC United");
+    CHECK(season_closed_member("usa_mls", "Dallas Burn", NULL, 2010) == 1, "Dallas Burn");
+    CHECK(season_closed_member("usa_mls", "CF Montr\xe9" "al", NULL, 2012) == 1, "CF Montreal");
+    CHECK(season_closed_member("usa_mls", "Montreal Impact", NULL, 2011) == 0, "Montreal 2011");
     /* Clubs of the same towns that the table does not name. */
-    CHECK(season_closed_member("usa_mls", "San Diego Loyal SC", 2025) == -1, "San Diego Loyal");
-    CHECK(season_closed_member("usa_mls", "Minnesota Thunder", 2017) == -1, "Minnesota Thunder");
-    CHECK(season_closed_member("usa_mls", "Nashville Metros", 2020) == -1, "Nashville Metros");
-    CHECK(season_closed_member("usa_mls", "Cincinnati Riverhawks", 2019) == -1, "Cincinnati Riverhawks");
-    CHECK(season_closed_member("usa_mls", "Toronto Lynx", 2007) == -1, "Toronto Lynx");
-    CHECK(season_closed_member("no_league", "Chicago Fire", 2010) == -1, "another league");
+    CHECK(season_closed_member("usa_mls", "San Diego Loyal SC", NULL, 2025) == -1, "San Diego Loyal");
+    CHECK(season_closed_member("usa_mls", "Minnesota Thunder", NULL, 2017) == -1, "Minnesota Thunder");
+    CHECK(season_closed_member("usa_mls", "Nashville Metros", NULL, 2020) == -1, "Nashville Metros");
+    CHECK(season_closed_member("usa_mls", "Cincinnati Riverhawks", NULL, 2019) == -1, "Cincinnati Riverhawks");
+    CHECK(season_closed_member("usa_mls", "Toronto Lynx", NULL, 2007) == -1, "Toronto Lynx");
+    CHECK(season_closed_member("no_league", "Chicago Fire", NULL, 2010) == -1, "another league");
+    /* The update databases give a retired record to a newer club: the short name decides. */
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "LAFC", 2024) == 1, "LAFC record 2024");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "LAFC", 2017) == 0, "LAFC record 2017");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "Inter Miami", 2024) == 1, "Inter Miami record");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "Miami", 2002) == 0, "the real Miami Fusion");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "Tampa Bay", 2002) == 0, "the real Tampa Bay");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "Seattle", 2010) == 1, "Seattle record");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "Houston Dynamo", 2010) == 1, "Houston record");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "Portland", 2022) == 1, "Portland record");
+    CHECK(season_closed_member("usa_mls", "Tampa Bay Mutiny", "Real Salt Lake", 2012) == 1, "Salt Lake record");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "Philadephia", 2011) == 1, "Philadelphia spelling");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "Atlanta Utd", 2019) == 1, "Atlanta record");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "NYCFC", 2022) == 1, "NYCFC record");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "Toronto", 2018) == 1, "Toronto record");
+    CHECK(season_closed_member("usa_mls", "Miami Fusion FC", "Houston", 2013) == 1, "Houston short");
+    CHECK(season_closed_member("usa_mls", "San Jose Earthquakes", "Houston Dynamo", 2007) == 1, "San Jose record");
+    CHECK(season_closed_member("usa_mls", "Toronto Lynx", "Toronto", 2007) == -1, "Toronto Lynx keeps out");
+    CHECK(season_mls_conference(season_closed_real_name("usa_mls", "Tampa Bay Mutiny", "LAFC"), 2024) == MLS_WEST,
+          "the LAFC record plays in the West");
+    CHECK(!strcmp(season_closed_real_name("usa_mls", "Toronto Lynx", "Toronto"), "Toronto Lynx"), "a name of no row");
     /* Every club of the table has a conference (season_mls_plan.c). */
     for (int i = 0; season_closed_real("usa_mls", i); i++) {
         const char *real = season_closed_real("usa_mls", i);
@@ -87,6 +107,12 @@ static void test_plan(void)
     CHECK(a[0] == CLOSED_STAY && a[1] == CLOSED_STAY, "2024 %d %d", a[0], a[1]);
     season_closed_plan("usa_mls", 2025, 0, y2025, 2, a, &r);
     CHECK(a[0] == CLOSED_STAY && a[1] == CLOSED_JOIN, "2025 %d %d", a[0], a[1]);
+    /* October 2023: the two retired records play as LAFC and Inter Miami, so they stay and San Diego FC makes 30. */
+    ClosedClub slots[] = {{"Tampa Bay Mutiny", 1, 0, 0, 80, "LAFC"}, {"Miami Fusion FC", 1, 0, 0, 80, "Inter Miami"},
+                          {"San Diego FC", 0, 0, 0, 10, "San Diego"}};
+    season_closed_plan("usa_mls", 2025, 0, slots, 3, a, &r);
+    CHECK(a[0] == CLOSED_STAY && a[1] == CLOSED_STAY && a[2] == CLOSED_JOIN, "slots %d %d %d", a[0], a[1], a[2]);
+    CHECK(r.folded == 0 && r.joined == 1, "slots folded %d joined %d", r.folded, r.joined);
     /* A club that the table does not name leaves only above the count, the lowest reputation first. */
     ClosedClub extra[] = {{"Stand In A", 1, 0, 0, 20}, {"Stand In B", 1, 0, 0, 10}, {"Stand In C", 1, 1, 0, 5},
                           {"Chicago Fire", 1, 0, 0, 50}};

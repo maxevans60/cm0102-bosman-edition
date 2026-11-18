@@ -85,14 +85,51 @@ int season_closed_row(const char *league, const char *name)
     return -1;
 }
 
+/* The short names of the update databases that hold no name part of their club (one has the spelling "Philadephia").
+ * They count only for a record that the table names: "Toronto" is also the short name of Toronto Lynx. */
+static const struct {
+    const char *league, *short_name, *real;
+} SHORTS[] = {
+    {"usa_mls", "houston", "Houston Dynamo"},          {"usa_mls", "seattle", "Seattle Sounders"},
+    {"usa_mls", "philadelphia", "Philadelphia Union"}, {"usa_mls", "philadephia", "Philadelphia Union"},
+    {"usa_mls", "toronto", "Toronto FC"},              {"usa_mls", "nycfc", "New York City FC"},
+    {"usa_mls", "atlanta utd", "Atlanta United FC"},   {"usa_mls", "portland", "Portland Timbers"},
+};
+
+static int same_text(const char *a, const char *lower_b)
+{
+    while (*a && lower((unsigned char)*a) == (unsigned char)*lower_b) a++, lower_b++;
+    return !*a && !*lower_b;
+}
+
+int season_closed_club(const char *league, const char *name, const char *short_name)
+{
+    int row = season_closed_row(league, name);
+    if (row < 0 || !short_name || !short_name[0]) return row;
+    int by_short = season_closed_row(league, short_name);
+    if (by_short >= 0) return by_short;
+    for (size_t k = 0; k < sizeof SHORTS / sizeof SHORTS[0]; k++) {
+        if (strcmp(SHORTS[k].league, league) || !same_text(short_name, SHORTS[k].short_name)) continue;
+        for (int i = 0; i < NROWS; i++)
+            if (!strcmp(ROWS[i].league, league) && !strcmp(ROWS[i].real, SHORTS[k].real)) return i;
+    }
+    return row;
+}
+
+const char *season_closed_real_name(const char *league, const char *name, const char *short_name)
+{
+    int row = season_closed_club(league, name, short_name);
+    return row < 0 ? name : ROWS[row].real;
+}
+
 const char *season_closed_league(const char *division)
 {
     return division && !strncmp(division, "American Major League", 52) ? "usa_mls" : NULL;
 }
 
-int season_closed_member(const char *league, const char *name, int season)
+int season_closed_member(const char *league, const char *name, const char *short_name, int season)
 {
-    int i = season_closed_row(league, name);
+    int i = season_closed_club(league, name, short_name);
     return i < 0 ? -1 : row_plays(&ROWS[i], season);
 }
 
@@ -130,7 +167,7 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
         actions[i] = CLOSED_STAY;
         if (!clubs[i].in_league) continue;
         r.count++;
-        if (season_closed_member(league, clubs[i].name, season) != 0) continue;
+        if (season_closed_member(league, clubs[i].name, clubs[i].short_name, season) != 0) continue;
         if (clubs[i].human) {
             r.human_stays++;
             continue;
@@ -146,7 +183,7 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
         if (strcmp(row->league, league) || !row_plays(row, season)) continue;
         int have = 0, best = -1;
         for (int i = 0; i < n && !have; i++) {
-            if (!row_names(row, clubs[i].name) || clubs[i].reserve) continue;
+            if (season_closed_club(league, clubs[i].name, clubs[i].short_name) != k || clubs[i].reserve) continue;
             if (clubs[i].in_league) have = 1;
             else if (best < 0 || clubs[i].reputation > clubs[best].reputation) best = i;
         }
@@ -164,7 +201,7 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
         int worst = -1;
         for (int i = 0; i < n; i++) {
             if (!clubs[i].in_league || actions[i] != CLOSED_STAY || clubs[i].human) continue;
-            if (season_closed_member(league, clubs[i].name, season) >= 0) continue;
+            if (season_closed_member(league, clubs[i].name, clubs[i].short_name, season) >= 0) continue;
             if (worst < 0 || clubs[i].reputation < clubs[worst].reputation) worst = i;
         }
         if (worst < 0) break;

@@ -527,7 +527,8 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
 {
     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) return 0;
     /* 0.7.3 slice 6: a record of a closed league's later club has no division until its season (season_mls.c). */
-    if (!c->db_div && season_closed_member("usa_mls", win_str(c->at + CLUB_NAME), moves_season) == 0) return 0;
+    if (!c->db_div && season_closed_member("usa_mls", win_str(c->at + CLUB_NAME), win_str(c->at + 0x38u), moves_season) == 0)
+        return 0;
     if (season_second_barred(c->at, d->at)) return 0;   /* open items 111, 114 to 122: a second team's bar */
     if (season_fin_barred(c->at, d->at)) return 0;      /* open item 118: no Finnish second team in the Veikkausliiga */
     if (season_bel_barred(c->at, d->at)) return 0;      /* open item 115: a Belgian U23 side below its first team */

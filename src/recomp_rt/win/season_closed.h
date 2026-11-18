@@ -14,6 +14,7 @@ typedef struct {
     int human;          /* 1 when a human manages it: it keeps its league */
     int reserve;        /* 1 for a reserve or B side: it never joins */
     int reputation;
+    const char *short_name;     /* NULL when the caller has none */
 } ClosedClub;
 
 enum { CLOSED_STAY = 0, CLOSED_JOIN = 1, CLOSED_FOLD = 2, CLOSED_CUT = 3 };
@@ -31,9 +32,17 @@ const char *season_closed_league(const char *division);
 /* The table row that has this name of a club, or -1. Two names of one club give the same row. */
 int season_closed_row(const char *league, const char *name);
 
+/* The table row of a club of a database. The update databases keep the 12 club records of the league and give a
+ * retired record to a newer club: the record "Tampa Bay Mutiny" of October 2023 has the short name "LAFC" and the
+ * squad of Los Angeles FC. So the short name of a club that the table names decides its row. short_name can be NULL. */
+int season_closed_club(const char *league, const char *name, const char *short_name);
+
+/* The real name of the club that season_closed_club finds, or name when the table does not name it. */
+const char *season_closed_real_name(const char *league, const char *name, const char *short_name);
+
 /* 1 when the club plays in the league in the season, 0 when the table names it for other seasons only, -1 when the
- * table does not name it. */
-int season_closed_member(const char *league, const char *name, int season);
+ * table does not name it. short_name can be NULL. */
+int season_closed_member(const char *league, const char *name, const char *short_name, int season);
 
 /* The clubs that the table names for the season. */
 int season_closed_count(const char *league, int season);

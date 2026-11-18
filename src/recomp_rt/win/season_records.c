@@ -760,12 +760,13 @@ int season_records_merge(const char *dir, int season, SeasonRecordsFind find_sou
         int nation_id = gets32(row(t, T_CLUB_COMP, d) + 0x5d);
         for (int i = 0; i < c && !skip[r]; i++) {
             const uint8_t *cl = row(t, T_CLUB, i);
-            char nm[64];
+            char nm[64], sh[64];
             field(cl + 4, 51, nm);
+            field(cl + 0x38, 26, sh);
             /* 0.7.3 slice 6: a closed league's club under another name of the table ("CF Montreal", "Montreal Impact"). */
             const char *league = season_closed_league(rr->division);
             int same = league && season_closed_row(league, rr->real) >= 0 &&
-                       season_closed_row(league, nm) == season_closed_row(league, rr->real);
+                       season_closed_club(league, nm, sh) == season_closed_row(league, rr->real);
             if (gets32(cl + 0x53) == nation_id && (same || !strcmp(nm, rr->name) || !strcmp(nm, rr->real))) {
                 skip[r] = 1;
                 result.held++;
