@@ -8,6 +8,7 @@ Runs, on a new game of the 3.9.68 database with England:
     on      squad_numbers_99 = on. The new game keeps database numbers from 51 to 99.
     off     squad_numbers_99 = off. The new game has no number above 50.
     carry   a game made with the option on is saved, then loads with the option off and plays on for 7 game days.
+    season  a game with the option on plays 120 game days, with league matches of players numbered above 50.
 
 In "on" and "off" the runtime's checks run at the first human turn (RECOMP_TEST_SQUAD_NUMBERS=1, squad_numbers.c):
 the setter takes numbers up to 99, assign_club_squad_numbers 0x859fe0 and allocate_squad_number 0x85a470 keep them at
@@ -105,6 +106,11 @@ def main(argv):
         check("message box from" not in log, "carry: no error box")
         check(bool(c) and c[0][1] > 0, f"carry: the load keeps the numbers above 50 {c[:1]}")
         check(bool(c) and c[-1][1] > 0 and c[-1][2] <= 99, f"carry: they are still there at the end {c[-1:]}")
+        check(bool(c) and max(x[1] for x in c) <= c[0][1], f"carry: the option off adds no number above 50 {c[0]} {c[-1:]}")
+    code, log, save = play(program, game, out, "season", NEW_GAME + HOLIDAY + ["1200000 quit"],
+                           [("squad_numbers_99", "on")], {"RECOMP_SAVE_AFTER_DAYS": "120"})
+    check(os.path.exists(save), f"season: 120 game days with the option on end in a save (code {code})")
+    check("message box from" not in log, "season: no error box")
     print("squad numbers:", "FAILED" if failures else "passed")
     return 1 if failures else 0
 

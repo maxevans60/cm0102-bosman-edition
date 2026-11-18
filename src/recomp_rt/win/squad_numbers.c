@@ -4,7 +4,8 @@
  * The option squad_numbers_99 (off by default) decides which NEW numbers the game gives:
  * - a new game keeps database numbers up to 99 in place of cutting them to 50, in the contract build (0x4c78bc..0x4c78c5)
  *   and in the loader (0x859f6b..0x859f6f);
- * - allocate_squad_number 0x85a470 gives 51 to 99 when 1 to 50 are all taken.
+ * - allocate_squad_number 0x85a470 gives 51 to 99 when 1 to 50 are all taken;
+ * - a transfer (0x8ca7c7) carries a number above 50 to the new club only with the option on.
  *
  * The two tables of the original hold 50 numbers and have no bounds check, so they widen in both modes. A save made
  * with the option on must load with it off: the game keeps those numbers and gives no new ones above 50.
@@ -29,6 +30,11 @@
 #include <string.h>
 
 enum { LOW_TOP = 50, HIGH_TOP = 99, HIGH_COUNT = HIGH_TOP - LOW_TOP };
+
+#define LINKED_CLUB 0x00540a50u         /* cdecl (club, 0, 1): the club's linked club, or 0 */
+#define STAFF_COUNT 0xae2364u
+#define STAFF_ROWS 0xae2d0cu            /* 79-byte rows: +0 the main contract, +4 the loan contract, -1 for none */
+#define CONTRACTS 0xae1050u             /* [this] is the table of 80-byte contracts: +4 the club id, +0x3a the number */
 
 static uint32_t assign_high[HIGH_COUNT];   /* the holder of each number 51 to 99 in assign_club_squad_numbers */
 static uint8_t allocate_high[HIGH_COUNT];  /* 1 when allocate_squad_number found the number 51 to 99 in the squad */
@@ -91,13 +97,46 @@ uint32_t rt_squad_allocate_mark(uint32_t number)
     return 1;
 }
 
+/* Marks the numbers above 50 of every contract at the club or its linked club. The list of 0x541f90 holds at most 50
+ * players (0x54201c), and they hold 1 to 50 here, so a number above 50 belongs to a player outside the list. */
+static void mark_contracts(uint32_t club)
+{
+    uint32_t args[3] = {club, 0, 1};
+    Cpu saved = cpu;
+    uint32_t linked = rt_callback(LINKED_CLUB, 3, args);     /* as 0x85a7c4 */
+    cpu = saved;
+    int32_t id = (int32_t)rd32(g_mem, club), other = linked ? (int32_t)rd32(g_mem, linked) : -1;
+    uint32_t rows = rd32(g_mem, STAFF_ROWS), table = rd32(g_mem, rd32(g_mem, CONTRACTS));
+    uint32_t count = rd32(g_mem, STAFF_COUNT);
+    for (uint32_t s = 0; s < count; s++) {
+        for (uint32_t k = 0; k < 2; k++) {                    /* +0 the main contract, +4 the loan contract */
+            int32_t c = (int32_t)rd32(g_mem, rows + s * 79u + k * 4u);
+            if (c < 0) continue;
+            uint32_t contract = table + (uint32_t)c * 80u;
+            int32_t at = (int32_t)rd32(g_mem, contract + 4u);
+            if (at != id && at != other) continue;
+            int32_t n = abs((int8_t)g_mem[contract + 0x3au]);
+            if (is_high(n)) allocate_high[n - LOW_TOP - 1] = 1;
+        }
+    }
+}
+
 /* 0x85a6f3, when 1 to 50 are all taken: the first free number above 50, 0 for none or with the option off. */
-uint32_t rt_squad_allocate_high(void)
+uint32_t rt_squad_allocate_high(uint32_t club)
 {
     if (rt_squad_number_top() <= LOW_TOP) return 0;
+    mark_contracts(club);
     for (int i = 0; i < HIGH_COUNT; i++)
         if (!allocate_high[i]) return (uint32_t)(LOW_TOP + 1 + i);
     return 0;
+}
+
+/* 0x8ca7c7: the number that a moving player takes to his new club (saved at 0x8c9dfe and 0x8c9f1c). With the option
+ * off a number above 50 stays behind, because the game gives no new number above 50. He has no number at the new club,
+ * as a player who had none before the move (0x8c9782). */
+uint32_t rt_squad_carried(uint32_t number)
+{
+    return abs((int8_t)number) > (int32_t)rt_squad_number_top() ? number & 0xffffff00u : number;
 }
 
 /* The checks of RECOMP_TEST_SQUAD_NUMBERS. They change the squads of the game, and the game stops after them. */
@@ -111,9 +150,6 @@ uint32_t rt_squad_allocate_high(void)
 #define CLUB_COUNT 0xae235cu
 #define CLUB_SIZE 0x245u
 #define CLUB_SQUAD 0xd7u                /* 50 staff pointers (0x85a028) */
-#define STAFF_COUNT 0xae2364u
-#define STAFF_ROWS 0xae2d0cu            /* 79-byte rows: +0 the main contract */
-#define CONTRACTS 0xae1050u
 
 static int test_failures;
 
@@ -191,24 +227,24 @@ static int take_player(uint32_t club, uint32_t person)
     return 1;
 }
 
-/* Fills the club's 50 slots from other clubs, and returns one more player of the club who is outside the list. */
-static uint32_t fill_squad(uint32_t club)
+/* Fills the club's 50 slots from other clubs, and gives it two more players who are outside the list. */
+static int fill_squad(uint32_t club, uint32_t extra[2])
 {
-    uint32_t clubs = rd32(g_mem, CLUBS), count = rd32(g_mem, CLUB_COUNT), extra = 0;
-    int slot = 0;
-    for (uint32_t c = 0; c < count && !extra; c++) {
+    uint32_t clubs = rd32(g_mem, CLUBS), count = rd32(g_mem, CLUB_COUNT);
+    int slot = 0, extras = 0;
+    for (uint32_t c = 0; c < count && extras < 2; c++) {
         uint32_t other = clubs + c * CLUB_SIZE;
         if (other == club) continue;
-        for (int i = 0; i < 50 && !extra; i++) {
+        for (int i = 0; i < 50 && extras < 2; i++) {
             uint32_t person = squad_slot(other, i);
             if (!is_player(person) || !take_player(club, person)) continue;
             while (slot < 50 && is_player(squad_slot(club, slot))) slot++;
             if (slot < 50) wr32(g_mem, club + CLUB_SQUAD + (uint32_t)slot * 4u, person);
-            else extra = person;
+            else extra[extras++] = person;
             wr32(g_mem, other + CLUB_SQUAD + (uint32_t)i * 4u, 0);
         }
     }
-    return extra;
+    return extras;
 }
 
 /* High numbers go through both functions and stay, at a club of each kind. */
@@ -250,18 +286,35 @@ static void check_kept(uint32_t club, const char *kind)
 /* A signing at a club whose 1 to 50 are all taken. */
 static void check_full(uint32_t club)
 {
-    uint32_t extra = fill_squad(club);
-    test_line(extra != 0, "a full squad and one more player", extra != 0, 1);
-    if (!extra) return;
+    uint32_t extra[2] = {0, 0};
+    int extras = fill_squad(club, extra);
+    test_line(extras == 2, "a full squad and two more players", extras, 2);
+    if (extras != 2) return;
     int sign = human_club(club) ? 1 : -1, n = 0;
     for (int i = 0; i < 50; i++)
         if (is_player(squad_slot(club, i))) set_number(squad_slot(club, i), club, sign * ++n);
     test_line(n == 50, "the squad holds 1 to 50", n, 50);
-    set_number(extra, club, 0);
-    uint32_t a[2] = {club, extra};
-    manager_call(ALLOCATE, 2, a);
-    int want = rt_squad_number_top() > LOW_TOP ? sign * (LOW_TOP + 1) : 0;
-    test_line(number_of(extra, club) == want, "the signing's number", number_of(extra, club), want);
+    int on = rt_squad_number_top() > LOW_TOP;
+    for (int i = 0; i < 2; i++) {
+        set_number(extra[i], club, 0);
+        uint32_t a[2] = {club, extra[i]};
+        manager_call(ALLOCATE, 2, a);
+        int want = on ? sign * (LOW_TOP + 1 + i) : 0;
+        test_line(number_of(extra[i], club) == want, i ? "the second signing's number" : "the first signing's number",
+                  number_of(extra[i], club), want);
+    }
+}
+
+/* The number that a moving player takes to his new club. */
+static void check_carried(void)
+{
+    int on = rt_squad_number_top() > LOW_TOP;
+    test_line((int8_t)rt_squad_carried(50) == 50, "a move keeps 50", (int8_t)rt_squad_carried(50), 50);
+    test_line((int8_t)rt_squad_carried((uint32_t)-50) == -50, "a move keeps -50",
+              (int8_t)rt_squad_carried((uint32_t)-50), -50);
+    test_line((int8_t)rt_squad_carried(75) == (on ? 75 : 0), "a move and 75", (int8_t)rt_squad_carried(75), on ? 75 : 0);
+    test_line((int8_t)rt_squad_carried((uint32_t)-75) == (on ? -75 : 0), "a move and -75",
+              (int8_t)rt_squad_carried((uint32_t)-75), on ? -75 : 0);
 }
 
 /* RECOMP_TEST_SQUAD_NUMBERS=1 runs the checks at the first human turn and stops the game. =count only prints the
@@ -297,6 +350,7 @@ void squad_numbers_test_turn(void)
     uint32_t ai = find_club(0), human = find_club(1);
     test_line(ai != 0, "a computer club", ai != 0, 1);
     test_line(human != 0, "the human club", human != 0, 1);
+    check_carried();
     if (ai) check_kept(ai, "computer");
     if (human) check_kept(human, "human");
     if (ai) check_full(ai);

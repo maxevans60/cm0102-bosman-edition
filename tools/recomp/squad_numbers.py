@@ -14,7 +14,11 @@ loops run on to 99.
 allocate_squad_number 0x85a470 keeps 50 flags on the stack (written at 0x85a500). It takes a number for the position,
 then 12 to 50 (0x85a676..0x85a686), then 11 down to 1 (0x85a6e6..0x85a6f3). When those are all taken, the patch at
 0x85a6f3 goes on with the first free number from 51 to 99, through the original's own write at 0x85a700. The flag write
-at 0x85a740 stays inside the table.
+at 0x85a740 stays inside the table. The search also reads the club's contracts, because a player who holds a number
+above 50 is outside the list of 50 that 0x541f90 gives.
+
+move_player_to_club 0x8c9720 saves the player's number (0x8c9dfe, 0x8c9f1c) and sets it at the new club (0x8ca7d4). With
+the option off, a number above 50 does not go with him.
 """
 
 INSNS = {
@@ -41,7 +45,9 @@ INSNS = {
     0x85A500: ("mov byte ptr [esp + eax + 0x1b], 1", "if (!rt_squad_allocate_mark(eax)) W8(esp + eax + 0x1bu, 1);"),
     0x85A6F3: ("jns 0x85a6e6",
                "if (!cc_s(F)) goto L_85a6e6; "
-               "{ uint32_t n_ = rt_squad_allocate_high(); "
+               "{ uint32_t n_ = rt_squad_allocate_high(ebp); "
                "if (n_) { ebx = (ebx & 0xffffff00u) | (n_ - 1u); goto L_85a700; } }"),
     0x85A740: ("mov byte ptr [esp + eax + 0x18], 1", "if ((int8_t)eax < 50) W8(esp + eax + 0x18u, 1);"),
+    # move_player_to_club 0x8c9720: the number that the player takes to the new club (set at 0x8ca7d4).
+    0x8CA7C7: ("mov ecx, dword ptr [esp + 0x2c]", "ecx = rt_squad_carried(R32(esp + 0x2cu));"),
 }

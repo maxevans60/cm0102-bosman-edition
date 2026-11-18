@@ -71,7 +71,7 @@
  * one's ping (nc_ping_ms of the player slot's socket). With many human managers the list rows get closer, so that
  * 15 fit above Close.
  *
- * Node slots: 0 the tab (1 Graphics, 2 Game, 3 Network), 1 the place that opened the box (1 start screen, 2 game). Only
+ * Node slots: 0 the tab (1 Graphics, 2 Game, 3 Network, 4 Squads), 1 the place that opened the box (1 start screen, 2 game). Only
  * numbers, so the box needs no leave function. */
 #include "win.h"
 #include "options.h"
@@ -149,7 +149,7 @@ extern const uint32_t rt_site_options_item, rt_site_main_poll;
 typedef enum { ROW_SWITCH, ROW_DISPLAY, ROW_PATH } RowKind;
 
 typedef struct {
-    int tab;                        /* 1 Graphics, 2 Game, 3 Network */
+    int tab;                        /* 1 Graphics, 2 Game, 3 Network, 4 Squads */
     OptionId id;
     RowKind kind;
     const char *label;
@@ -596,7 +596,7 @@ static void options_build(void)
     box_text(490, 115, 724, 135, 1, 0, 1, 1, light, "Changes save at once to settings.txt");
 
     /* The tabs: the open tab as a framed label, the other as a button. */
-    /* Squads (tab 4) stands second, so Graphics, Game and Network stay under their old click places. */
+    /* Squads (tab 4) stands second, so the clicks at x 304, 584 and 680 still reach Graphics, Game and Network. */
     static const uint8_t weights_tabs[TABS] = {8, 7, 7, 6};
     static const uint8_t tab_of_column[TABS] = {1, 4, 2, 3};
     int t = area(165, 142, 724, 168, TABS, weights_tabs, 1, 0);
