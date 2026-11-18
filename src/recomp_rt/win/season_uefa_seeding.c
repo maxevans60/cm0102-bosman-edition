@@ -225,6 +225,8 @@ static uint32_t cup_club(uint32_t nation, uint32_t off, int k)
     return rt_unwinding || !readable(c) ? 0 : c;
 }
 
+uint32_t season_uefa_cup_winner(uint32_t nation) { return cup_club(nation, 0x1e, 0); }
+
 /* The club that takes the cup place when the cup winner has a place already (0.6.2 open item 222). The original
  * gives it to the cup runner-up (0x9047e2). From 2015/16 UEFA gives it to the best league club with no place:
  * "the highest-ranked club in their domestic league not already qualified for the UEFA Europa League will

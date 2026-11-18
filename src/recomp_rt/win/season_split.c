@@ -41,6 +41,7 @@
 #include "season_sizes_arg.h"
 #include "win.h"
 #include "../rt_host.h"
+#include "season_bel_playoffs.h"
 #include "season_change.h"
 #include "season_league.h"
 #include "season_sizes.h"
@@ -125,7 +126,9 @@ static const struct {
     {"bel_first", 2009, 2009, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 3, 3}, "hzzk"},
     {"bel_first", 2010, 2014, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 3, 3}, "hzzb"},
     {"bel_first", 2015, 2015, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 3, 3}, "hzzk"},
-    {"bel_first", 2016, 2018, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 2, 3}, "hzzk"},
+    /* Issue 150: the groups of 2016/17 to 2018/19 hold second-division clubs, so they are stages of their own
+     * (season_bel_playoffs.c) and places 7 to 16 play no more matches in this table. */
+    {"bel_first", 2016, 2018, 16, {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, "hk"},
 };
 
 int season_split_of(uint32_t obj, const char *file, int n, int meetings, SeasonSplit *sp)
@@ -688,5 +691,6 @@ RT_WRAP(006847c0, league_update_for_date)
     season_split_update(self);
     if (rt_unwinding) return;
     season_arg_update(self);                    /* 0.7.2 gap row 48: the Apertura's knockout */
+    if (!rt_unwinding) season_bel_po_update(self);  /* issue 150: the groups of Play-off II */
     if (!rt_unwinding) cpu = saved;
 }

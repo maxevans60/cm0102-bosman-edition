@@ -262,4 +262,7 @@ int season_uefa_ko_dates(uint32_t table, char comp, int season, const int *kinds
  * stay. 1 when it wrote them. */
 int season_uefa_cup_qual_dates(uint32_t q2, uint32_t r1, int season);
 
+/* The winner of the nation's domestic cup in the history, or 0 (season_uefa_seeding.c). */
+uint32_t season_uefa_cup_winner(uint32_t nation);
+
 #endif

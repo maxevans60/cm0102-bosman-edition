@@ -85,6 +85,7 @@
  * team; RECOMP_TEST_BEL_SECOND_OLD=<n> plays as the original until n Belgian season changes are done. */
 #include "win.h"
 #include "season.h"
+#include "season_bel_playoffs.h"
 #include "season_bel_second.h"
 #include "season_change.h"
 #include "season_clubs.h"
@@ -546,7 +547,9 @@ RT_WRAP(00420230, bel_second_playoff)
 {
     if (cpu.ecx == league_of(KEY_SECOND) && rule_on() && season_now() >= BAR_FROM)
         hand_on(cpu.ecx, 2, "before the play-off");
+    season_bel_po_entrants_in(cpu.ecx);         /* issue 150: First Division clubs in the final round */
     o_00420230();
+    if (!rt_unwinding) season_bel_po_entrants_out();
 }
 
 /* The row index that the original's top-up of 0x423880 leaves as the best placed row of 0xff (0x4238c9..0x42393c:
@@ -848,6 +851,8 @@ RT_WRAP(0041ee80, bel_second_chain)
     }
     int season = (int16_t)rd16(g_mem, GAME_DATE + 2) - 1;      /* the summer after the season that ended */
     census("before");
+    season_bel_po_settle();                     /* issue 150: the result of the final round */
+    if (rt_unwinding) return;
     test_down();
     if (rule_on() && season >= BAR_FROM) {
         uint32_t first = league_of(KEY_FIRST), second = league_of(KEY_SECOND), third[2];
@@ -862,6 +867,7 @@ RT_WRAP(0041ee80, bel_second_chain)
     }
     o_0041ee80();
     if (!rt_unwinding) {
+        season_bel_po_moved();
         census("after");
         if (old_left > 0) old_left--;
     }
