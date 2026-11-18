@@ -444,13 +444,14 @@ FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
-# leagues: the Northern Irish divisions (slice 13). file: the count of the old floor (the class's own count: HELD for a
-# grown class, slice 7). The English divisions left in slice 8 (D15): the exchange of League Two and the Conference
+# leagues. The Northern Irish divisions left with items 271 and 272 (slice 13): their places are the rows'
+# (season_sizes_nir.c), and the First Division's relegation places go to the Northern Irish lower division. file: the
+# count of the old floor (the class's own count: HELD for a grown class, slice 7). The English divisions left in slice 8 (D15): the exchange of League Two and the Conference
 # takes the places of the rows (season_sizes_eng.c). The Welsh Premier left with open item 250: it has no chain, and its
 # row's relegation places go to no division at its season change (season_sizes.c, lone_exchange). The Scottish
 # divisions left with gap row 11: their places are the rows', and the play-offs between two divisions are
 # season_playoffs.c (the cross play-off).
-FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("nir_first", "nir_prm")}
+FIXED_EXCHANGE = {}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
