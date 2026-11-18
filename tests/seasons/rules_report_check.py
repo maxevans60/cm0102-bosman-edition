@@ -455,6 +455,10 @@ def differences(seasons, comps, rows):
                 # 2001/02) or the MLS (1) only mark rows.
                 if want == "na" and (c[key] == 0 or (key == "up" and c.get("above") == -1)):
                     continue
+                # Open item 281: the research found no number for this row (Druga HNL 2008/09, 2009/10 and 2012/13), so
+                # the game's places have nothing to differ from.
+                if want == "unknown":
+                    continue
                 accept = {c[key], c[key] + (1 if c[extra] else 0), c[key] + c[extra]}
                 # Open item 259: the play-off of these pairs is between the two divisions, so no club surely moves
                 # through it and the row counts the direct places only (nor_prm 2005 "13th-14th (2)" and the 12th

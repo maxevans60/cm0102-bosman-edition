@@ -328,6 +328,10 @@ if(NOT WIN32)
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_size_step COMMAND season_size_step_test)
+    add_executable(season_cro_gre_places_test tests/seasons/test_season_cro_gre_places.c
+                   src/recomp_rt/win/season_cro_gre_places.c)
+    target_include_directories(season_cro_gre_places_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_cro_gre_places COMMAND season_cro_gre_places_test)
     # The cups of eastern Europe and Asia follow the divisions (0.7.2 league sizes, slice 6).
     add_executable(season_cup_sizes_east_test tests/seasons/test_season_cup_sizes_east.c)
     target_include_directories(season_cup_sizes_east_test PRIVATE src/recomp_rt/win)

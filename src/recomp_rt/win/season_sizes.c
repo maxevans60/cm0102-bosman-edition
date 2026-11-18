@@ -1182,6 +1182,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding && readable(obj)) class_playoff_rules(obj, season_change_file(obj));
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
+    if (!rt_unwinding && readable(obj)) season_sizes_cro_rules(obj, season_change_file(obj));  /* items 281, 282 */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
     if (!rt_unwinding) season_arg_second_rules(obj);  /* 0.7.2 slice 16 */
@@ -1790,7 +1791,7 @@ static void size_step_run(uint32_t trigger)
      * of a new game takes it (season_clubs.c group 2): the Portuguese clubs below the Segunda Liga sit there. */
     for (int i = 0; readable(table) && i < count && i < national_from; i++) {
         uint32_t c = table + (uint32_t)i * CLUB_SIZE, nation = rd32(g_mem, c + CLUB_NATION), now = current_division(c);
-        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now) || season_sizes_gre_lower(now))) now = 0;
         int wanted = 0;
         if (now) {
             for (int d = 0; d < ndiv && !wanted; d++) wanted = now == step_seen[d].rec;
@@ -1805,8 +1806,11 @@ static void size_step_run(uint32_t trigger)
     }
     for (int k = 0; k < nclub; k++) {
         uint32_t c = at[k], now = current_division(c);
-        if (now && (season_clubs_in_spare(c) || season_arg_third(now))) now = 0;
-        club[k].div = now ? -3 : STEP_NONE;     /* -3: a division outside the step */
+        /* Item 282: a club of a last table that GrePrm's exchange 0x5eb120 has just sent to the Greek Lower Division
+         * went down on its results, so the step does not bring it back in the same change. */
+        int just_down = k < from_tables && season_sizes_gre_lower(now);
+        if (now && (season_clubs_in_spare(c) || season_arg_third(now) || season_sizes_gre_lower(now))) now = 0;
+        club[k].div = now || just_down ? -3 : STEP_NONE;     /* -3: a division outside the step */
         for (int d = 0; d < ndiv; d++)
             if (now == step_seen[d].rec) club[k].div = d;
         club[k].nation = (int)(rd32(g_mem, c + CLUB_NATION) & 0x7fffffff);
@@ -1914,6 +1918,9 @@ static void size_step_run(uint32_t trigger)
              * surplus to the third division, not out of the league system (slice 15). */
             if (!to && moves[i].from >= 0 && !strcmp(season_change_file(step_seen[moves[i].from].obj), "arg_second"))
                 to = season_arg_third_record();
+            /* Item 282: the Greek second tier sends its surplus to the Greek Lower Division, as its exchange does. */
+            if (!to && moves[i].from >= 0 && !strcmp(season_change_file(step_seen[moves[i].from].obj), "gre_second"))
+                to = season_sizes_gre_lower_record();
             wr32(g_mem, c + CLUB_LAST_DIVISION, old);
             wr32(g_mem, c + CLUB_DIVISION, to);
             uint32_t a[2] = {c, old};
