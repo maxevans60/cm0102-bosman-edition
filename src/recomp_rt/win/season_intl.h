@@ -62,8 +62,10 @@ uint32_t rt_intl_host_pick(uint32_t row, uint32_t r);
  * first host when club is 0 in a season game (0.6.2 open item 18). */
 uint32_t rt_intl_history_host(uint32_t cup, uint32_t club);
 
-/* The hosts of the news of the qualified nations (0x777b07, issue 146): the two host fields on the stack. */
+/* The hosts of the news of the qualified nations (issue 146): the two host fields on the stack when the news is
+ * made (0x777b07), and host k of the edition when its text is written (0x777d07). */
 void rt_intl_news_hosts(uint32_t key, uint32_t first_at, uint32_t second_at);
+uint32_t rt_intl_news_text_host(uint32_t key, uint32_t year, uint32_t stored, uint32_t k);
 
 /* A new game (season.c, before the original makes it): the start of Australia's move to Asia. */
 void season_intl_at_create(void);

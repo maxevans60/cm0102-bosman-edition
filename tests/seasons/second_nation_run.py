@@ -4,13 +4,14 @@
 Usage:
     python3 tests/seasons/second_nation_run.py <cm0102_recomp> <game folder> <out folder>
 
-A new game on the October 2026 database with the leagues of eight nations, to the first news. A capped player in the
-squad of his second nation loses his first nation at his first match there (0x76b7a9..0x76b7b9). The original's pick
-never calls him up (0x76acd4), and neither may the fill of a short national side (season_national_fill.c).
+A new game on the October 2026 database with the leagues of eight nations, on holiday for DAYS days, past the
+international matches of September. A capped player in the squad of his second nation loses his first nation at his
+first match there (0x76b7a9..0x76b7b9). The original's pick never calls him up (0x76cefc), and neither may the fill of
+a short national side (season_national_fill.c).
 
 The checks, on the save against the database:
     - no player with caps in the database sits in a national side of another nation than his first nation
-    - his first nation in the save is his first nation in the database
+    - a player with caps in the database keeps his first nation (an uncapped player may change it, as in the original)
 <out folder>/well-known.tsv lists the 500 players of the highest world reputation with the result of each.
 """
 import collections
@@ -26,11 +27,12 @@ for p in (HERE, os.path.join(HERE, "..", "smoke"), os.path.join(ROOT, "tools", "
 import cmdb  # noqa: E402
 import rules_report_check as rrc  # noqa: E402
 import savfile  # noqa: E402
-import season_dates_run as sdr  # noqa: E402
+import season_core_run as scr  # noqa: E402
 
 DB = "/Users/max/Projects/cm0102/test-fixtures/databases/October 2026/October 2026 Data Update"
 NATIONS = ["England", "Italy", "Spain", "France", "Germany", "Holland", "Portugal", "Belgium"]
 STAFF, CLUB, NATION, NAME = 110, 581, 290, 60
+DAYS = 100
 
 
 def database_rows():
@@ -79,7 +81,7 @@ def check(save, out):
         home, caps, _, name = row
         now, side = struct.unpack_from("<i", r, 0x1a)[0], struct.unpack_from("<i", r, 0x24)[0]
         result = "ok"
-        if now != home:
+        if now != home and caps:
             result = f"first nation {nations.get(now)}, in the database {nations.get(home)}"
         elif caps and side in sides and sides[side] != home:
             result = f"{caps} caps for {nations.get(home)}, in the squad of {nations.get(sides[side])}"
@@ -102,10 +104,10 @@ def main(argv):
         print(__doc__)
         return 2
     program, game, out = (os.path.abspath(a) for a in argv[1:4])
-    os.makedirs(out)
-    folder = sdr.neutral_copy(out, "October 2026", DB)
-    steps = rrc.league_steps(NATIONS, []) + ["400000 quit"]
-    save, log, _ = sdr.play(program, game, out, "new", 2026, folder, steps=steps)
+    os.makedirs(out, exist_ok=True)
+    steps = rrc.league_steps(NATIONS, []) + ["3000000 quit"]
+    save, log, _ = scr.play(program, game, out, "new", {"changing_rules": "on"}, steps, DAYS,
+                            {"RECOMP_START_SEASON": "2026"}, database=DB, timeout=3600)
     with open(os.path.join(out, "new.log"), "w", encoding="latin-1") as f:
         f.write(log)
     if not save:

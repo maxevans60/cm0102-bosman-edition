@@ -75,16 +75,23 @@ static int injured(uint32_t player)
 static int in_squad(uint32_t club, uint32_t sp);
 
 /* Issue 141: who counts as a player of the nation, as the original's squad pick reads it. His first nation always
- * counts. His second nation counts only with no cap (+0x22: 0x76acd4, 0x76cefc), with the flag of a player who has
- * chosen his nation clear (player table row +0xc bit 2: 0x76cf12) and for a nation other than the key nation of
- * 0x76acea. A capped player in the squad of his second nation lost his first nation at his first match there:
- * NationalTeams::record_international_result 0x76b600 swaps the two nations (0x76b7a9..0x76b7b9). */
+ * counts. His second nation counts only with no cap (+0x22, 0x76cefc), with mask 2 of the player table row +0xc clear
+ * (0x76cf12), for a nation other than the key nation of 0x76acea, and when the nation has a higher reputation (+0x8e)
+ * than his first nation (0x76cf40), or else lies on the continent (+0x71) of his club's nation and has +0x85 of 5 or
+ * more (0x76cf42..0x76cf57). A player in the squad of his second nation loses his first nation at his first match
+ * there: NationalTeams::record_international_result 0x76b600 swaps the two nations (0x76b7a9..0x76b7b9). */
 static int of_nation(uint32_t sp, uint32_t nation)
 {
-    if (rd32(g_mem, sp + 0x1a) == nation) return 1;
-    if (rd32(g_mem, sp + 0x1e) != nation || g_mem[sp + 0x22] || rd32(g_mem, nation) == rd32(g_mem, KEY_NO_SECOND)) return 0;
+    uint32_t first = rd32(g_mem, sp + 0x1a);
+    if (first == nation) return 1;
+    if (!readable(first) || rd32(g_mem, sp + 0x1e) != nation || g_mem[sp + 0x22] ||
+        rd32(g_mem, nation) == rd32(g_mem, KEY_NO_SECOND)) return 0;
     uint32_t id = rd32(g_mem, sp), table = rd32(g_mem, PLAYER_FLAGS);
-    return id >= rd32(g_mem, STAFF_COUNT) || !readable(table) || !(g_mem[table + id * PLAYER_FLAGS_SIZE + 0xc] & 2);
+    if (id < rd32(g_mem, STAFF_COUNT) && readable(table) && (g_mem[table + id * PLAYER_FLAGS_SIZE + 0xc] & 2)) return 0;
+    if ((int16_t)rd16(g_mem, nation + 0x8eu) > (int16_t)rd16(g_mem, first + 0x8eu)) return 1;
+    uint32_t club = rd32(g_mem, sp + 0x39), home = readable(club) ? rd32(g_mem, club + CLUB_NATION) : 0;
+    if (readable(home) && rd32(g_mem, nation + 0x71u) != rd32(g_mem, home + 0x71u)) return 0;
+    return (int8_t)g_mem[nation + 0x85u] >= 5;
 }
 
 static int can_join(uint32_t sp, uint32_t nation)
