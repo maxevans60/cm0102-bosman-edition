@@ -184,6 +184,11 @@ int main(void)
     CHECK(season_arg_second_down_places(6, 0) == 4, "the swap's 4 places with changing rules off");
     CHECK(season_arg_second_down_places(3, 0) == 3, "a row under the swap's 4 keeps its places");
     CHECK(season_arg_second_down_places(-1, 1) == 0, "no places from an unknown row");
+    /* Item 291: the class's 2001/02 form sends 2 down by the averages (0x408666) and the step the surplus to the next row. */
+    CHECK(season_arg_second_class_down(25, 20) == 7, "2001/02: 2 and the 5 that the row of 20 leaves over");
+    CHECK(season_arg_second_class_down(25, 25) == 2, "the class alone sends 2 down");
+    CHECK(season_arg_second_class_down(25, -1) == 2, "no next row: the class's 2");
+    CHECK(season_arg_second_class_down(20, 25) == 2, "a bigger next row sends no more down");
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;

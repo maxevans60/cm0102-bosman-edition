@@ -1396,6 +1396,8 @@ static int step_index(uint32_t obj)
     /* The Argentine Primera sends down by its averages (promedios), not by its table (slice 15 fix). */
     if (!strcmp(season_change_file(obj), "arg_prm"))
         season_arg_step_order(obj, step_seen[i].club, step_seen[i].nrows);
+    if (!strcmp(season_change_file(obj), "arg_second"))
+        season_arg_second_step_order(obj, step_seen[i].club, step_seen[i].nrows);
     return i;
 }
 

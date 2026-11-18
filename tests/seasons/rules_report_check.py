@@ -253,7 +253,8 @@ _LEAGUE_PLAYOFFS = {}
 
 # Files whose table holds both halves of a row of halves (0.7.2 league sizes, slice 14): it plays twice the meetings of
 # the row's halves. Also tests/seasons/league_size_run.py HALVES_IN_TABLE.
-HALVES_IN_TABLE = {"jap_j1", "kor_league"}
+# The Argentine second division plays rows 2002 to 2006 as one table of both halves (season_sizes_arg_second.c form_of).
+HALVES_IN_TABLE = {"jap_j1", "kor_league", "arg_second"}
 
 
 def league_playoffs():
@@ -493,7 +494,9 @@ def differences(seasons, comps, rows):
             # (0.7.2 slice 14, src/recomp_rt/win/season_sizes_asia.c), so it plays twice them.
             if e is not None and isinstance(e["meetings"], int):
                 meet = sorted({x["rounds"] for x in both if x["rounds"] > 0})
-                table_meet = e["meetings"] * (2 if e["halves"] == 1 and c["file"] in HALVES_IN_TABLE else 1)
+                # The second division's row of 25 clubs (2001/02) keeps the class: an Apertura of one meeting.
+                table_meet = e["meetings"] * (2 if e["halves"] == 1 and c["file"] in HALVES_IN_TABLE and
+                                              not (c["file"] == "arg_second" and r["clubs"] == 25) else 1)
                 if meet and meet != [table_meet]:
                     out.add((season, "meetings", f"{label}: game {'/'.join(map(str, meet))}, table "
                                                  f"{table_meet}"))

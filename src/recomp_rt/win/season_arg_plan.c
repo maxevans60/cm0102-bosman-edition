@@ -24,6 +24,11 @@ int season_arg_second_down_places(int row_down, int changing_rules)
     return !changing_rules && row_down > SEASON_ARG_SWAP_DOWN ? SEASON_ARG_SWAP_DOWN : row_down;
 }
 
+int season_arg_second_class_down(int clubs, int next_clubs)
+{
+    return SEASON_ARG_CLASS_DOWN + (next_clubs > 0 && clubs > next_clubs ? clubs - next_clubs : 0);
+}
+
 static void pair(int round[][SEASON_ARG_MAX_CLUBS / 2][2], int r, int k, int home, int away)
 {
     round[r][k][0] = home;

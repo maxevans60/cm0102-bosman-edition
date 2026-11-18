@@ -1,7 +1,9 @@
 /* The Argentine Primera at its real size (season_sizes_arg.h). */
 #include "win.h"
 #include "season_sizes_arg.h"
+#include "season_sizes_arg_second.h"
 #include "season_sizes.h"
+#include "season.h"
 #include "season_league.h"
 #include "season_change.h"
 #include "season_template.h"
@@ -41,6 +43,7 @@
 #define CLASS_CLUBS 20              /* ArgPrm::create_table 0x405552 */
 #define MIN_CLUBS 2
 #define MAX_CLUBS SEASON_ARG_MAX_CLUBS
+#define SNAP_MAX (4 * MAX_CLUBS)
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -770,7 +773,6 @@ void season_arg_averages_fit(uint32_t self, int n, const char *file)
  * +4, points over matches of three seasons, 0x4066dc..0x4066f8): start_new_season 0x405720 calls update(1) (0x40572e)
  * before the chain, which drops the oldest season (0x406669..0x4066a0) and sorts on the other two. The size step
  * (season_arg_step_order) ranks by these. */
-#define SNAP_MAX (4 * MAX_CLUBS)
 static struct { uint32_t obj; int year, n; int32_t id[SNAP_MAX]; float avg[SNAP_MAX]; } snap;
 
 void o_00406570(void);
@@ -924,17 +926,74 @@ int season_arg_promo_primera(uint32_t self, uint32_t *club)
     return 2;
 }
 
-/* Item 286: ArgPrm::set_up_rules writes 0 relegation places (0x4056d1), because the class sends down by its averages.
- * The rules report shows the direct places of the season: the row's places, or the last two records of the class
- * (0x405cb3, 0x405d6a) when the edition plays the class's form. A loser of the promoción of rows 2002 to 2011 goes down
- * after them (arg_record_honours) and counts as a play-off result, as the row's text counts it. */
-int season_arg_report_down(uint32_t obj, int places)
+/* Items 286 and 291: the moves of a season that the place bytes do not hold.
+ * The Primera: ArgPrm::set_up_rules writes 0 relegation places (0x4056d1), because the class sends down by its averages:
+ * the row's direct places, or the last two records of the class (0x405cb3, 0x405d6a). A loser of the promoción goes down
+ * after them (arg_record_honours), so the 17th and 18th of the averages are its 2 play-off places to row 2011.
+ * The second division in the class's form (2001/02): the Apertura's winner (+0xbe 1) and the Reducido's winner (status 0
+ * at 0x408d54) go up; 2 go down by the averages (0x408666) and the size step sends down the surplus over the next row.
+ * In one table of rows 2002 to 2011 the clubs after the direct places play the Primera's promoción (promo_advance), where
+ * the row names those places. */
+void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, int *down)
 {
-    if (!is_prm(obj)) return places;
-    Form f;
-    int avg = 2, tab = 0;
-    if (form_of(obj, (int16_t)rd16(g_mem, obj + COMP_CLUBS), &f)) season_arg_down_places(f.season, &avg, &tab);
-    return avg + tab;
+    int year = readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_YEAR) : 0;
+    int n = readable(obj) ? (int16_t)rd16(g_mem, obj + COMP_CLUBS) : 0;
+    if (is_prm(obj)) {
+        Form f;
+        int avg = SEASON_ARG_CLASS_DOWN, tab = 0, row = year;
+        if (form_of(obj, n, &f)) {
+            row = f.season;
+            season_arg_down_places(row, &avg, &tab);
+        }
+        *down = avg + tab;
+        if (row <= SEASON_ARG_PROMO_LAST) *po_down = 2;
+        return;
+    }
+    if (!readable(obj) || strcmp(season_change_file(obj), "arg_second")) return;
+    if (!season_arg_second_one_table(obj)) {
+        *up += 1;
+        *down = season_arg_second_class_down(n, season_changing_rules() ? season_sizes_clubs("arg_second", year + 1) : -1);
+        return;
+    }
+    int row = season_sizes_row_season(obj, "arg_second");
+    const SeasonLeagueRule *l = row >= 0 ? season_league_row("arg_second", row) : NULL;
+    if (l && l->po_up > 0 && row >= SEASON_ARG_PROMO_FIRST && row <= SEASON_ARG_PROMO_LAST) *po_up = 2;
+}
+
+/* Item 291: the row of 2001/02 sends down the worst coefficients. The records hold each club's average (+4, as
+ * season_arg_step_order reads the Primera's); a club with no record goes after those that have one. */
+void season_arg_second_step_order(uint32_t obj, uint32_t *club, int n)
+{
+    if (!season_sizes_on() || !readable(obj) || n < 1 || n > SNAP_MAX || season_arg_second_one_table(obj)) return;
+    uint32_t clubs = rd32(g_mem, CLUBS), recs = rd32(g_mem, obj + AVERAGES);
+    int have = (int16_t)rd16(g_mem, obj + AVERAGE_COUNT);
+    if (!readable(clubs) || !readable(recs) || have < 1) return;
+    float key[SNAP_MAX];
+    int has[SNAP_MAX];
+    for (int i = 0; i < n; i++) {
+        has[i] = 0;
+        key[i] = 0;
+        int32_t id = (int32_t)((club[i] - clubs) / CLUB_SIZE);
+        for (int k = 0; k < have && !has[i]; k++) {
+            uint32_t r = recs + (uint32_t)k * AVG_SIZE, bits = rd32(g_mem, r + 4);
+            if ((int32_t)rd32(g_mem, r) != id) continue;
+            memcpy(&key[i], &bits, sizeof key[i]);
+            has[i] = 1;
+        }
+    }
+    for (int i = 1; i < n; i++) {       /* insertion: stable */
+        uint32_t c = club[i];
+        float kv = key[i];
+        int hv = has[i], j = i;
+        for (; j > 0 && (has[j - 1] < hv || (has[j - 1] == hv && hv && key[j - 1] < kv)); j--)
+            club[j] = club[j - 1], key[j] = key[j - 1], has[j] = has[j - 1];
+        club[j] = c;
+        key[j] = kv;
+        has[j] = hv;
+    }
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: arg_second step order %d by the averages: worst %u, then %u\n",
+                (int16_t)rd16(g_mem, obj + COMP_YEAR), rd32(g_mem, club[n - 1]), n > 1 ? rd32(g_mem, club[n - 2]) : 0u);
 }
 
 /* The clubs (club records) that will go down at the end of the season, for the Clausura's knockout (gap row of

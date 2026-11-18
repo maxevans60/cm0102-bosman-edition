@@ -109,8 +109,16 @@ void season_arg_down_places(int row, int *avg, int *tab);
 /* Pure (item 286): the second division's relegation places of a row. With changing rules on the row's places
  * (season_arg_second.c moves the clubs past the swap's 4), with them off at most the swap's 4. */
 int season_arg_second_down_places(int row_down, int changing_rules);
-/* The Primera's relegation count for the rules report; any other league keeps its places. */
-int season_arg_report_down(uint32_t obj, int places);
+/* The clubs that ArgSecond::create_promotion_cup_stage 0x408630 sends down by the averages (cmp bp, 2 at 0x408666). */
+#define SEASON_ARG_CLASS_DOWN 2
+/* Pure (item 291): the clubs that leave the second division's class form: the class's 2 and the surplus over the next
+ * row's count, which the size step sends down. next_clubs -1: no next row. */
+int season_arg_second_class_down(int clubs, int next_clubs);
+/* The places that the rules report shows for an Argentine league: the moves that the season plays, where the classes
+ * keep them outside the place bytes. Any other league keeps the bytes. */
+void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, int *down);
+/* The second division's clubs for the size step in the class's form, best average first (item 291). */
+void season_arg_second_step_order(uint32_t obj, uint32_t *club, int n);
 
 /* The title stages of a season (season_arg_stages.c): none, two zone tables a half and a knockout of 16 after each
  * half (2025, 2026), two zone tables and a final of the zone winners with a match of the runners-up (2016), or a
