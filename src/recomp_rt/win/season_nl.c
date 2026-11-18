@@ -1117,8 +1117,8 @@ static void history(void)
 /* vtable +0x48, build_fate_news_text, thiscall (10 arguments), ret 0x28. Slot 18 takes the League base 0x48c6d0, which
  * knows the fates 0, 1, 2, 3 and 5 and writes "ERROR: No league fate yet" for any other (0x48ca7d). The League's
  * announce_team_status 0x686670 posts the item of a group (type 12, 0x686720) with fates 6, 7 and 0xfe and no fixture.
- * These go to the group text that the class's own slot 0x57d700 uses (0x57d73b), comp_util_write_group_qualify_news
- * 0x4b4590 (team, group name code, competition record, fate, full, text). */
+ * These go to comp_util_write_group_qualify_news 0x4b4590 (team, group name code, competition record, fate, full,
+ * text), which the class's own slot 0x57d700 calls for fates 7 and 0xfe (0x57d73b). */
 static void fate_text(void)
 {
     uint32_t self = cpu.ecx, args[10];

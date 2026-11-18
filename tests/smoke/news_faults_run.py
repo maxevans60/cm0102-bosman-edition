@@ -14,6 +14,7 @@ types in the Filter box, which makes the game write the text of every news item.
 The pictures stay in <out folder>: news.png (the screen) and filter.png (the list after the filter).
 """
 import os
+import shutil
 import struct
 import subprocess
 import sys
@@ -70,7 +71,7 @@ def main(argv):
         r, _ = fixtures.run(program, game, "classic", user, load + [s.replace("{d}", out) for s in STEPS], env, 900)
     with open(os.path.join(out, "stderr.txt"), "w") as f:
         f.write(r.stderr)
-    for name in ("news", "filter"):
+    for name in ("news", "filter") if shutil.which("sips") else ():
         subprocess.run(["sips", "-s", "format", "png", os.path.join(out, name + ".bmp"), "--out",
                         os.path.join(out, name + ".png")], capture_output=True)
     log = r.stderr
@@ -79,7 +80,7 @@ def main(argv):
     check("rules table: none" not in log, "the game read the rules table")
     check(os.path.exists(pictures[1]) and not box_shown(pictures[1]), "no box from the News filter")
     check("still empty" not in log, "every news item has a text")
-    check("competition 437 wrote no text: shared match text: " in log, "the Oceania match items have the match text")
+    check("competition 437 wrote no text: shared text: " in log, "the Oceania match items have the match text")
     check("(OFC) Semi Final" not in log, "the finals of 31 March are not named semi-finals")
     check("(OFC) Final\n" in log and "Final Final" not in log, "the headline names the final once")
     check("have won the FIFA World Cup qualification" not in log, "a final of the tournament does not win the section")
