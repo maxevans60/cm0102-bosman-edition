@@ -103,26 +103,41 @@ def season_checks(name, log, report, season, ecl):
 
 
 def pot_faults(name, log, season, changing):
-    """The pots of each league phase (decision L8 of the 0.7.3 spec). Changing rules on: no club of a lower pot has a
-    higher reputation than a club of the pot above, unless the log names clubs that changed pots for the nation rules.
-    Changing rules off: the entry codes of the original's seed order 0x586f60 never fall."""
+    """The pots of each league phase (decision L8 of the 0.7.3 spec). Changing rules on: both nation rules hold (draw
+    rules 0), and no more clubs of a lower pot have a higher reputation than a club of the pot above than the log says
+    changed pots for the nation rules in that league phase. Changing rules off: the entry codes of the original's seed
+    order 0x586f60 never fall."""
     key = f"{season}/{(season + 1) % 100:02d}"
-    fails, phases = [], []
-    for days, pot, text in re.findall(rf"league phase {key}: (\d) matches, pot (\d):((?: \d+:-?\d+:-?\d+)+)", log):
-        if pot == "1":
-            phases.append([])
-        phases[-1].append([tuple(int(x) for x in c.split(":")) for c in text.split()])
+    fails, phases, moved = [], [], 0
+    line = re.compile(rf"league phase {key}: (?:(\d+) clubs change pots|\d matches, pot (\d):((?: \d+:-?\d+:-?\d+)+)"
+                      r"|36 clubs, \d matches each, draw rules (\d))")
+    for m in line.finditer(log):
+        if m.group(1):
+            moved = int(m.group(1))
+        elif m.group(2):
+            if m.group(2) == "1":
+                phases.append({"pots": [], "moved": moved})
+                moved = 0
+            phases[-1]["pots"].append([tuple(int(x) for x in c.split(":")) for c in m.group(3).split()])
+        elif changing and m.group(4) != "0":
+            fails.append(f"{name}: a league phase of {key} has draw rules {m.group(4)}")
     if len(phases) < 2:
         fails.append(f"{name}: {len(phases)} league phases with pot lines in {key}")
-    moved = re.search(rf"league phase {key}: \d+ clubs change pots", log) is not None
-    for pots in phases:
+    for phase in phases:
+        pots = phase["pots"]
+        size = len(pots[0]) if pots else 0
+        if len(pots) * size != 36 or any(len(pot) != size for pot in pots):
+            fails.append(f"{name}: a league phase of {key} logs pots of {[len(pot) for pot in pots]} clubs")
+            continue
         clubs = [c for pot in pots for c in pot]
         if not changing and [c[0] for c in clubs] != sorted(c[0] for c in clubs):
             fails.append(f"{name}: changing rules off, the pots of {key} left the seed order")
-        if changing and not moved:
-            for upper, lower in zip(pots, pots[1:]):
-                if max(c[1] for c in lower) > min(c[1] for c in upper):
-                    fails.append(f"{name}: a lower pot of {key} holds a higher reputation")
+        if changing:
+            high = sum(c[1] > min(u[1] for u in upper) for i, upper in enumerate(pots) for lower in pots[i + 1:]
+                       for c in lower)
+            if high > phase["moved"] * len(pots):
+                fails.append(f"{name}: {high} clubs of lower pots of {key} hold a higher reputation, "
+                             f"{phase['moved']} changed pots")
     return fails
 
 

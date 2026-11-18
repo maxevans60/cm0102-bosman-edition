@@ -329,7 +329,7 @@ void season_league_pots(int days, const int *nation, int order[SEASON_LEAGUE_CLU
             int x = nation[order[i]];
             if (pot_count(nation, order, s, p, x) <= pot_limit(nation, s, x)) continue;
             int j = swap_place(nation, order, s, p, x);
-            if (j < 0) return;                              /* no place: the draw's last rule decides */
+            if (j < 0) continue;                            /* no place: the draw's last rule decides */
             int t = order[i];
             order[i] = order[j], order[j] = t;
         }

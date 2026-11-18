@@ -217,7 +217,7 @@ uint32_t season_uefa_league_make(uint32_t parent, uint32_t *clubs, int days, int
     }
     /* The test seam of the pots: entry code (+0x1df), reputation (+0x80) and nation of each club, in pot order. */
     for (int p = 0, s = days == 8 ? 9 : 6; p < SEASON_LEAGUE_CLUBS / s; p++) {
-        char line[16 * 9] = "";
+        char line[32 * 9] = "";                 /* " code:reputation:nation", the nation a 10-digit address */
         for (int i = p * s; i < (p + 1) * s; i++)
             snprintf(line + strlen(line), sizeof line - strlen(line), " %d:%d:%d", g_mem[clubs[i] + 0x1df],
                      (int16_t)rd16(g_mem, clubs[i] + 0x80), nation[i]);
