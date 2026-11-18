@@ -42,7 +42,7 @@ Each download is ready to play. It includes the game files from the free release
 - Best XI and squad depth on one screen, and an Assistant that picks the best, fittest or under-21 team.
 - Clickable player and club names, coloured attributes, condition and morale.
 - Holiday until the next match, faster holiday days and a Fastest commentary speed.
-- Save names with your club and the date, with the last three copies of each save kept as backups.
+- Save names with your club or national team and the date, with the last three copies of each save kept as backups.
 - Keyboard shortcuts, and a window that reopens where you left it.
 
 Every feature is a line in `settings.txt` in the save folder and can be switched off. In the base game (2001/02, 3.9.68, changing rules off) no feature changes a match result. The [site](https://maxevans60.github.io/cm0102-bosman-edition/#questions) lists every setting and its default.
