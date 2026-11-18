@@ -10,11 +10,12 @@ then the program ends) with RECOMP_SQUAD_LOAN_TEST=1. The runtime (rt_squad_loan
 loans a player between a senior club and its linked B side. The human manager then takes each side in turn and uses the move
 item of the staff profile's Action menu, through the screen's own handler 0x888260.
 
-The test makes one loan from the senior side to the B side and one the other way. The manager of a side sees the move
-item only for some placements, so a move can find no item. The checks: the run ends with code 0, both loans ran with
-four moves each, a manager of one side had the item for each loan, and each side holds the player in one slot after
-every move. --keep-faults runs with RECOMP_ORIGINAL_FAULTS=keep:squad_loans: it passes only when a side
-holds him in two slots, which proves that the test finds the fault.
+The test makes one loan from the senior side to its B side, and one against the link of club_get_linked_b_team 0x540a50.
+The data holds no one-contract player of a true B side, so the second loan is between two clubs that the game's fixed
+table links, whatever their names. The checks: the run ends with code
+0, both loans ran with four moves each, the Action menu offers no move for such a loan, and each side holds the player
+in one slot after every move. --keep-faults runs with RECOMP_ORIGINAL_FAULTS=keep:squad_loans: it passes only when the
+menu offers the move for each loan and a side then holds him in two slots, which proves that the test finds the fault.
 """
 import os
 import re
@@ -47,6 +48,8 @@ def main(argv):
     fails = []
     if "run: code 0 " not in run.stdout:
         fails.append("the start-only run did not end with code 0 (" + log + ")")
+    if "recomp: message box from" in text:
+        fails.append("the game showed a message box (" + log + ")")
     loans, moves = LOAN.findall(text), [tuple(map(int, m)) for m in MOVE.findall(text)]
     if len(loans) != 2:
         fails.append(f"{len(loans)} loans, expected one in each direction")
@@ -56,8 +59,11 @@ def main(argv):
     if len(moves) != 4 * len(loans):
         fails.append(f"{len(moves)} moves for {len(loans)} loans, expected 4 each")
     for staff, _, _, _, _ in loans:
-        if not any(m[0] == int(staff) and m[3] >= 0 for m in moves):
-            fails.append(f"staff {staff}: no manager of either side had the move item")
+        offered = any(m[0] == int(staff) and m[3] >= 0 for m in moves)
+        if keep_faults and not offered:
+            fails.append(f"staff {staff}: the fault is kept and no manager of either side had the move item")
+        if not keep_faults and offered:
+            fails.append(f"staff {staff}: the Action menu offers a move that the game does not make")
     for staff, number, club, item, first, second in moves:
         print(f"staff {staff} move {number} by the manager of club {club}: item {item}, slots {first} and {second}")
     doubled = any(m[4] > 1 or m[5] > 1 for m in moves)
