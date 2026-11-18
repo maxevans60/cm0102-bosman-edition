@@ -296,6 +296,13 @@ if(NOT WIN32)
     target_include_directories(season_sizes_asia_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_sizes_asia COMMAND season_sizes_asia_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_sizes_asia PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The places of Japan and Finland that the rules table decides (0.7.3 slice 4).
+    add_executable(season_sizes_places_test tests/seasons/test_season_sizes_places.c
+        src/recomp_rt/win/season_sizes_places.c src/recomp_rt/win/season_league.c src/recomp_rt/win/season_rules.c
+        src/recomp_rt/win/season_league_table.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_sizes_places_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_sizes_places COMMAND season_sizes_places_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_sizes_places PROPERTIES FIXTURES_REQUIRED rules_table)
     # Domestic cups that the rules table does not hold in some seasons (0.6.0 slice 21b).
     add_executable(season_cup_breaks_test tests/seasons/test_season_cup_breaks.c
         src/recomp_rt/win/season_cup_breaks.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
