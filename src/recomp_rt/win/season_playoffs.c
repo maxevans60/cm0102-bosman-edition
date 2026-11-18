@@ -6,8 +6,8 @@
  * no play-off code of its own: advance_stage (vtable +0x28) is the empty function 0x5a8f60 and the result
  * handler (+0x44) is the base League one 0x686940. Examples: the Segunda from 2010/11, the Turkish second tier
  * from 2010/11, each only when the division above relegates the direct places and one more (see balanced).
- * So not the Conference (League Two relegates 1) and not the Greek second tier (GrePrm relegates 2). J2 and the
- * Argentine second tier have no set_up_rules wrap of slice 18, so they get no play-off. A class with its own
+ * So not the Conference (League Two relegates 1) and not the Greek second tier (GrePrm relegates 2). The Argentine
+ * second tier has no set_up_rules wrap of slice 18, so it gets no play-off. J2 has one (0x665140). A class with its own
  * builder (England, Serie B, Norway, Ireland and the others of the doc) keeps the original's play-off.
  *
  * How. After each set_up_rules of such a league (vtable +0x8c: the constructor and start_new_season call it;
@@ -847,7 +847,8 @@ void season_playoffs_rules(uint32_t obj)
     int clubs = shape_clubs(file, season, &direct);
     /* Open item 283: the real 2023. J1 sends 1 down and takes 3 up, because it grows from 18 to 20 clubs, so the J2
      * play-off plays with no third club coming down (the wrap of 0x689c80 moves each club on its own). */
-    int want = clubs && (balanced(obj, direct) || (!strcmp(file, "jap_j2") && season_places_jap_grows(season, direct)));
+    int want = clubs && (balanced(obj, direct) || (!strcmp(file, "jap_j2") && season_changing_rules() &&
+                                                  season_places_jap_grows(season, direct)));
     int have = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1;
     if (!want) {
         /* The class set_up_rules rewrites +0xbf (ScoFirst 0x7eee9a), so after a cross season the mark can be gone
@@ -906,7 +907,7 @@ void season_playoffs_rules(uint32_t obj)
 
 #define CROSS_LOWER 3                   /* the play-off places of the lower division: 2nd to 4th */
 #define CROSS_JAPAN 1                   /* J2's play-off place: its 3rd (open item 283) */
-#define JAPAN_DIRECT 2                  /* J2's direct places in those seasons (JapJ2::set_up_rules 0x665190) */
+#define JAPAN_DIRECT 2                  /* J2's direct places in those seasons (JapJ2::set_up_rules 0x665140, +0xbe at 0x665190) */
 #define JAPAN_THIRD 2                   /* the table row of J2's 3rd */
 #define CROSS_SPAN 22                   /* days from the table to the last leg of the ladder */
 #define F_SCO_FIRST_ADVANCE 0x007ef270u /* ScoFirst +0x28: advance_stage */
@@ -946,7 +947,10 @@ static int cross_shape(uint32_t lower, int season, uint32_t *upper, int *ladder)
     const char *lf = readable(lower) ? season_change_file(lower) : NULL;
     if (jap_lower(lf)) {
         uint32_t j1 = league_above(lower);
-        if (!j1 || strcmp(season_change_file(j1), "jap_j1") || !season_places_jap_cross(season)) return 0;
+        /* Only with changing rules on: with them off the game stays as 0.7.2 plays it (spec L2). */
+        if (!season_changing_rules() || !j1 || strcmp(season_change_file(j1), "jap_j1") ||
+            !season_places_jap_cross(season))
+            return 0;
         if (upper) *upper = j1;
         if (ladder) *ladder = 0;
         return 1;

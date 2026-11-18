@@ -1647,8 +1647,8 @@ static void lone_stay_news(uint32_t comp)
 static void lone_send(uint32_t self, const char *file, int i, int down);
 
 /* Open item 283: J2's relegation places of the edition before its count changes (the real 2023: 22 clubs to 20, 2 down
- * to the J3 League, which the game does not hold). The chain of J1 runs first and the step follows at J1's
- * set_up_rules, before J2's own start_new_season, so the clubs go here: the plan then fills J2 to its row from the
+ * to the J3 League, which the game does not hold). The chain of J1 runs first (0x6636e3) and the step follows at
+ * J1's free_table (0x6636ec), before J2's own start_new_season, so the clubs go here: the plan then fills J2 to its row from the
  * Japanese clubs with no division, and never takes back a club that went down (lone_down, step_up_ok). */
 static void j2_exchange(void)
 {

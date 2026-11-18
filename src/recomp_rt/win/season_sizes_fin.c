@@ -18,7 +18,8 @@
  * stages takes a new block here. No stage exists then (+0x30 is -1 at 0x593c81). League::load 0x687b10 allocates the
  * slots of the saved count, so a game saved in a season of 3 stages loads with its 3 slots.
  *
- * The base game and RECOMP_LEAGUE_SIZES=off change nothing: the count is lowered only with the size engine on. The
+ * The base game, changing rules off and RECOMP_LEAGUE_SIZES=off change nothing: the count is lowered only with the
+ * size engine and changing rules on. The
  * wrap raises a count of 3 in every game, because only this file writes 3: a game saved in such a season and continued
  * with the engine off gets its fourth stage back. */
 #include "win.h"
@@ -41,13 +42,12 @@
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
-/* 1 when the edition of the object plays no relegation play-off. As row_now of season_sizes.c: the start season's row
- * with changing rules off and while the game is made (Q232). */
+/* 1 when the edition of the object plays no relegation play-off. Only with changing rules on: with them off the game
+ * stays as 0.7.2 plays it (spec L2). While the game is made the row is the start season's, as row_now of season_sizes.c. */
 static int no_playoff(uint32_t obj)
 {
-    if (!season_sizes_on()) return 0;
-    int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
-                                                                       : (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (!season_sizes_on() || !season_changing_rules()) return 0;
+    int year = season_change_is_creating() ? season_start_year() : (int16_t)rd16(g_mem, obj + COMP_YEAR);
     return season_places_fin_no_playoff(year);
 }
 
