@@ -1,0 +1,308 @@
+/* Squad numbers 1 to 99 (GitHub issue 140, 0.7.3 slice 13). The patches are in tools/recomp/squad_numbers.py.
+ *
+ * A squad number is the signed byte +0x3a of a contract: positive at a human club, negative at another (0x85a639).
+ * The option squad_numbers_99 (off by default) decides which NEW numbers the game gives:
+ * - a new game keeps database numbers up to 99 in place of cutting them to 50, in the contract build (0x4c78bc..0x4c78c5)
+ *   and in the loader (0x859f6b..0x859f6f);
+ * - allocate_squad_number 0x85a470 gives 51 to 99 when 1 to 50 are all taken.
+ *
+ * The two tables of the original hold 50 numbers and have no bounds check, so they widen in both modes. A save made
+ * with the option on must load with it off: the game keeps those numbers and gives no new ones above 50.
+ * - allocate_squad_number 0x85a470: 50 flag bytes on the stack, written at 0x85a500. Number 53 reaches the pointer list
+ *   at [esp + 0x50] that the same loop goes on to read.
+ * - assign_club_squad_numbers 0x859fe0: int[50] at [esp + 0x110], read at 0x85a293 and written at 0x85a328. Number 51
+ *   reaches the squad list at [esp + 0x1d8].
+ * Numbers 1 to 50 stay in the original's stack tables, so a game with no higher number runs as the original. Numbers
+ * 51 to 99 go in the tables below. Neither function calls itself. assign calls allocate at 0x85a3de, and each has its
+ * own table.
+ *
+ * Network games: a joiner runs only ScreenManager::run_network_client 0x7fdc00, so these rules run on the host and
+ * use the host's setting.
+ *
+ * Test switch RECOMP_TEST_SQUAD_NUMBERS=1: the checks at the end of this file run at the first human turn. */
+#include "win.h"
+#include "options.h"
+#include "../rt.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+enum { LOW_TOP = 50, HIGH_TOP = 99, HIGH_COUNT = HIGH_TOP - LOW_TOP };
+
+static uint32_t assign_high[HIGH_COUNT];   /* the holder of each number 51 to 99 in assign_club_squad_numbers */
+static uint8_t allocate_high[HIGH_COUNT];  /* 1 when allocate_squad_number found the number 51 to 99 in the squad */
+
+static int is_high(int32_t n) { return n > LOW_TOP && n <= HIGH_TOP; }
+
+/* The highest number that the game gives or keeps from the database. */
+uint32_t rt_squad_number_top(void)
+{
+    return options_bool(OPT_SQUAD_NUMBERS_99) ? HIGH_TOP : LOW_TOP;
+}
+
+/* assign_club_squad_numbers 0x859fe0: its start, where the original clears its two tables (0x859fee). */
+void rt_squad_assign_begin(void)
+{
+    memset(assign_high, 0, sizeof assign_high);
+}
+
+/* 0x85a293: the holder of number n. A number outside 1 to 99 counts as taken, so 0x85a2a5 clears it. */
+uint32_t rt_squad_assign_taken(uint32_t esp, uint32_t number)
+{
+    int32_t n = (int32_t)number;
+    if (n >= 1 && n <= LOW_TOP) return rd32(g_mem, esp + (uint32_t)n * 4u + 0x10cu);
+    return is_high(n) ? assign_high[n - LOW_TOP - 1] : 1u;
+}
+
+/* 0x85a29a: the address of the slot of number n in the original's table, 0 for a number above 50. */
+uint32_t rt_squad_assign_slot(uint32_t esp, uint32_t number)
+{
+    int32_t n = (int32_t)number;
+    return n >= 1 && n <= LOW_TOP ? esp + (uint32_t)n * 4u + 0x10cu : 0u;
+}
+
+/* 0x85a328: the player holds the number kept in bl. */
+void rt_squad_assign_keep(uint32_t slot, uint32_t ebx, uint32_t player)
+{
+    int32_t n = (int8_t)ebx;
+    if (slot) wr32(g_mem, slot, player);
+    else if (is_high(n)) assign_high[n - LOW_TOP - 1] = player;
+}
+
+/* 0x85a40b and 0x85a440: the holder of number n in the last loops, which the patches run on to 99. */
+uint32_t rt_squad_assign_holder(uint32_t slot, int32_t n)
+{
+    return n <= LOW_TOP ? rd32(g_mem, slot) : assign_high[n - LOW_TOP - 1];
+}
+
+/* allocate_squad_number 0x85a470: its start, where the original clears its flags (0x85a48f). */
+void rt_squad_allocate_begin(void)
+{
+    memset(allocate_high, 0, sizeof allocate_high);
+}
+
+/* 0x85a500: 1 when the number is not one of the original's 50 flags, so the stack stays as it is. */
+uint32_t rt_squad_allocate_mark(uint32_t number)
+{
+    int32_t n = (int32_t)number;
+    if (n >= 1 && n <= LOW_TOP) return 0;
+    if (is_high(n)) allocate_high[n - LOW_TOP - 1] = 1;
+    return 1;
+}
+
+/* 0x85a6f3, when 1 to 50 are all taken: the first free number above 50, 0 for none or with the option off. */
+uint32_t rt_squad_allocate_high(void)
+{
+    if (rt_squad_number_top() <= LOW_TOP) return 0;
+    for (int i = 0; i < HIGH_COUNT; i++)
+        if (!allocate_high[i]) return (uint32_t)(LOW_TOP + 1 + i);
+    return 0;
+}
+
+/* The checks of RECOMP_TEST_SQUAD_NUMBERS. They change the squads of the game, and the game stops after them. */
+#define SQUAD_MANAGER 0xdd7ef0u
+#define GET_NUMBER 0x0085a760u          /* thiscall (person, club) */
+#define SET_NUMBER 0x0085a850u          /* thiscall (person, club, number) */
+#define ALLOCATE 0x0085a470u            /* thiscall (club, player) */
+#define ASSIGN 0x00859fe0u              /* thiscall (club, keep numbers) */
+#define IS_HUMAN_CLUB 0x00600a50u       /* cdecl (club, 0, 1, 0, 0), as 0x85a3f6 */
+#define CLUBS 0xae23b4u
+#define CLUB_COUNT 0xae235cu
+#define CLUB_SIZE 0x245u
+#define CLUB_SQUAD 0xd7u                /* 50 staff pointers (0x85a028) */
+#define STAFF_COUNT 0xae2364u
+#define STAFF_ROWS 0xae2d0cu            /* 79-byte rows: +0 the main contract */
+#define CONTRACTS 0xae1050u
+
+static int test_failures;
+
+static uint32_t manager_call(uint32_t fn, int n, const uint32_t *args)
+{
+    Cpu saved = cpu;
+    cpu.ecx = rd32(g_mem, SQUAD_MANAGER);
+    uint32_t r = rt_callback(fn, n, args);
+    cpu = saved;
+    return r;
+}
+
+static int number_of(uint32_t person, uint32_t club)
+{
+    uint32_t a[2] = {person, club};
+    return (int8_t)manager_call(GET_NUMBER, 2, a);
+}
+
+static void set_number(uint32_t person, uint32_t club, int n)
+{
+    uint32_t a[3] = {person, club, (uint32_t)n};
+    manager_call(SET_NUMBER, 3, a);
+}
+
+static void test_line(int ok, const char *name, int value, int want)
+{
+    test_failures += !ok;
+    fprintf(stderr, "recomp: squad numbers test: %s %s (%d, want %d)\n", ok ? "ok" : "FAIL", name, value, want);
+}
+
+static uint32_t squad_slot(uint32_t club, int i)
+{
+    return rd32(g_mem, club + CLUB_SQUAD + (uint32_t)i * 4u);
+}
+
+static int is_player(uint32_t person)
+{
+    return person && rd32(g_mem, person) < rd32(g_mem, STAFF_COUNT) && rd32(g_mem, person + 0x61u);
+}
+
+static int squad_size(uint32_t club)
+{
+    int n = 0;
+    for (int i = 0; i < 50; i++) n += is_player(squad_slot(club, i));
+    return n;
+}
+
+static int human_club(uint32_t club)
+{
+    uint32_t a[5] = {club, 0, 1, 0, 0};
+    Cpu saved = cpu;
+    uint32_t r = rt_callback(IS_HUMAN_CLUB, 5, a);
+    cpu = saved;
+    return r != 0;
+}
+
+/* The first club of the wanted kind with at least 15 players, 0 for none. */
+static uint32_t find_club(int human)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS), count = rd32(g_mem, CLUB_COUNT);
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t club = clubs + i * CLUB_SIZE;
+        if (squad_size(club) >= 15 && human_club(club) == human) return club;
+    }
+    return 0;
+}
+
+/* Moves a player of another club into the club: his contract and an empty squad slot. */
+static int take_player(uint32_t club, uint32_t person)
+{
+    int32_t index = (int32_t)rd32(g_mem, rd32(g_mem, STAFF_ROWS) + rd32(g_mem, person) * 79u);
+    if (index < 0) return 0;
+    wr32(g_mem, rd32(g_mem, rd32(g_mem, CONTRACTS)) + (uint32_t)index * 80u + 4u, rd32(g_mem, club));
+    wr32(g_mem, person + 0x39u, club);
+    return 1;
+}
+
+/* Fills the club's 50 slots from other clubs, and returns one more player of the club who is outside the list. */
+static uint32_t fill_squad(uint32_t club)
+{
+    uint32_t clubs = rd32(g_mem, CLUBS), count = rd32(g_mem, CLUB_COUNT), extra = 0;
+    int slot = 0;
+    for (uint32_t c = 0; c < count && !extra; c++) {
+        uint32_t other = clubs + c * CLUB_SIZE;
+        if (other == club) continue;
+        for (int i = 0; i < 50 && !extra; i++) {
+            uint32_t person = squad_slot(other, i);
+            if (!is_player(person) || !take_player(club, person)) continue;
+            while (slot < 50 && is_player(squad_slot(club, slot))) slot++;
+            if (slot < 50) wr32(g_mem, club + CLUB_SQUAD + (uint32_t)slot * 4u, person);
+            else extra = person;
+            wr32(g_mem, other + CLUB_SQUAD + (uint32_t)i * 4u, 0);
+        }
+    }
+    return extra;
+}
+
+/* High numbers go through both functions and stay, at a club of each kind. */
+static void check_kept(uint32_t club, const char *kind)
+{
+    static const int numbers[] = {53, 60, 75, 99};
+    uint32_t players[4] = {0};
+    int have = 0;
+    char name[80];
+    for (int i = 0; i < 50 && have < 4; i++)
+        if (is_player(squad_slot(club, i))) players[have++] = squad_slot(club, i);
+    for (int i = 0; i < have; i++) set_number(players[i], club, numbers[i]);
+    for (int i = 0; i < have; i++) {
+        snprintf(name, sizeof name, "%s club: the setter takes %d", kind, numbers[i]);
+        test_line(abs(number_of(players[i], club)) == numbers[i], name, number_of(players[i], club), numbers[i]);
+    }
+    uint32_t a[2] = {club, 1};
+    manager_call(ASSIGN, 2, a);
+    for (int i = 0; i < have; i++) {
+        snprintf(name, sizeof name, "%s club: assign keeps %d", kind, numbers[i]);
+        test_line(abs(number_of(players[i], club)) == numbers[i], name, abs(number_of(players[i], club)), numbers[i]);
+    }
+    int sign = human_club(club) ? 1 : -1;
+    snprintf(name, sizeof name, "%s club: the kept number has the sign of the club", kind);
+    test_line(number_of(players[3], club) == sign * numbers[3], name, number_of(players[3], club), sign * numbers[3]);
+    uint32_t last = players[have - 1];
+    set_number(last, club, 0);
+    uint32_t b[2] = {club, last};
+    manager_call(ALLOCATE, 2, b);
+    int got = abs(number_of(last, club));
+    snprintf(name, sizeof name, "%s club: allocate gives a free number below 51", kind);
+    test_line(got >= 1 && got <= LOW_TOP, name, got, 1);
+    for (int i = 0; i < have - 1; i++) {
+        snprintf(name, sizeof name, "%s club: allocate leaves %d", kind, numbers[i]);
+        test_line(abs(number_of(players[i], club)) == numbers[i], name, abs(number_of(players[i], club)), numbers[i]);
+    }
+}
+
+/* A signing at a club whose 1 to 50 are all taken. */
+static void check_full(uint32_t club)
+{
+    uint32_t extra = fill_squad(club);
+    test_line(extra != 0, "a full squad and one more player", extra != 0, 1);
+    if (!extra) return;
+    int sign = human_club(club) ? 1 : -1, n = 0;
+    for (int i = 0; i < 50; i++)
+        if (is_player(squad_slot(club, i))) set_number(squad_slot(club, i), club, sign * ++n);
+    test_line(n == 50, "the squad holds 1 to 50", n, 50);
+    set_number(extra, club, 0);
+    uint32_t a[2] = {club, extra};
+    manager_call(ALLOCATE, 2, a);
+    int want = rt_squad_number_top() > LOW_TOP ? sign * (LOW_TOP + 1) : 0;
+    test_line(number_of(extra, club) == want, "the signing's number", number_of(extra, club), want);
+}
+
+/* RECOMP_TEST_SQUAD_NUMBERS=1 runs the checks at the first human turn and stops the game. =count only prints the
+ * count of numbers above 50 at each human turn of a new game day. */
+void squad_numbers_test_turn(void)
+{
+    static int state = -1, last_day = -1;
+    if (state < 0) {
+        const char *v = getenv("RECOMP_TEST_SQUAD_NUMBERS");
+        state = !v ? 0 : strcmp(v, "count") ? 1 : 2;
+    }
+    if (!state) return;
+    int day = (int16_t)rd16(g_mem, 0xae2c90u) + (int16_t)rd16(g_mem, 0xae2c92u) * 366;
+    if (state == 2 && day == last_day) return;
+    last_day = day;
+
+    uint32_t clubs = rd32(g_mem, CLUBS), count = rd32(g_mem, CLUB_COUNT);
+    int above = 0, highest = 0;
+    for (uint32_t c = 0; c < count; c++) {
+        uint32_t club = clubs + c * CLUB_SIZE;
+        for (int i = 0; i < 50; i++) {
+            if (!is_player(squad_slot(club, i))) continue;
+            int n = abs(number_of(squad_slot(club, i), club));
+            above += n > LOW_TOP;
+            if (n > highest) highest = n;
+        }
+    }
+    fprintf(stderr, "recomp: squad numbers test: option %s, %d players above 50, highest %d\n",
+            rt_squad_number_top() > LOW_TOP ? "on" : "off", above, highest);
+    if (state == 2) return;
+    state = 0;
+
+    uint32_t ai = find_club(0), human = find_club(1);
+    test_line(ai != 0, "a computer club", ai != 0, 1);
+    test_line(human != 0, "the human club", human != 0, 1);
+    if (ai) check_kept(ai, "computer");
+    if (human) check_kept(human, "human");
+    if (ai) check_full(ai);
+    if (human) check_full(human);
+    fprintf(stderr, "recomp: squad numbers test: done, %d failures\n", test_failures);
+    fflush(stderr);
+    if (rt_on_fatal) rt_on_fatal();
+    exit(test_failures ? 1 : 0);
+}

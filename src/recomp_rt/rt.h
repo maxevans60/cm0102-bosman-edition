@@ -302,6 +302,16 @@ uint32_t rt_euro_cfg_year(void);       /* win/season_uefa_seeding.c: 0x9041ec, t
 /* The league load's row arrays (win/league_load.c, tools/recomp/league_load.py at 0x68c898): 0 when the read
  * of a row's result array failed only because the array has 0 bytes (a league of one club), else 1. */
 uint32_t rt_league_row_read_failed(uint32_t league);
+/* Squad numbers 1 to 99 (win/squad_numbers.c, tools/recomp/squad_numbers.py). */
+uint32_t rt_squad_number_top(void);
+void rt_squad_assign_begin(void);
+uint32_t rt_squad_assign_taken(uint32_t esp, uint32_t number);
+uint32_t rt_squad_assign_slot(uint32_t esp, uint32_t number);
+void rt_squad_assign_keep(uint32_t slot, uint32_t ebx, uint32_t player);
+uint32_t rt_squad_assign_holder(uint32_t slot, int32_t n);
+void rt_squad_allocate_begin(void);
+uint32_t rt_squad_allocate_mark(uint32_t number);
+uint32_t rt_squad_allocate_high(void);
 /* The ban release's nation index (win/discipline_ban.c, tools/recomp/discipline_ban.py at 0x556dcf): the entry
  * of the staff id under any nation, 0 for none, or 1 when the fix is off (the original's box). */
 uint32_t rt_discipline_ban_entry(uint32_t discipline, uint32_t staff);
