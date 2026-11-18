@@ -12,7 +12,7 @@
  *   matches. 2021/22 to 2024/25 and from 2026/27 the same rounds in two legs.
  * - 2025/26: four clubs play round 1, the winners meet the two best clubs in round 2, a semi-final, then the final
  *   with the Eredivisie 16th. All two legs.
- * Seeds count the Eerste Divisie entrants in table order from 0. The lower seed of a tie plays the first leg at home. */
+ * Seeds count the Eerste Divisie entrants in table order from 0. */
 #include "season_ned_playoff_plan.h"
 
 NedPoForm ned_po_form(int season)

@@ -12,7 +12,9 @@ after 365 days, in July of the next year (soak_run.py). The checks of each run:
     drawn    the brackets of the season, each with its clubs;
     ties     each tie of the log is the tie of the plan (list places of the drawn line, winners of the round before);
     moves    in the save each bracket's winner plays in the Eredivisie, and the Eredivisie club of the bracket plays in
-             the Eerste Divisie when a lower club won; the Eredivisie keeps 18 clubs;
+             the Eerste Divisie when a lower club won; the Eredivisie keeps 18 clubs; the clubs that change division
+             are the direct places of the season and the lower clubs that won a bracket, as many up as down;
+    entrants no Jong side plays the knockout;
     none     2003/04 plays the groups and 2019/20 no play-off: no knockout line;
     load     the run r2012 saves during the play-off, a new program loads the save and plays the rest.
 --seed <n> plays another game (a folder per seed), so that both an Eredivisie club and a lower club win a bracket.
@@ -57,6 +59,11 @@ RUNS = {
 }
 # run: the game days before the save during the play-off (the draw comes about 308 days after the start).
 SAVE_IN_PLAYOFF = {"r2012": 318}
+
+
+def direct_places(year):
+    """The clubs that change division with no play-off: rows hol-bel of the Eredivisie and the Eerste Divisie."""
+    return 0 if year == 2019 else 2 if year >= 2020 else 1
 
 
 def save_divisions(save):
@@ -111,7 +118,8 @@ def check(name, work, loaded=None):
     report = os.path.join(work, "report.tsv")
     if not os.path.isfile(report):
         return failed + ["no report"]
-    _seasons, comps = rrc.read_report(report, [])
+    club_lines = []
+    _seasons, comps = rrc.read_report(report, club_lines)
     start = {c["file"]: c for c in comps if c["season"] == year and c["phase"] == "start"}
     upper_id = start["hol_prm"]["record"] if "hol_prm" in start else None
     lower_id = start["hol_first"]["record"] if "hol_first" in start else None
@@ -141,6 +149,8 @@ def check(name, work, loaded=None):
         entrants = x[5:]
         if x[3] != f"{legs} legs":
             failed.append(f"drawn: bracket {b}: {x[3]}, want {legs} legs")
+        if any("jong" in e.lower().split() or e.endswith((" U21", " U23")) for e in entrants):
+            failed.append(f"entrants: bracket {b}: a Jong side plays: {entrants}")
         if len(entrants) != clubs or len(set(entrants)) != clubs:
             failed.append(f"drawn: bracket {b}: clubs {entrants}, want {clubs} different clubs")
             continue
@@ -157,6 +167,13 @@ def check(name, work, loaded=None):
         want = lower_id if verdict == "goes up" else upper_id
         if division.get(upper) != want:
             failed.append(f"moves: {upper} in division {division.get(upper)}, want {want}")
+    at_start = {c["name"]: c["division"] for c in club_lines if c["season"] == year and c["phase"] == "start"}
+    went_up = [n for n, d in at_start.items() if d == lower_id and division.get(n) == upper_id]
+    went_down = [n for n, d in at_start.items() if d == upper_id and division.get(n) == lower_id]
+    want = direct_places(year) + sum(x[4] == "goes up" for x in winners)
+    print(f"  {year}: up {went_up}, down {went_down}, want {want} each")
+    if len(went_up) != want or len(went_down) != want:
+        failed.append(f"moves: {len(went_up)} up and {len(went_down)} down, want {want} each")
     return failed
 
 

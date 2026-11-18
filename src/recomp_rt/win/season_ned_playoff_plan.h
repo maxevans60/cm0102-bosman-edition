@@ -36,8 +36,8 @@ int ned_po_round(NedPoForm form, int round, NedPoRound *out);
 /* The entrants of a bracket in list order: a seed from 0 (the best placed Eerste Divisie entrant) or NED_PO_UPPER + k.
  * Returns the count, 0 for no such bracket. */
 int ned_po_entrants(NedPoForm form, int bracket, int out[NED_PO_MAX_LIST]);
-/* The two sides of a tie: a list index from 0, or -(t + 1) for the winner of tie t of the round before. The first side
- * plays the first leg at home. Returns 1 when the tie exists. */
+/* The two sides of a tie: a list index from 0, or -(t + 1) for the winner of tie t of the round before. The draw puts
+ * the sides in home order by their table places (season_ned_playoff_draw_round). Returns 1 when the tie exists. */
 int ned_po_tie(NedPoForm form, int round, int tie, int *first, int *second);
 
 #endif

@@ -18,6 +18,11 @@
  * - Cup::draw_round 0x51c410 is told the ties of each round (season_ned_playoff_draw_round, as season_playoffs_draw_round).
  * - The wrap of 0x5f6ee0 settles a bracket at its final: code 1 is the winner (as EngFirst's handler 0x576d71).
  * - The season change waits for the brackets (season_playoffs.c, entry_playoffs).
+ * - From 2020/21 the Eredivisie relegates two clubs directly and only the 16th plays off (season_ned_playoff_rules):
+ *   HolPrm::set_up_rules 0x5f8560 gives one direct place and two play-off places, which the rules step keeps because
+ *   it reads the row's 2 as one direct place and one play-off winner (season_sizes.c set_places).
+ * - 2019/20 was abandoned and no club moved: before the chain 0x689c20 the rows lose the statuses that it moves (the
+ *   title 5 of 0x684cd0 still goes up with no promotion place).
  * The stages save and load as the Cup_Stages of the other leagues (League::save 0x6891c0, load 0x687b10). A save made
  * during the groups of an older build keeps its League_Stages and the original's handler.
  *
@@ -53,6 +58,8 @@
 #define STATUS_PLAYOFF_UP 1             /* 0x5f676a */
 #define STATUS_PLAYOFF_DOWN 2           /* 0x5f68ad */
 #define STATUS_OUT 0xfeu                /* 0x5f709d */
+#define PLACES_DOWN_PLAYOFF 0xc0u       /* League: relegation play-off places */
+#define PLACES_DOWN 0xc1u               /* League: direct relegation places */
 #define NEWS_OBJECT 0x00dd7f00u
 #define F_NEWS_UP 0x00869480u           /* thiscall (club, record, 0x32), as 0x5f7060 */
 #define F_NEWS_DOWN 0x0086a1c0u         /* thiscall (club, record), as 0x5f70d5 */
@@ -92,7 +99,7 @@ static NedPoForm form_now(uint32_t self)
 {
     static int off = -1;
     if (off < 0) off = st_env_is("RECOMP_NED_PLAYOFF", "off");
-    if (off || !season_game_changes() || !season_changing_rules()) return NED_PO_GROUPS;
+    if (off || !season_sizes_on() || !season_game_changes() || !season_changing_rules()) return NED_PO_GROUPS;
     int season = season_of(self);
     return season < 0 ? NED_PO_GROUPS : ned_po_form(season);
 }
@@ -112,7 +119,12 @@ static int place_in(uint32_t league, uint32_t club)
 /* The bracket of a stage object of this season's play-off, or -1. */
 static int bracket_of(uint32_t self, uint32_t stage)
 {
-    if (!st_readable(self) || !st_readable(stage) || rd32(g_mem, stage) != CUP_VTABLE) return -1;
+    /* HolFirst::start_new_season deletes the stages and keeps the pointers (0x5f6436..0x5f644a), and another cup can
+     * take the freed block: a bracket is a Cup_Stage of this league and this edition. */
+    if (!st_readable(self) || !st_readable(stage) || rd32(g_mem, stage) != CUP_VTABLE ||
+        rd32(g_mem, stage + COMP_RECORD) != rd32(g_mem, self + COMP_RECORD) ||
+        rd16(g_mem, stage + COMP_YEAR) != rd16(g_mem, self + COMP_YEAR))
+        return -1;
     NedPoForm form = form_now(self);
     uint32_t stages = rd32(g_mem, self + COMP_STAGES), first = rt_hol_playoff_stage(self, 4u);
     for (int b = 0; b < ned_po_brackets(form); b++)
@@ -233,19 +245,27 @@ int season_ned_playoff_build(uint32_t self)
     if (!brackets) return 0;
     uint32_t lower[8], upper[2];
     int want_low = ned_po_lower_clubs(form), want_up = ned_po_upper_clubs(form);
+    /* The Eredivisie clubs first: the groups of the fallback pick their own clubs, and pick_lower sends news. */
+    int up = pick_upper(want_up, upper);
+    if (up != want_up) {
+        fprintf(stderr, "recomp: ned playoff\tno knockout\t%d\t%d of %d upper clubs: the groups play\n", season, up,
+                want_up);
+        return 0;
+    }
     int low = pick_lower(self, want_low, lower);
     if (rt_unwinding) return 1;
-    int up = pick_upper(want_up, upper);
-    if (low != want_low || up != want_up) {
-        fprintf(stderr, "recomp: ned playoff\tno knockout\t%d\t%d of %d lower clubs, %d of %d upper clubs: the groups "
-                        "play\n", season, low, want_low, up, want_up);
+    if (low != want_low) {
+        fprintf(stderr, "recomp: ned playoff\tno knockout\t%d\t%d of %d lower clubs: the groups play\n", season, low,
+                want_low);
         return 0;
     }
     uint32_t first = rt_hol_playoff_stage(self, 4u);
     int legs = ned_po_legs(season);
+    for (int b = 0; b < brackets; b++)
+        wr32(g_mem, rd32(g_mem, self + COMP_STAGES) + 4u * (first + (uint32_t)b), 0);   /* no pointer of last season */
     for (int b = 0; b < brackets; b++) {
         if (!build_bracket(self, form, legs, b, first + (uint32_t)b, lower, upper)) {
-            /* Out of memory: the slot stays empty and the game cannot go on, as the box at 0x5f6a48. */
+            /* Out of memory: the game cannot go on, as at the box of 0x5f6a48. */
             if (!rt_unwinding) fprintf(stderr, "recomp: ned playoff\tfailed\t%d\tbracket %d\n", season, b);
             return 1;
         }
@@ -341,7 +361,21 @@ void season_ned_playoff_draw_round(uint32_t cup, int round)
             want[2 * t + k] = have[found];
         }
     }
+    /* The better placed club plays the second leg at home, an Eredivisie club above every Eerste Divisie club (RSSSF
+     * 2011/12, 2018/19, 2022/23). A single match (2020/21) is at the better placed club's ground: side 0 is at home
+     * (season_playoffs.c, the play-off of six). */
+    int legs = ned_po_legs(season_of(self));
     for (int t = 0; t < o.ties; t++) {
+        if (want[2 * t].slot >= 0 && want[2 * t + 1].slot >= 0) {
+            int a = place_in(self, rd32(g_mem, list + 6u * (uint32_t)want[2 * t].slot));
+            int b = place_in(self, rd32(g_mem, list + 6u * (uint32_t)want[2 * t + 1].slot));
+            int first_better = a < 0 ? 1 : b < 0 ? 0 : a < b;     /* -1: the Eredivisie club */
+            if (first_better == (legs == 2)) {
+                Side x = want[2 * t];
+                want[2 * t] = want[2 * t + 1];
+                want[2 * t + 1] = x;
+            }
+        }
         for (int k = 0; k < 2; k++) side_set(base + (uint32_t)t * TIE_SIZE, k, &want[2 * t + k]);
         /* tests/seasons/ned_playoff_run.py compares these lines with the plan. */
         fprintf(stderr, "recomp: ned playoff\ttie\t%d\tbracket %d\tround %d\ttie %d\t%.51s\t%.51s\n", season_of(self),
@@ -431,6 +465,36 @@ uint32_t season_ned_playoff_last_stage(uint32_t obj, uint32_t last)
     if ((int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) > (int32_t)first) return last;
     return form == NED_PO_NONE ? first - 1u : ned_po_brackets(form) == 1 ? first : last;
 }
+
+void season_ned_playoff_rules(uint32_t obj)
+{
+    uint32_t first = st_league_of(KEY_FIRST);
+    if (!st_readable(obj) || !first || obj != st_league_of(KEY_PREMIER)) return;
+    NedPoForm form = form_now(first);
+    if (form != NED_PO_SEVEN && form != NED_PO_LADDER) return;
+    g_mem[obj + PLACES_DOWN] = 2;
+    g_mem[obj + PLACES_DOWN_PLAYOFF] = 1;
+}
+
+/* Before the chain of HolPrm::start_new_season (0x5f8623), while both divisions are in the old season. */
+static void ned_playoff_before_chain(uint32_t league)
+{
+    uint32_t first = st_league_of(KEY_FIRST);
+    if (!first || league != st_league_of(KEY_PREMIER) || form_now(first) != NED_PO_NONE) return;
+    uint32_t both[2] = {league, first};
+    for (int d = 0; d < 2; d++) {
+        int n;
+        uint32_t table = st_table_of(both[d], &n);
+        for (int i = 0; i < n; i++) {
+            uint8_t *s = &g_mem[table + (uint32_t)i * ST_ROW_SIZE + ST_ROW_STATUS];
+            if (*s == ST_UP || *s == ST_TITLE || *s == ST_DOWN) *s = ST_NONE;
+        }
+    }
+    fprintf(stderr, "recomp: ned playoff\tabandoned\t%d\tno club moves\n", season_of(first));
+}
+
+static const SecondTeamHooks ned_playoff_hooks = {NULL, ned_playoff_before_chain, NULL, NULL};
+SEASON_SECOND_HOOKS(ned_playoff_hooks)
 
 int season_ned_playoff_pending(uint32_t obj)
 {
