@@ -1378,6 +1378,7 @@ RT_WRAP(0055f620, input_poll)
     uint32_t poll_ret = rd32(g_mem, cpu.esp), poll_display = cpu.ecx;
     if (poll_ret == SCREEN_LOOP_POLL && net_session_screen_idle()) win_quit_now();
     waits_poll();
+    squad_numbers_test_poll();
     int replay = poll_ret == CLIENT_LOOP_POLL && click_press == press_count && replay_press != press_count &&
                  !(buttons & 1) && !rd32(g_mem, 0xb67a34u) && mouse_x == press_x && mouse_y == press_y &&
                  nc_resets_in() == click_resets;

@@ -313,6 +313,9 @@ void rt_squad_allocate_begin(void);
 uint32_t rt_squad_allocate_mark(uint32_t number);
 uint32_t rt_squad_allocate_high(uint32_t club);
 uint32_t rt_squad_carried(uint32_t number);
+uint32_t rt_squad_screen_strips(uint32_t club, uint32_t list);
+uint32_t rt_squad_screen_list_top(void);
+uint32_t rt_squad_screen_list_bottom(void);
 /* The ban release's nation index (win/discipline_ban.c, tools/recomp/discipline_ban.py at 0x556dcf): the entry
  * of the staff id under any nation, 0 for none, or 1 when the fix is off (the original's box). */
 uint32_t rt_discipline_ban_entry(uint32_t discipline, uint32_t staff);

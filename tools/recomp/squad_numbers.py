@@ -19,6 +19,12 @@ above 50 is outside the list of 50 that 0x541f90 gives.
 
 move_player_to_club 0x8c9720 saves the player's number (0x8c9dfe, 0x8c9f1c) and sets it at the new club (0x8ca7d4). With
 the option off, a number above 50 does not go with him.
+
+squad_numbers_screen_build 0x475520 draws the numbers as two strips of 25 buttons, 1 to 25 above the player list and 26
+to 50 below it (0x477640..0x477821). With the option on, the runtime draws each strip with two rows, 1 to 50 above and
+51 to 99 below, and the list between them is shorter (0x47785a, 0x477862). The event handler 0x47a9e0 takes the number
+from the button's data, so a drop on a button needs no change. Its search for the first free number stops at 50
+(0x47bb28) and now stops at the option's limit.
 """
 
 INSNS = {
@@ -48,6 +54,15 @@ INSNS = {
                "{ uint32_t n_ = rt_squad_allocate_high(ebp); "
                "if (n_) { ebx = (ebx & 0xffffff00u) | (n_ - 1u); goto L_85a700; } }"),
     0x85A740: ("mov byte ptr [esp + eax + 0x18], 1", "if ((int8_t)eax < 50) W8(esp + eax + 0x18u, 1);"),
+    # squad_numbers_screen_build 0x475520: the two strips of numbers and the list between them.
+    0x477640: ("movsx eax, word ptr [0xb77c7a]",
+               "{ uint32_t area_ = rt_squad_screen_strips(R32(esp + 0x14u), R32(esp + 0x38u)); "
+               "if (area_ != 0xffffffffu) { ebp = area_; ebx = 51u; goto L_477827; } } "
+               "eax = (uint32_t)(int32_t)(int16_t)R16(0xb77c7au);"),
+    0x47785A: ("mov esi, 0x1fe", "esi = rt_squad_screen_list_bottom();"),
+    0x477862: ("mov edi, 0xeb", "edi = rt_squad_screen_list_top();"),
+    # squad_numbers_screen_handle_event 0x47a9e0: the first free number. The cmp at 0x47bb28 stays.
+    0x47BB2E: ("jl 0x47bad5", "if ((int8_t)eax < (int32_t)rt_squad_number_top()) goto L_47bad5;"),
     # move_player_to_club 0x8c9720: the number that the player takes to the new club (set at 0x8ca7d4).
     0x8CA7C7: ("mov ecx, dword ptr [esp + 0x2c]", "ecx = rt_squad_carried(R32(esp + 0x2cu));"),
 }
