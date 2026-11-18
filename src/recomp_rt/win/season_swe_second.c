@@ -72,6 +72,7 @@
 #include "season_clubs.h"
 #include "season_names.h"
 #include "season_second_teams.h"
+#include "season_swe_groups.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -93,6 +94,7 @@
 #define CLUB_REPUTATION ST_CLUB_REPUTATION
 #define LEAGUE_YEAR 0x40u
 #define LEAGUE_STAGES 0x0cu             /* the stage table: [0..4] the other five groups, [6] the relegation play-off */
+#define LEAGUE_STAGE_NOW 0x30u          /* s32: the last stage made */
 #define LEAGUE_PICKS 0xeeu              /* 12 club indices that go up (0x892d19..0x892d39, 0x890c12..0x890c5a) */
 #define CUP_COUNT 0x3eu
 #define CUP_ENTRIES 0xa7u               /* 6 bytes an entry, +0 the club (0x890b6d..0x890b7c) */
@@ -218,7 +220,8 @@ static int group_stages(uint32_t league, uint32_t out[GROUPS])
     int n = 0;
     out[n++] = league;
     uint32_t stages = rd32(g_mem, league + LEAGUE_STAGES);
-    for (uint32_t k = 0; st_readable(stages) && k < 5; k++) {
+    int last = (int32_t)rd32(g_mem, league + LEAGUE_STAGE_NOW);     /* issue 106: two groups hold one stage */
+    for (uint32_t k = 0; st_readable(stages) && k < 5 && (int)k <= last; k++) {
         uint32_t s = rd32(g_mem, stages + 4u * k);
         if (st_readable(s)) out[n++] = s;
     }
@@ -356,6 +359,10 @@ static void season_down(uint32_t league, int season, int year)
 void o_00890b40(void);
 RT_WRAP(00890b40, swe_second_season)
 {
+    if (season_swe_groups_down(cpu.ecx)) {             /* issue 106: the deal of 0x890c70 fills the places */
+        rt_ret_stdcall(0, 0);
+        return;
+    }
     uint32_t table = rd32(g_mem, CLUBS);
     int count = (int)rd32(g_mem, CLUB_COUNT);
     if (!season_game_changes() || !st_readable(table) || count <= 0) {
