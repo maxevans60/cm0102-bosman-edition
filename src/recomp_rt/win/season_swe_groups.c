@@ -20,7 +20,7 @@
  *   up 0x890b40 and the deal into six sections 0x890c70 (it stops under 71 clubs, 0x890d86).
  * - The dates: create_schedule 0x891a60 makes 22 rounds (0x891af8), the template takes the rounds of the group.
  * - The places of each group are half the row's: 0x684cd0 reads them from +0xbe and +0xc1 of the table and the stage.
- * The deal runs at each season start (and at a new game): the division takes its clubs from the Lower Division or
+ * The deal runs in create_table, at a new game and at each season start: the division takes its clubs from the Lower Division or
  * sends its lowest clubs by reputation there, never a human manager's club, and the clubs go to Norra or Sodra by the
  * region scores of the original, swe_prm_region_fit_score 0x891370.
  *
@@ -151,6 +151,19 @@ static int region(uint32_t club, const uint32_t keys[3])
     return best;
 }
 
+/* The clubs that the groups sent down at this season change (season_swe_groups_down): the deal that follows on the
+ * same day takes them back only when the Lower Division holds no other club. */
+#define WENT_MAX 32
+static uint32_t went_down[WENT_MAX];
+static int went_count;
+
+static int just_down(uint32_t club)
+{
+    for (int i = 0; i < went_count; i++)
+        if (went_down[i] == club) return 1;
+    return 0;
+}
+
 /* The clubs of the division that the plan holds, each in Norra or Sodra. */
 static void deal(uint32_t prm, const SweGroupsPlan *p, int year, int creating)
 {
@@ -174,18 +187,21 @@ static void deal(uint32_t prm, const SweGroupsPlan *p, int year, int creating)
     }
     for (; have < p->clubs && !rt_unwinding; have++, came++) {
         uint32_t best = 0;
-        for (int i = 0; i < count; i++) {
-            uint32_t c = table + (uint32_t)i * ST_CLUB_SIZE;
-            if (rd32(g_mem, c + ST_CLUB_DIVISION) != lower || !st_nation_is(c, KEY_SWEDEN) ||
-                season_swe_barred(c, second))
-                continue;
-            if (!best || (int16_t)rd16(g_mem, c + ST_CLUB_REPUTATION) > (int16_t)rd16(g_mem, best + ST_CLUB_REPUTATION))
-                best = c;
-        }
+        for (int pass = 0; pass < 2 && !best; pass++)
+            for (int i = 0; i < count; i++) {
+                uint32_t c = table + (uint32_t)i * ST_CLUB_SIZE;
+                if (rd32(g_mem, c + ST_CLUB_DIVISION) != lower || !st_nation_is(c, KEY_SWEDEN) ||
+                    season_swe_barred(c, second) || (!pass && just_down(c)))
+                    continue;
+                if (!best ||
+                    (int16_t)rd16(g_mem, c + ST_CLUB_REPUTATION) > (int16_t)rd16(g_mem, best + ST_CLUB_REPUTATION))
+                    best = c;
+            }
         if (!best) break;
         move_club(prm, F_UP, best, second, creating);
     }
     if (rt_unwinding) return;
+    went_count = 0;
     uint32_t list[SWE_GROUPS_MAX_CLUBS];
     int north[SWE_GROUPS_MAX_CLUBS], group[SWE_GROUPS_MAX_CLUBS], n = 0;
     for (int i = 0; i < count && n < SWE_GROUPS_MAX_CLUBS; i++) {
@@ -203,18 +219,11 @@ static void deal(uint32_t prm, const SweGroupsPlan *p, int year, int creating)
         wr32(g_mem, list[i] + CLUB_ZONE, group[i] ? sodra : norra);
         in_norra += !group[i];
     }
-    fprintf(stderr, "recomp: swe groups: edition %d: Norra %d clubs, Sodra %d clubs (row 2 x %d), %d went down, %d came "
-            "up\n", year, in_norra, n - in_norra, p->size, went, came);
-}
-
-/* A new game: the division takes its clubs before SweSecond's constructor reads them. A loaded game keeps its own. */
-void o_008916f0(void);
-RT_WRAP(008916f0, swe_groups_new)
-{
-    SweGroupsPlan p;
-    int year = (int16_t)(rt_arg(0) & 0xffffu);
-    if (season_change_is_creating() && plan_of(year, &p)) deal(0, &p, year, 1);
-    if (!rt_unwinding) o_008916f0();
+    int first = 0;
+    for (int i = 0; i < count; i++)
+        first += rd32(g_mem, table + (uint32_t)i * ST_CLUB_SIZE + ST_CLUB_DIVISION) == st_comp_of(KEY_FIRST);
+    fprintf(stderr, "recomp: swe groups: edition %d: Norra %d clubs, Sodra %d clubs (row 2 x %d), Superettan %d clubs, "
+            "%d went down, %d came up\n", year, in_norra, n - in_norra, p->size, first, went, came);
 }
 
 /* SweSecond::create_table: Norra, the places of the group and the one stage of the edition. */
@@ -225,10 +234,15 @@ RT_WRAP(008921b0, swe_groups_table)
     int count = (int)rd32(g_mem, CLUB_COUNT) - 2 * (int)rd32(g_mem, NATION_COUNT);
     int key = (int)rd32(g_mem, KEY_NORRA), n = 0;
     SweGroupsPlan p;
-    if (!plan_of((int16_t)rd16(g_mem, self + COMP_YEAR), &p)) {
+    int year = (int16_t)rd16(g_mem, self + COMP_YEAR);
+    if (!plan_of(year, &p)) {
         o_008921b0();
         return;
     }
+    /* Here, after SwePrm's chain, its deal and the size step (0x890642), so the groups hold the clubs that play. A
+     * loaded game makes no table. */
+    deal(st_league_of(KEY_PREMIER), &p, year, season_change_is_creating());
+    if (rt_unwinding) return;
     for (int i = 0; i < count; i++) {
         uint32_t c = table + (uint32_t)i * ST_CLUB_SIZE, zone = rd32(g_mem, c + CLUB_ZONE);
         n += rd32(g_mem, c + ST_CLUB_DIVISION) == record && st_readable(zone) && (int)rd32(g_mem, zone) == key;
@@ -327,6 +341,40 @@ RT_WRAP(00893470, swe_groups_predicted)
     if (!rt_unwinding) rt_ret_stdcall(0, 0);
 }
 
+/* The pairs of the chain (0x689c80 with pairs 1 swaps the rows of status 3 of the upper table, first row first, with the
+ * rows of status 0 or 5 of the lower table, 0x689d1a..0x689dff). The Superettan class sends 3 down (0x88f099), so only
+ * its last rows, as many as the groups send up, keep status 3, and the groups share the swaps. A group's other up rows
+ * lose their status here. fill_first takes them, best placed first, if the Superettan needs them. */
+static void share_places(uint32_t first, uint32_t second, uint32_t sodra)
+{
+    int nf, n[2], ups = 0, down = 0;
+    uint32_t rows = st_table_of(first, &nf), groups[2] = {second, sodra}, t[2];
+    for (int g = 0; g < 2; g++) {
+        t[g] = st_table_of(groups[g], &n[g]);
+        for (int i = 0; i < n[g]; i++) {
+            int st = g_mem[t[g] + (uint32_t)i * ST_ROW_SIZE + ST_ROW_STATUS];
+            ups += st == ST_UP || st == ST_TITLE;
+        }
+    }
+    for (int i = 0; i < nf; i++) down += g_mem[rows + (uint32_t)i * ST_ROW_SIZE + ST_ROW_STATUS] == ST_DOWN;
+    int pairs = ups < down ? ups : down, drop = down - pairs;
+    for (int i = 0; i < nf && drop > 0; i++) {
+        uint32_t row = rows + (uint32_t)i * ST_ROW_SIZE;
+        if (g_mem[row + ST_ROW_STATUS] != ST_DOWN) continue;
+        g_mem[row + ST_ROW_STATUS] = ST_NONE;
+        drop--;
+    }
+    int quota[2] = {(pairs + 1) / 2, pairs / 2};
+    for (int g = 0; g < 2; g++)
+        for (int i = 0; i < n[g]; i++) {
+            uint32_t row = t[g] + (uint32_t)i * ST_ROW_SIZE;
+            int st = g_mem[row + ST_ROW_STATUS];
+            if (st != ST_UP && st != ST_TITLE) continue;
+            if (quota[g] > 0) quota[g]--;
+            else g_mem[row + ST_ROW_STATUS] = ST_NONE;
+        }
+}
+
 /* The promotion chain of SwePrm 0x8907f0, with the two groups in place of the six. */
 void o_008907f0(void);
 RT_WRAP(008907f0, swe_groups_chain)
@@ -342,8 +390,11 @@ RT_WRAP(008907f0, swe_groups_chain)
     for (int i = 0; i < 2 && !rt_unwinding; i++)
         call_this(rd32(g_mem, rd32(g_mem, finish[i]) + VT_FINISH), finish[i], 0, NULL);
     for (int i = 0; i < 3 && !rt_unwinding; i++) {
-        if (i == 1) call_this(rd32(g_mem, rd32(g_mem, second) + VT_FINISH), second, 0, NULL);
-        if (rt_unwinding) break;
+        if (i == 1) {
+            call_this(rd32(g_mem, rd32(g_mem, second) + VT_FINISH), second, 0, NULL);
+            if (rt_unwinding) break;
+            share_places(first, second, sodra);
+        }
         uint32_t a[6] = {pairs[i][0], pairs[i][1], 1, 1, 0xffffffffu, 0xffffffffu};
         call_this(F_CHAIN, self, 6, a);
     }
@@ -355,28 +406,59 @@ int season_swe_groups_down(uint32_t prm)
     uint32_t second = st_league_of(KEY_SECOND), sodra = two_groups(second) ? sodra_of(second) : 0;
     if (!st_readable(sodra)) return 0;
     uint32_t lower = st_comp_of(KEY_LOWER), groups[2] = {second, sodra};
+    went_count = 0;
     for (int g = 0; g < 2 && !rt_unwinding; g++) {
         int n;
         uint32_t rows = st_table_of(groups[g], &n);
         for (int i = 0; i < n && !rt_unwinding; i++) {
             uint32_t row = rows + (uint32_t)i * ST_ROW_SIZE;
-            if (g_mem[row + ST_ROW_STATUS] == ST_DOWN) move_club(prm, F_DOWN, rd32(g_mem, row), lower, 0);
+            if (g_mem[row + ST_ROW_STATUS] != ST_DOWN) continue;
+            if (went_count < WENT_MAX) went_down[went_count++] = rd32(g_mem, row);
+            move_club(prm, F_DOWN, rd32(g_mem, row), lower, 0);
         }
     }
     return 1;
 }
 
-/* SwePrm's deal of the clubs into six sections (called at 0x89063a, before the edition number goes up at 0x890670). */
+/* The Superettan after the chain: when the Allsvenskan grew it holds fewer clubs than its next row, and the best
+ * placed clubs of the two groups, taken in turn, fill it. The tables of the season that ended are still there. */
+static void fill_first(uint32_t prm, uint32_t second, int next)
+{
+    const SeasonRule *r = season_league_edition_row("swe_first", next);
+    uint32_t table = rd32(g_mem, CLUBS), first = st_comp_of(KEY_FIRST), record = st_comp_of(KEY_SECOND);
+    int count = (int)rd32(g_mem, CLUB_COUNT) - 2 * (int)rd32(g_mem, NATION_COUNT), have = 0;
+    if (!r || r->clubs <= 0 || !st_readable(table) || !st_readable(first)) return;
+    for (int i = 0; i < count; i++) have += rd32(g_mem, table + (uint32_t)i * ST_CLUB_SIZE + ST_CLUB_DIVISION) == first;
+    uint32_t groups[2] = {second, sodra_of(second)};
+    int at[2] = {0, 0}, g = 0, idle = 0;
+    while (have < r->clubs && idle < 2 && !rt_unwinding) {
+        int n;
+        uint32_t rows = st_table_of(groups[g], &n), club = 0;
+        while (at[g] < n && !club) {
+            uint32_t c = rd32(g_mem, rows + (uint32_t)at[g]++ * ST_ROW_SIZE);
+            if (rd32(g_mem, c + ST_CLUB_DIVISION) == record && !season_swe_barred(c, first)) club = c;
+        }
+        idle = club ? 0 : idle + 1;
+        if (club) {
+            move_club(prm, F_UP, club, first, 0);
+            have++;
+        }
+        g = !g;
+    }
+}
+
+/* SwePrm's deal of the clubs into six sections (called at 0x89063a, before the edition number goes up at 0x890670).
+ * In an edition of two groups create_table deals the clubs. */
 void o_00890c70(void);
 RT_WRAP(00890c70, swe_groups_deal)
 {
-    uint32_t self = cpu.ecx;
+    uint32_t self = cpu.ecx, second = st_league_of(KEY_SECOND);
     int next = (int16_t)rd16(g_mem, self + COMP_YEAR) + 1;
     SweGroupsPlan p;
-    if (!st_readable(st_league_of(KEY_SECOND)) || !plan_of(next, &p)) {
+    if (!st_readable(second) || !plan_of(next, &p)) {
         o_00890c70();
         return;
     }
-    deal(self, &p, next, 0);
+    if (two_groups(second)) fill_first(self, second, next);
     if (!rt_unwinding) rt_ret_stdcall(0, 0);
 }

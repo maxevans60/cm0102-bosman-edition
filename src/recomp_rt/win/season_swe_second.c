@@ -359,10 +359,6 @@ static void season_down(uint32_t league, int season, int year)
 void o_00890b40(void);
 RT_WRAP(00890b40, swe_second_season)
 {
-    if (season_swe_groups_down(cpu.ecx)) {             /* issue 106: the deal of 0x890c70 fills the places */
-        rt_ret_stdcall(0, 0);
-        return;
-    }
     uint32_t table = rd32(g_mem, CLUBS);
     int count = (int)rd32(g_mem, CLUB_COUNT);
     if (!season_game_changes() || !st_readable(table) || count <= 0) {
@@ -373,6 +369,14 @@ RT_WRAP(00890b40, swe_second_season)
     int season = season_of(league), year = rule_year_of(season + 1);
     log_census("before");
     if (rule_on() && year_bars(year)) season_down(league, season, year);
+    if (season_swe_groups_down(cpu.ecx)) {             /* issue 106: create_table's deal fills the places */
+        log_census("after");
+        if (!rt_unwinding) {
+            if (old_left > 0) old_left--;
+            rt_ret_stdcall(0, 0);
+        }
+        return;
+    }
     char *was = log_on() ? calloc((size_t)count, 1) : NULL;
     for (int i = 0; was && i < count; i++) was[i] = rd32(g_mem, table + (uint32_t)i * CLUB_SIZE + CLUB_DIVISION) == second;
     o_00890b40();

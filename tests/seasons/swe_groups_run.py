@@ -7,7 +7,8 @@ Usage:
 
 Each run is a season jump of tests/seasons/rules_report_check.py with Sweden alone and its extra division (the test
 switch RECOMP_TEST_EXTRA=sweden), changing rules on:
-    s2004  the short proof: a 2004/05 start on Summer 2004: six groups of 12 in 2005, then 2 x 14 in 2006 and 2007
+    s2004  the short proof: a 2004/05 start on Summer 2004: six groups of 12 in 2005, then 2 x 14 to 2008, the
+           season in which the Allsvenskan grows to 16 and the Superettan must stay at 16
     s2001  a 2001/02 start played to 2019: six groups of 12 to the Swedish season of 2005, then 2 x 14, then 2 x 16
     s2025  a 2025/26 start on the December 2025 database played to 2027: 2 x 16 from the new game on
     off    a 2025/26 start with changing rules off: the six groups of the class stay, with no line of the groups
@@ -26,9 +27,10 @@ sys.path.insert(0, HERE)
 import rules_report_check as rrc  # noqa: E402
 import uefa_formats_run as ufr  # noqa: E402
 
-LINE = re.compile(r"recomp: swe groups: edition (\d+): Norra (\d+) clubs, Sodra (\d+) clubs \(row 2 x (\d+)\)")
+LINE = re.compile(r"recomp: swe groups: edition (\d+): Norra (\d+) clubs, Sodra (\d+) clubs \(row 2 x (\d+)\), "
+                  r"Superettan (\d+) clubs")
 SPLIT = re.compile(r"2 groups of (\d+)")
-RUNS = {"s2004": (2004, 2006, "on"), "s2001": (None, 2019, "on"), "s2025": (2025, 2027, "on"), "off": (2025, 2026, "off")}
+RUNS = {"s2004": (2004, 2007, "on"), "s2001": (None, 2019, "on"), "s2025": (2025, 2027, "on"), "off": (2025, 2026, "off")}
 
 
 def group_sizes():
@@ -41,6 +43,11 @@ def group_sizes():
     return out
 
 
+def superettan_clubs():
+    """{edition: clubs of the Superettan} of the rules table."""
+    return {int(r["real_season"]): int(r["clubs"]) for r in rrc.make_rules.read_rows() if r["comp_file"] == "swe_first"}
+
+
 def check(name, log, first, last, rules):
     fails, seen = [], {}
     for m in LINE.finditer(log):
@@ -49,8 +56,10 @@ def check(name, log, first, last, rules):
     for y, n in sorted(want.items()):
         if y not in seen:
             fails.append(f"{name}: edition {y}: no line of the groups, the row plays 2 x {n}")
-        elif seen[y] != (n, n, n):
+        elif seen[y][:3] != (n, n, n):
             fails.append(f"{name}: edition {y}: Norra {seen[y][0]}, Sodra {seen[y][1]}, the row 2 x {n}")
+        elif seen[y][3] != superettan_clubs().get(y):
+            fails.append(f"{name}: edition {y}: Superettan {seen[y][3]} clubs, the row {superettan_clubs().get(y)}")
     fails += [f"{name}: edition {y}: a line of the groups, the row plays none" for y in sorted(set(seen) - set(want))]
     print(f"{name}: editions in two groups: " + (", ".join(f"{y} {seen[y][0]}+{seen[y][1]}" for y in sorted(seen)) or "none"))
     return fails
@@ -66,6 +75,8 @@ def run(name, program, game, work, databases):
                       {"RECOMP_TEST_EXTRA": "sweden"})
     fails = [] if code == 0 else [f"{name}: the jump ended with code {code}"]
     found, log = ufr.boxes(work)
+    if "rules table: none" in log:
+        fails.append(f"{name}: the game read no rules table")
     fails += [f"{name}: message box {b}" for b in found]
     if "extra division of sweden on" not in log:
         fails.append(f"{name}: the Swedish extra division was not set")
