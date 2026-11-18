@@ -29,7 +29,12 @@
  * (docs/research/2026-10-15-holiday-next-match-inventory.md). The log says whether that day is a FIFA day
  * (season_fifa_year_days). At the first human turn after that day it logs whether the human still manages the team
  * and managed it at every human turn between (the fixture has no manager field), and whether the match was played.
- * tests/seasons/future/run_set.py reads the lines. */
+ * tests/seasons/future/run_set.py reads the lines.
+ *
+ * Test switch RECOMP_TEST_NATION_JOB_NOW=1, with the switch above: the appointment comes at the first human turn,
+ * with no holiday. Test switch RECOMP_TEST_NATION_JOB_ONLY=1, with both: the human also leaves his club, through
+ * MANAGER_MANAGER::remove_staff_from_club 0x690890 (staff and club, ret 8; it reloads ecx itself, call at 0x83ee72). tests/smoke/save_name_run.py saves such a game to read the save name of a national
+ * team manager with no club. */
 #include "win.h"
 #include "season_uefa_days.h"
 
@@ -54,6 +59,8 @@
 #define NATION_VALUE 0x88u
 #define MANAGER_MANAGER 0xb67a44u
 #define APPOINT 0x0069ebc0u
+#define REMOVE_FROM_CLUB 0x00690890u
+#define STAFF_CLUB 0x39u
 #define HUMANS 0xb63c98u             /* the human records, 0xa6ef bytes each (holiday_next.c) */
 #define HUMAN_RECORD 0xa6efu
 #define ON_HOLIDAY 0x9a01u
@@ -172,7 +179,8 @@ void nation_job_turn(void)
             return;
         }
         uint32_t record = rd32(g_mem, rd32(g_mem, HUMANS)) + (uint32_t)slot * HUMAN_RECORD;
-        if (!rd32(g_mem, record + ON_HOLIDAY)) {
+        const char *now_switch = getenv("RECOMP_TEST_NATION_JOB_NOW");
+        if (!(now_switch && *now_switch) && !rd32(g_mem, record + ON_HOLIDAY)) {
             human = 0;                                      /* not on holiday yet: look again at the next turn */
             return;
         }
@@ -196,6 +204,14 @@ void nation_job_turn(void)
         fprintf(stderr, "recomp: nation job test: the human manages %s from day %d of %d (%s)\n", long_name(team),
                 doy + 1, year, now ? "appointed" : "the call did not appoint him");
         if (!now) return;
+        const char *only = getenv("RECOMP_TEST_NATION_JOB_ONLY");
+        uint32_t club = rd32(g_mem, human + STAFF_CLUB);
+        if (only && *only && club) {
+            uint32_t leave[2] = {human, club};
+            call_this(REMOVE_FROM_CLUB, rd32(g_mem, MANAGER_MANAGER), 2, leave);
+            fprintf(stderr, "recomp: nation job test: the human left his club (club job %s)\n",
+                    rd32(g_mem, human + STAFF_CLUB) ? "still set" : "empty");
+        }
         int last = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 ? 365 : 364;
         uint32_t other;
         if (doy >= last || !first_fixture(year, doy + 1, last, 0, &check_doy, &other)) {
