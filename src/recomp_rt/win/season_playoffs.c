@@ -962,6 +962,8 @@ static int cross_shape(uint32_t lower, int season, uint32_t *upper, int *ladder)
  * 2021/22 to 2025/26) and of the Druga HNL (to 2005/06) have no single club for the tie. GreSecond (vtable 0x96b61c) is a
  * plain league. CroA2a (vtable 0x969178) has its own advance_stage 0x516060 and result 0x7ebc40 (wraps below). */
 #define KEY_GRE_SECOND 0x009cf870u      /* the division index of the National B Division (0x5ebd54) */
+#define COMP_CLOSED 0x4cu               /* s32: not 0 keeps League::update_for_date from closing the season (0x6849e8) */
+#define COMP_TIE_FLAG 0xe6u             /* s32: a tie-break of level clubs is still open (0x516394, 0x684a1e) */
 
 static const char *const TIE_PAIRS[][2] = {
     {"por_second", "por_prm"}, {"gre_second", "gre_prm"}, {"cro_a2a", "cro_a1"},
@@ -1054,6 +1056,13 @@ static int tie_rules(uint32_t obj, const char *file)
     drop_stage(obj);
     wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
     g_mem[obj + UP_PLAYOFF] = 1;
+    /* CroA2a holds its season open for its tie-break: start_new_season sets +0x4c (0x515f01), set_up_rules sets +0xe6
+     * (0x515e80), and only 0x516360 clears them, with stage count 0 (0x516385). The tie's count of 1 skips that code, so
+     * the season closes as a plain league's does (League::update_for_date 0x6849e8, 0x684a1e). */
+    if (!strcmp(file, "cro_a2a")) {
+        wr32(g_mem, obj + COMP_CLOSED, 0);
+        wr32(g_mem, obj + COMP_TIE_FLAG, 0);
+    }
     fprintf(stderr, "recomp: playoffs: %s %d: one place plays off with %s\n", file, season, season_change_file(upper));
     return 1;
 }
@@ -1120,8 +1129,18 @@ static int table_complete(uint32_t lg)
 static int upper_done(uint32_t up)
 {
     if (!table_complete(up)) return 0;
-    /* CroA1 plays its own tie-break stage after the table (0x514bd0, 0x514c60), which can change its places. */
-    if (strcmp(season_change_file(up), "sco_prm") && strcmp(season_change_file(up), "cro_a1")) return 1;
+    /* CroA1 decides its tie-break after the table. CroA2a::update_for_date 0x516360, which CroA1 shares, clears +0xe6 when
+     * no clubs are level (0x5163e5), else it makes one stage (0x516400, 0x516416): a Cup_Stage of 0xb2 bytes (0x514dce), so
+     * its end is asked of the stage itself, as League::update_for_date does (vtable +0x10 with 0 and 1, 0x6849b3..0x6849be). */
+    if (!strcmp(season_change_file(up), "cro_a1")) {
+        int32_t made = (int32_t)rd32(g_mem, up + COMP_STAGE_COUNT), now = (int32_t)rd32(g_mem, up + COMP_STAGE_NOW);
+        if (made == 0) return rd32(g_mem, up + COMP_TIE_FLAG) == 0;
+        uint32_t slots = rd32(g_mem, up + COMP_STAGES), stage = readable(slots) ? rd32(g_mem, slots) : 0;
+        if (now < 0 || !readable(stage)) return 0;
+        uint32_t ask[2] = {0, 1};
+        return call_this(rd32(g_mem, rd32(g_mem, stage) + 0x10), stage, 2, ask) & 0xff;
+    }
+    if (strcmp(season_change_file(up), "sco_prm")) return 1;
     int32_t built = (int32_t)rd32(g_mem, up + COMP_STAGE_NOW), count = (int32_t)rd32(g_mem, up + COMP_STAGE_COUNT);
     uint32_t stages = rd32(g_mem, up + COMP_STAGES);
     if (built < count - 1) return 0;
@@ -1159,7 +1178,10 @@ static uint32_t tie_club(uint32_t obj)
     const SeasonRule *lr = row_of_season(file, season_now(obj, file));
     const SeasonLeagueRule *le = lr ? league_rule(file, lr->season) : NULL;
     int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
-    int skip = season_tie_skip(le ? le->po_up_first : 0, (int8_t)g_mem[obj + UP]);
+    /* Portugal counts the clubs that are not reserve sides after the direct places (row por-110), whatever the row's
+     * first play-off place says (4th in 2013/14, when a reserve side was 3rd). */
+    int first = le && strcmp(file, "por_second") ? le->po_up_first : 0;
+    int skip = season_tie_skip(first, (int8_t)g_mem[obj + UP]);
     for (int i = 0; i < n && i < 64 && !rt_unwinding; i++) {
         uint32_t c = row_club(obj, i);
         if (!readable(c) || barred(obj, c)) continue;
