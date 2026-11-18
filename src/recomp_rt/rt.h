@@ -341,6 +341,11 @@ uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fix
  * rt_squad_move_test: RECOMP_SQUAD_MOVE_TEST=1 at the first start report (season_report.c). */
 void rt_squad_move_set(uint32_t manager, uint32_t staff, int down);
 void rt_squad_move_test(void);
+/* Test runs at the first start report (season_report.c): RECOMP_SQUAD_LOAN_TEST=1, a human move of a loanee of a linked
+ * pair (issue 159, win/original_faults.c); RECOMP_COMP_MENU_TEST=1, the competition menu of each history screen (issue
+ * 163, win/screen_sweep.c). */
+void rt_squad_loan_test(void);
+void rt_comp_menu_test(void);
 /* Money above 2,147,483,647 (0.6.2 slice 11, Q24; win/original_faults.c, tools/recomp/original_faults.py). */
 uint32_t rt_budget_hi(uint32_t lo, uint32_t hi);          /* get_transfer_budget: the high word in place of cdq */
 uint32_t rt_budget_floor(uint32_t finance, uint32_t less); /* the balance less 10m or 15m (0x599135, 0x599185) */

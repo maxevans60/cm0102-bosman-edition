@@ -778,16 +778,17 @@ void rt_squad_move_test(void)
  * (database_add_staff_to_club 0x53bd10). He is already in both, so the add puts him in a second slot of the side he
  * goes to. In run C of the 0.7.2 full check FC Energie Cottbus II held one player in two squad slots on day 206 of
  * 2007, and MATCH_MAN::pick_team 0x6dbc50 stopped at its duplicate test (match_man..cpp 1225, 0x6dd3c1). With the
- * placement bit set after the loan the move went up instead and doubled him at FC Energie Cottbus. Here the calls
- * from move_to_first_team and move_to_reserves (returns 0x4cc0df and 0x4cc11f) leave a player alone while he is on
- * loan from one side of a linked pair to the other: toggle_squad_placement returns 0 (no move, *out cleared as at
- * 0x4cbd3f). Their callers are assess_club_squad, TRANSFER_MANAGER::add_config_loan (0x8bf61b, a loan of the data at
- * the game start) and player_regen_sign_for_club (0x7a7098). The staff screens call 0x4cbd20 directly (0x888760,
- * 0x88a11d), so a move that the human makes is not changed. The loan contract is slot +4 of the contract index
- * (sign_loan_contract 0x4d0444..0x4d0467), and end_loan 0x4d07e0 sets it to -1 (0x4d0983..0x4d09aa), so the moves
- * come back when the loan ends. */
-#define TOGGLE_FIRST_TEAM_RET 0x4cc0dfu   /* move_to_first_team 0x4cc0b0 */
-#define TOGGLE_RESERVES_RET 0x4cc11fu     /* move_to_reserves 0x4cc0f0 */
+ * placement bit set after the loan the move went up instead and doubled him at FC Energie Cottbus. Here
+ * toggle_squad_placement makes no move while the player is on loan from one side of a linked pair to the other (*out
+ * cleared as at 0x4cbd3f). The callers: move_to_first_team and move_to_reserves (returns 0x4cc0df and 0x4cc11f, from
+ * assess_club_squad, TRANSFER_MANAGER::add_config_loan 0x8bf61b and player_regen_sign_for_club 0x7a7098), which get 0;
+ * the Action menu of the staff profile and of the compare screen (issue 159; 0x888760 and 0x88a11d), which get 1,
+ * because they read 0 as a full squad and show "There is no space in the squad" (0x88876d, text 0xa8b2cc); and the
+ * call at 0x4cb02b, only for a club that 0x540a50 gives no linked side (0x4cb004..0x4cb00e), so it never meets such a
+ * loan. The loan contract is slot +4 of the contract index (sign_loan_contract 0x4d0444..0x4d0467), and end_loan
+ * 0x4d07e0 sets it to -1 (0x4d0983..0x4d09aa), so the moves come back when the loan ends. */
+#define TOGGLE_PROFILE_RET 0x888765u      /* staff_screens_handle_profile_action 0x888260 */
+#define TOGGLE_COMPARE_RET 0x88a122u      /* staff_screens_handle_compare_action 0x889c30 */
 
 static uint32_t contract_club(uint32_t manager, int32_t index)
 {
@@ -807,8 +808,7 @@ RT_WRAP(004cbd20, squad_loan_move)
     uint32_t ret = rd32(g_mem, cpu.esp), manager = cpu.ecx, staff = rt_arg(0), out = rt_arg(2);
     uint32_t count = rd32(g_mem, STAFF_COUNT), clubs_n = rd32(g_mem, CLUB_COUNT);
     uint32_t id = staff >= 0x10000u ? rd32(g_mem, staff) : 0xffffffffu;
-    if ((ret != TOGGLE_FIRST_TEAM_RET && ret != TOGGLE_RESERVES_RET) || !fixes_on_group(SQUAD_LOANS) || !manager ||
-        id >= count) {
+    if (!fixes_on_group(SQUAD_LOANS) || !manager || id >= count) {
         o_004cbd20();
         return;
     }
@@ -841,6 +841,105 @@ RT_WRAP(004cbd20, squad_loan_move)
                         "move\n", id, own_name, log_name(loan + 4u));
     }
     if (out) wr32(g_mem, out, 0);
-    cpu.eax = 0;                        /* no move: thiscall, ret 0xc */
+    cpu.eax = ret == TOGGLE_PROFILE_RET || ret == TOGGLE_COMPARE_RET;   /* no move: thiscall, ret 0xc */
     cpu.esp += 4 + 0xc;
+}
+
+/* RECOMP_SQUAD_LOAN_TEST=1 (tests/seasons/squad_loan_run.py, issue 159): at the first start report the test loans a
+ * player of the first senior club with a one-way linked B side to that B side, as TRANSFER_MANAGER::add_config_loan
+ * does (STAFF_CONTRACT 0x85e590, the end date at +0x2d, sign_loan_contract 0x4d01e0 at 0x8bf5b4). The human manager
+ * then takes each side in turn and uses the move item of the staff profile's Action menu: the profile opens
+ * (staff_screens_open_staff_profile 0x8702a0), the build 0x870700 adds the item, and its handler 0x888260 gets the
+ * index of the widget of item type 3 (read at 0x888719..0x88871c, the call of toggle_squad_placement at 0x888760). A
+ * line gives the slots of each side after each move. */
+#define HUMAN_STAFF 0xb74c26u            /* per channel, 0x300 bytes apart: the human manager (0x8882cd) */
+#define SCREEN_CHANNEL 0xb77c7au         /* s16 */
+#define SCREEN_DISPLAY 0xb74c4cu         /* per channel: the screen manager (0x888713) */
+#define WIDGET_ITEM_TYPE 0xba966u        /* per widget, 0x18c bytes apart: the item type (0x88871c) */
+#define WIDGET_SCAN 600u
+
+static int loan_test_click(uint32_t human, uint32_t club, uint32_t player)
+{
+    uint32_t channel = (uint32_t)(int16_t)rd16(g_mem, SCREEN_CHANNEL) * 0x300u;
+    uint32_t old_club = rd32(g_mem, human + 0x39u);
+    wr32(g_mem, human + 0x39u, club);
+    uint32_t open[5] = {player, 1, 1, 0, 0};    /* the Profile tab, as the name click at 0x4173a6 */
+    rt_callback(0x8702a0u, 5, open);
+    if (rt_unwinding) return -1;
+    screen_sweep_build_now();
+    if (rt_unwinding) return -1;
+    uint32_t display = rd32(g_mem, SCREEN_DISPLAY + channel);
+    int found = -1;
+    for (uint32_t k = 0; k < WIDGET_SCAN && found < 0; k++)
+        if ((int16_t)rd16(g_mem, display + WIDGET_ITEM_TYPE + k * 0x18cu) == 3) found = (int)k;
+    if (found >= 0) {
+        uint32_t click[1] = {(uint32_t)found};
+        rt_callback(0x888260u, 1, click);
+        if (rt_unwinding) return -1;
+    }
+    wr32(g_mem, human + 0x39u, old_club);
+    return found;
+}
+
+/* One loan and four moves: a player of `from` goes on loan to `to`, the other side of a linked pair. 0: no such player. */
+static int loan_test_case(uint32_t human, uint32_t from, uint32_t to)
+{
+    uint32_t manager = rd32(g_mem, CONTRACTS), index = rd32(g_mem, CONTRACT_INDEX);
+    for (uint32_t k = 0; k < 50u; k++) {
+        uint32_t p = rd32(g_mem, from + 0xd7u + 4u * k);
+        if (!p || rd32(g_mem, p + 0x39u) != from || !rd32(g_mem, p + 0x61u)) continue;
+        uint32_t id = rd32(g_mem, p);
+        if (id >= rd32(g_mem, STAFF_COUNT) || (int32_t)rd32(g_mem, index + id * 0x4fu) < 0 ||
+            (int32_t)rd32(g_mem, index + id * 0x4fu + 4u) >= 0 || squad_slots(to, p))
+            continue;
+        /* His contract must be with `from`: a player of a B side can hold his contract at the senior club (item 187). */
+        if (contract_club(manager, (int32_t)rd32(g_mem, index + id * 0x4fu)) != rd32(g_mem, from)) continue;
+        uint32_t contract = rt_alloc(0x50);
+        uint32_t make[6] = {p, to, 0xae2c90u, 0, 1, 1};
+        call_this(contract, 0x85e590u, 6, make);
+        if (rt_unwinding) return 0;
+        memcpy(g_mem + contract + 0x2du, g_mem + 0xae2c90u, 5);
+        wr16(g_mem, contract + 0x2fu, (uint16_t)(rd16(g_mem, 0xae2c92u) + 1u));   /* the loan ends in a year */
+        uint32_t sign[1] = {contract};
+        call_this(manager, 0x4d01e0u, 1, sign);
+        if (rt_unwinding) return 0;
+        fprintf(stderr, "recomp: squad loan test: staff %u loaned from club %u to club %u, slots %d and %d\n", id,
+                rd32(g_mem, from), rd32(g_mem, to), squad_slots(from, p), squad_slots(to, p));
+        for (int move = 0; move < 4; move++) {
+            uint32_t side = move % 2 ? to : from;
+            int item = loan_test_click(human, side, p);
+            if (rt_unwinding) return 0;
+            fprintf(stderr, "recomp: squad loan test: staff %u move %d by the manager of club %u: item %d, slots %d "
+                    "and %d\n", id, move, rd32(g_mem, side), item, squad_slots(from, p), squad_slots(to, p));
+        }
+        return 1;
+    }
+    return 0;
+}
+
+void rt_squad_loan_test(void)
+{
+    static int done;
+    if (done || !getenv("RECOMP_SQUAD_LOAN_TEST")) return;
+    done = 1;
+    uint32_t clubs = rd32(g_mem, CLUBS), flag = rt_alloc(4), count = rd32(g_mem, CLUB_COUNT);
+    uint32_t human = rd32(g_mem, HUMAN_STAFF + (uint32_t)(int16_t)rd16(g_mem, SCREEN_CHANNEL) * 0x300u);
+    if (human < 0x10000u || !clubs || !rd32(g_mem, CONTRACTS)) {
+        fprintf(stderr, "recomp: squad loan test: no human manager\n");
+        return;
+    }
+    int down = 0, up = 0;                 /* a loan from the senior side to the B side, and one the other way */
+    for (uint32_t c = 0; c < count && !(down && up); c++) {
+        uint32_t club = clubs + c * CLUB_SIZE;
+        wr32(g_mem, flag, 0);
+        uint32_t args[3] = {club, flag, 1};
+        uint32_t b = rt_callback(0x540a50u, 3, args);
+        if (rt_unwinding) return;
+        if (!b || !rd32(g_mem, flag)) continue;          /* the flag: this club is the senior side (0x4cbbe6) */
+        if (!down) down = loan_test_case(human, club, b);
+        if (rt_unwinding) return;
+        if (!up) up = loan_test_case(human, b, club);
+        if (rt_unwinding) return;
+    }
+    fprintf(stderr, "recomp: squad loan test: done, %d loans\n", down + up);
 }
