@@ -13,7 +13,7 @@
  *   meetings; a row of zones (2019/20 on) plays one table of one meeting, since no source gives the zone lists;
  * - the dates of both class templates (Apertura and Clausura), to the rounds of the count (D4, D5);
  * - no stages: the promotion places of the row go to the next clubs of the table (D2), the relegation places (at
- *   most 4) to the third division through the Primera's swap 0x4068d0;
+ *   most 4, more with changing rules on) to the third division through the Primera's swap 0x4068d0;
  * - the averages, the predicted positions and the honours take the count.
  * The base game, RECOMP_LEAGUE_SIZES=off and the 2001/02 row keep the class. */
 #ifndef RECOMP_SEASON_SIZES_ARG_SECOND_H

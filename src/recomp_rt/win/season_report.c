@@ -75,6 +75,7 @@
 #include "season_comps.h"
 #include "season_uefa.h"
 #include "season_split.h"
+#include "season_sizes_arg.h"
 #include "season_comps.h"
 #include "../host.h"
 #include "../rt_host.h"
@@ -226,7 +227,8 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
     if (league)
         snprintf(rules, sizeof rules, "%d\t%d\t%d\t%d\t%d\t0x%x\t%d\t%d", (int16_t)rd16(g_mem, obj + 0xa7),
                  (int8_t)g_mem[obj + 0xbe], (int8_t)g_mem[obj + 0xbf], (int8_t)g_mem[obj + 0xc0],
-                 (int8_t)g_mem[obj + 0xc1], rd16(g_mem, obj + 0xd9), (int32_t)rd32(g_mem, obj + 0x1c),
+                 season_arg_report_down(obj, (int8_t)g_mem[obj + 0xc1]), rd16(g_mem, obj + 0xd9),
+                 (int32_t)rd32(g_mem, obj + 0x1c),
                  (int32_t)rd32(g_mem, obj + 0x20));
     /* Slice 23: a UEFA cup of the access list counts its clubs, not its entry slots (season_uefa_qual.c). */
     int clubs = season_uefa_report_clubs(obj);

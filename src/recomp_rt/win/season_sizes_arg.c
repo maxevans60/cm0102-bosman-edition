@@ -839,21 +839,8 @@ void season_arg_averages_empty(uint32_t self, int n)
  * the 17th and 18th of the averages against the second division: rows 2002 to 2011 play it as two ties of the Primera
  * (season_arg_stages.c promo_advance), the 2001 edition as the second division's own ties (0x408910). Its losers go
  * down after the clubs of arg_down (arg_record_honours). Rows
- * from 2026 take the 2027 format (one by the averages, one by the annual table). */
-static void arg_down(int row, int *avg, int *tab)
-{
-    *tab = 0;
-    if (row <= 2011) *avg = 2;
-    else if (row <= 2013) *avg = 3;
-    else if (row == 2014) *avg = 2;
-    else if (row == 2015) *avg = 1;
-    else if (row <= 2018) *avg = 4;
-    else if (row <= 2020) *avg = 0;     /* 2019/20 and 2021: relegation suspended */
-    else if (row == 2021) *avg = 2;
-    else if (row == 2023) *avg = 0;     /* 2024: none */
-    else *avg = 1, *tab = 1;            /* 2023, 2025, 2026 and the 2027 format */
-}
-
+ * from 2026 take the 2027 format (one by the averages, one by the annual table). The counts are
+ * season_arg_down_places (season_arg_plan.c). */
 #define F_SORT_TABLE 0x006827d0u    /* League::sort_table, thiscall (rows or 0), ret 4 */
 #define F_RECORD_HONOURS 0x00684640u
 #define ROW_POSITION 4u
@@ -873,7 +860,7 @@ static int relegated(uint32_t self, const Form *f, int32_t *down, int *by_avg_ou
     call_this(rd32(g_mem, vt + 0x34), self, 1, a0);           /* the averages of the season (0x405cb0) */
     if (rt_unwinding) return 0;
     int avg, tab, nd = 0;
-    arg_down(f->season, &avg, &tab);
+    season_arg_down_places(f->season, &avg, &tab);
     uint32_t recs = rd32(g_mem, self + AVERAGES), clubs = rd32(g_mem, CLUBS);
     int have = (int16_t)rd16(g_mem, self + AVERAGE_COUNT);
     float worst_kept = 1e9f;
@@ -935,6 +922,18 @@ int season_arg_promo_primera(uint32_t self, uint32_t *club)
     club[0] = clubs + (uint32_t)w[1] * CLUB_SIZE;
     club[1] = clubs + (uint32_t)w[0] * CLUB_SIZE;
     return 2;
+}
+
+/* Item 286: ArgPrm::set_up_rules writes 0 relegation places (0x4056d1), because the class sends down by its averages.
+ * The rules report shows the clubs that the season sends down: the row's places, or the last two records of the class
+ * (0x405cb3, 0x405d6a) when the edition plays the class's form. */
+int season_arg_report_down(uint32_t obj, int places)
+{
+    if (!is_prm(obj)) return places;
+    Form f;
+    int avg = 2, tab = 0;
+    if (form_of(obj, (int16_t)rd16(g_mem, obj + COMP_CLUBS), &f)) season_arg_down_places(f.season, &avg, &tab);
+    return avg + tab;
 }
 
 /* The clubs (club records) that will go down at the end of the season, for the Clausura's knockout (gap row of

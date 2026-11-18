@@ -6,6 +6,7 @@
 #include "season_league.h"
 #include "season_rules.h"
 #include "season_change.h"
+#include "season.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +15,6 @@
 #define FILE_SECOND "arg_second"
 #define CLASS_CLUBS 25              /* ArgSecond::fill_league_table 0x407ce2 */
 #define CLASS_STAGES 6              /* ArgSecond::ArgSecond 0x406c61 */
-#define MAX_DOWN 4                  /* arg_prm_swap_second_and_third_division_clubs 0x4068d0: cmp bl, 4 at 0x4069fb */
 #define COMP_STAGES 0x0cu            /* the stage array (0x406c72) */
 #define COMP_STAGE_COUNT 0x2cu
 #define COMP_STAGE_NOW 0x30u
@@ -28,6 +28,15 @@
 #define DATE_SIZE 0x41u
 #define F_SCHEDULE 0x00406f00u      /* ArgSecond::create_schedule, thiscall (stage, &count, &code, &flag) ret 0x10 */
 #define F_PREDICTED 0x0068a850u     /* League::set_predicted_positions, thiscall, no argument: any count */
+#define F_RELEGATE 0x006831a0u      /* League::relegate_club_to_division, thiscall (club, record, 1), ret 0xc */
+#define KEY_SECOND 0x9cf658u        /* the record id of the second division (0x4067f9) */
+#define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table (0x4067f0) */
+#define COMP_RECORD 4u
+#define COMP_TABLE 0xb1u
+#define CLUB_DIVISION 0x57u
+#define ROW_SIZE 0x3bu
+#define ROW_STATUS 0x37u
+#define STATUS_DOWN 3               /* the rows that the swap sends down (0x406a11) */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
 
@@ -132,12 +141,12 @@ void season_arg_second_rules(uint32_t obj)
      * +0x30 < +0x2c - 1, 0x6849d1..0x6849e0), so the Clausura zones of 24 fixed rows (create_zone_stages 0x4081b0,
      * 0x408233..0x40838a), the Reducido of 8 (0x408630) and the promotion ties (0x408910) are not played. The
      * promotion places of the row go to the next clubs of the table (D2, D10); sizes_rules set them. The clubs of the
-     * relegation places go down to the third division through the Primera's swap (0x4068d0, at most 4 at 0x4069fb):
-     * the class relegates by its averages in the Reducido's stage (0x408630), which is not played. */
+     * relegation places go down to the third division through the Primera's swap (0x4068d0, at most 4 at 0x4069fb) and,
+     * with changing rules on, arg_swap below: the class relegates by its averages in the Reducido's stage (0x408630),
+     * which is not played. */
     wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
     wr32(g_mem, obj + COMP_STAGE_NOW, 0xffffffffu);
-    int down = r && r->down >= 0 && r->down <= 30 ? r->down : 0;
-    if (down > MAX_DOWN) down = MAX_DOWN;
+    int down = season_arg_second_down_places(r ? r->down : -1, season_changing_rules());
     g_mem[obj + COMP_UP_PLAYOFF] = 0;
     g_mem[obj + COMP_DOWN_PLAYOFF] = 0;
     g_mem[obj + COMP_DOWN] = (uint8_t)down;
@@ -151,6 +160,39 @@ void season_arg_second_rules(uint32_t obj)
 uint32_t rt_arg_second_fixed_at(uint32_t obj, uint32_t original)
 {
     return playing_one_table(obj) ? 0xffu : original;
+}
+
+/* ---- The places past the swap (item 286) ---- */
+
+/* arg_prm_swap_second_and_third_division_clubs 0x4068d0 (thiscall, no argument; ArgPrm::start_new_season calls it at
+ * 0x40573f) sends at most 4 rows of status 3 down (cmp bl, 4 at 0x4069fb) and brings as many clubs up. The row of
+ * 2017/18 has 6 places. With changing rules on the other rows of status 3 go down as the swap sends its own
+ * (0x406a1c..0x406a38), and the size step, which runs at the free_table of 0x405789, fills the division to its next
+ * row with other clubs of the third division. */
+void o_004068d0(void);
+RT_WRAP(004068d0, arg_swap)
+{
+    uint32_t self = cpu.ecx;
+    o_004068d0();
+    if (rt_unwinding || !season_sizes_on() || !season_changing_rules()) return;
+    uint32_t objects = rd32(g_mem, COMP_OBJECTS), third = season_arg_third_record();
+    int32_t key = (int32_t)rd32(g_mem, KEY_SECOND);
+    uint32_t second = readable(objects) && key >= 0 ? rd32(g_mem, objects + 4u * (uint32_t)key) : 0;
+    if (!third || !is_second(second) || !playing_one_table(second)) return;
+    uint32_t rows = rd32(g_mem, second + COMP_TABLE), record = rd32(g_mem, second + COMP_RECORD);
+    int n = (int16_t)rd16(g_mem, second + COMP_CLUBS);
+    for (int r = 0; readable(rows) && r < n; r++) {
+        uint32_t row = rows + (uint32_t)r * ROW_SIZE, club = rd32(g_mem, row);
+        if (g_mem[row + ROW_STATUS] != STATUS_DOWN || !readable(club) || rd32(g_mem, club + CLUB_DIVISION) != record)
+            continue;
+        uint32_t a[3] = {club, third, 1};
+        call_this(F_RELEGATE, self, 3, a);
+        if (rt_unwinding) return;
+        season_sizes_step_bar(club);
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: arg_second %d: club %u goes down past the swap's %d\n",
+                    (int16_t)rd16(g_mem, second + COMP_YEAR), rd32(g_mem, club), SEASON_ARG_SWAP_DOWN);
+    }
 }
 
 /* ---- The dates ---- */

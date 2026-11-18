@@ -1577,6 +1577,11 @@ static uint32_t lone_return(const char *file)
 
 static int lone_file(const char *file) { return lone_return(file) != 0; }
 
+void season_sizes_step_bar(uint32_t club)
+{
+    if (nlone_down < STEP_MAX_ROWS) lone_down[nlone_down++] = club;
+}
+
 /* The clubs with no division (or in a spare division) of the nation of record rec that the step may take into it:
  * the same clubs as the pool of size_step_run. */
 static int lone_pool(uint32_t rec)

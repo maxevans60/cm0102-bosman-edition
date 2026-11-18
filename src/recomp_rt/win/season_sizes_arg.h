@@ -102,6 +102,16 @@ int season_arg_derby_plan(int n, const int *derby, int derby_at, int round[][SEA
  * reputation. derby[i] gets the partner of club i. Returns the pairs made by replacement. */
 int season_arg_derby_pairs(int n, const int *listed, const int *rep, int *derby);
 
+/* Pure (item 286): the clubs that a rules row of the Primera sends down, by the averages and by the annual table. */
+void season_arg_down_places(int row, int *avg, int *tab);
+/* The clubs that the swap 0x4068d0 exchanges at most (cmp bl, 4 at 0x4069fb). */
+#define SEASON_ARG_SWAP_DOWN 4
+/* Pure (item 286): the second division's relegation places of a row. With changing rules on the row's places
+ * (season_arg_second.c moves the clubs past the swap's 4), with them off at most the swap's 4. */
+int season_arg_second_down_places(int row_down, int changing_rules);
+/* The Primera's relegation count for the rules report; any other league keeps its places. */
+int season_arg_report_down(uint32_t obj, int places);
+
 /* The title stages of a season (season_arg_stages.c): none, two zone tables a half and a knockout of 16 after each
  * half (2025, 2026), two zone tables and a final of the zone winners with a match of the runners-up (2016), or a
  * knockout of the first 16 of each half's table (2027 on). */

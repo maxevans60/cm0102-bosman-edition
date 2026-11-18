@@ -4,6 +4,26 @@
 
 #define MAX_CLUBS SEASON_ARG_MAX_CLUBS
 
+void season_arg_down_places(int row, int *avg, int *tab)
+{
+    *tab = 0;
+    if (row <= 2011) *avg = 2;
+    else if (row <= 2013) *avg = 3;
+    else if (row == 2014) *avg = 2;
+    else if (row == 2015) *avg = 1;
+    else if (row <= 2018) *avg = 4;
+    else if (row <= 2020) *avg = 0;     /* 2019/20 and 2021: relegation suspended */
+    else if (row == 2021) *avg = 2;
+    else if (row == 2023) *avg = 0;     /* 2024: none */
+    else *avg = 1, *tab = 1;            /* 2023, 2025, 2026 and the 2027 format */
+}
+
+int season_arg_second_down_places(int row_down, int changing_rules)
+{
+    if (row_down < 0 || row_down > 30) return 0;
+    return !changing_rules && row_down > SEASON_ARG_SWAP_DOWN ? SEASON_ARG_SWAP_DOWN : row_down;
+}
+
 static void pair(int round[][SEASON_ARG_MAX_CLUBS / 2][2], int r, int k, int home, int away)
 {
     round[r][k][0] = home;

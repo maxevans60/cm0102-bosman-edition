@@ -169,6 +169,21 @@ int main(void)
     CHECK(season_arg_derby_plan(4, p3, 0, round) == 0, "a derby that is not a pairing gives a plan");
     int r5[5] = {0, 1, 2, 3, 4}, d5[5] = {0, 2, 3, 4, 1};     /* club 0 meets its rival twice, the others not */
     CHECK(season_arg_zone_plan(5, r5, d5, 0, round) == 0, "one drawn opponent that is the rival gives a plan");
+    /* Item 286: the clubs that the rows send down. Row: {by the averages, by the annual table}. */
+    static const int rows[][3] = {{2001, 2, 0}, {2011, 2, 0}, {2012, 3, 0}, {2013, 3, 0}, {2014, 2, 0}, {2015, 1, 0},
+                                  {2016, 4, 0}, {2017, 4, 0}, {2018, 4, 0}, {2019, 0, 0}, {2020, 0, 0}, {2021, 2, 0},
+                                  {2022, 1, 1}, {2023, 0, 0}, {2024, 1, 1}, {2027, 1, 1}};
+    for (unsigned i = 0; i < sizeof rows / sizeof rows[0]; i++) {
+        int avg = -1, tab = -1;
+        season_arg_down_places(rows[i][0], &avg, &tab);
+        CHECK(avg == rows[i][1] && tab == rows[i][2], "the relegation places of a row");
+    }
+    /* Item 286: the second division plays the row's places with changing rules on (2017/18: 6), and the 4 of the swap
+     * 0x4068d0 (cmp bl, 4 at 0x4069fb) with changing rules off. */
+    CHECK(season_arg_second_down_places(6, 1) == 6, "6 places with changing rules on");
+    CHECK(season_arg_second_down_places(6, 0) == 4, "the swap's 4 places with changing rules off");
+    CHECK(season_arg_second_down_places(3, 0) == 3, "a row under the swap's 4 keeps its places");
+    CHECK(season_arg_second_down_places(-1, 1) == 0, "no places from an unknown row");
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;
