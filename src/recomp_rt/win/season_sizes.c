@@ -1329,6 +1329,8 @@ static int is_human(uint32_t club)
     return readable(humans) && call_this(F_IS_HUMAN, humans, 1, a) != 0;
 }
 
+int season_sizes_is_human(uint32_t club) { return is_human(club); }
+
 /* 1 when a club may go up into the division of record rec by the step: no reserve or B side (D12), and no club
  * that a second-team rule bars from it (the rules of the club moves, season_clubs.c fill_takes). */
 static int up_ok(uint32_t club, uint32_t rec)

@@ -330,6 +330,10 @@ if(NOT WIN32)
     add_executable(season_mls_plan_test tests/seasons/test_season_mls_plan.c src/recomp_rt/win/season_mls_plan.c)
     target_include_directories(season_mls_plan_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_mls_plan COMMAND season_mls_plan_test)
+    add_executable(season_closed_test tests/seasons/test_season_closed.c src/recomp_rt/win/season_closed.c
+                   src/recomp_rt/win/season_mls_plan.c)
+    target_include_directories(season_closed_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_closed COMMAND season_closed_test)
     # The size step at a season change (0.7.2 league sizes, slice 3, D13).
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)

@@ -21,6 +21,9 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_closed.h"
+#include "season_clubs.h"
+#include "season_records.h"
 #include "season_mls.h"
 #include "season_mls_plan.h"
 #include "season_names.h"
@@ -36,6 +39,12 @@
 #define CLUB_SIZE 0x245u
 #define CLUB_DIVISION 0x57u         /* club_comp pointer, its +0 is the record id */
 #define KEY_MLS 0x9cf590u           /* key id of the American Major League (0x909ed7) */
+#define NATION_COUNT 0xae2350u      /* the last 2 x nations rows of the club table are national teams (0x53b900) */
+#define CLOSED_NATION 0x5du         /* club_comp: nation pointer */
+#define CLOSED_CLUB_NATION 0x53u    /* club: nation pointer */
+#define CLOSED_LAST_DIVISION 0x5bu  /* club: the division of the last season */
+#define CLOSED_REPUTATION 0x80u     /* club: s16 */
+#define CLOSED_SHORT 0x38u          /* club: short name */
 
 #define GROUP_A 0x413u
 #define GROUP_B 0x47bu
@@ -207,6 +216,15 @@ uint32_t rt_mls_round_flags(uint32_t flags)
 #define STADIUMS 0x00dd7ef4u
 #define FIXTURES 0x00ae2a58u
 #define CLUB_NAME 4u
+
+/* The conference of a club by its real name: an update database gives a retired record to a newer club
+ * (season_closed.h). */
+static int club_conference(uint32_t club, int season)
+{
+    const char *name = win_str(club + CLUB_NAME);
+    if (season_changing_rules()) name = season_closed_real_name("usa_mls", name, win_str(club + CLOSED_SHORT));
+    return season_mls_conference(name, season);
+}
 #define ROW_SIZE 0x3bu
 #define DATE_SIZE 0x41u
 #define FIXTURE_SIZE 0x4fu
@@ -351,7 +369,66 @@ static int new_conference(uint32_t club)
         if (in_table(rd32(g_mem, stages), club)) return GROUP_A;
         if (in_table(rd32(g_mem, stages + 4), club)) return GROUP_C;
     }
-    return season_mls_conference(win_str(club + CLUB_NAME), form_season(obj)) == MLS_WEST ? GROUP_C : GROUP_A;
+    return club_conference(club, form_season(obj)) == MLS_WEST ? GROUP_C : GROUP_A;
+}
+
+/* The clubs that fold and join at the season change (0.7.3 slice 6, issue 157, decision L7). UsaMls::start_new_season
+ * 0x908e00 adds 1 to the edition (0x908e68), calls set_up_rules (0x908e6e) and then create_table (0x908eac), so the
+ * wrap of create_table sees the new edition before any table of it exists. A club that folds goes to no division and
+ * keeps its players. A club that joins comes from the clubs of the division's nation: a club of the database, or the
+ * record that the data load added for it (season_records.c). Only with changing rules on, and never at a new game:
+ * the club moves apply the same plan to the first edition (season_clubs.c closed_moves). */
+static void closed_step(uint32_t obj)
+{
+    if (!season_changing_rules() || season_change_is_creating()) return;
+    uint32_t rec = rd32(g_mem, obj + COMP_RECORD), table = rd32(g_mem, CLUBS), nation = rd32(g_mem, rec + CLOSED_NATION);
+    int count = (int)rd32(g_mem, CLUB_COUNT) - 2 * (int)rd32(g_mem, NATION_COUNT);
+    int season = form_season(obj), edition = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    if (count <= 0) return;
+    ClosedClub *club = calloc((size_t)count, sizeof *club);
+    uint32_t *at = calloc((size_t)count, sizeof *at);
+    int *action = calloc((size_t)count, sizeof *action);
+    if (!club || !at || !action) rt_fatal("mls: no memory for the closed league step");
+    int n = 0;
+    for (int i = 0; i < count; i++) {
+        uint32_t c = table + (uint32_t)i * CLUB_SIZE;
+        int in_league = rd32(g_mem, c + CLUB_DIVISION) == rec;
+        if (!in_league && rd32(g_mem, c + CLOSED_CLUB_NATION) != nation) continue;
+        const char *name = win_str(c + CLUB_NAME);
+        at[n] = c;
+        club[n].name = name;
+        club[n].short_name = win_str(c + CLOSED_SHORT);
+        club[n].in_league = in_league;
+        club[n].human = season_sizes_is_human(c);
+        club[n].reserve = season_clubs_reserve_name(name);
+        club[n].reputation = (int16_t)rd16(g_mem, c + CLOSED_REPUTATION);
+        n++;
+    }
+    ClosedResult r;
+    season_closed_plan("usa_mls", season, row_clubs(season), club, n, action, &r);
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        if (action[i] == CLOSED_FOLD || action[i] == CLOSED_CUT) {
+            wr32(g_mem, at[i] + CLOSED_LAST_DIVISION, rec);
+            wr32(g_mem, at[i] + CLUB_DIVISION, 0);
+            fprintf(stderr, "recomp: mls: %d: %.50s %s\n", edition, club[i].name,
+                    action[i] == CLOSED_FOLD ? "folds: it goes to no division" : "leaves for a club of the season");
+        } else if (action[i] == CLOSED_JOIN) {
+            uint32_t from = rd32(g_mem, at[i] + CLUB_DIVISION);
+            if (from) wr32(g_mem, at[i] + CLOSED_LAST_DIVISION, from);
+            wr32(g_mem, at[i] + CLUB_DIVISION, rec);
+            int players = season_records_fill_club(at[i], edition);
+            fprintf(stderr, "recomp: mls: %d: %.50s joins with %d players, %d of them new with a contract\n", edition,
+                    club[i].name, players, season_records_joined_contracts());
+        } else if (club[i].in_league && club[i].human &&
+                   season_closed_member("usa_mls", club[i].name, club[i].short_name, season) == 0) {
+            fprintf(stderr, "recomp: mls: %d: %.50s stays: a human manages it\n", edition, club[i].name);
+        }
+    }
+    if (r.missing)
+        fprintf(stderr, "recomp: mls: %d: %d clubs of the season are not in this database\n", edition, r.missing);
+    free(club);
+    free(at);
+    free(action);
 }
 
 void o_00908560(void);
@@ -369,6 +446,8 @@ RT_WRAP(00908560, mls_create_table)
         o_00908560();
         return;
     }
+    closed_step(obj);
+    if (rt_unwinding) return;
     uint32_t rec = rd32(g_mem, obj + COMP_RECORD), table = rd32(g_mem, CLUBS);
     int count = (int)rd32(g_mem, CLUB_COUNT), n = 0;
     for (int i = 0; i < count; i++) n += rd32(g_mem, table + (uint32_t)i * CLUB_SIZE + CLUB_DIVISION) == rec;
@@ -394,14 +473,12 @@ RT_WRAP(00908560, mls_create_table)
     }
     int edition = (int16_t)rd16(g_mem, obj + COMP_YEAR);
     fprintf(stderr, "recomp: mls: %d table of %d clubs (season %d form)\n", edition, k, form_season(obj));
-    /* The MLS has no division below, so no club comes in or goes out (open item 269): a 2023 start has the 29 clubs
-     * of the October 2023 database and no San Diego FC (30 from 2025), a 2001 start keeps Miami Fusion and Tampa Bay
-     * Mutiny (folded in January 2002, no fold in the game: item 269, for 0.7.3). The run check (league_size_run.py)
- * takes the count of this line for those editions only. */
+    /* closed_step brings the league to its row. This line names an edition that still differs: a human manages a
+     * club that folded, or a club of a custom database is missing. The run check (league_size_run.py) fails on it. */
     int want = row_clubs(form_season(obj));
     if (want > 0 && k != want)
         fprintf(stderr, "recomp: mls: %d: %d clubs, the row %d: %s\n", edition, k, want,
-                k < want ? "the database has no other club of the division" : "no club can leave (no division below)");
+                k < want ? "the database has no other club of the division" : "a club that folds has a human manager");
     rt_ret_stdcall(k == n && n >= 2, 0);
 }
 
@@ -459,7 +536,7 @@ static int make_season(uint32_t obj)
     int conf[MLS_MAX_CLUBS];
     for (int i = 0; i < n; i++) {
         clubs[i] = row_club(obj, i);
-        conf[i] = season_mls_conference(win_str(clubs[i] + CLUB_NAME), season);
+        conf[i] = club_conference(clubs[i], season);
     }
     static MlsPlan plan;
     char why[160];

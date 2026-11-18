@@ -1085,10 +1085,6 @@ def shortages(log, file):
         m = pat.match(line)
         if m and int(m.group(2)) < int(m.group(3)):
             out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
-        m = MLS_COUNT.match(line) if file == "usa_mls" else None
-        if m and (int(m.group(2)) < int(m.group(3)) or
-                  MLS_FOLD.get(int(m.group(1))) == (int(m.group(2)), int(m.group(3)))):
-            out[int(m.group(1))] = (int(m.group(2)), int(m.group(3)))
     return out
 # Gap 43: an exchange whose real places keep both counts. The lower file: (the upper file, the least clubs that move
 # each way). League of Ireland 2011 to 2015 (rows wal-nir-irl-266 to 367): the 12th of the Premier Division goes down,
@@ -1274,15 +1270,8 @@ def irl_change_faults(log, file, year, last=None):
 MLS_FIRST = 2002
 MLS_PLAN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src", "recomp_rt", "win",
                         "season_mls_plan.c")
-# The MLS has no division below, so no club comes in or goes out (open item 269). The log names each edition whose
-# count differs from its row, with the reason. The check takes the game's count only when the database has fewer
-# clubs than the row (a 2023 start has no San Diego FC, 30 from 2025): the count of a closed league is bounded by
-# its database clubs. More clubs than the row stay a fault, except editions 2002 to 2004 (MLS_FOLD): Miami Fusion
-# and Tampa Bay Mutiny folded in January 2002, and the game has no fold of named clubs (lead decision, 16 November
-# 2026: open item 269, for 0.7.3).
-MLS_COUNT = re.compile(r"recomp: mls: (\d+): (\d+) clubs, the row (\d+): (the database has no other club of the "
-                       r"division|no club can leave \(no division below\))$")
-MLS_FOLD = {2002: (12, 10), 2003: (12, 10), 2004: (12, 10)}
+# 0.7.3 slice 6 (issue 157): clubs fold and join in their real seasons (season_closed.c), so each edition holds the
+# clubs of its row. No shortage of the MLS is accepted.
 MLS_PLAN_LINE = re.compile(r"recomp: mls: (\d+): (\d+) clubs \(East (\d+), West (\d+)\), (\d+) matches, (\d+) to "
                            r"(\d+) games, (\d+) rounds ")
 
@@ -2098,21 +2087,18 @@ def self_test():
     mls_log = ("recomp: mls: 2025: 29 clubs, the row 30: the database has no other club of the division\n"
                "recomp: mls: 2025: 29 clubs (East 15, West 14), 493 matches, 34 to 34 games, 37 rounds from day 80 "
                "to 248\nrecomp: mls: 2025: final A v B\n")
-    short = shortages(mls_log, "usa_mls")
     checks += [
-        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (short.get(ed, (30, 0))[0], 0), games), False),
+        (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (29, 0), games), False),
         (mls_faults(mls_log, [], [], "usa_mls", 2025, 2025, lambda ed: (30, 0), games), True),
         (mls_faults(mls_log + "recomp: mls: stage 2, West tie 0: 0 clubs go on (x)\n", [], [], "usa_mls", 2025,
                     2025, lambda ed: (29, 0), games), True),
         (mls_faults(mls_log, [], [], "usa_mls", 2025, 2026, lambda ed: (29, 0), games), True),
-        ([] if short == {2025: (29, 30)} else ["shortage"], False),
+        # 0.7.3 slice 6: the log line of a count that differs from the row excuses no edition.
+        ([] if shortages(mls_log, "usa_mls") == {} else ["shortage"], False),
+        ([] if shortages("recomp: mls: 2002: 12 clubs, the row 10: a club that folds has a human manager\n",
+                         "usa_mls") == {} else ["fold"], False),
         (mls_faults(mls_log.replace("2025", "2027"), [(2026, "end", 2027, 29, 0, 34)], [], "usa_mls", 2027, 2027,
                     lambda ed: (29, 0), games), False),
-        ([] if shortages(mls_log.replace("29 clubs, the row 30", "31 clubs, the row 30"), "usa_mls") == {}
-         else ["excess"], False),
-        ([] if shortages("recomp: mls: 2002: 12 clubs, the row 10: no club can leave (no division below)\n"
-                         "recomp: mls: 2005: 13 clubs, the row 12: no club can leave (no division below)\n",
-                         "usa_mls") == {2002: (12, 10)} else ["fold"], False),
     ]
     # A template of 7-day gaps only (the Brazilian classes) has no winter break: a Wednesday in a gap is good, and the
     # earlier starts go up to the class's limit.

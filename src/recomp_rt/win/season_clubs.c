@@ -3,6 +3,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_mls.h"
+#include "season_closed.h"
 #include "season_clubs.h"
 #include "season_second_teams.h"
 #include "season_fin_second.h"
@@ -32,6 +33,8 @@
 #define CLUB_SIZE 0x245u
 #define CLUB_ZONE 0x60u             /* zone record of an Argentine club (club_comp pointer; 0 when the data has none) */
 #define CLUB_NAME 4u                /* long name, 52 bytes */
+#define CLUB_SHORT 0x38u            /* short name */
+#define CLUB_REPUTATION 0x80u       /* s16 */
 #define CLUB_NATION 0x53u           /* nation pointer */
 #define CLUB_DIVISION 0x57u         /* club_comp pointer */
 #define CLUB_REPUTATION 0x80u      /* s16 */
@@ -175,6 +178,7 @@ typedef struct {
 static const Club *moves_club;
 static uint32_t moves_table;
 static int moves_count;
+static int moves_season;
 
 static uint32_t planned_division(uint32_t at)
 {
@@ -524,6 +528,10 @@ static int fill_takes(const Club *c, const Division *div, int ncomps, uint32_t c
                       uint32_t spare1, uint32_t spare2, uint32_t cup_pool_nation)
 {
     if (c->kept || c->national || c->nation != d->nation || c->div == d->at) return 0;
+    /* 0.7.3 slice 6: a record of a closed league's later club has no division until its season (season_mls.c). */
+    if (season_changing_rules() && !c->db_div &&
+        season_closed_member("usa_mls", win_str(c->at + CLUB_NAME), win_str(c->at + CLUB_SHORT), moves_season) == 0)
+        return 0;
     if (season_second_barred(c->at, d->at)) return 0;   /* open items 111, 114 to 122: a second team's bar */
     if (season_fin_barred(c->at, d->at)) return 0;      /* open item 118: no Finnish second team in the Veikkausliiga */
     if (season_bel_barred(c->at, d->at)) return 0;      /* open item 115: a Belgian U23 side below its first team */
@@ -582,6 +590,44 @@ static int best_fill(const Club *club, int count, const Division *div, int ncomp
 }
 
 /* The moves of a season. */
+/* 0.7.3 slice 6 (issue 157, decision L7): the first edition of a closed league holds the clubs of its real season.
+ * The list of season S names the clubs of the next real season of a league that plays in one calendar year (list 2024
+ * holds San Diego FC, who first play in 2025), and a database can lack a club of the list. The plan of the season
+ * change (season_closed.h) puts this right, with changing rules on only. */
+static void closed_moves(Club *club, int count, const Division *div, int ncomps, int season)
+{
+    if (!season_changing_rules()) return;
+    for (int t = 0; t < ncomps; t++) {
+        const Division *d = &div[t];
+        const char *league = season_closed_league(d->name);
+        if (!league || d->spare || (d->n0 <= 0 && !d->fresh)) continue;
+        ClosedClub *list = calloc((size_t)count + 1, sizeof *list);
+        int *of = calloc((size_t)count + 1, sizeof *of), *action = calloc((size_t)count + 1, sizeof *action);
+        if (!list || !of || !action) rt_fatal("club moves: no memory for a closed league");
+        int n = 0;
+        for (int i = 0; i < count; i++) {
+            if (club[i].national || club[i].nation != d->nation) continue;
+            const char *name = win_str(club[i].at + CLUB_NAME);
+            of[n] = i;
+            list[n].name = name;
+            list[n].short_name = win_str(club[i].at + CLUB_SHORT);
+            list[n].in_league = club[i].div == d->at;
+            list[n].reserve = season_clubs_reserve_name(name);
+            list[n].reputation = (int16_t)rd16(g_mem, club[i].at + CLUB_REPUTATION);
+            n++;
+        }
+        ClosedResult r;
+        season_closed_plan(league, season, d->want, list, n, action, &r);
+        for (int k = 0; k < n; k++)
+            if (action[k] != CLOSED_STAY) club[of[k]].div = action[k] == CLOSED_JOIN ? d->at : 0;
+        fprintf(stderr, "recomp: club moves: %s of %d: %d clubs, %d join, %d fold, %d leave, %d not in this database\n",
+                d->name, season, r.count, r.joined, r.folded, r.cut, r.missing);
+        free(list);
+        free(of);
+        free(action);
+    }
+}
+
 static void move_clubs(int season)
 {
     int first = -1, last = -1;
@@ -631,6 +677,7 @@ static void move_clubs(int season)
     moves_club = club;
     moves_table = table;
     moves_count = count;
+    moves_season = season;
     season_esp_second_moves();
     /* The divisions: every club_comp record, its club count in the database and the count it keeps. */
     for (int i = 0; i < ncomps; i++) {
@@ -978,6 +1025,7 @@ static void move_clubs(int season)
     if (to_lower)
         fprintf(stderr, "recomp: club moves: %d clubs that leave a group division of a new form go to its lower division\n",
                 to_lower);
+    closed_moves(club, count, div, ncomps, season);
     /* Write the moves. */
     int moved = 0;
     for (int i = 0; i < count; i++) {
