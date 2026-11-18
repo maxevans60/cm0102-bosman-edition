@@ -210,6 +210,8 @@ if(NOT WIN32)
     add_test(NAME same_save_rules_pair_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/smoke/rules_pair_table_check.py")
     add_test(NAME seasons_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_db_table.py" --check)
     add_test(NAME season_credits COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/check_credits.py")
+    # Issue 138 (0.7.3): the site roadmap shows Done only for issues closed as completed.
+    add_test(NAME site_roadmap COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/site/roadmap_check.py")
     # Right ages and dates in every season (0.6.0 slice 11b): the C table matches the date shift tables.
     add_test(NAME season_dates_table COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_dates_table.py" --check)
     # Open item 233 (0.7.2): the year fix table matches docs/research/history-years/wrong-rows.tsv.
