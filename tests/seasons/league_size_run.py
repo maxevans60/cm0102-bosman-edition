@@ -353,11 +353,11 @@ GROUPS = {("den_prm", 2016, 2019): [0] * 6 + [1, 2, 2, 1, 1, 2, 2, 1],
           # (2016/17 to 2018/19 with the 15th), then the 15th and 16th (en.wikipedia.org 2009-10 to
           # 2015-16_Belgian_Pro_League, 2016-17 to 2018-19_Belgian_First_Division_A).
           ("bel_first", 2009, 2015): [0] * 6 + [1, 2, 1, 2, 2, 1, 2, 1, 3, 3],
-          ("bel_first", 2016, 2018): [0] * 6 + [1, 2, 1, 2, 2, 1, 2, 1, 2, 3]}
+          ("bel_first", 2016, 2018): [0] * 6 + [1] * 10}
 # Gap 34: the points of each section at the split (season_split.c GROUPS): h halved, k kept, z from 0, b from 0 with
 # 3 for the section's best placed club (the 15th of the relegation play-off 2010/11 to 2014/15).
 SPLIT_POINTS = {("bel_first", 2009, 2009): "hzzk", ("bel_first", 2010, 2014): "hzzb",
-                ("bel_first", 2015, 2015): "hzzk", ("bel_first", 2016, 2018): "hzzk"}
+                ("bel_first", 2015, 2015): "hzzk", ("bel_first", 2016, 2018): "hk"}
 
 
 def split_points_faults(log, file, season_of):

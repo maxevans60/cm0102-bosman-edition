@@ -54,6 +54,7 @@
 #include "season_cup_third_place.h"
 #include "season_second_teams.h"
 #include "season_ofc_first.h"
+#include "season_bel_playoffs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -782,6 +783,11 @@ RT_WRAP(00686940, playoff_result)
         rt_ret_stdcall(0, 6);
         return;
     }
+    /* Issue 150: the stages of the Belgian First Division. */
+    if (season_bel_po_result(cpu.ecx, (int8_t)g_mem[cpu.esp + 0xc])) {
+        rt_ret_stdcall(0, 6);
+        return;
+    }
     if (marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
         if (getenv("RECOMP_PLAYOFF_LOG"))
             fprintf(stderr, "recomp: playoffs: %s: result club %x (%.30s) code %d stage %d, day %d of %d\n",
@@ -848,6 +854,7 @@ static int cross_rules(uint32_t obj);
 
 void season_playoffs_rules(uint32_t obj)
 {
+    if (season_bel_po_rules(obj)) return;       /* issue 150: the Belgian First Division's own stages */
     if (!playoffs_on() || cross_rules(obj) || !plain_league(obj)) return;
     const char *file = season_change_file(obj);
     int direct = 0, season = season_now(obj, file);
@@ -1255,7 +1262,9 @@ static int entry_unfinished(int e, int year, const char **file)
     uint32_t buf[COMPS_MAX];
     int n = season_change_entry_comps(e, buf, COMPS_MAX), seen = 0;
     for (int i = 0; i < n && !rt_unwinding; i++) {
-        if (!plain_league(buf[i]) || marked(buf[i]) || (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year) continue;
+        if (!plain_league(buf[i]) || marked(buf[i]) || season_bel_po_holds(buf[i]) ||
+            (int16_t)rd16(g_mem, buf[i] + COMP_YEAR) >= year)
+            continue;
         seen = 1;
         uint32_t vt = rd32(g_mem, buf[i]), args[2] = {1, 1};
         if (!(call_this(rd32(g_mem, vt + 0x10), buf[i], 2, args) & 0xff)) {   /* check_complete(1, 1) */
@@ -1283,6 +1292,13 @@ int season_playoffs_hold(void)
             const char *f3 = "";
             int q = season_pol_playoff_unfinished(e, year, &f3);
             if (q == 2) p = 2, file = f3;
+            else if (q && !p) p = 1;
+        }
+        /* Issue 150: the Belgian play-offs and the final round that waits for them. */
+        if (p != 2) {
+            const char *f4 = "";
+            int q = season_bel_po_unfinished(e, year, &f4);
+            if (q == 2) p = 2, file = f4;
             else if (q && !p) p = 1;
         }
         /* The net only for an entry with a plain league that is not complete on its update day itself. */

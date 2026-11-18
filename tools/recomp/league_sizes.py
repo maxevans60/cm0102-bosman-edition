@@ -342,6 +342,7 @@ TABLE_SITE_TAKEN = {
 # Grown classes whose create_schedule another module wraps already (RT_WRAP takes an address once). That wrap calls
 # season_sizes_schedule after the original, and make_size_wraps.py writes none: file: the module.
 SCHEDULE_TAKEN = {
+    "bel_second": "season_bel_playoffs.c bel_second_schedule",
     "ita_ser_c1a": "season_divisions_ita.c c1a_schedule",
     "ita_ser_c1b": "season_divisions_ita.c c1b_schedule",
 }
