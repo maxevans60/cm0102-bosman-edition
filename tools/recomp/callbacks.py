@@ -18,7 +18,7 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
                   "season_super_cups.c", "season_new_cups.c", "season_cup_groups.c",
                   "season_club_cups.c", "season_playoffs.c", "season_ned_playoff.c", "season_nl.c", "season_nl_euro.c", "season_nl_wc.c",
                   "season_gold_cup.c", "season_divisions.c", "season_tur_groups.c", "season_pol_first.c", "screen_sweep.c",
-                  "season_national_fill.c")
+                  "season_national_fill.c", "news_text.c")
                                 # in src/recomp_rt/win
 
 # address: (bytes of the first eight, name)
@@ -212,6 +212,9 @@ CALLBACKS = {
     0x4241B0: ("8b4424048b490856", "BelThird::set_club_progress (three groups), thiscall, ret 0x14"),
     0x684640: ("83ec0c5355568bf1", "League::record_season_honours, thiscall"),
     0x48C6D0: ("8b44241453565785", "Comp::build_fate_news_text, thiscall, ret 0x28"),
+    # Issue 161 (news_text.c, season_nl.c): the text of a match item, and the group news of the Nations League.
+    0x4B0010: ("53558b6c2414568b", "comp_util_read_fixture_from_news_slots (item, fixture, &slot), cdecl"),
+    0x4B4590: ("8a44241083ec643c", "comp_util_write_group_qualify_news (team, code, record, fate, full, text), cdecl"),
 }
 
 
