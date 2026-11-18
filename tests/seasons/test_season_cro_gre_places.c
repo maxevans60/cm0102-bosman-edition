@@ -37,6 +37,20 @@ int main(void)
     same("gre_prm 2021 down keeps both winners", season_gre_prm_down(2, 1), 2);
     same("gre_prm unknown keeps both winners", season_gre_prm_down(2, -2), 2);
 
+    /* One tie between two divisions (play-off places 1 and 1, one group, changing rules on). */
+    same("tie 2018/19", season_tie_played(1, 1, 0, 1), 1);
+    same("no tie with two groups (2021/22)", season_tie_played(1, 1, 1, 1), 0);
+    same("no tie with changing rules off", season_tie_played(1, 1, 0, 0), 0);
+    same("no tie with a group of four (2009/10)", season_tie_played(4, 1, 0, 1), 0);
+    same("no tie with no upper place", season_tie_played(1, 0, 0, 1), 0);
+    same("no tie with two upper places (2001/02)", season_tie_played(1, 2, 0, 1), 0);
+
+    /* The clubs that the lower club of the tie skips: the places before the row's first play-off place. */
+    same("2nd after 1 up", season_tie_skip(2, 1), 1);
+    same("3rd after 2 up", season_tie_skip(3, 2), 2);
+    same("6th of 2008/09, its up places unknown", season_tie_skip(6, 0), 5);
+    same("no first place: after the direct places", season_tie_skip(0, 2), 2);
+
     if (!failed) puts("season_cro_gre_places: ok");
     return failed;
 }

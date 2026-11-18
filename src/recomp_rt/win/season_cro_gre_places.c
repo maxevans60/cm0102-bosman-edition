@@ -29,3 +29,13 @@ int season_gre_prm_down(int group_ups, int row_down)
 {
     return row_places(row_down) && row_down > group_ups ? row_down : group_ups;
 }
+
+int season_tie_played(int po_up, int po_down, int two_groups, int changing_rules)
+{
+    return po_up == 1 && po_down == 1 && !two_groups && changing_rules;
+}
+
+int season_tie_skip(int po_up_first, int direct_up)
+{
+    return po_up_first > 0 ? po_up_first - 1 : direct_up;
+}
