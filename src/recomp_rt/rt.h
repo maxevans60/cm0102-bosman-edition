@@ -339,6 +339,9 @@ uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fix
 /* Open item 187 (win/original_faults.c, tools/recomp/original_faults.py at 0x4cc03d): the move of a one-contract
  * player to the linked side sets his contract's placement bit and the move back clears it, as the other moves do.
  * rt_squad_move_test: RECOMP_SQUAD_MOVE_TEST=1 at the first start report (season_report.c). */
+/* Issue 132 (win/original_faults.c): a crash site of the original was reached. One stderr line per site and run,
+ * "recomp: crash site <addr> reached", so that the run set's logs show whether a site can happen in the port. */
+void rt_crash_site(uint32_t site);
 void rt_squad_move_set(uint32_t manager, uint32_t staff, int down);
 void rt_squad_move_test(void);
 /* Money above 2,147,483,647 (0.6.2 slice 11, Q24; win/original_faults.c, tools/recomp/original_faults.py). */
