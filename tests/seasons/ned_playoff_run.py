@@ -10,13 +10,16 @@ Each run starts a new game with the Netherlands, changing rules on, plays on hol
 after 365 days, in July of the next year (soak_run.py). The checks of each run:
     box      no message box of the game, and the program saves and ends with code 0;
     drawn    the brackets of the season, each with its clubs;
-    ties     each tie of the log is the tie of the plan (list places of the drawn line, winners of the round before);
+    ties     each tie of the log is the tie of the plan (list places of the drawn line, winners of the round before),
+             and the better placed club plays the second leg at home, or the single match at home;
     moves    in the save each bracket's winner plays in the Eredivisie, and the Eredivisie club of the bracket plays in
              the Eerste Divisie when a lower club won; the Eredivisie keeps 18 clubs; the clubs that change division
-             are the direct places of the season and the lower clubs that won a bracket, as many up as down;
+             are the direct places of the season and the lower clubs that won a bracket, as many up as down
+             (2003/04: the direct place and at most the two group places);
     entrants no Jong side plays the knockout;
     none     2003/04 plays the groups and 2019/20 no play-off: no knockout line;
-    load     the run r2012 saves during the play-off, a new program loads the save and plays the rest.
+    load     the run r2012 saves after the first draw of the play-off, a new program loads the save and plays the
+             later rounds.
 --seed <n> plays another game (a folder per seed), so that both an Eredivisie club and a lower club win a bracket.
 A run takes 5 to 60 minutes. --reuse checks the folders in --keep again.
 """
@@ -44,6 +47,9 @@ def w(t):
 TEN = [[(0, 1)], [(w(0), 2), (3, 4)], [(w(0), w(1))]]
 SEVEN = [[(0, 1), (2, 3), (4, 5)], [(w(0), w(1)), (w(2), 6)], [(w(0), w(1))]]
 LADDER = [[(0, 1), (2, 3)], [(w(0), 4), (w(1), 5)], [(w(0), w(1))], [(w(0), 6)]]
+# The table place of each list place by bracket, from 0, with -1 for an Eredivisie club (ned_po_entrants).
+PLACES = {id(TEN): [[7, 4, -1, 3, 0], [6, 5, -1, 2, 1]], id(SEVEN): [[5, 0, 4, 1, 3, 2, -1]],
+          id(LADDER): [[4, 3, 5, 2, 0, 1, -1]]}
 # run: (start year, what it shows, ties, brackets, clubs of a bracket, legs).
 RUNS = {
     "n2003": (2003, "2003/04: the groups of four stay", None, 0, 0, 0),
@@ -57,8 +63,8 @@ RUNS = {
     "n2026": (2026, "2026/27: seven clubs, two legs", SEVEN, 1, 7, 2),
     "r2012": (2012, "2012/13: a save during the play-off, loaded and played on", TEN, 2, 5, 2),
 }
-# run: the game days before the save during the play-off (the draw comes about 308 days after the start).
-SAVE_IN_PLAYOFF = {"r2012": 318}
+# run: the game days before the save, after the first draw of the play-off and before the later draws.
+SAVE_IN_PLAYOFF = {"r2012": 306}
 
 
 def direct_places(year):
@@ -67,14 +73,13 @@ def direct_places(year):
 
 
 def save_divisions(save):
-    """{long name: division id} of the clubs of a save."""
+    """{club id: division id} of the clubs of a save. Two clubs of different nations can share a long name."""
     import savfile
     data = savfile.Sav(save).read_member("club.dat")
     out = {}
     for i in range(len(data) // CLUB):
         rec = data[i * CLUB:(i + 1) * CLUB]
-        name = rec[4:rec.index(b"\0", 4)].decode("latin-1")
-        out[name] = struct.unpack_from("<i", rec, 0x57)[0]
+        out[struct.unpack_from("<i", rec, 0)[0]] = struct.unpack_from("<i", rec, 0x57)[0]
     return out
 
 
@@ -88,9 +93,10 @@ def lines_of(log):
     return out
 
 
-def check_ties(plan, entrants, ties, bracket):
-    """The faults of the logged ties of one bracket against the plan."""
+def check_ties(plan, entrants, ties, bracket, legs):
+    """The faults of the logged ties of one bracket against the plan. The draw puts the two sides in home order."""
     failed = []
+    place = dict(zip(entrants, PLACES[id(plan)][bracket]))
     alive = {}                  # (round, tie): the two clubs that can come out of the tie
     for r, round_ties in enumerate(plan):
         for t, sides in enumerate(round_ties):
@@ -99,10 +105,15 @@ def check_ties(plan, entrants, ties, bracket):
                 failed.append(f"ties: bracket {bracket} round {r} tie {t} not in the log")
                 continue
             alive[(r, t)] = got
-            for k, side in enumerate(sides):
-                want = {entrants[side]} if side >= 0 else set(alive.get((r - 1, -side - 1), ()))
-                if got[k] not in want:
-                    failed.append(f"ties: bracket {bracket} round {r} tie {t} side {k}: {got[k]}, want {sorted(want)}")
+            first, second = [{entrants[x]} if x >= 0 else set(alive.get((r - 1, -x - 1), ())) for x in sides]
+            if not (got[0] in first and got[1] in second or got[0] in second and got[1] in first):
+                failed.append(f"ties: bracket {bracket} round {r} tie {t}: {got}, want {sorted(first)} and "
+                              f"{sorted(second)}")
+                continue
+            home = 1 if legs == 2 else 0        # the side that plays the last match at home
+            if place[got[home]] > place[got[1 - home]]:
+                failed.append(f"ties: bracket {bracket} round {r} tie {t}: {got[home]} is at home, "
+                              f"{got[1 - home]} is the better placed club")
     return failed
 
 
@@ -127,11 +138,17 @@ def check(name, work, loaded=None):
     if not os.path.isfile(save):
         return failed + ["no save at the end of the run"]
     division = save_divisions(save)
+    dutch = [c for c in club_lines if c["season"] == year and c["phase"] == "start"
+             and c["division"] in (upper_id, lower_id)]
+    ids = {c["name"]: c["club"] for c in dutch}
     got = sum(1 for d in division.values() if d == upper_id)
     if got != 18:
         failed.append(f"count: the Eredivisie holds {got} clubs in the save, want 18")
     lines = [x for log in logs for x in lines_of(log) if int(x[1]) == year]
     if loaded:
+        before = [x for x in lines_of(logs[0]) if int(x[1]) == year]
+        if sum(x[0] == "drawn" for x in before) != brackets:
+            failed.append("load: the save comes before the first draw of the play-off")
         after = [x for x in lines_of(logs[1]) if int(x[1]) == year]
         if not any(x[0] == "tie" for x in after) or sum(x[0] == "winner" for x in after) != brackets:
             failed.append(f"load: the loaded game played {len(after)} knockout lines, want its later rounds and finals")
@@ -158,22 +175,22 @@ def check(name, work, loaded=None):
         for t in lines:
             if t[0] == "tie" and int(t[2].split()[1]) == b:
                 ties[(int(t[3].split()[1]), int(t[4].split()[1]))] = (t[5], t[6])
-        failed += check_ties(plan, entrants, ties, b)
+        failed += check_ties(plan, entrants, ties, b, legs)
     for x in winners:
         bracket, winner, verdict, upper, upper_verdict = x[2:7]
         print(f"  {year} {bracket}: {winner} {verdict}, {upper} {upper_verdict}")
-        if division.get(winner) != upper_id:
-            failed.append(f"moves: {winner} in division {division.get(winner)}, want the Eredivisie")
+        if division.get(ids.get(winner)) != upper_id:
+            failed.append(f"moves: {winner} in division {division.get(ids.get(winner))}, want the Eredivisie")
         want = lower_id if verdict == "goes up" else upper_id
-        if division.get(upper) != want:
-            failed.append(f"moves: {upper} in division {division.get(upper)}, want {want}")
-    at_start = {c["name"]: c["division"] for c in club_lines if c["season"] == year and c["phase"] == "start"}
-    went_up = [n for n, d in at_start.items() if d == lower_id and division.get(n) == upper_id]
-    went_down = [n for n, d in at_start.items() if d == upper_id and division.get(n) == lower_id]
+        if division.get(ids.get(upper)) != want:
+            failed.append(f"moves: {upper} in division {division.get(ids.get(upper))}, want {want}")
+    went_up = [c["name"] for c in dutch if c["division"] == lower_id and division.get(c["club"]) == upper_id]
+    went_down = [c["name"] for c in dutch if c["division"] == upper_id and division.get(c["club"]) == lower_id]
     want = direct_places(year) + sum(x[4] == "goes up" for x in winners)
-    print(f"  {year}: up {went_up}, down {went_down}, want {want} each")
-    if len(went_up) != want or len(went_down) != want:
-        failed.append(f"moves: {len(went_up)} up and {len(went_down)} down, want {want} each")
+    most = want + 2 if year <= 2004 else want
+    print(f"  {year}: up {went_up}, down {went_down}, want {want} to {most} each")
+    if len(went_up) != len(went_down) or not want <= len(went_up) <= most:
+        failed.append(f"moves: {len(went_up)} up and {len(went_down)} down, want {want} to {most} each")
     return failed
 
 
