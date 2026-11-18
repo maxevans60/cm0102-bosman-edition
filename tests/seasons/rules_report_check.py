@@ -779,7 +779,8 @@ NEWS_KIND = {("2004/05", "Conference Cup"): "again", ("2009/10", "Superfinalen")
              ("2004/05", "Setanta Cup"): "for the first time", ("2009/10", "Setanta Sports Cup"): "again"}
 
 
-def check(report, game=None, last=None, expected=None, update=False, data_dir=None, start_only=False):
+def check(report, game=None, last=None, expected=None, update=False, data_dir=None, start_only=False,
+          names=True):
     """Prints the checks and the differences. Returns the failure texts."""
     clubs = []
     seasons, comps = read_report(report, clubs)
@@ -797,7 +798,9 @@ def check(report, game=None, last=None, expected=None, update=False, data_dir=No
     unknown = sorted({c["vtable"] for c in comps if c["file"] == "?"})
     if unknown:
         failed.append(f"competitions with an unknown class: {', '.join(unknown)}")
-    if game and start == 2001:
+    if game and start == 2001 and names:
+        # Changing rules on gives the real names from the first season (season_names.c), so only a run with
+        # changing rules off checks the names of the data (0.7.2 league sizes slice 18).
         names = record_names(game)
         for c in comps:
             if c["season"] != 2001:
@@ -1107,7 +1110,8 @@ def main(argv):
                     failed += first_and_again(f.read())
             if os.path.exists(report):
                 failed += check(report, game if not database else None, last, name, update,
-                                data_dir=database or os.path.join(game, "Data"), start_only=start_only)
+                                data_dir=database or os.path.join(game, "Data"), start_only=start_only,
+                                names=rules == "off")
             else:
                 failed.append("the run wrote no report")
         finally:
