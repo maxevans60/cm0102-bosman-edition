@@ -221,8 +221,9 @@ uint32_t rt_mls_round_flags(uint32_t flags)
  * (season_closed.h). */
 static int club_conference(uint32_t club, int season)
 {
-    return season_mls_conference(season_closed_real_name("usa_mls", win_str(club + CLUB_NAME),
-                                                         win_str(club + CLOSED_SHORT)), season);
+    const char *name = win_str(club + CLUB_NAME);
+    if (season_changing_rules()) name = season_closed_real_name("usa_mls", name, win_str(club + CLOSED_SHORT));
+    return season_mls_conference(name, season);
 }
 #define ROW_SIZE 0x3bu
 #define DATE_SIZE 0x41u
@@ -376,7 +377,7 @@ static int new_conference(uint32_t club)
  * wrap of create_table sees the new edition before any table of it exists. A club that folds goes to no division and
  * keeps its players. A club that joins comes from the clubs of the division's nation: a club of the database, or the
  * record that the data load added for it (season_records.c). Only with changing rules on, and never at a new game:
- * the club moves (season_clubs.c) give the first edition its clubs. */
+ * the club moves apply the same plan to the first edition (season_clubs.c closed_moves). */
 static void closed_step(uint32_t obj)
 {
     if (!season_changing_rules() || season_change_is_creating()) return;
@@ -416,7 +417,8 @@ static void closed_step(uint32_t obj)
             if (from) wr32(g_mem, at[i] + CLOSED_LAST_DIVISION, from);
             wr32(g_mem, at[i] + CLUB_DIVISION, rec);
             int players = season_records_fill_club(at[i], edition);
-            fprintf(stderr, "recomp: mls: %d: %.50s joins with %d players\n", edition, club[i].name, players);
+            fprintf(stderr, "recomp: mls: %d: %.50s joins with %d players, %d of them new with a contract\n", edition,
+                    club[i].name, players, season_records_joined_contracts());
         } else if (club[i].in_league && club[i].human &&
                    season_closed_member("usa_mls", club[i].name, club[i].short_name, season) == 0) {
             fprintf(stderr, "recomp: mls: %d: %.50s stays: a human manages it\n", edition, club[i].name);

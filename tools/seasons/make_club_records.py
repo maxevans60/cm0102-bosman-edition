@@ -34,6 +34,7 @@ import make_clubs  # noqa: E402
 RECORDS = os.path.join(os.path.dirname(os.path.dirname(HERE)), "docs", "research", "club-records-0.6.0")
 CLOSED = os.path.join(RECORDS, "closed-leagues.tsv")
 FIRST_START = 2001
+LAST_START = 2027
 COLUMNS = ["season", "division", "real", "name", "short", "city", "stadium", "capacity", "colour1", "colour2",
            "source", "source_club"]
 
@@ -73,14 +74,15 @@ def build():
 
 
 def closed_league_rows(errors):
-    """0.7.3 slice 6 (issue 157, decision L7): one record for each start season before a closed league's club joins.
-    The game makes no record when the start database holds the club (season_records_merge), and the club waits with
-    no division until its first season (season_mls.c)."""
+    """0.7.3 slice 6 (issue 157, decision L7): one record of a closed league's club for each start season up to its
+    last season. The game makes no record when the start database holds the club (season_records_merge). A club whose
+    season has not come waits with no division (season_mls.c), and the club moves place one whose season has come
+    (season_clubs.c closed_moves)."""
     rows = []
     for c in csv.DictReader(open(CLOSED, encoding="utf-8"), delimiter="\t"):
         if not c["source"].startswith("https://"):
             errors.append(f"{c['real']}: no source in closed-leagues.tsv")
-        for season in range(FIRST_START, int(c["first"])):
+        for season in range(FIRST_START, int(c["last"] or LAST_START) + 1):
             rows.append([season, c["division"], c["real"], c["name"], c["short"], c["city"], c["stadium"], c["capacity"],
                          c["colour1"], c["colour2"], "", "-1"])
     return rows
@@ -108,6 +110,8 @@ def short_name_clashes(out, databases):
                 by_season.setdefault(season + 1, path)          # 3.9.68 is the data of 2001/02 and 2002/03
     errors, seen = [], set()
     for r in out:
+        if not r[10]:
+            continue                                            # a closed league's record: the database may hold it
         path = by_season.get(r[0])
         if not path:
             if r[0] not in seen:
