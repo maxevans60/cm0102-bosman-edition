@@ -1278,7 +1278,18 @@ def duty_clashes(game):
     match of 3 September; its own pick held 2, and the senior side's for 4 September none. A club match on its
     nation's match day is no fault in itself: clubs play on international match days, and a clash is a fault only
     when a picked player is due in two places. The Olympic count above has no PICK_AHEAD limit: Olympic squads are not
-    read from these picks. One fault per competition and year, with its first case."""
+    read from these picks. One fault per competition and year, with its first case.
+    duty-clash-linked-u21 is the same fault for the squad of an under-21 side (the second side of its nation in
+    nat_club.dat, 0x540a2a..0x540a40) whose senior side plays the next day: the linked under-21 match that add_fixture
+    0x5aa680 adds the day before a senior match (ReserveComp::add_b_or_under21_fixture 0x7e6720, called at 0x5aab09),
+    whose squad the senior match's check 0x76bab0 picks. That pick leaves out a club's regulars when the club has a
+    match within a day (with open item 299 of 0.6.2 the day before the linked match too), but takes its players of
+    playing-time mood -10 or less (the gate of select_squad, contract +0x3d, 0x76cd6f): original design, item 162.
+    The mood moves after the pick, so the save does not show it. In release set row t2002 (seed 73) a replay with a
+    log at the pick (run-logs/0.7.3-s073-19/r299/rep8) showed the re-pick of day 231 of 2003 leave out the Huracán
+    regular (mood 100) and keep 4 Huracán players of mood -16, -96, -91 and -50, whose moods at the save of day 243
+    were 6, -99, -6 and 20. The check name lets history_known.tsv accept this one case as design, and no other
+    duty clash."""
     sav = game.sav
     staff = sav.read("staff.dat") if sav.has("staff.dat") else b""
     injury = sav.read("injury.dat") if sav.has("injury.dat") else b""
@@ -1317,6 +1328,9 @@ def duty_clashes(game):
             if comp.get("nation", -1) < 0 and not FRIENDLY.match(comp.get("name", "")) and home in called and \
                     away in called:
                 club_matches.append((day, cid, home, away))
+    by_nation = collections.defaultdict(list)    # nation: its side ids (the senior side's is the lower, nat_club.dat)
+    for sid in game.sides:
+        by_nation[game.club(sid)[1]].append(sid)
     faults, seen = [], set()
     for day, cid, home, away in sorted(club_matches):
         name = game.comps[cid]["name"]
@@ -1330,7 +1344,10 @@ def duty_clashes(game):
         if hit:
             c, side, d = hit
             seen.add((name, year))
-            faults.append(("duty-clash", name, year, f"{game.club(c)[0]} on {when} has "
+            nation = game.club(side)[1]
+            linked = side == max(by_nation.get(nation, [side])) and min(by_nation.get(nation, [side])) in \
+                national.get(d + 1, ())
+            faults.append(("duty-clash-linked-u21" if linked else "duty-clash", name, year, f"{game.club(c)[0]} on {when} has "
                                                      f"{called[c][side]} players in the squad of {game.club(side)[0]}, "
                                                      f"which plays on {datetime.date.fromordinal(d)}"))
             continue

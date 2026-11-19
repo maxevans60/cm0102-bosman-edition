@@ -795,6 +795,24 @@ def duty_dates_rule():
     return []
 
 
+def linked_u21_rule():
+    """Item 299: history_known.tsv accepts the duty clash of a linked under-21 squad in the Copa Sudamericana 2003 as
+    design (item 162), in a changing-rules game only, and no other duty clash."""
+    import history_check
+    known = history_check.read_known(os.path.join(os.path.dirname(os.path.abspath(__file__)), "history_known.tsv"))
+    cases = [(("duty-clash-linked-u21", "Copa Sudamericana", 2003, "on"), "accepted"),
+             (("duty-clash", "Copa Sudamericana", 2003, "on"), None),
+             (("duty-clash-linked-u21", "Copa Sudamericana", 2004, "on"), None),
+             (("duty-clash-linked-u21", "Copa Libertadores", 2003, "on"), None),
+             (("duty-clash-linked-u21", "Copa Sudamericana", 2003, "off"), None)]
+    bad = []
+    for (check, comp, year, rules), want in cases:
+        got = history_check.known_status(known, check, comp, year, rules, 2003)
+        if got != want:
+            bad.append(f"linked under-21 rule: {check} {comp} {year} rules {rules} is {got}, not {want}")
+    return bad
+
+
 def save_date_rule():
     """The save date is the game date of general.dat; with no general.dat, or no date in it, the latest news date."""
     import history_check
@@ -1185,6 +1203,7 @@ def main():
     bad += not_held_rule()
     bad += euro_holders_rule()
     bad += save_date_rule()
+    bad += linked_u21_rule()
 
     for b in bad:
         print("FAIL  " + b)
