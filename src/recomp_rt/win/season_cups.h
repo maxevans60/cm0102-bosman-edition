@@ -146,6 +146,13 @@ int season_new_cup_held(const char *file, int edition);
  * (row_shift 1). */
 int season_new_cup_row_edition(const char *file, int season);
 
+/* The late start of the All-Ireland cup (season_new_cups.c, season_new_cups_day): 1 on day (0 = 1 January) when that
+ * is the original update day of Ireland's league table entry, 20 June (day 170: key_nation_build_table 0x667150 builds
+ * it as Date(20 June 2001) at 0x66840f..0x668438, the same day in a leap year), the entry's update day entry_day is
+ * another day, the cup's edition is before the game year and the game plays the cup in that year (held 1). */
+#define SEASON_NEW_CUP_LATE_DAY 170
+int season_new_cup_late(int day, int entry_day, int edition, int year, int held);
+
 /* The first edition from `edition` on that the game plays, SEASON_CUPS_NEVER when none, 0 with no row. */
 int season_new_cup_next(const char *file, int edition);
 

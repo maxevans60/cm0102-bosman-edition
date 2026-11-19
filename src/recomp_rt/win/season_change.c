@@ -904,6 +904,7 @@ static void update_pass(void);
 /* game_season_update_pass, cdecl (): at the end of every day. Slice 19: an entry's change waits for its play-off
  * (season_playoffs.c). */
 void season_friendly_dates_day(void);   /* season_friendly_dates.c: row A18, the friendly table of a running season */
+void season_new_cups_day(void);         /* season_new_cups.c: the late start of the All-Ireland cup */
 
 RT_WRAP(005d5ae0, season_update_pass)
 {
@@ -912,6 +913,48 @@ RT_WRAP(005d5ae0, season_update_pass)
     int held = season_playoffs_hold();
     update_pass();
     season_playoffs_release(held);
+    if (rt_unwinding) return;
+    season_new_cups_day();
+}
+
+int season_change_late_start(uint32_t comp)
+{
+    if (!readable(comp) || in_pass) return 0;
+    uint32_t vt = rd32(g_mem, comp), rec = rd32(g_mem, comp + 4);
+    if (!readable(vt) || !readable(rec)) return 0;
+    /* 0x5d5cc6..0x5d5ce0: a complete competition (vtable +0xc returns al) for which +0x2c returns 0 */
+    int complete = (int)(call_this(rd32(g_mem, vt + 0xcu), comp, 0, NULL) & 0xffu);
+    if (rt_unwinding || !complete) return 0;
+    uint32_t busy = call_this(rd32(g_mem, vt + 0x2cu), comp, 0, NULL);
+    if (rt_unwinding || busy) return 0;
+    int day = game_day(), season = game_year() + (day >= LATE_DAY ? 1 : 0);
+    int with_hooks = kinds_on() && season_hooks_due(season);
+    if (with_hooks) {
+        pass_season = season;
+        pass_start = season == season_start_year();
+        started_count = 0;
+        depth = 0;
+        in_pass = 1;
+    }
+    /* 0x5d5ce6..0x5d5d15: the attendances of a league division (comp_util_is_league_division 0x4b0700 with the
+     * record id, then game_update_league_attendances 0x5d6280 for the competition and each one of its +0x20 chain) */
+    uint32_t id = rd32(g_mem, rec);
+    if (call_cdecl(0x004b0700u, 1, &id) && !rt_unwinding) {
+        uint32_t obj = comp;
+        for (int i = 0; readable(obj) && i < 64 && !rt_unwinding; i++) {
+            call_cdecl(0x005d6280u, 1, &obj);
+            int32_t next = (int32_t)rd32(g_mem, obj + 0x20u);
+            if (next == -1) break;
+            obj = rd32(g_mem, rd32(g_mem, COMP_TABLE) + 4u * (uint32_t)next);
+        }
+    }
+    /* 0x5d5d17..0x5d5d1c: start_new_season (vtable +8, the wrap of season_starts.c runs the hooks), then 0x5d5d1f..
+     * 0x5d5d29: Discipline::start_new_season_for_comp 0x556210 (thiscall [0xae28f0], the record) */
+    if (!rt_unwinding) call_this(rd32(g_mem, vt + 8u), comp, 0, NULL);
+    if (!rt_unwinding) call_this(0x00556210u, rd32(g_mem, 0xae28f0u), 1, &rec);
+    in_pass = 0;
+    pass_start = 0;
+    return !rt_unwinding;
 }
 
 static void update_pass(void)

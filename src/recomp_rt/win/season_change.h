@@ -192,6 +192,17 @@ int season_change_point(void);
  * while the repair of an old save restarts its finals (season_intl.c repair_idle). At most 8 at once. */
 void season_change_hold(uint32_t comp, int on);
 
+/* Starts one competition outside its entry's update day, as game_season_update_pass 0x5d5ae0 starts each competition
+ * of a due entry (0x5d5cc6..0x5d5d29): only a complete one (vtable +0xc) whose +0x2c is 0, then the attendances of a
+ * league division, start_new_season (vtable +8) with the hooks of season S (the game year, the next one from 1
+ * October; the hooks only where the pass would run them, season_hooks_due) and Discipline::start_new_season_for_comp
+ * 0x556210. The pass's last step for a competition (0x5d5d2e..0x5d5dbb) builds SimulatedStats 0x84b940 again (the
+ * background match groups of the leagues the game does not play, ranked by reputation) on the first start of a day,
+ * when the date at 0xae2c80 is not the game date. That belongs to the update days of the entries: here it is not
+ * done, so the groups stay those of the last update day until the next one (many entries change from June to
+ * August). Returns 1 when the competition started. Not inside a pass. */
+int season_change_late_start(uint32_t comp);
+
 /* season_starts.c calls it around each start_new_season (this, 0 before and 1 after). */
 int season_change_start(uint32_t comp, int after);   /* 1 before: a kind skips this season */
 
