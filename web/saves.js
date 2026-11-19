@@ -293,7 +293,7 @@ export function mountSavesPanel({ FS, sync, log, cloud = () => null, promo = () 
       return `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-remove="${esc(f.name)}" title="Remove from the cloud; it stays here">Remove</button>` : ''}</td>`;
     };
     const row = (f, i, kind) => `<tr><td>${esc(f.name)}</td><td class="num">${mb(f.size)}</td>${whenCell(f.mtime)}
-      ${c ? (kind === 'save' ? state(f) : '<td></td>') : ''}<td class="acts"><div class="btns">${play?.can() && kind === 'save' ? `<button class="primary" data-play="${i}" title="Load this save in the game">Play</button>` : ''}${edit && kind === 'save' ? `<button data-edit="${i}">Edit</button>` : ''}<button data-kind="${kind}" data-i="${i}">Download</button><button class="link" data-delete="${kind}" data-i="${i}">Delete</button></div></td></tr>`;
+      ${c ? (kind === 'save' ? state(f) : '<td></td>') : ''}<td class="acts"><div class="btns">${play?.can() && kind === 'save' ? `<button class="primary" data-play="${i}" title="Load this save in the game">Play</button>` : ''}${edit && kind === 'save' ? `<button data-edit="${i}">Edit</button>` : ''}<button data-kind="${kind}" data-i="${i}">Download</button><button class="link danger" data-delete="${kind}" data-i="${i}">Delete</button></div></td></tr>`;
     list.innerHTML = shown.saves.length
       ? `<table><tr><th>Save</th><th class="num">Size</th><th>Saved</th>${c ? '<th>Cloud</th>' : ''}<th></th></tr>${shown.saves.map((f, i) => row(f, i, 'save')).join('')}</table>`
       : '<p class="small">No saved games yet. Save in the game (Game Options, Save Game), or upload one.</p>';

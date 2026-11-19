@@ -87,8 +87,8 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
       <section><h4>A data set, for new games</h4><p class="small">Your own copy of the game's database: change players or add new ones.
         When you start a new game, choose it under Database. Each data set takes about 60 MB of this browser's storage.</p>
       ${sets.length ? `<div class="ed-files">${sets.map((n) => `<div class="ed-file"><span>${esc(n)}</span>
-        <button data-open-set="${esc(n)}">Edit</button><button class="link" data-delete-set="${esc(n)}">Delete</button></div>`).join('')}</div>` : ''}
-      <div class="row"><input id="editor-new-name" type="text" placeholder="Name, for example My data set" maxlength="60" autocomplete="off">
+        <button data-open-set="${esc(n)}">Edit</button><button class="link danger" data-delete-set="${esc(n)}">Delete</button></div>`).join('')}</div>` : ''}
+      <div class="row"><input id="editor-new-name" type="text" placeholder="Name, for example My data set" aria-label="Name of the new data set" maxlength="60" autocomplete="off">
         <button class="primary" id="editor-new">New data set</button></div></section>`;
     $('editor-new').onclick = () => createSet($('editor-new-name').value);
   }

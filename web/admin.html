@@ -15,7 +15,11 @@
   header h1 { font-size: 17px; margin: 0; } header .spacer { flex: 1; }
   main { padding: 18px 20px 40px; max-width: 1400px; margin: 0 auto; }
   button, input { font: inherit; color: var(--text); background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; }
-  button { cursor: pointer; }
+  button { cursor: pointer; transition: border-color 150ms, background-color 150ms; }
+  button:hover:not(:disabled) { border-color: #3a4552; background-color: #252d37; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  input:focus { border-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .muted { color: var(--muted); } .small { font-size: 12px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin-bottom: 18px; }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }

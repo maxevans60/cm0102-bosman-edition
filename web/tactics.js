@@ -84,7 +84,7 @@ export function mountTacticsPanel({ FS, sync, log, cloud = () => null }) {
     list.innerHTML = shown.length
       ? `<table><tr><th>Tactic</th><th class="num">Size</th><th>Saved</th><th></th></tr>${shown.map((f, i) => `<tr>
         <td>${esc(f.name.slice(0, -4))}</td><td class="num">${kb(f.size)}</td>${whenCell(f.mtime)}
-        <td class="acts"><div class="btns"><button data-tactic="${i}">Download</button><button class="link" data-tactic-delete="${i}">Delete</button></div></td></tr>`).join('')}</table>`
+        <td class="acts"><div class="btns"><button data-tactic="${i}">Download</button><button class="link danger" data-tactic-delete="${i}">Delete</button></div></td></tr>`).join('')}</table>`
       : '<p class="small">No tactics yet. On the tactics screen use Tactics, Save As, or upload one.</p>';
   }
 

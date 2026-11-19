@@ -40,7 +40,7 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
         ${c ? (fromLibrary(s) ? '<td class="cloud">From the library</td>'
           : `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-set-remove="${i}">Remove</button>` : ''}</td>`) : ''}
         <td class="acts"><div class="btns"><button class="primary" data-set-use="${i}">Use</button><button data-set-edit="${i}">Edit</button>
-          <button data-set-download="${i}">Download</button><button class="link" data-set-delete="${i}">Delete</button></div></td></tr>
+          <button data-set-download="${i}">Download</button><button class="link danger" data-set-delete="${i}">Delete</button></div></td></tr>
         ${using === s.name ? `<tr class="use"><td colspan="${c ? 5 : 4}"><div class="use-row"><label>Season of the next new game
           <select id="sets-season">${Array.from({ length: LAST_SEASON - FIRST_SEASON + 1 }, (_, k) => FIRST_SEASON + k)
             .map((y) => `<option value="${y}"${y === (s.season ?? FIRST_SEASON) ? ' selected' : ''}>${seasonText(y)}</option>`).join('')}</select></label>

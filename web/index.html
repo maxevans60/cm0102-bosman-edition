@@ -16,6 +16,11 @@
   :root {
     --bg: #0b0d10; --panel: #151a20; --raised: #1d242c; --text: #e8ebef; --muted: #97a2af; --line: #29313b;
     --accent: #35b673; --accent-ink: #06140c; --bad: #ff7b72; --warn: #e3b341; --bar-h: 44px;
+    /* One system (web/README.md, "Look and feel"): a line that a pointer brightens, a raised face that it lightens, one
+       radius scale, one quick ease for every answer to the pointer. */
+    --line-hi: #3a4552; --raised-hi: #252d37; --accent-hi: #45c784; --heart: #e5484d;
+    --r-sm: 6px; --r: 8px; --r-lg: 12px; --r-xl: 14px;
+    --ease: 140ms cubic-bezier(.23, 1, .32, 1);         /* an ease-out: quick to answer, soft to settle */
     color-scheme: dark;
   }
   @media (pointer: coarse) { :root { --bar-h: 50px; } }
@@ -33,20 +38,30 @@
     background: var(--panel); border-bottom: 1px solid var(--line); min-width: 0; }
   .brand { font-weight: 650; letter-spacing: .01em; white-space: nowrap; }
   #status { color: var(--muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  button { font: inherit; color: var(--text); background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
-    padding: 0 12px; height: 32px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+  button { font: inherit; color: var(--text); background: var(--raised); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 0 12px; height: 32px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+    position: relative; transition: background-color var(--ease), border-color var(--ease), color var(--ease), transform var(--ease); }
   @media (pointer: coarse) { button { height: 38px; padding: 0 14px; } }
-  button:hover { border-color: #3a4552; }
-  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* Every control answers the pointer: a lighter face on hover, a step down on press, and a ring for the keyboard. */
+  @media (hover: hover) and (pointer: fine) { button:hover:not(:disabled) { border-color: var(--line-hi); background-color: var(--raised-hi); } }
+  button:active:not(:disabled) { transform: scale(.97); }      /* the press shows when the finger lands, not when it lifts */
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* A finger's target is 44px at least (Apple's 44pt) where a button is drawn smaller: an invisible margin round it. */
+  @media (pointer: coarse) {
+    button::after { content: ''; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px);
+      transform: translate(-50%, -50%); }
+  }
   /* Buy me a coffee is a link that looks and sizes as the bar's buttons do (the button rules above, coarse pointer too). */
   #bar a.coffee { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px; border: 1px solid var(--line);
-    border-radius: 8px; background: var(--raised); color: var(--text); text-decoration: none; font: inherit; white-space: nowrap; flex: none; }
-  #bar a.coffee:hover { border-color: #3a4552; }
-  #bar a.coffee:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    border-radius: var(--r); background: var(--raised); color: var(--text); text-decoration: none; font: inherit; white-space: nowrap; flex: none;
+    transition: background-color var(--ease), border-color var(--ease); }
+  @media (hover: hover) and (pointer: fine) { #bar a.coffee:hover { border-color: var(--line-hi); background-color: var(--raised-hi); } }
   @media (pointer: coarse) { #bar a.coffee { height: 38px; padding: 0 14px; } }
-  #bar a.coffee svg { width: 18px; height: 18px; fill: none; stroke: #e3b341; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  #bar a.coffee svg { width: 18px; height: 18px; fill: none; stroke: var(--warn); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   @media (max-width: 720px) { #bar a.coffee span { display: none; } }
   button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 650; }
+  @media (hover: hover) and (pointer: fine) { button.primary:hover:not(:disabled) { background-color: var(--accent-hi); border-color: var(--accent-hi); } }
   button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
   button svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   @media (max-width: 720px) { #bar button span { display: none; } #bar button, #bar a.coffee { padding: 0 10px; } }
@@ -100,7 +115,7 @@
   /* The question about the statistics (stats.js, consent): over the game and the start box, in a corner; the two
      answers look the same, so neither is the easy one. */
   #consent { position: absolute; left: 12px; bottom: calc(12px + var(--covered, 0px)); z-index: 6; max-width: 400px; padding: 12px 14px;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 34px rgba(0, 0, 0, .5); font-size: 13px; }
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: 0 12px 34px rgba(0, 0, 0, .5); font-size: 13px; }
   #consent p { margin: 0 0 10px; color: var(--muted); } #consent p b { color: var(--text, inherit); }
   #consent .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } #consent .row a { margin-left: 4px; }
   #consent .small { margin: 8px 0 0; font-size: 12px; }
@@ -109,7 +124,7 @@
   /* The boxes over the game: start, progress, errors. */
   #overlay { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 16px;
     background: radial-gradient(ellipse at center, rgba(11, 13, 16, .82), rgba(11, 13, 16, .96)); overflow: auto; }
-  .box { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; max-width: 540px; width: 100%;
+  .box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 22px 24px; max-width: 540px; width: 100%;
     box-shadow: 0 18px 50px rgba(0, 0, 0, .5); }
   .box h1 { font-size: 19px; margin: 0 0 8px; letter-spacing: -.01em; }
   .box p { margin: 0 0 14px; color: var(--muted); }
@@ -128,7 +143,7 @@
   #kbd { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; margin: 0;
     font-size: 16px; background: transparent; color: transparent; caret-color: transparent; pointer-events: none; }
 
-  dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px;
+  dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 20px 22px;
     width: min(660px, calc(100vw - 24px)); max-height: calc(100% - 24px); box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
     -webkit-user-select: text; user-select: text; }
   dialog::backdrop { background: rgba(0, 0, 0, .55); }
@@ -187,10 +202,13 @@
   #saves .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: 0 0 10px; }
   #saves .tabs button { background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0; height: 36px; padding: 0 14px; color: var(--muted); }
   #saves .tabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+  @media (hover: hover) and (pointer: fine) { #saves .tabs button:hover { color: var(--text); } }
+  #saves .tabs button:focus-visible { outline-offset: -2px; border-radius: var(--r-sm) var(--r-sm) 0 0; }
+  @media (pointer: coarse) { #saves .tabs button { height: 44px; } }
   #saves:has(#tactics[hidden]) .tabs [data-tab="tactics"], #saves:has(#sets[hidden]) .tabs [data-tab="sets"] { display: none; }
   #saves:has(#tactics[hidden]):has(#sets[hidden]) .tabs { display: none; }
   #saves:not([data-tab="tactics"]) #tactics, #saves:not([data-tab="sets"]) #sets, #saves[data-tab]:not([data-tab="saves"]) .tab-saves { display: none !important; }
-  #saves #tactics > h3, #saves #sets > h3 { display: none; }
+  #saves #tactics > h3, #saves #sets > h3:not(.sets-head) { display: none; }   /* the tab names them */
   /* Narrow screens: a list keeps its columns whole and scrolls sideways, not one letter a line. */
   @media (max-width: 640px) {
     dialog .dlg-list table { width: max-content; min-width: 100%; }
@@ -203,7 +221,7 @@
   dialog ::-webkit-scrollbar, #overlay::-webkit-scrollbar, #log::-webkit-scrollbar { width: 6px; height: 6px; }
   dialog ::-webkit-scrollbar-track, #overlay::-webkit-scrollbar-track, #log::-webkit-scrollbar-track { background: transparent; }
   dialog ::-webkit-scrollbar-thumb, #overlay::-webkit-scrollbar-thumb, #log::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, .22); border-radius: 6px; }
+    background: rgba(255, 255, 255, .22); border-radius: var(--r-sm); }
   dialog ::-webkit-scrollbar-thumb:hover, #overlay::-webkit-scrollbar-thumb:hover, #log::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, .38); }
   dialog h2 { font-size: 17px; margin: 0 0 6px; }
@@ -219,19 +237,26 @@
   #saves-note, #account-note { white-space: pre-line; }
   dialog td.cloud { white-space: nowrap; color: var(--muted); }
   dialog td.cloud.cloud { color: var(--accent); }
-  button.link { background: none; border: 0; padding: 0 4px; height: auto; color: var(--muted); text-decoration: underline; }
-  a { color: var(--accent); }
-  a.button { display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; text-decoration: none; }
-  a.button.primary { background: var(--accent); color: var(--accent-ink); font-weight: 650; }
+  button.link { background: none; border: 0; padding: 0 4px; height: auto; color: var(--muted); text-decoration: underline;
+    text-underline-offset: 2px; }
+  @media (hover: hover) and (pointer: fine) { button.link:hover:not(:disabled) { background: none; color: var(--text); } }
+  /* Delete: a link, so the row's buttons stay the safe ones, and the colour of a loss under the pointer. */
+  @media (hover: hover) and (pointer: fine) { button.link.danger:hover:not(:disabled) { color: var(--bad); } }
+  button.link:active:not(:disabled) { transform: none; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  @media (hover: hover) and (pointer: fine) { a:hover { color: var(--accent-hi); } }
+  a.button { display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: var(--r); text-decoration: none; }
+  a.button.primary { background: var(--accent); color: var(--accent-ink); font-weight: 650; transition: background-color var(--ease); }
+  @media (hover: hover) and (pointer: fine) { a.button.primary:hover { background: var(--accent-hi); color: var(--accent-ink); } }
   #account-open .dot { display: none; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-left: -2px; }
   #account-open.on .dot { display: inline-block; }
   .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
-  .plan { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .plan { background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 12px 14px; }
   .plan.on { border-color: var(--accent); }        /* the free game: what everybody has */
   .plan .tag { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 4px; }
   .plan.on .tag { color: var(--accent); }
   .free-note { color: var(--accent); font-weight: 600; font-size: 14px; }
-  .addon { margin: 16px 0 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: 13px; }
+  .addon { margin: 16px 0 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: var(--r-lg); color: var(--muted); font-size: 13px; }
   .addon b { color: var(--text); }
   .plan h4 { margin: 0; font-size: 14px; }
   .plan .price { font-size: 19px; font-weight: 650; margin: 2px 0 6px; color: var(--text); }
@@ -242,27 +267,31 @@
      (a phone held sideways), where the game takes every pixel. */
   #made { flex: none; display: flex; align-items: center; justify-content: center; gap: 4px; height: 26px; padding: 0 12px;
     font-size: 12px; color: var(--muted); background: var(--panel); border-top: 1px solid var(--line); white-space: nowrap; }
-  #made svg { width: 12px; height: 12px; fill: #e5484d; }
+  #made svg { width: 12px; height: 12px; fill: var(--heart); }
   #made:empty, #app.fs #made { display: none; }
   @media (max-height: 520px) { #made { display: none; } }
   .check { display: flex; gap: 8px; align-items: flex-start; } .check input { margin-top: 3px; }
-  .warn { border-left: 3px solid #d9a441; padding: 2px 0 2px 10px; margin: 6px 0 8px !important; }
-  .promo { border: 1px solid var(--accent); border-radius: 8px; padding: 7px 10px; margin: 8px 0 !important; }
+  .warn { border-left: 3px solid var(--warn); padding: 2px 0 2px 10px; margin: 6px 0 8px !important; }
+  .promo { border: 1px solid var(--accent); border-radius: var(--r); padding: 7px 10px; margin: 8px 0 !important; }
   td.acts { white-space: nowrap; }
   #sets-note { white-space: pre-line; }
   #sets tr.use td { background: var(--raised); }
   #sets tr.use label { display: inline-flex; gap: 8px; align-items: center; margin-right: 10px; }
   .report-field { display: flex; flex-direction: column; gap: 6px; margin: 12px 0 0; font-size: 14px; }
   .report-field textarea, .report-field select { font: inherit; font-size: 16px; color: var(--text); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; width: 100%; box-sizing: border-box; }
+    border: 1px solid var(--line); border-radius: var(--r-sm); padding: 6px 8px; width: 100%; box-sizing: border-box; }
   .report-field textarea { resize: vertical; min-height: 64px; }
-  #sets select { font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; }
+  /* The fields: a line that turns green with the focus (the ring of :focus-visible as well, for the keyboard). */
+  input, select, textarea { transition: border-color var(--ease); }
+  :is(input, select, textarea):not(#kbd):focus { border-color: var(--accent); }
+  :is(input, select, textarea):focus-visible { outline-offset: 0; }
+  #sets select { font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 3px 6px; }
   dialog#saves { width: min(820px, calc(100vw - 24px)); }
   /* The saves list keeps room for about six rows (it once shrank to two or three under the sections below it); the
      dialog's body scrolls for the rest. */
   #saves-list:has(tr + tr + tr + tr) { min-height: min(46vh, 360px); }
   /* Little room left in the browser for saves (saves.js, lowOnSpace): a mark on the bar's button. */
-  #saves-open.low::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #d9a441; margin-left: 2px; }
+  #saves-open.low::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); margin-left: 2px; }
   td.acts button + button { margin-left: 6px; }
   td.acts .btns button + button { margin-left: 0; }   /* the wrapper's gap spaces them */
 
@@ -276,7 +305,7 @@
   .ed-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 14px; }
   .ed-list { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
   #editor-search { font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line);
-    border-radius: 8px; padding: 8px 10px; }
+    border-radius: var(--r); padding: 8px 10px; }
   #editor-results { overflow: auto; min-height: 0; display: flex; flex-direction: column; gap: 4px; }
   .ed-row { display: grid; grid-template-columns: 1fr auto; text-align: left; height: auto; padding: 7px 10px; gap: 0 8px; white-space: normal; }
   .ed-row b { font-weight: 600; } .ed-row span { grid-column: 1; color: var(--muted); font-size: 12px; }
@@ -293,20 +322,20 @@
   .ed-grid.pos input { width: 52px; }
   .ed-grid label { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted); }
   .ed-grid input { width: 64px; font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line);
-    border-radius: 6px; padding: 4px 6px; text-align: right; font-variant-numeric: tabular-nums; }
+    border-radius: var(--r-sm); padding: 4px 6px; text-align: right; font-variant-numeric: tabular-nums; }
   .ed-grid input[type=date] { width: auto; text-align: left; }
   .ed-grid input[type=text], .ed-grid select { width: 100%; max-width: 260px; text-align: left; font: inherit; font-size: 16px;
-    color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; }
+    color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 4px 6px; }
   .ed-grid label.wide { grid-column: span 2; }
   .ed-grid select.changed { border-color: var(--accent); }
   .ed-search { display: flex; gap: 6px; } .ed-search input { flex: 1; min-width: 0; }
   #editor-home { overflow: auto; min-height: 0; }
   #editor-home h4 { margin: 12px 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
   .ed-files { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
-  .ed-file { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; }
+  .ed-file { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--r); }
   .ed-file span { flex: 1; overflow-wrap: anywhere; }
   #editor-new-name { flex: 1; max-width: 340px; font: inherit; font-size: 16px; color: var(--text); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+    border: 1px solid var(--line); border-radius: var(--r); padding: 7px 10px; }
   .ed-grid input.changed { border-color: var(--accent); color: var(--accent); }
   @media (max-width: 760px) {
     .ed-grid label.wide { grid-column: 1 / -1; }
@@ -317,11 +346,11 @@
   .promo .link { color: var(--accent); }
   details summary { cursor: pointer; color: var(--muted); padding: 4px 0; }
   #log { margin: 4px 0 0; padding: 8px 10px; max-height: 34vh; overflow: auto; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
-    color: var(--muted); white-space: pre-wrap; background: var(--bg); border-radius: 8px; border: 1px solid var(--line); }
+    color: var(--muted); white-space: pre-wrap; background: var(--bg); border-radius: var(--r); border: 1px solid var(--line); }
 
   /* Full screen: the bar becomes a small set of buttons over the corner of the game. */
   #app.fs #bar { position: absolute; top: calc(8px + env(safe-area-inset-top)); right: calc(8px + env(safe-area-inset-right));
-    z-index: 6; height: auto; padding: 4px; gap: 4px; border: 1px solid var(--line); border-radius: 12px;
+    z-index: 6; height: auto; padding: 4px; gap: 4px; border: 1px solid var(--line); border-radius: var(--r-lg);
     background: rgba(21, 26, 32, .86); opacity: .3; transition: opacity .2s; }
   #app.fs #bar:hover, #app.fs #bar:focus-within { opacity: 1; }
   @media (hover: none) { #app.fs #bar { opacity: .65; } }
@@ -339,11 +368,19 @@
   #app.fs[data-bar="over"] #bar-fold { display: inline-flex; }
   #app.fs[data-bar="over"].bar-folded #bar > :not(#bar-fold) { display: none !important; }
   #app.fs[data-bar="over"].bar-folded #bar { top: 50%; right: env(safe-area-inset-right); transform: translateY(-50%);
-    padding: 3px 2px 3px 3px; border-right: 0; border-radius: 10px 0 0 10px; }
+    padding: 3px 2px 3px 3px; border-right: 0; border-radius: var(--r-lg) 0 0 var(--r-lg); }
   #app.fs[data-bar="over"].bar-folded #bar-fold { padding: 0 3px; }
   #app.fs[data-bar="over"].bar-folded #bar-fold svg { transform: scaleX(-1); }
 
-  @media (prefers-reduced-motion: reduce) { #canvas { transition: none; } #type-chip, .toast { animation: none; } }
+  /* Less motion asked for: nothing slides, pulses or fades in; what tells the state stays (the long-press ring fills, the
+     busy mark turns, slower). */
+  @media (prefers-reduced-motion: reduce) {
+    #canvas, button, a, input, select, textarea, .bar i, #app.fs #bar { transition: none; }
+    #type-chip, .toast, .ping:not(.hold) { animation: none; }
+    .ping:not(.hold) { opacity: 0; }
+    button:active:not(:disabled) { transform: none; }
+    .spin { animation-duration: 1.6s; }
+  }
 </style>
 </head>
 <body>
@@ -396,10 +433,10 @@
   <dialog id="saves" aria-labelledby="saves-title">
     <h2 id="saves-title">Saved games</h2>
     <div class="tabs" role="tablist" aria-label="Saved games">
-      <button role="tab" data-tab="saves" aria-selected="true">Saves</button><button role="tab" data-tab="tactics" aria-selected="false">Tactics</button><button role="tab" data-tab="sets" aria-selected="false">Databases</button>
+      <button role="tab" id="tab-saves" data-tab="saves" aria-selected="true" aria-controls="saves-panel">Saves</button><button role="tab" id="tab-tactics" data-tab="tactics" aria-selected="false" aria-controls="tactics" tabindex="-1">Tactics</button><button role="tab" id="tab-sets" data-tab="sets" aria-selected="false" aria-controls="sets" tabindex="-1">Databases</button>
     </div>
     <div class="dlg-body">
-    <div class="tab-saves">
+    <div class="tab-saves" id="saves-panel" role="tabpanel" aria-labelledby="tab-saves">
     <p class="small"><span id="saves-where">Your saves stay in this browser.</span> Download one to keep a copy on your
     device or to play it on another one; upload a .sav file to play it here.</p>
     <p id="saves-risk" class="small warn"></p>
@@ -413,7 +450,7 @@
       <input type="file" id="saves-file" accept=".sav,.zip" multiple hidden>
     </div>
     </div>
-    <section id="tactics" hidden>
+    <section id="tactics" role="tabpanel" aria-labelledby="tab-tactics" hidden>
       <h3>Tactics</h3>
       <p class="small">The tactics you saved on the tactics screen (Tactics, Save As). Download one to keep it or to use it
       in the PC game; upload a .tct file, from the PC game or from a friend, then use Tactics, Load on the tactics
@@ -423,19 +460,19 @@
       <div class="row"><button id="tactics-upload">Upload a tactic…</button>
         <input type="file" id="tactics-file" accept=".tct,.pct" multiple hidden></div>
     </section>
-    <section id="sets" hidden>
+    <section id="sets" role="tabpanel" aria-labelledby="tab-sets" hidden>
       <h3>Data sets <span class="small">for new games</span></h3>
       <ol class="steps small" aria-label="How to play with another database">
         <li><span id="sets-step1"><b>Upload</b> a database, or make one from the game's data</span></li>
         <li><span>Press <b>Use</b>, choose its season</span></li>
         <li><span>Start a new game</span></li></ol>
-      <h4 class="sets-head">Your data sets</h4>
+      <h3 class="sets-head">Your data sets</h3>
       <div id="sets-list" class="dlg-list"></div>
       <p id="sets-note" class="small" role="status"></p>
       <div class="row"><button id="sets-upload">Upload a data set…</button><button id="sets-new">New data set…</button>
         <span class="small">Upload a .zip, or the .dat files together (unpack a .rar or .7z first).</span>
         <input type="file" id="sets-file" accept=".zip,.dat" multiple hidden></div>
-      <h4 id="sets-lib-head" class="sets-head" hidden>Available to download</h4>
+      <h3 id="sets-lib-head" class="sets-head" hidden>Available to download</h3>
       <div id="sets-lib" class="dlg-list" hidden></div>
     </section>
     </div>
@@ -449,7 +486,7 @@
     <p id="editor-note" class="small" role="status"></p>
     <div id="editor-home"></div>
     <div class="ed-body" hidden>
-      <div class="ed-list"><div class="ed-search"><input id="editor-search" type="search" placeholder="Search a player or a club" autocomplete="off" spellcheck="false">
+      <div class="ed-list"><div class="ed-search"><input id="editor-search" type="search" placeholder="Search a player or a club" aria-label="Search a player or a club" autocomplete="off" spellcheck="false">
         <button id="editor-add" type="button" hidden>Add a player</button></div>
         <div id="editor-results"></div></div>
       <div class="ed-form" id="editor-form"></div>

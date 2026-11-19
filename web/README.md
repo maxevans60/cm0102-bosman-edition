@@ -642,6 +642,30 @@ code addresses and the checks: `docs/research/2026-11-10-data-set-editor.md`.
   does (the saves stored first; with a game in play the page asks first). The page never loads itself: a player in the
   middle of a match decides when.
 
+### Look and feel
+
+One system for every part of the page (`index.html`, its `:root`), from the UI skills in `.claude/skills/`
+(ui-ux-pro-max's priorities, the taste skill's "one system", Emil Kowalski's `mobile-native` and
+`emil-design-eng`, impeccable's audit):
+
+- **Tokens.** Colours, the hover shades (`--line-hi`, `--raised-hi`, `--accent-hi`), one radius scale (`--r-sm` 6,
+  `--r` 8, `--r-lg` 12, `--r-xl` 14) and one ease (`--ease`, 140 ms ease-out). Text is 5.4:1 on its ground at the
+  least (WCAG AA is 4.5).
+- **Every control answers.** A lighter face on hover, only with a mouse (`(hover: hover) and (pointer: fine)`: a tap
+  leaves no hover stuck); a press at 0.97 when the finger lands; a faded, not-allowed look when disabled; a green ring
+  for the keyboard on every control (`:focus-visible`), and a green line on the field that has the focus. Delete is a
+  link that turns red under the pointer, so the row's buttons stay the safe ones.
+- **A finger's target is 44px** (Apple's 44pt) where a button is drawn smaller: an invisible margin round it on a
+  touch screen; the tabs are 44px tall there.
+- **The tabs of Saved games** are a WAI-ARIA tab list: Left and Right, Home and End move between them, one of them is
+  in the Tab order, each section is its tab's panel. The handler runs on the window before `guardKeys`, which stops
+  every key of an open dialog there so that the game gets none.
+- **Less motion asked for** (`prefers-reduced-motion`): nothing slides, pulses or fades in; the long-press ring and
+  the busy mark stay, as they tell the state.
+- **Zoom stays off** (`user-scalable=no`), against the usual rule, on purpose: two fingers on the game are its mouse
+  wheel and its right click, and a page zoomed by a pinch would leave the game half out of view. Every field is 16px,
+  so no browser zooms into one either.
+
 ## On an iPad or another touch device
 
 | Do | The game gets |

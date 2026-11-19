@@ -676,7 +676,18 @@ try {
     await p.waitForFunction(() => window.__fake, null, { timeout: 30000 });
     await p.click('#saves-open');
     await p.click('#saves .tabs [data-tab="sets"]');
+    // The tabs by the keys (WAI-ARIA tabs): Left, Home and End move the choice and the focus; one tab in the Tab order.
+    const keys = [];
+    for (const k of ['ArrowLeft', 'Home', 'ArrowLeft', 'End']) {
+      await p.keyboard.press(k);
+      keys.push(await p.evaluate(() => [document.getElementById('saves').dataset.tab, document.activeElement?.dataset.tab,
+        [...document.querySelectorAll('#saves .tabs [data-tab]')].filter((b) => b.tabIndex === 0).length].join('/')));
+    }
+    check('the tabs of Saved games go by the arrow keys, Home and End, with one of them in the Tab order',
+      keys.join(' ') === 'tactics/tactics/1 saves/saves/1 sets/sets/1 sets/sets/1', keys.join(' '));
     await p.waitForSelector('#sets-lib button[data-lib-get]', { timeout: 20000 });
+    check('the Databases tab names its two lists with headings one level under the dialog\'s',
+      await p.evaluate(() => [...document.querySelectorAll('#sets h3.sets-head')].filter((h) => h.offsetParent).length) === 2);
     const offer = (await p.textContent('#sets-lib')).replace(/\s+/g, ' ');
     await p.click('#sets-lib button[data-lib-get]');
     await waitFor('the database to come', async () => /Update 2011 is here/.test(await p.textContent('#sets-note')), 30000);

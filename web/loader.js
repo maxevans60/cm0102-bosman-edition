@@ -172,6 +172,22 @@ let running = false, leaving = false;
 // from then on nothing of this tab writes the browser's storage.
 let turnGone = false, handedOver = false;
 let keyboard = null;
+// The keys of a tab list (WAI-ARIA tabs): Left and Right go to the tab before or after, Home and End to the first and the
+// last, among the tabs offered (one whose section is hidden is not). On the window before guardKeys, whose listener stops
+// every key of an open dialog there, so that the game gets none of them.
+function savesTabKeys(e) {
+  const list = e.target instanceof Element ? e.target.closest('#saves .tabs') : null;
+  if (!list) return;
+  const tabs = [...list.querySelectorAll('[data-tab]')].filter((b) => getComputedStyle(b).display !== 'none');
+  const at = tabs.indexOf(e.target.closest('[data-tab]'));
+  const to = at < 0 ? undefined : { ArrowRight: at + 1, ArrowLeft: at - 1, Home: 0, End: tabs.length - 1 }[e.key];
+  if (to === undefined) return;
+  e.preventDefault();
+  const b = tabs[(to + tabs.length) % tabs.length];
+  showSavesTab(b.dataset.tab);
+  b.focus();
+}
+addEventListener('keydown', savesTabKeys, true);
 guardKeys();
 guardLeave(() => (running || storing) && !leaving);
 const canvas = $('canvas');
@@ -213,11 +229,15 @@ $('help-open').onclick = () => $('help').showModal();
 function showSavesTab(tab) {
   const d = $('saves');
   d.dataset.tab = tab;
-  for (const b of d.querySelectorAll('.tabs [data-tab]')) b.setAttribute('aria-selected', String(b.dataset.tab === tab));
+  for (const b of d.querySelectorAll('.tabs [data-tab]')) {
+    b.setAttribute('aria-selected', String(b.dataset.tab === tab));
+    b.tabIndex = b.dataset.tab === tab ? 0 : -1;       // one stop in the Tab order; the arrows go between the tabs
+  }
 }
 showSavesTab('saves');
 $('saves-open').addEventListener('click', () => showSavesTab('saves'));     // Saved games opens on the saves
 $('saves').querySelector('.tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) showSavesTab(b.dataset.tab); });
+
 
 // ---- The account and the cloud saves (account.js). ----
 
