@@ -1,8 +1,8 @@
 /* Faults of the original that long games reach (0.6.2 slice 11, tools/recomp/original_faults.py). The fixes act in
  * every game, the base game too (Q23, Q24, Q27). The test switch RECOMP_ORIGINAL_FAULTS turns them off: "keep" all
  * of them, "keep:" with a list of groups some of them ("keep:money,age"). The groups are managers, money, age,
- * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, squad_moves, squad_loans
- * and club_keys. */
+ * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, squad_moves, squad_loans,
+ * club_keys and callup_counts. */
 #include "win.h"
 #include "season.h"
 #include "season_intl.h"
@@ -18,7 +18,7 @@
 #define NATION_COUNT 0xae2350u
 
 enum { MANAGERS, MONEY, AGE, OLYMPICS, IRE_SUPER, NSL, HOLIDAY, CALLUPS, WC_POTS, CONFED, CLUB_REGULARS, MATCH_NUMBERS,
-       SQUAD_MOVES, SQUAD_LOANS, CLUB_KEYS, GROUPS };
+       SQUAD_MOVES, SQUAD_LOANS, CLUB_KEYS, CALLUP_COUNTS, GROUPS };
 
 static int fixes_on_group(int group)
 {
@@ -26,7 +26,8 @@ static int fixes_on_group(int group)
     if (on[0] < 0) {
         static const char *const names[GROUPS] = {"managers", "money", "age", "olympics", "ire_super", "nsl",
                                                    "holiday", "callups", "wc_pots", "confed", "club_regulars",
-                                                   "match_numbers", "squad_moves", "squad_loans", "club_keys"};
+                                                   "match_numbers", "squad_moves", "squad_loans", "club_keys",
+                                                   "callup_counts"};
         const char *v = getenv("RECOMP_ORIGINAL_FAULTS");
         if (v && strcmp(v, "keep") && strncmp(v, "keep:", 5))
             fprintf(stderr, "recomp: RECOMP_ORIGINAL_FAULTS=%s is not keep or keep:<groups>: every fix acts\n", v);
@@ -39,7 +40,7 @@ static int fixes_on_group(int group)
                 fprintf(stderr,
                         "recomp: RECOMP_ORIGINAL_FAULTS: unknown group %.*s (managers, money, age, olympics, "
                         "ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, "
-                        "squad_moves, squad_loans, club_keys)\n",
+                        "squad_moves, squad_loans, club_keys, callup_counts)\n",
                         (int)n, p);
         }
         for (int g = 0; g < GROUPS; g++) {
@@ -595,6 +596,26 @@ int season_intl_confed_june(void)
 uint32_t rt_callup_mark_all(void)
 {
     return (uint32_t)fixes_on_group(CLUB_REGULARS);
+}
+
+/* Group callup_counts (open item 300 of 0.6.2, original_faults.py). NationalTeams::record_club_call_ups 0x7771c0
+ * (thiscall: side, B flag, fixture; ret 0xc) sorts the side's 50 squad slots by club id (qsort 0x945333 at 0x777225
+ * with 0x778ef0: players with a club first, by id) and counts the players of each club in a run. It writes a club's
+ * count to the club's list of call-up records (this +0x20, 6 bytes a club: +0 the records of 9 bytes, +5 their
+ * count; a record is a Date and +8 the count) only when the next counted player has another club (0x7772f7..0x7773fe).
+ * After the 50th slot it leaves (0x77741a..0x777426 to 0x77748b), so the club that sorts last never gets a record,
+ * unless a player with no club comes after it. NationalTeams::can_schedule_club_fixture 0x776fc0 reads these records
+ * (more than two players within a day of a fixture: clash 21, 0x5adb5b..0x5adb6b), and so does the call-up move
+ * NationalTeams::reschedule_clashing_club_fixtures 0x7777e0 (0x7778c3). So a club fixture made or moved after the
+ * squad pick could land next to the side's match: in release set row t2006 (seed 73) Urawa Red Diamonds (club id
+ * 7935, the highest in Japan's squad) had no record for Japan's friendly of 11 September 2007, and find_new_fixture_date
+ * 0x5ab510 moved its AFC Champions League first leg of 30 August to 12 September, with 5 players in Japan's squad.
+ * Here the loop's end (0x777426) goes back once to the write of a run (0x7772f7) with the club of the open run (esi),
+ * and the write leaves at 0x777401, where the slot counter at esp + 0x13 is 50 only on that pass. 1 when the fix acts
+ * and a run is open. */
+uint32_t rt_callup_count_last(uint32_t club)
+{
+    return club && fixes_on_group(CALLUP_COUNTS);
 }
 
 /* A kept squad is picked again for a match when one of its players is a regular of a club with a continental match
