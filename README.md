@@ -59,7 +59,7 @@ Saves are in `~/Library/Application Support/cm0102` (Mac), `%APPDATA%\cm0102` (W
 
 ## Roadmap
 
-The current release is 0.7.2. Next is 0.7.3, with small fixes and requests. Then 0.8.0 brings the features players asked for most, with a Rules tab of options, and 0.9.0 brings Android. The [changelog](CHANGELOG.md) lists every release, and the [milestones](https://github.com/maxevans60/cm0102-bosman-edition/milestones) show what each version holds.
+The current release is 0.7.3. Next is 0.8.0, which brings the features players asked for most, with a Rules tab of options. Then 0.9.0 brings Android. The [changelog](CHANGELOG.md) lists every release, and the [milestones](https://github.com/maxevans60/cm0102-bosman-edition/milestones) show what each version holds.
 
 ## How it works
 

@@ -2,6 +2,83 @@
 
 CM 01/02 Bosman Edition uses semantic versioning. A patch release (0.1.1) fixes bugs. A minor release (0.2.0) adds features. A major release (1.0.0 and later) can break saved games or settings. Releases below 1.0.0 are test releases.
 
+## 0.7.3 (pre-release)
+
+Leagues play their real promotion and relegation places in more nations, and closed leagues such as MLS and the A-League take and lose clubs in their real seasons. This release also adds squad numbers from 1 to 99 and fixes faults in the news, Save Game, history and competition screens. One new line in `settings.txt`: `squad_numbers_99`.
+
+Saves from 0.7.2 and earlier load in 0.7.3. Do not open a season game saved by 0.7.3 in an earlier version.
+
+### Squad numbers from 1 to 99
+
+- New option `squad_numbers_99`, off by default, with the row "Squad numbers 1 to 99" on the new Squads tab of Bosman Edition Options. With it on, a new game keeps the database's squad numbers from 51 to 99, and a signing gets a number up to 99 when 1 to 50 are taken. The Squad Numbers screen shows 1 to 50 above the player list and 51 to 99 below it. With it off, no new number goes above 50 and the screen is the original. A number above 50 that a save already holds stays. In a network game the host's setting applies (issue 140).
+
+### Real places and league sizes
+
+- Norway, Sweden, Brazil and Portugal: a division that grows or shrinks at a season change sends its extra clubs by the real promotion and relegation places, not by the original's places. Examples: the Allsvenskan 2006/07 and the Tippeligaen 2007/08 send 1 club down, Série A 2003/04 sends 4 down and Série B sends 6 (issue 154, items 246 to 249 and 259).
+- Portugal: the Primeira Liga and the Segunda Liga play their tie from 2013/14 in the seasons the rules table gives. A 2001 start with Portugal and Spain no longer stops at "por_second_b..cpp 419" at the 2003/04 season change. A club that the size step moves into a kept division takes a zone, also in the Belgian third division (issue 155, items 278, 279 and 287).
+- With Portugal's extra divisions off, the Segunda Liga's surplus goes to no division, because the game holds no division below it.
+- Northern Ireland: the NIFL Premiership and Championship play their real sizes and places, and both leagues start every season after 2018. Before, a 2018 start stopped both leagues at 2019/20, because two matches moved to the day of the Championship split were never played. The fix acts in every league with a split, in a season game (issue 153, items 271, 272 and 288).
+- Croatia and Greece: the Druga HNL, the Greek second tier and the Super League play the places of their rows, and the play-off tie between two divisions plays in Greece in 2002/03, 2003/04 and 2018/19 to 2020/21 and in Croatia in 2006/07 to 2008/09 and 2013/14 to 2019/20 (issue 156, items 281 and 282).
+- Japan and Finland: J1's 16th plays J2's 3rd over two legs in 2004 to 2008, J2 plays its four-club play-off in 2023, and the Veikkausliiga plays no relegation play-off in 2002, 2006 and 2011 to 2014 (issue 156, items 283 and 284).
+- Argentina: the second division plays the 2001/02 form, the Torneo Reducido of 2014, 2017, 2018 and 2021, and the zones of 2019, 2020 and 2022 to 2025, with the real relegation places (issue 158, item 286).
+- MLS and the A-League: a closed league loses its folded clubs and takes its new clubs in their real seasons. MLS holds 10 clubs in 2002 and 30 from 2025, with San Diego FC from 2025. The A-League starts in 2005/06 with 8 clubs and then follows the real count of each season. A new club uses its club in the database when there is one. A club with a human manager stays in the league (issue 157, items 269 and 285).
+- Sweden: Division 1 plays two groups, Norra and Södra, from 2006, with 14 clubs in each and 16 from 2018. When the Allsvenskan grows, the best placed clubs of the two groups fill the Superettan (issue 106).
+- Belgium: the Play-off II final and the Europa League play-off from 2009/10 to 2018/19, the First Division B clubs in Play-off II from 2016/17 to 2018/19, and the final round of the second division (issue 150).
+- The Netherlands: the Eerste Divisie promotion and relegation knockout plays from 2005/06, with ten clubs to 2018/19, no club moves in 2019/20, seven clubs from 2020/21 and four rounds from 2025/26 (issue 150).
+- Relegation play-offs over a play-off of four clubs: Norway, Ireland, J1 and J2, and Ligue 2 and Ligue 3 play them in their real seasons. The research note `docs/research/2026-11-18-relegation-playoffs-over-four.md` lists them (issue 160).
+- All of these act only in a season game with changing rules on. The base game (2001/02 with changing rules off) stays the original.
+
+### European cups
+
+- League phase draw: from 2024/25 the Champions League, the Europa League and the Conference League draw the league phase from pots. The Champions League and the Europa League have four pots of nine, and each club meets two clubs of each pot, one at home and one away. The Conference League has six pots of six, and each club meets one club of each pot. A club never meets a club of its own nation and meets at most two clubs of another nation. The pots follow club reputation, highest first, because the game keeps no club coefficient. Only with changing rules on (issue 147).
+- A Conference League holder takes a Europa League place, as the real access rule says.
+- UEFA Cup 2001/02 to 2003/04: the qualifying rounds and the first round play on their real dates. Before, the first round of 2003/04 came the day after an international match day.
+
+### History, hosts and nations
+
+- Competition history: rows that were wrong in the season databases show the right result. Examples: the 2026 World Cup host is the USA, the Copa Libertadores 2022 runner-up is Athletico Paranaense, the Euro 2020 host is England and Euro 2024 has no third place. Each row has a source in `docs/research/history-rows/` (issue 145).
+- The Conference League, the Nations League and the Greek Super Cup show their own history of winners (issues 145 and 165).
+- Euro 2028, World Cup 2030 and Euro 2032 show their real hosts in the news, two hosts each where a tournament has more (issue 146).
+- A player with a second nation no longer shows the wrong nation, such as Kevin De Bruyne as Burundi in the October 2026 database. A save that already holds the wrong nation keeps it (issue 141).
+
+### Screens and news
+
+- Save Game suggests "Nation YYYY-MM-DD" for a national team manager with no club. A manager with a club keeps the club's name (issues 139 and 164).
+- News: a season game no longer shows "(null)" items or "ERROR: No league fate yet for UEFA Nations League". A text in the news filter no longer stops the game with "search_eng..cpp 881" (issues 161 and 162).
+- The competition arrow on the history screens of the Intercontinental Cup and the other world club competitions lists their own group, not the European competitions (issue 163).
+- A human move of a loaned player inside a club and its linked side keeps the player in one squad slot. The Action menu does not offer a move that would do nothing (issue 159).
+- The site's roadmap shows Done only for issues closed as completed (issue 138).
+
+### Faults of the original
+
+- A new game on the October 2026 database could stop with the box "Database.cpp 13126" in August 2026. Two clubs of the database each have two key ids, and the original moved only the first one. In a season game every key id of a club now follows it (item 295).
+- Argentine second division: the average points no longer read the play-off stages as league stages, which crashed the original (issue 132).
+- Player condition between two summer matches a week apart: the original 3.9.68 game does the same, so it stays (issue 148).
+
+### Planned changes of play in a season game
+
+These change how a season game plays from the same save, by plan. The base game does not change.
+
+- The league phase pots follow club reputation (above).
+- A Conference League holder takes a Europa League place (above).
+- The Greek Super Cup history rows in a game that starts in 2001 with changing rules on.
+- The key id fix of item 295.
+
+### Known limits
+
+- Croatia: the two-group seasons 2001/02 to 2005/06 play no play-off between the group winners. Greece: the play-off groups of 2009/10 to 2012/13 and the rounds of 2013/14, 2014/15 and 2021/22 to 2025/26 are not played. Relegation play-offs against third-level clubs that the game does not hold are not played (item 293).
+- Argentina: the two inter-zone derby matches of 2023 and 2025 are not played. In 2004 to 2006 the promoción takes the place of the Reducido. The clubs of each zone come from the club ids, because no source gives the lists of every season. The tie-break of the 2025 final is not known, and it goes to penalties (item 291).
+- A 2001 start with changing rules off on a later database does not get the item 295 fix, so the box "Database.cpp 13126" can still show in that game.
+- A club that joins MLS in a running game can start with a thin squad (item 294).
+- The Netherlands: the knockout of 2005/06 plays two legs where real life played some third matches.
+- A 0.7.2 save loaded during a season from 2009/10 to 2018/19 plays the Belgian play-off rounds from its next season.
+- The Friendly menu keeps the original's list of European competitions.
+- Copa Sudamericana 2003: a club can play the day before an under-21 friendly of its nation, as in 0.7.2 (item 299).
+
+### Tests
+
+- The full release set ran on the release candidate with seed 73. Each league slice has season runs that check the count and the places played, and the same-save set shows that the base game is unchanged.
+
 ## 0.7.2 (pre-release)
 
 Leagues play their real number of clubs, meetings and dates in a season game. This release also fixes loans on the season databases, history years, the Tactics click and the rules of several nations. There are no new lines in `settings.txt`.

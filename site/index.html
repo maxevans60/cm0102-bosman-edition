@@ -315,6 +315,32 @@ a { color: inherit; }
   </div>
 </section>
 
+<section class="screen" id="news-073" aria-labelledby="news-073-title">
+  <div class="inner">
+    <h2 class="bar" id="news-073-title">New in <em>0.7.3</em></h2>
+    <p class="lead" data-in>Leagues play their real promotion and relegation places in more nations, and MLS and the A-League take and lose clubs in their real seasons. The release also adds squad numbers from 1 to 99 and fixes faults in the news, Save Game and history screens. Version 0.7.3 came out on 20 November 2026.</p>
+    <div class="preview">
+      <div class="release">
+        <div class="panel" data-in>
+          <h3 class="sub">What it adds</h3>
+          <ul class="adds">
+            <li>Squad numbers from 1 to 99, with the option on: the Squad Numbers screen shows 51 to 99 below the player list, and a new game keeps the database's numbers above 50.</li>
+            <li>The real promotion and relegation places when a division grows or shrinks, in Norway, Sweden, Brazil, Portugal, Northern Ireland, Croatia, Greece, Japan, Finland and Argentina.</li>
+            <li>MLS holds 10 clubs in 2002 and 30 from 2025, and the A-League starts in 2005/06 with 8 clubs.</li>
+            <li>The Swedish Division 1 plays two groups, Norra and Södra, from 2006.</li>
+            <li>The Belgian and Dutch play-offs, and the relegation play-offs over a play-off of four clubs in Norway, Ireland, Japan and France.</li>
+            <li>From 2024/25 the Champions League, the Europa League and the Conference League draw the league phase from pots.</li>
+            <li>Corrected competition history, the history of the Conference League, the Nations League and the Greek Super Cup, and the hosts of Euro 2028, World Cup 2030 and Euro 2032.</li>
+            <li>Save Game suggests a name for a national team manager.</li>
+            <li>Fixes for "(null)" news, the news filter, the competition arrow on the history screens and loan moves inside a club.</li>
+            <li>Saves from 0.7.2 load in 0.7.3. Do not open a season game saved by 0.7.3 in an earlier version.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="screen" id="news-072" aria-labelledby="news-072-title">
   <div class="inner">
     <h2 class="bar" id="news-072-title">New in <em>0.7.2</em></h2>
@@ -534,6 +560,7 @@ a { color: inherit; }
     <div class="release history">
     <div class="panel" data-in>
       <ul>
+        <li><b>0.7.3</b> (20 November 2026): real promotion and relegation places in more nations, clubs that join and leave MLS and the A-League, the Swedish Division 1 in two groups, the Belgian and Dutch play-offs, league phase pots, squad numbers from 1 to 99, corrected competition history and hosts, and fixes to the news, Save Game and history screens.</li>
         <li><b>0.7.2</b> (17 November 2026): leagues play their real number of clubs, meetings and dates in a season game, loans on the season databases, history years in the right year, the Tactics click, and rules for several nations.</li>
         <li><b>0.7.1</b> (13 November 2026): the Network tab shows the host its game code and invite link, with a Copy link button, and the Screen Mode setting (Full or Windowed) works.</li>
         <li><b>0.7.0</b> (12 November 2026): network games with friends online and on your own network, for Mac, Windows and Linux together, with invite links, a game password, Kick, drop in and drop out, clear errors and a connection test. Also a 2026/27 season, real rules for reserve and B teams, real formats for many competitions, and fixes for long games to 2300.</li>
@@ -559,18 +586,8 @@ a { color: inherit; }
 <section class="screen" id="next" aria-labelledby="next-title">
   <div class="inner">
     <h2 class="bar" id="next-title">The road to <em>1.0</em></h2>
-    <p class="lead" data-in>Next is 0.7.3 with small fixes and requests. Then 0.8.0 brings the features players asked for most, with a Rules tab of options. Android follows in 0.9.0, and 1.0.0 is the finished game.</p>
+    <p class="lead" data-in>Next is 0.8.0, which brings the features players asked for most, with a Rules tab of options. Android follows in 0.9.0, and 1.0.0 is the finished game.</p>
     <div class="plans" data-plans>
-      <div class="panel" data-in>
-        <h3 class="sub">Version 0.7.3</h3>
-        <p class="plan-note">Small fixes and requests.</p>
-        <ul>
-          <li>A save name suggestion</li>
-          <li>Squad numbers from 1 to 99</li>
-          <li>De Bruyne's nation</li>
-          <li>This site shows ideas that are not planned as Done</li>
-        </ul>
-      </div>
       <div class="panel" data-in>
         <h3 class="sub">Version 0.8.0</h3>
         <p class="plan-note">The features players asked for most, and a Rules tab with options that change the game's rules.</p>
@@ -661,7 +678,7 @@ a { color: inherit; }
         <p>On a Mac: <code>~/Library/Application Support/cm0102</code>. On Windows: <code>%APPDATA%\cm0102</code>. On Linux: <code>~/.local/share/cm0102</code>. A new release does not change this folder. Older copies of each save are in the <code>backups</code> folder inside it.</p></details>
       <details><summary>How do I get the 800 × 600 layout back?</summary>
         <p>Open Bosman Edition Options from Setup Game or from Game Options, and set Display mode to Classic. Then start the game again. You can also change the line in <code>settings.txt</code> in the save folder to <code>display = classic</code>.</p></details>
-      <details><summary>Which settings can I change in version 0.7.2?</summary>
+      <details><summary>Which settings can I change in version 0.7.3?</summary>
         <p>Open Bosman Edition Options from Setup Game or from Game Options in the side bar, or open <code>settings.txt</code> in the save folder. Each option has one line in the file, and a switch takes <code>on</code> or <code>off</code>. The defaults are:</p>
         <ul>
           <li><code>display = widescreen</code> draws the game at 1280 × 800, and <code>classic</code> at 800 × 600.</li>
@@ -686,6 +703,7 @@ a { color: inherit; }
           <li><code>full_player_search = off</code> keeps the original player search. <code>on</code> lists every player, also the ones your manager does not know.</li>
           <li><code>online_play = on</code> shows online games in the game list and puts a network game that you host in the online list. <code>off</code> shows games on your own network only.</li>
           <li><code>game_password =</code> is empty by default, so anyone can join a game that you host. Set it on the Network tab, and a friend types it to join.</li>
+          <li><code>squad_numbers_99 = off</code> gives no new squad number above 50. <code>on</code> lets a new game keep the database's numbers from 51 to 99, and gives a signing a number up to 99 when 1 to 50 are taken. The Squad Numbers screen then shows 1 to 99. In a network game the host's setting applies.</li>
         </ul>
         <p>Prints go to the <code>Prints</code> folder as PDF files. To get the old text files, set Print To to File in the game's own options.</p></details>
       <details><summary>Is the database updated?</summary>

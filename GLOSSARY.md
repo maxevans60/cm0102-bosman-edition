@@ -280,6 +280,26 @@ _Avoid_: rule handler, plugin
 The row of the rules table that gives a league its club count, meetings, halves, zones, splits and periods for one season. In a season game the shared engine builds the table and the fixture dates from it (0.7.2). The base game keeps the class's counts.
 _Avoid_: league class count (that is the original's count), league format
 
+**Size step**:
+The change at a season change that brings a division to the club count of its new row. It moves the extra or missing clubs by the real promotion and relegation places of the rows. It runs only with changing rules on (0.7.3).
+_Avoid_: resize, league expansion
+
+**Closed league**:
+A league with no division below it, such as MLS or the A-League. At a season change it loses its folded clubs and takes its new clubs by the closed league table, only with changing rules on (0.7.3).
+_Avoid_: franchise league, expansion league
+
+**Cross play-off**:
+A tie between a club of an upper division and a club of the division below it, for one place in the upper division, such as J1's 16th against J2's 3rd or the Portuguese tie of the Primeira Liga and the Segunda Liga.
+_Avoid_: promotion/relegation play-off (that can be a play-off inside one division), barrage
+
+**Play-off over four**:
+A relegation play-off whose winner meets the winner of a play-off of four clubs of the division below, such as in Norway, Ireland, J1 and J2, and Ligue 2 and Ligue 3 (0.7.3).
+_Avoid_: five-club play-off (in docs for players), ladder
+
+**League phase pot**:
+One of the groups of clubs that the league phase draw of a UEFA competition takes its opponents from, from 2024/25. The pots follow club reputation, highest first (0.7.3).
+_Avoid_: seeding band, coefficient pot
+
 **Bench**:
 The named substitutes of a match. The rules table column `bench` holds the count. The match engine holds at most 9.
 _Avoid_: reserves, subs list
