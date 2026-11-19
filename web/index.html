@@ -157,7 +157,29 @@
   dialog .dlg-list td { vertical-align: middle; }
   dialog .dlg-list td.acts { text-align: right; width: 1%; }
   dialog .dlg-list td.acts .btns { flex-wrap: nowrap; }      /* one line of buttons: the column takes their width */
-  #sets-lib-head { margin: 14px 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  /* The Databases tab, top to bottom: how it goes in three steps, the player's own data sets (never squeezed: every
+     row and the Use panel show whole; a player did not see that the list scrolled, 19 November 2026), what happened,
+     Upload and New, then the library's list, which takes the room that is left and scrolls. */
+  #sets .steps { display: flex; flex-wrap: wrap; gap: 6px 22px; list-style: none; padding: 0; margin: 0 0 12px; counter-reset: step; color: var(--text); }
+  #sets .steps li { display: flex; align-items: center; gap: 8px; counter-increment: step; }
+  #sets .steps li::before { content: counter(step); flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--raised); border: 1px solid var(--line); font-size: 12px; font-weight: 650; color: var(--accent); }
+  #sets .sets-head { margin: 4px 0 4px; font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  #sets #sets-lib-head { margin-top: 18px; }
+  #sets .sets-head span { text-transform: none; letter-spacing: 0; font-weight: 400; }
+  #sets-list { flex: none; }
+  #sets-lib { flex: 1 1 auto; }
+  #sets-lib:has(tr + tr + tr + tr) { min-height: 150px; }      /* two databases and part of a third at least: it shows that it scrolls */
+  /* A shadow at the edge where more databases are (it goes at the list's end): the list scrolls, and says so. */
+  #sets-lib { background: linear-gradient(var(--panel) 40%, transparent) top / 100% 30px no-repeat local,
+    linear-gradient(transparent, var(--panel) 60%) bottom / 100% 30px no-repeat local,
+    linear-gradient(rgba(0, 0, 0, .55), transparent) top / 100% 12px no-repeat scroll,
+    linear-gradient(transparent, rgba(0, 0, 0, .55)) bottom / 100% 12px no-repeat scroll; }
+  #sets-note { margin: 8px 0 0; white-space: pre-line; }
+  #sets-note:empty { display: none; }
+  #sets .row { margin-top: 10px; flex-wrap: wrap; }
+  #sets tr.use .use-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  #sets tr.use .small { display: block; margin-top: 8px; }
   dialog .dlg-foot { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
   #sets:not([hidden]), #tactics:not([hidden]), .tab-saves { display: contents; }
   /* Saved games in tabs: Saves, Tactics, Databases (loader.js showSavesTab). A tab whose section is hidden (no game yet)
@@ -403,15 +425,18 @@
     </section>
     <section id="sets" hidden>
       <h3>Data sets <span class="small">for new games</span></h3>
-      <p class="small">Your own databases: a copy of the game's data that you edited, or one you uploaded (an Update Team
-      database, for example). Use one to start a new game with it. Upload a database as a .zip, or as its .dat files
-      together; a .rar or .7z must be unpacked and zipped first.</p>
+      <ol class="steps small" aria-label="How to play with another database">
+        <li><span id="sets-step1"><b>Upload</b> a database, or make one from the game's data</span></li>
+        <li><span>Press <b>Use</b>, choose its season</span></li>
+        <li><span>Start a new game</span></li></ol>
+      <h4 class="sets-head">Your data sets</h4>
       <div id="sets-list" class="dlg-list"></div>
-      <h4 id="sets-lib-head" hidden>Available to download</h4>
-      <div id="sets-lib" class="dlg-list" hidden></div>
       <p id="sets-note" class="small" role="status"></p>
       <div class="row"><button id="sets-upload">Upload a data set…</button><button id="sets-new">New data set…</button>
+        <span class="small">Upload a .zip, or the .dat files together (unpack a .rar or .7z first).</span>
         <input type="file" id="sets-file" accept=".zip,.dat" multiple hidden></div>
+      <h4 id="sets-lib-head" class="sets-head" hidden>Available to download</h4>
+      <div id="sets-lib" class="dlg-list" hidden></div>
     </section>
     </div>
     <div class="row dlg-foot"><span class="spacer"></span><button id="saves-close">Close</button></div>

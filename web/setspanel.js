@@ -21,13 +21,18 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
   const box = $('sets-list'), note = $('sets-note'), input = $('sets-file'), lib = $('sets-lib');
   const say = (text, bad = false) => { note.textContent = text; note.className = bad ? 'small bad' : 'small'; };
   let shown = [], using = null, watched = null;
+  let entries = [], askedAt = 0;                      // the library's list (showLibrary), and when it was asked
 
-  function render() {
+  const render = () => { drawOwn(); showLibrary(); };
+  // The player's own data sets (the library's list is drawn by showLibrary).
+  function drawOwn() {
     shown = listDataSets(FS, root);
-    showLibrary();
     const c = cloud();
     if (c && c !== watched) { watched = c; c.onChange(() => { if ($('saves').open) render(); }); }
-    if (!shown.length) { box.innerHTML = '<p class="small">No data sets yet. Make one from the game\'s data (New data set), or upload one.</p>'; return; }
+    if (!shown.length) {
+      box.innerHTML = `<p class="small">No data sets yet. ${entries.length ? 'Get one from the list below, upload one,' : 'Upload one,'} or make one from the game's data (New data set).</p>`;
+      return;
+    }
     box.innerHTML = `<table><tr><th>Data set</th><th class="num">Size</th><th>Changed</th>${c ? '<th>Cloud</th>' : ''}<th></th></tr>
       ${shown.map((s, i) => {
         const st = c?.status(s.name);
@@ -36,10 +41,10 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
           : `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-set-remove="${i}">Remove</button>` : ''}</td>`) : ''}
         <td class="acts"><div class="btns"><button class="primary" data-set-use="${i}">Use</button><button data-set-edit="${i}">Edit</button>
           <button data-set-download="${i}">Download</button><button class="link" data-set-delete="${i}">Delete</button></div></td></tr>
-        ${using === s.name ? `<tr class="use"><td colspan="${c ? 5 : 4}"><label>Season of the next new game
+        ${using === s.name ? `<tr class="use"><td colspan="${c ? 5 : 4}"><div class="use-row"><label>Season of the next new game
           <select id="sets-season">${Array.from({ length: LAST_SEASON - FIRST_SEASON + 1 }, (_, k) => FIRST_SEASON + k)
             .map((y) => `<option value="${y}"${y === (s.season ?? FIRST_SEASON) ? ' selected' : ''}>${seasonText(y)}</option>`).join('')}</select></label>
-          <button class="primary" data-set-go="${i}">Use for my next new game</button>
+          <button class="primary" data-set-go="${i}">Use for my next new game</button></div>
           <span class="small">A season database that the game knows keeps its own season. A copy of the game's data is 2001/02;
           a newer database moves to the season you choose, its players keeping their ages.</span></td></tr>` : ''}`;
       }).join('')}</table>`;
@@ -143,11 +148,12 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
   });
   // ---- Get a database: the library of the server (library.mjs), each database for a season. ----
   // The library's list, always on the Databases tab under the player's own (asked again a minute after the last time).
-  let entries = [], askedAt = 0;
   const head = $('sets-lib-head');
   function drawLibrary() {
     const have = new Set(listDataSets(FS, root).map((s) => s.library?.id).filter(Boolean));
     head.hidden = lib.hidden = !entries.length;
+    head.innerHTML = `Available to download <span>· ${entries.length} database${entries.length === 1 ? '' : 's'}, free</span>`;
+    $('sets-step1').innerHTML = entries.length ? '<b>Get</b> a database below, or upload your own' : '<b>Upload</b> a database, or make one from the game\'s data';
     lib.innerHTML = entries.length ? `<table><tr><th>Database</th><th>Season</th><th class="num">Size</th><th></th></tr>
       ${entries.map((e, i) => `<tr><td>${esc(e.name)}${e.note ? `<div class="small">${esc(e.note)}</div>` : ''}</td><td>${seasonText(e.season)}</td>
         <td class="num">${MB(e.size)}</td><td class="acts"><div class="btns"><button class="primary" data-lib-get="${i}">${have.has(e.id) ? 'Get again' : 'Get'}</button></div></td></tr>`).join('')}</table>` : '';
@@ -162,6 +168,7 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       entries = (await r.json()).entries;
     } catch (err) { askedAt = 0; log(`page: library: the list did not come (${err.message})`); }
+    if (!shown.length) drawOwn();                     // its "No data sets yet" names the list below
     drawLibrary();
   }
   // One database: its zip (straight from the store where it can, else through the server), into Databases with its
@@ -209,8 +216,9 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
       using = name;                                    // Use opens, with its season chosen
       render();
       say(e.season > LAST_SEASON
-        ? `${name} is here: a ${seasonText(e.season)} database. The game's latest season is ${seasonText(LAST_SEASON)}, so a new game with it starts there, its players keeping their ages. Use for my next new game below starts it.`
-        : `${name} is here, for ${seasonText(e.season)}. Use for my next new game below starts a new game with it.`);
+        ? `${name} is here: a ${seasonText(e.season)} database. The game's latest season is ${seasonText(LAST_SEASON)}, so a new game with it starts there, its players keeping their ages. Press Use for my next new game, then start a new game.`
+        : `${name} is here, for ${seasonText(e.season)}. Press Use for my next new game, then start a new game.`);
+      box.closest('.dlg-body').scrollTop = 0;         // the new data set and its Use panel, in view
     } catch (err) {
       say(`${e.name} did not come: ${err.message}`, true);
       drawLibrary();

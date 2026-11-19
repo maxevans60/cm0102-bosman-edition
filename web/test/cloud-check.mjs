@@ -502,6 +502,9 @@ try {
     FS.writeFile('/user/Big 2011-12-11.sav', big);                 // the newest: the first of the sync's jobs
   });
   const inCloud = async (name) => (await a.evaluate(async () => (await (await fetch('/api/saves')).json()).saves.map((s) => s.name))).includes(name);
+  // The message shows for 12 seconds: it is read when it comes (read at the end, it had sometimes gone already).
+  let bigToast = '';
+  await waitFor('the too large message', async () => { const t = await toasts(a); if (/too large for Cloud Saves/.test(t)) bigToast = t; return Boolean(bigToast); }, 30000);
   await waitFor('the small save in the cloud', () => inCloud('Small after big.sav'), 30000);
   await a.evaluate(() => { const s = new Uint8Array(0x416ec + 500), dv = new DataView(s.buffer); dv.setInt32(0, 2, true); dv.setInt32(8, 1, true); dv.setUint32(12, 0x416ec, true); window.Module.FS.writeFile('/user/Another after big.sav', s); });
   await waitFor('the next save in the cloud', () => inCloud('Another after big.sav'), 30000);
@@ -510,8 +513,8 @@ try {
   await a.click('#saves-close');
   check('a save too large for the cloud: the others still go up, it is not sent, and Saved games and a message say so',
     await inCloud('Small after big.sav') && await inCloud('Another after big.sav') && !(await inCloud('Big 2011-12-11.sav'))
-      && bigRequests.length === 0 && /Too large for the cloud/.test(bigRow) && /Big 2011-12-11\.sav is too large for Cloud Saves/.test(await toasts(a)),
-    `${bigRow} | requests: ${bigRequests.join(', ')} | ${await toasts(a)}`);
+      && bigRequests.length === 0 && /Too large for the cloud/.test(bigRow) && /Big 2011-12-11\.sav is too large for Cloud Saves/.test(bigToast),
+    `${bigRow} | requests: ${bigRequests.join(', ')} | ${bigToast}`);
 
   // ---- Sold as a Buy Me a Coffee membership (another server of the same store): join in another tab, the webhook,
   // Cloud Saves turn on in the running game; the account dialog points to the membership. ----
@@ -701,6 +704,43 @@ try {
     check('the library shows by itself under the data sets, its Get lined up with their buttons and its text with its button',
       lined.head && Math.abs(lined.get - lined.del) < 1.5 && lined.middle < 4 && lined.again === 'Get again', JSON.stringify(lined));
     await shot(p, 'databases');
+    // A library of many databases on a laptop's window (a player's screenshot, 19 November 2026: the library's list took
+    // the room, and the player's own data set and its Use panel were squeezed to a strip that scrolled unseen). The
+    // player's own part shows whole, the library's list gets what is left, three rows at least, and scrolls.
+    const added = await adminPage.evaluate(async (zip) => {
+      const body = new Uint8Array(zip), h = { 'content-type': 'application/json', 'x-cm': '1' }, out = [];
+      for (let y = 2012; y <= 2018; y++) {
+        const start = await (await fetch('/api/admin/library', { method: 'POST', headers: h, body: JSON.stringify({ size: body.length }) })).json();
+        const put = await fetch(`/api/admin/library/${start.id}/body`, { method: 'PUT', headers: { 'content-type': 'application/zip', 'x-cm': '1' }, body });
+        const done = await fetch(`/api/admin/library/${start.id}/done`, { method: 'POST', headers: h, body: JSON.stringify({ name: `October ${y} Data Update`, season: y }) });
+        out.push(`${put.status}/${done.status}`);
+      }
+      return out.join(' ');
+    }, Array.from(dbZip));
+    await p.setViewportSize({ width: 1470, height: 790 });
+    await p.click('#saves-close');
+    await p.evaluate(() => { const real = Date.now; Date.now = () => real() + 61000; });     // the list is asked again after a minute
+    await p.click('#saves-open');
+    await p.click('#saves .tabs [data-tab="sets"]');
+    const eight = await waitFor('the eight databases', async () => (await p.locator('#sets-lib button[data-lib-get]').count()) === 8, 20000);
+    if (!eight) console.log(`  (the library: added ${added}; listed ${await p.locator('#sets-lib button[data-lib-get]').count()})`);
+    if (!(await p.isVisible('#sets-season'))) await p.click('#sets-list tr:has-text("Update 2011") button[data-set-use]');   // its Use panel, open
+    await p.waitForSelector('#sets-season');
+    const room = await p.evaluate(() => {
+      const own = document.getElementById('sets-list'), lib = document.getElementById('sets-lib'), body = own.closest('.dlg-body');
+      const b = body.getBoundingClientRect(), l = lib.getBoundingClientRect(), use = own.querySelector('tr.use').getBoundingClientRect();
+      const rows = [...lib.querySelectorAll('tr')].slice(1).filter((tr) => { const r = tr.getBoundingClientRect(); return r.top >= l.top - 1 && r.bottom <= l.bottom + 1; }).length;
+      const close = document.getElementById('saves-close').getBoundingClientRect();
+      return { ownWhole: own.scrollHeight <= own.clientHeight + 1, useInView: use.top >= b.top && use.bottom <= b.bottom + 1, libRows: rows,
+        libScrolls: lib.scrollHeight > lib.clientHeight + 1, bodyFits: body.scrollHeight <= body.clientHeight + 1, over: body.scrollHeight - body.clientHeight,
+        stepsOneLine: new Set([...document.querySelectorAll('#sets .steps li')].map((li) => Math.round(li.getBoundingClientRect().top))).size === 1, closeInView: close.bottom <= innerHeight,
+        head: document.getElementById('sets-lib-head').textContent, step: document.getElementById('sets-step1').textContent,
+        ownAboveLib: own.getBoundingClientRect().bottom <= l.top };
+    });
+    check('many databases on a laptop: the player\'s own data sets and the Use panel show whole, the library below them takes the room that is left and scrolls, and nothing else does',
+      room.ownWhole && room.useInView && room.libRows >= 2 && room.libScrolls && room.bodyFits && room.closeInView && room.ownAboveLib && room.stepsOneLine
+        && /8 databases, free/.test(room.head) && /Get a database below/.test(room.step), JSON.stringify(room));
+    await shot(p, 'databases-many');
     await lctx.close();
   }
 
