@@ -957,9 +957,11 @@ static int cross_shape(uint32_t lower, int season, uint32_t *upper, int *ladder)
 
 static int tie_lower(const char *f) { return f && !strcmp(f, "por_second"); }
 
-/* 1 when the rows of season give lower (the Segunda Liga) and the division above it the tie. */
+/* 1 when the rows of season give lower (the Segunda Liga) and the division above it the tie. Only with changing rules
+ * on: with them off the chain moves pairs (season_sizes.c) and the game keeps the class's places (decision L2). */
 static int tie_shape(uint32_t lower, int season, uint32_t *upper)
 {
+    if (!season_changing_rules()) return 0;
     const char *lf = readable(lower) ? season_change_file(lower) : NULL;
     uint32_t up = tie_lower(lf) ? league_above(lower) : 0;
     const char *uf = up ? season_change_file(up) : NULL;
@@ -1120,6 +1122,19 @@ static uint32_t tie_club(uint32_t obj)
         uint32_t c = row_club(obj, i);
         if (!readable(c) || barred(obj, c)) continue;
         if (skip-- <= 0) return c;
+    }
+    return 0;
+}
+
+uint32_t season_playoffs_tie_club(uint32_t lower, int edition, const uint32_t *club, int n)
+{
+    const char *file = readable(lower) ? season_change_file(lower) : NULL;
+    if (!playoffs_on() || !tie_shape(lower, edition, NULL)) return 0;
+    const SeasonRule *r = row_of_season(file, edition);
+    int skip = r && r->up > 0 ? r->up : 0;
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        if (!readable(club[i]) || barred(lower, club[i])) continue;
+        if (skip-- <= 0) return club[i];
     }
     return 0;
 }

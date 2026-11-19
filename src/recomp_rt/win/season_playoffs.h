@@ -29,6 +29,11 @@ int season_playoffs_winners_up(const char *file, int season);
  * up 2, play-off places 1 to 8), else 0. season_sizes_bra.c plays it. Host code only. */
 int season_playoffs_finalists_up(const char *file, int season);
 
+/* The club of the Segunda Liga that played the tie with the Primeira Liga in an edition, from the rows of its last
+ * table in order (club, n), or 0 when that edition has no tie. The size step gives no extra place to this club while it
+ * stays in the Segunda Liga: it lost the tie (issue 154). */
+uint32_t season_playoffs_tie_club(uint32_t lower, int edition, const uint32_t *club, int n);
+
 /* After set_up_rules of a league (season_sizes_rules calls it): the places and the stage count of the play-off
  * of the season, or none. */
 void season_playoffs_rules(uint32_t obj);

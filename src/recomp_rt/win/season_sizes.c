@@ -1530,7 +1530,9 @@ static int zone_class_record(uint32_t rec)
 {
     if (!readable(rec)) return 0;
     uint32_t id = rd32(g_mem, rec);
-    return id == rd32(g_mem, 0x9cf7c0u) || id == rd32(g_mem, 0x9cf8e0u);
+    /* Item 279: the Belgian third division too ([0x9cf7c4]). Its split 0x41ef70 writes +0x60 (0x41f011, 0x41f016) before
+     * the step runs, and its group stage reads +0x60 against [0x9cf5a8] (0x422a25..0x422a32). */
+    return id == rd32(g_mem, 0x9cf7c0u) || id == rd32(g_mem, 0x9cf8e0u) || id == rd32(g_mem, 0x9cf7c4u);
 }
 
 static int is_human(uint32_t club)
@@ -1712,6 +1714,14 @@ static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r)
  * game unwinds. */
 static int step_up_ok(const StepDivision *div, int ndiv, StepClub *club, int nclub, const uint32_t *at)
 {
+    /* Issue 154: a Segunda Liga club that lost the tie with the Primeira Liga takes no extra place of a size change. */
+    uint32_t tie_loser = 0;
+    int tie_div = -1;
+    for (int d = 0; d < ndiv && !tie_loser; d++) {
+        tie_loser = season_playoffs_tie_club(step_seen[d].obj, step_seen[d].year, step_seen[d].club, step_seen[d].nrows);
+        if (rt_unwinding) return 0;
+        if (tie_loser) tie_div = d;
+    }
     for (int k = 0; k < nclub; k++) {
         int d = club[k].div, to = -1;
         if (d == STEP_NONE) {
@@ -1735,6 +1745,12 @@ static int step_up_ok(const StepDivision *div, int ndiv, StepClub *club, int ncl
         club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
         for (int j = 0; j < nlone_down; j++)
             if (at[k] == lone_down[j]) club[k].up_ok = 0;     /* open item 250: it went down this season change */
+        if (at[k] == tie_loser && club[k].div == tie_div) {
+            club[k].up_ok = 0;
+            if (logging())
+                fprintf(stderr, "recomp: league sizes: %.50s lost the tie and stays in %s\n", win_str(at[k] + CLUB_NAME),
+                        season_change_file(step_seen[tie_div].obj));
+        }
         if (rt_unwinding) return 0;
     }
     return 1;

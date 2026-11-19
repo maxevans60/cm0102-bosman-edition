@@ -60,6 +60,9 @@ CASES = {
     "portugal2013": (2013, 2014, ["England", "Portugal"], {"por_prm": (2014, 18), "por_second": (2014, 24)},
                      "Issue 154: the Primeira Liga's 15th and the Segunda Liga's 3rd club that is no reserve side play "
                      "one tie over two legs in 2013/14 (rows por-109, por-110, open item 248)"),
+    "belgium2009": (2009, 2010, ["England", "Belgium"], {"bel_second": (2010, 18)},
+                    "Item 279: the Belgian second division 19 to 18 in 2010/11: a club that the step moves into the "
+                    "third division takes a group (+0x60), so both groups fill (bel_third.cpp 758)"),
     "brazil": (2004, 2006, ["England", "Brazil"], {"bra_nat_second": (2006, 20)},
                "D23 towards a division outside the size table: Serie B 22 to 20 in 2006 through the real places of "
                "2005 (6 down, open item 249)"),
@@ -211,6 +214,10 @@ def faults(work, case):
         for step in ("drawn", "final"):
             if not re.search(rf"recomp: playoffs: cross\t{file}\t{season}\t{step}\t", log):
                 fails.append(f"{file} {season}: no line of the tie's {step}")
+        # The upper club won: the lower club that lost takes no extra place of the size change (review, issue 154).
+        if re.search(rf"recomp: playoffs: cross\t{file}\t{season}\tfinal\t[^\t]*\tpor_prm\t", log) and \
+                not re.search(rf"recomp: league sizes: .* lost the tie and stays in {file}\n", log):
+            fails.append(f"{file} {season}: the club that lost the tie has no line that it stays")
     for file in NO_EXIT.get(case, []):
         names = {c["name"] for c in comps if c["file"] == file}
         fails += [f"{file}: the step sent a club to no division: {m.group(0)}"
