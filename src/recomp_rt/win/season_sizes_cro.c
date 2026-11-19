@@ -360,6 +360,37 @@ RT_WRAP(00682e10, league_pay_prize_money)
     o_00682e10();
 }
 
+/* After a load: the South of a game made in a season of one group (season_sizes_cro_new_game) has no club, and
+ * League::load 0x687b10 makes no table for a league of no row (+0x3e 0 at 0x6889db..0x6889e2 jumps to 0x688e06, which
+ * stores +0xb1 = 0). League::check_complete 0x689ad0 is then false (+0xb1 0 at 0x689ad5..0x689add), and the season
+ * start test of the First Division 0x48ce10 asks each division along +0x20 (0x48ce30..0x48ce4d): the North's +0x20 is
+ * the South (CroA2a::set_up_rules 0x515e54..0x515e79). So after a load the Croatian leagues never started a new season
+ * (release set sp2021: the HNL and the Prva NL held edition 2022 at the end of 2023/24). The South gets back the table
+ * of no row that CroA2b::create_table 0x516dd0 made for it: SOUTH_ROWS empty rows, as its malloc at the new game. */
+void season_sizes_cro_loaded(void)
+{
+    uint32_t south = season_sizes_on() ? league_at(CRO_A2B) : 0;
+    if (!south || !rt_cro_south_empty(south) || rd32(g_mem, south + COMP_TABLE)) return;
+    uint32_t table = season_sizes_game_malloc(SOUTH_ROWS * ROW_SIZE);
+    if (!table) return;
+    for (uint32_t i = 0; i < SOUTH_ROWS * ROW_SIZE; i++) g_mem[table + i] = 0;
+    wr32(g_mem, south + COMP_TABLE, table);
+    /* Always logged (once per load), so a test of a loaded game shows that the table came back. */
+    fprintf(stderr, "recomp: league sizes: cro_a2b %d: no club, the load gives it back its table of no row\n",
+            (int16_t)rd16(g_mem, south + COMP_YEAR));
+}
+
+/* 1 for the First Division of a game whose Croatian leagues stalled before this fix: a season of one group, the
+ * South with its table (season_sizes_cro_loaded), and an edition before the game year after the season change's
+ * update day (season_playoffs_hold tests the day). The change then needs only its gate 0x48ce10, which the South's
+ * table opens. One season only: a game two seasons behind gets one change, then a table with no match played. */
+int season_sizes_cro_behind(uint32_t comp, int year)
+{
+    uint32_t a1 = season_sizes_on() && readable(comp) ? league_at(CRO_A1) : 0, south = a1 ? league_at(CRO_A2B) : 0;
+    if (!a1 || comp != a1 || !south || !rd32(g_mem, south + COMP_TABLE) || !one_group(year)) return 0;
+    return (int16_t)rd16(g_mem, a1 + COMP_YEAR) < year;
+}
+
 /* 1 for the South in a season of one group: the size engine gives it a table of no row (rt_league_clubs). */
 int season_sizes_cro_empty(uint32_t obj, const char *file, int season)
 {
