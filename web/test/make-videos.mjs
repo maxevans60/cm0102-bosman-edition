@@ -1,66 +1,33 @@
 // Two how-to videos of the page (web/README.md, "How-to videos"): how to edit a saved game (and a data set), and how
-// to use the app around the game. A player asked where the editor is (18 November 2026). They are recorded in
-// Chromium against the stand-in engine and small saves and a data set in the game's formats (fakes.mjs), with a caption
-// bar and a pointer drawn on the page; the game's own screen is not in them (a panel says where the game runs).
-// NODE_PATH=$(npm root -g) node web/test/make-videos.mjs <folder>    → <folder>/editor.mp4 and <folder>/app.mp4
+// to use the app around the game. A player asked where the editor is (18 November 2026). The page is recorded in
+// Chromium against the stand-in engine and small saves and a data set in the game's formats (fakes.mjs), with a pointer
+// drawn on it; the game's own screen is not in them (a panel says where the game runs). Each step's words and the box it
+// points at go into a log, and videos-compose.mjs makes the film of it with HyperFrames: a title card, the capture in a
+// frame with a caption under it for each step and a zoom on what the step points at, an end card.
+// NODE_PATH=$(npm root -g) node web/test/make-videos.mjs <folder> [editor|app]
+//   → <folder>/editor.mp4 and <folder>/app.mp4 (and <folder>/<name>-project/, the HyperFrames project, to edit or
+//   render again: node .claude/skills/hyperframes/scripts/plugin-cli.mjs render, in it)
 // CM_SELLER and CM_COFFEE_URL, as on the server, name the footer's maker and the coffee link.
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync } from 'node:fs';
-import { createHash } from 'node:crypto';
-import { tmpdir } from 'node:os';
-import { join, resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { createApp } from '../server.mjs';
-import { createCloud } from '../cloud.mjs';
-import { createS3 } from '../s3.mjs';
-import { createStats, statsStore } from '../stats.mjs';
-import { fakeDataSet, fakeGoogle, fakeS3, fakeSaveGame } from './fakes.mjs';
+import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fakeSaveGame } from './fakes.mjs';
+import { composeVideo, render } from './videos-compose.mjs';
+import { startDemoSite } from './demo-site.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(process.argv[2] ?? '.');
 const SITE = 'cm0102-web.fly.dev';
 mkdirSync(OUT, { recursive: true });
 
-// The site, as the checks make it: the game's own database as a small data set, the stand-in engine.
-const tmp = mkdtempSync(join(tmpdir(), 'cm0102-videos-'));
-const game = join(tmp, 'game'), build = join(tmp, 'build-web');
-mkdirSync(join(game, 'Data'), { recursive: true });
-mkdirSync(join(build, 'seasons'), { recursive: true });
-const exe = Buffer.from('MZ the game');
-writeFileSync(join(game, 'cm0102.exe'), exe);
-const sha = (b) => createHash('sha256').update(b).digest('hex');
-let manifest = `${sha(exe)}\t${exe.length}\tcm0102.exe\n`;
-for (const [name, bytes] of Object.entries(fakeDataSet())) {
-  writeFileSync(join(game, 'Data', name), bytes);
-  manifest += `${sha(bytes)}\t${bytes.length}\tData/${name}\n`;
-}
-writeFileSync(join(tmp, 'manifest.tsv'), manifest);
-for (const t of ['rules', 'names', 'clubs', 'club_records']) writeFileSync(join(build, 'seasons', `${t}.tsv`), 'x\n');
-copyFileSync(join(HERE, 'fake-emscripten.js'), join(build, 'cm0102_recomp.js'));
-writeFileSync(join(build, 'cm0102_recomp.wasm'), Buffer.from([0, 0x61, 0x73, 0x6d, 1, 0, 0, 0]));
-writeFileSync(join(build, 'CMakeCache.txt'), 'CM0102_WEB_SUSPEND:STRING=asyncify\n');
-// Accounts (signed out in the videos: the plans and the sign-in), as sold on the site.
-const s3fake = await fakeS3(), google = await fakeGoogle();
-const coffee = process.env.CM_COFFEE_URL || 'https://buymeacoffee.com';
-const cloud = createCloud({ s3: createS3({ endpoint: s3fake.endpoint, bucket: s3fake.bucket, accessKeyId: 'tid_test', secretAccessKey: 'tsec_test', pathStyle: true }),
-  clientId: google.clientId, clientSecret: google.clientSecret, sessionSecret: 'v'.repeat(40), google: google.google, price: '£5 a month',
-  coffee: { secret: 'video', url: `${coffee.replace(/\/+$/, '')}/membership`, levels: [] }, log: () => {} });
-const server = createApp({ gameDir: game, buildDir: build, manifestPath: join(tmp, 'manifest.tsv'), cloud,
-  stats: createStats({ store: statsStore(null) }), statsMode: 'optout',
-  site: { seller: process.env.CM_SELLER || '', price: '£5 a month', coffee } });
-await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const BASE = `http://127.0.0.1:${server.address().port}`;
+const { BASE, tmp, close: closeSite } = await startDemoSite();
 
-// On the page: the caption bar, the pointer (with a ring at each click) and the panel where the game runs. The bar
-// and the pointer are popovers, raised above each dialog the page opens (dialogs sit in the top layer).
+// On the page: the pointer (with a ring at each click) and the panel where the game runs. The
+// pointer is a popover, raised above each dialog the page opens (dialogs sit in the top layer).
 const OVERLAY = String.raw`(() => {
-  const css = '#vid-cap,#vid-ptr{position:fixed;inset:auto;margin:0;padding:0;border:0;background:transparent;overflow:visible;pointer-events:none;color:inherit}'
-    + '#vid-cap{left:50%;bottom:26px;transform:translateX(-50%);width:max-content;max-width:min(1040px,92vw);background:rgba(8,10,14,.9);color:#fff;'
-    + 'font:600 25px/1.35 Inter,system-ui,sans-serif;padding:14px 24px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);text-align:center;border:1px solid rgba(255,255,255,.12)}'
-    + '#vid-cap small{display:block;font-weight:400;font-size:19px;color:#c9d1d9;margin-top:4px}'
+  const css = '#vid-ptr{position:fixed;inset:auto;margin:0;padding:0;border:0;background:transparent;overflow:visible;pointer-events:none;color:inherit}'
     + '#vid-ptr{left:0;top:0;width:30px;height:30px}'
     + '#vid-ptr .ring{position:absolute;left:-16px;top:-16px;width:34px;height:34px;border-radius:50%;border:3px solid #35b673;opacity:0}'
     + '#vid-ptr.down .ring{animation:vring .55s ease-out}@keyframes vring{from{transform:scale(.35);opacity:1}to{transform:scale(1.5);opacity:0}}'
@@ -68,10 +35,9 @@ const OVERLAY = String.raw`(() => {
     + '#stage{background:repeating-linear-gradient(135deg,#101820 0 22px,#0d141b 22px 44px)!important}'
     + '#vid-game{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;font:600 26px/1.4 Inter,system-ui,sans-serif;color:#8fa3b5;text-align:center}'
     + '#vid-game small{display:block;font-weight:400;font-size:18px;color:#6c7f90}';
-  const raise = () => { for (const id of ['vid-cap', 'vid-ptr']) { const el = document.getElementById(id); if (!el) continue; try { if (el.matches(':popover-open')) el.hidePopover(); el.showPopover(); } catch {} } };
+  const raise = () => { for (const id of ['vid-ptr']) { const el = document.getElementById(id); if (!el) continue; try { if (el.matches(':popover-open')) el.hidePopover(); el.showPopover(); } catch {} } };
   addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style'); style.textContent = css; document.head.append(style);
-    const cap = document.createElement('div'); cap.id = 'vid-cap'; cap.popover = 'manual'; cap.style.display = 'none'; document.body.append(cap);
     const ptr = document.createElement('div'); ptr.id = 'vid-ptr'; ptr.popover = 'manual';
     ptr.innerHTML = '<div class="ring"></div><svg width="30" height="30" viewBox="0 0 24 24"><path d="M4 2l15 10.5-6.6 1.3 3.9 7.2-2.7 1.4-3.9-7.3L4 20z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>';
     ptr.style.left = '640px'; ptr.style.top = '400px'; document.body.append(ptr);
@@ -86,7 +52,6 @@ const OVERLAY = String.raw`(() => {
   });
   addEventListener('mousemove', (e) => { const p = document.getElementById('vid-ptr'); if (p) { p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px'; } }, true);
   addEventListener('mousedown', () => { const p = document.getElementById('vid-ptr'); if (!p) return; p.classList.remove('down'); void p.offsetWidth; p.classList.add('down'); }, true);
-  window.__cap = (text, sub) => { const c = document.getElementById('vid-cap'); if (!c) return; c.style.display = text ? '' : 'none'; c.innerHTML = text ? text + (sub ? '<small>' + sub + '</small>' : '') : ''; raise(); };
 })();`;
 
 const browser = await chromium.launch();
@@ -97,18 +62,29 @@ async function recorder(name) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, recordVideo: { dir, size: { width: 1280, height: 800 } } });
   await ctx.addInitScript(OVERLAY);
   const p = await ctx.newPage();
+  const t0 = Date.now();                                 // the capture starts with the page
+  const now = () => (Date.now() - t0) / 1000;
   p.on('dialog', (d) => d.accept());
   const pause = (ms) => p.waitForTimeout(ms);
-  const say = async (text, sub = '', ms = 3000) => { await p.evaluate(([t, s]) => window.__cap(t, s), [text, sub]); await pause(ms); };
+  // A step: its words, shown for ms, in the log; the box pointed at just before it (point, not click) is its zoom.
+  const captions = [];
+  let pointed = null;
+  const say = async (text, sub = '', ms = 3000) => {
+    const start = now();
+    await pause(ms);
+    captions.push({ text, sub, start, end: now(), focus: pointed });
+    pointed = null;
+  };
   const point = async (sel, { steps = 24, wait = 350 } = {}) => {
     const el = p.locator(sel).first();
     await el.scrollIntoViewIfNeeded();
     const b = await el.boundingBox();
     await p.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps });
     await pause(wait);
+    pointed = { x: b.x, y: b.y, w: b.width, h: b.height };
     return b;
   };
-  const click = async (sel, opts) => { const b = await point(sel, opts); await p.mouse.click(b.x + b.width / 2, b.y + b.height / 2); await pause(500); };
+  const click = async (sel, opts) => { const b = await point(sel, opts); pointed = null; await p.mouse.click(b.x + b.width / 2, b.y + b.height / 2); await pause(500); };
   const type = async (sel, text) => {
     const b = await point(sel);
     await p.mouse.click(b.x + b.width / 2, b.y + b.height / 2, { clickCount: 3 });
@@ -121,10 +97,14 @@ async function recorder(name) {
     const video = p.video();
     await ctx.close();
     const webm = await video.path();
-    const mp4 = join(OUT, file);
-    execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', webm, '-c:v', 'libx264', '-preset', 'slow', '-crf', '22', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', `${mp4}.part.mp4`]);
+    const capture = join(tmp, `${name}-capture.mp4`), mp4 = join(OUT, file), project = join(OUT, `${name}-project`);
+    execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', webm, '-c:v', 'libx264', '-preset', 'slow', '-crf', '14', '-r', '30', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', capture]);
+    rmSync(project, { recursive: true, force: true });
+    const seconds = composeVideo({ dir: project, capture, log: { captions } });
+    writeFileSync(join(project, 'steps.json'), JSON.stringify(captions, null, 1));
+    render(project, `${mp4}.part.mp4`);
     renameSync(`${mp4}.part.mp4`, mp4);
-    console.log(`made ${mp4}`);
+    console.log(`made ${mp4} (${Math.round(seconds)} s)`);
   };
   return { p, pause, say, point, click, type, putSave, finish };
 }
@@ -135,12 +115,14 @@ async function editorVideo() {
   const { p } = v;
   await p.goto(BASE);
   await p.waitForSelector('#go');
-  await v.say('How to edit a saved game', 'CM 01/02 in the Browser', 3800);
-  await v.say('Start the game as usual', '', 1600);
+  await v.say('How to edit a saved game', 'its players, or your own database for new games', 3800);
+  await v.point('#go');
+  await v.say('Start the game as usual', '', 2000);
   await v.click('#go');
   await p.waitForFunction(() => window.__fake, null, { timeout: 30000 });
   await v.putSave('Juventus 2001-07-29.sav', saves.juve);
-  await v.say('The editor is in Saved games', 'the folder button at the top of the page', 2600);
+  await v.point('#saves-open');
+  await v.say('The editor is in Saved games', 'the button at the top of the page', 2600);
   await v.click('#saves-open');
   await p.waitForSelector('#saves-list tr:has-text("Juventus 2001-07-29.sav") button[data-edit]');
   await v.say('Each saved game has an Edit button', '', 2200);
@@ -191,7 +173,7 @@ async function editorVideo() {
   await v.click('#saves .tabs [data-tab="sets"]');
   await p.waitForSelector('#sets-list [data-set-use]');
   await v.point('#sets-list [data-set-use]');
-  await v.say('To play it: Saved games, Data sets, Use', 'then start a new game: it uses your database', 4000);
+  await v.say('To play it: Saved games, Databases, Use', 'then start a new game: it uses your database', 4000);
   await v.click('#saves-close');
   await v.say('Have fun!', SITE, 3200);
   await v.finish('editor.mp4');
@@ -203,19 +185,19 @@ async function appVideo() {
   const { p } = v;
   await p.goto(BASE);
   await p.waitForSelector('#go');
-  await v.say('CM 01/02 in the Browser', 'the whole game, free, in your browser', 3800);
+  await v.say('How to play in your browser', 'the whole game, free, nothing to install', 3800);
   await v.point('#go');
-  await v.say('The first visit downloads the game files into this browser', 'once; nothing is installed', 3600);
+  await v.say('The first visit downloads the game files into this browser', 'once; the next visits start at once', 3600);
   await v.click('#go');
   await p.waitForFunction(() => window.__fake, null, { timeout: 30000 });
   await v.say('The game runs in this tab', 'mouse and keys as in the original; on a touch screen, tap and long press', 3800);
   await v.putSave('Juventus 2001-07-29.sav', saves.juve);
   await v.putSave('Liverpool 2002-05-12.sav', saves.juve);
+  await p.evaluate(() => { const FS = window.Module.FS; try { FS.mkdir('/user/tactics'); } catch {} FS.writeFile('/user/tactics/Attacking 4-3-3.tct', new Uint8Array(3000).fill(1)); });
   await v.point('#saves-open');
-  await v.say('Save in the game as usual', 'your saves stay in this browser', 2800);
+  await v.say('Save in the game as usual', 'your saves stay in this browser: Saved games lists them', 3000);
   await v.click('#saves-open');
   await p.waitForSelector('#saves-list button[data-play]');
-  await v.say('Saved games lists them', '', 1800);
   await v.point('#saves-list button[data-play]');
   await v.say('Play loads a save at once', '', 2400);
   await v.point('#saves-list button[data-kind="save"]');
@@ -225,10 +207,23 @@ async function appVideo() {
   const [chooser] = await Promise.all([p.waitForEvent('filechooser'), v.click('#saves-upload')]);
   await chooser.setFiles({ name: 'Arsenal 2003-04-19.sav', mimeType: 'application/octet-stream', buffer: Buffer.from(saves.juve) });
   await p.waitForSelector('#saves-list tr:has-text("Arsenal 2003-04-19.sav")', { timeout: 30000 });
-  await v.point('#saves-list tr:has-text("Arsenal 2003-04-19.sav")');
-  await v.say('It is in the list, ready to play', '', 2400);
+  await v.say('It is in the list, ready to play', '', 2200);
   await v.point('#saves-all');
   await v.say('Download all keeps a copy of everything', 'a browser may delete a site\'s data by itself: keep copies', 3800);
+  await v.click('#saves .tabs [data-tab="tactics"]');
+  await p.waitForSelector('#tactics-list button[data-tactic]');
+  await v.say('Tactics: the ones you saved in the game', 'download them, or upload a .tct from the PC game or a friend', 3800);
+  await v.click('#saves .tabs [data-tab="sets"]');
+  await p.waitForSelector('#sets-lib button[data-lib-get]', { timeout: 20000 });
+  await v.say('Databases: play another season', 'free databases to download, or your own', 3600);
+  await v.point('#sets-lib tr:has-text("2018-19") button[data-lib-get]');
+  await v.say('Get one from the list', '', 2200);
+  await v.click('#sets-lib tr:has-text("2018-19") button[data-lib-get]');
+  await p.waitForSelector('#sets-season', { timeout: 30000 });
+  await v.point('[data-set-go]');
+  await v.say('Use it for your next new game', 'its season is chosen for you; then start a new game', 4000);
+  await v.click('[data-set-go]');
+  await v.pause(1200);
   await v.click('#saves-close');
   if (await p.isVisible('#fullscreen')) {
     await v.point('#fullscreen');
@@ -259,8 +254,5 @@ try {
   if (!which || which === 'app') await appVideo();
 } finally {
   await browser.close();
-  server.close();
-  s3fake.close();
-  google.close();
-  rmSync(tmp, { recursive: true, force: true });
+  await closeSite();
 }

@@ -17,6 +17,7 @@ const pad = (n) => String(n).padStart(2, '0');
 const isoDate = (d) => (d ? `${d.year}-${pad(d.month)}-${pad(d.day)}` : '');
 const fromIso = (v) => (/^\d{4}-\d{2}-\d{2}$/.test(v) ? { year: +v.slice(0, 4), month: +v.slice(5, 7), day: +v.slice(8, 10) } : null);
 const MB = (n) => `${(n / 1048576).toFixed(0)} MB`;
+const players = (n) => (n === 1 ? '1 player' : `${n} players`);
 
 // A name for a data set folder: what dbfolders_path takes (no path part), and no month and year, which would make
 // the game list it as a season.
@@ -85,7 +86,8 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
       ${saves.length ? `<div class="ed-files">${saves.map((f) => `<div class="ed-file"><span>${esc(f.name)}</span>
         <button data-open-save="${esc(f.name)}">Edit</button></div>`).join('')}</div>` : '<p class="small">No saved games yet.</p>'}</section>
       <section><h4>A data set, for new games</h4><p class="small">Your own copy of the game's database: change players or add new ones.
-        When you start a new game, choose it under Database. Each data set takes about 60 MB of this browser's storage.</p>
+        To play with one: Saved games, Databases, Use, then start a new game (or choose it under Database on the game's
+        new-game screen). Each data set takes about 60 MB of this browser's storage.</p>
       ${sets.length ? `<div class="ed-files">${sets.map((n) => `<div class="ed-file"><span>${esc(n)}</span>
         <button data-open-set="${esc(n)}">Edit</button><button class="link danger" data-delete-set="${esc(n)}">Delete</button></div>`).join('')}</div>` : ''}
       <div class="row"><input id="editor-new-name" type="text" placeholder="Name, for example My data set" aria-label="Name of the new data set" maxlength="60" autocomplete="off">
@@ -335,7 +337,7 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
         log(`page: data set ${name}: ${changed} player(s) changed, ${Object.keys(out).length} files (${MB(bytes)}) written`);
         await openSet(name);                          // the saved files, read again: the new rows are now the files' own
         onSetChange(name, 'saved');
-        say(`Saved: ${changed} player(s) changed in ${name}. To play with it: Saved games, Data sets, Use.`);
+        say(`Saved: ${players(changed)} changed in ${name}. To play with it: Saved games, Databases, Use.`);
         return;
       }
       const path = `${dir}/${name}`;
@@ -352,7 +354,7 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
       if (why) throw new Error(why);
       sync();
       log(`page: ${name}: ${edited.size} player(s) edited`);
-      say(`Saved: ${edited.size} player(s) changed in ${name}. The file as it was is in Saved games, Older copies.${isRunning() ? ' Load the save in the game to play with the changes.' : ''}`);
+      say(`Saved: ${players(edited.size)} changed in ${name}. The file as it was is in Saved games, Older copies.${isRunning() ? ' Load the save in the game to play with the changes.' : ''}`);
       edited = new Set();
       dirty();
       results();
@@ -376,13 +378,13 @@ export function mountEditor({ FS, sync, log, toast, dir, gameData = '/game/Data'
   };
   $('editor-add').onclick = () => { if (model && kind === 'set') show(null); };
   $('editor-home-button').onclick = () => {
-    if (edited.size && !confirm(`${edited.size} player(s) changed and not saved. Leave without saving?`)) return;
+    if (edited.size && !confirm(`${players(edited.size)} changed and not saved. Leave without saving?`)) return;
     say('');
     showHome();
   };
   saveButton.onclick = save;
   $('editor-close').onclick = () => {
-    if (edited.size && !confirm(`${edited.size} player(s) changed and not saved. Close without saving?`)) return;
+    if (edited.size && !confirm(`${players(edited.size)} changed and not saved. Close without saving?`)) return;
     dialog.close();
     model = null;
   };

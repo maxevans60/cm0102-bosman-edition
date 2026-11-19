@@ -752,6 +752,21 @@ try {
       room.ownWhole && room.useInView && room.libRows >= 2 && room.libScrolls && room.bodyFits && room.closeInView && room.ownAboveLib && room.stepsOneLine
         && /8 databases, free/.test(room.head) && /Get a database below/.test(room.step), JSON.stringify(room));
     await shot(p, 'databases-many');
+    // On a phone held upright (the screens review, 19 November 2026): each row a card, every button of every list on
+    // the screen (the table's columns once hid Play, Download and Get past the right edge), and one scroll, the dialog's.
+    await p.setViewportSize({ width: 390, height: 844 });
+    await p.waitForTimeout(300);
+    const phone = await p.evaluate(() => {
+      const rows = [...document.querySelectorAll('#sets-lib tr, #sets-list tr')].filter((tr) => tr.querySelector('button'));
+      const buttons = rows.flatMap((tr) => [...tr.querySelectorAll('button')]);
+      const right = Math.max(...buttons.map((b) => b.getBoundingClientRect().right));
+      const lists = [...document.querySelectorAll('#sets .dlg-list')].map((l) => l.scrollHeight - l.clientHeight);
+      return { rows: rows.length, right, width: innerWidth, listsScroll: lists.some((d) => d > 1),
+        headHidden: getComputedStyle(document.querySelector('#sets-lib tr')).display === 'none' };
+    });
+    check('a phone: every list\'s buttons on the screen, each row a card, and only the dialog scrolls',
+      phone.rows >= 9 && phone.right <= phone.width && !phone.listsScroll && phone.headHidden, JSON.stringify(phone));
+    await shot(p, 'databases-phone');
     await lctx.close();
   }
 

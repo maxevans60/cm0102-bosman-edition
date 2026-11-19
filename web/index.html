@@ -209,12 +209,27 @@
   #saves:has(#tactics[hidden]):has(#sets[hidden]) .tabs { display: none; }
   #saves:not([data-tab="tactics"]) #tactics, #saves:not([data-tab="sets"]) #sets, #saves[data-tab]:not([data-tab="saves"]) .tab-saves { display: none !important; }
   #saves #tactics > h3, #saves #sets > h3:not(.sets-head) { display: none; }   /* the tab names them */
-  /* Narrow screens: a list keeps its columns whole and scrolls sideways, not one letter a line. */
+  /* Narrow screens (a phone held upright): each row of a list is a card, its name on the first line, its size, date
+     and place on the second, its buttons on the third, all in view. The table's columns, scrolled sideways, hid Play,
+     Download and Get past the edge (the screens review, 19 November 2026). */
   @media (max-width: 640px) {
-    dialog .dlg-list table { width: max-content; min-width: 100%; }
-    dialog .dlg-list th, dialog .dlg-list td, dialog .dlg-list td:first-child { overflow-wrap: normal; white-space: nowrap; min-width: 0; }
-    dialog .dlg-list td.acts .btns { flex-wrap: nowrap; }
-    dialog .dlg-list:has(tr + tr + tr) { min-height: 150px; }
+    dialog .dlg-list table, dialog .dlg-list tbody { display: block; width: 100%; }
+    dialog .dlg-list tr:has(> th) { display: none; }
+    dialog .dlg-list tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; padding: 10px 2px; border-top: 1px solid var(--line); }
+    dialog .dlg-list td, dialog .dlg-list td:first-child { display: block; border: 0; padding: 0; min-width: 0; white-space: normal; text-align: left; }
+    dialog .dlg-list td:first-child { flex: 1 0 100%; font-weight: 600; overflow-wrap: anywhere; }
+    dialog .dlg-list td:not(:first-child):not(.acts) { flex: none; font-size: 13px; color: var(--muted); }
+    dialog .dlg-list td.when br { display: none; }
+    dialog .dlg-list td.when .small { margin-left: 4px; }
+    dialog .dlg-list td.acts { flex: 1 0 100%; width: auto; margin-top: 6px; }
+    dialog .dlg-list td.acts .btns { justify-content: flex-start; flex-wrap: wrap; }
+    dialog .dlg-list td:empty { display: none; }
+    dialog .dlg-list tr.use { padding: 0; }
+    dialog .dlg-list tr.use td { flex: 1 0 100%; padding: 10px; }
+    dialog .dlg-list td:first-child .small { font-weight: 400; }
+    dialog .dlg-list td.cloud.cloud { color: var(--accent); }          /* In the cloud keeps its green */
+    /* One scroll, the dialog's: a list inside it scrolling on its own showed one card at a time. */
+    dialog .dlg-list, #sets-lib { flex: none; overflow: visible; min-height: 0 !important; background: none; }
   }
   /* Slim scroll bars in the dialogs, the overlay and the log. */
   dialog *, #overlay, #log { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .22) transparent; }
@@ -230,6 +245,10 @@
   dialog th, dialog td { text-align: left; padding: 6px 6px; border-top: 1px solid var(--line); overflow-wrap: anywhere; vertical-align: top; }
   dialog th { color: var(--muted); font-weight: 500; font-size: 12px; border-top: 0; }
   dialog td:first-child { white-space: nowrap; }
+  /* Help's tables: what you do, then what it does; both wrap at word ends (the first column, kept on one line, took the
+     phone's width and left the second one letter a line). */
+  #help td { overflow-wrap: normal; }
+  #help td:first-child { white-space: normal; width: 40%; color: var(--text); }
   dialog .num { text-align: right; white-space: nowrap; }
   dialog .row { display: flex; gap: 8px; align-items: center; margin-top: 14px; }
   dialog .spacer { flex: 1; }
@@ -289,7 +308,9 @@
   dialog#saves { width: min(820px, calc(100vw - 24px)); }
   /* The saves list keeps room for about six rows (it once shrank to two or three under the sections below it); the
      dialog's body scrolls for the rest. */
-  #saves-list:has(tr + tr + tr + tr) { min-height: min(46vh, 360px); }
+  #saves-list:has(tr + tr + tr + tr) { min-height: min(46vh, 170px); }       /* three saves whole, no empty band under fewer */
+  #saves-list:has(tr + tr + tr + tr + tr + tr) { min-height: min(46vh, 260px); }
+  #saves-list:has(tr + tr + tr + tr + tr + tr + tr + tr) { min-height: min(46vh, 360px); }
   /* Little room left in the browser for saves (saves.js, lowOnSpace): a mark on the bar's button. */
   #saves-open.low::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); margin-left: 2px; }
   td.acts button + button { margin-left: 6px; }
@@ -330,6 +351,11 @@
   .ed-grid select.changed { border-color: var(--accent); }
   .ed-search { display: flex; gap: 6px; } .ed-search input { flex: 1; min-width: 0; }
   #editor-home { overflow: auto; min-height: 0; }
+  #editor-home .row { flex-wrap: wrap; }
+  #editor-new-name { min-width: 0; flex: 1 1 12em; }
+  /* No player picked yet: say what the pane is for, not an empty half of the dialog. */
+  .ed-form:empty { display: grid; place-items: center; }
+  .ed-form:empty::before { content: 'Pick a player from the list to change him.'; color: var(--muted); padding: 24px; text-align: center; }
   #editor-home h4 { margin: 12px 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
   .ed-files { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
   .ed-file { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--r); }

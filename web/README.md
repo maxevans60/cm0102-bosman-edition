@@ -662,6 +662,9 @@ One system for every part of the page (`index.html`, its `:root`), from the UI s
   every key of an open dialog there so that the game gets none.
 - **Less motion asked for** (`prefers-reduced-motion`): nothing slides, pulses or fades in; the long-press ring and
   the busy mark stay, as they tell the state.
+- **On a phone held upright** (under 640px) each row of a list is a card: its name, then its size, date and place,
+  then its buttons, all on the screen; the lists do not scroll on their own, the dialog does. The columns of a table,
+  scrolled sideways, hid Play, Download and Get past the edge (the screens review, `test/screens.mjs`).
 - **Zoom stays off** (`user-scalable=no`), against the usual rule, on purpose: two fingers on the game are its mouse
   wheel and its right click, and a page zoomed by a pinch would leave the game half out of view. Every field is 16px,
   so no browser zooms into one either.
@@ -812,11 +815,19 @@ What to know about the Asyncify engine:
   that joins as a Buy Me a Coffee member in another tab (webhook, Cloud Saves on by themselves, Your membership).
   Needs Playwright.
 - `NODE_PATH=$(npm root -g) node web/test/make-videos.mjs <folder> [editor|app]`: the two how-to videos for players,
-  `editor.mp4` (Saved games, Edit, a search, a change, Apply, Save; the Editor button, a new data set, Use) and
-  `app.mp4` (the start, Saved games: Play, Download, Upload, Download all; Full screen, Cloud Saves, Help, Add to Home
-  Screen), about 1.5 minutes each, 1280x800 H.264. Recorded in Chromium on the stand-in engine with the checks' small
-  saves and data set, a caption bar and a pointer drawn on the page; the game's own screen is not in them (a panel says
-  where the game runs). CM_SELLER and CM_COFFEE_URL as on the server. Make them again after the page changes.
+  `editor.mp4` (Saved games, Edit, a search, a change, Apply, Save; the Editor button, a new data set, Databases, Use)
+  and `app.mp4` (the start; Saved games: Play, Download, Upload, Download all; the Tactics tab; the Databases tab: Get a
+  database from the library, Use; Full screen, Cloud Saves, Help, Add to Home Screen), about 1.5 minutes each, 1920x1080
+  H.264. The page is recorded in Chromium (1280x800) on the stand-in site of `test/demo-site.mjs` (the stand-in engine,
+  the checks' small saves and data set, a library of three example databases), with a pointer drawn on it; the game's
+  own screen is not in them (a panel says where the game runs). Each step's words and the box it points at go into a
+  log, and `test/videos-compose.mjs` makes a HyperFrames project of it (`<folder>/<name>-project/`, the skill in
+  `.claude/skills/hyperframes`): a title card, the capture in a frame with a caption under it for each step and a zoom
+  on a small target, an end card; then renders it with the HyperFrames CLI (npm, pinned, its telemetry off). Silent.
+  CM_SELLER and CM_COFFEE_URL as on the server. Make them again after the page changes.
+- `NODE_PATH=$(npm root -g) node web/test/screens.mjs <folder>`: every screen of the page on a laptop (1280x800) and a
+  phone (an iPhone 13), for a review of the look: the start, the bar over the game, Saved games and its three tabs, the
+  editor, the account, Help, Send to the developer, the legal pages and the admin page.
 - `NODE_PATH=$(npm root -g) node web/test/editor-check.mjs`: the editors in Chromium, with a small saved game and a small
   data set in the game's formats (`test/fakes.mjs`). The save editor on a computer and a phone: Edit, search, change,
   Apply, a rating out of reach, Save, the backup, a file that is not a full save. The data set editor: a name refused,
