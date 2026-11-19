@@ -80,7 +80,7 @@ const PORT = 8097;
       /cannot compile the engine/.test(g.box) && /download of the game files was stopped/.test(g.box) && gameAsked < rows.length / 2,
       `${gameAsked} of ${rows.length} game files asked for`);
     g = await gate('touch only', { ctx: { hasTouch: true, isMobile: true } });
-    check('the start box ends with Made with a red heart by the seller (CM_SELLER)', /Made with by A\. Maker$/.test(g.box), g.box.slice(-80));
+    check('the start box has no Made with line: it is the page\'s footer', !/Made with/.test(g.box), g.box.slice(-80));
     check('a touch device is told the gestures and may start', /tap to click, long press for the right button \(keep the finger down to drag with it\), two fingers to scroll/.test(g.box) && g.start === 1, g.box.slice(0, 200));
 
     // The game stops (an exit code, as Restart Game gave before WinExec was replaced): the box names it and offers
@@ -532,10 +532,11 @@ const PORT = 8097;
       barSizes.join(' | '));
     await p.click('#help-open');
     const helpText = (await p.textContent('#help')).replace(/\s+/g, ' ');
-    const made = await p.evaluate(() => { const m = document.getElementById('help-made'), svg = m.querySelector('svg');
-      return { text: m.textContent.replace(/\s+/g, ' '), shown: m.offsetParent !== null, fill: svg && getComputedStyle(svg).fill, label: svg?.getAttribute('aria-label') }; });
-    check('Help ends with Made with a red heart by the seller', made.text === 'Made with by A. Maker' && made.shown && made.fill === 'rgb(229, 72, 77)'
-      && made.label === 'love', JSON.stringify(made));
+    const made = await p.evaluate(() => { const m = document.getElementById('made'), svg = m.querySelector('svg'), r = m.getBoundingClientRect();
+      return { text: m.textContent.replace(/\s+/g, ' ').trim(), shown: m.offsetParent !== null, atBottom: Math.abs(r.bottom - innerHeight) < 1, height: r.height,
+        fill: svg && getComputedStyle(svg).fill, label: svg?.getAttribute('aria-label'), canvasAbove: document.getElementById('canvas').getBoundingClientRect().bottom <= r.top + 0.5 }; });
+    check('the page\'s footer under the game: Made with a red heart by the seller; not in Help', made.text === 'Made with by A. Maker' && made.shown && made.atBottom
+      && made.canvasAbove && made.height <= 28 && made.fill === 'rgb(229, 72, 77)' && made.label === 'love' && !/Made with/.test(helpText), JSON.stringify(made));
     check('Help lists the gestures, the right-button drag of a run (and the Mac\'s Control), and holds the engine log',
       /Long press \(a ring fills\), then lift or drag/.test(helpText) && /Right click, then a tap or a drag/.test(helpText) && /A tap with two fingers/.test(helpText)
         && /drag a player with the right button to give him a run/.test(helpText) && /On a Mac, Control and a click is the right button/.test(helpText)
@@ -753,7 +754,8 @@ const PORT = 8097;
         const shown = [...document.querySelectorAll('#bar > button, #bar > a')].filter((e) => e.offsetParent !== null);
         const r = shown.map((e) => e.getBoundingClientRect());
         return { n: shown.length, inside: r.every((x) => x.left >= 0 && x.right <= innerWidth + 0.5), heights: [...new Set(r.map((x) => Math.round(x.height)))],
-          cls: document.getElementById('bar').className, title: document.querySelector('#bar .brand').offsetParent !== null };
+          cls: document.getElementById('bar').className, title: document.querySelector('#bar .brand').offsetParent !== null,
+          made: document.getElementById('made').offsetParent !== null };
       });
       await pg.tap('#fullscreen');
       await pg.waitForFunction(() => document.getElementById('app').classList.contains('fs'), null, { timeout: 5000 }).catch(() => {});
@@ -770,6 +772,9 @@ const PORT = 8097;
     await upright.ctx.close();
     await small.ctx.close();
     const phoneBar = await phone.pg.locator('#bar').boundingBox(), phoneCanvas = await phone.pg.locator('#canvas').boundingBox();
+    check('the footer: on an upright phone, not on one held sideways (the game takes every pixel), never in full screen',
+      upright.bar.made === true && small.bar.made === true && phone.bar.made === false && !(await phone.pg.isVisible('#made')),
+      JSON.stringify([upright.bar.made, small.bar.made, phone.bar.made]));
     check('full screen on a phone held sideways: the buttons are a column beside the game, over none of it',
       (await phone.pg.evaluate(() => document.getElementById('app').dataset.bar)) === 'side' && !overlap(phoneBar, phoneCanvas)
         && phoneBar.height > phoneBar.width && (await phone.pg.locator('#bar-fold').isVisible()) === false,
@@ -779,6 +784,8 @@ const PORT = 8097;
     await phone.ctx.close();
     const pad = await fullScreenOn({ width: 1180, height: 820 });
     const padOpen = await pad.pg.locator('#bar').boundingBox();
+    check('the footer shows on an iPad before full screen, and goes in full screen', pad.bar.made === true && !(await pad.pg.isVisible('#made')),
+      JSON.stringify([pad.bar.made, await pad.pg.isVisible('#made')]));
     check('full screen on an iPad: the buttons over the corner, with the fold button',
       (await pad.pg.evaluate(() => document.getElementById('app').dataset.bar)) === 'over' && (await pad.pg.locator('#bar-fold').isVisible()),
       await pad.pg.evaluate(() => document.getElementById('app').dataset.bar));

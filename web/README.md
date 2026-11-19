@@ -504,7 +504,7 @@ deleted until the subscription is canceled. In Paddle (start in the sandbox, `sa
 | `PADDLE_CLIENT_TOKEN`, `PADDLE_PRICE_ID`, `PADDLE_WEBHOOK_SECRET` | Paddle's checkout: the client-side token, the price id (more than one, comma-separated, are all taken; the first is sold), the notification destination's secret |
 | `PADDLE_ENV` | `sandbox` for Paddle's sandbox; unset for real payments |
 | `PADDLE_API_KEY` | for Manage subscription; without it the button leads to paddle.net |
-| `CM_SELLER`, `CM_CONTACT` | your name and contact email, on the terms, refund, privacy and pricing pages; the name also ends the footer "Made with ♥ by …" of those pages, the start box and Help |
+| `CM_SELLER`, `CM_CONTACT` | your name and contact email, on the terms, refund, privacy and pricing pages; the name also ends the footer "Made with ♥ by …" of those pages and of the game's page (a strip under the game; not in full screen or on a short screen) |
 | `CM_UPGRADE_URL` | without Buy Me a Coffee and Paddle: where "Get Cloud Saves" leads |
 | `BMC_WEBHOOK_SECRET` | the signing secret of the Buy Me a Coffee webhook; with it (and a membership page) Cloud Saves are sold as a membership |
 | `BMC_MEMBERSHIP_URL` | the membership page (`https://`); default `CM_COFFEE_URL` + `/membership` |
