@@ -253,7 +253,8 @@ _LEAGUE_PLAYOFFS = {}
 
 # Files whose table holds both halves of a row of halves (0.7.2 league sizes, slice 14): it plays twice the meetings of
 # the row's halves. Also tests/seasons/league_size_run.py HALVES_IN_TABLE.
-HALVES_IN_TABLE = {"jap_j1", "kor_league"}
+# The Argentine second division plays rows 2002 to 2006 as one table of both halves (season_sizes_arg_second.c form_of).
+HALVES_IN_TABLE = {"jap_j1", "kor_league", "arg_second"}
 
 
 def league_playoffs():
@@ -447,8 +448,11 @@ def differences(seasons, comps, rows):
             # Item 286: edition Y of the Argentine second division plays row Y (season_league.c edition_is_year), the
             # real season that ends in it ("2016" for row 2015). Its object moves on after the start line (14 July),
             # so that line of season Y still holds edition Y - 1 and the end line holds edition Y, with row Y's places.
-            if c["file"] == "arg_second":
+            # The Primera moves on in the same way (season_league.c edition_is_year): a running game's start line of 2021
+            # holds edition 2020, so its places and rounds are those of row 2020.
+            if c["file"] in CALENDAR_START_FILES:
                 c = next((x for x in both if x["year"] == r["season"]), c)
+                both = [x for x in both if x["year"] == r["season"]] or both
             for key, extra in (("up", "playoff_up"), ("down", "playoff_down")):
                 want = r[key]
                 # A top division (no division above, -1) sends nobody up: the class's up places of the Série A (4 in
@@ -482,6 +486,10 @@ def differences(seasons, comps, rows):
                 want = (encode_leagues.count(e["po_up"]), encode_leagues.count(e["po_down"]))
                 game = (c["playoff_up"], c["playoff_down"])
                 same = game == want if e["po_status"] == "ok" else bool(sum(game)) == bool(sum(want))
+                # Item 291: rows 2002 and 2003 of the second division name the promoción in their text, and the encoded
+                # row holds no places for it: the game plays it with the two clubs after the direct places.
+                if c["file"] == "arg_second" and game == (2, 0) and "promoci" in r["playoffs_text"].lower():
+                    same = True
                 if two_winners_first(r) and game[0] != 4:   # open item 63: no stage, the places go up directly
                     same = game == (0, want[1])
                 if not same:
@@ -494,7 +502,9 @@ def differences(seasons, comps, rows):
             # (0.7.2 slice 14, src/recomp_rt/win/season_sizes_asia.c), so it plays twice them.
             if e is not None and isinstance(e["meetings"], int):
                 meet = sorted({x["rounds"] for x in both if x["rounds"] > 0})
-                table_meet = e["meetings"] * (2 if e["halves"] == 1 and c["file"] in HALVES_IN_TABLE else 1)
+                # The second division's row of 25 clubs (2001/02) keeps the class: an Apertura of one meeting.
+                table_meet = e["meetings"] * (2 if e["halves"] == 1 and c["file"] in HALVES_IN_TABLE and
+                                              not (c["file"] == "arg_second" and r["clubs"] == 25) else 1)
                 if meet and meet != [table_meet]:
                     out.add((season, "meetings", f"{label}: game {'/'.join(map(str, meet))}, table "
                                                  f"{table_meet}"))

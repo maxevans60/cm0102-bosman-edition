@@ -17,6 +17,7 @@
 #include "season_change.h"
 #include "season_round_names.h"
 #include "season_sizes.h"
+#include "season_swe_groups.h"
 #include "season_uefa.h"
 
 #include <stdio.h>
@@ -86,6 +87,10 @@ RT_WRAP(004b4850, round_name)
     if (!name && readable(buf) && size >= 2 && size <= 0x1000) {
         /* 0.7.2 gap row 33: the fifth and sixth periods of the Eerste Divisie */
         name = season_sizes_period_name(code, set == SEASON_ROUND_NAME_ABBREVIATED);
+        if (name) part = 0;
+    }
+    if (!name && readable(buf) && size >= 2 && size <= 0x1000) {
+        name = season_swe_groups_name(code);             /* issue 106: Norra and Sodra */
         if (name) part = 0;
     }
     if (!name) {

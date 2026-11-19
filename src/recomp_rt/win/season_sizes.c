@@ -240,6 +240,7 @@ static const char *record_name(uint32_t obj)
 /* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
 static void size_step_run(uint32_t trigger);
 static int lone_file(const char *file);
+static int lone_pool(uint32_t rec);
 static void lone_exchange(uint32_t self);
 static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r);
 static void lone_send(uint32_t self, const char *file, int i, int down, uint32_t to);
@@ -367,6 +368,9 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     else if (grown_of(file) && meet > 0)
         wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet +
                                                    (kept_at(obj) ? 0 : season_split_matches(obj, file, n, meet))));
+    int za, zb;
+    if (season_arg_second_zones(obj, n, &za, &zb))      /* item 291: the matches of the smaller zone */
+        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)(2 * ((za < zb ? za : zb) - 1)));
     return (uint32_t)n;
 }
 
@@ -574,6 +578,11 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         }
     }
     int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
+    int zone_a, zone_b, zoned = !probe && season_arg_second_zones(self, n, &zone_a, &zone_b);
+    if (zoned) {        /* item 291: the rounds of the larger zone, a rest round for an odd zone */
+        int ra = 2 * (zone_a + (zone_a & 1) - 1), rb = 2 * (zone_b + (zone_b & 1) - 1);
+        rounds = ra > rb ? ra : rb;
+    }
     /* A split (slice 7, D7): the template plans the rounds before the split and the most rounds of a section after
      * it. The table plays the first; the sections take the rest when the split comes (season_split.c), through
      * this wrap again (probe). */
@@ -602,7 +611,8 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     }
     /* The matches of the count (rt_league_clubs writes the same when create_table runs after this), and those of
      * the largest section of a split. */
-    if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings + (split ? sp.matches_max : 0)));
+    if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)(zoned ? 2 * ((zone_a < zone_b ? zone_a : zone_b) - 1)
+                                                                  : (n - 1) * meetings + (split ? sp.matches_max : 0)));
     if (total == have && !split && !cal) return;
     /* A class date on the day of an earlier one (NirPrm 2010/11: 15 January 2011 twice, a date that snaps to its
      * Saturday) is left out of the plan, which never puts two rounds on one day (season_template.c). Not for a
@@ -1036,15 +1046,13 @@ static int outside_now(uint32_t obj)
     return r && outside_change(obj, file, r);
 }
 
-/* Gap row 29: Ligue 2's 16th meets the winner of the Ligue 3 play-off of the 3rd to 6th (rows 2026/27 on, its po_down
- * place). The game plays no tie between two divisions, and slice 19 plays the Ligue 3 play-off only when the division
- * above relegates its direct places and the winner (season_playoffs.c balanced). So the 16th's place counts as a
- * relegation place in a season whose Ligue 3 row has that play-off: the play-off plays and its winner goes up. Only
- * Ligue 2 over Ligue 3: other rows with a relegation play-off over a play-off of four (Norway, Japan, Ireland,
- * Greece, Belgium, Argentina) have their own code or gap rows. 1 for that place, else 0. */
+/* Gap row 29, with changing rules off only: Ligue 2's 16th counts as a relegation place in a season whose Ligue 3 row has
+ * the play-off of the 3rd to 6th, so that play-off plays and its winner goes up, as in 0.7.2 (spec L2). With changing
+ * rules on the 16th meets the winner (season_playoffs.c, the play-off over a play-off of four, issue 160). 1 for that
+ * place, else 0. */
 static int below_playoff_place(const char *file, int season, int down)
 {
-    if (!file || strcmp(file, "fra_second")) return 0;
+    if (!file || strcmp(file, "fra_second") || season_changing_rules()) return 0;
     const SeasonLeagueRule *e = season_league_rule(file, season);
     int direct = -1;
     /* Only when the direct places match (balanced: the 16th's place is the winner's), else the play-off stays off. */
@@ -1108,6 +1116,12 @@ static void sizes_rules(uint32_t obj)
                     "gave %d (the row %d)\n", file, record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), shown,
                     (int8_t)g_mem[obj + DOWN], r->down);
         if ((int8_t)g_mem[obj + DOWN] != shown) g_mem[obj + DOWN] = (uint8_t)shown;
+    }
+    /* Open item 283: J2 has no division below it (JapJ2::set_up_rules 0x665140 writes +0x20 -1 at 0x6651c6 and 0 down
+     * at 0x6651a2). In the edition before its count changes the row's places go to no division (j2_exchange). */
+    if (!strcmp(file, "jap_j2") && season_changing_rules()) {
+        int places = season_places_jap_j2_down(year), pool = places ? lone_pool(rd32(g_mem, obj + COMP_RECORD)) : 0;
+        g_mem[obj + DOWN] = (uint8_t)(places < pool ? places : pool);
     }
 }
 
@@ -1195,6 +1209,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding && readable(obj)) season_sizes_cro_rules(obj, season_change_file(obj));  /* items 281, 282 */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
+    if (!rt_unwinding && sizes_on()) season_sizes_fin_rules(obj, season_change_file(obj));   /* 0.7.3 slice 4 */
     if (!rt_unwinding) season_arg_second_rules(obj);  /* 0.7.2 slice 16 */
     /* The C1 play-out and direct places of the season (open item 253, season_sizes_ita.c). */
     const char *f = season_change_file(obj);
@@ -1410,6 +1425,8 @@ static int step_index(uint32_t obj)
     /* The Argentine Primera sends down by its averages (promedios), not by its table (slice 15 fix). */
     if (!strcmp(season_change_file(obj), "arg_prm"))
         season_arg_step_order(obj, step_seen[i].club, step_seen[i].nrows);
+    if (!strcmp(season_change_file(obj), "arg_second"))
+        season_arg_second_step_order(obj, step_seen[i].club, step_seen[i].nrows);
     return i;
 }
 
@@ -1597,6 +1614,11 @@ static uint32_t lone_return(const char *file)
 
 static int lone_file(const char *file) { return lone_return(file) != 0; }
 
+void season_sizes_step_bar(uint32_t club)
+{
+    if (nlone_down < STEP_MAX_ROWS) lone_down[nlone_down++] = club;
+}
+
 /* 1 when the step counts the division now of club c as no division: a spare division (A Lower Division, A Premier
  * Division), the Argentine third division, or the lower division of a nation (season_sizes_nir.c: the Northern Irish
  * lower division, where the original keeps the clubs below the First Division). The Greek Lower Division (item 282) is
@@ -1664,6 +1686,24 @@ static void lone_stay_news(uint32_t comp)
             season_change_news("%s stays in the %.50s: its manager is a player.", stays[j].club, record_name(comp));
     }
     nstays = k;
+}
+
+/* Open item 283: J2's relegation places of the edition before its count changes (the real 2023: 22 clubs to 20, 2 down
+ * to the J3 League, which the game does not hold). The chain of J1 runs first (0x6636e3) and the step follows at
+ * J1's free_table (0x6636ec), before J2's own start_new_season, so the clubs go here: the plan then fills J2 to its row from the
+ * Japanese clubs with no division, and never takes back a club that went down (lone_down, step_up_ok). */
+static void j2_exchange(void)
+{
+    for (int i = 0; i < nstep_seen && !rt_unwinding; i++) {
+        uint32_t obj = step_seen[i].obj;
+        const char *file = season_change_file(obj);
+        if (strcmp(file, "jap_j2") || (int16_t)rd16(g_mem, obj + COMP_YEAR) != step_seen[i].year) continue;
+        int places = season_places_jap_j2_down(step_seen[i].year), shown = (int8_t)g_mem[obj + DOWN];
+        int want = step_want(obj, file, step_seen[i].year + 1);
+        int down = season_size_lone_down(places, lone_pool(step_seen[i].rec), clubs_in_division(obj), want);
+        if (shown >= 0 && shown < down) down = shown;
+        if (down > 0) lone_send(obj, file, i, down, 0);
+    }
 }
 
 static void lone_exchange(uint32_t self)
@@ -1810,6 +1850,7 @@ static void size_step_run(uint32_t trigger)
         return;
     }
     step_running = 1;
+    j2_exchange();
     int ndiv = nstep_seen;
     StepDivision div[STEP_DIVS];
     memset(div, 0, sizeof div);

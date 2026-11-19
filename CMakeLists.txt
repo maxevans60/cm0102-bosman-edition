@@ -296,6 +296,13 @@ if(NOT WIN32)
     target_include_directories(season_sizes_asia_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_sizes_asia COMMAND season_sizes_asia_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
     set_tests_properties(season_sizes_asia PROPERTIES FIXTURES_REQUIRED rules_table)
+    # The places of Japan and Finland that the rules table decides (0.7.3 slice 4).
+    add_executable(season_sizes_places_test tests/seasons/test_season_sizes_places.c
+        src/recomp_rt/win/season_sizes_places.c src/recomp_rt/win/season_league.c src/recomp_rt/win/season_rules.c
+        src/recomp_rt/win/season_league_table.c src/recomp_rt/host/posix.c)
+    target_include_directories(season_sizes_places_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_sizes_places COMMAND season_sizes_places_test "${CMAKE_BINARY_DIR}/seasons/rules-test.tsv")
+    set_tests_properties(season_sizes_places PROPERTIES FIXTURES_REQUIRED rules_table)
     # Domestic cups that the rules table does not hold in some seasons (0.6.0 slice 21b).
     add_executable(season_cup_breaks_test tests/seasons/test_season_cup_breaks.c
         src/recomp_rt/win/season_cup_breaks.c src/recomp_rt/win/season_rules.c src/recomp_rt/host/posix.c)
@@ -330,6 +337,10 @@ if(NOT WIN32)
     add_executable(season_mls_plan_test tests/seasons/test_season_mls_plan.c src/recomp_rt/win/season_mls_plan.c)
     target_include_directories(season_mls_plan_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_mls_plan COMMAND season_mls_plan_test)
+    # The Swedish third tier in two groups (issue 106).
+    add_executable(season_swe_groups_test tests/seasons/test_season_swe_groups.c src/recomp_rt/win/season_swe_groups_plan.c)
+    target_include_directories(season_swe_groups_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_swe_groups COMMAND season_swe_groups_test)
     add_executable(season_closed_test tests/seasons/test_season_closed.c src/recomp_rt/win/season_closed.c
                    src/recomp_rt/win/season_mls_plan.c)
     target_include_directories(season_closed_test PRIVATE src/recomp_rt/win)
@@ -800,6 +811,8 @@ if(EXISTS "${CM0102_EXE}")
     add_test(NAME arg_prm_zones COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_arg_prm_zones.py" --check)
     # The checks of the size step runs (slice 3) and of the English exchange (slice 8, D15) on made-up logs.
     add_test(NAME size_step_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/size_step_run.py"
+        --self-test)
+    add_test(NAME over_four_run_self_test COMMAND python3 -I "${CMAKE_SOURCE_DIR}/tests/seasons/over_four_run.py"
         --self-test)
     # The cups of western Europe take the real divisions (0.7.2 league sizes, slice 5): the counts with grown and
     # shrunk divisions on a made-up club table, and the run list of the season runs (tests/seasons/cup_size_run.py).

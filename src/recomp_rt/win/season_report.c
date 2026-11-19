@@ -75,6 +75,7 @@
 #include "season_comps.h"
 #include "season_uefa.h"
 #include "season_split.h"
+#include "season_sizes_arg.h"
 #include "season_comps.h"
 #include "../host.h"
 #include "../rt_host.h"
@@ -223,11 +224,15 @@ static void write_comp(FILE *f, int season, const char *phase, const char *slot,
     }
     int league = c && c->kind == SEASON_KIND_LEAGUE;
     char rules[128] = "-\t-\t-\t-\t-\t-\t-\t-";
-    if (league)
+    if (league) {
+        int up = (int8_t)g_mem[obj + 0xbe], po_up = (int8_t)g_mem[obj + 0xbf], po_down = (int8_t)g_mem[obj + 0xc0];
+        int down = (int8_t)g_mem[obj + 0xc1];
+        season_arg_report_places(obj, &up, &po_up, &po_down, &down);
         snprintf(rules, sizeof rules, "%d\t%d\t%d\t%d\t%d\t0x%x\t%d\t%d", (int16_t)rd16(g_mem, obj + 0xa7),
-                 (int8_t)g_mem[obj + 0xbe], (int8_t)g_mem[obj + 0xbf], (int8_t)g_mem[obj + 0xc0],
-                 (int8_t)g_mem[obj + 0xc1], rd16(g_mem, obj + 0xd9), (int32_t)rd32(g_mem, obj + 0x1c),
+                 up, po_up, po_down, down, rd16(g_mem, obj + 0xd9),
+                 (int32_t)rd32(g_mem, obj + 0x1c),
                  (int32_t)rd32(g_mem, obj + 0x20));
+    }
     /* Slice 23: a UEFA cup of the access list counts its clubs, not its entry slots (season_uefa_qual.c). */
     int clubs = season_uefa_report_clubs(obj);
     if (clubs < 0) clubs = (int16_t)rd16(g_mem, obj + 0x3e);
