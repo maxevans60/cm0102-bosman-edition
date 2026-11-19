@@ -65,6 +65,19 @@ int season_sizes_asia_earlier(const char *file);
  * halves, else one table (slice 14, D8; season_sizes_asia.c). */
 void season_sizes_asia_rules(uint32_t obj, const char *file);
 
+/* The places of Japan and Finland that the rows decide (0.7.3 slice 4; season_sizes_places.c reads only the tables).
+ * season_places_jap_cross: 1 when the rows of the season give J1's 16th and J2's 3rd one tie between the divisions.
+ * season_places_jap_grows: 1 when J1 grows by exactly the winner of the four-club J2 play-off above `direct` places.
+ * season_places_jap_j2_down: the clubs that J2 sends to no division after an edition before its count changes.
+ * season_places_fin_no_playoff: 1 when the Veikkausliiga's row of the edition's own real season has no play-off. */
+int season_places_jap_cross(int season);
+int season_places_jap_grows(int season, int direct);
+int season_places_jap_j2_down(int edition);
+int season_places_fin_no_playoff(int edition);
+
+/* After the class's rules of the Veikkausliiga: no relegation play-off place in a season with none (season_sizes_fin.c). */
+void season_sizes_fin_rules(uint32_t obj, const char *file);
+
 /* The season of the rules row of a league's edition (+0x40) of a year: the row whose real season begins with the
  * year (row Y first, then row Y - 1, the row of a calendar-year league), else the year. */
 int season_sizes_edition(const char *file, int year);

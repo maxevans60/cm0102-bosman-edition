@@ -240,6 +240,7 @@ static const char *record_name(uint32_t obj)
 /* The size step (slice 3): runs the moves noted at the promotion chain before the first new table (below). */
 static void size_step_run(uint32_t trigger);
 static int lone_file(const char *file);
+static int lone_pool(uint32_t rec);
 static void lone_exchange(uint32_t self);
 static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r);
 static void lone_send(uint32_t self, const char *file, int i, int down, uint32_t to);
@@ -1109,6 +1110,12 @@ static void sizes_rules(uint32_t obj)
                     (int8_t)g_mem[obj + DOWN], r->down);
         if ((int8_t)g_mem[obj + DOWN] != shown) g_mem[obj + DOWN] = (uint8_t)shown;
     }
+    /* Open item 283: J2 has no division below it (JapJ2::set_up_rules 0x665140 writes +0x20 -1 at 0x6651c6 and 0 down
+     * at 0x6651a2). In the edition before its count changes the row's places go to no division (j2_exchange). */
+    if (!strcmp(file, "jap_j2") && season_changing_rules()) {
+        int places = season_places_jap_j2_down(year), pool = places ? lone_pool(rd32(g_mem, obj + COMP_RECORD)) : 0;
+        g_mem[obj + DOWN] = (uint8_t)(places < pool ? places : pool);
+    }
 }
 
 /* Gap row 9 (lead-notes/sizes-gaps.md): a row whose play-off cell says "none" plays no play-off. Here the pairs whose
@@ -1194,6 +1201,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
+    if (!rt_unwinding && sizes_on()) season_sizes_fin_rules(obj, season_change_file(obj));   /* 0.7.3 slice 4 */
     if (!rt_unwinding) season_arg_second_rules(obj);  /* 0.7.2 slice 16 */
     /* The C1 play-out and direct places of the season (open item 253, season_sizes_ita.c). */
     const char *f = season_change_file(obj);
@@ -1660,6 +1668,24 @@ static void lone_stay_news(uint32_t comp)
     nstays = k;
 }
 
+/* Open item 283: J2's relegation places of the edition before its count changes (the real 2023: 22 clubs to 20, 2 down
+ * to the J3 League, which the game does not hold). The chain of J1 runs first (0x6636e3) and the step follows at
+ * J1's free_table (0x6636ec), before J2's own start_new_season, so the clubs go here: the plan then fills J2 to its row from the
+ * Japanese clubs with no division, and never takes back a club that went down (lone_down, step_up_ok). */
+static void j2_exchange(void)
+{
+    for (int i = 0; i < nstep_seen && !rt_unwinding; i++) {
+        uint32_t obj = step_seen[i].obj;
+        const char *file = season_change_file(obj);
+        if (strcmp(file, "jap_j2") || (int16_t)rd16(g_mem, obj + COMP_YEAR) != step_seen[i].year) continue;
+        int places = season_places_jap_j2_down(step_seen[i].year), shown = (int8_t)g_mem[obj + DOWN];
+        int want = step_want(obj, file, step_seen[i].year + 1);
+        int down = season_size_lone_down(places, lone_pool(step_seen[i].rec), clubs_in_division(obj), want);
+        if (shown >= 0 && shown < down) down = shown;
+        if (down > 0) lone_send(obj, file, i, down, 0);
+    }
+}
+
 static void lone_exchange(uint32_t self)
 {
     if (step_running || !sizes_on() || !season_changing_rules() || season_change_is_creating()) return;
@@ -1804,6 +1830,7 @@ static void size_step_run(uint32_t trigger)
         return;
     }
     step_running = 1;
+    j2_exchange();
     int ndiv = nstep_seen;
     StepDivision div[STEP_DIVS];
     memset(div, 0, sizeof div);
