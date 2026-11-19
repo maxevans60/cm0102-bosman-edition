@@ -2164,6 +2164,7 @@ static void sizes_loaded(int start_year)
     nlone_down = 0;
     nstays = 0;
     if (!sizes_on()) return;
+    season_sizes_cro_loaded();          /* release set sp2021: the empty South needs its table */
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
     for (int i = 0; i < n && !rt_unwinding; i++)
