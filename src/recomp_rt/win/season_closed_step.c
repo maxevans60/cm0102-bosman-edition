@@ -71,14 +71,19 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     /* s073-16: a club that leaves the league, or a club of the nation with no division or in a spare division, takes
      * the place of a club that joins (season_closed_places). */
     uint32_t spare1 = spare_division(KEY_LOWER), spare2 = spare_division(KEY_PREMIER);
+    int gaps = 0;
     for (int i = 0; i < n; i++) {
         uint32_t div = rd32(g_mem, at[i] + CLUB_DIVISION);
-        from[i] = action[i] == CLOSED_JOIN ? div : 0;
+        /* A place only in a division of the league's nation: not a spare division, not a New Zealand division. */
+        from[i] = action[i] == CLOSED_JOIN && div && rd32(g_mem, div + REC_NATION) == nation ? div : 0;
+        gaps += from[i] != 0;
         pool[i] = !club[i].in_league && !club[i].human && !club[i].reserve && (!div || div == spare1 || div == spare2) &&
                   rd32(g_mem, at[i] + CLUB_NATION) == nation &&
                   season_closed_club(league, club[i].name, club[i].short_name) < 0;
     }
-    season_closed_places(club, action, from, pool, n, to);
+    int places = season_closed_places(club, action, from, pool, n, to);
+    if (places < gaps)
+        fprintf(stderr, "recomp: %s: %d: %d places of the clubs that join stay empty\n", tag, edition, gaps - places);
     for (int i = 0; i < n && !rt_unwinding; i++) {
         if (action[i] == CLOSED_FOLD || action[i] == CLOSED_CUT) {
             wr32(g_mem, at[i] + CLUB_LAST_DIVISION, rec);
