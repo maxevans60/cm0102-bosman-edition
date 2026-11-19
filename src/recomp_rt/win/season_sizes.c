@@ -48,6 +48,9 @@
 #define UP_PLAYOFF 0xbfu            /* s8: promotion play-off places (inference, rules report doc) */
 #define DOWN_PLAYOFF 0xc0u          /* s8: relegation play-off places (inference) */
 #define DOWN 0xc1u                  /* s8: relegation places (League::has_relegation 0x6847b0) */
+#define COMP_STAGES 0xcu            /* the stage array (League load 0x688e3a allocates +0x2c * 4 bytes) */
+#define COMP_STAGE_COUNT 0x2cu      /* s32: stages of an edition, set by the constructor */
+#define COMP_STAGE_NOW 0x30u        /* s32: the stage now, -1 before the first */
 #define ABOVE 0x1cu                 /* s32: record id of the division above, -1 for none */
 #define BELOW 0x20u                 /* s32: record id of the division below */
 #define COMP_OBJECTS 0xadadfcu      /* g_comp_object_table: the object of each competition record */
@@ -58,6 +61,7 @@
 #define CLUB_LAST_DIVISION 0x5bu    /* club_comp pointer: the division of the last season (0x689d99) */
 #define CLUB_GROUP 0x60u            /* club_comp pointer: the group of a division in groups (0x5960f7) */
 #define CLUB_REPUTATION 0x80u       /* s16 */
+#define CLUB_ZONE 0x60u             /* club_comp pointer: the zone of a class of zones (0x7d293b, 0x900881) */
 #define NATION_COUNT 0xae2350u      /* the last 2 x nations rows of the club table are national teams (0x53b900) */
 #define REC_NATION 0x5du            /* club_comp record: nation pointer */
 #define ROW_POS 0x39u               /* s8: the place in the table, from 1 (0x685225) */
@@ -240,6 +244,7 @@ static void lone_exchange(uint32_t self);
 static int lone_shown(uint32_t obj, const char *file, const SeasonRule *r);
 static void lone_send(uint32_t self, const char *file, int i, int down, uint32_t to);
 static void step_note_pair(uint32_t upper, uint32_t lower);
+static void step_note_outside(uint32_t upper, uint32_t lower);
 static int step_alone(uint32_t upper, uint32_t lower);
 static void step_note_alone(uint32_t upper, uint32_t lower);
 static int step_index(uint32_t obj);
@@ -914,23 +919,41 @@ uint32_t rt_ita_cup_first_position(uint32_t original)
     return season_game_changes() ? 6u : original;
 }
 
-/* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
- * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). */
-static void set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
+/* Open item 259: the pairs whose play-off is a stage of the lower class between the two divisions (NorFirst
+ * 0x790b00 with NorPrm 0x792700, SweFirst 0x88f090 with SwePrm 0x890550; PLAYOFF_PAIRS below). No club surely moves
+ * through such a play-off, so their rows count the direct places only: nor_prm 2005 "13th-14th (2)" with the 12th in
+ * the play-off, nor_prm 2007 "14th (1)" with the 13th, nor_first 2007 "1st-3rd (3)" with the 4th. Northern Ireland
+ * is a fixed exchange. The places of Ireland are an open item of their own (0.6.2 open items), so neither is here. */
+static int cross_playoff(const char *file)
 {
-    if (want < 0 || want > 30) return;
+    static const char *const files[] = {"nor_prm", "nor_first", "swe_prm", "swe_first"};
+    for (unsigned i = 0; file && i < sizeof files / sizeof files[0]; i++)
+        if (!strcmp(file, files[i])) return 1;
+    return 0;
+}
+
+/* Sets a count of places so that the row's count is the direct places, or the direct places and the winners
+ * of the class's own play-off (the reading of tests/seasons/rules_report_check.py). A play-off between two
+ * divisions counts no winner (cross_playoff). */
+static int set_places(uint32_t obj, uint32_t at, uint32_t playoff_at, int want, const char *what)
+{
+    if (want < 0 || want > 30) return 0;
     int now = (int8_t)g_mem[obj + at], playoff = (int8_t)g_mem[obj + playoff_at];
     /* A class with no places in this direction has its own way or none (Argentina relegates by the average of
      * three seasons, ArgPrm::set_up_rules 0x4056d1 writes 0): it stays. */
-    if (now == 0 && playoff == 0) return;
-    if (want == now || want == now + (playoff ? 1 : 0) || want == now + playoff) return;
-    int direct = want - (playoff ? 1 : 0);
+    if (now == 0 && playoff == 0) return 0;
+    /* Open item 259: NorPrm::set_up_rules writes 2 down and 1 relegation play-off place (0x79275e, 0x792758). The
+     * row of 2007 (the real 2008) says 1 down: read as 0 down and the play-off, the Tippeligaen sent nobody down
+     * and, in pairs, the First Division nobody up. */
+    int cross = cross_playoff(season_change_file(obj));
+    if (want == now || (!cross && (want == now + (playoff ? 1 : 0) || want == now + playoff))) return 0;
+    int direct = cross ? want : want - (playoff ? 1 : 0);
     if (direct < 0) direct = 0;
     g_mem[obj + at] = (uint8_t)direct;
     if (logging())
         fprintf(stderr, "recomp: league sizes: %s (%.50s) %d: %s places %d, the class gave %d (+%d play-off)\n",
                 season_change_file(obj), record_name(obj), (int16_t)rd16(g_mem, obj + COMP_YEAR), what, direct, now,
-                playoff);
+                playoff);    return 1;
 }
 
 /* The object of the division above or below (league +0x1c, +0x20: the record ids, -1 for none, EngFirst::
@@ -955,6 +978,62 @@ static int open_neighbour(uint32_t obj, uint32_t at)
     if (!other) return 0;
     const char *f = season_change_file(other);
     return size_file(f) && exchange_floor(f) == 0;
+}
+
+/* The divisions whose relegation places towards a division outside the size table this slice changed (D23): their
+ * chain call to it moves in pairs (the wrap of 0x689c80), so that division keeps its count whatever its class. */
+#define OUTSIDE_MAX 32
+static uint32_t outside_set[OUTSIDE_MAX];
+
+static void note_outside(uint32_t obj, int on)
+{
+    int free_at = -1;
+    for (int i = 0; i < OUTSIDE_MAX; i++) {
+        if (outside_set[i] == obj) {
+            if (!on) outside_set[i] = 0;
+            return;
+        }
+        if (!outside_set[i] && free_at < 0) free_at = i;
+    }
+    if (on && free_at >= 0) outside_set[free_at] = obj;
+}
+
+/* A new game and a load start with an empty set, so a game in a new process and a game made or loaded in the same
+ * process move the same clubs (review of item 259, finding 1). */
+static void clear_outside(void)
+{
+    for (int i = 0; i < OUTSIDE_MAX; i++) outside_set[i] = 0;
+}
+
+static int is_outside(uint32_t obj)
+{
+    for (int i = 0; obj && i < OUTSIDE_MAX; i++)
+        if (outside_set[i] == obj) return 1;
+    return 0;
+}
+
+/* 1 when the division below is a league outside the size table and the row's count changes after this edition. */
+static int outside_change(uint32_t obj, const char *file, const SeasonRule *r)
+{
+    /* With changing rules off the start season's places stay (Q232; review 1 of the D23 fix). */
+    if (!season_changing_rules() || season_change_is_creating()) return 0;
+    uint32_t below = neighbour(obj, BELOW);
+    if (!below || size_file(season_change_file(below))) return 0;
+    /* Slice 10: a division whose division below plays as now (the Ykkonen) takes part in the step alone. */
+    if (step_alone(obj, below)) return 0;
+    /* The row of the next edition (season_league_edition_row: the same rule for a calendar-year league, whose
+     * edition Y plays row Y - 1). */
+    const SeasonRule *next = row_of_edition(file, (int16_t)rd16(g_mem, obj + COMP_YEAR) + 1);
+    return next && next->clubs >= MIN_CLUBS && next->clubs <= MAX_CLUBS && r->clubs >= MIN_CLUBS &&
+           next->clubs != r->clubs;
+}
+
+static int outside_now(uint32_t obj)
+{
+    if (is_outside(obj)) return 1;
+    const char *file = season_change_file(obj);
+    const SeasonRule *r = size_file(file) && exchange_floor(file) == 0 ? row_now(obj, file) : NULL;
+    return r && outside_change(obj, file, r);
 }
 
 /* Gap row 29: Ligue 2's 16th meets the winner of the Ligue 3 play-off of the 3rd to 6th (rows 2026/27 on, its po_down
@@ -983,14 +1062,20 @@ static void sizes_rules(uint32_t obj)
      * the Reducido and the promotion ties of its stages; slice 16). */
     if (!strcmp(file, "arg_second") && !season_arg_second_one_table(obj)) return;
     const SeasonRule *r = row_now(obj, file);
-    if (!r) return;
+    if (!r) {
+        note_outside(obj, 0);
+        return;
+    }
     /* An Irish edition that plays a row of another real season keeps the class's places: editions 2003 and 2004 both
      * play row 2003 (the real 2004, 3 up and no play-off), and the real 2003 (row 2002) had 1 up and the play-off.
      * The row's places belong to edition 2004 (item 251b review; season_sizes_irl.c does the same for the play-off
      * and the direct places up). */
     int year = !season_changing_rules() || season_change_is_creating() ? season_start_year()
                                                                      : (int16_t)rd16(g_mem, obj + COMP_YEAR);
-    if (!strncmp(file, "ire_", 4) && !real_starts(r, year)) return;
+    if (!strncmp(file, "ire_", 4) && !real_starts(r, year)) {
+        note_outside(obj, 0);
+        return;
+    }
     /* Only towards a division of the size table with no floor: elsewhere the exchange is the class's own code
      * with fixed counts (the German Regionalliga split needs exactly 36 clubs, cmp bl, 0x24 at 0x5dbc3b, box
      * ger_first.cpp 1049 at 0x5dbcd9: the 2. Bundesliga with 2 relegation places against the Regionalliga's 4
@@ -998,9 +1083,19 @@ static void sizes_rules(uint32_t obj)
     if (open_neighbour(obj, ABOVE))
         set_places(obj, UP, UP_PLAYOFF, r->up + season_playoffs_winners_up(file, r->season), "promotion");
     /* League Two: towards the Conference, played or not (season_sizes_eng.c, slice 8, D15). The Conference:
-     * towards the leagues below it, whose exchange takes as many clubs (gap row 25). */
-    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file))
-        set_places(obj, DOWN, DOWN_PLAYOFF, r->down + below_playoff_place(file, r->season, r->down), "relegation");
+     * towards the leagues below it, whose exchange takes as many clubs (gap row 25). D23 (slice 3, open items 248 and
+     * 249): towards a division outside the size table only in the season before the row's count changes. The
+     * Segunda Liga and the Serie B relegate 3 and 4 by their class, their rows 0 to 6. The chain to such a division
+     * moves in pairs (PorPrm's chain 0x7cfcbf..0x7cfd1a and BraNatFirst's 0x42afe3..0x42b124 push pairwise 1; the
+     * wrap of 0x689c80 below keeps the original's call for a pair with a class outside the table), so the division
+     * below keeps its count, and the size step (D13) moves the clubs of the relegation places that did not move. */
+    int outside = !open_neighbour(obj, BELOW) && !season_sizes_eng_below(file) && outside_change(obj, file, r);
+    int changed = 0;
+    if (open_neighbour(obj, BELOW) || season_sizes_eng_below(file) || outside)
+        changed = set_places(obj, DOWN, DOWN_PLAYOFF, r->down + below_playoff_place(file, r->season, r->down),
+                             "relegation");
+    /* Each edition: the set holds a division only in the edition whose places this slice set (review 1). */
+    note_outside(obj, outside && changed);
     /* A division with no chain (open item 250, below): the row's places go to no division at the season change. The
      * class writes none (WelFirst::set_up_rules 0x925c50), so set_places would keep its 0. */
     /* Only with changing rules on: only then do the clubs go down (lone_exchange; review of 15 November). */
@@ -1016,6 +1111,75 @@ static void sizes_rules(uint32_t obj)
     }
 }
 
+/* Gap row 9 (lead-notes/sizes-gaps.md): a row whose play-off cell says "none" plays no play-off. Here the pairs whose
+ * lower class owns a promotion play-off against the upper division's row of status 2 (research in run-logs/0.7.2-
+ * sz03/row9-research.md):
+ *   IreFirst 0x635aa0 / IrePrm 0x63a900 (+0xc0 = 1 at 0x63a957), NirFirst 0x78bd70 / NirPrm 0x78ed80 (0x78edda),
+ *   NorFirst 0x790b00 / NorPrm 0x792700 (0x792758), SweFirst 0x88f090 / SwePrm 0x890550 (0x8905a8).
+ * The play-off plays only because of the stage count +0x2c = 1 that the lower constructor sets (IreFirst 0x634cad,
+ * NirFirst 0x78b07d, NorFirst 0x78fdad, SweFirst 0x88e64d); there is no year test. With +0x2c 0 advance_stage is
+ * never called (League::update_for_date 0x6849d1..0x6849e3) and check_complete is true with no stage
+ * (0x689bdf..0x689be8). The builder needs both rows (no status 1 row: IreFirst asserts at 0x635e52..0x635e7d; no
+ * status 2 row: a stale slot 0 at 0x635f00..0x635f08), so both divisions take one decision: the upper division's row
+ * of the edition. In that edition the lower class gets +0x2c 0 and its direct up places, the upper one no relegation
+ * play-off place and its direct down places. The Irish and Northern Irish pairs are not here: season_sizes_irl.c
+ * (item 251) and season_sizes_nir.c (slice 13) write their places and stage count from the rows. start_new_season keeps +0x2c, so the next edition
+ * writes 1 back. A game saved with +0x2c 0 loads with no stage array (League load 0x688e3a..0x688e5b allocates
+ * +0x2c * 4 bytes), so the array gets one slot then. Only while no stage was made (+0x30 -1). */
+static const char *const PLAYOFF_PAIRS[][2] = {
+    {"nor_first", "nor_prm"}, {"swe_first", "swe_prm"},
+};
+
+static int pair_playoff_off(const char *upper_file, int year)
+{
+    /* As row_now: the start season's row with changing rules off and while the game is made (Q232). */
+    if (!season_changing_rules() || season_change_is_creating()) year = season_start_year();
+    const SeasonRule *r = row_of_edition(upper_file, year);
+    return r && r->playoffs && !strcmp(r->playoffs, "none");
+}
+
+static void class_playoff_rules(uint32_t obj, const char *file)
+{
+    if (!sizes_on() || !readable(obj) || (int32_t)rd32(g_mem, obj + COMP_STAGE_NOW) != -1) return;
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
+    for (unsigned i = 0; i < sizeof PLAYOFF_PAIRS / sizeof PLAYOFF_PAIRS[0]; i++) {
+        const char *lower = PLAYOFF_PAIRS[i][0], *upper = PLAYOFF_PAIRS[i][1];
+        int is_lower = !strcmp(file, lower);
+        if (!is_lower && strcmp(file, upper)) continue;
+        int off = pair_playoff_off(upper, year), fixed = exchange_floor(file) > 0;
+        const SeasonRule *r = row_now(obj, file);
+        if (is_lower) {
+            int count = (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT);
+            /* Every edition with no play-off: set_up_rules writes the class's places again each edition (SweFirst
+             * 0x88f0dc..0x88f0ee), also when the stage count is 0 already (review 1). */
+            if (off && (count == 1 || count == 0)) {
+                wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+                g_mem[obj + UP_PLAYOFF] = 0;
+                if (!fixed && r && r->up >= 0 && r->up <= 30) g_mem[obj + UP] = (uint8_t)r->up;
+            } else if (!off && count == 0) {
+                uint32_t arr = rd32(g_mem, obj + COMP_STAGES);
+                if (!readable(arr)) {
+                    arr = game_malloc(4);
+                    if (!arr) return;
+                    wr32(g_mem, obj + COMP_STAGES, arr);
+                }
+                wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
+            } else {
+                return;
+            }
+        } else {
+            if (!off || (int8_t)g_mem[obj + DOWN_PLAYOFF] <= 0) return;
+            g_mem[obj + DOWN_PLAYOFF] = 0;
+            if (!fixed && r && r->down >= 0 && r->down <= 30) g_mem[obj + DOWN] = (uint8_t)r->down;
+        }
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s %d: %s (the row of %s says none): stages %d, places %d up "
+                            "%d down\n", file, year, off ? "no class play-off" : "the class play-off again", upper,
+                    (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT), (int8_t)g_mem[obj + UP], (int8_t)g_mem[obj + DOWN]);
+        return;
+    }
+}
+
 void season_sizes_rules(uint32_t obj)
 {
     if (readable(obj)) size_step_run(obj);
@@ -1025,6 +1189,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding && readable(obj)) season_sizes_nir_rules(obj, season_change_file(obj));
     sizes_rules(obj);
     if (!rt_unwinding) season_ned_playoff_rules(obj);  /* issue 150: the Eredivisie's places from 2020/21 */
+    if (!rt_unwinding && readable(obj)) class_playoff_rules(obj, season_change_file(obj));
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
@@ -1097,6 +1262,22 @@ RT_WRAP(00689c80, promote_relegate)
                !season_pol_first_moves_alone(upper);     /* issue 92: the Ekstraklasa's exchange of the season */
     /* Slice 3 (D13): with changing rules on, each pair of the chain is noted for the size step. */
     if (ours && season_changing_rules() && !season_change_is_creating()) step_note_pair(upper, lower);
+    else if (season_changing_rules() && !season_change_is_creating() && size_file(season_change_file(upper)) &&
+             !size_file(season_change_file(lower)) && readable(rd32(g_mem, lower + COMP_RECORD)) &&
+             !step_alone(upper, lower))
+        step_note_outside(upper, lower);
+    /* D23 (slice 3): a division whose relegation places towards a division outside the size table this slice set
+     * sends its clubs in pairs, so the division below keeps its count. Most classes pass pairs already (0x7cfcbf,
+     * 0x42afe3); the Turkish chain 0x8fe2d4..0x8fe38b pushes 0 and the base chain 0x689c60 passes the class's flag.
+     * After a load the set is empty, so the row is read again. */
+    if (!ours && !pairwise && season_changing_rules() && !season_change_is_creating() &&
+        size_file(season_change_file(upper)) && !size_file(season_change_file(lower)) && outside_now(upper)) {
+        wr32(g_mem, cpu.esp + 4 + 12, 1);
+        pairwise = 1;
+        if (logging())
+            fprintf(stderr, "recomp: league sizes: %s to %s moves in pairs (D23 places towards a division outside the "
+                            "size table)\n", season_change_file(upper), season_change_file(lower));
+    }
     /* Slice 10: a size division whose division below plays as now (D16: the Ykkonen, fin_first) takes part in the
      * step alone, as a lowest division. Its count changes (the Veikkausliiga 14 to 13 for 2006, 14 to 12 for 2011)
      * by the clubs that leave it for no division (2006: AC Allianssi) or join it from none. */
@@ -1184,6 +1365,7 @@ RT_WRAP(00689c80, promote_relegate)
 static struct {
     uint32_t obj, rec;
     int year, nlower, nrows;
+    int keep;               /* gap row 8: a division outside the size table below a lowest one; it keeps its count */
     int lower[STEP_MAX_LOWER];
     int nfeed, feed[STEP_MAX_LOWER];        /* gap 37: the divisions below that play as now */
     uint32_t club[STEP_MAX_ROWS];
@@ -1270,6 +1452,28 @@ static int lost_licence(const char *file, int edition, uint32_t club)
 }
 void season_sizes_step_note(uint32_t upper, uint32_t lower) { step_note_pair(upper, lower); }
 
+/* Gap row 8 (lead-notes/sizes-gaps.md): a lowest division of the size table trades its surplus and its lack with the
+ * real tier below it, a division outside the table, as the chain does. That division keeps its count: the plan sends
+ * its worst clubs that stayed to no division for each club that comes down, and fills it from its nation's clubs with
+ * no division for each club that goes up, so a class of groups with fixed arrays (PorSecondB 0x7d2870, the
+ * Regionalliga of exactly 36, cmp 0x24 at 0x5dbc3b) holds the clubs that it held after the chain.
+ * Item 287: one record, one kept division. The 2002 chain calls 0x689c80 for the Segunda Liga with por_second_b and
+ * again with each of its zone stages (league_stage objects of the same record), and Spain's with its four groups. Each
+ * extra entry wanted the clubs of the whole record and held none (club[k].div takes one index), so the plan filled it
+ * from the spare divisions: 120 Portuguese clubs got the Segunda B record, and the 2003 start stopped at
+ * por_second_b.cpp 419 (PorSecondB 0x7d252f..0x7d258b counts the clubs of [0x9cf7c0] against the stage's +0x3e,
+ * box at 0x7d25e4). The first object noted for the record stays. */
+static void step_note_outside(uint32_t upper, uint32_t lower)
+{
+    if (step_running) return;
+    uint32_t rec = readable(lower) ? rd32(g_mem, lower + COMP_RECORD) : 0;
+    for (int k = 0; k < nstep_seen; k++)
+        if (step_seen[k].obj != lower && step_seen[k].rec == rec) return;
+    step_note_pair(upper, lower);
+    for (int i = 0; i < nstep_seen; i++)
+        if (step_seen[i].obj == lower) step_seen[i].keep = 1;
+}
+
 static void step_note_pair(uint32_t upper, uint32_t lower)
 {
     if (step_running) return;
@@ -1328,6 +1532,20 @@ int season_sizes_plays_short(const char *file)
 }
 
 static uint32_t current_division(uint32_t club) { return rd32(g_mem, club + CLUB_DIVISION); }
+
+/* 1 for the record of a class that groups its clubs by their zone (+0x60): the Segunda Divisao B ([0x9cf7c0],
+ * PorSecond::set_up_rules 0x7d1714) and the Second League Category B ([0x9cf8e0], TurSecond::set_up_rules 0x8ff2f1).
+ * The division and its stages carry the record (its id at +0, as PorSecondB::create_zone_stage compares at
+ * 0x7d2959..0x7d2961). Elsewhere +0x60 is no zone of the division: a Brazilian club holds its state championship there
+ * (a copy in Serie C gave too few clubs of MT for the Campeonato Mato-Grossense, bra_reg_central.cpp 466). */
+static int zone_class_record(uint32_t rec)
+{
+    if (!readable(rec)) return 0;
+    uint32_t id = rd32(g_mem, rec);
+    /* Item 279: the Belgian third division too ([0x9cf7c4]). Its split 0x41ef70 writes +0x60 (0x41f011, 0x41f016) before
+     * the step runs, and its group stage reads +0x60 against [0x9cf5a8] (0x422a25..0x422a32). */
+    return id == rd32(g_mem, 0x9cf7c0u) || id == rd32(g_mem, 0x9cf8e0u) || id == rd32(g_mem, 0x9cf7c4u);
+}
 
 static int is_human(uint32_t club)
 {
@@ -1530,6 +1748,53 @@ int season_sizes_lower_shown(uint32_t obj, const char *file)
     return r && r->down >= 0 && r->down <= 30 ? lone_shown(obj, file, r) : -1;
 }
 
+/* up_ok depends on the division that the club would join: the plan takes a club only into a division of its own
+ * chain, the one above its own or, for a club with no division, the lowest of its nation that takes part. 0 when the
+ * game unwinds. */
+static int step_up_ok(const StepDivision *div, int ndiv, StepClub *club, int nclub, const uint32_t *at)
+{
+    /* Issue 154: a Segunda Liga club that lost the tie with the Primeira Liga takes no extra place of a size change. */
+    uint32_t tie_loser = 0;
+    int tie_div = -1;
+    for (int d = 0; d < ndiv && !tie_loser; d++) {
+        tie_loser = season_playoffs_tie_club(step_seen[d].obj, step_seen[d].year, step_seen[d].club, step_seen[d].nrows);
+        if (rt_unwinding) return 0;
+        if (tie_loser) tie_div = d;
+    }
+    for (int k = 0; k < nclub; k++) {
+        int d = club[k].div, to = -1;
+        if (d == STEP_NONE) {
+            for (int e = 0; e < ndiv && to < 0; e++)
+                if (!div[e].nlower && div[e].want >= 0 && div[e].nation == club[k].nation) to = e;
+            /* Gap 37: with a feeder, a club with no division joins the feeder (in a promoted club's place). */
+            for (int e = 0; to >= 0 && e < div[to].nfeed; e++)
+                if (div[to].feed[e] >= 0 && div[to].feed[e] < ndiv) {
+                    to = div[to].feed[e];
+                    break;
+                }
+        } else if (d >= 0) {
+            for (int e = 0; e < ndiv && to < 0; e++) {
+                for (int j = 0; j < div[e].nlower; j++)
+                    if (div[e].lower[j] == d) to = e;
+                /* Gap 37: a feeder's club goes up to the division that it feeds. */
+                for (int j = 0; to < 0 && j < div[e].nfeed; j++)
+                    if (div[e].feed[j] == d) to = e;
+            }
+        }
+        club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
+        for (int j = 0; j < nlone_down; j++)
+            if (at[k] == lone_down[j]) club[k].up_ok = 0;     /* open item 250: it went down this season change */
+        if (at[k] == tie_loser && club[k].div == tie_div) {
+            club[k].up_ok = 0;
+            if (logging())
+                fprintf(stderr, "recomp: league sizes: %.50s lost the tie and stays in %s\n", win_str(at[k] + CLUB_NAME),
+                        season_change_file(step_seen[tie_div].obj));
+        }
+        if (rt_unwinding) return 0;
+    }
+    return 1;
+}
+
 static void size_step_run(uint32_t trigger)
 {
     if (!nstep_seen || step_running || rt_unwinding) return;
@@ -1554,7 +1819,7 @@ static void size_step_run(uint32_t trigger)
         uint32_t obj = step_seen[d].obj;
         const char *file = season_change_file(obj);
         int year = (int16_t)rd16(g_mem, obj + COMP_YEAR);
-        div[d].want = step_want(obj, file, step_seen[d].year + 1);
+        div[d].want = step_seen[d].keep ? clubs_in_division(obj) : step_want(obj, file, step_seen[d].year + 1);
         div[d].started = obj != trigger && year != step_seen[d].year;
         div[d].nation = (int)(rd32(g_mem, step_seen[d].rec + REC_NATION) & 0x7fffffff);
         div[d].nlower = step_seen[d].nlower;
@@ -1626,40 +1891,77 @@ static void size_step_run(uint32_t trigger)
             if (club[k].div == d && step_seen[d].nfeed)
                 club[k].leave = lost_licence(season_change_file(step_seen[d].obj), step_seen[d].year, at[k]);
     }
-    /* up_ok depends on the division that the club would join: the plan takes a club only into a division of its own
-     * chain, the one above its own or, for a club with no division, the lowest of its nation. */
-    for (int k = 0; k < nclub; k++) {
-        int d = club[k].div, to = -1;
-        if (d == STEP_NONE) {
-            for (int e = 0; e < ndiv && to < 0; e++)
-                if (!div[e].nlower && div[e].nation == club[k].nation) to = e;
-            /* Gap 37: with a feeder, a club with no division joins the feeder (in a promoted club's place). */
-            for (int e = 0; to >= 0 && e < div[to].nfeed; e++)
-                if (div[to].feed[e] >= 0 && div[to].feed[e] < ndiv) {
-                    to = div[to].feed[e];
-                    break;
-                }
-        } else if (d >= 0) {
-            for (int e = 0; e < ndiv && to < 0; e++) {
-                for (int j = 0; j < div[e].nlower; j++)
-                    if (div[e].lower[j] == d) to = e;
-                /* Gap 37: a feeder's club goes up to the division that it feeds. */
-                for (int j = 0; to < 0 && j < div[e].nfeed; j++)
-                    if (div[e].feed[j] == d) to = e;
-            }
-        }
-        club[k].up_ok = to >= 0 && up_ok(at[k], step_seen[to].rec);
-        for (int j = 0; j < nlone_down; j++)
-            if (at[k] == lone_down[j]) club[k].up_ok = 0;     /* open item 250: it went down this season change */
-        if (rt_unwinding) goto done;
-    }
+    if (!step_up_ok(div, ndiv, club, nclub, at)) goto done;
     /* The step never sends down a club with a human manager (review 2: a club that finished safe). */
     for (int d = 0; d < ndiv; d++)
         for (int r = 0; r < div[d].nrows; r++) {
             club[div[d].rows[r]].down_ok = !is_human(at[div[d].rows[r]]);
             if (rt_unwinding) goto done;
         }
-    int n = season_size_step_plan(div, ndiv, club, nclub, moves, nmax);
+    /* A division outside the table that cannot keep its count (no row of its last table to send out, no club of its
+     * nation to take in) takes no part, and the plan runs again: the lowest division of the table then trades with
+     * no division as before. */
+    /* An outside division that made its new table already gives and takes nothing (review 1): it leaves the lists of
+     * the divisions above, which then trade with no division as before. */
+    for (int d = 0; d < ndiv; d++)
+        if (step_seen[d].keep && div[d].started) {
+            div[d].want = -1;
+            for (int e = 0; e < ndiv; e++) {
+                int k = 0;
+                for (int j = 0; j < div[e].nlower; j++)
+                    if (div[e].lower[j] != d) div[e].lower[k++] = div[e].lower[j];
+                div[e].nlower = k;
+            }
+        }
+    if (!step_up_ok(div, ndiv, club, nclub, at)) goto done;
+    StepClub *start = malloc((size_t)nclub * sizeof *start + 1);
+    if (!start) goto done;
+    memcpy(start, club, (size_t)nclub * sizeof *club);
+    int n = 0;
+    for (int pass = 0; pass <= ndiv; pass++) {
+        n = season_size_step_plan(div, ndiv, club, nclub, moves, nmax);
+        int again = 0;
+        for (int d = 0; d < ndiv; d++)
+            if (step_seen[d].keep && div[d].want >= 0 && div[d].short_by != 0) {
+                if (logging())
+                    fprintf(stderr, "recomp: league sizes: step: %.50s (outside the size table) cannot keep its %d "
+                                    "clubs: it takes no part\n", record_name(step_seen[d].obj), div[d].want);
+                div[d].want = -1;
+                for (int e = 0; e < ndiv; e++) {
+                    int k = 0;
+                    for (int j = 0; j < div[e].nlower; j++)
+                        if (div[e].lower[j] != d) div[e].lower[k++] = div[e].lower[j];
+                    div[e].nlower = k;
+                }
+                again = 1;
+            }
+        if (!again) break;
+        memcpy(club, start, (size_t)nclub * sizeof *club);
+        if (!step_up_ok(div, ndiv, club, nclub, at)) {
+            free(start);
+            goto done;
+        }
+    }
+    free(start);
+    /* A division outside the table keeps the count of each zone. PorSecondB::create_zone_stage takes the clubs of
+     * its division whose zone (+0x60) is the zone's record (0x7d293b..0x7d2969) and stops at por_second_b.cpp 612
+     * (0x7d2a2c) with fewer than 20. TurSecondB::create_group_stage does the same for 10 clubs (0x900876..0x900892)
+     * and stops at tur_second_b.cpp 695 (0x900961). A club that the step moves in keeps the zone of its data, so a
+     * 2015 game with Portugal's extra divisions stopped at the 2016 start, and a 2001 game at the Turkish 2002
+     * start. Each club that the step moves into such a division takes the zone of a club that the step moves out of
+     * it. Only these two classes (zone_class_record). */
+    for (int d = 0; d < ndiv; d++) {
+        if (!step_seen[d].keep || !zone_class_record(step_seen[d].rec)) continue;
+        int out = 0;
+        for (int i = 0; i < n; i++) {
+            if (moves[i].to != d) continue;
+            while (out < n && moves[out].from != d) out++;
+            if (out == n) break;
+            uint32_t zone = rd32(g_mem, at[moves[out].club] + CLUB_ZONE);
+            if (readable(zone)) wr32(g_mem, at[moves[i].club] + CLUB_ZONE, zone);
+            out++;
+        }
+    }
     for (int i = 0; i < n && !rt_unwinding; i++) {
         uint32_t c = at[moves[i].club], old = current_division(c);
         uint32_t to = moves[i].to >= 0 ? step_seen[moves[i].to].rec : 0;
@@ -1775,6 +2077,7 @@ static void sizes_new_game(int start_year)
 {
     (void)start_year;
     nstep_seen = 0;
+    clear_outside();
     nlone_down = 0;
     nstays = 0;
     if (!sizes_on()) return;
@@ -1800,6 +2103,7 @@ static void sizes_loaded(int start_year)
     (void)start_year;
     nseen = 0;
     nstep_seen = 0;
+    clear_outside();
     nlone_down = 0;
     nstays = 0;
     if (!sizes_on()) return;

@@ -956,14 +956,83 @@ static int cross_shape(uint32_t lower, int season, uint32_t *upper, int *ladder)
     return 1;
 }
 
+/* ---- Portugal: one tie between the Primeira Liga and the Segunda Liga (issue 154, open item 248) ----
+ *
+ * Real life (rows por-109 and por-110): in 2013/14 the Primeira Liga's 15th played the Segunda Liga's 3rd club that is
+ * not a reserve side, over two legs, for a place in the Primeira Liga. The rows from 2020/21 hold the same tie with the
+ * 16th. The encoded rows give the lower division 1 promotion play-off place (po_up 1) and the upper division 1
+ * relegation play-off place (po_down 1).
+ *
+ * PorPrm (vtable 0x96e6f0) and PorSecond (vtable 0x96e7a4) are plain leagues: advance_stage 0x5a8f60, result 0x686940.
+ * So the tie uses the marks, the wait for the upper division, the result and the chain of the Scottish play-off above,
+ * with one round of two clubs. */
+#define TIE_CLUBS 2
+#define TIE_SPAN 10                     /* days from the table to the second leg */
+
+static int tie_lower(const char *f) { return f && !strcmp(f, "por_second"); }
+
+/* 1 when the rows of season give lower (the Segunda Liga) and the division above it the tie. Only with changing rules
+ * on: with them off the chain moves pairs (season_sizes.c) and the game keeps the class's places (decision L2). */
+static int tie_shape(uint32_t lower, int season, uint32_t *upper)
+{
+    if (!season_changing_rules()) return 0;
+    const char *lf = readable(lower) ? season_change_file(lower) : NULL;
+    uint32_t up = tie_lower(lf) ? league_above(lower) : 0;
+    const char *uf = up ? season_change_file(up) : NULL;
+    if (!uf || strcmp(uf, "por_prm")) return 0;
+    const SeasonRule *lr = row_of_season(lf, season), *ur = row_of_season(uf, season);
+    const SeasonLeagueRule *le = lr ? league_rule(lf, lr->season) : NULL, *ue = ur ? league_rule(uf, ur->season) : NULL;
+    if (!le || !ue || le->po_up != 1 || ue->po_down != 1) return 0;
+    if (upper) *upper = up;
+    return 1;
+}
+
 /* The lower division of a play-off between two divisions this season: a Scottish division below the top with one
- * stage and 3 play-off places (cross_rules). */
+ * stage and 3 play-off places (cross_rules), or the Segunda Liga with one stage and 1 play-off place (tie_rules). */
 static int cross_marked(uint32_t obj)
 {
     if (!readable(obj) || !playoffs_on()) return 0;
     const char *f = season_change_file(obj);
+    if (tie_lower(f))
+        return (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1 && (int8_t)g_mem[obj + UP_PLAYOFF] == 1;
     return sco_division(f) && strcmp(f, "sco_prm") && (int32_t)rd32(g_mem, obj + COMP_STAGE_COUNT) == 1 &&
            (int8_t)g_mem[obj + UP_PLAYOFF] == CROSS_LOWER;
+}
+
+/* The places of the Primeira Liga and the Segunda Liga for the tie (after their set_up_rules). 1 when this season has
+ * the tie or a mark of a season before was cleared: the plain play-off of this kind is not theirs then. */
+static int tie_rules(uint32_t obj, const char *file)
+{
+    int season = season_now(obj, file);
+    uint32_t upper = 0, below = league_below(obj);
+    if (!strcmp(file, "por_prm")) {
+        int want = below && tie_shape(below, season, &upper) && upper == obj;
+        if (want && (int8_t)g_mem[obj + DOWN_PLAYOFF] != 1) {
+            g_mem[obj + DOWN_PLAYOFF] = 1;
+            fprintf(stderr, "recomp: playoffs: %s %d: place %d plays off with %s\n", file, season,
+                    (int16_t)rd16(g_mem, obj + COMP_CLUBS) - (int8_t)g_mem[obj + DOWN], season_change_file(below));
+        } else if (!want && (int8_t)g_mem[obj + DOWN_PLAYOFF] == 1) {
+            g_mem[obj + DOWN_PLAYOFF] = 0;
+        }
+        return want;
+    }
+    if (!tie_shape(obj, season, &upper)) {
+        if (!cross_marked(obj)) return 0;
+        drop_stage(obj);
+        wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+        g_mem[obj + UP_PLAYOFF] = 0;
+        return 1;
+    }
+    if (!readable(rd32(g_mem, obj + COMP_STAGES))) {
+        uint32_t arr = game_malloc(4);
+        if (!arr) return 1;
+        wr32(g_mem, obj + COMP_STAGES, arr);
+    }
+    drop_stage(obj);
+    wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
+    g_mem[obj + UP_PLAYOFF] = 1;
+    fprintf(stderr, "recomp: playoffs: %s %d: one place plays off with %s\n", file, season, season_change_file(upper));
+    return 1;
 }
 
 /* The places of a Scottish division (after its set_up_rules, as season_playoffs_rules). 1 for a Scottish division:
@@ -971,6 +1040,7 @@ static int cross_marked(uint32_t obj)
 static int cross_rules(uint32_t obj)
 {
     const char *file = readable(obj) ? season_change_file(obj) : NULL;
+    if (file && (tie_lower(file) || !strcmp(file, "por_prm"))) return tie_rules(obj, file);
     if (!sco_division(file)) return 0;
     int season = season_now(obj, file), ladder = 0;
     uint32_t upper = 0, below = league_below(obj);
@@ -1057,9 +1127,107 @@ static int in_table(uint32_t obj, uint32_t club)
     return 0;
 }
 
+/* The lower club of the tie: the first club after the direct places that is not a reserve side barred from the upper
+ * division (row por-110: "the 3rd club that is not a reserve team"). 0 for none. */
+static uint32_t tie_club(uint32_t obj)
+{
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS), skip = (int8_t)g_mem[obj + UP];
+    for (int i = 0; i < n && i < 64 && !rt_unwinding; i++) {
+        uint32_t c = row_club(obj, i);
+        if (!readable(c) || barred(obj, c)) continue;
+        if (skip-- <= 0) return c;
+    }
+    return 0;
+}
+
+uint32_t season_playoffs_tie_club(uint32_t lower, int edition, const uint32_t *club, int n)
+{
+    const char *file = readable(lower) ? season_change_file(lower) : NULL;
+    if (!playoffs_on() || !tie_shape(lower, edition, NULL)) return 0;
+    const SeasonRule *r = row_of_season(file, edition);
+    int skip = r && r->up > 0 ? r->up : 0;
+    for (int i = 0; i < n && !rt_unwinding; i++) {
+        if (!readable(club[i]) || barred(lower, club[i])) continue;
+        if (skip-- <= 0) return club[i];
+    }
+    return 0;
+}
+
+/* One round of two clubs over two legs: EngFirst's semi-final round (two legs, extra time and penalties in the second
+ * leg, 0x572af3..0x572b20) with the final's id 150 (+0x07, 0x572b6e), so that the winner gets result code 1. */
+static void build_tie(uint32_t obj)
+{
+    const char *file = season_change_file(obj);
+    int year = (int16_t)rd16(g_mem, obj + COMP_YEAR), left = days_to_change(obj);
+    uint32_t up = 0;
+    int shape = tie_shape(obj, season_now(obj, file), &up), time = left >= 0 && TIE_SPAN <= left + WAIT_DAYS;
+    if (shape && time && !upper_done(up)) return;   /* the next day again, as build_cross */
+    int urow = shape ? upper_row(up) : -1;
+    uint32_t u = urow >= 0 ? row_club(up, urow) : 0, l = shape ? tie_club(obj) : 0;
+    if (rt_unwinding) return;
+    if (!shape || !time || !readable(u) || !readable(l)) {
+        fprintf(stderr, "recomp: playoffs: %s %d: no cross play-off (%d days to the season change)\n", file, year, left);
+        wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+        return;
+    }
+    uint32_t outs = game_malloc(8);
+    if (!outs) return;
+    uint32_t ra[4] = {0, outs, outs + 4, 0};
+    uint32_t eng = call_this(F_ENG_ROUNDS, obj, 4, ra);
+    int eng_rounds = (int16_t)rd16(g_mem, outs);
+    game_free(outs);
+    if (rt_unwinding) return;
+    uint32_t table = readable(eng) && eng_rounds == 2 ? game_malloc(ROUND_SIZE) : 0;
+    if (!table) {
+        game_free(eng);
+        wr32(g_mem, obj + COMP_STAGE_COUNT, 0);
+        return;
+    }
+    memcpy(g_mem + table, g_mem + eng, ROUND_SIZE);
+    wr16(g_mem, table + 0x07, rd16(g_mem, eng + ROUND_SIZE + 0x07));
+    wr16(g_mem, table + 0x09, 0);
+    wr16(g_mem, table + 0x18, TIE_CLUBS);
+    wr16(g_mem, table + 0x1a, 1);
+    wr16(g_mem, table + 0x1c, TIE_CLUBS);
+    wr16(g_mem, table + 0x1e, 0);
+    game_free(eng);
+    set_dates(table, 0, 1, 3, 2, 0, (uint32_t)year);
+    uint32_t list = rt_unwinding ? 0 : game_malloc(4 * TIE_CLUBS);
+    if (!list) {
+        game_free(table);
+        return;
+    }
+    wr32(g_mem, list, l);
+    wr32(g_mem, list + 4, u);
+    uint32_t sz[1] = {0xb2};
+    uint32_t stage = call_cdecl(F_NEW, 1, sz);
+    if (rt_unwinding || !readable(stage)) {
+        game_free(list);
+        game_free(table);
+        return;
+    }
+    uint32_t args[15] = {obj, TIE_CLUBS, list, 1, rd32(g_mem, obj + COMP_RECORD), table,
+                         (uint32_t)year, 0, 1, 0xa0, 0x14, 0, 0, 0, 0};    /* as build_stage, 0x573180..0x573189 */
+    call_this(F_CUP_STAGE, stage, 15, args);
+    if (rt_unwinding) return;
+    wr32(g_mem, rd32(g_mem, obj + COMP_STAGES), stage);
+    game_free(list);
+    game_free(table);
+    uint32_t r0[1] = {0};
+    call_this(F_SET_UP_ROUND, stage, 1, r0);
+    if (rt_unwinding) return;
+    wr32(g_mem, obj + COMP_STAGE_NOW, 0);
+    fprintf(stderr, "recomp: playoffs: cross\t%s\t%d\tdrawn\t%.51s\t%.51s\ttie\tday %d\n", file, year, win_str(l + 4),
+            win_str(u + 4), (int16_t)rd16(g_mem, GAME_DATE));
+}
+
 static void build_cross(uint32_t obj)
 {
     const char *file = season_change_file(obj);
+    if (tie_lower(file)) {
+        build_tie(obj);
+        return;
+    }
     int year = (int16_t)rd16(g_mem, obj + COMP_YEAR), ladder = 0;
     uint32_t up = 0;
     int shape = cross_shape(obj, season_now(obj, file), &up, &ladder), left = days_to_change(obj);
