@@ -39,7 +39,9 @@ const list = async () => (await (await fetch(`${base}/api/library`)).json()).ent
 test('the fields of an entry: a folder name, a season of the game, a short note', () => {
   assert.deepEqual(entryFields({ name: ' 2011 update ', season: '2011', note: 'From the forum\u0007, by A.' }).fields, { name: '2011 update', season: 2011, note: 'From the forum, by A.' });
   assert.match(entryFields({ name: 'a/b', season: 2011 }).why, /a name of 1 to 60/);
-  assert.match(entryFields({ name: 'ok', season: 1999 }).why, /a season from 2001 to 2025/);
+  assert.match(entryFields({ name: 'ok', season: 1999 }).why, /a season from 2001 to 2026/);
+  assert.equal(entryFields({ name: 'ok', season: 2026 }).fields.season, 2026, '2026/27: a database after the game\'s last season');
+  assert.match(entryFields({ name: 'ok', season: 2027 }).why, /a season/);
   assert.match(entryFields({ name: 'ok', season: 2011.5 }).why, /a season/);
   assert.equal(entryFields({ name: 'ok', season: 2025, note: 'x'.repeat(900) }).fields.note.length, 500);
 });

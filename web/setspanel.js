@@ -192,7 +192,7 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
     zip ??= await read(await fetch(`/api/library/${e.id}`, { cache: 'no-store' }));
     const [set] = await dataSetsInZip(zip, e.name);
     const name = uniqueName(set.name === e.name ? set.name : e.name, listDataSets(FS, root).map((s) => s.name));
-    writeDataSet(FS, root, name, set.files, { season: e.season });
+    writeDataSet(FS, root, name, set.files, { season: Math.min(e.season, LAST_SEASON) });   // 2026/27: the game's last season
     markFromLibrary(FS, root, name, e.id);
     sync();
     changed();
@@ -208,7 +208,9 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
       const name = await getFromLibrary(e);
       using = name;                                    // Use opens, with its season chosen
       render();
-      say(`${name} is here, for ${seasonText(e.season)}. Use for my next new game below starts a new game with it.`);
+      say(e.season > LAST_SEASON
+        ? `${name} is here: a ${seasonText(e.season)} database. The game's latest season is ${seasonText(LAST_SEASON)}, so a new game with it starts there, its players keeping their ages. Use for my next new game below starts it.`
+        : `${name} is here, for ${seasonText(e.season)}. Use for my next new game below starts a new game with it.`);
     } catch (err) {
       say(`${e.name} did not come: ${err.message}`, true);
       drawLibrary();

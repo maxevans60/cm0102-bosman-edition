@@ -13,7 +13,10 @@ import { randomBytes } from 'node:crypto';
 import { inspectSetZip, validSetName } from './cloud.mjs';
 
 export const MAX_LIBRARY_ZIP = 128 << 20;            // a data set with its extra files, zipped (the 2001/02 data: some 20 MB)
-export const FIRST_SEASON = 2001, LAST_SEASON = 2025; // the seasons of the game (datasets.js, seasons_db.h)
+// The season a database is for: the game's seasons (datasets.js, seasons_db.h, 2001/02 to 2025/26), and one more for a
+// database of the season after the game's last (an update of October 2026 is 2026/27): Use starts that one in the game's
+// last season, its players keeping their ages (setspanel.js).
+export const FIRST_SEASON = 2001, LAST_SEASON = 2026;
 const INDEX = 'library/index.json';
 const zipKey = (id) => `library/${id}.zip`, incomingKey = (id) => `library/incoming/${id}.zip`;
 const validId = (id) => typeof id === 'string' && /^[0-9a-f]{16}$/.test(id);
