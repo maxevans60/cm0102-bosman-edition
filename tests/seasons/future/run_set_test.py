@@ -137,7 +137,7 @@ def main():
         bad.append("Tier B limits: the rate of the first seasons still counts after 30 seasons")
 
     # Open item 68: one group of the Greek Super League 2 plays from 2026/27, the other waits at 2998.
-    def gre(season, year1, year2, clubs=14):
+    def gre(season, year1, year2, clubs=run_set.GRE_CLUBS):
         return [{"season": season, "phase": "start", "file": "gre_second", "year": year1, "clubs": clubs,
                  "name": "Super League 2"},
                 {"season": season, "phase": "start", "file": "gre_second", "year": year2, "clubs": 10,
@@ -158,7 +158,7 @@ def main():
     # Open item 104: a leg that loads a save writes its first start lines under the game's start season
     # (season_report_turn), with the state at the load. jump2198 has one group, slot t144: leg 0 writes 2198 at the
     # start of 2198/99, legs 1 and 2 write 2199 and 2200 under 2198 again. Only the first line of a slot counts.
-    def slot(season, year, clubs=14, name="t144"):
+    def slot(season, year, clubs=run_set.GRE_CLUBS, name="t144"):
         return {"season": season, "phase": "start", "file": "gre_second", "year": year, "clubs": clubs,
                 "slot": name, "name": "Super League 2"}
     jump = [slot(2198, 2198), slot(2198, 2199), slot(2199, 2199), slot(2198, 2200), slot(2200, 2200)]

@@ -404,7 +404,8 @@ def tier_b_limits(legs, last_year=2300):
 # ---- The leagues ----
 
 GRE_ONE_GROUP = 2026                          # the first season of one Super League 2 group (open item 68)
-GRE_CLUBS = 14                                # the table's 16 clubs, at the GreSecond class's cap of 14 (item 68)
+GRE_CLUBS = 16                                # rows gre-pol-cro-80 and -81: 16 clubs; GreSecond holds up to 21
+                                              # since the 0.7.2 league sizes (tools/recomp/league_sizes.py GROWN)
 IDLE = 2998                                   # the year of a division that is not held (season_divisions.c)
 
 
