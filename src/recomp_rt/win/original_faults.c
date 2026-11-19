@@ -611,7 +611,8 @@ uint32_t rt_callup_mark_all(void)
  * builds the marks (0x54c770 with 2 at 0x76b126, 0x76b257..0x76b2bf; 0x76bab0 also runs for a new fixture from
  * 0x5aab15, with the marks of another day). A mark 3 that a later mark 1 or 2 of the day before or after overwrites
  * (0x777779) is not seen: that club's league match moves instead (0x7777e0).
- * Gives 0 when the fix acts and a player of the side's squad (+0xd7, 50 staff pointers, as the sort
+ * Gives 0 when the fix acts, the fixture's key is one that reaches the gate (see rt_squad_kept_at) and a player of
+ * the nation's squad (+0xd7 of its senior side, with flag 4 in staff +0x5e; 50 staff pointers, as the sort
  * 0x778ef0 reads them) is at a club (staff +0x39) with mark 3 in the list of mark_clubs_with_fixtures 0x7775c0 (nt
  * +0x24, a byte per club below the national sides) and has a contract whose playing-time mood (+0x3d) is over -10
  * (the gate's test, CONTRACT_MANAGER::get_contract 0x4cf5a0: staff row [0xae2d0c] + id x 79, +0 the contract index;
@@ -729,6 +730,8 @@ void rt_link_marks(uint32_t nt, uint32_t fixture, uint32_t on)
     }
     if (!on || !fixes_on_group(CLUB_REGULARS) || !pointer(nt) || !pointer(fixture)) return;
     if (!(rd16(g_mem, fixture + 0x4du) & 0x300u)) return;
+    uint32_t key = rd32(g_mem, fixture);                /* the linked copy itself (0x7e6773 copies the flags) */
+    if (key == rd32(g_mem, 0x9cf794u) || key == rd32(g_mem, 0x9cf798u)) return;
     int nations = (int)rd32(g_mem, NATION_COUNT), clubs = (int)rd32(g_mem, CLUB_COUNT) - 2 * nations;
     uint32_t home = rd32(g_mem, fixture + 0x1cu), marks = rd32(g_mem, nt + 0x24u);
     if (!pointer(home) || !pointer(marks) || clubs <= 0) return;
@@ -754,7 +757,17 @@ void rt_link_marks(uint32_t nt, uint32_t fixture, uint32_t on)
     cpu.ecx = nt;
     uint32_t a[1] = {date};
     rt_callback(MARK_CLUBS, 1, a);
+    if (rt_unwinding) {
+        link_count = 0;
+        return;
+    }
     cpu = saved;
+    /* 0x7775c0 writes the day's mark over the one there (0x77770f, 0x777734, 0x777779): a mark 3 of the senior days
+     * stays 3, and a club marked before keeps its mark, so the new day only adds marks. */
+    for (uint32_t i = 0; i < link_count; i++) {
+        uint8_t was = link_copy[i], now = g_mem[marks + i];
+        if (was == 3u || (was && now != 3u)) g_mem[marks + i] = was;
+    }
 }
 
 /* Issue 132: the known crash sites of the original. The fixes and guards are in
