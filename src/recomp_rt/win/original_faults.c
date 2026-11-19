@@ -4,6 +4,7 @@
  * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, squad_moves, squad_loans
  * and club_keys. */
 #include "win.h"
+#include "season.h"
 #include "season_intl.h"
 #include "../rt.h"
 
@@ -795,7 +796,15 @@ void rt_squad_move_test(void)
  * (0x53b3d0). Here every key id of the old row follows it. The rows go up in order and a new row is never above its
  * old row, so a key id that already moved never holds the old row of a later call. The chain of 0x60ba80 holds
  * 0x9d00a4..0x9d0524 without 0x9d0300 and 0x9d034c, and 0xb63c9c..0xb63d00. A saved game needs no fix: set_key_ids
- * runs again at its load (0x52d8fa). */
+ * runs again at its load (0x52d8fa). Only a season game takes the fix (decision L2): the base game, a 2001 start with
+ * changing rules off, keeps the original's key ids. The trim runs while the game is made, so the rules are those of the
+ * next new game. */
+static int club_keys_season_game(void)
+{
+    if (!season_code_on()) return 0;
+    return season_start_year() != SEASON_FIRST_YEAR || (season_game_on() ? season_changing_rules() : season_next_rules());
+}
+
 static void club_key_follow(uint32_t key, uint32_t old_row, uint32_t new_row)
 {
     if (rd32(g_mem, key) != old_row) return;
@@ -806,7 +815,7 @@ static void club_key_follow(uint32_t key, uint32_t old_row, uint32_t new_row)
 
 void rt_club_key_twins(uint32_t old_row, uint32_t new_row, uint32_t hit)
 {
-    if (!hit || old_row == new_row || !fixes_on_group(CLUB_KEYS)) return;
+    if (!hit || old_row == new_row || !club_keys_season_game() || !fixes_on_group(CLUB_KEYS)) return;
     for (uint32_t key = 0x9d00a4u; key <= 0x9d0524u; key += 4u)
         if (key != 0x9d0300u && key != 0x9d034cu) club_key_follow(key, old_row, new_row);
     for (uint32_t key = 0xb63c9cu; key <= 0xb63d00u; key += 4u) club_key_follow(key, old_row, new_row);

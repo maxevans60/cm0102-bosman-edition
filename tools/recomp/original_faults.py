@@ -242,7 +242,8 @@ A club in two key ids (open item 295, group club_keys). remap_club_key_id 0x60ba
 holds a row, so the second key id of C.D. Logrones, C.D. Logrones B, C.D. Badajoz and C.D. Badajoz B keeps its old row
 after database_trim_club_table 0x5267c0 (call 0x526d94). The stale key id then names another club, and
 club_get_linked_b_team 0x540a50 can give that club a B side past the end of the table. Here every key id of the row
-follows it (original_faults.c).
+follows it in a season game (original_faults.c). The base game, a 2001 start with changing rules off, keeps the
+original's key ids (decision L2).
 """
 
 # address: (the instruction in the original, C code)

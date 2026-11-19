@@ -4,14 +4,15 @@
 Usage:
     python3 tests/seasons/club_key_twins_run.py <cm0102_recomp> <game folder> <out folder> [--keep-faults] [--original-data]
 
-A new game up to its first start report, on the October 2026 database or with --original-data on the 3.9.68 data.
+A new game up to its first start report: a season game on the October 2026 database, or with --original-data the base
+game on the 3.9.68 data (a 2001 start with changing rules off), which must stay the original.
 remap_club_key_id 0x60ba80 rewrites only the first key id of a row, so the second key ids of C.D. Logrones,
 C.D. Logrones B, C.D. Badajoz and C.D. Badajoz B kept their old rows after database_trim_club_table 0x5267c0.
 
 The checks, on the log of RECOMP_SEASON_LOG and RECOMP_CLUB_KEY_TEST:
-    - the two key ids of each club hold one row
-    - October 2026: each second key id moves to its known row
-    - no club on an old row has a B side past the end of the club table
+    - October 2026: the two key ids of each club hold one row, and each second key id moves to its known row
+    - October 2026: no club on an old row has a B side past the end of the club table
+    - --original-data: no second key id moves, so the two key ids of each club hold different rows
     - --keep-faults (RECOMP_ORIGINAL_FAULTS=keep:club_keys), October 2026: the club on row 3230 has that B side, so the
       test can see the fault
 """
@@ -35,18 +36,20 @@ def faults_of(log, keep, original):
     pairs = re.findall(r"club key test: keys 0x[0-9a-f]+ 0x[0-9a-f]+ hold rows (-?\d+) (-?\d+)", log)
     past = re.findall(r"club key test: row (\d+) '([^']*)' has a B side past the table", log)
     faults = [] if "club key test: done" in log and len(pairs) == 4 else ["the key test did not run"]
+    if original:
+        if moved:
+            faults.append(f"the base game moved second key ids: {sorted(hex(k) for k in moved)}")
+        faults += [f"the base game holds rows {a} and {b} in one row's key ids" for a, b in pairs if a == b]
+        return faults
     if keep:
         if moved:
             faults.append(f"second key ids moved: {sorted(hex(k) for k in moved)}")
-        if not original and not any(row == "3230" for row, _ in past):
+        if not any(row == "3230" for row, _ in past):
             faults.append("row 3230 has no B side past the table")
         return faults
     faults += [f"the key ids of one club hold rows {a} and {b}" for a, b in pairs if a != b]
     faults += [f"row {row} {name} has a B side past the table" for row, name in past]
-    if original:
-        if set(moved) != set(MOVES):
-            faults.append(f"second key ids that moved: {sorted(hex(k) for k in moved)}")
-    elif moved != MOVES:
+    if moved != MOVES:
         faults.append(f"second key ids that moved: { {hex(k): v for k, v in moved.items()} }")
     return faults
 
