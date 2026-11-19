@@ -102,6 +102,75 @@ int season_arg_derby_plan(int n, const int *derby, int derby_at, int round[][SEA
  * reputation. derby[i] gets the partner of club i. Returns the pairs made by replacement. */
 int season_arg_derby_pairs(int n, const int *listed, const int *rep, int *derby);
 
+/* Pure (item 286): the clubs that a rules row of the Primera sends down, by the averages and by the annual table. */
+void season_arg_down_places(int row, int *avg, int *tab);
+/* The clubs that the swap 0x4068d0 exchanges at most (cmp bl, 4 at 0x4069fb). */
+#define SEASON_ARG_SWAP_DOWN 4
+/* Pure (item 286): the second division's relegation places of a row. With changing rules on the row's places
+ * (season_arg_second.c moves the clubs past the swap's 4), with them off at most the swap's 4. */
+int season_arg_second_down_places(int row_down, int changing_rules);
+/* The clubs that ArgSecond::create_promotion_cup_stage 0x408630 sends down by the averages (cmp bp, 2 at 0x408666). */
+#define SEASON_ARG_CLASS_DOWN 2
+/* Pure (item 291): the clubs that leave the second division's class form: the class's 2 and the surplus over the next
+ * row's count, which the size step sends down. next_clubs -1: no next row. */
+int season_arg_second_class_down(int clubs, int next_clubs);
+/* The places that the rules report shows for an Argentine league: the moves that the season plays, where the classes
+ * keep them outside the place bytes. Any other league keeps the bytes. */
+void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, int *down);
+/* The second division's clubs for the size step in the class's form, best average first (item 291). */
+void season_arg_second_step_order(uint32_t obj, uint32_t *club, int n);
+
+/* The Torneo Reducido of the second division (item 291). Each tie is a Cup_Stage of its own, so that the survivors of a
+ * round can be paired again by their places. Sources: en.wikipedia.org 2015 Primera B Nacional (2nd to 5th, two legs),
+ * 2017-18 (2nd to 9th, one-match quarter-finals), 2018-19 (two legs, paired again after the first round), 2022 Primera
+ * Nacional (4th to 13th, the 3rd in round two and the 2nd in the semi-finals; two-leg semi-finals and final). */
+#define SEASON_ARG_REDUCIDO_ROUNDS 4
+typedef struct { int fresh, ties, legs; } SeasonArgReducidoRound;
+typedef struct {
+    int places;             /* the clubs that take part, from the 2nd place on */
+    int rounds, stages;     /* the rounds, and the ties of all rounds */
+    int final_pens;         /* 1: a level final goes to penalties; 0: the better placed club goes through */
+    int zone_last;          /* zone rows: the last zone place that enters (4 or 8); 0: one table */
+    int loser_round;        /* zone rows: the round that the loser of the zone winners' final enters, else -1 */
+    int final_one;          /* 1: the final is one match on neutral ground */
+    int level_pens;         /* 1: a level tie of two legs goes to penalties in every round */
+    int down_each;          /* zone rows: the clubs that each zone sends down */
+    int rel_tie;            /* zone rows: 1 when the second last clubs of the zones play for one more relegation */
+    SeasonArgReducidoRound round[SEASON_ARG_REDUCIDO_ROUNDS];
+} SeasonArgReducido;
+/* Zone rows: sources en.wikipedia.org 2021 Primera Nacional (2nd to 4th, the final's loser in the semi-finals, penalties)
+ * and 2023 and 2024 Primera Nacional (2nd to 8th, one match then two legs, a one-match final on neutral ground, the higher
+ * seed through on a level score). Row 2019 was abandoned in real life: it plays the form of row 2020. */
+#define SEASON_ARG_ZONE_ROUNDS 40
+#define SEASON_ARG_ZONE_TIES 20
+/* Pure: zone[i] (0 A, 1 B) of the i-th club of n sorted by club id: in turn until zone A holds a clubs. */
+void season_arg_second_zone_split(int n, int a, int *zone);
+/* Pure: both zones in home and away rounds (clubs 0 to a - 1, then a to a + b - 1). Each round holds (a + b) / 2 entries;
+ * an entry of -1 is no match. Returns the rounds. */
+int season_arg_second_zone_plan(int a, int b, int round[][SEASON_ARG_ZONE_TIES][2]);
+/* Pure: the Reducido of a rules row of the second division. Returns 0 for a row with none. */
+int season_arg_reducido_of(int row, SeasonArgReducido *out);
+/* Pure: the ties of n survivors (n even) sorted best place first: out[2i] the better, out[2i + 1] the worse place. */
+void season_arg_reducido_pairs(const int *sorted, int n, int *out);
+/* The second division's edition plays this Reducido now. */
+int season_arg_reducido_marked(uint32_t obj);
+/* The places and the stage array of an edition with a Reducido, after the row's places. */
+void season_arg_reducido_rules(uint32_t obj);
+/* The next round, the day every tie made so far is complete (ArgSecond::advance_stage 0x4080c0). */
+void season_arg_reducido_advance(uint32_t obj);
+/* A result of a tie of the edition: 1 when the class's handler takes it as the winner of its Reducido, 0 when it is done. */
+int season_arg_reducido_result(uint32_t obj, int stage, int result, uint32_t club);
+/* The edition plays two zones (n clubs): 1, with the sizes of the zones. */
+int season_arg_second_zones(uint32_t obj, int n, int *a, int *b);
+/* The same for the edition being played: its stages are the zone rows' (a count that a save holds). */
+int season_arg_second_zones_live(uint32_t obj, int n, int *a, int *b);
+/* The fixed list of two zones, or 0; the entries with no match are dropped by season_arg_second_drop_fixture. */
+uint32_t season_arg_second_zone_fixtures(uint32_t league);
+void season_arg_second_zone_fixtures_end(void);
+/* Before the Primera's chain: only the two winners of a season of two zones go up. */
+void season_arg_reducido_chain(uint32_t second);
+int season_arg_second_drop_fixture(uint32_t fixture);
+
 /* The title stages of a season (season_arg_stages.c): none, two zone tables a half and a knockout of 16 after each
  * half (2025, 2026), two zone tables and a final of the zone winners with a match of the runners-up (2016), or a
  * knockout of the first 16 of each half's table (2027 on). */

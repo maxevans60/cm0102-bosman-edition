@@ -8,7 +8,9 @@ The list comes from `docs/research/2026-10-18-league-rules-encoded.tsv`. A candi
 
 ## Leagues that play this form
 
-The game reads the seasons from the rows. The lower row needs 4 play-off places directly below its direct places, and the upper row needs 1 relegation play-off place.
+The game reads the seasons from the rows. The lower row needs 4 play-off places directly below its direct places, and the upper row needs 1 relegation play-off place. The form plays only with changing rules on.
+
+J2 has three forms, and its rows pick one in each season. Rows 2003 to 2007 have 1 play-off place and play the tie of the 3rd against the J1 16th. Rows 2017, 2018 and 2021 play this form. The other rows with 4 play-off places have no J1 relegation play-off place, so J2 plays its plain play-off of four.
 
 | Lower division | Upper division | Rows | Places | Semi-finals | Lower final | Last tie | Row ids |
 |---|---|---|---|---|---|---|---|

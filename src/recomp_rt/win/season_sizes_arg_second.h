@@ -13,7 +13,7 @@
  *   meetings; a row of zones (2019/20 on) plays one table of one meeting, since no source gives the zone lists;
  * - the dates of both class templates (Apertura and Clausura), to the rounds of the count (D4, D5);
  * - no stages: the promotion places of the row go to the next clubs of the table (D2), the relegation places (at
- *   most 4) to the third division through the Primera's swap 0x4068d0;
+ *   most 4, more with changing rules on) to the third division through the Primera's swap 0x4068d0;
  * - the averages, the predicted positions and the honours take the count.
  * The base game, RECOMP_LEAGUE_SIZES=off and the 2001/02 row keep the class. */
 #ifndef RECOMP_SEASON_SIZES_ARG_SECOND_H
@@ -41,5 +41,9 @@ int season_arg_second_no_stage(uint32_t obj);
 
 /* tools/recomp/arg_second.py: the count at which fill_league_table adds its fixed club (24, 0x407dc0). */
 uint32_t rt_arg_second_fixed_at(uint32_t obj, uint32_t original);
+
+/* The promotion places of a rules row of the second division, or -1 (item 291). */
+int season_arg_second_row_up(int row);
+int season_arg_second_row_down(int row);
 
 #endif

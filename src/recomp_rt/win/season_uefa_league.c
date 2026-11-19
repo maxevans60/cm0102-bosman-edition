@@ -137,10 +137,13 @@ RT_WRAP(006835c0, league_create_fixtures)
     if (!rd32(g_mem, league + 0xea)) {      /* 0.7.2 slice 15: the Argentine Primera's zones and derby round */
         arg = season_arg_fixtures(league);
         if (rt_unwinding) return;
+        if (!arg) arg = season_arg_second_zone_fixtures(league);    /* 0.7.3 item 291: two zones in one table */
+        if (rt_unwinding) return;
         if (arg) wr32(g_mem, league + 0xea, arg);
     }
     season_fifa_stage_begin(league);        /* O259: a qualifier's FIFA day stays within its stage */
     o_006835c0();
+    season_arg_second_zone_fixtures_end();
     season_fifa_stage_end();
     /* The original frees the list it plays (0x683aa1) and clears +0xea; one it did not play is a fault (test log). */
     if (!rt_unwinding && arg && rd32(g_mem, league + 0xea) == arg)
