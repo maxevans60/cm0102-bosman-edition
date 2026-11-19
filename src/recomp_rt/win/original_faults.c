@@ -1,7 +1,8 @@
 /* Faults of the original that long games reach (0.6.2 slice 11, tools/recomp/original_faults.py). The fixes act in
  * every game, the base game too (Q23, Q24, Q27). The test switch RECOMP_ORIGINAL_FAULTS turns them off: "keep" all
  * of them, "keep:" with a list of groups some of them ("keep:money,age"). The groups are managers, money, age,
- * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, squad_moves and squad_loans. */
+ * olympics, ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, squad_moves, squad_loans
+ * and club_keys. */
 #include "win.h"
 #include "season_intl.h"
 #include "../rt.h"
@@ -16,7 +17,7 @@
 #define NATION_COUNT 0xae2350u
 
 enum { MANAGERS, MONEY, AGE, OLYMPICS, IRE_SUPER, NSL, HOLIDAY, CALLUPS, WC_POTS, CONFED, CLUB_REGULARS, MATCH_NUMBERS,
-       SQUAD_MOVES, SQUAD_LOANS, GROUPS };
+       SQUAD_MOVES, SQUAD_LOANS, CLUB_KEYS, GROUPS };
 
 static int fixes_on_group(int group)
 {
@@ -24,7 +25,7 @@ static int fixes_on_group(int group)
     if (on[0] < 0) {
         static const char *const names[GROUPS] = {"managers", "money", "age", "olympics", "ire_super", "nsl",
                                                    "holiday", "callups", "wc_pots", "confed", "club_regulars",
-                                                   "match_numbers", "squad_moves", "squad_loans"};
+                                                   "match_numbers", "squad_moves", "squad_loans", "club_keys"};
         const char *v = getenv("RECOMP_ORIGINAL_FAULTS");
         if (v && strcmp(v, "keep") && strncmp(v, "keep:", 5))
             fprintf(stderr, "recomp: RECOMP_ORIGINAL_FAULTS=%s is not keep or keep:<groups>: every fix acts\n", v);
@@ -37,7 +38,7 @@ static int fixes_on_group(int group)
                 fprintf(stderr,
                         "recomp: RECOMP_ORIGINAL_FAULTS: unknown group %.*s (managers, money, age, olympics, "
                         "ire_super, nsl, holiday, callups, wc_pots, confed, club_regulars, match_numbers, "
-                        "squad_moves, squad_loans)\n",
+                        "squad_moves, squad_loans, club_keys)\n",
                         (int)n, p);
         }
         for (int g = 0; g < GROUPS; g++) {
@@ -781,6 +782,28 @@ void rt_squad_move_test(void)
         }
     }
     fprintf(stderr, "recomp: squad move test: no senior club with a one-way B side and a one-contract player at placement 4\n");
+}
+
+/* A club in two key ids (open item 295, group club_keys). set_key_ids 0x601a40 gives C.D. Logrones, C.D. Logrones B,
+ * C.D. Badajoz and C.D. Badajoz B two key ids each: 0x9d0170 and 0x9d04c8, 0x9d0174 and 0x9d04cc, 0x9d03b4 and 0x9d04c0,
+ * 0x9d03b8 and 0x9d04c4. database_trim_club_table 0x5267c0 calls remap_club_key_id 0x60ba80 for each row in order
+ * (0x526d94), and 0x60ba80 rewrites the first key id that holds the old row and returns. The second key id keeps the
+ * old row, so it names another club after the trim. In a game on the October 2026 database Levante U.D. B took row
+ * 3230, the old row of C.D. Logrones, and club_get_linked_b_team 0x540a50 gave it the pair of 0x9d04c8: old row 6679,
+ * past the end of the trimmed table. match_day_can_quick_simulate 0x6b66a0 passed that row to
+ * human_manager_is_human_club 0x600a50 (0x6b6756), which read no nation and stopped at the box Database.cpp 13126
+ * (0x53b3d0). Here every key id of the old row follows it. The rows go up in order and a new row is never above its
+ * old row, so a key id that already moved never holds the old row of a later call. 0x9d0300 and 0x9d034c are not in
+ * the chain of 0x60ba80. A saved game needs no fix: set_key_ids runs again at its load (0x52d8fa). */
+void rt_club_key_twins(uint32_t old_row, uint32_t new_row, uint32_t hit)
+{
+    if (!hit || old_row == new_row || !fixes_on_group(CLUB_KEYS)) return;
+    for (uint32_t key = 0x9d00a4u; key <= 0x9d0524u; key += 4u) {
+        if (key == 0x9d0300u || key == 0x9d034cu || rd32(g_mem, key) != old_row) continue;
+        wr32(g_mem, key, new_row);
+        if (getenv("RECOMP_SEASON_LOG"))
+            fprintf(stderr, "recomp: club key %#x follows row %u to row %u\n", key, old_row, new_row);
+    }
 }
 
 /* A loan to the club's own linked B side (open item 280, group squad_loans). CONTRACT_MANAGER::sign_loan_contract

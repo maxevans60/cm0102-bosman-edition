@@ -2,7 +2,7 @@
 """No capped player in the squad of his second nation (0.7.3 slice 16, issue 141).
 
 Usage:
-    python3 tests/seasons/second_nation_run.py <cm0102_recomp> <game folder> <out folder>
+    python3 tests/seasons/second_nation_run.py <cm0102_recomp> <game folder> <out folder> [--days n]
 
 A new game on the October 2026 database with the leagues of eight nations, on holiday for DAYS days, past the
 international matches of September. A capped player in the squad of his second nation loses his first nation at his
@@ -100,13 +100,15 @@ def check(save, out):
 
 
 def main(argv):
-    if len(argv) != 4:
+    days = int(argv[argv.index("--days") + 1]) if "--days" in argv else DAYS
+    args = [a for i, a in enumerate(argv[1:]) if a != "--days" and argv[i] != "--days"]
+    if len(args) != 3:
         print(__doc__)
         return 2
-    program, game, out = (os.path.abspath(a) for a in argv[1:4])
+    program, game, out = (os.path.abspath(a) for a in args)
     os.makedirs(out, exist_ok=True)
     steps = rrc.league_steps(NATIONS, []) + ["3000000 quit"]
-    save, log, _ = scr.play(program, game, out, "new", {"changing_rules": "on"}, steps, DAYS,
+    save, log, _ = scr.play(program, game, out, "new", {"changing_rules": "on"}, steps, days,
                             {"RECOMP_START_SEASON": "2026"}, database=DB, timeout=3600)
     with open(os.path.join(out, "new.log"), "w", encoding="utf-8", errors="replace") as f:
         f.write(log)

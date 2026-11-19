@@ -2,7 +2,8 @@
 src/recomp_rt/win/original_faults.c). The fixes act in every game, the base game too. The test switch
 RECOMP_ORIGINAL_FAULTS=keep turns them all off. "keep:managers", "keep:money", "keep:age", "keep:olympics",
 "keep:ire_super", "keep:nsl", "keep:holiday", "keep:callups", "keep:wc_pots", "keep:confed", "keep:club_regulars",
-"keep:match_numbers", "keep:squad_moves" or "keep:squad_loans" (or a list: "keep:money,age") turns off one group or more.
+"keep:match_numbers", "keep:squad_moves", "keep:squad_loans" or "keep:club_keys" (or a list: "keep:money,age") turns off
+one group or more.
 
 National managers (fault 26, Q23). `club_can_be_managed` 0x544820 takes a senior national team (club id from club
 count - 2 x nation count to club count - nation count, 0x544835..0x544857) only when its nation had more than 150
@@ -236,6 +237,12 @@ he goes to. In run C of the 0.7.2 full check (seven European nations with the re
 Cottbus II held one player in two squad slots on day 206 of 2007, and pick_team stopped at match_man..cpp 1225 on day
 208. Here a wrap of toggle_squad_placement (original_faults.c) leaves a player alone in those two moves while he is on
 loan from one side of a linked pair to the other. A move that the human makes is not changed.
+
+A club in two key ids (open item 295, group club_keys). remap_club_key_id 0x60ba80 rewrites only the first key id that
+holds a row, so the second key id of C.D. Logrones, C.D. Logrones B, C.D. Badajoz and C.D. Badajoz B keeps its old row
+after database_trim_club_table 0x5267c0 (call 0x526d94). The stale key id then names another club, and
+club_get_linked_b_team 0x540a50 can give that club a B side past the end of the table. Here every key id of the row
+follows it (original_faults.c).
 """
 
 # address: (the instruction in the original, C code)
@@ -294,6 +301,7 @@ INSNS = {
     0x777729: ("je 0x77778f", "if (cc_e(F) && !rt_callup_mark_all()) goto L_77778f;"),
     0x76BBA8: ("je 0x76bc10", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x1cu), edi, esi)) goto L_76bc10;"),
     0x76BE1B: ("je 0x76be83", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x20u), edi, esi)) goto L_76be83;"),
+    0x526D99: ("add esp, 8", "rt_club_key_twins(R32(esp), R32(esp + 4u), eax); esp += 8u;"),
     0x4CC03D: ("mov ecx, dword ptr [0xb74350]", "rt_squad_move_set(R32(esp + 0x10u), esi, edi == ebx); ecx = R32(0xb74350u);"),
     # Issue 132, log only (no change of the game): HolFirst::set_club_progress 0x5f73d0 (vtable 0x96b86c slot +0x68)
     # writes progress bytes +0x73..+0x75 of the club's Comp_Stats entry, which Comp_Stats::find_club_entry 0x4a4850
