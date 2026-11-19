@@ -36,7 +36,8 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     ClosedClub *club = calloc((size_t)count, sizeof *club);
     uint32_t *at = calloc((size_t)count, sizeof *at);
     int *action = calloc((size_t)count, sizeof *action);
-    if (!club || !at || !action) rt_fatal("closed league: no memory for the season change");
+    unsigned *from = calloc((size_t)count, sizeof *from), *to = calloc((size_t)count, sizeof *to);
+    if (!club || !at || !action || !from || !to) rt_fatal("closed league: no memory for the season change");
     int n = 0;
     for (int i = 0; i < count; i++) {
         uint32_t c = table + (uint32_t)i * CLUB_SIZE;
@@ -55,12 +56,16 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     }
     ClosedResult r;
     season_closed_plan(league, season, want, club, n, action, &r);
+    /* s073-16: a club that leaves the league takes the place of a club that joins (season_closed_places). */
+    for (int i = 0; i < n; i++) from[i] = action[i] == CLOSED_JOIN ? rd32(g_mem, at[i] + CLUB_DIVISION) : 0;
+    season_closed_places(club, action, from, n, to);
     for (int i = 0; i < n && !rt_unwinding; i++) {
         if (action[i] == CLOSED_FOLD || action[i] == CLOSED_CUT) {
             wr32(g_mem, at[i] + CLUB_LAST_DIVISION, rec);
-            wr32(g_mem, at[i] + CLUB_DIVISION, 0);
-            fprintf(stderr, "recomp: %s: %d: %.50s %s\n", tag, edition, club[i].name,
-                    action[i] == CLOSED_FOLD ? "folds: it goes to no division" : "leaves for a club of the season");
+            wr32(g_mem, at[i] + CLUB_DIVISION, to[i]);
+            fprintf(stderr, "recomp: %s: %d: %.50s %s%s\n", tag, edition, club[i].name,
+                    action[i] == CLOSED_FOLD ? "folds: it goes to no division" : "leaves for a club of the season",
+                    to[i] ? ", to the place of a club that joins" : "");
         } else if (action[i] == CLOSED_JOIN) {
             uint32_t from = rd32(g_mem, at[i] + CLUB_DIVISION);
             if (from) wr32(g_mem, at[i] + CLUB_LAST_DIVISION, from);
@@ -78,6 +83,8 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     free(club);
     free(at);
     free(action);
+    free(from);
+    free(to);
     return r.count;
 }
 
