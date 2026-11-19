@@ -34252,6 +34252,9 @@ add	April 2011 SIM	2010	African Cup of Nations	2004		add	Tunisia		Morocco		Niger
 add	April 2011 SIM	2010	African Cup of Nations	2006		add	Egypt		Ivory Coast		Nigeria		Egypt	
 add	April 2011 SIM	2010	African Cup of Nations	2008		add	Egypt		Cameroon		Ghana		Ghana	
 add	April 2011 SIM	2010	African Cup of Nations	2010		add	Egypt		Ghana		Nigeria		Angola	
+add	April 2011 SIM	2010	Oceania Nations Cup	2002		add	New Zealand		Australia		Tahiti		New Zealand	
+add	April 2011 SIM	2010	Oceania Nations Cup	2004		add	Australia		Solomon Islands				Australia	
+add	April 2011 SIM	2010	Oceania Nations Cup	2008		add	New Zealand		New Caledonia					
 add	December 2010 SIM	2010	US Open Cup	2002		add	Columbus Crew	United States	Los Angeles Galaxy	United States				
 add	December 2010 SIM	2010	US Open Cup	2003		add	Chicago Fire	United States	NY/NJ Metrostars	United States				
 add	December 2010 SIM	2010	US Open Cup	2004		add	Kansas City Wizards	United States	Chicago Fire	United States				
@@ -34263,6 +34266,7 @@ add	December 2010 SIM	2010	US Open Cup	2009		add	Seattle Sounders	United States	
 add	December 2010 SIM	2010	US Open Cup	2010		add	Seattle Sounders	United States	Columbus Crew	United States				
 add	December 2010 SIM	2010	US Open Cup	2001		add	Los Angeles Galaxy	United States	New England Revolution	United States				
 add	February 2011 ODB	2010	African Cup of Nations	2010		add	Egypt		Ghana		Nigeria		Angola	
+add	February 2011 ODB	2010	Oceania Nations Cup	2008		add	New Zealand		New Caledonia					
 add	September 2010 ODB	2010	US Open Cup	2002		add	Columbus Crew	United States	Los Angeles Galaxy	United States				
 add	September 2010 ODB	2010	US Open Cup	2003		add	Chicago Fire	United States	NY/NJ Metrostars	United States				
 add	September 2010 ODB	2010	US Open Cup	2004		add	Kansas City Wizards	United States	Chicago Fire	United States				
@@ -34276,6 +34280,7 @@ add	September 2010 ODB	2010	US Open Cup	2001		add	Los Angeles Galaxy	United Stat
 clear	September 2010 ODB	2010	FIFA World Cup	2007										
 add	September 2010 ODB	2010	FIFA World Cup	2010		add	Spain		Holland		Germany		South Africa	
 add	September 2010 ODB	2010	African Cup of Nations	2010		add	Egypt		Ghana		Nigeria		Angola	
+add	September 2010 ODB	2010	Oceania Nations Cup	2008		add	New Zealand		New Caledonia					
 add	March 2012 SIM	2011	US Open Cup	2002		add	Columbus Crew	United States	Los Angeles Galaxy	United States				
 add	March 2012 SIM	2011	US Open Cup	2003		add	Chicago Fire	United States	NY/NJ Metrostars	United States				
 add	March 2012 SIM	2011	US Open Cup	2004		add	Kansas City Wizards	United States	Chicago Fire	United States				
@@ -34298,6 +34303,9 @@ add	March 2012 SIM	2011	African Cup of Nations	2004		add	Tunisia		Morocco		Niger
 add	March 2012 SIM	2011	African Cup of Nations	2006		add	Egypt		Ivory Coast		Nigeria		Egypt	
 add	March 2012 SIM	2011	African Cup of Nations	2008		add	Egypt		Cameroon		Ghana		Ghana	
 add	March 2012 SIM	2011	African Cup of Nations	2010		add	Egypt		Ghana		Nigeria		Angola	
+add	March 2012 SIM	2011	Oceania Nations Cup	2002		add	New Zealand		Australia		Tahiti		New Zealand	
+add	March 2012 SIM	2011	Oceania Nations Cup	2004		add	Australia		Solomon Islands				Australia	
+add	March 2012 SIM	2011	Oceania Nations Cup	2008		add	New Zealand		New Caledonia					
 clear	Autumn 2013	2013	Croatian First Division	2012										
 add	Autumn 2013	2013	Croatian First Division	2013		differ	GNK Dinamo Zagreb	Croatia	NK Lokomotiva Zagreb	Croatia	HNK Rijeka	Croatia		
 add	Autumn 2013	2013	Croatian First Division	2012		differ	GNK Dinamo Zagreb	Croatia	HNK Hajduk Split	Croatia	NK Koprivnica	Croatia		
@@ -34324,9 +34332,12 @@ add	March 2014	2013	African Cup of Nations	2013		add	Nigeria		Burkina Faso		Mali
 add	April 2015	2014	African Cup of Nations	2013		add	Nigeria		Burkina Faso		Mali		South Africa	
 add	October 2014	2014	African Cup of Nations	2013		add	Nigeria		Burkina Faso		Mali		South Africa	
 add	April 2017	2016	African Cup of Nations	2002		add	Cameroon		Senegal		Nigeria		Mali	
+add	April 2017	2016	Oceania Nations Cup	2016		add	New Zealand		Papua New Guinea				Papua New Guinea	
 add	October 2016	2016	African Cup of Nations	2002		add	Cameroon		Senegal		Nigeria		Mali	
+add	October 2016	2016	Oceania Nations Cup	2016		add	New Zealand		Papua New Guinea				Papua New Guinea	
 add	October 2017	2017	African Cup of Nations	2002		add	Cameroon		Senegal		Nigeria		Mali	
 add	October 2017	2017	African Cup of Nations	2017		add	Cameroon		Egypt		Burkina Faso		Gabon	
+add	October 2017	2017	Oceania Nations Cup	2016		add	New Zealand		Papua New Guinea				Papua New Guinea	
 add	October 2018	2018	FIFA Club World Championship	2017		add	Real Madrid C.F.	Spain	Grêmio Foot-Ball Porto-Alegrense	Brazil				
 add	March 2020	2019	African Cup of Nations	2019		add	Algeria		Senegal		Nigeria		Egypt	
 add	October 2019	2019	African Cup of Nations	2019		add	Algeria		Senegal		Nigeria		Egypt	

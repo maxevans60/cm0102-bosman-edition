@@ -287,8 +287,11 @@ LAST_ROW_MOVES = (("Autumn 2013", "Croatian First Division", 2012, "NK Lokomotiv
 # The FIFA Club World Cup (0.6.2 open item 197): a database keeps the editions to the one before it was made, so
 # October 2018 lacks 2017, October 2024 lacks 2023, and December 2025 and May 2026 lack 2025 (Chelsea / Paris
 # Saint-Germain, 13 July 2025). The research holds every edition (intl-clubs-cwc.tsv).
+# The OFC Nations Cup (0.7.3, release set full2): September 2010 ODB holds no 2008 row and October 2016 no 2016 row,
+# so a 2010 or 2016 start has a gap before its first edition. The research holds every edition to 2024 (2020
+# cancelled).
 GAP_FINALS = ("FIFA World Cup", "European Football Championship", "African Cup of Nations",
-              "FIFA Club World Championship")
+              "FIFA Club World Championship", "Oceania Nations Cup")
 # The same for one database only: October 2026 holds no row of the Argentine Apertura 2026 (Belgrano, 24 May 2026,
 # before the start). This is open item 98. The years of a club competition get the club shift (comp_history), the
 # years of a nation competition the nation shift.
