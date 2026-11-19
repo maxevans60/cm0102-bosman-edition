@@ -673,7 +673,6 @@ try {
     await p.waitForFunction(() => window.__fake, null, { timeout: 30000 });
     await p.click('#saves-open');
     await p.click('#saves .tabs [data-tab="sets"]');
-    await p.click('#sets-get');
     await p.waitForSelector('#sets-lib button[data-lib-get]', { timeout: 20000 });
     const offer = (await p.textContent('#sets-lib')).replace(/\s+/g, ' ');
     await p.click('#sets-lib button[data-lib-get]');
@@ -692,6 +691,16 @@ try {
     await p.waitForTimeout(2500);                                 // a set sync runs after a data set came
     const inCloud = [...s3fake.objects.keys()].filter((k) => k.startsWith(`sets/${PLAYER.sub}/`) && k.includes(Buffer.from('Update 2011').toString('base64url')));
     check('a database from the library takes none of the player\'s places in the cloud', inCloud.length === 0, inCloud.join(', '));
+    // Aligned: the library's Get sits at the right edge, as the data sets' buttons do; text and buttons share a line.
+    const lined = await p.evaluate(() => {
+      const right = (sel) => document.querySelector(sel)?.getBoundingClientRect().right;
+      const row = document.querySelector('#sets-lib tr:nth-child(2)'), name = row.cells[0].getBoundingClientRect(), get = row.querySelector('button').getBoundingClientRect();
+      return { get: right('#sets-lib button[data-lib-get]'), del: right('#sets-list button[data-set-delete]'), head: !document.getElementById('sets-lib-head').hidden,
+        again: row.querySelector('button').textContent, middle: Math.abs((name.top + name.bottom) / 2 - (get.top + get.bottom) / 2) };
+    });
+    check('the library shows by itself under the data sets, its Get lined up with their buttons and its text with its button',
+      lined.head && Math.abs(lined.get - lined.del) < 1.5 && lined.middle < 4 && lined.again === 'Get again', JSON.stringify(lined));
+    await shot(p, 'databases');
     await lctx.close();
   }
 

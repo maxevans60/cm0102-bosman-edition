@@ -574,7 +574,7 @@ The **Editor** button in the bar opens the editors: a saved game (as above), or 
 - The Editor's home lists the data sets, with Delete.
 
 **Database library (`library.mjs`).** Databases that the admin offers every player, free and with no account, each
-for a season: Saved games, Data sets, **Get a database** lists them (name, season, size, note), and **Get** brings one
+for a season: the Databases tab of Saved games lists them under "Available to download" (name, season, size, note), and **Get** brings one
 into Databases with its season noted, straight from the store where the pages go direct (else through the server);
 **Use** then opens with that season. A database from the library is marked in its folder's note (`.web.json`:
 `library: { id, mtime }`): while its files are as they came, the Cloud column says "From the library" and the data sets'

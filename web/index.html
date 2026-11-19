@@ -151,7 +151,13 @@
   dialog .dlg-list td:first-child { white-space: normal; overflow-wrap: anywhere; min-width: 9em; }
   dialog .dlg-list td.when { white-space: nowrap; line-height: 1.25; }     /* two lines no taller than the buttons */
   dialog .dlg-list td.when .small { color: var(--muted); font-size: 12px; }
-  dialog .dlg-list td.acts .btns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  dialog .dlg-list td.acts .btns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+  /* A row's text and its buttons on one line, and the buttons at the right edge of every list, so the lists of a tab
+     line up (the Databases tab: your data sets, then the library's). */
+  dialog .dlg-list td { vertical-align: middle; }
+  dialog .dlg-list td.acts { text-align: right; width: 1%; }
+  dialog .dlg-list td.acts .btns { flex-wrap: nowrap; }      /* one line of buttons: the column takes their width */
+  #sets-lib-head { margin: 14px 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
   dialog .dlg-foot { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
   #sets:not([hidden]), #tactics:not([hidden]), .tab-saves { display: contents; }
   /* Saved games in tabs: Saves, Tactics, Databases (loader.js showSavesTab). A tab whose section is hidden (no game yet)
@@ -401,9 +407,10 @@
       database, for example). Use one to start a new game with it. Upload a database as a .zip, or as its .dat files
       together; a .rar or .7z must be unpacked and zipped first.</p>
       <div id="sets-list" class="dlg-list"></div>
+      <h4 id="sets-lib-head" hidden>Available to download</h4>
       <div id="sets-lib" class="dlg-list" hidden></div>
       <p id="sets-note" class="small" role="status"></p>
-      <div class="row"><button class="primary" id="sets-get" hidden>Get a database…</button><button id="sets-upload">Upload a data set…</button><button id="sets-new">New data set…</button>
+      <div class="row"><button id="sets-upload">Upload a data set…</button><button id="sets-new">New data set…</button>
         <input type="file" id="sets-file" accept=".zip,.dat" multiple hidden></div>
     </section>
     </div>
