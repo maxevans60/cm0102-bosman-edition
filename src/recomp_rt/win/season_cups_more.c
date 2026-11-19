@@ -207,6 +207,11 @@ int season_new_cup_held(const char *file, int edition)
     return f && f->clubs >= 0;
 }
 
+int season_new_cup_late(int day, int entry_day, int edition, int year, int held)
+{
+    return day == SEASON_NEW_CUP_LATE_DAY && entry_day != day && edition < year && held == 1;
+}
+
 const SeasonNewCup *season_new_cup_played(const char *file, int edition, int rules, int start)
 {
     return season_new_cup(file, rules ? edition : season_new_cup_row_edition(file, start));

@@ -20,7 +20,6 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
-#include "season_calendar.h"
 #include "season_comps.h"
 #include "season_cups.h"
 #include "season_ned_playoff.h"
@@ -782,20 +781,25 @@ const SeasonRuleKind season_kind_new_cups = {"new_cups", NULL, NULL, NULL, NULL,
  * whose update day is another day starts the season of the game year when it is complete, its edition is before that
  * season and the table holds it then (new_held, as the module makes it): the same start as the pass (resumes,
  * not-held seasons and the hooks through the before hook above). The next first match of each row is in July or later
- * (2009/10: 28 July 2009), so no edition starts with past dates. With the entry on 20 June (the original calendar,
- * changing rules off and a start in 2001 or 2002) the pass starts it and this does nothing. */
+ * (2009/10: 28 July 2009), so no edition starts with past dates (test_season_cups_more.c checks the rows). With the
+ * entry on 20 June (the original calendar: changing rules off and a start in 2001 or 2002) the pass starts the cup and
+ * this does nothing. A game that starts in 2003 or later has the calendar move with changing rules off too, and its
+ * cup plays every season in its start format (season_new_cup_played): there the late start runs with no hooks, as
+ * the pass would, and the cup no longer stops after its first edition. The day is the entry's fixed day 170
+ * (SEASON_NEW_CUP_LATE_DAY), so 19 June in a leap year, as the original. */
 void season_new_cups_day(void)
 {
     if (!season_game()) return;
     int year = (int16_t)rd16(g_mem, GAME_DATE + 2), day = (int16_t)rd16(g_mem, GAME_DATE);
-    if (day != season_calendar_doy(year, 6, 20)) return;
+    if (day != SEASON_NEW_CUP_LATE_DAY) return;
     uint32_t objs[64], cup = 0;
     int n = season_change_entry_comps(season_def_all_ireland.entry, objs, 64);
     for (int i = 0; i < n && !cup; i++)
         if (readable(objs[i]) && !strcmp(season_change_file(objs[i]), season_def_all_ireland.file)) cup = objs[i];
-    if (!cup || season_change_start_day(cup) == day) return;
+    if (!cup) return;
     int edition = (int16_t)rd16(g_mem, cup + CUP_YEAR);
-    if (edition >= year || new_held(&season_def_all_ireland, year) != 1) return;
+    if (!season_new_cup_late(day, season_change_start_day(cup), edition, year, new_held(&season_def_all_ireland, year)))
+        return;
     if (season_change_late_start(cup))
         fprintf(stderr, "recomp: new cups: %s starts %d late (edition %d to %d, the entry's update day is day %d)\n",
                 season_def_all_ireland.file, year, edition, (int16_t)rd16(g_mem, cup + CUP_YEAR),

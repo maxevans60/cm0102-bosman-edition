@@ -274,6 +274,39 @@ static void setanta(void)
         CHECK(g->ko[0].day == want[i].final_day && g->ko[0].month == want[i].final_month,
               "Setanta Cup %d/%02d: the final of the knockout stage", e, (e + 1) % 100);
     }
+    /* The late start on 20 June (season_new_cups_day): only that day, only when the entry has another day, only for
+     * an edition behind the year that the game plays. */
+    CHECK(season_new_cup_late(170, 50, 2004, 2005, 1), "late start: 20 June 2005, edition 2004, entry on 20 February");
+    CHECK(!season_new_cup_late(171, 50, 2004, 2005, 1), "late start: not on 21 June");
+    CHECK(!season_new_cup_late(170, 170, 2004, 2005, 1), "late start: not when the entry's own day is 20 June");
+    CHECK(!season_new_cup_late(170, 50, 2005, 2005, 1), "late start: not when the edition is the year (started)");
+    CHECK(!season_new_cup_late(170, 50, 2007, 2008, 0), "late start: not in a season without the cup (2008)");
+    /* Each final of the rows is before 20 June of the year after its edition, and the first date of the next
+     * edition (its draw, its first group day or its first round) is after that 20 June: the late start never meets a
+     * running edition or past dates. Dates as month (0 to 11) x 31 + day, years after the edition year. */
+    const int late = 5 * 31 + 20;
+    for (int e = 2004; e <= 2013; e++) {
+        const SeasonNewCup *f = season_new_cup("new_all_ireland", e);
+        const SeasonCupGroups *gr = season_cup_groups("new_all_ireland", e);
+        if (season_new_cup_held("new_all_ireland", e) == 1 && f) {
+            const SeasonNewRound *fin = gr ? &gr->ko[0] : &f->round[0];
+            CHECK(fin->year == 1 && fin->month * 31 + fin->day < late, "Setanta Cup %d/%02d: the final before 20 June",
+                  e, (e + 1) % 100);
+        }
+        int n = e + 1;
+        const SeasonNewCup *fn = season_new_cup("new_all_ireland", n);
+        const SeasonCupGroups *gn = season_cup_groups("new_all_ireland", n);
+        if (season_new_cup_held("new_all_ireland", n) != 1 || !fn) continue;
+        int y, m, d;
+        if (gn && gn->draw[0] > 0) y = gn->draw[2], m = gn->draw[1], d = gn->draw[0];
+        else if (gn) y = gn->days[0][2], m = gn->days[0][1], d = gn->days[0][0];
+        else {
+            int r = 4;
+            while (r > 0 && fn->round[r].day == 0) r--;
+            y = fn->round[r].year, m = fn->round[r].month, d = fn->round[r].day;
+        }
+        CHECK(y >= 1 || m * 31 + d > late, "Setanta Cup %d/%02d: the first date after 20 June %d", n, (n + 1) % 100, n);
+    }
     /* 2009/10: two-legged semi-finals, 14 days apart. */
     const SeasonCupGroups *g = season_cup_groups("new_all_ireland", 2009);
     CHECK(g && g->ko[1].legs == 2 && g->ko[1].gap == 14 && g->ko[1].day == 3 && g->ko[1].month == 3,
