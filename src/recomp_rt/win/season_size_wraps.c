@@ -797,8 +797,8 @@ const int season_size_fixed[] = {
     0,       /* jap_j1 */
     0,       /* jap_j2 */
     0,       /* kor_league */
-    10,       /* nir_first */
-    10,       /* nir_prm */
+    0,       /* nir_first */
+    0,       /* nir_prm */
     0,       /* nor_first */
     0,       /* nor_prm */
     0,       /* pol_first */
@@ -907,16 +907,7 @@ RT_WRAP(0041e010, schedule_41e010)
     season_sizes_schedule(self, stage, count_at);
 }
 
-/* BelSecond::create_schedule */
-void o_0041f340(void);
-RT_WRAP(0041f340, schedule_41f340)
-{
-    uint32_t self = cpu.ecx, count_at = rt_arg(1);
-    int stage = (int8_t)(rt_arg(0) & 0xff);
-    o_0041f340();
-    if (rt_unwinding) return;
-    season_sizes_schedule(self, stage, count_at);
-}
+/* BelSecond::create_schedule 0x41f340: wrapped in season_bel_playoffs.c bel_second_schedule */
 
 /* BraNatFirst::create_schedule */
 void o_00429b50(void);

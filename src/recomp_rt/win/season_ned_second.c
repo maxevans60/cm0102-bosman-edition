@@ -75,6 +75,7 @@
 #include "season.h"
 #include "season_clubs.h"
 #include "season_names.h"
+#include "season_ned_playoff.h"
 #include "season_second_teams.h"
 
 #include <stdio.h>
@@ -293,7 +294,8 @@ RT_WRAP(005f6720, ned_second_playoff)
     uint32_t self = cpu.ecx;
     int ours = self && self == st_league_of(KEY_FIRST) && season_game_changes();
     if (ours && marks_on()) st_shift_up(self, jong_club, TAG, "before the play-off", log_on());
-    o_005f6720();
+    /* From 2005/06 the knockout takes the place of the groups (issue 150, season_ned_playoff.c). */
+    if (!ours || !season_ned_playoff_build(self)) o_005f6720();
     if (!ours || !log_on() || rt_unwinding) return;
     int n;
     uint32_t table = st_table_of(self, &n);

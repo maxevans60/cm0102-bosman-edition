@@ -27,6 +27,7 @@
 #include "season_comps.h"
 #include "season.h"
 #include "season_change.h"
+#include "news_text.h"
 #include "season_divisions.h"
 #include "season_comps.h"
 #include "season_cups.h"
@@ -692,7 +693,9 @@ RT_WRAP(0077bc80, news_write_text)
 {
     uint32_t item = cpu.ecx, text = rt_arg(1);
     if (!our_item(item) || !readable(text)) {
+        uint32_t full_text = rt_arg(2);
         o_0077bc80();
+        if (!rt_unwinding) news_text_written(item, text, full_text);
         return;
     }
     int season = (int)rd32(g_mem, item + 9), full = rt_arg(2) != 0;

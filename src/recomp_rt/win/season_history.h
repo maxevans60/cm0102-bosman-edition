@@ -91,6 +91,37 @@ typedef struct {
 extern const SeasonHistDb season_history_dbs[];          /* season_history_table.c */
 extern const int season_history_dbs_count;
 
+/* The corrected rows of issues 145 and 165 (docs/research/history-rows/, season_history_rows_table.c). Every season
+ * game takes them at the end of the fill; the base game takes none. A name may list the spellings of the databases,
+ * joined by '|'. */
+typedef struct {                    /* lists.tsv: the whole history of a competition */
+    const char *comp;
+    uint16_t label;
+    uint16_t from;                  /* the first start year that holds the row: the game plays earlier editions */
+    const char *place[4];           /* first, second, third, host */
+} SeasonHistListRow;
+
+typedef struct {                    /* corrections.tsv: one field of one edition */
+    const char *comp;
+    uint16_t label;
+    uint8_t field;                  /* 0 first, 1 second, 2 third, 3 host */
+    const char *guard;              /* the winner that the row must hold */
+    const char *accept;             /* the field stays when it holds one of these names */
+    const char *write;              /* "": the field becomes empty */
+} SeasonHistRowFix;
+
+typedef struct {                    /* clears.tsv: rows of editions that never took place */
+    const char *comp;
+    uint16_t from_label;
+} SeasonHistClearFrom;
+
+extern const SeasonHistListRow season_history_list_rows[];
+extern const int season_history_list_rows_count;
+extern const SeasonHistRowFix season_history_row_fixes[];
+extern const int season_history_row_fixes_count;
+extern const SeasonHistClearFrom season_history_clears_from[];
+extern const int season_history_clears_from_count;
+
 /* After the shift of a database load or a new shift (season_dates.c): the rows of database `name` for start
  * year N: first the duplicate rows go (above), then the researched rows and the rows of the added records.
  * name NULL (no shift plan): only the rows of the added records, and the duplicate rows go when duplicates is 1

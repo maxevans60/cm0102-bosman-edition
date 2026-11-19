@@ -27,6 +27,7 @@
  * its own entrants and qualifying rounds (season_uefa_qual.c), and for its knockout round play-offs the 8 thirds
  * of the Europa League groups. The format of 2004/05 to 2008/09 and the Intertoto hand-over are the Europa
  * League's only. */
+#include "season_bel_playoffs.h"
 #include "season_sizes_arg.h"
 #include "win.h"
 #include "season.h"
@@ -1003,6 +1004,10 @@ RT_WRAP(005a8f60, empty_or_uc_advance)
 {
     uint32_t uc = cpu.ecx;
     if (season_arg_advance(uc)) {                    /* 0.7.2 gap row 48: the Argentine Primera's title stages */
+        if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
+        return;
+    }
+    if (season_bel_po_advance(uc)) {                 /* issue 150: the Belgian First Division's stages */
         if (!rt_unwinding) rt_ret_cdecl(cpu.eax);
         return;
     }
