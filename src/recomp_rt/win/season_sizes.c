@@ -2154,7 +2154,8 @@ static void sizes_new_game(int start_year)
     }
 }
 
-/* After a load: the counts of the loaded game. It only reads the objects. */
+/* After a load: the counts of the loaded game. It reads the objects, and gives the empty Druga HNL South its table back
+ * (season_sizes_cro_loaded). */
 static void sizes_loaded(int start_year)
 {
     (void)start_year;

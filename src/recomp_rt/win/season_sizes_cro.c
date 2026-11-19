@@ -375,6 +375,7 @@ void season_sizes_cro_loaded(void)
     if (!table) return;
     for (uint32_t i = 0; i < SOUTH_ROWS * ROW_SIZE; i++) g_mem[table + i] = 0;
     wr32(g_mem, south + COMP_TABLE, table);
+    /* Always logged (once per load), so a test of a loaded game shows that the table came back. */
     fprintf(stderr, "recomp: league sizes: cro_a2b %d: no club, the load gives it back its table of no row\n",
             (int16_t)rd16(g_mem, south + COMP_YEAR));
 }
