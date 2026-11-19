@@ -354,6 +354,23 @@ static uint32_t ko_table(uint32_t uc, int ko_po);
 static uint32_t group_table(uint32_t year, int days);
 static uint32_t uc_group_name(int g);
 
+/* Item 298: the UEFA Cup before its groups (a row with a qualifying round "QR" and no group stage: 2001/02 to
+ * 2003/04) keeps the original's round table, whose qualifying round (code 0xdc, 10 August, 0x902735..0x90273c) and
+ * first round (code 10, 14 September, 0x9027cd..0x9027de; drawn on 25 August, 0x9027bf..0x9027c4) take the day of
+ * the year on a Thursday. In 2003 the first round fell on 11 September, the day after a FIFA day: the clubs played
+ * it without their players on duty (release set row t2002: Leeds United with 3 players in the squad of the Republic
+ * of Ireland, which played on 10 September). In a season game the two rounds take the dates of the UEFA Cup with
+ * groups (season_uefa_cup_qual_dates). t is the table that the original returned (eax), rounds its count. The base
+ * game has no row and keeps the original's days. */
+static void pre_group_dates(int kind, const SeasonUefa *r, uint32_t t, int rounds, int year)
+{
+    if (rt_unwinding || kind != 'e' || !r || r->uc_groups || r->uc_league || season_uefa_uc_round(r, "QR") <= 0 ||
+        !readable(t) || rounds < 2 || rounds > 16)
+        return;
+    uint32_t qr = record_of(t, rounds, 0xdc), first = record_of(t, rounds, 10);
+    if (qr && first) season_uefa_cup_qual_dates(qr, first, year);
+}
+
 /* The return addresses of the two calls that set up a season's rounds: the constructor (call at 0x9023cd) and
  * set_up_rules 0x9030b0 (call at 0x9030ca). Any other caller, such as Comp::build_match_date_list 0x48d500 (the
  * Schedule tab, call at 0x48d5c4), only reads the tables. */
@@ -393,6 +410,7 @@ RT_WRAP(009025c0, uc_round_table)
                         kind == 'k' ? "Conference League" : "UEFA Cup", year, (int8_t)g_mem[uc + 0xb2],
                         (int16_t)rd16(g_mem, uc + 0x3e));
             o_009025c0();
+            if (readable(out_rounds)) pre_group_dates(kind, r, cpu.eax, (int16_t)rd16(g_mem, out_rounds), (int)year);
             return;
         }
         uint32_t t = qual_table(uc, q1, q2, r1);
@@ -419,6 +437,8 @@ RT_WRAP(009025c0, uc_round_table)
     }
     if (!groups_layout(uc) || stage < -1 || stage > ko_slot(uc) || !have_f) {
         o_009025c0();
+        if (stage == -1 && readable(out_rounds))       /* a reader of the season before groups: the same dates */
+            pre_group_dates(kind, r, cpu.eax, (int16_t)rd16(g_mem, out_rounds), (int)year);
         return;
     }
     /* A reader: the tables of this season's format, with no change to the object. */
