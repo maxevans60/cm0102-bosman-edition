@@ -337,6 +337,10 @@ if(NOT WIN32)
     add_executable(season_mls_plan_test tests/seasons/test_season_mls_plan.c src/recomp_rt/win/season_mls_plan.c)
     target_include_directories(season_mls_plan_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_mls_plan COMMAND season_mls_plan_test)
+    # The Swedish third tier in two groups (issue 106).
+    add_executable(season_swe_groups_test tests/seasons/test_season_swe_groups.c src/recomp_rt/win/season_swe_groups_plan.c)
+    target_include_directories(season_swe_groups_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_swe_groups COMMAND season_swe_groups_test)
     add_executable(season_closed_test tests/seasons/test_season_closed.c src/recomp_rt/win/season_closed.c
                    src/recomp_rt/win/season_mls_plan.c)
     target_include_directories(season_closed_test PRIVATE src/recomp_rt/win)
