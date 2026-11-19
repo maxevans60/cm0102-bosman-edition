@@ -478,9 +478,31 @@ static void free_row(uint32_t hist, uint32_t index)
 /* The end of the fill in a season game: the corrections, then the rows of editions that never took place, then the
  * whole lists. A list row goes into a row that the list freed, else into a new row of 0x527f60. A name that a
  * database lacks leaves its place empty; a list row with no winner stays out. */
+static int after_start_part(char part);
+
+/* Test switch RECOMP_HISTORY_ROWS, read once: unset, all parts of apply_rows; off, none; else the letters of the parts
+ * that act: f the corrections, h the clear of club hosts, c the clears, l the lists. The Q48 switch
+ * RECOMP_HISTORY_AFTER_START=off also stops them all (the new-game pair rules-on and history-q48-off of smoke_run.py). */
+static int rows_part(char part)
+{
+    static const char *mode;
+    if (!mode) {
+        const char *v = getenv("RECOMP_HISTORY_ROWS");
+        int q48_off = !after_start_part('c') && !after_start_part('w');
+        mode = q48_off ? "" : !v || !*v ? "fhcl" : !strcmp(v, "off") ? "" : v;
+        if (q48_off) fprintf(stderr, "recomp: season history: corrected rows: off (RECOMP_HISTORY_AFTER_START=off)\n");
+        else if (strcmp(mode, "fhcl"))
+            fprintf(stderr, "recomp: season history: corrected rows: RECOMP_HISTORY_ROWS=%s, parts that act:%s%s%s%s\n", v,
+                    strchr(mode, 'f') ? " f" : "", strchr(mode, 'h') ? " h" : "", strchr(mode, 'c') ? " c" : "",
+                    strchr(mode, 'l') ? " l" : "");
+    }
+    return strchr(mode, part) != NULL;
+}
+
 static void apply_rows(int N)
 {
     if (!season_code_on() || (N == SEASON_FIRST_YEAR && !season_next_rules())) return;
+    if (!rows_part('f') && !rows_part('h') && !rows_part('c') && !rows_part('l')) return;
     uint32_t hist = rd32(g_mem, HISTORY_PTR), count = rd32(g_mem, HISTORY_COUNT);
     uint32_t clubs = rd32(g_mem, CLUBS_PTR), n_clubs = rd32(g_mem, CLUB_COUNT);
     if (!hist || !clubs) return;
@@ -492,7 +514,7 @@ static void apply_rows(int N)
     index_clubs(clubs, n_clubs);
     uint32_t fixed = 0, cleared = 0, written = 0, lost = 0;
 
-    for (int k = 0; k < season_history_row_fixes_count; k++) {
+    for (int k = 0; rows_part('f') && k < season_history_row_fixes_count; k++) {
         const SeasonHistRowFix *x = &season_history_row_fixes[k];
         uint32_t c = rows_comp(x->comp), at = 0xa + 4u * x->field;
         for (uint32_t i = 0; c && i < count; i++) {
@@ -510,14 +532,14 @@ static void apply_rows(int N)
     }
     /* A national team tournament never has a club as its host: the data of some databases points there (Olot). */
     uint32_t sides = rd32(g_mem, NATIONAL_SIDES_PTR);
-    for (uint32_t i = 0; sides > clubs && i < count; i++) {
+    for (uint32_t i = 0; rows_part('h') && sides > clubs && i < count; i++) {
         uint32_t r = hist + i * HISTORY_SIZE, host = rd32(g_mem, r + 0x16);
         if (!rd32(g_mem, r + 4) || rd32(g_mem, r + 0xa) < sides || !host || host >= sides) continue;
         save_row(i);
         wr32(g_mem, r + 0x16, 0);
         fixed++;
     }
-    for (int k = 0; k < season_history_clears_from_count; k++) {
+    for (int k = 0; rows_part('c') && k < season_history_clears_from_count; k++) {
         uint32_t c = rows_comp(season_history_clears_from[k].comp);
         for (uint32_t i = 0; c && i < count; i++) {
             uint32_t r = hist + i * HISTORY_SIZE;
@@ -534,7 +556,7 @@ static void apply_rows(int N)
     if (!nw || !freed) rt_fatal("season history: no memory");
     for (int k = 0; k < season_history_list_rows_count; k++) {
         const SeasonHistListRow *x = &season_history_list_rows[k];
-        uint32_t c = x->from <= N && x->label <= N ? rows_comp(x->comp) : 0;
+        uint32_t c = rows_part('l') && x->from <= N && x->label <= N ? rows_comp(x->comp) : 0;
         if (!c) continue;
         ListNew *w = &nw[n_new];
         w->comp = c;
