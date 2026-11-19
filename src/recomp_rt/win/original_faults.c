@@ -790,20 +790,53 @@ void rt_squad_move_test(void)
  * (0x526d94), and 0x60ba80 rewrites the first key id that holds the old row and returns. The second key id keeps the
  * old row, so it names another club after the trim. In a game on the October 2026 database Levante U.D. B took row
  * 3230, the old row of C.D. Logrones, and club_get_linked_b_team 0x540a50 gave it the pair of 0x9d04c8: old row 6679,
- * past the end of the trimmed table. match_day_can_quick_simulate 0x6b66a0 passed that row to
+ * past the end of the trimmed table. match_day_can_quick_simulate 0x6b66a0 passed the club of that row to
  * human_manager_is_human_club 0x600a50 (0x6b6756), which read no nation and stopped at the box Database.cpp 13126
  * (0x53b3d0). Here every key id of the old row follows it. The rows go up in order and a new row is never above its
- * old row, so a key id that already moved never holds the old row of a later call. 0x9d0300 and 0x9d034c are not in
- * the chain of 0x60ba80. A saved game needs no fix: set_key_ids runs again at its load (0x52d8fa). */
+ * old row, so a key id that already moved never holds the old row of a later call. The chain of 0x60ba80 holds
+ * 0x9d00a4..0x9d0524 without 0x9d0300 and 0x9d034c, and 0xb63c9c..0xb63d00. A saved game needs no fix: set_key_ids
+ * runs again at its load (0x52d8fa). */
+static void club_key_follow(uint32_t key, uint32_t old_row, uint32_t new_row)
+{
+    if (rd32(g_mem, key) != old_row) return;
+    wr32(g_mem, key, new_row);
+    if (getenv("RECOMP_SEASON_LOG"))
+        fprintf(stderr, "recomp: club key %#x follows row %u to row %u\n", key, old_row, new_row);
+}
+
 void rt_club_key_twins(uint32_t old_row, uint32_t new_row, uint32_t hit)
 {
     if (!hit || old_row == new_row || !fixes_on_group(CLUB_KEYS)) return;
-    for (uint32_t key = 0x9d00a4u; key <= 0x9d0524u; key += 4u) {
-        if (key == 0x9d0300u || key == 0x9d034cu || rd32(g_mem, key) != old_row) continue;
-        wr32(g_mem, key, new_row);
-        if (getenv("RECOMP_SEASON_LOG"))
-            fprintf(stderr, "recomp: club key %#x follows row %u to row %u\n", key, old_row, new_row);
+    for (uint32_t key = 0x9d00a4u; key <= 0x9d0524u; key += 4u)
+        if (key != 0x9d0300u && key != 0x9d034cu) club_key_follow(key, old_row, new_row);
+    for (uint32_t key = 0xb63c9cu; key <= 0xb63d00u; key += 4u) club_key_follow(key, old_row, new_row);
+}
+
+/* RECOMP_CLUB_KEY_TEST=1 (tests/seasons/club_key_twins_run.py, open item 295): at the first start report, the two key
+ * ids of each of the four clubs, and the B side that club_get_linked_b_team 0x540a50 gives the clubs on the old rows. */
+void rt_club_key_test(void)
+{
+    static int done;
+    if (done || !getenv("RECOMP_CLUB_KEY_TEST")) return;
+    done = 1;
+    static const uint32_t pairs[4][2] = {{0x9d0170u, 0x9d04c8u}, {0x9d0174u, 0x9d04ccu}, {0x9d03b4u, 0x9d04c0u}, {0x9d03b8u, 0x9d04c4u}};
+    static const uint32_t rows[] = {1215u, 1216u, 3230u, 6678u, 6679u};
+    uint32_t clubs = rd32(g_mem, 0xae23b4u), count = rd32(g_mem, CLUB_COUNT);
+    for (int i = 0; i < 4; i++)
+        fprintf(stderr, "recomp: club key test: keys %#x %#x hold rows %d %d\n", pairs[i][0], pairs[i][1],
+                (int)rd32(g_mem, pairs[i][0]), (int)rd32(g_mem, pairs[i][1]));
+    for (size_t i = 0; i < sizeof rows / sizeof rows[0] && rows[i] < count; i++) {
+        uint32_t club = clubs + rows[i] * 581u, args[3] = {club, 0u, 0u};
+        uint32_t b = rt_callback(0x540a50u, 3, args);
+        if (rt_unwinding) return;
+        uint32_t row = b ? (b - clubs) / 581u : 0u;
+        if (!b) fprintf(stderr, "recomp: club key test: row %u '%.50s' has no B side\n", rows[i], (const char *)(g_mem + club + 4u));
+        else if (row >= count) fprintf(stderr, "recomp: club key test: row %u '%.50s' has a B side past the table, row %u\n", rows[i],
+                                       (const char *)(g_mem + club + 4u), row);
+        else fprintf(stderr, "recomp: club key test: row %u '%.50s' has the B side row %u '%.50s'\n", rows[i],
+                     (const char *)(g_mem + club + 4u), row, (const char *)(g_mem + b + 4u));
     }
+    fprintf(stderr, "recomp: club key test: done\n");
 }
 
 /* A loan to the club's own linked B side (open item 280, group squad_loans). CONTRACT_MANAGER::sign_loan_contract
