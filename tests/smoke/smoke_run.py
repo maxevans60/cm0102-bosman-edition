@@ -214,14 +214,15 @@ def differing_share(a, b, box=None, tol=0):
 # (open item 160: a squad pick of the first days can be new) can act in a new game or its first days, and the group
 # match_numbers acts on each match day (open item 155, match_numbers.c), and squad_moves (open item 187) acts at each
 # squad assessment of a club with a linked B side (Shortlist_Manager::assess_club_squad 0x83cb40), and squad_loans (open item 280) at each loan to a
-# linked B side (sign_loan_contract 0x4d01e0), so the runs
+# linked B side (sign_loan_contract 0x4d01e0), and callup_counts (open item 300) at each national squad pick whose
+# last club by id has players in the squad (record_club_call_ups 0x7771c0), so the runs
 # original-faults-keep keep only the others.
 ORIGINAL_FAULT_GROUPS = ["managers", "money", "age", "olympics", "ire_super", "nsl", "holiday", "callups", "wc_pots",
                          "confed", "club_regulars", "match_numbers", "squad_moves",
-                         "squad_loans"]
+                         "squad_loans", "callup_counts"]
 # Group confed moves the dates of the Confederations Cup 2003 that a new game of 2001/02 builds (its stage builder
 # 0x58bdb0 runs at the creation), in the base game and with changing rules on alike.
-ACTING_GROUPS = ("callups", "confed", "club_regulars", "match_numbers", "squad_moves", "squad_loans")
+ACTING_GROUPS = ("callups", "confed", "club_regulars", "match_numbers", "squad_moves", "squad_loans", "callup_counts")
 KEEP_IN_RUNS = "keep:" + ",".join(g for g in ORIGINAL_FAULT_GROUPS if g not in ACTING_GROUPS)
 
 
