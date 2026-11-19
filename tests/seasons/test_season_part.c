@@ -29,6 +29,7 @@ void o_00685640(void) {}
 void o_005d5ae0(void) {}
 void o_0060efd0(void) {}
 void o_0077bc80(void) {}
+void news_text_written(uint32_t item, uint32_t text, uint32_t full) { (void)item, (void)text, (void)full; }
 void o_00782b70(void) {}
 void o_00784100(void) {}
 void o_00784eb0(void) {}

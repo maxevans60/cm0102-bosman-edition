@@ -67,6 +67,9 @@ static const OptionDef defs[OPT_COUNT] = {
     /* 0.7.0 slice 6 (Q38): the Network tab of the Options box sets it; the join check reads it (net_lobby.c). */
     [OPT_GAME_PASSWORD] = {"game_password", KIND_TEXT, "", NULL,
         "game_password = the password that a human manager types to join a network game that you host. Empty: no password."},
+    /* 0.7.3 slice 13 (issue 140): read at each new number (squad_numbers.c). */
+    [OPT_SQUAD_NUMBERS_99] = {"squad_numbers_99", KIND_SWITCH, "off", NULL,
+        "squad_numbers_99 = on lets a new game keep database squad numbers from 51 to 99, and gives a signing a number up to 99 when 1 to 50 are taken. off gives no new number above 50. In a network game the host's setting applies."},
 };
 
 #define TEXT_MAX 1100

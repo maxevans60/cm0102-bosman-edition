@@ -503,6 +503,21 @@ int main(void)
     CHECK(!season_intl_gold_busy(2016, doy_of(2016, 7, 10)), "2013 off: no Gold Cup in 2016");
     CHECK(!season_intl_gold_busy(2013, doy_of(2013, 7, 10)), "2013 off: the 2013 Gold Cup lies before the game");
 
+    /* Issue 146: the news of the qualified nations names real hosts for the Euros with an empty host row. */
+    CHECK(season_intl_news_hosts("euro_champ", 2020) && !strcmp(season_intl_news_hosts("euro_champ", 2020), "England"),
+          "Euro 2020 news host");
+    CHECK(season_intl_news_hosts("euro_champ", 2028) &&
+          !strcmp(season_intl_news_hosts("euro_champ", 2028), "England;Republic of Ireland"), "Euro 2028 news hosts");
+    CHECK(!season_intl_news_hosts("euro_champ", 2024), "Euro 2024 keeps its host row");
+    CHECK(!season_intl_news_hosts("euro_champ", 2032), "Euro 2032 keeps its host row");
+    CHECK(!season_intl_news_hosts("world_cup", 2030), "World Cup 2030 keeps its host row");
+    {
+        const SeasonIntlEdition *wc = season_intl_edition("world_cup", 2030);
+        CHECK(wc && !strcmp(wc->hosts, "Morocco;Portugal;Spain;Argentina;Paraguay;Uruguay"), "World Cup 2030 hosts");
+        CHECK(season_intl_announced_hosts("euro_champ", 2032) &&
+              !strncmp(season_intl_announced_hosts("euro_champ", 2032), "Italy;Turkey", 12), "Euro 2032 hosts");
+    }
+
     if (failures) {
         fprintf(stderr, "season_intl_test: %d failures\n", failures);
         return 1;

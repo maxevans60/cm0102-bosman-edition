@@ -57,6 +57,12 @@ CASES = {
     "portugal2015": (2014, 2016, ["England", "Portugal"], {"por_second": (2016, 22), "por_prm": (2016, 18)},
                      "D23 towards a division outside the size table: LigaPro 24 to 22 in 2016/17 through the real "
                      "places of 2015/16 (5 down, open item 248)"),
+    "portugal2013": (2013, 2014, ["England", "Portugal"], {"por_prm": (2014, 18), "por_second": (2014, 24)},
+                     "Issue 154: the Primeira Liga's 15th and the Segunda Liga's 3rd club that is no reserve side play "
+                     "one tie over two legs in 2013/14 (rows por-109, por-110, open item 248)"),
+    "belgium2009": (2009, 2010, ["England", "Belgium"], {"bel_second": (2010, 18)},
+                    "Item 279: the Belgian second division 19 to 18 in 2010/11: a club that the step moves into the "
+                    "third division takes a group (+0x60), so both groups fill (bel_third.cpp 758)"),
     "brazil": (2004, 2006, ["England", "Brazil"], {"bra_nat_second": (2006, 20)},
                "D23 towards a division outside the size table: Serie B 22 to 20 in 2006 through the real places of "
                "2005 (6 down, open item 249)"),
@@ -84,7 +90,7 @@ CASES = {
 # Segunda Divisao B: without it PorSecond::set_up_rules sets no division below (0x7d1714..0x7d1728) and the PorPrm
 # chain returns before its Segunda Liga call (0x7cfc55), so no club of the Segunda Liga goes down there.
 EXTRA = {"conference": ["conference"], "refuse": ["conference"], "nl2019": ["conference"], "nl2021": ["conference"],
-         "portugal2015": ["portugal"]}
+         "portugal2015": ["portugal"], "portugal2013": ["portugal"]}
 
 # The environment of a case beyond RECOMP_SIZE_LOG=1.
 ENV = {"refuse": {"RECOMP_TEST_REFUSE_CHAMPION": "1"}}
@@ -132,6 +138,8 @@ NO_STEP = {"grow": ["swe_prm"], "shrink": ["fra_first"]}
 NO_EXIT = {"portugal2015": ["por_second"], "brazil": ["bra_nat_second"]}
 # Gap row 9: the rows of the Allsvenskan and the Superettan for 2007 say no play-off, so neither plays the class's
 # kvalspel (report season, the line of the edition).
+# Issue 154: the tie between two divisions, with its log lines (season_playoffs.c build_tie, cross_result).
+TIE = {"portugal2013": {"por_second": 2013}}
 NO_PLAYOFF = {"grow": {"swe_prm": 2007, "swe_first": 2007}}
 
 MOVE_LINE = re.compile(r"recomp: league sizes: step: (.*) from (.*) to (.*)$")
@@ -202,6 +210,14 @@ def faults(work, case):
                     and c["year"] and (c["playoff_up"] or c["playoff_down"]):
                 fails.append(f"{file} {season}: {c['playoff_up']} up and {c['playoff_down']} down play-off places, "
                              f"its row none")
+    for file, season in TIE.get(case, {}).items():
+        for step in ("drawn", "final"):
+            if not re.search(rf"recomp: playoffs: cross\t{file}\t{season}\t{step}\t", log):
+                fails.append(f"{file} {season}: no line of the tie's {step}")
+        # The upper club won: the lower club that lost takes no extra place of the size change (review, issue 154).
+        if re.search(rf"recomp: playoffs: cross\t{file}\t{season}\tfinal\t[^\t]*\tpor_prm\t", log) and \
+                not re.search(rf"recomp: league sizes: .* lost the tie and stays in {file}\n", log):
+            fails.append(f"{file} {season}: the club that lost the tie has no line that it stays")
     for file in NO_EXIT.get(case, []):
         names = {c["name"] for c in comps if c["file"] == file}
         fails += [f"{file}: the step sent a club to no division: {m.group(0)}"

@@ -342,6 +342,7 @@ TABLE_SITE_TAKEN = {
 # Grown classes whose create_schedule another module wraps already (RT_WRAP takes an address once). That wrap calls
 # season_sizes_schedule after the original, and make_size_wraps.py writes none: file: the module.
 SCHEDULE_TAKEN = {
+    "bel_second": "season_bel_playoffs.c bel_second_schedule",
     "ita_ser_c1a": "season_divisions_ita.c c1a_schedule",
     "ita_ser_c1b": "season_divisions_ita.c c1b_schedule",
 }
@@ -444,13 +445,14 @@ FLOOR_COUNT = {f: CAPS[f] for f in FLOORS}
 # (0.7.2 slice 4, lead decision of 13 November 2026). A floor did both: sizes_rules (season_sizes.c) leaves the places
 # of a division with a floor or next to one, and the wrap of league_promote_and_relegate 0x689c80 moves its clubs in
 # pairs unless both counts stay within floor and cap. The places of these divisions belong to the slices of their
-# leagues: the Northern Irish divisions (slice 13). file: the count of the old floor (the class's own count: HELD for a
-# grown class, slice 7). The English divisions left in slice 8 (D15): the exchange of League Two and the Conference
+# leagues. The Northern Irish divisions left with items 271 and 272 (slice 13): their places are the rows'
+# (season_sizes_nir.c), and the First Division's relegation places go to the Northern Irish lower division. file: the
+# count of the old floor (the class's own count: HELD for a grown class, slice 7). The English divisions left in slice 8 (D15): the exchange of League Two and the Conference
 # takes the places of the rows (season_sizes_eng.c). The Welsh Premier left with open item 250: it has no chain, and its
 # row's relegation places go to no division at its season change (season_sizes.c, lone_exchange). The Scottish
 # divisions left with gap row 11: their places are the rows', and the play-offs between two divisions are
 # season_playoffs.c (the cross play-off).
-FIXED_EXCHANGE = {f: HELD.get(f, CAPS[f]) for f in ("nir_first", "nir_prm")}
+FIXED_EXCHANGE = {}
 assert not set(FIXED_EXCHANGE) & FLOORS
 
 # Fixed rows that a class of another division reads in the table of a class here (open item 113): file: (count, why).
@@ -704,8 +706,8 @@ PERIOD_PATCHES = {
     0x5F607A: (0x4, "rt_hol_playoff_stage(edi, 0x4u)"),         # the group's name: cmp al, 4
     0x5F6F9C: (0x4, "rt_hol_playoff_stage(ebx, 0x4u)"),         # status news 0x5f6ee0: cmp al, 4
     0x5F6FD1: (0x5, "rt_hol_playoff_stage(ebx, 0x5u)"),         # cmp al, 5
-    0x5F7117: (0x4, "rt_hol_playoff_stage(ecx, 0x4u)"),         # match news 0x5f7110: cmp al, 4
-    0x5F711D: (0x5, "rt_hol_playoff_stage(edi, 0x5u)"),         # cmp al, 5
+    0x5F7117: (0x4, "rt_hol_match_news_stage(ecx, 0x4u)"),      # match news 0x5f7110: cmp al, 4
+    0x5F711D: (0x5, "rt_hol_match_news_stage(edi, 0x5u)"),      # cmp al, 5
     # The group goes in the play-off's own slot of the stage array (+0xc), so no slot before it stays empty.
     0x42042F: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # mov [ecx + 0xc], eax
     0x420443: (0xC, "4u * rt_bel_playoff_stage(esi, 0x3u)"),    # cmp [edx + 0xc], ebx

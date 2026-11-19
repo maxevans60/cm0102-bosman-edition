@@ -36,8 +36,8 @@ tests/seasons/callups_run.py. The group wc_pots (open item 166) has its own test
 tests/seasons/wc2002_draw_run.py. The group confed (open items 157 to 159) has the ctest season_intl and
 tests/seasons/confed_dates_run.py. The group club_regulars (open item 160) has tests/seasons/club_regulars_run.py.
 The group match_numbers (open item 155) has its own test: tests/smoke/match_timing_run.py. The group squad_moves
-(open item 187) has its own test: tests/seasons/squad_move_run.py. The group squad_loans (open item 280) has no
-short test: its proof is run C of the 0.7.2 full check from a new game (day 208 of 2007), red with keep:squad_loans.
+(open item 187) has its own test: tests/seasons/squad_move_run.py. The group squad_loans (open item 280, issue 159) has its own
+test: tests/seasons/squad_loan_run.py. The AI move's proof is run C of the 0.7.2 full check from a new game (day 208 of 2007), red with keep:squad_loans.
 
 money: for each balance, sets the balance of Arsenal (the human's club) and of Liverpool (an AI club whose budget follows its balance: club +0x82 is 0, see
 docs/research/2026-10-30-money-64bit.md) in start.sav of the
