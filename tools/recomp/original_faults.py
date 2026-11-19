@@ -199,6 +199,13 @@ senior side picks again (select_squad 0x76c120) when one of its squad is a regul
 the squad's window is still to come (today on or after the window end, nation record +0x3a; 0x54cdb0 gives today
 minus that day) and the fixture is the one of the day two weeks ahead, the day of the marks (daily_update 0x76b100
 builds them for that day, 0x76b257..0x76b2bf; 0x76bab0 also runs for a new fixture, from 0x5aab15).
+The B and under-21 squads have their own keep tests with the same 14 days (open item 299 of 0.6.2): the B squad
+(window end record +0x4e, squad set +0x57) at 0x76bc76 (home) and 0x76bec7 (away), the under-21 squad (window end
++0x62, squad set +0x6b) at 0x76bd34 (home) and 0x76bf85 (away), each before its pick (select_squad with slot 1 at
+0x76bdcf from 0x76bce9, slot 2 from 0x76bdbc, and the away calls from 0x76bf3a and 0x76c00e). They take the same new
+pick (rt_squad_kept_at with the window of the squad): in release set row t2002 (seed 73) Argentina's under-21 squad
+of its friendly of 19 August 2003 was kept on that day for the friendly of 2 September, and three regulars of a club
+with a Copa Sudamericana match on 1 September played neither.
 The marks and the new pick are one group: one rule of real life, and the reported case needs both. Test:
 tests/seasons/club_regulars_run.py.
 
@@ -302,6 +309,10 @@ INSNS = {
     0x777729: ("je 0x77778f", "if (cc_e(F) && !rt_callup_mark_all()) goto L_77778f;"),
     0x76BBA8: ("je 0x76bc10", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x1cu), edi, esi)) goto L_76bc10;"),
     0x76BE1B: ("je 0x76be83", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x20u), edi, esi)) goto L_76be83;"),
+    0x76BC76: ("je 0x76bce9", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x1cu), edi, esi, 0x4eu)) goto L_76bce9;"),
+    0x76BEC7: ("je 0x76bf3a", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x20u), edi, esi, 0x4eu)) goto L_76bf3a;"),
+    0x76BD34: ("je 0x76bdbc", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x1cu), edi, esi, 0x62u)) goto L_76bdbc;"),
+    0x76BF85: ("je 0x76c00e", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x20u), edi, esi, 0x62u)) goto L_76c00e;"),
     0x526D99: ("add esp, 8", "rt_club_key_twins(R32(esp), R32(esp + 4u), eax); esp += 8u;"),
     0x4CC03D: ("mov ecx, dword ptr [0xb74350]", "rt_squad_move_set(R32(esp + 0x10u), esi, edi == ebx); ecx = R32(0xb74350u);"),
     # Issue 132, log only (no change of the game): HolFirst::set_club_progress 0x5f73d0 (vtable 0x96b86c slot +0x68)

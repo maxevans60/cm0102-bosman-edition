@@ -350,6 +350,7 @@ uint32_t rt_callup_released(uint32_t slot);
  * kept squad at 0x76bba8 and 0x76be1b. keep:club_regulars turns off both. */
 uint32_t rt_callup_mark_all(void);
 uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture);
+uint32_t rt_squad_kept_at(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture, uint32_t window);
 /* Open item 187 (win/original_faults.c, tools/recomp/original_faults.py at 0x4cc03d): the move of a one-contract
  * player to the linked side sets his contract's placement bit and the move back clears it, as the other moves do.
  * rt_squad_move_test: RECOMP_SQUAD_MOVE_TEST=1 at the first start report (season_report.c). */

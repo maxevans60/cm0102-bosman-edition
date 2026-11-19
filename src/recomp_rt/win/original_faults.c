@@ -636,12 +636,21 @@ static long abs_day(int year, int doy)          /* days from 1 January 1900, for
 #define TODAY 0xae2c90u
 #define AHEAD 14                    /* daily_update's day: two weeks ahead (0x54c770 with 2 at 0x76b126) */
 
+/* The same for the B squad (window end +0x4e: the keep tests 0x76bc76 and 0x76bec7) and the under-21 squad (+0x62:
+ * 0x76bd34 and 0x76bf85), open item 299 of 0.6.2. side is the fixture's side, the B or under-21 side, whose squad
+ * (+0xd7) the new pick (select_squad 0x76c120 with slot 1 or 2) replaces. The window is the record offset of the
+ * squad's window end (s16 day of the year, s16 year): 0x3a, 0x4e or 0x62. */
 uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture)
+{
+    return rt_squad_kept_at(nt, side, record, fixture, 0x3au);
+}
+
+uint32_t rt_squad_kept_at(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture, uint32_t window)
 {
     if (!fixes_on_group(CLUB_REGULARS) || !pointer(nt) || !pointer(side) || !pointer(record) || !pointer(fixture))
         return 1;
     int ty = (int16_t)rd16(g_mem, TODAY + 2u), td = (int16_t)rd16(g_mem, TODAY);
-    int wy = (int16_t)rd16(g_mem, record + 0x3cu), wd = (int16_t)rd16(g_mem, record + 0x3au);
+    int wy = (int16_t)rd16(g_mem, record + window + 2u), wd = (int16_t)rd16(g_mem, record + window);
     int fy = (int16_t)rd16(g_mem, fixture + 0x28u), fd = (int16_t)rd16(g_mem, fixture + 0x2au);
     if (ty < 1900 || wy < 1900 || fy < 1900 || ty > 3000 || wy > 3000 || fy > 3000) return 1;
     long today = abs_day(ty, td);
