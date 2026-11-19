@@ -603,7 +603,8 @@ static void closed_moves(Club *club, int count, const Division *div, int ncomps,
         if (!league || d->spare || (d->n0 <= 0 && !d->fresh)) continue;
         ClosedClub *list = calloc((size_t)count + 1, sizeof *list);
         int *of = calloc((size_t)count + 1, sizeof *of), *action = calloc((size_t)count + 1, sizeof *action);
-        if (!list || !of || !action) rt_fatal("club moves: no memory for a closed league");
+        unsigned *from = calloc((size_t)count + 1, sizeof *from), *to = calloc((size_t)count + 1, sizeof *to);
+        if (!list || !of || !action || !from || !to) rt_fatal("club moves: no memory for a closed league");
         int n = 0;
         for (int i = 0; i < count; i++) {
             if (club[i].national) continue;
@@ -621,9 +622,16 @@ static void closed_moves(Club *club, int count, const Division *div, int ncomps,
         ClosedResult r;
         season_closed_plan(league, season, d->want, list, n, action, &r);
         for (int k = 0; k < n; k++)
-            if (action[k] != CLOSED_STAY) club[of[k]].div = action[k] == CLOSED_JOIN ? d->at : 0;
-        fprintf(stderr, "recomp: club moves: %s of %d: %d clubs, %d join, %d fold, %d leave, %d not in this database\n",
-                d->name, season, r.count, r.joined, r.folded, r.cut, r.missing);
+            from[k] = action[k] == CLOSED_JOIN ? club[of[k]].div : 0;
+        /* s073-16: a club that leaves the league takes the place of a club that joins (season_closed_places). */
+        int places = season_closed_places(list, action, from, n, to);
+        for (int k = 0; k < n; k++)
+            if (action[k] != CLOSED_STAY) club[of[k]].div = action[k] == CLOSED_JOIN ? d->at : to[k];
+        fprintf(stderr, "recomp: club moves: %s of %d: %d clubs, %d join, %d fold, %d leave (%d to the places of the "
+                        "clubs that join), %d not in this database\n",
+                d->name, season, r.count, r.joined, r.folded, r.cut, places, r.missing);
+        free(from);
+        free(to);
         free(list);
         free(of);
         free(action);

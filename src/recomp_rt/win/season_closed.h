@@ -73,4 +73,16 @@ int season_closed_first(const char *league, int i);
 void season_closed_plan(const char *league, int season, int want, const ClosedClub *clubs, int n, int *actions,
                         ClosedResult *result);
 
+/* The divisions that the clubs leaving the league go to (s073-16). A club that joins leaves a place in its division
+ * from[i] (0: no division). Each such place, in the order of the list, takes the club that leaves the league
+ * (CLOSED_CUT) with the highest reputation that has no place yet. to[i] gets that division for each such club and 0
+ * for every other club. Returns the places filled.
+ *
+ * UsaOpenCup::collect_entrants 0x90b530 takes 10 clubs of the division with key id [0x9cf594] (0x90b56b, need 10 at
+ * 0x90b5f0, comp_util 0x4afbd0 at 0x90b5f8) and boxes "comp_util..cpp 241" (0x4afc8d) with fewer. The October 2026
+ * database holds the 18 MLS clubs of 2026 in that division, American A-League, and nothing else. All 18 join the MLS,
+ * and the 18 stand-ins that the fill gave the MLS (USL clubs) left for no division, so the cup found 0 clubs. In
+ * real life those clubs play in the USL, the second tier, so they take the places of the clubs that joined. */
+int season_closed_places(const ClosedClub *clubs, const int *actions, const unsigned *from, int n, unsigned *to);
+
 #endif

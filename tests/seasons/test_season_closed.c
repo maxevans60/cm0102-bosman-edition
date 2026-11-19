@@ -220,8 +220,29 @@ static void test_a_league_plan(void)
           r.count, a[10]);
 }
 
+/* s073-16: the clubs that leave the league take the places of the clubs that join, in the divisions they left. Row
+ * sp2026 of the release set: all 18 clubs of American A-League joined the MLS of 2026, the 18 stand-ins left for no
+ * division, and the US Open Cup found 0 of its 10 A-League clubs (comp_util..cpp 241). */
+static void test_places(void)
+{
+    ClosedClub c[] = {{"Seattle Sounders FC", 0, 0, 0, 80}, {"Austin FC", 0, 0, 0, 70},
+                      {"Charlotte Independence", 1, 0, 0, 20}, {"Richmond Kickers", 1, 0, 0, 40},
+                      {"Union Omaha", 1, 0, 0, 30}, {"Chicago Fire", 1, 0, 0, 90}, {"Inter Miami CF", 0, 0, 0, 60}};
+    int a[] = {CLOSED_JOIN, CLOSED_JOIN, CLOSED_CUT, CLOSED_CUT, CLOSED_CUT, CLOSED_STAY, CLOSED_JOIN};
+    unsigned from[] = {32, 33, 31, 31, 31, 31, 0}, to[7];
+    int filled = season_closed_places(c, a, from, 7, to);
+    CHECK(filled == 2, "places filled %d", filled);
+    CHECK(to[3] == 32 && to[4] == 33 && to[2] == 0, "places: %u %u %u", to[3], to[4], to[2]);
+    CHECK(to[0] == 0 && to[1] == 0 && to[5] == 0 && to[6] == 0, "only a club that leaves moves");
+    /* More places than clubs that leave: the rest stay empty. */
+    a[2] = a[3] = CLOSED_STAY;
+    filled = season_closed_places(c, a, from, 7, to);
+    CHECK(filled == 1 && to[4] == 32 && to[2] == 0 && to[3] == 0, "one club, two places: %d %u", filled, to[4]);
+}
+
 int main(void)
 {
+    test_places();
     test_table();
     test_plan();
     test_a_league();
