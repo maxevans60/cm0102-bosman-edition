@@ -33,8 +33,7 @@ PLACE_KINDS = ("up", "down", "playoffs")
 KEPT = {"usa_mls": "D17", "fin_first": "D16", "den_second": "D16", "spa_second_b": "D16 groups",
         "por_second_b": "D16 groups", "tur_second_b": "D16 groups", "bra_nat_third": "D16 groups",
         "ita_ser_c2a": "D16 groups", "ita_ser_c2b": "D16 groups", "ita_ser_c2c": "D16 groups",
-        "ger_regional": "D16 groups", "fra_cfa": "D16 groups", "fra_lower": "D16 groups", "pol_first": "D16 groups",
-        "swe_second": "D16 groups"}
+        "ger_regional": "D16 groups", "fra_cfa": "D16 groups", "fra_lower": "D16 groups", "pol_first": "D16 groups"}
 CONFEDERATIONS = {"UEFA", "AFC", "CAF", "CONMEBOL", "CONCACAF", "OFC", "FIFA"}
 
 

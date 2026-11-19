@@ -41,6 +41,7 @@
  * Division clubs. One log line each time. Without the extra division the Second Division groups are not played,
  * and the game stays as before. */
 #include "win.h"
+#include "season_swe_groups.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -75,6 +76,10 @@ RT_WRAP(00892670, swe_second_group)
 {
     uint32_t self = cpu.ecx;
     int group = (int8_t)(rt_arg(0) & 0xffu);
+    if (season_swe_groups_skip_stage(self, group)) {   /* issue 106: two groups, only stage 0 exists */
+        rt_ret_stdcall(0, 1);
+        return;
+    }
     uint32_t division = readable(self) ? rd32(g_mem, self + OBJ_DIVISION) : 0;
     uint32_t table = rd32(g_mem, CLUBS);
     int32_t count = (int32_t)rd32(g_mem, CLUB_COUNT) - 2 * (int32_t)rd32(g_mem, NATION_COUNT);

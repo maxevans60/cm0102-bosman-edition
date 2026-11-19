@@ -169,6 +169,102 @@ int main(void)
     CHECK(season_arg_derby_plan(4, p3, 0, round) == 0, "a derby that is not a pairing gives a plan");
     int r5[5] = {0, 1, 2, 3, 4}, d5[5] = {0, 2, 3, 4, 1};     /* club 0 meets its rival twice, the others not */
     CHECK(season_arg_zone_plan(5, r5, d5, 0, round) == 0, "one drawn opponent that is the rival gives a plan");
+    /* Item 286: the clubs that the rows send down. Row: {by the averages, by the annual table}. */
+    static const int rows[][3] = {{2001, 2, 0}, {2011, 2, 0}, {2012, 3, 0}, {2013, 3, 0}, {2014, 2, 0}, {2015, 1, 0},
+                                  {2016, 4, 0}, {2017, 4, 0}, {2018, 4, 0}, {2019, 0, 0}, {2020, 0, 0}, {2021, 2, 0},
+                                  {2022, 1, 1}, {2023, 0, 0}, {2024, 1, 1}, {2027, 1, 1}};
+    for (unsigned i = 0; i < sizeof rows / sizeof rows[0]; i++) {
+        int avg = -1, tab = -1;
+        season_arg_down_places(rows[i][0], &avg, &tab);
+        CHECK(avg == rows[i][1] && tab == rows[i][2], "the relegation places of a row");
+    }
+    /* Item 286: the second division plays the row's places with changing rules on (2017/18: 6), and the 4 of the swap
+     * 0x4068d0 (cmp bl, 4 at 0x4069fb) with changing rules off. */
+    CHECK(season_arg_second_down_places(6, 1) == 6, "6 places with changing rules on");
+    CHECK(season_arg_second_down_places(6, 0) == 4, "the swap's 4 places with changing rules off");
+    CHECK(season_arg_second_down_places(3, 0) == 3, "a row under the swap's 4 keeps its places");
+    CHECK(season_arg_second_down_places(-1, 1) == 0, "no places from an unknown row");
+    /* Item 291: the class's 2001/02 form sends 2 down by the averages (0x408666) and the step the surplus to the next row. */
+    CHECK(season_arg_second_class_down(25, 20) == 7, "2001/02: 2 and the 5 that the row of 20 leaves over");
+    CHECK(season_arg_second_class_down(25, 25) == 2, "the class alone sends 2 down");
+    CHECK(season_arg_second_class_down(25, -1) == 2, "no next row: the class's 2");
+    CHECK(season_arg_second_class_down(20, 25) == 2, "a bigger next row sends no more down");
+    /* Item 291: the Torneo Reducido of each row, and the pairs of a round. */
+    SeasonArgReducido rd;
+    CHECK(!season_arg_reducido_of(2016, &rd), "no Reducido in row 2016");
+    CHECK(season_arg_reducido_of(2014, &rd) && rd.places == 4 && rd.rounds == 2 && rd.stages == 3 && rd.final_pens,
+          "row 2014: 4 clubs, semi-finals and a final");
+    CHECK(rd.round[0].fresh == 4 && rd.round[0].ties == 2 && rd.round[0].legs == 2, "row 2014: two legs");
+    CHECK(season_arg_reducido_of(2017, &rd) && rd.places == 8 && rd.stages == 7 && rd.round[0].legs == 1 &&
+          rd.round[1].legs == 2 && rd.round[2].legs == 2, "row 2017: one-match quarter-finals");
+    CHECK(season_arg_reducido_of(2018, &rd) && rd.places == 8 && rd.round[0].legs == 2, "row 2018: two legs");
+    CHECK(season_arg_reducido_of(2021, &rd) && rd.places == 12 && rd.rounds == 4 && rd.stages == 11 && !rd.final_pens,
+          "row 2021: 12 clubs in four rounds");
+    CHECK(rd.round[0].fresh == 10 && rd.round[0].ties == 5 && rd.round[1].fresh == 1 && rd.round[1].ties == 3 &&
+          rd.round[2].fresh == 1 && rd.round[2].ties == 2 && rd.round[3].fresh == 0 && rd.round[3].ties == 1,
+          "row 2021: 4th to 13th, then the 3rd, then the 2nd");
+    for (int row = 2014; row <= 2021; row++) {
+        if (!season_arg_reducido_of(row, &rd) || rd.zone_last) continue;
+        int in = 0, left = 0;
+        for (int r = 0; r < rd.rounds; r++) {
+            in += rd.round[r].fresh;
+            CHECK(left + rd.round[r].fresh == 2 * rd.round[r].ties, "every club of a round plays");
+            left = rd.round[r].ties;
+        }
+        CHECK(in == rd.places && left == 1, "every place enters and one club wins");
+    }
+    int seeds[6] = {0, 2, 3, 6, 8, 11}, ties[6];
+    season_arg_reducido_pairs(seeds, 6, ties);
+    CHECK(ties[0] == 0 && ties[1] == 11 && ties[2] == 2 && ties[3] == 8 && ties[4] == 3 && ties[5] == 6,
+          "the best place meets the worst");
+    /* Item 291: the zone rows. */
+    CHECK(season_arg_reducido_of(2020, &rd) && rd.zone_last == 4 && rd.places == 6 && rd.rounds == 3 && rd.loser_round == 1 &&
+          rd.final_one && rd.level_pens && rd.down_each == 0 && !rd.rel_tie && rd.stages == 7,
+          "row 2020: 2nd to 4th of each zone, the final's loser in the semi-finals, no relegation");
+    CHECK(season_arg_reducido_of(2019, &rd) && rd.zone_last == 4 && rd.down_each == 1, "row 2019: the last of each zone");
+    CHECK(season_arg_reducido_of(2022, &rd) && rd.zone_last == 8 && rd.places == 14 && rd.rounds == 4 && rd.loser_round == 1 &&
+          rd.final_one && !rd.level_pens && rd.down_each == 1 && !rd.rel_tie && rd.stages == 15, "row 2022");
+    CHECK(rd.round[0].fresh == 14 && rd.round[0].ties == 7 && rd.round[0].legs == 1 && rd.round[1].ties == 4 &&
+          rd.round[1].legs == 2 && rd.round[3].legs == 1, "row 2022: one match, two legs, and a final of one match");
+    CHECK(season_arg_reducido_of(2023, &rd) && rd.rel_tie && rd.down_each == 1 && rd.stages == 16, "row 2023: a relegation tie");
+    CHECK(season_arg_reducido_of(2024, &rd) && rd.down_each == 2 && !rd.rel_tie, "row 2024: the last two of each zone");
+    CHECK(!rd.final_one && rd.round[3].legs == 2 && rd.final_pens, "row 2024: a final of two legs");
+    CHECK(season_arg_reducido_of(2025, &rd) && rd.down_each == 2, "row 2025: the last two of each zone");
+    for (int row = 2019; row <= 2025; row++) {
+        if (!season_arg_reducido_of(row, &rd) || !rd.zone_last) continue;
+        int left = 0;
+        for (int r = 0; r < rd.rounds; r++) {
+            CHECK(left + rd.round[r].fresh + (r == rd.loser_round) == 2 * rd.round[r].ties, "a zone row's round is full");
+            left = rd.round[r].ties;
+        }
+        CHECK(left == 1 && rd.places == 2 * (rd.zone_last - 1), "a zone row ends in one winner");
+    }
+    int zone[37], in_a = 0;
+    season_arg_second_zone_split(37, 19, zone);
+    for (int i = 0; i < 37; i++) in_a += zone[i] == 0;
+    CHECK(in_a == 19, "19 clubs in zone A");
+    static int zr[SEASON_ARG_ZONE_ROUNDS][SEASON_ARG_ZONE_TIES][2];
+    static const int sizes[][3] = {{16, 16, 30}, {17, 18, 34}, {19, 18, 38}, {19, 19, 38}, {18, 18, 34}};
+    for (unsigned i = 0; i < sizeof sizes / sizeof sizes[0]; i++) {
+        int a = sizes[i][0], b = sizes[i][1], n = a + b, rounds = season_arg_second_zone_plan(a, b, zr);
+        CHECK(rounds == sizes[i][2], "the rounds of two zones");
+        static int met[40][40];
+        memset(met, 0, sizeof met);
+        for (int r = 0; r < rounds; r++) {
+            char seen[40] = {0};
+            for (int k = 0; k < n / 2; k++) {
+                int h = zr[r][k][0], w = zr[r][k][1];
+                if (h < 0) continue;
+                CHECK(!seen[h] && !seen[w], "a club plays once a round");
+                seen[h] = seen[w] = 1;
+                CHECK((h < a) == (w < a), "a match inside one zone");
+                met[h][w]++;
+            }
+        }
+        for (int h = 0; h < n; h++)
+            for (int w = 0; w < n; w++)
+                CHECK(met[h][w] == (h != w && (h < a) == (w < a)), "each pair of a zone meets home and away");
+    }
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;
