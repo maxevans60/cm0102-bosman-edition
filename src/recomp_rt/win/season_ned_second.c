@@ -294,8 +294,12 @@ RT_WRAP(005f6720, ned_second_playoff)
     uint32_t self = cpu.ecx;
     int ours = self && self == st_league_of(KEY_FIRST) && season_game_changes();
     if (ours && marks_on()) st_shift_up(self, jong_club, TAG, "before the play-off", log_on());
-    /* From 2005/06 the knockout takes the place of the groups (issue 150, season_ned_playoff.c). */
+    /* From 2005/06 the knockout takes the place of the groups (issue 150, season_ned_playoff.c). In its place the wrap
+     * does the original's `ret` (0x5f6ac2): with the return address left on the stack, advance_stage's `pop esi` at
+     * 0x5f6715 loads 0x5f6715, and League::update_for_date then passes it as the league to the club records at
+     * 0x684abc (the box of line 1265 at 0x44747b). */
     if (!ours || !season_ned_playoff_build(self)) o_005f6720();
+    else if (!rt_unwinding) cpu.esp += 4;
     if (!ours || !log_on() || rt_unwinding) return;
     int n;
     uint32_t table = st_table_of(self, &n);
