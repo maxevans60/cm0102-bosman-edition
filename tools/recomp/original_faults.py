@@ -203,9 +203,16 @@ The B and under-21 squads have their own keep tests with the same 14 days (open 
 (window end record +0x4e, squad set +0x57) at 0x76bc76 (home) and 0x76bec7 (away), the under-21 squad (window end
 +0x62, squad set +0x6b) at 0x76bd34 (home) and 0x76bf85 (away), each before its pick (select_squad with slot 1 at
 0x76bdcf from 0x76bce9, slot 2 from 0x76bdbc, and the away calls from 0x76bf3a and 0x76c00e). They take the same new
-pick (rt_squad_kept_at with the window of the squad): in release set row t2002 (seed 73) Argentina's under-21 squad
+pick (rt_squad_kept_at with the window of the squad, which reads the squad that pick replaces, counts a player only
+with his squad's flag in staff +0x5e, and acts only for the friendly, 'B' and Under 21 keys that reach the gate): in release set row t2002 (seed 73) Argentina's under-21 squad
 of its friendly of 19 August 2003 was kept on that day for the friendly of 2 September, and three regulars of a club
-with a Copa Sudamericana match on 1 September played neither.
+with a Copa Sudamericana match on 1 September were on duty for both matches.
+That squad is the linked under-21 match's: add_fixture 0x5aa680 adds a linked B or under-21 match on the day before a
+senior friendly (0x7e6720 at 0x5aab09), and 0x76bab0 keeps or picks its squad with the senior match's, on the day of
+the marks two weeks before the senior match (0x7775c0 at 0x76b257, 0x76b28b and 0x76b2bf: that day and the days
+either side). A club that plays the day before the linked match is not marked. So the linked part of the check (home
+0x76bc4a to 0x76bdd4, away 0x76be9b to 0x76c026) also marks that day, and the marks come back as they were after it
+and at the end 0x76c043 (rt_link_marks).
 The marks and the new pick are one group: one rule of real life, and the reported case needs both. Test:
 tests/seasons/club_regulars_run.py.
 
@@ -309,6 +316,13 @@ INSNS = {
     0x777729: ("je 0x77778f", "if (cc_e(F) && !rt_callup_mark_all()) goto L_77778f;"),
     0x76BBA8: ("je 0x76bc10", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x1cu), edi, esi)) goto L_76bc10;"),
     0x76BE1B: ("je 0x76be83", "if (cc_e(F) || !rt_squad_kept(ebp, R32(esi + 0x20u), edi, esi)) goto L_76be83;"),
+    0x76BC4A: ("mov ax, word ptr [esi + 0x4d]", "SYNC(); rt_link_marks(ebp, esi, 1u); RT_AFTER_CALL(); "
+                                                "eax = (eax & 0xffff0000u) | (R16(esi + 0x4du) & 0xffffu);"),
+    0x76BDD4: ("mov ecx, dword ptr [esi + 0x20]", "SYNC(); rt_link_marks(ebp, esi, 0u); RT_AFTER_CALL(); ecx = R32(esi + 0x20u);"),
+    0x76BE9B: ("mov ax, word ptr [esi + 0x4d]", "SYNC(); rt_link_marks(ebp, esi, 1u); RT_AFTER_CALL(); "
+                                                "eax = (eax & 0xffff0000u) | (R16(esi + 0x4du) & 0xffffu);"),
+    0x76C026: ("mov eax, dword ptr [esi + 0x1c]", "SYNC(); rt_link_marks(ebp, esi, 0u); RT_AFTER_CALL(); eax = R32(esi + 0x1cu);"),
+    0x76C043: ("mov ecx, dword ptr [esp + 0x24]", "SYNC(); rt_link_marks(0u, 0u, 0u); RT_AFTER_CALL(); ecx = R32(esp + 0x24u);"),
     0x76BC76: ("je 0x76bce9", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x1cu), edi, esi, 0x4eu)) goto L_76bce9;"),
     0x76BEC7: ("je 0x76bf3a", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x20u), edi, esi, 0x4eu)) goto L_76bf3a;"),
     0x76BD34: ("je 0x76bdbc", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x1cu), edi, esi, 0x62u)) goto L_76bdbc;"),
