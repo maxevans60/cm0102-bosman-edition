@@ -24,9 +24,9 @@ and its nation at +0x5d.
 The save date is the game date that the save writes into general.dat (GENERAL_DATE). A save with no general.dat
 uses the latest date of the news list (news.dat: 100 items of 223 bytes after an 8-byte head, the s16 day of the
 year from 0 and the s16 year at +0xc9 of each item). The news date can be days before the game date: in the 0.7.3
-release set (t2003, leg 1) the game saved on day 244 of 2004, and its last news was of day 240. The start year and changing rules are the words +8 and +0xc of
-bosman_season.dat (docs/research/2026-10-17-season-save-part.md, section 4); a save without that part is a 2001
-game with changing rules off.
+release set (t2003, leg 1) the game saved on day 244 of 2004, and its last news was of day 240. The start
+year and changing rules are the words +8 and +0xc of bosman_season.dat (docs/research/2026-10-17-season-save-part.md,
+section 4); a save without that part is a 2001 game with changing rules off.
 
 The edition year of a finals class: its .tmp part holds the word after the bytes ff ff ff ff 07 03 xx xx, seven
 zero bytes, one byte and three zero bytes (inference from the parts of a 2028 save: FIFA World Cup 2030, the
