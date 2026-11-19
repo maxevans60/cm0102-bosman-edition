@@ -959,6 +959,13 @@ PAIR_KEEP = {"RECOMP_ORIGINAL_FAULTS": "keep:club_regulars"}
 # rules-on-q48-ref, and with only the lists part on it differs (lead bisect point 5795241a, 19 November 2026). So
 # rules-on-q48 runs with the lists part off, and tests/seasons/history_rows_run.py (run r2001) checks the rows.
 HISTORY_ROWS_NO_LISTS = {"RECOMP_HISTORY_ROWS": "fhc"}
+# Open item 295 (0.7.3 slice 16, original_faults.c rt_club_key_twins): at the trim of the club table
+# (database_trim_club_table 0x5267c0) every key id of a club follows its row. The fix acts only in a season game, and
+# a new 2001 game with changing rules on is one, so rules-on-q48 takes it and the 0.7.2 build does not. The game then
+# plays differently. This is the planned fix of the item. The lead bisect of 19 November 2026 (lists part off) finds
+# the first difference at merge 7f0ef429 (item 295), and rules-on-q48 equals rules-on-q48-ref with the group off. So
+# rules-on-q48 runs with group club_keys off, and tests/seasons/club_key_twins_run.py checks the fix.
+CLUB_KEYS_OFF = {"RECOMP_ORIGINAL_FAULTS": "keep:club_keys"}
 
 
 def q48_runs(runs, new_game):
@@ -970,7 +977,7 @@ def q48_runs(runs, new_game):
             if new_game:                          # compared with history-q48-off, so with the same groups
                 o = dict(o, _env=dict(o.get("_env", {}), **PAIR_KEEP))
         elif name == "rules-on" and new_game:
-            q = dict(o, _env=dict(o.get("_env", {}), **HISTORY_ROWS_NO_LISTS))
+            q = dict(o, _env=dict(o.get("_env", {}), **HISTORY_ROWS_NO_LISTS, **CLUB_KEYS_OFF))
             out.append(("rules-on-q48", dict(q, _against="rules-on-q48-ref" if REF_BUILD else "")))
             if REF_BUILD:
                 out.append(("rules-on-q48-ref", dict(q, _program=REF_BUILD, _against="")))
