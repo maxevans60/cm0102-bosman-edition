@@ -49,6 +49,7 @@
 #include "../rt_host.h"
 #include "season_change.h"
 #include "season_league.h"
+#include "season_ned_playoff.h"
 #include "season_periods.h"
 #include "season_sizes.h"
 #include "season_split.h"
@@ -330,7 +331,8 @@ uint32_t rt_league_last_stage(uint32_t obj, uint32_t original)
     if (!season_sizes_on()) return original;
     const PeriodClass *c = class_of(obj);
     int own = c ? own_periods(obj, c) : 0;
-    return own ? (uint32_t)(own + ((int)original - c->parts)) : original;
+    uint32_t last = own ? (uint32_t)(own + ((int)original - c->parts)) : original;
+    return c == &CLASSES[0] ? season_ned_playoff_last_stage(obj, last) : last;   /* issue 150 */
 }
 
 uint32_t rt_hol_playoff_stage(uint32_t obj, uint32_t original)

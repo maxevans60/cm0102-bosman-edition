@@ -97,11 +97,23 @@ const char *season_intl_announced_hosts(const char *file, int year)
 
 /* The Euros of 2020 (eleven host nations) and 2028 (five) have no host in the table, so that no host takes an
  * automatic place (UEFA gave none in 2020). The history row names the nation of the final: Wembley, England, in
- * both (UEFA, 2021 and 10 October 2023). */
+ * both (UEFA, 2021 and 10 October 2023). The World Cup of 2026 has three hosts, and its row names the nation of the
+ * final too: MetLife Stadium, United States (issue 145, https://en.wikipedia.org/wiki/2026_FIFA_World_Cup). */
 const char *season_intl_history_host(const char *file, int year)
 {
     if (!strcmp(file, "euro_champ") && (year == 2020 || year == 2028)) return "England";
+    if (!strcmp(file, "world_cup") && year == 2026) return "United States/USA";
     return NULL;
+}
+
+/* The news of the qualified nations (NationalTeams::write_qualified_nations_text 0x777ca0) has room for two hosts
+ * (parts 4 and 5, 0x777ce7..0x777cfb). Euro 2020 names the nation of the final, as its history row does. Euro 2028
+ * names the first two of the four hosts that stage matches: UEFA's decision of 10 October 2023 names five hosts, and
+ * Northern Ireland stages no match (season_nl_euro.c, kept_places). */
+const char *season_intl_news_hosts(const char *file, int year)
+{
+    if (strcmp(file, "euro_champ")) return NULL;
+    return year == 2020 ? "England" : year == 2028 ? "England;Republic of Ireland" : NULL;
 }
 
 /* Q4: the original's rows (host-rule.md, read in HostCountry::init_default_table 0x5f9970): the World Cup 1998 to

@@ -34535,7 +34535,7 @@ static const SeasonHistClear clears_41[] = {
 };
 static const SeasonHistRow rows_41[] = {
     {"US Open Cup", 2019, {"Atlanta United FC", "Minnesota United FC", "", ""}, {"United States", "United States", "", ""}, 0, 0},
-    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "Canada"}, {"", "", "", ""}, 0, 0},
+    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "United States"}, {"", "", "", ""}, 0, 0},
     {"African Cup of Nations", 2025, {"Morocco", "Senegal", "Nigeria", "Morocco"}, {"", "", "", ""}, 0, 0},
     {"Argentine Premier Division", 2026, {"Belgrano de C\363rdoba", "River Plate", "", ""}, {"Argentina", "Argentina", "", ""}, 0, 0},
 };
@@ -38114,7 +38114,7 @@ static const SeasonHistRow rows_42[] = {
     {"FIFA Club World Championship", 2019, {"Liverpool", "Clube de Regatas do Flamengo", "", ""}, {"England", "Brazil", "", ""}, 2020, 65535},
     {"FIFA Club World Championship", 2020, {"FC Bayern M\374nchen", "", "", ""}, {"Germany", "", "", ""}, 2021, 65535},
     {"African Cup of Nations", 2021, {"Senegal", "Egypt", "Cameroon", "Cameroon"}, {"", "", "", ""}, 2021, 65535},
-    {"European Football Championship", 2020, {"Italy", "England", "", ""}, {"", "", "", ""}, 2021, 65535},
+    {"European Football Championship", 2020, {"Italy", "England", "", "England"}, {"", "", "", ""}, 2021, 65535},
     {"FIFA Club World Championship", 2021, {"Chelsea", "Sociedade Esportiva Palmeiras", "", ""}, {"England", "Brazil", "", ""}, 2022, 65535},
     {"FIFA World Cup", 2022, {"Argentina", "France", "Croatia", "Qatar"}, {"", "", "", ""}, 2022, 65535},
     {"FIFA Club World Championship", 2022, {"Real Madrid C.F.", "Al Hilal (KSA)", "", ""}, {"Spain", "Saudi Arabia", "", ""}, 2023, 65535},
@@ -38124,7 +38124,7 @@ static const SeasonHistRow rows_42[] = {
     {"FIFA Club World Championship", 2025, {"Chelsea", "Paris-Saint-Germain", "", ""}, {"England", "France", "", ""}, 2025, 65535},
     {"Argentine Premier Division", 2026, {"Belgrano de C\363rdoba", "River Plate", "", ""}, {"Argentina", "Argentina", "", ""}, 2026, 65535},
     {"African Cup of Nations", 2025, {"Morocco", "Senegal", "Nigeria", "Morocco"}, {"", "", "", ""}, 2026, 65535},
-    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "Canada"}, {"", "", "", ""}, 2026, 65535},
+    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "United States"}, {"", "", "", ""}, 2026, 65535},
 };
 static const SeasonHistClear clears_43[] = {
     {"African CAF Cup", 2001, 2002, 65535},
@@ -41975,7 +41975,7 @@ static const SeasonHistRow rows_43[] = {
     {"FIFA Club World Championship", 2019, {"Liverpool", "Clube de Regatas do Flamengo", "", ""}, {"England", "Brazil", "", ""}, 2020, 65535},
     {"FIFA Club World Championship", 2020, {"FC Bayern M\374nchen", "", "", ""}, {"Germany", "", "", ""}, 2021, 65535},
     {"African Cup of Nations", 2021, {"Senegal", "Egypt", "Cameroon", "Cameroon"}, {"", "", "", ""}, 2021, 65535},
-    {"European Football Championship", 2020, {"Italy", "England", "", ""}, {"", "", "", ""}, 2021, 65535},
+    {"European Football Championship", 2020, {"Italy", "England", "", "England"}, {"", "", "", ""}, 2021, 65535},
     {"FIFA Club World Championship", 2021, {"Chelsea", "Sociedade Esportiva Palmeiras", "", ""}, {"England", "Brazil", "", ""}, 2022, 65535},
     {"FIFA World Cup", 2022, {"Argentina", "France", "Croatia", "Qatar"}, {"", "", "", ""}, 2022, 65535},
     {"FIFA Club World Championship", 2022, {"Real Madrid C.F.", "Al Hilal (KSA)", "", ""}, {"Spain", "Saudi Arabia", "", ""}, 2023, 65535},
@@ -41985,7 +41985,7 @@ static const SeasonHistRow rows_43[] = {
     {"FIFA Club World Championship", 2025, {"Chelsea", "Paris-Saint-Germain", "", ""}, {"England", "France", "", ""}, 2025, 65535},
     {"Argentine Premier Division", 2026, {"Belgrano de C\363rdoba", "River Plate", "", ""}, {"Argentina", "Argentina", "", ""}, 2026, 65535},
     {"African Cup of Nations", 2025, {"Morocco", "Senegal", "Nigeria", "Morocco"}, {"", "", "", ""}, 2026, 65535},
-    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "Canada"}, {"", "", "", ""}, 2026, 65535},
+    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "United States"}, {"", "", "", ""}, 2026, 65535},
 };
 static const SeasonHistClear clears_44[] = {
     {"African CAF Cup", 2001, 2003, 65535},
@@ -46088,7 +46088,7 @@ static const SeasonHistRow rows_44[] = {
     {"FIFA Club World Championship", 2019, {"Liverpool", "Clube de Regatas do Flamengo", "", ""}, {"England", "Brazil", "", ""}, 2020, 65535},
     {"FIFA Club World Championship", 2020, {"FC Bayern M\374nchen", "Club Tigres M\351xico", "", ""}, {"Germany", "Mexico", "", ""}, 2021, 65535},
     {"African Cup of Nations", 2021, {"Senegal", "Egypt", "Cameroon", "Cameroon"}, {"", "", "", ""}, 2021, 65535},
-    {"European Football Championship", 2020, {"Italy", "England", "", ""}, {"", "", "", ""}, 2021, 65535},
+    {"European Football Championship", 2020, {"Italy", "England", "", "England"}, {"", "", "", ""}, 2021, 65535},
     {"FIFA Club World Championship", 2021, {"Chelsea", "Sociedade Esportiva Palmeiras", "", ""}, {"England", "Brazil", "", ""}, 2022, 65535},
     {"FIFA World Cup", 2022, {"Argentina", "France", "Croatia", "Qatar"}, {"", "", "", ""}, 2022, 65535},
     {"FIFA Club World Championship", 2022, {"Real Madrid C.F.", "Al Hilal (KSA)", "", ""}, {"Spain", "Saudi Arabia", "", ""}, 2023, 65535},
@@ -46098,7 +46098,7 @@ static const SeasonHistRow rows_44[] = {
     {"FIFA Club World Championship", 2025, {"Chelsea", "Paris-Saint-Germain", "", ""}, {"England", "France", "", ""}, 2025, 65535},
     {"Argentine Premier Division", 2026, {"Belgrano de C\363rdoba", "River Plate", "", ""}, {"Argentina", "Argentina", "", ""}, 2026, 65535},
     {"African Cup of Nations", 2025, {"Morocco", "Senegal", "Nigeria", "Morocco"}, {"", "", "", ""}, 2026, 65535},
-    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "Canada"}, {"", "", "", ""}, 2026, 65535},
+    {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "United States"}, {"", "", "", ""}, 2026, 65535},
 };
 const SeasonHistDb season_history_dbs[] = {
     {"3.9.68", 2002, 0, clears_0, 553, rows_0, 419},
