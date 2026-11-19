@@ -34,6 +34,7 @@ READERS = {
     "season_mls.c": ("season_rules_find(", "the MLS only (gap row 7)"),
     "season_closed_step.c": ("season_rules_find(", "the A-League (aus_nsl) only"),
     "season_sizes_arg_second.c": ("season_rules_find(", "the Argentine second division (Primera B Nacional) only"),
+    "season_sizes_places.c": ("season_rules_find(", "J1 and J2 only"),
     "season_uefa.c": ("season_rules_find(", "the UEFA Cup only"),
     "season_report.c": ("season_rules_find(", "the rules report of the tests, the row of each season, which "
                         "tests/seasons/rules_report_check.py compares with the table by its own rule"),
