@@ -363,6 +363,7 @@ void rt_squad_move_test(void);
  * 163, win/screen_sweep.c). */
 void rt_squad_loan_test(void);
 void rt_club_key_twins(uint32_t old_row, uint32_t new_row, uint32_t hit);
+void rt_club_key_test(void);                    /* RECOMP_CLUB_KEY_TEST=1, open item 295 (win/original_faults.c) */
 void rt_comp_menu_test(void);
 /* Money above 2,147,483,647 (0.6.2 slice 11, Q24; win/original_faults.c, tools/recomp/original_faults.py). */
 uint32_t rt_budget_hi(uint32_t lo, uint32_t hi);          /* get_transfer_budget: the high word in place of cdq */

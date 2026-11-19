@@ -323,6 +323,7 @@ static void write_season(int season, const char *phase)
     if (*phase == 's') write_clubs(season, phase);
     if (*phase == 's') rt_squad_move_test();       /* open item 187 (original_faults.c) */
     if (*phase == 's') rt_squad_loan_test();       /* issue 159 (original_faults.c) */
+    if (*phase == 's') rt_club_key_test();         /* open item 295 (original_faults.c) */
     if (*phase == 's') rt_comp_menu_test();        /* issue 163 (screen_sweep.c) */
     if (sweep_on) {
         fprintf(report, "sweepok\t%d\t%s\t%d objects\t%d round tables\t%d dates\t%d faults\n", season, phase,
