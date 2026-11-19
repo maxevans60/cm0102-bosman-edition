@@ -517,14 +517,27 @@ TITLES_OF_YEAR.update({("Belgian Third Division", 2012): 2, ("Belgian National D
                        ("Belgian Division 1", 2012): 2, ("French CFA", 2013): 4})
 
 
+# The League of Ireland's calendar move (docs/research/2026-11-15-ireland-calendar-2003.md, decision 8): the 2001/02
+# season keeps the original's label, the year it ends (2002), and the short season 2002/03 (5 July 2002 to 8 February
+# 2003) takes the label 2002 too, in the game's rows (season_calendar_label, src/recomp_rt/win/season_calendar.c) and
+# in the researched rows (tools/seasons/make_history_table.py, IRISH_MOVE). Two real seasons, one label, in every
+# year: the game writes the short season itself in a game with changing rules on from 2001 or 2002. Real seasons:
+# docs/research/history-0.6.0/ireland.md and ireland.check.md (RSSSF, Wikipedia, read 17 October 2026).
+TWO_SEASONS = {(n, 2002): 2 for n in ("League of Ireland Premier Division", "League of Ireland First Division",
+                                      "FAI Cup", "League of Ireland Cup", "Irish Premier Division",
+                                      "Irish First Division", "Irish Senior Challenge Cup", "Irish League Cup")}
+
+
 def titles_allowed(name, year, start, most, several, played=True):
     """The rows a competition may hold in a label year: most (1, or 2 for a split season), the count of its
-    SEVERAL_TITLES format from that format's first year, or the count of TITLES_OF_YEAR. TITLES_OF_YEAR counts only
+    SEVERAL_TITLES format from that format's first year, the count of TWO_SEASONS, or the count of TITLES_OF_YEAR.
+    TITLES_OF_YEAR counts only
     before the start year: those rows come from the database, and a game writes its own rows with its own format.
     played False: the game does not play the competition (no .tmp part), so every row comes from the database and
     TITLES_OF_YEAR counts in every year."""
     return max(most, several[0] if year >= several[1] else 1,
-               TITLES_OF_YEAR.get((name, year), 1) if year < start or not played else 1)
+               TITLES_OF_YEAR.get((name, year), 1) if year < start or not played else 1,
+               TWO_SEASONS.get((name, year), 1))
 
 
 def filed_titles(per_year, year, start):
