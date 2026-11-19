@@ -795,6 +795,33 @@ def duty_dates_rule():
     return []
 
 
+def save_date_rule():
+    """The save date is the game date of general.dat; with no general.dat, or no date in it, the latest news date."""
+    import history_check
+    class Sav:
+        def __init__(self, parts):
+            self.parts = parts
+
+        def has(self, name):
+            return name in self.parts
+
+        def read(self, name):
+            return self.parts[name]
+    news = bytearray(8 + 100 * 223)
+    for k, (d, y) in enumerate([(206, 2004), (240, 2004), (20, 2004)]):
+        struct.pack_into("<hh", news, 8 + k * 223 + 0xC9, d, y)
+    general = bytearray(history_check.GENERAL_DATE + 8)
+    struct.pack_into("<hh", general, history_check.GENERAL_DATE, 244, 2004)
+    bad = []
+    for parts, want_ in (({"news.dat": bytes(news), "general.dat": bytes(general)}, (2004, 244)),
+                         ({"news.dat": bytes(news)}, (2004, 240)),
+                         ({"news.dat": bytes(news), "general.dat": bytes(history_check.GENERAL_DATE)}, (2004, 240))):
+        got = history_check.save_date(Sav(parts))
+        if got != want_:
+            bad.append(f"save_date with {sorted(parts)} is {got}, not {want_}")
+    return bad
+
+
 def main():
     work = tempfile.mkdtemp(prefix="history-check-")
     members, want = records()
@@ -1157,6 +1184,7 @@ def main():
     bad += start_season_rule()
     bad += not_held_rule()
     bad += euro_holders_rule()
+    bad += save_date_rule()
 
     for b in bad:
         print("FAIL  " + b)

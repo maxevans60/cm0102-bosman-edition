@@ -21,11 +21,12 @@ with a negative competition is a free row. Club and national side ids index club
 (club_comp.dat and nation_comp.dat, 107 bytes, the record id is the competition id) has its continent at +0x59
 and its nation at +0x5d.
 
-The save date is the latest date of the news list (news.dat: 100 items of 223 bytes after an 8-byte head, the
-s16 day of the year from 0 and the s16 year at +0xc9 of each item). Inference: it matches the test logs of the gate runs (date 182/2028 in the
-log, last news 189/2028 at the save after it). The start year and changing rules are the words +8 and +0xc of
-bosman_season.dat (docs/research/2026-10-17-season-save-part.md, section 4); a save without that part is a 2001
-game with changing rules off.
+The save date is the game date that the save writes into general.dat (GENERAL_DATE). A save with no general.dat
+uses the latest date of the news list (news.dat: 100 items of 223 bytes after an 8-byte head, the s16 day of the
+year from 0 and the s16 year at +0xc9 of each item). The news date can be days before the game date: in the 0.7.3
+release set (t2003, leg 1) the game saved on day 244 of 2004, and its last news was of day 240. The start
+year and changing rules are the words +8 and +0xc of bosman_season.dat (docs/research/2026-10-17-season-save-part.md,
+section 4); a save without that part is a 2001 game with changing rules off.
 
 The edition year of a finals class: its .tmp part holds the word after the bytes ff ff ff ff 07 03 xx xx, seven
 zero bytes, one byte and three zero bytes (inference from the parts of a 2028 save: FIFA World Cup 2030, the
@@ -185,6 +186,10 @@ MOVED = 3                                     # days: add_fixture moves a clashi
 RECENT = 60                                   # a team of the round after a break played this many days before it
 PAUSE = 300                                   # days: the longest pause of a home-and-away group (the OFC Nations Cup
                                               # of 2008 from 21 November 2007 to 14 June 2008, 206 days)
+# The game date 0xae2c90 (s16 day of the year from 0, s16 year) in general.dat: save_game_data 0x82e430 writes 4 bytes
+# of 0xdd7110 (0x82e796), 0xf74 bytes of its stack (0x82e7cb), 4 bytes of 0xdd7120 (0x82e7e8), 1 byte of 0xdd7114
+# (0x82e804, size and count edi = 1), 8 bytes of 0xdd6ec8 (0x82e821), then 8 bytes of 0xae2c90 (0x82e83e).
+GENERAL_DATE = 4 + 0xF74 + 4 + 1 + 8
 # continent ids of the data (Africa, Asia, Europe, North America, Oceania, South America in every database)
 CONF_IDS = ["CAF", "AFC", "UEFA", "CONCACAF", "OFC", "CONMEBOL"]
 
@@ -243,6 +248,21 @@ def text(b, o, n=51):
     return b[o:o + n].split(b"\0")[0].decode("latin-1")
 
 
+def save_date(sav):
+    """The game date of a save, (year, day of the year from 0): the words at GENERAL_DATE of general.dat, else the
+    latest date of the news list."""
+    if sav.has("general.dat"):
+        general = sav.read("general.dat")
+        if len(general) >= GENERAL_DATE + 4:
+            d, y = struct.unpack_from("<hh", general, GENERAL_DATE)
+            if 0 <= d < 366 and 1900 < y < 3000:
+                return y, d
+    news = sav.read("news.dat")
+    dates = [struct.unpack_from("<hh", news, o) for o in range(8 + 0xC9, len(news) - 3, 223)]
+    dates = [(y, d) for d, y in dates if 0 <= d < 366 and 1900 < y < 3000]
+    return max(dates) if dates else (0, 0)
+
+
 class Game:
     def __init__(self, path):
         sav = LazySav(path)
@@ -284,10 +304,7 @@ class Game:
                 rid, cid, year, a, b, c, h = struct.unpack_from("<iiHiiii", data, i * HIST)
                 if cid >= 0 and cid in self.comps:
                     self.rows.append((cid, year, a, b, c, h))
-        news = sav.read("news.dat")
-        dates = [struct.unpack_from("<hh", news, o) for o in range(8 + 0xC9, len(news) - 3, 223)]
-        dates = [(y, d) for d, y in dates if 0 <= d < 366 and 1900 < y < 3000]
-        self.date = max(dates) if dates else (0, 0)
+        self.date = save_date(sav)
         self.start, self.changing = 2001, 0
         if sav.has("bosman_season.dat"):
             part = sav.read("bosman_season.dat")
