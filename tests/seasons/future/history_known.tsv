@@ -66,7 +66,7 @@ missing	Polish Super Cup	2002-2004	real calendar: no Super Cup in 2002 (cancelle
 duplicate	Portuguese Second Division B Central	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
 duplicate	Portuguese Second Division B North	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
 duplicate	Portuguese Second Division B South	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
-missing	President's Cup	2003	real history: the LFA President's Cup was last played in 2002/03; the FAI cup of the record starts in 2014 as the President of Ireland's Cup (rules rows wal-nir-irl-73 to -298 not held; en.wikipedia.org "LFA President's Cup", read 7 November 2026: played between 1930 and 2002)		real
+missing	President's Cup	2003-2014	real history: the record holds the Leinster FA (LFA) President's Cup, last played in 2002/03 (label 2003: Shelbourne 2-0 Dundalk); no edition follows, so the first missing year is 2003 or 2004 by the save's data, and the FAI cup of the record starts in 2014 as the President of Ireland's Cup (rules rows wal-nir-irl-73 to -298 not held, wal-nir-irl-323 from 2013/14; en.wikipedia.org "LFA President's Cup", read 19 November 2026: played between 1930 and 2002, last final 2002-03); the same range as the row for President of Ireland's Cup		real
 duplicate	Primera B Nacional	*	open items 3 and 17: rows held twice before the start in the 0.6.0 saves (data); slice 7 checked only its 10 starts
 duplicate	Primera División	*	open items 58 and 59: rows held twice in the data itself before or at the start (several titles a year, or the newest row one year early); not a start overlap (slice 7)
 same-final	Russian Super Cup	*	a game result: check by hand
@@ -85,6 +85,7 @@ gap	Welsh Cup	*	open items 2 and 19: editions not written
 missing	OFC Men's Nations Cup	2028	open items 2 and 19: editions not written
 same-final	CONCACAF Gold Cup	2009	real results: the same finalists count only in Tier B (spec, Decisions)		real
 same-final	CONCACAF Gold Cup	2023	real results: the same finalists count only in Tier B (spec, Decisions)		real
+same-final	FAW Premier Cup	2007	a game result, not real history: the real finals of 2004-05 and 2005-06 were Swansea City 2-1 Wrexham, and the real 2006-07 final was The New Saints 1-0 Newport County (en.wikipedia.org "FAW Premier Cup", read 19 November 2026); the 2007 edition of a 2006 start is the game's own: check by hand
 entrant-route	*Finalissima	2022	open item 19: no Copa America after 2001 in a 2001 game, so no winner to enter
 entrant-host	Africa*Cup of Nations	2002	original design, changing rules off only: the original's host row of 2002 names Egypt (HostCountry::init_default_table 0x5f9970, Egypt written at 0x5f9f19, fixed at 0x5f9f2f). With changing rules on the row takes Mali at the draw (item 181; a 2001 Tier A game to 2005 shows Mali as host and entrant)	off	design
 entrant-route	Intercontinental Cup	2002	open item 47: the data row of the 2002 Libertadores, after the start (fault 17), counts as a played route until slice 7 removes it; then the original's drawn club passes (slice 9a)
