@@ -76,6 +76,7 @@ static void check_defaults(void)
     CHECK(options_bool(OPT_FULL_PLAYER_SEARCH) == 0);
     CHECK(options_bool(OPT_CHANGING_RULES) == 1);
     CHECK(options_bool(OPT_ONLINE_PLAY) == 1);
+    CHECK(options_bool(OPT_SQUAD_NUMBERS_99) == 0);
     CHECK(options_enum(OPT_DATABASE) == DATABASE_3960);
     CHECK(!strcmp(options_string(OPT_DATABASE), "3.9.60"));   /* item 11 of 0.6.1: the original data */
     CHECK(options_enum(OPT_SEASON) == 0 && !strcmp(options_string(OPT_SEASON), "2001/02"));
@@ -107,6 +108,8 @@ int main(void)
     CHECK(strstr(get(), "\nchanging_rules = on\n") != NULL);
     CHECK(strstr(get(), "changing_rules = on lets the rules of each league and cup change each July") != NULL);
     CHECK(strstr(get(), "\nonline_play = on\n") != NULL);
+    CHECK(strstr(get(), "\nsquad_numbers_99 = off\n") != NULL);
+    CHECK(strstr(get(), "squad_numbers_99 = on lets a new game keep database squad numbers") != NULL);
     CHECK(strstr(get(), "online_play = on shows online games in the game list") != NULL);
     CHECK(strstr(get(), "\nseason = 2001/02\n") != NULL);
     CHECK(strstr(get(), "season = the season of a new game, 2001/02 to 2026/27.") != NULL);

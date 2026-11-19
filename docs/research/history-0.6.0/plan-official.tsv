@@ -3557,7 +3557,7 @@ clear	3.9.60	2020	European Football Championship	2020
 clear	3.9.60	2020	FIFA Club World Championship	2020											
 add	3.9.60	2021	FIFA Club World Championship	2020		add	FC Bayern München	Germany							
 add	3.9.60	2021	African Cup of Nations	2021		add	Senegal		Egypt		Cameroon		Cameroon		
-add	3.9.60	2021	European Football Championship	2020		add	Italy		England						
+add	3.9.60	2021	European Football Championship	2020		add	Italy		England				England		
 clear	3.9.60	2021	African Cup of Nations	2021											
 clear	3.9.60	2021	FIFA Club World Championship	2021											
 add	3.9.60	2022	FIFA Club World Championship	2021		add	Chelsea	England	Sociedade Esportiva Palmeiras	Brazil					
@@ -3579,7 +3579,7 @@ clear	3.9.60	2025	African Cup of Nations	2025
 clear	3.9.60	2025	FIFA Club World Championship	2025											
 add	3.9.60	2026	Argentine Premier Division	2026	Apertura	add	Belgrano de Córdoba	Argentina	River Plate	Argentina					
 add	3.9.60	2026	African Cup of Nations	2025		add	Morocco		Senegal		Nigeria		Morocco		
-add	3.9.60	2026	FIFA World Cup	2026		add	Spain		Argentina		England		Canada		
+add	3.9.60	2026	FIFA World Cup	2026		add	Spain		Argentina		England		United States		
 clear	3.9.60	2026	Argentine Premier Division	2026											
 clear	3.9.60	2026	FIFA World Cup	2026											
 add	3.9.65	2002	American Major League	2002		add	Los Angeles Galaxy	United States	New England Revolution	United States					
@@ -7414,7 +7414,7 @@ clear	3.9.65	2020	European Football Championship	2020
 clear	3.9.65	2020	FIFA Club World Championship	2020											
 add	3.9.65	2021	FIFA Club World Championship	2020		add	FC Bayern München	Germany							
 add	3.9.65	2021	African Cup of Nations	2021		add	Senegal		Egypt		Cameroon		Cameroon		
-add	3.9.65	2021	European Football Championship	2020		add	Italy		England						
+add	3.9.65	2021	European Football Championship	2020		add	Italy		England				England		
 clear	3.9.65	2021	African Cup of Nations	2021											
 clear	3.9.65	2021	FIFA Club World Championship	2021											
 add	3.9.65	2022	FIFA Club World Championship	2021		add	Chelsea	England	Sociedade Esportiva Palmeiras	Brazil					
@@ -7436,7 +7436,7 @@ clear	3.9.65	2025	African Cup of Nations	2025
 clear	3.9.65	2025	FIFA Club World Championship	2025											
 add	3.9.65	2026	Argentine Premier Division	2026	Apertura	add	Belgrano de Córdoba	Argentina	River Plate	Argentina					
 add	3.9.65	2026	African Cup of Nations	2025		add	Morocco		Senegal		Nigeria		Morocco		
-add	3.9.65	2026	FIFA World Cup	2026		add	Spain		Argentina		England		Canada		
+add	3.9.65	2026	FIFA World Cup	2026		add	Spain		Argentina		England		United States		
 clear	3.9.65	2026	Argentine Premier Division	2026											
 clear	3.9.65	2026	FIFA World Cup	2026											
 add	3.9.68	2003	Argentine Premier Division	2002	Apertura	add	Independiente	Argentina	Boca Juniors	Argentina					
@@ -11523,7 +11523,7 @@ clear	3.9.68	2020	European Football Championship	2020
 clear	3.9.68	2020	FIFA Club World Championship	2020											
 add	3.9.68	2021	FIFA Club World Championship	2020		add	FC Bayern München	Germany	Club Tigres México	Mexico					
 add	3.9.68	2021	African Cup of Nations	2021		add	Senegal		Egypt		Cameroon		Cameroon		
-add	3.9.68	2021	European Football Championship	2020		add	Italy		England						
+add	3.9.68	2021	European Football Championship	2020		add	Italy		England				England		
 clear	3.9.68	2021	African Cup of Nations	2021											
 clear	3.9.68	2021	FIFA Club World Championship	2021											
 add	3.9.68	2022	FIFA Club World Championship	2021		add	Chelsea	England	Sociedade Esportiva Palmeiras	Brazil					
@@ -11545,6 +11545,6 @@ clear	3.9.68	2025	African Cup of Nations	2025
 clear	3.9.68	2025	FIFA Club World Championship	2025											
 add	3.9.68	2026	Argentine Premier Division	2026	Apertura	add	Belgrano de Córdoba	Argentina	River Plate	Argentina					
 add	3.9.68	2026	African Cup of Nations	2025		add	Morocco		Senegal		Nigeria		Morocco		
-add	3.9.68	2026	FIFA World Cup	2026		add	Spain		Argentina		England		Canada		
+add	3.9.68	2026	FIFA World Cup	2026		add	Spain		Argentina		England		United States		
 clear	3.9.68	2026	Argentine Premier Division	2026											
 clear	3.9.68	2026	FIFA World Cup	2026											

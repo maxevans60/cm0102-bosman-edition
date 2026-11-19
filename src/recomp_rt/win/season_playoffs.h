@@ -13,6 +13,9 @@ int season_playoffs_build_for(uint32_t obj);
 /* 1 when the rules row of file and season gives a play-off that this kind plays (4 places in a row just below
  * the direct places); *direct (may be NULL) gets the direct promotion places. */
 int season_playoffs_shape(const char *file, int season, int *direct);
+/* The draw and match days of a round of a stage, in days from today (season_ned_playoff.c). */
+void season_playoffs_round_dates(uint32_t table, int round, int draw_in, int match_in, uint32_t a7, uint32_t venue,
+                                 uint32_t year);
 /* The semi-finals of the play-off of six before Cup::draw_round 0x51c410 builds them (item 273). */
 void season_playoffs_draw_round(uint32_t cup, int round);
 
@@ -28,6 +31,11 @@ int season_playoffs_winners_up(const char *file, int season);
  * places beyond them (Série B 2002 to 2005, rows 2001 to 2004: "top 8 ... finalists promoted" or "top 2 promoted",
  * up 2, play-off places 1 to 8), else 0. season_sizes_bra.c plays it. Host code only. */
 int season_playoffs_finalists_up(const char *file, int season);
+
+/* The club of the Segunda Liga that played the tie with the Primeira Liga in an edition, from the rows of its last
+ * table in order (club, n), or 0 when that edition has no tie. The size step gives no extra place to this club while it
+ * stays in the Segunda Liga: it lost the tie (issue 154). */
+uint32_t season_playoffs_tie_club(uint32_t lower, int edition, const uint32_t *club, int n);
 
 /* After set_up_rules of a league (season_sizes_rules calls it): the places and the stage count of the play-off
  * of the season, or none. */

@@ -82,9 +82,9 @@ check(e.encode_split(_bel_text) == "after 30: 6+8, points halved", "Belgian Play
 check(all(by[("bel_first", y)]["split"] == "after 30: 6+4+4+2, points halved" for y in range(2009, 2016)) and
       by[("bel_first", 2009)]["split_meet"] == "2+2+2+0" and by[("bel_first", 2012)]["split_meet"] == "2+2+2+5" and
       by[("bel_first", 2015)]["split_meet"] == "2+2+2+0" and
-      all(by[("bel_first", y)]["split"] == "after 30: 6+4+5+1, points halved" and
-          by[("bel_first", y)]["split_meet"] == "2+2+2+0" for y in range(2016, 2019)),
-      "Belgian play-offs by hand: 6+4+4+2 (relegation play-off of five 2010-2014), 6+4+5+1 from 2016")
+      all(by[("bel_first", y)]["split"] == "after 30: 6+10, points halved" and
+          by[("bel_first", y)]["split_meet"] == "2+0" for y in range(2016, 2019)),
+      "Belgian play-offs by hand: 6+4+4+2 (relegation play-off of five 2010-2014), 6+10 from 2016")
 check(all(by[("den_prm", y)]["split"] == "after 26: 6+4+4, points kept" and by[("den_prm", y)]["split_meet"] ==
           "2+2+2" for y in range(2016, 2020)) and by[("bel_first", 2024)]["split_meet"] == "2+2+2" and
       by[("bel_second", 2016)]["meetings"] == 4 and by[("bel_second", 2016)]["rounds"] == 28,

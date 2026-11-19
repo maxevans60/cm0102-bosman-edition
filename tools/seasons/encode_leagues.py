@@ -137,8 +137,9 @@ SPLIT_FORM_BY_HAND = {
                                 "Play-off I, Play-off II in two groups, the relegation play-off of five matches"),
     ("bel_first", 2015, 2015): ("after 30: 6+4+4+2, points halved", "2+2+2+0",
                                 "Play-off I, Play-off II in two groups, the 15th and 16th play no more"),
-    ("bel_first", 2016, 2018): ("after 30: 6+4+5+1, points halved", "2+2+2+0",
-                                "Play-off I, Play-off II in groups of 4 and 5 (with the 15th), the 16th plays no more"),
+    ("bel_first", 2016, 2018): ("after 30: 6+10, points halved", "2+0",
+                                "Play-off I; Play-off II holds First Division B clubs, so its groups of six are stages "
+                                "of their own (season_bel_playoffs.c) and places 7 to 16 play no more in this table"),
     # Pro League 2023/24 to 2025/26: champions', Europe and relegation play-offs of 6, 6 and 4, each a double round
     # robin of 10, 10 and 6 rounds, points halved (sizes-check-north line 214).
     ("bel_first", 2023, 2025): ("after 30: 6+6+4, points halved", "2+2+2", "10, 10 and 6 rounds: two meetings each"),

@@ -41,10 +41,12 @@
 #include "season_sizes_arg.h"
 #include "win.h"
 #include "../rt_host.h"
+#include "season_bel_playoffs.h"
 #include "season_change.h"
 #include "season_league.h"
 #include "season_sizes.h"
 #include "season_split.h"
+#include "season_template.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -125,7 +127,9 @@ static const struct {
     {"bel_first", 2009, 2009, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 3, 3}, "hzzk"},
     {"bel_first", 2010, 2014, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 3, 3}, "hzzb"},
     {"bel_first", 2015, 2015, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 3, 3}, "hzzk"},
-    {"bel_first", 2016, 2018, 16, {0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1, 2, 3}, "hzzk"},
+    /* Issue 150: the groups of 2016/17 to 2018/19 hold second-division clubs, so they are stages of their own
+     * (season_bel_playoffs.c) and places 7 to 16 play no more matches in this table. */
+    {"bel_first", 2016, 2018, 16, {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, "hk"},
 };
 
 int season_split_of(uint32_t obj, const char *file, int n, int meetings, SeasonSplit *sp)
@@ -326,6 +330,12 @@ int rt_league_keep_split_place(uint32_t obj, uint32_t played)
  *   neither done and max_j >= pts_i; i done, j not, and max_j >= pts_i; j done, i not, and max_j == pts_i; both
  *   done, max_j == pts_j and +0xe6 set.
  * - a row whose best and worst places are equal is settled and keeps them (0x684f24). */
+#define FIX_YEAR 0x28u              /* s16: a fixture's year (find_new_fixture_date 0x5ab510) */
+#define FIX_DAY 0x2au               /* s16: a fixture's day of the year */
+#define FIX_HOME 0x1cu              /* a fixture's home club (add_fixture 0x5aa73b) */
+#define FIX_FLAGS 0x4du             /* u16: a fixture's flags (add_fixture 0x5aa72e) */
+#define FIX_CLUB_DAY_DONE 0x800u    /* the home club's match day rule is done (add_fixture 0x5aa732, 0x5aa76d) */
+#define CLUB_MATCH_DAY 0x72u        /* s8: a club's usual match day, 0 Monday (add_fixture 0x5aa774) */
 #define ROW_BEST 0x39u
 #define ROW_WORST 0x3au
 #define COMP_WIN_POINTS 0xc2u       /* s8: the points of a win (0x684f4d) */
@@ -429,6 +439,41 @@ static uint32_t deleting;
 
 int season_split_deleting(uint32_t obj) { return obj && obj == deleting; }
 
+/* Item 288: a section match never lands on the day of the split. The split runs after the day's matches (the wrap of
+ * League::update_for_date 0x6847c0 below), so a fixture dated today or earlier is never played. add_fixture 0x5aa680
+ * first moves a date of today or earlier (0x5aa70f..0x5aa729, find_new_fixture_date 0x5ab510). Then the home club's
+ * usual match day can take the match back (0x5aa774..0x5aa804): a league match on a Saturday or Sunday goes to the
+ * nearest day of the club's byte +0x72 when that is 4, 5 or 6 (Friday to Sunday, Date::get_weekday 0x54a3f0, 0x54a2d0).
+ * Fixture flag 0x800 of the word +0x4d marks that rule as done (0x5aa732, 0x5aa76d).
+ * NIFL Championship 2018/19: the last table matches moved to Saturday, day 25 of 2019, and the split came that day.
+ * Two section matches of Sunday, day 26, went to the home club's Saturday. Four clubs ended on 31 of 32 matches,
+ * check_complete 0x689ad0 stayed false and neither Northern Irish league started 2019/20. So while the sections are
+ * made, the rule is marked as done for a match dated today or earlier (its new date comes from 0x5ab510) and for a
+ * match that the rule would take to today or earlier. */
+static int making_sections;
+
+void season_split_add_fixture(void)
+{
+    if (!making_sections) return;
+    uint32_t f = rt_arg(0);
+    if (!readable(f)) return;
+    int year = (int16_t)rd16(g_mem, f + FIX_YEAR), day = (int16_t)rd16(g_mem, f + FIX_DAY);
+    int today_year = (int16_t)rd16(g_mem, TODAY + 2u), today = (int16_t)rd16(g_mem, TODAY);
+    uint32_t home = rd32(g_mem, f + FIX_HOME);
+    uint16_t flags = rd16(g_mem, f + FIX_FLAGS);
+    if (!readable(home) || (flags & FIX_CLUB_DAY_DONE) || year > today_year + 1) return;
+    int from_today = year < today_year ? -1 : day - today + (year > today_year ? season_template_year_days(today_year) : 0);
+    if (from_today > 0) {
+        int club_day = (int8_t)g_mem[home + CLUB_MATCH_DAY], weekday = season_template_weekday(year, day);
+        if (club_day < 4 || club_day > 6 || (weekday != 5 && weekday != 6) || from_today + club_day - weekday > 0)
+            return;
+    }
+    wr16(g_mem, f + FIX_FLAGS, (uint16_t)(flags | FIX_CLUB_DAY_DONE));
+    if (logging())
+        fprintf(stderr, "recomp: league sizes: a section match of day %d of %d keeps off the split day: no move to the "
+                        "home club's day\n", day, year);
+}
+
 /* One section: a League_Stage of the clubs with the section's meetings on the first `days` dates of the block,
  * deleted at once as ScoPrm's (its fixtures stay with the parent). 1 when made. */
 static int make_section(uint32_t obj, const uint32_t *clubs, int size, int meetings, uint32_t dates, int days,
@@ -446,7 +491,9 @@ static int make_section(uint32_t obj, const uint32_t *clubs, int size, int meeti
                           (uint32_t)days, g_mem[obj + 0xc2u], g_mem[obj + 0xc3u], g_mem[obj + 0xc4u], obj + 0xc5u,
                           obj + 0xbeu, (uint32_t)(int16_t)rd16(g_mem, obj + COMP_YEAR), 0xffffffffu, code, 0x14, 1, 0,
                           3, 0xffffffffu, 0, 2};
+        making_sections = 1;
         uint32_t made_at = call_this(F_LEAGUE_STAGE, stage, 22, a);
+        making_sections = 0;
         if (rt_unwinding) return 0;
         if (readable(made_at)) {
             uint32_t one[1] = {1};
@@ -688,5 +735,6 @@ RT_WRAP(006847c0, league_update_for_date)
     season_split_update(self);
     if (rt_unwinding) return;
     season_arg_update(self);                    /* 0.7.2 gap row 48: the Apertura's knockout */
+    if (!rt_unwinding) season_bel_po_update(self);  /* issue 150: the groups of Play-off II */
     if (!rt_unwinding) cpu = saved;
 }
