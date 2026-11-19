@@ -611,7 +611,8 @@ uint32_t rt_callup_mark_all(void)
  * builds the marks (0x54c770 with 2 at 0x76b126, 0x76b257..0x76b2bf; 0x76bab0 also runs for a new fixture from
  * 0x5aab15, with the marks of another day). A mark 3 that a later mark 1 or 2 of the day before or after overwrites
  * (0x777779) is not seen: that club's league match moves instead (0x7777e0).
- * Gives 0 when the fix acts and a player of the side's squad (+0xd7, 50 staff pointers, as the sort
+ * Gives 0 when the fix acts, the fixture's key is one that reaches the gate (see rt_squad_kept_at) and a player of
+ * the nation's squad (+0xd7 of its senior side, with flag 4 in staff +0x5e; 50 staff pointers, as the sort
  * 0x778ef0 reads them) is at a club (staff +0x39) with mark 3 in the list of mark_clubs_with_fixtures 0x7775c0 (nt
  * +0x24, a byte per club below the national sides) and has a contract whose playing-time mood (+0x3d) is over -10
  * (the gate's test, CONTRACT_MANAGER::get_contract 0x4cf5a0: staff row [0xae2d0c] + id x 79, +0 the contract index;
@@ -636,22 +637,48 @@ static long abs_day(int year, int doy)          /* days from 1 January 1900, for
 #define TODAY 0xae2c90u
 #define AHEAD 14                    /* daily_update's day: two weeks ahead (0x54c770 with 2 at 0x76b126) */
 
+/* The same for the B squad (slot 1: window end +0x4e, the keep tests 0x76bc76 and 0x76bec7) and the under-21 squad
+ * (slot 2: window end +0x62, the keep tests 0x76bd34 and 0x76bf85), open item 299 of 0.6.2. The window is the record
+ * offset of the squad's window end (s16 day of the year, s16 year). The squad read is the one the new pick
+ * (select_squad 0x76c120) replaces: slots 0 and 1 the nation's senior side (0x53b3d0: club clubs - 2 x nations + the
+ * nation id, 0x53b4c2..0x53b4e0), slot 2 its under-21 side (0x53b4f0: clubs - nations + the id, 0x53b5e2..0x53b5fe),
+ * whatever the fixture's side (esi +0x1c or +0x20 is the senior side for a B match and for an under-21 match linked to
+ * a senior one, flag 0x200 at 0x76bcf8). The senior and B squads share the senior side's slots (+0xd7), so a player
+ * counts only with his squad's flag in staff +0x5e (the pick's clear tests it at 0x76c63b..0x76c63f): 8 for B, 4 for
+ * the senior and under-21 squads. The new pick acts only for a fixture whose key (fixture +0) is one of the three that
+ * reach the gate (0x76cc1f..0x76cc3b: the friendly 0x9cf668, 'B' 0x9cf794, Under 21 0x9cf798); for any other key the
+ * pick takes a club's regular all the same. */
+#define SQUAD_FLAG 0x5eu
+#define SIDE_SIZE 0x245u
+
 uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture)
+{
+    return rt_squad_kept_at(nt, side, record, fixture, 0x3au);
+}
+
+uint32_t rt_squad_kept_at(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture, uint32_t window)
 {
     if (!fixes_on_group(CLUB_REGULARS) || !pointer(nt) || !pointer(side) || !pointer(record) || !pointer(fixture))
         return 1;
+    uint32_t key = rd32(g_mem, fixture);
+    if (key != rd32(g_mem, 0x9cf668u) && key != rd32(g_mem, 0x9cf794u) && key != rd32(g_mem, 0x9cf798u)) return 1;
     int ty = (int16_t)rd16(g_mem, TODAY + 2u), td = (int16_t)rd16(g_mem, TODAY);
-    int wy = (int16_t)rd16(g_mem, record + 0x3cu), wd = (int16_t)rd16(g_mem, record + 0x3au);
+    int wy = (int16_t)rd16(g_mem, record + window + 2u), wd = (int16_t)rd16(g_mem, record + window);
     int fy = (int16_t)rd16(g_mem, fixture + 0x28u), fd = (int16_t)rd16(g_mem, fixture + 0x2au);
     if (ty < 1900 || wy < 1900 || fy < 1900 || ty > 3000 || wy > 3000 || fy > 3000) return 1;
     long today = abs_day(ty, td);
     if (today < abs_day(wy, wd) || abs_day(fy, fd) != today + AHEAD) return 1;
-    uint32_t marks = rd32(g_mem, nt + 0x24u);
-    int clubs = (int)rd32(g_mem, CLUB_COUNT) - 2 * (int)rd32(g_mem, NATION_COUNT);
-    if (!pointer(marks)) return 1;
+    uint32_t marks = rd32(g_mem, nt + 0x24u), nation = rd32(g_mem, side + 0x53u);
+    int nations = (int)rd32(g_mem, NATION_COUNT), all = (int)rd32(g_mem, CLUB_COUNT), clubs = all - 2 * nations;
+    if (!pointer(marks) || !pointer(nation)) return 1;
+    int32_t nid = (int32_t)rd32(g_mem, nation);
+    int32_t at = (window == 0x62u ? all - nations : clubs) + nid;
+    if (nid < 0 || nid >= nations || at < 0 || at >= all) return 1;
+    uint32_t squad = rd32(g_mem, 0xae23b4u) + (uint32_t)at * SIDE_SIZE;
+    uint8_t flag = window == 0x4eu ? 8u : 4u;
     for (uint32_t k = 0; k < SQUAD_SLOTS; k++) {
-        uint32_t st = rd32(g_mem, side + SQUAD_AT + 4u * k);
-        if (!pointer(st)) continue;
+        uint32_t st = rd32(g_mem, squad + SQUAD_AT + 4u * k);
+        if (!pointer(st) || !(g_mem[st + SQUAD_FLAG] & flag)) continue;
         uint32_t club = rd32(g_mem, st + STAFF_CLUB);
         if (!pointer(club)) continue;
         int32_t id = (int32_t)rd32(g_mem, club);
@@ -664,7 +691,7 @@ uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fix
         if ((int8_t)g_mem[contract + MOOD] > -10) {
             if (getenv("RECOMP_DUTY_LOG")) {
                 char who[64];
-                snprintf(who, sizeof who, "%s", log_name(side + 4u));
+                snprintf(who, sizeof who, "%s", log_name(squad + 4u));
                 fprintf(stderr, "recomp: duty: %s picks its squad again: a regular of %s has a continental match "
                                 "within a day\n", who, log_name(club + 4u));
             }
@@ -672,6 +699,75 @@ uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fix
         }
     }
     return 1;
+}
+
+/* The day before a linked match (open item 299 of 0.6.2, group club_regulars). add_fixture 0x5aa680 adds, for a senior
+ * national match that is not a tournament match, a linked B or under-21 match of the same nations on the day before
+ * (ReserveComp::add_b_or_under21_fixture 0x7e6720, called at 0x5aab09), with flags +0x4d & 0x300 (0x100 B, 0x200
+ * under-21) on both fixtures. The squad check 0x76bab0 skips the linked fixture (+0x40 = 0 and bit 1 of +0x4e,
+ * 0x76bad1..0x76badc) and does its keep test and pick with the senior match's (home 0x76bc4a..0x76bdcf, away
+ * 0x76be9b..0x76c021), on the day of the marks two weeks before the senior match. NationalTeams::daily_update 0x76b100
+ * marks the clubs with a match on that day and the days before and after it (mark_clubs_with_fixtures 0x7775c0 at
+ * 0x76b257, 0x76b28b, 0x76b2bf). So a club that plays the day before the linked match, two days before the senior
+ * match, is not marked, and the B or under-21 pick takes its regulars: in release set row t2002 (seed 73) Vélez
+ * Sarsfield played the Copa Sudamericana on 1 September 2003 with three players in the under-21 squad of Argentina,
+ * whose linked match was on 2 September (the friendly on 3 September).
+ *
+ * Here, for the linked part of a senior fixture with a linked match (flags & 0x300, home a senior side), the marks also
+ * hold that day (0x7775c0 with the Date of the senior match's day minus 2: s16 day of the year at +0, s16 year at +2,
+ * the leap flag at +4, as Date 0x549ef0 writes them, 0x549efa..0x549f5a). The keep test (rt_squad_kept_at) and the
+ * pick's gate (0x76cd44..0x76cd73) then see them. The marks come back as they were before the next senior pick (on 0,
+ * at 0x76bdd4, 0x76c026 and the end 0x76c043), so senior picks are as before. */
+#define MARK_CLUBS 0x7775c0u
+static uint8_t *link_copy;
+static uint32_t link_marks, link_count;
+
+void rt_link_marks(uint32_t nt, uint32_t fixture, uint32_t on)
+{
+    if (link_count) {                                   /* back as they were */
+        if (pointer(link_marks)) memcpy(g_mem + link_marks, link_copy, link_count);
+        link_count = 0;
+    }
+    if (!on || !fixes_on_group(CLUB_REGULARS) || !pointer(nt) || !pointer(fixture)) return;
+    if (!(rd16(g_mem, fixture + 0x4du) & 0x300u)) return;
+    uint32_t key = rd32(g_mem, fixture);                /* the linked copy itself (0x7e6773 copies the flags) */
+    if (key == rd32(g_mem, 0x9cf794u) || key == rd32(g_mem, 0x9cf798u)) return;
+    int nations = (int)rd32(g_mem, NATION_COUNT), clubs = (int)rd32(g_mem, CLUB_COUNT) - 2 * nations;
+    uint32_t home = rd32(g_mem, fixture + 0x1cu), marks = rd32(g_mem, nt + 0x24u);
+    if (!pointer(home) || !pointer(marks) || clubs <= 0) return;
+    int32_t id = (int32_t)rd32(g_mem, home);
+    if (id < clubs || id >= clubs + nations) return;   /* not a senior side */
+    int fy = (int16_t)rd16(g_mem, fixture + 0x28u), fd = (int16_t)rd16(g_mem, fixture + 0x2au) - 2;
+    if (fy < 1900 || fy > 3000) return;
+    if (fd < 0) {
+        fy--;
+        fd += 365 + ((fy % 4 == 0 && fy % 100 != 0) || fy % 400 == 0);
+    }
+    uint8_t *copy = realloc(link_copy, (size_t)clubs);
+    if (!copy) return;
+    link_copy = copy;
+    memcpy(link_copy, g_mem + marks, (size_t)clubs);
+    link_marks = marks, link_count = (uint32_t)clubs;
+    Cpu saved = cpu;
+    cpu.esp -= 16;
+    uint32_t date = cpu.esp;
+    wr16(g_mem, date, (uint16_t)fd);
+    wr16(g_mem, date + 2u, (uint16_t)fy);
+    wr32(g_mem, date + 4u, (uint32_t)((fy % 4 == 0 && fy % 100 != 0) || fy % 400 == 0));
+    cpu.ecx = nt;
+    uint32_t a[1] = {date};
+    rt_callback(MARK_CLUBS, 1, a);
+    if (rt_unwinding) {
+        link_count = 0;
+        return;
+    }
+    cpu = saved;
+    /* 0x7775c0 writes the day's mark over the one there (0x77770f, 0x777734, 0x777779): a mark 3 of the senior days
+     * stays 3, and a club marked before keeps its mark, so the new day only adds marks. */
+    for (uint32_t i = 0; i < link_count; i++) {
+        uint8_t was = link_copy[i], now = g_mem[marks + i];
+        if (was == 3u || (was && now != 3u)) g_mem[marks + i] = was;
+    }
 }
 
 /* Issue 132: the known crash sites of the original. The fixes and guards are in
