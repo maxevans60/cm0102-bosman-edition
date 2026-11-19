@@ -221,7 +221,7 @@ async function appVideo() {
   await v.click('#sets-lib tr:has-text("2018-19") button[data-lib-get]');
   await p.waitForSelector('#sets-season', { timeout: 30000 });
   await v.point('[data-set-go]');
-  await v.say('Use it for your next new game', 'its season is chosen for you; then start a new game', 4000);
+  await v.say('Use it for your next new game', 'its season is chosen for you; the next new game is played with it', 4000);
   await v.click('[data-set-go]');
   await v.pause(1200);
   await v.click('#saves-close');
