@@ -1200,10 +1200,11 @@ def main():
         got = history_check.known_status(rng, *args)
         if got != want_:
             bad.append(f"known_status range {args} is {got}, not {want_}")
-    # the LFA President's Cup ended after 2002/03: the first missing year (2003 or 2004) is real history while the save
-    # is before 2015; a game's FAW Premier Cup final of 2007 is a game result, known and never accepted
+    # the LFA President's Cup ended after 2002/03: the first missing year (2003 or 2004) is real history with changing rules
+    # on while the save is before 2015; a game's FAW Premier Cup final of 2007 is a game result, known and never accepted
     for args, want_ in ((("missing", "President's Cup", 2004, "on", 2006), "accepted"),
-                        (("missing", "President's Cup", 2003, "off", 2004), "accepted"),
+                        (("missing", "President's Cup", 2003, "on", 2004), "accepted"),
+                        (("missing", "President's Cup", 2004, "off", 2006), None),
                         (("missing", "President's Cup", 2004, "on", 2015), None),
                         (("same-final", "FAW Premier Cup", 2007, "on", 2007), "known"),
                         (("same-final", "FAW Premier Cup", 2008, "on", 2008), None)):
