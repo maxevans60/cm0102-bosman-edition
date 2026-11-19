@@ -45,6 +45,7 @@
 #include "../rt_host.h"
 #include "season.h"
 #include "season_sizes.h"
+#include "season_cro_gre_places.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,6 +67,9 @@
 #define ROW_POS 0x39u              /* s8: the place in the table, from 1 */
 #define CRO_A2A 0x009cf8a8u        /* the division index of the North */
 #define CRO_A2B 0x009cf8acu        /* the division index of the South */
+#define KEY_GRE_LOWER 0x009cf874u  /* the division index of the Greek Lower Division (0x5eb1e0) */
+#define PLACES_UP 0xbeu            /* s8: the promotion places (0x515e33) */
+#define PLACES_DOWN 0xc1u          /* s8: the relegation places (0x515e45) */
 
 static uint32_t list;              /* the list in the game's memory, made at the first table of more than 16 */
 static uint32_t regroup;           /* the list of the regroup, made at the first regroup of a season game */
@@ -360,6 +364,38 @@ RT_WRAP(00682e10, league_pay_prize_money)
 int season_sizes_cro_empty(uint32_t obj, const char *file, int season)
 {
     return season_sizes_on() && file && !strcmp(file, "cro_a2b") && one_group(season) && readable(obj);
+}
+
+/* The places of the Druga HNL and the Greek second tier from their rows, with changing rules on (open items 281 and
+ * 282; the rules are in season_cro_gre_places.c). With changing rules off the classes keep their places. */
+void season_sizes_cro_rules(uint32_t obj, const char *file)
+{
+    if (!season_sizes_on() || !season_changing_rules() || !readable(obj) || !file) return;
+    int up = (int8_t)g_mem[obj + PLACES_UP], down = (int8_t)g_mem[obj + PLACES_DOWN];
+    int new_up = season_cro_gre_up(file, one_group(season_sizes_row_season(obj, file)),
+                                   season_sizes_row_up(obj, file), up);
+    int new_down = season_cro_gre_down(file, season_sizes_row_down(obj, file), down);
+    if (new_up == up && new_down == down) return;
+    g_mem[obj + PLACES_UP] = (uint8_t)new_up;
+    g_mem[obj + PLACES_DOWN] = (uint8_t)new_down;
+    if (getenv("RECOMP_SIZE_LOG"))
+        fprintf(stderr, "recomp: league sizes: %s %d: %d up and %d down from the row, the class gave %d and %d\n", file,
+                (int16_t)rd16(g_mem, obj + COMP_YEAR), new_up, new_down, up, down);
+}
+
+/* The record of the Greek Lower Division [0x9cf874], the pool of GrePrm's exchange 0x5eb120 (0x5eb1e0), or 0. */
+uint32_t season_sizes_gre_lower_record(void)
+{
+    int32_t id = (int32_t)rd32(g_mem, KEY_GRE_LOWER);
+    uint32_t comps = rd32(g_mem, COMPS);
+    return id >= 0 && readable(comps) ? comps + (uint32_t)id * COMP_SIZE : 0;
+}
+
+/* 1 for the Greek Lower Division: the small Greek clubs wait there, not in A Lower Division, so the size step takes
+ * the clubs of a larger second tier from it (open item 282: 16 clubs in 2006/07 and 2012/13). */
+int season_sizes_gre_lower(uint32_t record)
+{
+    return record && record == season_sizes_gre_lower_record();
 }
 
 /* The count that fix_division_club_count 0x839920 gives a Greek division at a new game (0x8283c0 National A,

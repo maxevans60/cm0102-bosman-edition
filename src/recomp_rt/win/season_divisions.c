@@ -4,6 +4,7 @@
 #include "season.h"
 #include "season_change.h"
 #include "season_comps.h"
+#include "season_cro_gre_places.h"
 #include "season_divisions.h"
 #include "season_divisions_ita.h"
 #include "season_esp_second.h"
@@ -1140,13 +1141,15 @@ static void gre_rules(uint32_t obj)
         if (r->down >= 0) g_mem[obj + DOWN] = (uint8_t)r->down;
     } else if (!strcmp(season_change_file(obj), "gre_second") && gre_held(s)) {
         /* The National B Division in a season with the group: the two groups of one tier promote by one rule
-         * (review 2). It is a floor division of slice 18 (its class keeps 2 up and 2 down), and its relegations stay
-         * 2: the original's exchange 0x5eb120 brings 2 clubs back from the Lower Division (0x5eb219). */
+         * (review 2). Its relegation places come from its row (season_sizes_cro_rules, item 282). The original's
+         * exchange 0x5eb120 brings 2 clubs back from the Lower Division (0x5eb219), and the size step closes the gap. */
         g_mem[obj + UP] = (uint8_t)gre_up(s, 0);
         g_mem[obj + UP_PLAYOFF] = 0;
     } else if (!strcmp(season_change_file(obj), "gre_prm") && gre_held(s)) {
         /* Both groups' promotions, from their rows (at a new game GrePrm's rules run before the groups' own). */
-        g_mem[obj + DOWN] = (uint8_t)(gre_up(s, 0) + gre_up(s, 1));
+        /* Item 282: a row that sends more clubs down shrinks the division (2014/15: 4 down, 18 clubs to 16). */
+        const SeasonRule *top = season_changing_rules() ? season_rules_find(s, "gre_prm", 0) : NULL;
+        g_mem[obj + DOWN] = (uint8_t)season_gre_prm_down(gre_up(s, 0) + gre_up(s, 1), top ? top->down : -1);
         g_mem[obj + DOWN_PLAYOFF] = 0;
     }
 }

@@ -1206,6 +1206,7 @@ void season_sizes_rules(uint32_t obj)
     if (!rt_unwinding && readable(obj)) class_playoff_rules(obj, season_change_file(obj));
     if (!rt_unwinding) season_playoffs_rules(obj);   /* slice 19: a play-off in a league with none */
     if (!rt_unwinding) season_divisions_rules(obj);  /* slice 20: the places towards a new division */
+    if (!rt_unwinding && readable(obj)) season_sizes_cro_rules(obj, season_change_file(obj));  /* items 281, 282 */
     if (!rt_unwinding && sizes_on()) season_sizes_bra_rules(obj, season_change_file(obj));  /* 0.7.2 slice 17 */
     if (!rt_unwinding && sizes_on()) season_sizes_asia_rules(obj, season_change_file(obj));  /* 0.7.2 slice 14 */
     if (!rt_unwinding && sizes_on()) season_sizes_fin_rules(obj, season_change_file(obj));   /* 0.7.3 slice 4 */
@@ -1384,6 +1385,7 @@ static struct {
     int lower[STEP_MAX_LOWER];
     int nfeed, feed[STEP_MAX_LOWER];        /* gap 37: the divisions below that play as now */
     uint32_t club[STEP_MAX_ROWS];
+    uint8_t went_down[STEP_MAX_ROWS];       /* item 282: the row had status 3, a relegation place */
 } step_seen[STEP_DIVS];
 static int nstep_seen;
 
@@ -1412,10 +1414,12 @@ static int step_index(uint32_t obj)
         while (k > 0 && pos[k - 1] > p) {
             pos[k] = pos[k - 1];
             step_seen[i].club[k] = step_seen[i].club[k - 1];
+            step_seen[i].went_down[k] = step_seen[i].went_down[k - 1];
             k--;
         }
         pos[k] = p;
         step_seen[i].club[k] = c;
+        step_seen[i].went_down[k] = g_mem[row + ROW_STATUS] == STATUS_DOWN;
         step_seen[i].nrows++;
     }
     /* The Argentine Primera sends down by its averages (promedios), not by its table (slice 15 fix). */
@@ -1617,10 +1621,12 @@ void season_sizes_step_bar(uint32_t club)
 
 /* 1 when the step counts the division now of club c as no division: a spare division (A Lower Division, A Premier
  * Division), the Argentine third division, or the lower division of a nation (season_sizes_nir.c: the Northern Irish
- * lower division, where the original keeps the clubs below the First Division). */
+ * lower division, where the original keeps the clubs below the First Division). The Greek Lower Division (item 282) is
+ * not in that table: GrePrm's exchange 0x5eb120 sends the relegated rows there itself, so lone_send must not. */
 static int pool_division(uint32_t c, uint32_t now)
 {
-    return season_clubs_in_spare(c) || season_arg_third(now) || season_sizes_in_nation_lower(now);
+    return season_clubs_in_spare(c) || season_arg_third(now) || season_sizes_in_nation_lower(now) ||
+           season_sizes_gre_lower(now);
 }
 
 /* The clubs with no division (or in a spare division) of the nation of record rec that the step may take into it:
@@ -1854,8 +1860,9 @@ static void size_step_run(uint32_t trigger)
     StepClub *club = calloc((size_t)nmax, sizeof *club);
     uint32_t *at = calloc((size_t)nmax, sizeof *at);
     StepMove *moves = calloc((size_t)nmax, sizeof *moves);
+    uint8_t *relegated = calloc((size_t)nmax, sizeof *relegated);
     int nclub = 0;
-    if (!club || !at || !moves) goto done;
+    if (!club || !at || !moves || !relegated) goto done;
     for (int d = 0; d < ndiv; d++) {
         uint32_t obj = step_seen[d].obj;
         const char *file = season_change_file(obj);
@@ -1894,6 +1901,7 @@ static void size_step_run(uint32_t trigger)
             while (k < nclub && at[k] != c) k++;
             if (k == nclub) at[nclub++] = c;
             div[d].rows[div[d].nrows++] = k;
+            if (step_seen[d].went_down[r]) relegated[k] = 1;
         }
     int from_tables = nclub;
     /* Every other club of a noted division (a club that joined it outside the noted pairs, such as the Conference
@@ -1919,8 +1927,12 @@ static void size_step_run(uint32_t trigger)
     }
     for (int k = 0; k < nclub; k++) {
         uint32_t c = at[k], now = current_division(c);
+        /* Item 282: a club that a relegation place (status 3) has just sent to the Greek Lower Division (GrePrm's
+         * exchange 0x5eb25d..0x5eb28a) does not come back in the same change. The safe clubs of a second group that
+         * ends also go there (gre_swap, season_divisions.c), and they can take a free place. */
+        int just_down = relegated[k] && season_sizes_gre_lower(now);
         if (now && pool_division(c, now)) now = 0;
-        club[k].div = now ? -3 : STEP_NONE;     /* -3: a division outside the step */
+        club[k].div = now || just_down ? -3 : STEP_NONE;     /* -3: a division outside the step */
         for (int d = 0; d < ndiv; d++)
             if (now == step_seen[d].rec) club[k].div = d;
         club[k].nation = (int)(rd32(g_mem, c + CLUB_NATION) & 0x7fffffff);
@@ -2028,6 +2040,9 @@ static void size_step_run(uint32_t trigger)
              * surplus to the third division, not out of the league system (slice 15). */
             if (!to && moves[i].from >= 0 && !strcmp(season_change_file(step_seen[moves[i].from].obj), "arg_second"))
                 to = season_arg_third_record();
+            /* Item 282: the Greek second tier sends its surplus to the Greek Lower Division, as its exchange does. */
+            if (!to && moves[i].from >= 0 && !strcmp(season_change_file(step_seen[moves[i].from].obj), "gre_second"))
+                to = season_sizes_gre_lower_record();
             /* Item 271: the surplus of the Irish League First Division goes to the Northern Irish lower division,
              * where the original keeps the nation's small clubs (season_sizes_nir.c). */
             if (!to && moves[i].from >= 0)
@@ -2057,6 +2072,7 @@ done:
     free(club);
     free(at);
     free(moves);
+    free(relegated);
     nstep_seen = 0;
     nlone_down = 0;
     step_running = 0;

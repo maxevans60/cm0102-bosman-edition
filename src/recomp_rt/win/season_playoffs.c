@@ -44,6 +44,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_cro_gre_places.h"
 #include "season_league.h"
 #include "season_names.h"
 #include "season_rules.h"
@@ -1041,20 +1042,58 @@ static int cross_shape(uint32_t lower, int season, uint32_t *upper, int *ladder)
 #define TIE_CLUBS 2
 #define TIE_SPAN 10                     /* days from the table to the second leg */
 
-static int tie_lower(const char *f) { return f && !strcmp(f, "por_second"); }
+/* Greece and Croatia (issue 156, open items 281 and 282) play the same tie: the rows give the Football League's 2nd
+ * or 3rd against the Super League's place above its direct places, and the Druga HNL's 2nd against the Prva HNL's. Only
+ * with changing rules on, and only in a season of one group: the two groups of the Greek second tier (2013/14, 2014/15,
+ * 2021/22 to 2025/26) and of the Druga HNL (to 2005/06) have no single club for the tie. GreSecond (vtable 0x96b61c) is a
+ * plain league. CroA2a (vtable 0x969178) has its own advance_stage 0x516060 and result 0x7ebc40 (wraps below). */
+#define KEY_GRE_SECOND 0x009cf870u      /* the division index of the National B Division (0x5ebd54) */
+#define COMP_CLOSED 0x4cu               /* s32: not 0 keeps League::update_for_date from closing the season (0x6849e8) */
+#define COMP_TIE_FLAG 0xe6u             /* s32: a tie-break of level clubs is still open (0x516394, 0x684a1e) */
 
-/* 1 when the rows of season give lower (the Segunda Liga) and the division above it the tie. Only with changing rules
- * on: with them off the chain moves pairs (season_sizes.c) and the game keeps the class's places (decision L2). */
+static const char *const TIE_PAIRS[][2] = {
+    {"por_second", "por_prm"}, {"gre_second", "gre_prm"}, {"cro_a2a", "cro_a1"},
+};
+
+static const char *tie_upper_of(const char *lower)
+{
+    for (unsigned i = 0; lower && i < sizeof TIE_PAIRS / sizeof TIE_PAIRS[0]; i++)
+        if (!strcmp(lower, TIE_PAIRS[i][0])) return TIE_PAIRS[i][1];
+    return NULL;
+}
+
+static int tie_lower(const char *f) { return tie_upper_of(f) != NULL; }
+
+static int tie_upper(const char *f)
+{
+    for (unsigned i = 0; f && i < sizeof TIE_PAIRS / sizeof TIE_PAIRS[0]; i++)
+        if (!strcmp(f, TIE_PAIRS[i][1])) return 1;
+    return 0;
+}
+
+/* 1 when a second group of the tier plays this season. The second gre_second object is that group or waits for it. */
+static int tie_two_groups(uint32_t lower, const char *file, int season)
+{
+    if (!strcmp(file, "cro_a2a")) return season_sizes_clubs("cro_a2b", season) >= 2;
+    if (strcmp(file, "gre_second")) return 0;
+    uint32_t rec = rd32(g_mem, lower + COMP_RECORD);
+    return !readable(rec) || rd32(g_mem, rec) != rd32(g_mem, KEY_GRE_SECOND) ||
+           season_rules_find(season, file, 1) != NULL;
+}
+
+/* 1 when the rows of season give lower and the division above it the tie. Only with changing rules on: with them off
+ * the chain moves pairs (season_sizes.c) and the game keeps the class's places (decision L2). */
 static int tie_shape(uint32_t lower, int season, uint32_t *upper)
 {
     if (!season_changing_rules()) return 0;
     const char *lf = readable(lower) ? season_change_file(lower) : NULL;
     uint32_t up = tie_lower(lf) ? league_above(lower) : 0;
     const char *uf = up ? season_change_file(up) : NULL;
-    if (!uf || strcmp(uf, "por_prm")) return 0;
+    if (!uf || strcmp(uf, tie_upper_of(lf))) return 0;
     const SeasonRule *lr = row_of_season(lf, season), *ur = row_of_season(uf, season);
     const SeasonLeagueRule *le = lr ? league_rule(lf, lr->season) : NULL, *ue = ur ? league_rule(uf, ur->season) : NULL;
-    if (!le || !ue || le->po_up != 1 || ue->po_down != 1) return 0;
+    if (!le || !ue) return 0;
+    if (!season_tie_played(le->po_up, ue->po_down, tie_two_groups(lower, lf, season), 1)) return 0;
     if (upper) *upper = up;
     return 1;
 }
@@ -1148,7 +1187,7 @@ static int tie_rules(uint32_t obj, const char *file)
 {
     int season = season_now(obj, file);
     uint32_t upper = 0, below = league_below(obj);
-    if (!strcmp(file, "por_prm")) {
+    if (tie_upper(file)) {
         int want = below && tie_shape(below, season, &upper) && upper == obj;
         if (want && (int8_t)g_mem[obj + DOWN_PLAYOFF] != 1) {
             g_mem[obj + DOWN_PLAYOFF] = 1;
@@ -1174,6 +1213,13 @@ static int tie_rules(uint32_t obj, const char *file)
     drop_stage(obj);
     wr32(g_mem, obj + COMP_STAGE_COUNT, 1);
     g_mem[obj + UP_PLAYOFF] = 1;
+    /* CroA2a holds its season open for its tie-break: start_new_season sets +0x4c (0x515f01), set_up_rules sets +0xe6
+     * (0x515e80), and only 0x516360 clears them, with stage count 0 (0x516385). The tie's count of 1 skips that code, so
+     * the season closes as a plain league's does (League::update_for_date 0x6849e8, 0x684a1e). */
+    if (!strcmp(file, "cro_a2a")) {
+        wr32(g_mem, obj + COMP_CLOSED, 0);
+        wr32(g_mem, obj + COMP_TIE_FLAG, 0);
+    }
     fprintf(stderr, "recomp: playoffs: %s %d: one place plays off with %s\n", file, season, season_change_file(upper));
     return 1;
 }
@@ -1207,7 +1253,7 @@ static int over_rules(uint32_t obj, const char *file)
 static int cross_rules(uint32_t obj)
 {
     const char *file = readable(obj) ? season_change_file(obj) : NULL;
-    if (file && (tie_lower(file) || !strcmp(file, "por_prm"))) return tie_rules(obj, file);
+    if (file && (tie_lower(file) || tie_upper(file))) return tie_rules(obj, file);
     /* J2 has two forms: over_rules takes the seasons of 4 play-off places under J1's play-off place, and the code
      * below the seasons of the tie of its 3rd. */
     if (file && (over_pair(file, 0) || over_pair(file, 1)) && over_rules(obj, file)) return 1;
@@ -1275,6 +1321,17 @@ static int table_complete(uint32_t lg)
 static int upper_done(uint32_t up)
 {
     if (!table_complete(up)) return 0;
+    /* CroA1 decides its tie-break after the table. CroA2a::update_for_date 0x516360, which CroA1 shares, clears +0xe6 when
+     * no clubs are level (0x5163e5), else it makes one stage (0x516400, 0x516416): a Cup_Stage of 0xb2 bytes (0x514dce), so
+     * its end is asked of the stage itself, as League::update_for_date does (vtable +0x10 with 0 and 1, 0x6849b3..0x6849be). */
+    if (!strcmp(season_change_file(up), "cro_a1")) {
+        int32_t made = (int32_t)rd32(g_mem, up + COMP_STAGE_COUNT), now = (int32_t)rd32(g_mem, up + COMP_STAGE_NOW);
+        if (made == 0) return rd32(g_mem, up + COMP_TIE_FLAG) == 0;
+        uint32_t slots = rd32(g_mem, up + COMP_STAGES), stage = readable(slots) ? rd32(g_mem, slots) : 0;
+        if (now < 0 || !readable(stage)) return 0;
+        uint32_t ask[2] = {0, 1};
+        return call_this(rd32(g_mem, rd32(g_mem, stage) + 0x10), stage, 2, ask) & 0xff;
+    }
     if (strcmp(season_change_file(up), "sco_prm")) return 1;
     int32_t built = (int32_t)rd32(g_mem, up + COMP_STAGE_NOW), count = (int32_t)rd32(g_mem, up + COMP_STAGE_COUNT);
     uint32_t stages = rd32(g_mem, up + COMP_STAGES);
@@ -1307,9 +1364,20 @@ static int in_table(uint32_t obj, uint32_t club)
 
 /* The lower club of the tie: the first club after the direct places that is not a reserve side barred from the upper
  * division (row por-110: "the 3rd club that is not a reserve team"). 0 for none. */
+/* The clubs before the lower club of the tie. Portugal counts the clubs that are not reserve sides after the direct
+ * places (row por-110), whatever the row's first play-off place says (4th in 2013/14, when a reserve side was 3rd). */
+static int tie_skip(const char *file, int season, int direct)
+{
+    const SeasonRule *lr = row_of_season(file, season);
+    const SeasonLeagueRule *le = lr ? league_rule(file, lr->season) : NULL;
+    return season_tie_skip(le && strcmp(file, "por_second") ? le->po_up_first : 0, direct);
+}
+
 static uint32_t tie_club(uint32_t obj)
 {
-    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS), skip = (int8_t)g_mem[obj + UP];
+    const char *file = season_change_file(obj);
+    int n = (int16_t)rd16(g_mem, obj + COMP_CLUBS);
+    int skip = tie_skip(file, season_now(obj, file), (int8_t)g_mem[obj + UP]);
     for (int i = 0; i < n && i < 64 && !rt_unwinding; i++) {
         uint32_t c = row_club(obj, i);
         if (!readable(c) || barred(obj, c)) continue;
@@ -1323,7 +1391,7 @@ uint32_t season_playoffs_tie_club(uint32_t lower, int edition, const uint32_t *c
     const char *file = readable(lower) ? season_change_file(lower) : NULL;
     if (!playoffs_on() || !tie_shape(lower, edition, NULL)) return 0;
     const SeasonRule *r = row_of_season(file, edition);
-    int skip = r && r->up > 0 ? r->up : 0;
+    int skip = tie_skip(file, edition, r && r->up > 0 ? r->up : 0);    /* the club that tie_club picks */
     for (int i = 0; i < n && !rt_unwinding; i++) {
         if (!readable(club[i]) || barred(lower, club[i])) continue;
         if (skip-- <= 0) return club[i];
@@ -1643,6 +1711,30 @@ RT_WRAP(007ef270, sco_first_advance)
         return;
     }
     o_007ef270();
+}
+
+/* CroA2a's advance_stage and the Croatian result handler in a season of the tie. CroA2a::update_for_date 0x516360 makes
+ * its tie-break stage only with stage count 0 (0x516385), so the tie's count of 1 keeps that stage out of the season. */
+void o_00516060(void);
+RT_WRAP(00516060, cro_a2a_advance)
+{
+    if (cross_marked(cpu.ecx)) {
+        season_playoffs_advance(cpu.ecx);
+        if (!rt_unwinding) rt_ret_cdecl(0);
+        return;
+    }
+    o_00516060();
+}
+
+void o_007ebc40(void);
+RT_WRAP(007ebc40, cro_a2a_result)
+{
+    if (cross_marked(cpu.ecx) && g_mem[cpu.esp + 0xc] != 0xff) {
+        cross_result(cpu.ecx);
+        if (!rt_unwinding) rt_jump(F_ENG_RESULT);
+        return;
+    }
+    o_007ebc40();
 }
 
 void o_007ef5d0(void);
