@@ -214,6 +214,8 @@ void season_sizes_game_free(uint32_t p);
 /* The size step of a division pair that a class's own chain moves (not league_promote_and_relegate 0x689c80): the
  * Argentine Primera and second division (ArgPrm::process_promotion_relegation_chain 0x4067f0). */
 void season_sizes_step_note(uint32_t upper, uint32_t lower);
+/* Item 286: the size step of this season change takes this club into no division: it has just gone down. */
+void season_sizes_step_bar(uint32_t club);
 
 /* The name of a period stage id that the original does not know (gap 33, season_sizes_periods.c), or NULL. */
 const char *season_sizes_period_name(int id, int abbreviated);
