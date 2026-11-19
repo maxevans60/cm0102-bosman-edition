@@ -161,6 +161,36 @@ int main(int argc, char **argv)
             failures++;
         }
     }
+    /* Item 298: the UEFA Cup before its groups (2001/02 to 2003/04) takes the same rule in a season game. The real
+     * qualifying round first legs and first round draws (en.wikipedia.org "2001-02 UEFA Cup", "2002-03 UEFA Cup",
+     * "2003-04 UEFA Cup", rsssf.org ec200102, ec200203, ec200304, kassiesa.net dates2001 to dates2003, read 19
+     * November 2026): 9 and 24 August 2001, 15 and 30 August 2002, 14 and 29 August 2003. The real first rounds
+     * (20 September 2001 after the postponement from 13 September, 19 September 2002, 24 September 2003) are not
+     * matched: the rule gives 13, 12 and 18 September, whose two legs meet no FIFA day. */
+    static const int pre[][5] = {{2001, 8, 9, 8, 24}, {2002, 8, 15, 8, 30}, {2003, 8, 14, 8, 29}};
+    for (size_t i = 0; i < sizeof pre / sizeof pre[0]; i++) {
+        int got[4], y, m, d;
+        season_uefa_cup_q2_day(pre[i][0], &y, &got[0], &got[1]);
+        season_uefa_cup_r1_draw(pre[i][0], &y, &got[2], &got[3]);
+        checked++;
+        if (memcmp(got, pre[i] + 1, sizeof got)) {
+            printf("FAIL %d/%02d: UEFA Cup qualifying round %02d-%02d, R1 draw %02d-%02d; real %02d-%02d, %02d-%02d\n",
+                   pre[i][0], (pre[i][0] + 1) % 100, got[0], got[1], got[2], got[3], pre[i][1], pre[i][2], pre[i][3],
+                   pre[i][4]);
+            failures++;
+        }
+        season_uefa_cup_r1_day(pre[i][0], &y, &m, &d);
+        for (int leg = 0; leg < 2; leg++) {
+            int y2, m2, d2;
+            season_from_abs_day(season_abs_day(y, m, d) + 14 * leg, &y2, &m2, &d2);
+            checked++;
+            if (season_fifa_meets(y2, m2, d2)) {
+                printf("FAIL %d/%02d: UEFA Cup first round leg %d on %04d-%02d-%02d meets a FIFA day\n", pre[i][0],
+                       (pre[i][0] + 1) % 100, leg + 1, y2, m2, d2);
+                failures++;
+            }
+        }
+    }
     if (list)
         for (int y = 2002; y <= 2031; y++)
             for (int m = 1; m <= 12; m++)

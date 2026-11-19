@@ -83,3 +83,16 @@ int season_uefa_cup_qual_dates(uint32_t q2, uint32_t r1, int season)
     season_uefa_cup_r1_day(season, &y, &m, &d);
     return put_date(r1, 3, season, y, m, d);
 }
+
+int season_uefa_cup_draw_after(uint32_t r1, uint32_t next, int season)
+{
+    if (!readable(r1) || !readable(next)) return 0;
+    int y, m, d, doy, yr;
+    season_uefa_cup_r1_day(season, &y, &m, &d);
+    season_from_abs_day(season_abs_day(y, m, d) + g_mem[r1 + 0x22], &y, &m, &d);
+    if (!make_date(d, m - 1, y, &doy, &yr)) return 0;
+    int draw_yr = season + (int8_t)g_mem[next + 2], draw_doy = (int16_t)rd16(g_mem, next);
+    if (draw_yr > yr || (draw_yr == yr && draw_doy > doy)) return 0;
+    season_from_abs_day(season_abs_day(y, m, d) + 1, &y, &m, &d);
+    return put_date(next, 0, season, y, m, d);
+}
