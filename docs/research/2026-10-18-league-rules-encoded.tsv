@@ -1521,17 +1521,17 @@ hol-bel-191	2015	bel_second	2	17	-	-	-	ok	-	split	2	0	-	0	0	-	34
 hol-bel-192	2015	bel_third	3	37	-	-	-	partial: the play-off places are not given	-	split	2	0	-	0	0	-	-
 hol-bel-197	2016	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-198	2016	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-203	2016	bel_first	1	16	-	-	-	ok	after 30: 6+4+5+1, points halved	split	2	0	-	0	0	2+2+2+0	30
+hol-bel-203	2016	bel_first	1	16	-	-	-	ok	after 30: 6+10, points halved	split	2	0	-	0	0	2+0	30
 hol-bel-204	2016	bel_second	2	8	-	-	europe	ok	-	split	4	0	-	0	2	-	28
 hol-bel-205	2016	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-210	2017	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-211	2017	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-216	2017	bel_first	1	16	-	-	-	ok	after 30: 6+4+5+1, points halved	split	2	0	-	0	0	2+2+2+0	30
+hol-bel-216	2017	bel_first	1	16	-	-	-	ok	after 30: 6+10, points halved	split	2	0	-	0	0	2+0	30
 hol-bel-217	2017	bel_second	2	8	-	-	europe	ok	-	split	4	0	-	0	2	-	28
 hol-bel-218	2017	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-223	2018	hol_prm	1	18	-	16-17	europe	ok	-	split	2	0	-	0	0	-	34
 hol-bel-224	2018	hol_first	2	20	-	-	-	partial: the period winners, not table places	-	split	2	0	-	0	4	-	38
-hol-bel-229	2018	bel_first	1	16	-	-	-	ok	after 30: 6+4+5+1, points halved	split	2	0	-	0	0	2+2+2+0	30
+hol-bel-229	2018	bel_first	1	16	-	-	-	ok	after 30: 6+10, points halved	split	2	0	-	0	0	2+0	30
 hol-bel-230	2018	bel_second	2	8	-	-	europe	ok	-	split	4	0	-	0	2	-	28
 hol-bel-231	2018	bel_third	3	16	1-4	-	-	ok	-	split	2	0	-	0	0	-	30
 hol-bel-236	2019	hol_prm	1	18	-	16	-	ok	-	split	2	0	-	0	0	-	34

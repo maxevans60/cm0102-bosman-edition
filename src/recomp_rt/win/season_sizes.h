@@ -136,6 +136,16 @@ const char *season_sizes_row_playoffs(uint32_t obj, const char *file);
 void season_sizes_irl_rules(uint32_t obj, const char *file);
 int season_sizes_irl_takes(const char *file, int n);
 
+/* Items 271 and 272 (season_sizes_nir.c): in the set_up_rules wrap of NirPrm and NirFirst, the places of the row and
+ * the season's play-off; the record of the lower division of the nation of a lowest division (the Northern Irish lower
+ * division for nir_first), or 0; and 1 when a record is such a lower division. Only with the sizes on. */
+void season_sizes_nir_rules(uint32_t obj, const char *file);
+uint32_t season_sizes_nation_lower(const char *file);
+int season_sizes_in_nation_lower(uint32_t record);
+/* The relegation places that the size step will use for a lowest division with a nation's lower division: the row's
+ * places as far as that division's clubs can replace them (as a lone division), -1 with changing rules off. */
+int season_sizes_lower_shown(uint32_t obj, const char *file);
+
 /* After create_schedule of a grown class (thiscall: stage, &count, &code, &flag): for stage -1 in a season game,
  * the meetings of the row (+0x3c), the matches per club (+0xa7) and a template of the rounds of the count, which
  * replaces the class's (the pointer in eax, the count at count_at). */
@@ -176,6 +186,8 @@ uint32_t season_sizes_build_template(uint32_t obj, const char *file, uint32_t ol
 /* The club count of a grown league this edition (the clubs of its division up to its cap), 0 outside a season game
  * with the sizes on. */
 int season_sizes_count(uint32_t obj);
+/* 1 when a human manages the club. */
+int season_sizes_is_human(uint32_t club);
 
 /* The objects whose template had no room this edition (D4) keep the class's count and form: on 1 marks the object,
  * 0 clears it; season_sizes_kept gives the mark of the object's edition. */

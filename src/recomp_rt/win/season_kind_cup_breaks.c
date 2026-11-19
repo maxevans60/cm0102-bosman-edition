@@ -334,6 +334,7 @@ static void log_fixture_years(const char *when)
  * or any fixture while a constructor runs with SEASON_CUPS_NEVER, gives a line "fixture added", which
  * tests/seasons/cup_breaks_run.py does not allow. The call runs the original through fixture_season_end.c (O288). */
 void season_playoffs_fixture_log(uint32_t f);
+void season_split_add_fixture(void);    /* item 288: a section match never on the day of the split */
 void o_005aa680(void);
 RT_WRAP(005aa680, cup_breaks_add_fixture)
 {
@@ -349,6 +350,8 @@ RT_WRAP(005aa680, cup_breaks_add_fixture)
                     rd32(g_mem, cpu.esp),
                     never_obj ? " in a constructor that waits for ever" : "");
     }
+    season_split_add_fixture();
+    if (rt_unwinding) return;
     fixture_season_end_add_fixture();
 }
 

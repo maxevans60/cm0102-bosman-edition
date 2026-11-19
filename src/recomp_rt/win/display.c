@@ -113,6 +113,7 @@ static int from_comp_text(void)
 /* Widget create, thiscall: (flags, x1, y1, x2, y2, column, row, ...). */
 RT_WRAP(0055f990, widget_create)
 {
+    if (rd32(g_mem, cpu.esp) == 0x49d217u) screen_sweep_menu_item(rt_arg(13));   /* the item's text, pushed at 0x49d1e1 */
     columns_widget_before();
     foreign_widget_before();    /* the tactics screen's names (foreign.c) */
     int holiday = holiday_widget_before();

@@ -48,6 +48,8 @@
 #define QUAL_SET_UP_RULES 0x0057e8f0u   /* thiscall (), returns 1: rules, draw date, template (slot 35) */
 #define QUAL_START 0x0057eb20u          /* start_new_season, thiscall () */
 #define QUAL_UPDATE 0x0057fd60u         /* update_for_date, thiscall (today, full), ret 8 */
+#define LEAGUE_FATE_TEXT 0x0048c6d0u    /* Comp::build_fate_news_text, slot 18 of the League, ret 0x28 */
+#define GROUP_NEWS 0x004b4590u          /* comp_util_write_group_qualify_news, cdecl, 6 arguments */
 
 #define GAME_NEW 0x00944cf1u            /* operator new, cdecl (size) */
 #define GAME_MALLOC 0x00944e46u         /* malloc, cdecl (size) */
@@ -1112,6 +1114,28 @@ static void history(void)
     rt_ret_stdcall(0, 0);
 }
 
+/* vtable +0x48, build_fate_news_text, thiscall (10 arguments), ret 0x28. Slot 18 takes the League base 0x48c6d0, which
+ * knows the fates 0, 1, 2, 3 and 5 and writes "ERROR: No league fate yet" for any other (0x48ca7d). The League's
+ * announce_team_status 0x686670 posts the item of a group (type 12, 0x686720) with fates 6, 7 and 0xfe and no fixture.
+ * These go to comp_util_write_group_qualify_news 0x4b4590 (team, group name code, competition record, fate, full,
+ * text), which the class's own slot 0x57d700 calls for fates 7 and 0xfe (0x57d73b). */
+static void fate_text(void)
+{
+    uint32_t self = cpu.ecx, args[10];
+    int fate = (int8_t)rt_arg(1);
+    for (int i = 0; i < 10; i++) args[i] = rt_arg(i);
+    if (!args[4] && (fate == 6 || fate == 7 || fate == -2)) {
+        static int logged;
+        uint32_t group[6] = {args[0], args[3] & 0xffffu, rd32(g_mem, self + 4u), (uint32_t)fate, args[8], args[9]};
+        if (!logged++) fprintf(stderr, "recomp: nations league: group news of fate %d, code %u\n", fate, group[1]);
+        call_cdecl(GROUP_NEWS, 6, group);
+    } else {
+        call_this(LEAGUE_FATE_TEXT, self, 10, args);
+    }
+    if (rt_unwinding) return;
+    rt_ret_stdcall(0, 10);
+}
+
 static uint32_t build_vtable(const SeasonCompDef *d)
 {
     uint32_t v = season_comps_vtable(d, QUAL_VTABLE, VTABLE_SLOTS);
@@ -1126,6 +1150,7 @@ static uint32_t build_vtable(const SeasonCompDef *d)
     season_comps_set_slot(v, 10, "nl_advance_stage", advance_stage);
     season_comps_set_slot(v, 12, "nl_history", history);
     season_comps_set_slot(v, 15, "nl_round_template", round_template);
+    season_comps_set_slot(v, 18, "nl_fate_text", fate_text);
     return v;
 }
 

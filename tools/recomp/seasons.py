@@ -363,6 +363,10 @@ INSNS = {
     # 0x519c2f a season game takes the edition's first host (open item 18).
     0x5FAAAE: ("mov byte ptr [edx + 0x1e], al", "SYNC(); W8(edx + 0x1eu, rt_intl_host_pick(edx, eax & 0xffu));"),
     0x519C2F: ("mov ecx, dword ptr [esp + 0x10]", "SYNC(); ebx = rt_intl_history_host(esi, ebx); ecx = R32(esp + 0x10u);"),
+    # Issue 146: the news of the qualified nations names the hosts of its own edition (win/season_intl.c), when it is
+    # made and when its text is written (ebp part 0 the competition, edi and ebx parts 4 and 5, eax part 6 the year).
+    0x777D07: ("mov dword ptr [esp + 0x24], eax", "W32(esp + 0x24u, eax); SYNC(); edi = rt_intl_news_text_host(ebp, eax, edi, 0u); ebx = rt_intl_news_text_host(ebp, eax, ebx, 1u);"),
+    0x777B07: ("mov eax, dword ptr [esp + 0x18]", "SYNC(); rt_intl_news_hosts(R32(edi), esp + 0x18u, esp + 0x1cu); eax = R32(esp + 0x18u);"),
     0x57BE3D: ("jle 0x57becc", "if (cc_le(F)) { if (rt_intl_euro_no_host()) goto L_57bf2f; goto L_57becc; }"),
     # EuroChampQual::get_group_team_count 0x57d9d0 gives the size of each qualifying group by the hosts that the
     # pool leaves out (+0xf6): 1 (0x57d9de) or 2 (0x57d9e5), else the box "euro_champ_qual.cpp 581" (0x57da3d).

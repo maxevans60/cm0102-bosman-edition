@@ -217,6 +217,11 @@ from discipline_ban import INSNS as BAN_INSNS  # noqa: E402
 
 assert not set(BAN_INSNS) & (set(INSNS) | set(PATCHES))
 INSNS.update(BAN_INSNS)
+# Squad numbers 1 to 99 (squad_numbers.py, GitHub issue 140).
+from squad_numbers import INSNS as SQUAD_NUMBER_INSNS  # noqa: E402
+
+assert not set(SQUAD_NUMBER_INSNS) & (set(INSNS) | set(PATCHES))
+INSNS.update(SQUAD_NUMBER_INSNS)
 # The OFC Champions League at a load after Australia's move to Asia (oceania_entry.py).
 from oceania_entry import INSNS as OCEANIA_INSNS  # noqa: E402
 

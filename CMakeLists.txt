@@ -310,6 +310,12 @@ if(NOT WIN32)
     add_executable(season_periods_test tests/seasons/test_season_periods.c src/recomp_rt/win/season_periods.c)
     target_include_directories(season_periods_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_periods COMMAND season_periods_test)
+    add_executable(season_ned_playoff_test tests/seasons/test_season_ned_playoff.c src/recomp_rt/win/season_ned_playoff_plan.c)
+    target_include_directories(season_ned_playoff_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_ned_playoff COMMAND season_ned_playoff_test)
+    add_executable(season_bel_plan_test tests/seasons/test_season_bel_plan.c src/recomp_rt/win/season_bel_plan.c)
+    target_include_directories(season_bel_plan_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_bel_plan COMMAND season_bel_plan_test)
     # The Irish calendar move of 2003 (gap row 2 of 0.7.2 league sizes).
     add_executable(season_calendar_test tests/seasons/test_season_calendar.c src/recomp_rt/win/season_calendar.c
         src/recomp_rt/win/season_template.c)
@@ -328,6 +334,10 @@ if(NOT WIN32)
     add_executable(season_swe_groups_test tests/seasons/test_season_swe_groups.c src/recomp_rt/win/season_swe_groups_plan.c)
     target_include_directories(season_swe_groups_test PRIVATE src/recomp_rt/win)
     add_test(NAME season_swe_groups COMMAND season_swe_groups_test)
+    add_executable(season_closed_test tests/seasons/test_season_closed.c src/recomp_rt/win/season_closed.c
+                   src/recomp_rt/win/season_mls_plan.c)
+    target_include_directories(season_closed_test PRIVATE src/recomp_rt/win)
+    add_test(NAME season_closed COMMAND season_closed_test)
     # The size step at a season change (0.7.2 league sizes, slice 3, D13).
     add_executable(season_size_step_test tests/seasons/test_season_size_step.c src/recomp_rt/win/season_size_step.c)
     target_include_directories(season_size_step_test PRIVATE src/recomp_rt/win)
@@ -622,6 +632,7 @@ set(RECOMP_PYTHON "${RECOMP_PYTHON_DEFAULT}" CACHE FILEPATH "A Python with capst
 # every row is valid. A Python test, so it runs on every platform.
 enable_testing()
 add_test(NAME season_history_table COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py" --check)
+add_test(NAME season_history_rows_table COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_rows_table.py" --check)
 # 0.6.2 open item 106: the C table of the real UEFA season coefficients matches its TSV and the researched values.
 add_test(NAME season_coeffs_table COMMAND "${RECOMP_PYTHON}" -I "${CMAKE_SOURCE_DIR}/tools/seasons/make_coeff_table.py" --check)
 # The .dmg window background shows the logo art alone, with no drawn BOSMAN EDITION line under it (0.6.1
