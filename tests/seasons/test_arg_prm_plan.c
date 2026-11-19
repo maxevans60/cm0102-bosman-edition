@@ -204,7 +204,7 @@ int main(void)
           rd.round[2].fresh == 1 && rd.round[2].ties == 2 && rd.round[3].fresh == 0 && rd.round[3].ties == 1,
           "row 2021: 4th to 13th, then the 3rd, then the 2nd");
     for (int row = 2014; row <= 2021; row++) {
-        if (!season_arg_reducido_of(row, &rd)) continue;
+        if (!season_arg_reducido_of(row, &rd) || rd.zone_last) continue;
         int in = 0, left = 0;
         for (int r = 0; r < rd.rounds; r++) {
             in += rd.round[r].fresh;
@@ -217,6 +217,53 @@ int main(void)
     season_arg_reducido_pairs(seeds, 6, ties);
     CHECK(ties[0] == 0 && ties[1] == 11 && ties[2] == 2 && ties[3] == 8 && ties[4] == 3 && ties[5] == 6,
           "the best place meets the worst");
+    /* Item 291: the zone rows. */
+    CHECK(season_arg_reducido_of(2020, &rd) && rd.zone_last == 4 && rd.places == 6 && rd.rounds == 3 && rd.loser_round == 1 &&
+          rd.final_one && rd.level_pens && rd.down_each == 0 && !rd.rel_tie && rd.stages == 7,
+          "row 2020: 2nd to 4th of each zone, the final's loser in the semi-finals, no relegation");
+    CHECK(season_arg_reducido_of(2019, &rd) && rd.zone_last == 4 && rd.down_each == 1, "row 2019: the last of each zone");
+    CHECK(season_arg_reducido_of(2022, &rd) && rd.zone_last == 8 && rd.places == 14 && rd.rounds == 4 && rd.loser_round == 1 &&
+          rd.final_one && !rd.level_pens && rd.down_each == 1 && !rd.rel_tie && rd.stages == 15, "row 2022");
+    CHECK(rd.round[0].fresh == 14 && rd.round[0].ties == 7 && rd.round[0].legs == 1 && rd.round[1].ties == 4 &&
+          rd.round[1].legs == 2 && rd.round[3].legs == 1, "row 2022: one match, two legs, and a final of one match");
+    CHECK(season_arg_reducido_of(2023, &rd) && rd.rel_tie && rd.down_each == 1 && rd.stages == 16, "row 2023: a relegation tie");
+    CHECK(season_arg_reducido_of(2024, &rd) && rd.down_each == 2 && !rd.rel_tie, "row 2024: the last two of each zone");
+    CHECK(season_arg_reducido_of(2025, &rd) && rd.down_each == 2, "row 2025: the last two of each zone");
+    for (int row = 2019; row <= 2025; row++) {
+        if (!season_arg_reducido_of(row, &rd) || !rd.zone_last) continue;
+        int left = 0;
+        for (int r = 0; r < rd.rounds; r++) {
+            CHECK(left + rd.round[r].fresh + (r == rd.loser_round) == 2 * rd.round[r].ties, "a zone row's round is full");
+            left = rd.round[r].ties;
+        }
+        CHECK(left == 1 && rd.places == 2 * (rd.zone_last - 1), "a zone row ends in one winner");
+    }
+    int zone[37], in_a = 0;
+    season_arg_second_zone_split(37, 19, zone);
+    for (int i = 0; i < 37; i++) in_a += zone[i] == 0;
+    CHECK(in_a == 19, "19 clubs in zone A");
+    static int zr[SEASON_ARG_ZONE_ROUNDS][SEASON_ARG_ZONE_TIES][2];
+    static const int sizes[][3] = {{16, 16, 30}, {17, 18, 34}, {19, 18, 38}, {19, 19, 38}, {18, 18, 34}};
+    for (unsigned i = 0; i < sizeof sizes / sizeof sizes[0]; i++) {
+        int a = sizes[i][0], b = sizes[i][1], n = a + b, rounds = season_arg_second_zone_plan(a, b, zr);
+        CHECK(rounds == sizes[i][2], "the rounds of two zones");
+        static int met[40][40];
+        memset(met, 0, sizeof met);
+        for (int r = 0; r < rounds; r++) {
+            char seen[40] = {0};
+            for (int k = 0; k < n / 2; k++) {
+                int h = zr[r][k][0], w = zr[r][k][1];
+                if (h < 0) continue;
+                CHECK(!seen[h] && !seen[w], "a club plays once a round");
+                seen[h] = seen[w] = 1;
+                CHECK((h < a) == (w < a), "a match inside one zone");
+                met[h][w]++;
+            }
+        }
+        for (int h = 0; h < n; h++)
+            for (int w = 0; w < n; w++)
+                CHECK(met[h][w] == (h != w && (h < a) == (w < a)), "each pair of a zone meets home and away");
+    }
     if (fails) {
         printf("%d checks failed\n", fails);
         return 1;

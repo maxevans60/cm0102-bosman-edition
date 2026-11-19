@@ -278,8 +278,8 @@ def encoded_row(file, season):
         m *= 2
     # Slice 16 (season_sizes_arg_second.c form_of): the second division plays a row of zones as one table of one
     # meeting, a row of halves as one table of twice the meetings; 2001/02 (25 clubs in halves) keeps the class.
-    if file == "arg_second" and "+" in row.get("zones", ""):     # zone sizes, "19+19"
-        m = 1
+    if file == "arg_second" and "+" in row.get("zones", ""):     # zone sizes, "19+19" (item 291: two meetings)
+        m = 2
     elif file == "arg_second" and row.get("halves") == "1" and row["clubs"] != "25":
         m *= 2
     return (int(row["clubs"]), m)
@@ -479,9 +479,9 @@ def want_counts(file, season, meetings=0):
         # own template of n/2 dates, and a club plays n/2 matches in each (arg_title_faults checks both together).
         return (clubs // 2, clubs // 2)
     if file == "arg_second" and zones:
-        # Slice 16 (season_sizes_arg_second.c form_of): zones play as one table of one meeting, no inter-zone rounds.
-        # Since item 286 edition Y plays row Y, so the zone rows 2022 to 2024 now reach this check.
-        return (rounds_of(clubs, 1), clubs - 1)
+        # Item 291 (season_arg_stages.c): two zones of two meetings in one table, the rounds of the larger zone, the
+        # matches of the smaller. No inter-zone rounds.
+        return (max(2 * (z + (z & 1) - 1) for z in zones), 2 * (min(zones) - 1))
     m = m or meetings or 2
     if zones:
         return (rounds or m * (max(zones) + (max(zones) & 1) - 1) + extra, m * (max(zones) - 1) + extra)

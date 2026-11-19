@@ -44,5 +44,6 @@ uint32_t rt_arg_second_fixed_at(uint32_t obj, uint32_t original);
 
 /* The promotion places of a rules row of the second division, or -1 (item 291). */
 int season_arg_second_row_up(int row);
+int season_arg_second_row_down(int row);
 
 #endif

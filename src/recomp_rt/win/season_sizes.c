@@ -363,6 +363,9 @@ uint32_t rt_league_clubs(uint32_t obj, uint32_t original)
     else if (grown_of(file) && meet > 0)
         wr16(g_mem, obj + COMP_MATCHES, (uint16_t)((n - 1) * meet +
                                                    (kept_at(obj) ? 0 : season_split_matches(obj, file, n, meet))));
+    int za, zb;
+    if (season_arg_second_zones(obj, n, &za, &zb))      /* item 291: the matches of the smaller zone */
+        wr16(g_mem, obj + COMP_MATCHES, (uint16_t)(2 * ((za < zb ? za : zb) - 1)));
     return (uint32_t)n;
 }
 
@@ -567,6 +570,11 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
         }
     }
     int rounds = meetings * (n + (n & 1) - 1), base = (int16_t)rd16(g_mem, self + COMP_YEAR);
+    int zone_a, zone_b, zoned = !probe && season_arg_second_zones(self, n, &zone_a, &zone_b);
+    if (zoned) {        /* item 291: the rounds of the larger zone, a rest round for an odd zone */
+        int ra = 2 * (zone_a + (zone_a & 1) - 1), rb = 2 * (zone_b + (zone_b & 1) - 1);
+        rounds = ra > rb ? ra : rb;
+    }
     /* A split (slice 7, D7): the template plans the rounds before the split and the most rounds of a section after
      * it. The table plays the first; the sections take the rest when the split comes (season_split.c), through
      * this wrap again (probe). */
@@ -595,7 +603,8 @@ void season_sizes_schedule(uint32_t self, int stage, uint32_t count_at)
     }
     /* The matches of the count (rt_league_clubs writes the same when create_table runs after this), and those of
      * the largest section of a split. */
-    if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)((n - 1) * meetings + (split ? sp.matches_max : 0)));
+    if (!probe) wr16(g_mem, self + COMP_MATCHES, (uint16_t)(zoned ? 2 * ((zone_a < zone_b ? zone_a : zone_b) - 1)
+                                                                  : (n - 1) * meetings + (split ? sp.matches_max : 0)));
     if (total == have && !split && !cal) return;
     /* A class date on the day of an earlier one (NirPrm 2010/11: 15 January 2011 twice, a date that snaps to its
      * Saturday) is left out of the plan, which never puts two rounds on one day (season_template.c). Not for a

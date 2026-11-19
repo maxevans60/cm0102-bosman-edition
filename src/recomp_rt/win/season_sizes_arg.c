@@ -956,6 +956,11 @@ void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, i
     }
     int row = season_sizes_row_season(obj, "arg_second");
     if (row >= SEASON_ARG_PROMO_FIRST && row <= SEASON_ARG_PROMO_LAST) *po_up = 2;
+    int a, b;
+    if (season_arg_second_zones(obj, n, &a, &b)) {     /* item 291: the final's and the Reducido's winners, and the zones */
+        *up = 2;
+        *down = season_arg_second_row_down(row);
+    }
 }
 
 /* Item 291: the row of 2001/02 sends down the worst coefficients. The records hold each club's average (+4, as
@@ -1174,6 +1179,9 @@ RT_WRAP(004067f0, arg_chain)
 {
     uint32_t self = cpu.ecx;
     if (season_sizes_on() && is_prm(self)) {
+        uint32_t table = rd32(g_mem, COMP_OBJECTS);
+        int32_t id = (int32_t)rd32(g_mem, KEY_SECOND);
+        if (readable(table) && id >= 0) season_arg_reducido_chain(rd32(g_mem, table + 4u * (uint32_t)id));
         /* The promoción's winners of the second division go up: status 0 in its table (0x406839); its losers stay
          * down: 0xfe, as the second division's own ties (0x408cd0). Its stages still exist here (start_new_season
          * frees them after the chain, 0x4057b5). With the sizes off arg_record_honours sent no loser down, so no

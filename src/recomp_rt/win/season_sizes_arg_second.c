@@ -85,10 +85,12 @@ static int form_of(uint32_t obj, Form *f)
         f->meetings = m * 2 <= 4 ? m * 2 : 4;
         f->why = "two halves as one table";
     } else if (l->zones > 1) {
-        /* Zones (2019/20 on): no source gives the zone of each club yet, so one table of one meeting, as many
-         * rounds as the zones played (open item). */
-        f->meetings = 1;
-        f->why = "zones as one table of one meeting";
+        /* Zones (2019/20 on): with changing rules on two zones of two meetings in one table (item 291, season_arg_stages.c);
+         * with them off one table of one meeting, the form of 0.7.2. */
+        SeasonArgReducido rd;
+        int zoned = season_changing_rules() && season_arg_reducido_of(f->season, &rd) && rd.zone_last;
+        f->meetings = zoned ? 2 : 1;
+        f->why = zoned ? "two zones of two meetings" : "zones as one table of one meeting";
     } else {
         f->meetings = m;
         f->why = "one table";
@@ -108,6 +110,12 @@ static int playing_one_table(uint32_t obj)
 {
     return season_arg_reducido_marked(obj) ||
            (season_arg_second_one_table(obj) && rd32(g_mem, obj + COMP_STAGE_COUNT) == 0);
+}
+
+int season_arg_second_row_down(int row)
+{
+    const SeasonRule *r = season_rules_find(row, FILE_SECOND, 0);
+    return r ? r->down : -1;
 }
 
 int season_arg_second_row_up(int row)
@@ -350,18 +358,16 @@ RT_WRAP(00408cd0, arg_second_result)
         o_00408cd0();
         return;
     }
-    if (stage + 1 < (int32_t)rd32(g_mem, self + COMP_STAGE_COUNT)) {
+    /* Only a winner that goes up reaches the class. The loser: the class records a place in its promotion ties
+     * (0x408d75..0x408d94), which this edition does not play. The earlier ties only send their winner on. */
+    if (!season_arg_reducido_result(self, stage, (int8_t)(rt_arg(1) & 0xff), rt_arg(0))) {
+        if (rt_unwinding) return;
         rt_ret_stdcall(0xffffffffu, 6);         /* ret 0x18, as the class's own stages, 0x408d6e */
         return;
     }
     if (logging())
-        fprintf(stderr, "recomp: league sizes: arg_second reducido %d: result %d of club %u in the final\n",
-                (int16_t)rd16(g_mem, self + COMP_YEAR), (int8_t)(rt_arg(1) & 0xff), rd32(g_mem, rt_arg(0)));
-    /* The loser: the class records a place in its promotion ties (0x408d75..0x408d94), which this edition does not play. */
-    if ((int8_t)(rt_arg(1) & 0xff) != 1) {
-        rt_ret_stdcall(0xffffffffu, 6);
-        return;
-    }
+        fprintf(stderr, "recomp: league sizes: arg_second reducido %d: result 1 of club %u in the final (stage %d)\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), rd32(g_mem, rt_arg(0)), stage);
     wr32(g_mem, cpu.esp + 4 + 4 * 2, 3);
     o_00408cd0();
 }

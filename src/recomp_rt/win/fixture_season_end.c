@@ -82,6 +82,7 @@
 #include "season_names.h"
 #include "fixture_season_end.h"
 #include "duty_log.h"
+#include "season_sizes_arg.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -747,6 +748,10 @@ static void nearby_today_test(void)
 
 void fixture_season_end_add_fixture(void)
 {
+    if (season_arg_second_drop_fixture(rt_arg(0))) {    /* 0.7.3 item 291: a round of two zones with no match here */
+        rt_ret_stdcall(1, 2);
+        return;
+    }
     uint32_t ret = rd32(g_mem, cpu.esp);
     nearby_today_test();
     if (nearby_skip && rt_arg(0) == nearby_skip && (ret == 0x005aec21u || ret == 0x005aeddbu)) {

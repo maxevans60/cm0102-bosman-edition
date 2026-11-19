@@ -27,6 +27,9 @@ season change moves the losers and winners (the "chain" line), as league_size_ru
 (item 291; default --save-days 279, day 109 of 2018, after the semi-finals are drawn and before the final; --play-days 120). The checks:
 the first run drew round 2 and played no final; after the load the final is drawn and played, and the season change
 sends its winner up (the "chain" line holds a club of the second division with status 0).
+--zones: a 2024 game (the October 2024 database) instead, saved in the table of two zones of the second division (item 291;
+default --save-days 150, --play-days 330). The checks: the first run made the zones and no Reducido; after the load the
+zone winners' final and the Reducido are played, and exactly their two winners go up at the season change.
 Exit code 1 on a failure. A run takes about an hour.
 """
 import os
@@ -134,6 +137,33 @@ def reducido_load(work, code):
     return fails
 
 
+def zones_first(work):
+    log = open(os.path.join(work, "stderr.txt"), encoding="latin-1").read()
+    fails = [x.strip() for x in log.split("\n") if "recomp: message box from" in x]
+    if not re.search(r"arg_second zones 2024: 18 and 18 clubs, 34 rounds", log):
+        fails.append("first: no zones of 2024")
+    if re.search(r"arg_second reducido 2024: round 1 tie 1,", log):
+        fails.append("first: the Reducido is drawn before the save (save earlier)")
+    return fails
+
+
+def zones_load(work, code):
+    fails = [] if code == 0 else [f"load: the run ended with code {code}"]
+    path = os.path.join(work, "stderr.txt")
+    if not os.path.exists(path):
+        return fails + ["load: no log"]
+    log = open(path, encoding="latin-1").read()
+    fails += [x.strip() for x in log.split("\n") if "recomp: message box from" in x]
+    won = re.findall(r"arg_second reducido 2024: result 1 of club (\d+) in the final", log)
+    if len(won) != 2:
+        fails.append(f"load: {len(won)} winners of the final and the Reducido after the load, want 2")
+    m = re.search(r"arg_prm chain 2024:.*second:(.*)", log)
+    up = sorted(x.split(":")[0] for x in m.group(1).split() if x.split(":")[2] in ("0", "5")) if m else []
+    if sorted(won) != up:
+        fails.append(f"load: the clubs that go up are {up}, the winners {sorted(won)}")
+    return fails
+
+
 def main(argv):
     if len(argv) < 2:
         print(__doc__)
@@ -144,8 +174,9 @@ def main(argv):
     keep = rrc.arg(argv, "--keep", None)
     promo = "--promocion" in argv
     reducido = "--reducido" in argv
-    save_days = int(rrc.arg(argv, "--save-days", "279" if reducido else "310" if promo else "230"))
-    play_days = int(rrc.arg(argv, "--play-days", "120" if reducido else "150" if promo else "160"))
+    zones = "--zones" in argv
+    save_days = int(rrc.arg(argv, "--save-days", "150" if zones else "279" if reducido else "310" if promo else "230"))
+    play_days = int(rrc.arg(argv, "--play-days", "330" if zones else "120" if reducido else "150" if promo else "160"))
     year = 2017 if reducido else 2010 if promo else 2024
     work = os.path.abspath(keep) if keep else tempfile.mkdtemp(prefix="cm0102-arg-prm-save-")
     again = os.path.join(work, "again")
@@ -157,7 +188,8 @@ def main(argv):
         if code != 0 and not os.path.exists(os.path.join(work, "user", "samesave.sav")):
             print(f"FAIL first: the run ended with code {code} and no save ({work})")
             return 1
-    fails = reducido_first(work) if reducido else promo_first(work) if promo else faults_first(work)
+    fails = (zones_first(work) if zones else reducido_first(work) if reducido else promo_first(work) if promo
+             else faults_first(work))
     if not fails:
         if "--reuse" not in argv:
             os.makedirs(again, exist_ok=True)
@@ -166,10 +198,11 @@ def main(argv):
             code = r.returncode if saved else (r.returncode or 1)
         else:
             code = 0
-        fails += reducido_load(again, code) if reducido else promo_load(again, code) if promo else faults_load(again, code)
+        fails += (zones_load(again, code) if zones else reducido_load(again, code) if reducido
+                  else promo_load(again, code) if promo else faults_load(again, code))
     for f in fails:
         print("FAIL", f)
-    what = ("in the Reducido of 2017" if reducido else "between the promocion legs of 2010" if promo
+    what = ("in the zones of 2024" if zones else "in the Reducido of 2017" if reducido else "between the promocion legs of 2010" if promo
             else "in the Clausura of 2024")
     print(("FAIL" if fails else "PASS") + f" arg_prm save {what} ({work})")
     return 1 if fails else 0
