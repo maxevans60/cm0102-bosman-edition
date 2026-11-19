@@ -128,6 +128,15 @@ For real payments: the live token, price, secret and key, and `fly secrets unset
 `fly secrets set` restarts the app with them. `fly logs` then shows `accounts and cloud saves: on`; if a setting is
 missing it names it. The secrets stay on the app: a later `fly deploy` keeps them.
 
+## The database library
+
+Databases for players to get, each for a season (`web/README.md`, "Database library"): on the admin page, the
+**Database library** section takes a zip of a data set (the 20 database files, as Saved games, Data sets, Download
+gives it), its name, the season a new game with it starts in, and a note (who made it, what it holds). Players then find
+it in Saved games, Data sets, **Get a database**, free and with no account. It is on whenever the bucket is set
+(`fly logs`: `database library: on`); the files live in the bucket under `library/`. Offer only databases you may
+share: the makers of community updates usually say how theirs may be passed on.
+
 ## Statistics and the admin page
 
 The statistics are on by default and kept in the bucket (`web/README.md`, "Statistics and the admin panel"). The admin

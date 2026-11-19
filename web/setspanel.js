@@ -3,8 +3,8 @@
 // Cloud Saves, a Cloud column and Remove, as for the saves. The work is in datasets.js.
 import { whenCell } from './saves.js';
 import { DATA_SET_FILES } from './dataset.js';
-import { FIRST_SEASON, LAST_SEASON, chooseForNextGame, cleanName, dataSetZip, dataSetsInZip, deleteDataSet, listDataSets,
-  seasonText, uniqueName, writeDataSet } from './datasets.js';
+import { FIRST_SEASON, LAST_SEASON, chooseForNextGame, cleanName, dataSetZip, dataSetsInZip, deleteDataSet, fromLibrary, listDataSets,
+  markFromLibrary, seasonText, uniqueName, writeDataSet } from './datasets.js';
 
 // An uploaded data set starts on the latest season the game has (an update of the current season, most often); the
 // game measures its own year from its dates of birth and moves it to the season chosen (season_dates.c).
@@ -15,9 +15,10 @@ const MB = (n) => `${(n / 1048576).toFixed(0)} MB`;
 const CLOUD = { cloud: 'In the cloud', up: 'Saving…', here: 'Only here', waiting: 'Not yet' };
 
 // root: the user folder; module(): the engine's Module; cloud(): the data sets' sync (datasets.js) or null; edit(name),
-// create(): the editor; changed(): after a data set came or went (the cloud sync runs).
-export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () => null, edit, create, changed = () => {} }) {
-  const box = $('sets-list'), note = $('sets-note'), input = $('sets-file');
+// create(): the editor; changed(): after a data set came or went (the cloud sync runs). library: the server has the
+// database library (library.mjs): Get a database lists it.
+export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () => null, edit, create, changed = () => {}, library = false }) {
+  const box = $('sets-list'), note = $('sets-note'), input = $('sets-file'), lib = $('sets-lib');
   const say = (text, bad = false) => { note.textContent = text; note.className = bad ? 'small bad' : 'small'; };
   let shown = [], using = null, watched = null;
 
@@ -30,7 +31,8 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
       ${shown.map((s, i) => {
         const st = c?.status(s.name);
         return `<tr><td>${esc(s.name)}</td><td class="num">${MB(s.size)}</td>${whenCell(s.mtime)}
-        ${c ? `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-set-remove="${i}">Remove</button>` : ''}</td>` : ''}
+        ${c ? (fromLibrary(s) ? '<td class="cloud">From the library</td>'
+          : `<td class="cloud ${st}">${CLOUD[st]}${st === 'cloud' ? ` <button class="link" data-set-remove="${i}">Remove</button>` : ''}</td>`) : ''}
         <td class="acts"><div class="btns"><button class="primary" data-set-use="${i}">Use</button><button data-set-edit="${i}">Edit</button>
           <button data-set-download="${i}">Download</button><button class="link" data-set-delete="${i}">Delete</button></div></td></tr>
         ${using === s.name ? `<tr class="use"><td colspan="${c ? 5 : 4}"><label>Season of the next new game
@@ -138,6 +140,75 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
       render();
     }
   });
+  // ---- Get a database: the library of the server (library.mjs), each database for a season. ----
+  let entries = [];
+  async function showLibrary() {
+    lib.hidden = false;
+    lib.innerHTML = '<p class="small">Getting the list…</p>';
+    try {
+      const r = await fetch('/api/library', { cache: 'no-store' });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      entries = (await r.json()).entries;
+    } catch (err) { lib.innerHTML = `<p class="small bad">The list did not come: ${esc(err.message)}. Try again in a moment.</p>`; return; }
+    const have = new Set(listDataSets(FS, root).map((s) => s.library?.id).filter(Boolean));
+    lib.innerHTML = entries.length ? `<table><tr><th>Database</th><th>Season</th><th class="num">Size</th><th></th></tr>
+      ${entries.map((e, i) => `<tr><td>${esc(e.name)}${e.note ? `<div class="small">${esc(e.note)}</div>` : ''}</td><td>${seasonText(e.season)}</td>
+        <td class="num">${MB(e.size)}</td><td class="acts"><div class="btns"><button class="primary" data-lib-get="${i}">${have.has(e.id) ? 'Get again' : 'Get'}</button></div></td></tr>`).join('')}</table>`
+      : '<p class="small">No databases in the library yet.</p>';
+  }
+  // One database: its zip (straight from the store where it can, else through the server), into Databases with its
+  // season, then Use opens with that season.
+  async function getFromLibrary(e) {
+    const show = (got) => say(`Getting ${e.name}: ${Math.min(100, Math.floor((100 * got) / Math.max(1, e.size)))}%`);
+    show(0);
+    const read = async (r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const out = new Uint8Array(e.size), reader = r.body.getReader();
+      let at = 0;
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (at + value.length > out.length) throw new Error('more bytes than the library said');
+        out.set(value, at);
+        at += value.length;
+        show(at);
+      }
+      if (at !== out.length) throw new Error('the download stopped before its end');
+      return out;
+    };
+    let zip = null;
+    try {
+      const link = await (await fetch(`/api/library/${e.id}?direct=get`, { cache: 'no-store' })).json();
+      if (link.direct) zip = await read(await fetch(link.url, { cache: 'no-store' }));
+    } catch (err) { log(`page: library: ${e.name} not straight from the store (${err.message}): through the server`); }
+    zip ??= await read(await fetch(`/api/library/${e.id}`, { cache: 'no-store' }));
+    const [set] = await dataSetsInZip(zip, e.name);
+    const name = uniqueName(set.name === e.name ? set.name : e.name, listDataSets(FS, root).map((s) => s.name));
+    writeDataSet(FS, root, name, set.files, { season: e.season });
+    markFromLibrary(FS, root, name, e.id);
+    sync();
+    changed();
+    log(`page: ${name} came from the database library (${seasonText(e.season)}, ${MB(e.size)})`);
+    return name;
+  }
+  lib.addEventListener('click', async (ev) => {
+    const b = ev.target.closest('button[data-lib-get]');
+    if (!b) return;
+    const e = entries[Number(b.dataset.libGet)];
+    for (const x of lib.querySelectorAll('button')) x.disabled = true;
+    try {
+      const name = await getFromLibrary(e);
+      lib.hidden = true;
+      using = name;                                    // Use opens, with its season chosen
+      render();
+      say(`${name} is here, for ${seasonText(e.season)}. Use for my next new game below starts a new game with it.`);
+    } catch (err) {
+      say(`${e.name} did not come: ${err.message}`, true);
+      for (const x of lib.querySelectorAll('button')) x.disabled = false;
+    }
+  });
+  $('sets-get').hidden = !library;
+  $('sets-get').onclick = () => { if (lib.hidden) showLibrary(); else lib.hidden = true; };
   $('sets-upload').onclick = () => input.click();
   $('sets-new').onclick = () => { $('saves').close(); create(); };
   input.onchange = async () => { const files = [...input.files]; input.value = ''; await upload(files); };

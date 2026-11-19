@@ -573,6 +573,19 @@ The **Editor** button in the bar opens the editors: a saved game (as above), or 
 - **Save the data set** writes the changed files; the data set's other files stay.
 - The Editor's home lists the data sets, with Delete.
 
+**Database library (`library.mjs`).** Databases that the admin offers every player, free and with no account, each
+for a season: Saved games, Data sets, **Get a database** lists them (name, season, size, note), and **Get** brings one
+into Databases with its season noted, straight from the store where the pages go direct (else through the server);
+**Use** then opens with that season. A database from the library is marked in its folder's note (`.web.json`:
+`library: { id, mtime }`): while its files are as they came, the Cloud column says "From the library" and the data sets'
+cloud sync leaves it out (any device gets it from the library again, and it takes none of the player's 5 places); an
+edit makes it the player's own. The admin page's **Database library** section adds one (a zip of the 20 files, as
+Download gives it; its name, season and a note), changes those or removes it: the zip goes straight to the store with a
+signed link (else through the server) to `library/incoming/`, and the server lists it only once it holds the 20
+database files (`inspectSetZip`, at most 128 MB). The store keeps `library/index.json` and `library/<id>.zip`. Routes:
+`GET /api/library`, `GET /api/library/<id>` (`?direct=get` for a link); for the admin (`CM_ADMIN_EMAILS` or the token)
+`GET|POST /api/admin/library`, `PUT …/<id>/body`, `POST …/<id>/done`, `PATCH|DELETE …/<id>`. It needs the bucket.
+
 **Data sets in Saved games.** The Saved games dialog lists the data sets under the saves (`setspanel.js`,
 `datasets.js`), as it lists the saves:
 

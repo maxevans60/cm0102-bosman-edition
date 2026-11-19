@@ -22,6 +22,7 @@ import { createReadStream, existsSync, readdirSync, readFileSync, statSync } fro
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cloudFromEnv, coffeeFromEnv, paddleFromEnv } from './cloud.mjs';
+import { createLibrary } from './library.mjs';
 import { MAX_SENT_SAVE, createStats, statsStore } from './stats.mjs';
 import { createNotifier } from './notify.mjs';
 import { s3FromEnv } from './s3.mjs';
@@ -34,7 +35,7 @@ const SEASON_TABLES = ['rules.tsv', 'names.tsv', 'clubs.tsv', 'club_records.tsv'
 export const PAGE_FILES = ['index.html', 'loader.js', 'layout.js', 'touch.js', 'keyboard.js', 'saves.js', 'ui.js', 'account.js', 'savedit.js', 'dataset.js', 'datasets.js', 'zip.js', 'editor.js', 'setspanel.js', 'tactics.js', 'report.js', 'play.js', 'release.js', 'progress.js', 'tacticsync.js', 'room.js', 'upload.js', 'lastvisit.js', 'disk.js', 'vault.js', 'stats.js', 'engine.js', 'direct.js', 'sw.js',
   'manifest.webmanifest', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'privacy.html', 'terms.html', 'refunds.html', 'pricing.html'];
 // The server's own files; it also imports saves.js, savedit.js, dataset.js and zip.js of the page (PAGE_FILES).
-export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'notify.mjs', 'spool.mjs', 'admin.html', 'package.json'];
+export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'library.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'notify.mjs', 'spool.mjs', 'admin.html', 'package.json'];
 const PAGES = Object.fromEntries([['/', 'index.html'], ...['privacy', 'terms', 'refunds', 'pricing'].map((p) => [`/${p}`, `${p}.html`]),
   ...PAGE_FILES.map((f) => [`/${f}`, f])]);
 // The pages of the site's terms: the seller, the contact and the price come from the settings (CM_SELLER, CM_CONTACT,
@@ -151,7 +152,7 @@ const json = (res, status, body) => {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
   res.end(status === 204 ? undefined : JSON.stringify(body));
 };
-async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
+async function statsRoute(req, res, url, { stats, cloud, admins, adminToken, library }) {
   const path = url.pathname;
   const user = cloud?.userOf(req) ?? null;
   if (path === '/api/stats/choice') {
@@ -251,6 +252,16 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
     json(res, plan ? 200 : 404, plan ? { id: body.id, plan } : { error: 'no such account: it signs in once first' });
     return;
   }
+  if (path === '/api/admin/library' || path.startsWith('/api/admin/library/')) {
+    // The database library (library.mjs): a change only from the admin page (or a script with the token).
+    if (!library) { req.resume(); json(res, 404, { error: 'the library needs the store (BUCKET_NAME and its key)' }); return; }
+    const from = req.headers.origin;
+    if (req.method !== 'GET' && !(adminToken && bearer === adminToken) && (req.headers['x-cm'] !== '1' || (from && new URL(from).host !== req.headers.host))) {
+      req.resume(); json(res, 403, { error: 'not from this site' }); return;
+    }
+    await library.admin(req, res, url);
+    return;
+  }
   if (path === '/api/admin/report' && req.method === 'GET') {
     const r = await stats.reportFile(url.searchParams.get('key') ?? '');
     json(res, r ? 200 : 404, r ?? { error: 'no such report' });
@@ -263,7 +274,7 @@ async function statsRoute(req, res, url, { stats, cloud, admins, adminToken }) {
 // stats: the statistics (stats.mjs), or null for none; statsMode: 'optin' (the page asks first: nothing is sent or stored
 // for them before a yes) or 'optout' (on unless the player turns them off). admins: the emails of the admin page; adminToken: a token for it instead.
 export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath, cloud = null, site = {}, stats = null, statsMode = 'optin', admins = [],
-  adminToken = null, releaseCacheMs = 10000 }) {
+  adminToken = null, releaseCacheMs = 10000, library = null }) {
   let inv = inventory({ gameDir, buildDir, asyncifyDir, manifestPath });
   let released = { at: 0, release: null };              // /version.json's answer and when it was worked out
   const adminSet = new Set(admins.map((e) => e.trim().toLowerCase()).filter(Boolean));
@@ -273,7 +284,7 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
       const url = new URL(req.url, 'http://x');
       if (stats && (url.pathname === '/api/stats/beat' || url.pathname === '/api/stats/choice' || url.pathname === '/api/report'
         || url.pathname.startsWith('/api/report/') || url.pathname.startsWith('/api/admin/'))) {
-        statsRoute(req, res, url, { stats, cloud, admins: adminSet, adminToken: token }).catch((err) => {
+        statsRoute(req, res, url, { stats, cloud, admins: adminSet, adminToken: token, library }).catch((err) => {
           if (res.headersSent) { res.destroy(err); return; }
           json(res, err.status ?? 500, { error: err.status ? err.message : 'the server failed' });
         });
@@ -285,6 +296,13 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
         return;
       }
       if (url.pathname === '/admin') { sendFile(req, res, join(HERE, 'admin.html'), TYPES['.html']); return; }
+      if (library && (url.pathname === '/api/library' || url.pathname.startsWith('/api/library/'))) {   // for everyone (library.mjs)
+        library.handle(req, res, url).catch((err) => {
+          if (res.headersSent) { res.destroy(err); return; }
+          json(res, err.status ?? 500, { error: err.status ? err.message : 'the server failed' });
+        });
+        return;
+      }
       if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')) {
         if (cloud) { cloud.handle(req, res, url); return; }
         req.resume();
@@ -320,7 +338,8 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
           engines: inv.engines.map((e) => ({ base: e.base, suspend: e.suspend, version: e.version, bytes: e.wasm.size })),
           shell: SHELL,
           coffee: coffeeUrl(site.coffee),
-          maker: site.seller ? String(site.seller).slice(0, 80) : null,      // the footer's "Made with ♥ by" (CM_SELLER)
+          maker: site.seller ? String(site.seller).slice(0, 80) : null,
+          library: Boolean(library),                                       // Get a database (library.mjs)      // the footer's "Made with ♥ by" (CM_SELLER)
           stats: stats ? { mode: statsMode } : null,
           release: releaseOf(inv),
         });
@@ -430,8 +449,13 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   console.log(stats ? `statistics: on (${process.env.CM_STATS === 'optout' ? 'opt-out' : 'opt-in: the page asks first'}), ${s3FromEnv(process.env) ? 'kept in the bucket' : 'in memory only'}; admin page /admin for ${admins.filter((e) => e.trim()).length} email(s)${process.env.CM_ADMIN_TOKEN ? ' and the token' : ''}`
     : 'statistics: off (CM_STATS=off)');
   if (stats) console.log(notify.on ? 'report notices: on (CM_REPORT_WEBHOOK)' : 'report notices: off (CM_REPORT_WEBHOOK, web/deploy/README.md)');
+  // The database library: in the same bucket; its links name the address the pages reach (cloud.mjs presign).
+  const store = s3FromEnv(process.env);
+  const library = store ? createLibrary({ s3: store, presign: (m, k, o) => (cloud?.presign ?? store.presign)(m, k, o),
+    isDirect: () => Boolean(cloud?.isDirect?.()), log: (t) => console.log(t) }) : null;
+  console.log(library ? 'database library: on (admin page, Library; players: Saved games, Data sets, Get a database)' : 'database library: off (it needs the bucket)');
   const server = createApp({ gameDir, buildDir, asyncifyDir, cloud, site, stats, statsMode: process.env.CM_STATS === 'optout' ? 'optout' : 'optin', admins,
-    adminToken: process.env.CM_ADMIN_TOKEN ?? null });
+    adminToken: process.env.CM_ADMIN_TOKEN ?? null, library });
   server.listen(port, host, () => console.log(`open http://${host}:${port} in Chrome`));
   // Fly stops a machine with SIGINT (fly.toml kill_signal) or SIGTERM: the statistics are written first.
   for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, async () => { await stats?.stop(); process.exit(0); });

@@ -9,7 +9,7 @@ import { readView } from './saves.js';
 import { downDirect, upDirect } from './direct.js';
 
 export const FIRST_SEASON = 2001, LAST_SEASON = 2025;          // the seasons the game has (seasons_db.h)
-const META = '.web.json';                                       // the page's note in a folder: { season }
+const META = '.web.json';                                       // the page's note in a folder: { season, library }
 // The other Data files a data set may bring (an Update Team zip has its own player_setup.cfg, euro.cfg, weather.cfg
 // and tactics): the game reads a Data file from the data set's folder when the folder has it (files.c data_dir_swap),
 // pictures (.rgn) excepted, so a data set keeps these and leaves pictures out.
@@ -52,9 +52,8 @@ export function listDataSets(FS, root) {
       size += st.size;
       mtime = Math.max(mtime, +new Date(st.mtime));
     }
-    let season = null;
-    try { season = JSON.parse(FS.readFile(`${dirOf(root, name)}/${META}`, { encoding: 'utf8' })).season ?? null; } catch { /* none */ }
-    out.push({ name, size, mtime, season });
+    const meta = readMeta(FS, root, name);
+    out.push({ name, size, mtime, season: meta.season ?? null, library: meta.library ?? null });
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
@@ -72,9 +71,20 @@ export function readDataSet(FS, root, name, read = (p) => FS.readFile(p)) {
   return Object.fromEntries(DATA_SET_FILES.map((f) => [have.get(f), read(`${dirOf(root, name)}/${have.get(f)}`)]));
 }
 
-export function noteSeason(FS, root, name, season) {
-  FS.writeFile(`${dirOf(root, name)}/${META}`, JSON.stringify({ season }));
+function readMeta(FS, root, name) {
+  try { return JSON.parse(FS.readFile(`${dirOf(root, name)}/${META}`, { encoding: 'utf8' })) ?? {}; } catch { return {}; }
 }
+export function noteSeason(FS, root, name, season) {
+  FS.writeFile(`${dirOf(root, name)}/${META}`, JSON.stringify({ ...readMeta(FS, root, name), season }));
+}
+// A data set from the database library (library.mjs, setspanel.js): its id there, and the time of its files then. One
+// whose files have not changed since is the library's, not the player's: the cloud sync leaves it out (any device gets
+// it from the library again, and it takes none of the player's places in the cloud); an edit makes it the player's.
+export function markFromLibrary(FS, root, name, id) {
+  const set = listDataSets(FS, root).find((x) => x.name === name);
+  if (set) FS.writeFile(`${dirOf(root, name)}/${META}`, JSON.stringify({ ...readMeta(FS, root, name), library: { id, mtime: set.mtime } }));
+}
+export const fromLibrary = (set) => Boolean(set?.library && set.library.mtime === set.mtime);
 
 // A new folder with the files ({ name: bytes }); the files are checked as a data set first.
 export function writeDataSet(FS, root, name, files, { season = null, time = null } = {}) {
@@ -165,7 +175,7 @@ export function createSetSync({ FS, root, sync, log, toast, account }) {
   const listeners = new Set();
   const changed = () => { for (const f of listeners) f(); };
   const keep = () => { FS.writeFile(`${root}/${STATE}`, JSON.stringify(state)); sync(); };
-  const local = () => new Map(listDataSets(FS, root).map((s) => [s.name, { size: s.size, mtime: s.mtime }]));
+  const local = () => new Map(listDataSets(FS, root).filter((s) => !fromLibrary(s)).map((s) => [s.name, { size: s.size, mtime: s.mtime }]));
 
   async function up(name, base) {
     const l = local().get(name);

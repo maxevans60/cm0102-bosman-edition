@@ -792,7 +792,7 @@ function runEngine(files, info) {
       $('editor-open').hidden = false;
       $('editor-open').onclick = () => editor.open();
       const sets = mountSetsPanel({ FS, root: SAVE_DIR, sync, log, toast, module: () => window.Module, cloud: () => setSync,
-        edit: (name) => editor.openSet(name), create: () => editor.open(), changed: () => setSync?.run() });
+        edit: (name) => editor.openSet(name), create: () => editor.open(), changed: () => setSync?.run(), library: Boolean(info.library) });
       $('sets').hidden = false;
       $('saves-open').addEventListener('click', () => sets.render());
       setSync?.run();                                   // the cloud's data sets come in while the game starts

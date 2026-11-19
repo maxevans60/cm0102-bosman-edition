@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync, gunzipSync } from 'node:zlib';
 import { createApp } from '../server.mjs';
 import { createCloud } from '../cloud.mjs';
+import { createLibrary } from '../library.mjs';
 import { createStats, statsStore } from '../stats.mjs';
 import { createS3 } from '../s3.mjs';
 import { coffeeEvent, fakeDataSet, fakeGoogle, fakeS3, fakeSaveBytes, paddleEvent, signCoffee, signPaddle } from './fakes.mjs';
@@ -51,7 +52,8 @@ const FAKE_PADDLE = `window.Paddle = {
   Initialize(o) { window.__paddleInit = o; },
   Checkout: { open(o) { window.__paddleOpen = o; setTimeout(() => window.__paddleInit.eventCallback({ name: 'checkout.completed', data: {} }), 200); } },
 };`;
-const server = createApp({ gameDir: game, buildDir: build, manifestPath: join(tmp, 'manifest.tsv'), cloud, stats: createStats({ store: statsStore(s3) }), statsMode: 'optout',
+const library = createLibrary({ s3, presign: (m, k, o) => cloud.presign(m, k, o), isDirect: () => cloud.isDirect(), log: (t) => logs.push(t) });
+const server = createApp({ gameDir: game, buildDir: build, manifestPath: join(tmp, 'manifest.tsv'), cloud, stats: createStats({ store: statsStore(s3) }), statsMode: 'optout', library,
   admins: ['player@example.com'] });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const BASE = `http://127.0.0.1:${server.address().port}`;
@@ -633,6 +635,62 @@ try {
     check('Account lists it with Get it here, which brings it to this device', offered && same(await localBytes(k2, held), cloudBytes(held))
       && !(await k2.innerText('#account-body')).includes('Left in the cloud on this device'), acct.slice(0, 300));
     await kctx.close();
+  }
+
+  // ---- The database library: the admin adds a database on the admin page; a player gets it in Saved games, Data sets,
+  // Get a database, and Use opens with its season. It is the library's: no copy goes to the player's cloud. ----
+  {
+    google.user = PLAYER;                                        // an admin (isAdmin) with Cloud Saves
+    const lctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+    const adminPage = await lctx.newPage();
+    adminPage.on('pageerror', (e) => errors.push(e.message));
+    await adminPage.goto(`${BASE}/auth/google/start?mode=page`);
+    await adminPage.waitForSelector('#go');
+    await adminPage.goto(`${BASE}/admin`);
+    await adminPage.waitForSelector('#library:not([hidden]) #lib-file', { timeout: 20000 });
+    const dbZip = Buffer.from(await writeZip(Object.entries(fakeDataSet()).map(([name, data]) => ({ name: `Update 2011/${name}`, data }))));
+    await adminPage.setInputFiles('#lib-file', { name: 'Update 2011.zip', mimeType: 'application/zip', buffer: dbZip });
+    const named = await adminPage.inputValue('#lib-name');
+    await adminPage.selectOption('#lib-season', '2011');
+    await adminPage.fill('#lib-note', 'Squads of December 2011');
+    await adminPage.click('#lib-add');
+    await waitFor('the library entry', async () => /Update 2011/.test(await adminPage.textContent('#library table').catch(() => '')), 20000);
+    const adminRow = (await adminPage.textContent('#library table').catch(() => '')).replace(/\s+/g, ' ');
+    check('the admin page: a zip, its name from the file, a season and a note go into the library',
+      named === 'Update 2011' && ['Update 2011', '2011/12', 'Squads of December 2011'].every((t) => adminRow.includes(t)), adminRow.slice(0, 200));
+    // A zip that is not a data set: refused, and said so.
+    await adminPage.setInputFiles('#lib-file', { name: 'notes.zip', mimeType: 'application/zip', buffer: Buffer.from(await writeZip([{ name: 'a.txt', data: new Uint8Array(3) }])) });
+    await adminPage.click('#lib-add');
+    await waitFor('the refusal', async () => /Not added/.test(await adminPage.textContent('#lib-msg')), 20000);
+    check('a zip that is not a data set is refused on the admin page', /not a data set: it does not hold the 20 database files/.test(await adminPage.textContent('#lib-msg')),
+      await adminPage.textContent('#lib-msg'));
+    const p = await lctx.newPage();
+    p.on('pageerror', (e) => errors.push(e.message));
+    await p.goto(`${BASE}/`);
+    await p.waitForSelector('#go');
+    await p.click('#go');
+    await p.waitForFunction(() => window.__fake, null, { timeout: 30000 });
+    await p.click('#saves-open');
+    await p.click('#sets-get');
+    await p.waitForSelector('#sets-lib button[data-lib-get]', { timeout: 20000 });
+    const offer = (await p.textContent('#sets-lib')).replace(/\s+/g, ' ');
+    await p.click('#sets-lib button[data-lib-get]');
+    await waitFor('the database to come', async () => /Update 2011 is here/.test(await p.textContent('#sets-note')), 30000);
+    const got = await p.evaluate(() => {
+      const FS = window.Module.FS, dir = '/user/Databases/Update 2011';
+      let files = [];
+      try { files = FS.readdir(dir); } catch { /* none */ }
+      return { files: files.filter((f) => f.endsWith('.dat')).length, meta: (() => { try { return JSON.parse(FS.readFile(`${dir}/.web.json`, { encoding: 'utf8' })); } catch { return null; } })(),
+        season: document.getElementById('sets-season')?.value ?? null,
+        cloud: [...document.querySelectorAll('#sets-list tr')].find((tr) => tr.cells[0]?.textContent === 'Update 2011')?.querySelector('td.cloud')?.textContent ?? null };
+    });
+    check('Get a database lists it with its season, size and note; Get brings it, with its season, and Use opens with that season',
+      ['Update 2011', 'Squads of December 2011', '2011/12'].every((t) => offer.includes(t)) && got.files === 20 && got.meta?.season === 2011 && Boolean(got.meta?.library?.id)
+        && got.season === '2011' && got.cloud === 'From the library', `${offer.slice(0, 160)} | ${JSON.stringify(got).slice(0, 300)}`);
+    await p.waitForTimeout(2500);                                 // a set sync runs after a data set came
+    const inCloud = [...s3fake.objects.keys()].filter((k) => k.startsWith(`sets/${PLAYER.sub}/`) && k.includes(Buffer.from('Update 2011').toString('base64url')));
+    check('a database from the library takes none of the player\'s places in the cloud', inCloud.length === 0, inCloud.join(', '));
+    await lctx.close();
   }
 
   check('no page errors', errors.length === 0, errors.join('; '));
