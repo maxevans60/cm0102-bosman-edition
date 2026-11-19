@@ -2,8 +2,8 @@
 src/recomp_rt/win/original_faults.c). The fixes act in every game, the base game too. The test switch
 RECOMP_ORIGINAL_FAULTS=keep turns them all off. "keep:managers", "keep:money", "keep:age", "keep:olympics",
 "keep:ire_super", "keep:nsl", "keep:holiday", "keep:callups", "keep:wc_pots", "keep:confed", "keep:club_regulars",
-"keep:match_numbers", "keep:squad_moves", "keep:squad_loans" or "keep:club_keys" (or a list: "keep:money,age") turns off
-one group or more.
+"keep:match_numbers", "keep:squad_moves", "keep:squad_loans", "keep:club_keys" or "keep:callup_counts" (or a list:
+"keep:money,age") turns off one group or more.
 
 National managers (fault 26, Q23). `club_can_be_managed` 0x544820 takes a senior national team (club id from club
 count - 2 x nation count to club count - nation count, 0x544835..0x544857) only when its nation had more than 150
@@ -258,6 +258,19 @@ after database_trim_club_table 0x5267c0 (call 0x526d94). The stale key id then n
 club_get_linked_b_team 0x540a50 can give that club a B side past the end of the table. Here every key id of the row
 follows it in a season game (original_faults.c). The base game, a 2001 start with changing rules off, keeps the
 original's key ids (decision L2).
+
+The call-up count of the last club (open item 300, group callup_counts). NationalTeams::record_club_call_ups 0x7771c0
+sorts a side's squad slots by club id (0x778ef0) and counts the players of each club in a run. It writes a club's count
+to the club's call-up records (NationalTeams +0x20) only when the next counted player has another club
+(0x7772f7..0x7773fe), and after the 50th slot it leaves (0x777426 to 0x77748b). So the club that sorts last in the
+squad never gets a record. The records tell NationalTeams::can_schedule_club_fixture 0x776fc0 that a club has more
+than two players on duty within a day of a fixture (clash 21, 0x5adb6b), and they feed the call-up move
+NationalTeams::reschedule_clashing_club_fixtures 0x7777e0 (0x7778c3). In release set row t2006 (seed 73) Urawa Red
+Diamonds, the club with the highest id in Japan's squad, had no record for Japan's friendly of 11 September 2007, so
+find_new_fixture_date 0x5ab510 moved its AFC Champions League first leg of 30 August (made on 29 August) to
+12 September, with 5 of its players in Japan's squad. Here the end of the loop (0x777426) goes back once to the write
+of a run (0x7772f7) with the club of the open run, and the write leaves at 0x777401, where the slot counter at
+esp + 0x13 is 50 only on that pass. Test: tests/seasons/callup_counts_run.py.
 """
 
 # address: (the instruction in the original, C code)
@@ -327,6 +340,8 @@ INSNS = {
     0x76BEC7: ("je 0x76bf3a", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x20u), edi, esi, 0x4eu)) goto L_76bf3a;"),
     0x76BD34: ("je 0x76bdbc", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x1cu), edi, esi, 0x62u)) goto L_76bdbc;"),
     0x76BF85: ("je 0x76c00e", "if (cc_e(F) || !rt_squad_kept_at(ebp, R32(esi + 0x20u), edi, esi, 0x62u)) goto L_76c00e;"),
+    0x777426: ("jmp 0x77748b", "if (rt_callup_count_last(esi)) goto L_7772f7; goto L_77748b;"),
+    0x777401: ("mov esi, dword ptr [edi + 0x39]", "if ((int8_t)R8(esp + 0x13u) >= 0x32) goto L_77748b; esi = R32(edi + 0x39u);"),
     0x526D99: ("add esp, 8", "rt_club_key_twins(R32(esp), R32(esp + 4u), eax); esp += 8u;"),
     0x4CC03D: ("mov ecx, dword ptr [0xb74350]", "rt_squad_move_set(R32(esp + 0x10u), esi, edi == ebx); ecx = R32(0xb74350u);"),
     # Issue 132, log only (no change of the game): HolFirst::set_club_progress 0x5f73d0 (vtable 0x96b86c slot +0x68)

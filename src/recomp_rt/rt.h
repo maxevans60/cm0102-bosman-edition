@@ -351,6 +351,9 @@ uint32_t rt_callup_released(uint32_t slot);
  * 0x76bf85) through rt_squad_kept_at with the window end offset of that squad (open item 299). keep:club_regulars
  * turns off all of them. */
 uint32_t rt_callup_mark_all(void);
+/* Group callup_counts (open item 300; win/original_faults.c): record_club_call_ups 0x7771c0 also writes the call-up
+ * count of the club that sorts last (0x777426, 0x777401). */
+uint32_t rt_callup_count_last(uint32_t club);
 uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture);
 uint32_t rt_squad_kept_at(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture, uint32_t window);
 void rt_link_marks(uint32_t nt, uint32_t fixture, uint32_t on);
