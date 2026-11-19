@@ -367,8 +367,12 @@ static void pre_group_dates(int kind, const SeasonUefa *r, uint32_t t, int round
     if (rt_unwinding || kind != 'e' || !r || r->uc_groups || r->uc_league || season_uefa_uc_round(r, "QR") <= 0 ||
         !readable(t) || rounds < 2 || rounds > 16)
         return;
-    uint32_t qr = record_of(t, rounds, 0xdc), first = record_of(t, rounds, 10);
-    if (qr && first) season_uefa_cup_qual_dates(qr, first, year);
+    uint32_t qr = record_of(t, rounds, 0xdc), first = record_of(t, rounds, 10), second = record_of(t, rounds, 20);
+    if (!qr || !first || !season_uefa_cup_qual_dates(qr, first, year) || rt_unwinding) return;
+    /* The second round's draw (29 September with weekday 4, 0x902858..0x90285e: 26 September 2003) comes after the
+     * first round's second leg (2 October 2003 when the rule moves it a week). The qualifying round's draw keeps the
+     * original's day. */
+    if (second) season_uefa_cup_draw_after(first, second, year);
 }
 
 /* The return addresses of the two calls that set up a season's rounds: the constructor (call at 0x9023cd) and

@@ -262,6 +262,10 @@ int season_uefa_ko_dates(uint32_t table, char comp, int season, const int *kinds
  * stay. 1 when it wrote them. */
 int season_uefa_cup_qual_dates(uint32_t q2, uint32_t r1, int season);
 
+/* season_uefa_dates.c, the game only (item 298): the draw of record next a day after the second leg of record r1
+ * (its first leg + its days to the second leg, +0x22) when the draw is not later than that leg. 1 when it moved it. */
+int season_uefa_cup_draw_after(uint32_t r1, uint32_t next, int season);
+
 /* The winner of the nation's domestic cup in the history, or 0 (season_uefa_seeding.c). */
 uint32_t season_uefa_cup_winner(uint32_t nation);
 
