@@ -20,6 +20,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_change.h"
+#include "season_calendar.h"
 #include "season_comps.h"
 #include "season_cups.h"
 #include "season_ned_playoff.h"
@@ -768,6 +769,38 @@ static void new_after(const SeasonChange *c)
 }
 
 const SeasonRuleKind season_kind_new_cups = {"new_cups", NULL, NULL, NULL, NULL, new_before, new_after};
+
+/* ---- The late start of the All-Ireland cup ----
+ *
+ * The cup is an object of Ireland's league table entry 20 (new_make), and game_season_update_pass 0x5d5ae0 starts a
+ * competition only on its entry's update day and only when it is complete (vtable +0xc at 0x5d5ccb). The original's
+ * entry 20 has its update day on 20 June (key_nation_build_table 0x667150, 0x66834b..0x668443), after each final of the
+ * cup (the latest is 21 May, season_cups_more.c). From the calendar move of 2003 the entry's update day is 20 February
+ * (season_calendar.h), inside each edition (draw in December or January, matches from January or February to May),
+ * so the cup missed every change it was running at: the release set lost the editions of 2005/06 and 2007/08 in a
+ * 2004 game (row sp2004: edition 2006 at the end of 2007/08). On 20 June, the cup's old update day, a cup of an entry
+ * whose update day is another day starts the season of the game year when it is complete, its edition is before that
+ * season and the table holds it then (new_held, as the module makes it): the same start as the pass (resumes,
+ * not-held seasons and the hooks through the before hook above). The next first match of each row is in July or later
+ * (2009/10: 28 July 2009), so no edition starts with past dates. With the entry on 20 June (the original calendar,
+ * changing rules off and a start in 2001 or 2002) the pass starts it and this does nothing. */
+void season_new_cups_day(void)
+{
+    if (!season_game()) return;
+    int year = (int16_t)rd16(g_mem, GAME_DATE + 2), day = (int16_t)rd16(g_mem, GAME_DATE);
+    if (day != season_calendar_doy(year, 6, 20)) return;
+    uint32_t objs[64], cup = 0;
+    int n = season_change_entry_comps(season_def_all_ireland.entry, objs, 64);
+    for (int i = 0; i < n && !cup; i++)
+        if (readable(objs[i]) && !strcmp(season_change_file(objs[i]), season_def_all_ireland.file)) cup = objs[i];
+    if (!cup || season_change_start_day(cup) == day) return;
+    int edition = (int16_t)rd16(g_mem, cup + CUP_YEAR);
+    if (edition >= year || new_held(&season_def_all_ireland, year) != 1) return;
+    if (season_change_late_start(cup))
+        fprintf(stderr, "recomp: new cups: %s starts %d late (edition %d to %d, the entry's update day is day %d)\n",
+                season_def_all_ireland.file, year, edition, (int16_t)rd16(g_mem, cup + CUP_YEAR),
+                season_change_start_day(cup));
+}
 
 /* ---- The ruling body of the All-Ireland cup ----
  *

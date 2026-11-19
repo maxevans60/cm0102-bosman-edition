@@ -59,6 +59,7 @@ void season_intl_qual_reset(void) {}
 void season_uefa_league_reset(void) {}
 void season_playoffs_hold(void) {}
 void season_playoffs_release(void) {}
+void season_new_cups_day(void) {}
 const SeasonRuleKind season_kind_club_cups, season_kind_club_world, season_kind_comps, season_kind_cup_breaks,
     season_kind_cups, season_kind_divisions, season_kind_intl, season_kind_ita_serie_c, season_kind_names,
     season_kind_nation, season_kind_new_cups, season_kind_playoffs, season_kind_sizes, season_kind_subs,

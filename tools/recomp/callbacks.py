@@ -23,6 +23,10 @@ CALLBACK_FILES = ("picker.c", "assistant.c", "commentary.c", "holiday_next.c", "
 
 # address: (bytes of the first eight, name)
 CALLBACKS = {
+    # season_change_late_start (season_change.c): the steps of game_season_update_pass 0x5d5ae0 for one competition.
+    0x4B0700: ("8b4424048b0db0f6", "comp_util_is_league_division (record id), cdecl"),
+    0x556210: ("8b4424048b10a1fc", "Discipline::start_new_season_for_comp (this, record), ret 4"),
+    0x5D6280: ("558bec83e4f883ec", "game_update_league_attendances (League *), cdecl"),
     # Open item 192 (history_trim.c, not in CALLBACK_FILES: it compares return addresses of the calls of add_node
     # 0x58e340 and set_year 0x5aa2d0): the test of the Club History lists.
     0x450D50: ("81ec08020000538b", "Club_Records::build_history_list (this, club, &count), ret 8: the test of the list"),
