@@ -1046,15 +1046,13 @@ static int outside_now(uint32_t obj)
     return r && outside_change(obj, file, r);
 }
 
-/* Gap row 29: Ligue 2's 16th meets the winner of the Ligue 3 play-off of the 3rd to 6th (rows 2026/27 on, its po_down
- * place). The game plays no tie between two divisions, and slice 19 plays the Ligue 3 play-off only when the division
- * above relegates its direct places and the winner (season_playoffs.c balanced). So the 16th's place counts as a
- * relegation place in a season whose Ligue 3 row has that play-off: the play-off plays and its winner goes up. Only
- * Ligue 2 over Ligue 3: other rows with a relegation play-off over a play-off of four (Norway, Japan, Ireland,
- * Greece, Belgium, Argentina) have their own code or gap rows. 1 for that place, else 0. */
+/* Gap row 29, with changing rules off only: Ligue 2's 16th counts as a relegation place in a season whose Ligue 3 row has
+ * the play-off of the 3rd to 6th, so that play-off plays and its winner goes up, as in 0.7.2 (spec L2). With changing
+ * rules on the 16th meets the winner (season_playoffs.c, the play-off over a play-off of four, issue 160). 1 for that
+ * place, else 0. */
 static int below_playoff_place(const char *file, int season, int down)
 {
-    if (!file || strcmp(file, "fra_second")) return 0;
+    if (!file || strcmp(file, "fra_second") || season_changing_rules()) return 0;
     const SeasonLeagueRule *e = season_league_rule(file, season);
     int direct = -1;
     /* Only when the direct places match (balanced: the 16th's place is the winner's), else the play-off stays off. */
