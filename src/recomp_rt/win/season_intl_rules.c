@@ -97,10 +97,12 @@ const char *season_intl_announced_hosts(const char *file, int year)
 
 /* The Euros of 2020 (eleven host nations) and 2028 (five) have no host in the table, so that no host takes an
  * automatic place (UEFA gave none in 2020). The history row names the nation of the final: Wembley, England, in
- * both (UEFA, 2021 and 10 October 2023). */
+ * both (UEFA, 2021 and 10 October 2023). The World Cup of 2026 has three hosts, and its row names the nation of the
+ * final too: MetLife Stadium, United States (issue 145, https://en.wikipedia.org/wiki/2026_FIFA_World_Cup). */
 const char *season_intl_history_host(const char *file, int year)
 {
     if (!strcmp(file, "euro_champ") && (year == 2020 || year == 2028)) return "England";
+    if (!strcmp(file, "world_cup") && year == 2026) return "United States/USA";
     return NULL;
 }
 

@@ -20,7 +20,10 @@
  * first months. The log names each screen
  * ("recomp: screen sweep: ... view n"), writes "recomp: screen sweep: built" at its first build and counts the
  * builds, so a run can tell that each screen was drawn. A box of the game while a screen is up is logged after
- * that screen's line (waits.c). */
+ * that screen's line (waits.c).
+ *
+ * RECOMP_SCREEN_SWEEP_DUMP=<folder> also writes the picture of each history screen to <folder>/history-<record id>.bmp
+ * (issue 145: the pictures show the rows that the screen draws). */
 #include "win.h"
 #include "season_change.h"
 
@@ -166,6 +169,12 @@ void screen_sweep_turn(void)
         if (rt_unwinding) return;
     }
     screen_sweep_build_now();
+    const char *dump = view == 5 && !rt_unwinding ? getenv("RECOMP_SCREEN_SWEEP_DUMP") : NULL;
+    if (dump && *dump) {
+        char path[1024];
+        snprintf(path, sizeof path, "%s/history-%d.bmp", dump, (int)rd32(g_mem, rec));
+        win_dump_screen(path);
+    }
 }
 
 /* RECOMP_COMP_MENU_TEST=1 (tests/seasons/comp_menu_run.py, issue 163): at the first start report the history screen of
