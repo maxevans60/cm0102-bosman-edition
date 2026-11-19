@@ -262,6 +262,7 @@ try {
   // Deleted here: the cloud's record keeps the removal, so the other device's copy goes at its next sync too.
   b.on('dialog', (d) => d.accept());
   await b.tap('#saves-open');
+  await b.tap('#saves .tabs [data-tab="tactics"]');
   await b.tap('#tactics-list button[data-tactic-delete="0"]');
   await waitFor('the removal in the cloud', () => cloudTactics()?.removed?.['Cloud 4-4-2.tct'] > 0, 20000);
   check('a tactic deleted here leaves the cloud, with the time of its removal',
@@ -671,6 +672,7 @@ try {
     await p.click('#go');
     await p.waitForFunction(() => window.__fake, null, { timeout: 30000 });
     await p.click('#saves-open');
+    await p.click('#saves .tabs [data-tab="sets"]');
     await p.click('#sets-get');
     await p.waitForSelector('#sets-lib button[data-lib-get]', { timeout: 20000 });
     const offer = (await p.textContent('#sets-lib')).replace(/\s+/g, ' ');

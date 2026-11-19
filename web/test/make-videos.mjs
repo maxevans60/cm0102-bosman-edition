@@ -188,6 +188,7 @@ async function editorVideo() {
   await v.pause(800);
   await v.click('#editor-close');
   await v.click('#saves-open');
+  await v.click('#saves .tabs [data-tab="sets"]');
   await p.waitForSelector('#sets-list [data-set-use]');
   await v.point('#sets-list [data-set-use]');
   await v.say('To play it: Saved games, Data sets, Use', 'then start a new game: it uses your database', 4000);

@@ -373,12 +373,23 @@ const PORT = 8097;
       stored[0] === 0x98ec5e && stored[1] === 0x98ec5c && /Uploaded My 4-4-2, 442_diamond_default/.test(tacticsNote)
         && /junk\.tct: it is too short/.test(tacticsNote) && /notes\.txt: only \.tct files/.test(tacticsNote)
         && /My 4-4-2/.test(await p.textContent('#tactics-list')), `${stored.map((x) => x.toString(16))} | ${tacticsNote}`);
+    // Saved games in tabs: Saves, Tactics, Databases; the dialog opens on Saves.
+    const tabs = await p.evaluate(() => ({ shown: [...document.querySelectorAll('#saves .tabs [data-tab]')].filter((b) => b.offsetParent !== null).map((b) => b.textContent),
+      on: document.getElementById('saves').dataset.tab, tactics: document.getElementById('tactics-list').offsetParent !== null }));
+    await p.click('#saves .tabs [data-tab="tactics"]');
+    const tabbed = await p.evaluate(() => ({ tactics: document.getElementById('tactics-list').offsetParent !== null, saves: document.getElementById('saves-list').offsetParent !== null,
+      sets: document.getElementById('sets-list').offsetParent !== null }));
+    check('Saved games in tabs: Saves, Tactics, Databases; Saves first, one tab shown at a time',
+      tabs.shown.join() === 'Saves,Tactics,Databases' && tabs.on === 'saves' && !tabs.tactics && tabbed.tactics && !tabbed.saves && !tabbed.sets, JSON.stringify([tabs, tabbed]));
     const [tdl] = await Promise.all([p.waitForEvent('download'), p.click('#tactics-list button[data-tactic="1"]')]);
     const tdlPath = await tdl.path();
     check('a tactic downloads as its .tct file', tdl.suggestedFilename() === 'My 4-4-2.tct' && fs.readFileSync(tdlPath).equals(tct(0x98ec5e)), tdl.suggestedFilename());
     await p.click('#tactics-list button[data-tactic-delete="0"]');
     check('a tactic is deleted', !(await p.evaluate(() => window.Module.FS.readdir('/user/tactics').includes('442_diamond_default.tct')))
       && !/442_diamond_default/.test(await p.textContent('#tactics-list')));
+    await p.click('#saves-close');
+    await p.click('#saves-open');
+    check('Saved games opens on Saves again', (await p.evaluate(() => document.getElementById('saves').dataset.tab)) === 'saves' && await p.isVisible('#saves-list'));
     await p.click('#saves-close');
     const storesNow = await p.evaluate(() => window.__syncs.store);
     await p.evaluate(() => window.Module.FS.writeFile('/user/Auto 2001-07-20.sav', new Uint8Array(0x416ec + 8)));

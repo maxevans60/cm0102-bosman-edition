@@ -153,7 +153,16 @@
   dialog .dlg-list td.when .small { color: var(--muted); font-size: 12px; }
   dialog .dlg-list td.acts .btns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   dialog .dlg-foot { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
-  #sets:not([hidden]), #tactics:not([hidden]) { display: contents; }
+  #sets:not([hidden]), #tactics:not([hidden]), .tab-saves { display: contents; }
+  /* Saved games in tabs: Saves, Tactics, Databases (loader.js showSavesTab). A tab whose section is hidden (no game yet)
+     is not offered, and with none but Saves there is no tab bar. */
+  #saves .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: 0 0 10px; }
+  #saves .tabs button { background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0; height: 36px; padding: 0 14px; color: var(--muted); }
+  #saves .tabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+  #saves:has(#tactics[hidden]) .tabs [data-tab="tactics"], #saves:has(#sets[hidden]) .tabs [data-tab="sets"] { display: none; }
+  #saves:has(#tactics[hidden]):has(#sets[hidden]) .tabs { display: none; }
+  #saves:not([data-tab="tactics"]) #tactics, #saves:not([data-tab="sets"]) #sets, #saves[data-tab]:not([data-tab="saves"]) .tab-saves { display: none !important; }
+  #saves #tactics > h3, #saves #sets > h3 { display: none; }
   /* Narrow screens: a list keeps its columns whole and scrolls sideways, not one letter a line. */
   @media (max-width: 640px) {
     dialog .dlg-list table { width: max-content; min-width: 100%; }
@@ -358,7 +367,11 @@
 
   <dialog id="saves" aria-labelledby="saves-title">
     <h2 id="saves-title">Saved games</h2>
+    <div class="tabs" role="tablist" aria-label="Saved games">
+      <button role="tab" data-tab="saves" aria-selected="true">Saves</button><button role="tab" data-tab="tactics" aria-selected="false">Tactics</button><button role="tab" data-tab="sets" aria-selected="false">Databases</button>
+    </div>
     <div class="dlg-body">
+    <div class="tab-saves">
     <p class="small"><span id="saves-where">Your saves stay in this browser.</span> Download one to keep a copy on your
     device or to play it on another one; upload a .sav file to play it here.</p>
     <p id="saves-risk" class="small warn"></p>
@@ -370,6 +383,7 @@
       <button class="primary" id="saves-upload">Upload a save…</button>
       <button id="saves-all" title="One zip of every save, older copy, tactic and data set, as the save folder holds them">Download all</button>
       <input type="file" id="saves-file" accept=".sav,.zip" multiple hidden>
+    </div>
     </div>
     <section id="tactics" hidden>
       <h3>Tactics</h3>

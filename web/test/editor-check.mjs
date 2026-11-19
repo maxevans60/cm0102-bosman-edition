@@ -110,6 +110,7 @@ async function dataSets(p, label) {
 async function setsPanel(p, label) {
   const { zipEntries } = await import('../zip.js');
   await p.click('#saves-open');
+  await p.click('#saves .tabs [data-tab="sets"]');
   check(`${label}: Saved games has a Data sets section`, await p.isVisible('#sets') && /No data sets yet/.test(await p.textContent('#sets-list')));
   await p.click('#sets-new');
   await p.waitForSelector('#editor[open] #editor-new');
@@ -118,6 +119,7 @@ async function setsPanel(p, label) {
   await p.waitForSelector('#editor .ed-row', { timeout: 30000 });
   await p.click('#editor-close');
   await p.click('#saves-open');
+  await p.click('#saves .tabs [data-tab="sets"]');
   await p.waitForSelector('#sets-list [data-set-use]');
   await p.click('#sets-list [data-set-use]');
   check(`${label}: Use asks the season; a copy of the game's data starts at 2001/02`, (await p.inputValue('#sets-season')) === '2001');

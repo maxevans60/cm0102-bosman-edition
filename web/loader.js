@@ -209,6 +209,15 @@ const backToGame = () => { if (!document.querySelector('dialog[open]') && docume
 $('bar').addEventListener('click', (e) => { if (e.target.closest('button') && !e.target.closest('#kbd-open')) setTimeout(backToGame); });
 for (const d of document.querySelectorAll('dialog')) d.addEventListener('close', backToGame);
 $('help-open').onclick = () => $('help').showModal();
+// Saved games in tabs (index.html): Saves, Tactics, Databases. The tab chosen stays for the visit.
+function showSavesTab(tab) {
+  const d = $('saves');
+  d.dataset.tab = tab;
+  for (const b of d.querySelectorAll('.tabs [data-tab]')) b.setAttribute('aria-selected', String(b.dataset.tab === tab));
+}
+showSavesTab('saves');
+$('saves-open').addEventListener('click', () => showSavesTab('saves'));     // Saved games opens on the saves
+$('saves').querySelector('.tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) showSavesTab(b.dataset.tab); });
 
 // ---- The account and the cloud saves (account.js). ----
 
