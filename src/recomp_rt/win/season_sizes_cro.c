@@ -380,6 +380,17 @@ void season_sizes_cro_loaded(void)
             (int16_t)rd16(g_mem, south + COMP_YEAR));
 }
 
+/* 1 for the First Division of a game whose Croatian leagues stalled before this fix: a season of one group, the
+ * South with its table (season_sizes_cro_loaded), and an edition before the game year after the season change's
+ * update day (season_playoffs_hold tests the day). The change then needs only its gate 0x48ce10, which the South's
+ * table opens. One season only: a game two seasons behind gets one change, then a table with no match played. */
+int season_sizes_cro_behind(uint32_t comp, int year)
+{
+    uint32_t a1 = season_sizes_on() && readable(comp) ? league_at(CRO_A1) : 0, south = a1 ? league_at(CRO_A2B) : 0;
+    if (!a1 || comp != a1 || !south || !rd32(g_mem, south + COMP_TABLE) || !one_group(year)) return 0;
+    return (int16_t)rd16(g_mem, a1 + COMP_YEAR) < year;
+}
+
 /* 1 for the South in a season of one group: the size engine gives it a table of no row (rt_league_clubs). */
 int season_sizes_cro_empty(uint32_t obj, const char *file, int season)
 {

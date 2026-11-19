@@ -91,6 +91,7 @@ int season_sizes_clubs(const char *file, int season);
  * of its season start keeps it idle (1: skip the start). */
 void season_sizes_cro_rules(uint32_t obj, const char *file);
 void season_sizes_cro_loaded(void);
+int season_sizes_cro_behind(uint32_t comp, int year);
 uint32_t season_sizes_gre_lower_record(void);
 int season_sizes_gre_lower(uint32_t record);
 int season_sizes_cro_south_before(uint32_t comp, int season);
