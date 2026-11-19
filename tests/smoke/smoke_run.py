@@ -952,6 +952,15 @@ Q48_SAVE_ROWS = {"start.sav": [Q48_COPA_2001], "prematch.sav": [Q48_COPA_2001]}
 PAIR_KEEP = {"RECOMP_ORIGINAL_FAULTS": "keep:club_regulars"}
 
 
+# Issue 145 and 165 (0.7.3 slice 15, docs/research/history-rows/): in a new 2001 game with changing rules on, the
+# corrected rows write the 8 Greek Super Cup rows of 1980 to 1996 (the lists part of apply_rows, season_history.c).
+# The history table grows by 8 rows for them (0x527f60), and the game then plays differently from the 0.7.2 build.
+# The mechanism is not known. The difference is the planned change of play of docs/research/history-rows/README.md. With the lists part off (RECOMP_HISTORY_ROWS=fhc) rules-on-q48 equals
+# rules-on-q48-ref, and with only the lists part on it differs (lead bisect point 5795241a, 19 November 2026). So
+# rules-on-q48 runs with the lists part off, and tests/seasons/history_rows_run.py (run r2001) checks the rows.
+HISTORY_ROWS_NO_LISTS = {"RECOMP_HISTORY_ROWS": "fhc"}
+
+
 def q48_runs(runs, new_game):
     """The runs with the Q48 comparisons (above)."""
     out = []
@@ -961,9 +970,10 @@ def q48_runs(runs, new_game):
             if new_game:                          # compared with history-q48-off, so with the same groups
                 o = dict(o, _env=dict(o.get("_env", {}), **PAIR_KEEP))
         elif name == "rules-on" and new_game:
-            out.append(("rules-on-q48", dict(o, _against="rules-on-q48-ref" if REF_BUILD else "")))
+            q = dict(o, _env=dict(o.get("_env", {}), **HISTORY_ROWS_NO_LISTS))
+            out.append(("rules-on-q48", dict(q, _against="rules-on-q48-ref" if REF_BUILD else "")))
             if REF_BUILD:
-                out.append(("rules-on-q48-ref", dict(o, _program=REF_BUILD, _against="")))
+                out.append(("rules-on-q48-ref", dict(q, _program=REF_BUILD, _against="")))
             # Item 257: the pair is defined with no rules table (RULES_ON_PARTS). With a table, changing rules on
             # applies the 2001/02 rows at the new game (club moves, new competitions, names), so rules-on runs with
             # none (NO_TABLE) whatever the set's environment holds. history-q48-off keeps the set's table. So with a
