@@ -878,6 +878,13 @@ int season_arg_second_zones(uint32_t obj, int n, int *a, int *b)
     return 1;
 }
 
+/* The edition that is being played has its zones: its stage count says so, and that count is in the save. A save of 0.7.2
+ * in a zone row, or an edition with no room for its dates, plays one table. */
+int season_arg_second_zones_live(uint32_t obj, int n, int *a, int *b)
+{
+    return season_arg_reducido_marked(obj) && season_arg_second_zones(obj, n, a, b);
+}
+
 /* The zone (0 or 1) of each of n clubs. */
 static void zones_of(const uint32_t *club, int n, int a, int *zone)
 {
@@ -954,7 +961,7 @@ RT_WRAP(00689ad0, league_check_complete)
 {
     uint32_t self = cpu.ecx;
     int n = readable(self) && rd32(g_mem, self) == VT_ARG_SECOND ? (int16_t)rd16(g_mem, self + COMP_CLUBS) : 0, a, b;
-    if (n >= 4 && n <= TABLE_MAX && season_arg_second_zones(self, n, &a, &b)) {
+    if (n >= 4 && n <= TABLE_MAX && season_arg_second_zones_live(self, n, &a, &b)) {
         uint32_t rows = rd32(g_mem, self + COMP_TABLE), club[TABLE_MAX];
         int zone[TABLE_MAX];
         for (int i = 0; readable(rows) && i < n; i++) club[i] = rd32(g_mem, rows + (uint32_t)i * ROW_SIZE);
@@ -1020,6 +1027,28 @@ static void reducido_send_down(uint32_t self, uint32_t club)
 static void reducido_none(uint32_t self, const uint32_t *table, int n, const char *why)
 {
     uint32_t rows = rd32(g_mem, self + COMP_TABLE);
+    SeasonArgReducido s;
+    int a, b;
+    /* Two zones and no stage made: the winner of each zone goes up and the zones send their clubs down. */
+    if (reducido_spec(self, &s) && s.zone_last && (int32_t)rd32(g_mem, self + STAGE_LAST) < 0 && n <= TABLE_MAX &&
+        season_arg_second_zones(self, n, &a, &b)) {
+        int zone[TABLE_MAX], cnt[2] = {0, 0};
+        uint32_t in[2][TABLE_MAX];
+        zones_of(table, n, a, zone);
+        for (int i = 0; i < n; i++) in[zone[i]][cnt[zone[i]]++] = table[i];
+        for (int z = 0; z < 2; z++) {
+            for (int r = 0; readable(rows) && r < n; r++)
+                if (rd32(g_mem, rows + (uint32_t)r * ROW_SIZE) == in[z][0]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0;
+            for (int d = 0; d < s.down_each && cnt[z] - 1 - d >= 1; d++) {
+                reducido_send_down(self, in[z][cnt[z] - 1 - d]);
+                if (rt_unwinding) return;
+            }
+        }
+        wr32(g_mem, self + STAGE_COUNT, 0);
+        fprintf(stderr, "recomp: league sizes: arg_second reducido %d: %s; the zone winners go up\n",
+                (int16_t)rd16(g_mem, self + COMP_YEAR), why);
+        return;
+    }
     for (int r = 0; readable(rows) && n > 1 && r < n; r++)
         if (rd32(g_mem, rows + (uint32_t)r * ROW_SIZE) == table[1]) g_mem[rows + (uint32_t)r * ROW_SIZE + ROW_STATUS] = 0;
     wr32(g_mem, self + STAGE_COUNT, (uint32_t)((int32_t)rd32(g_mem, self + STAGE_LAST) + 1));
@@ -1062,6 +1091,11 @@ void season_arg_reducido_advance(uint32_t self)
         uint32_t in[2][TABLE_MAX];
         int cnt[2] = {0, 0}, k = 0;
         for (int i = 0; i < nt; i++) in[zone[i]][cnt[zone[i]]++] = t[i];
+        /* Each zone holds the clubs of the Reducido and, below them, the clubs that go down. */
+        if (cnt[0] < s.zone_last + s.down_each + s.rel_tie || cnt[1] < s.zone_last + s.down_each + s.rel_tie) {
+            reducido_none(self, t, nt, "too few clubs in a zone");
+            return;
+        }
         if (!made) {
             for (int z = 0; z < 2; z++)
                 for (int d = 0; d < s.down_each; d++) {
@@ -1145,12 +1179,12 @@ void season_arg_reducido_advance(uint32_t self)
 }
 
 /* Before the Primera's chain (0x4067f0 moves the rows of status 0 or 5 up, 0x406839): League::update_positions_and_status
- * 0x684cd0 gives the table's leader status 5, but in a season of two zones only the two winners go up. The others take
- * 0xfe, the mark of a club that stays (0x408e45). */
+ * 0x684cd0 gives the table's leader status 5, but in a season of two zones only the winners go up (status 0). A leader that
+ * won nothing takes 0xfe, the mark of a club that stays (0x408e45). */
 void season_arg_reducido_chain(uint32_t second)
 {
     SeasonArgReducido s;
-    if (!readable(second) || rd32(g_mem, second) != VT_ARG_SECOND || !reducido_spec(second, &s) || !s.zone_last) return;
+    if (!season_arg_reducido_marked(second) || !reducido_spec(second, &s) || !s.zone_last) return;
     uint32_t w0 = 0, l0 = 0, w1 = 0, l1 = 0;
     ko_winners(stage_at(second, 0), &w0, &l0);
     ko_winners(stage_at(second, (int32_t)rd32(g_mem, second + STAGE_LAST)), &w1, &l1);
@@ -1159,7 +1193,7 @@ void season_arg_reducido_chain(uint32_t second)
     for (int r = 0; readable(rows) && r < n; r++) {
         uint32_t row = rows + (uint32_t)r * ROW_SIZE, c = rd32(g_mem, row);
         int st = g_mem[row + ROW_STATUS];
-        if ((st == 0 || st == 5) && c != w0 && c != w1) g_mem[row + ROW_STATUS] = 0xfe;
+        if (st == 5 && c != w0 && c != w1) g_mem[row + ROW_STATUS] = 0xfe;
     }
 }
 

@@ -228,6 +228,7 @@ int main(void)
           rd.round[1].legs == 2 && rd.round[3].legs == 1, "row 2022: one match, two legs, and a final of one match");
     CHECK(season_arg_reducido_of(2023, &rd) && rd.rel_tie && rd.down_each == 1 && rd.stages == 16, "row 2023: a relegation tie");
     CHECK(season_arg_reducido_of(2024, &rd) && rd.down_each == 2 && !rd.rel_tie, "row 2024: the last two of each zone");
+    CHECK(!rd.final_one && rd.round[3].legs == 2 && rd.final_pens, "row 2024: a final of two legs");
     CHECK(season_arg_reducido_of(2025, &rd) && rd.down_each == 2, "row 2025: the last two of each zone");
     for (int row = 2019; row <= 2025; row++) {
         if (!season_arg_reducido_of(row, &rd) || !rd.zone_last) continue;

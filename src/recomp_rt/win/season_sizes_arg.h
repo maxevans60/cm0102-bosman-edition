@@ -162,6 +162,8 @@ void season_arg_reducido_advance(uint32_t obj);
 int season_arg_reducido_result(uint32_t obj, int stage, int result, uint32_t club);
 /* The edition plays two zones (n clubs): 1, with the sizes of the zones. */
 int season_arg_second_zones(uint32_t obj, int n, int *a, int *b);
+/* The same for the edition being played: its stages are the zone rows' (a count that a save holds). */
+int season_arg_second_zones_live(uint32_t obj, int n, int *a, int *b);
 /* The fixed list of two zones, or 0; the entries with no match are dropped by season_arg_second_drop_fixture. */
 uint32_t season_arg_second_zone_fixtures(uint32_t league);
 void season_arg_second_zone_fixtures_end(void);

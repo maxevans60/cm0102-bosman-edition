@@ -957,7 +957,7 @@ void season_arg_report_places(uint32_t obj, int *up, int *po_up, int *po_down, i
     int row = season_sizes_row_season(obj, "arg_second");
     if (row >= SEASON_ARG_PROMO_FIRST && row <= SEASON_ARG_PROMO_LAST) *po_up = 2;
     int a, b;
-    if (season_arg_second_zones(obj, n, &a, &b)) {     /* item 291: the final's and the Reducido's winners, and the zones */
+    if (season_arg_second_zones_live(obj, n, &a, &b)) {     /* item 291: the final's and the Reducido's winners, and the zones */
         *up = 2;
         *down = season_arg_second_row_down(row);
     }
