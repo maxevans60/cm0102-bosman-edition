@@ -111,12 +111,28 @@ def span(r):
     return first, last
 
 
+def irish_faults(rows):
+    """The data sets whose table would hold two researched rows of label 2003 for a competition of IRISH_MOVE: the
+    start-year clear of a 2003 start then keeps both, and the game's own 2003 edition becomes a third row."""
+    seen, bad = {}, []
+    for r in rows:
+        if r["action"] == "add" and r["competition"] in IRISH_MOVE and label_of(r) == 2003:
+            k = (r["database"], r["start_year"], r["competition"])
+            if k in seen:
+                bad.append(f"{k[0]} {k[1]} {k[2]}: two rows of label 2003")
+            seen[k] = 1
+    return bad
+
+
 def make():
     dbs = {}
     for r in read_plan(PLAN):
         k = (r["database"], int(r["start_year"]), 0)
         dbs.setdefault(k, {"clear": [], "add": []})[r["action"]].append(r)
     official = read_plan(PLAN_OFFICIAL) if os.path.isfile(PLAN_OFFICIAL) else []
+    bad = irish_faults(read_plan(PLAN) + official)
+    if bad:
+        raise SystemExit("the Irish short season keeps label 2003:\n  " + "\n  ".join(bad))
     firsts = {}
     for r in official:
         firsts[r["database"]] = min(firsts.get(r["database"], 9999), int(r["start_year"]))

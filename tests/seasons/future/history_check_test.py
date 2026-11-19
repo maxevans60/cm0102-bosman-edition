@@ -484,17 +484,20 @@ def titles_rule():
         got = history_check.titles_allowed(name, year, start, 1, (1, 0), played)
         if got != want:
             bad.append(f"titles_allowed {name} {year} (start {start}, played {played}): {got}, not {want}")
-    # The Irish calendar move (TWO_SEASONS): 2001/02 and the short 2002/03 both hold the label 2002, from the data
-    # before a 2003 start and from the game in a 2002 start; the 2003 season holds one row.
-    for name, year, start, want in (("League of Ireland Premier Division", 2002, 2003, 2),
-                                    ("League of Ireland First Division", 2002, 2002, 2),
-                                    ("FAI Cup", 2002, 2003, 2),
-                                    ("FAI Cup", 2003, 2003, 1),
-                                    ("League of Ireland Premier Division", 2003, 2003, 1),
-                                    ("Northern Irish League Premier Division", 2002, 2002, 1)):
-        got = history_check.titles_allowed(name, year, start, 1, (1, 0))
+    # The Irish calendar move (two_seasons): 2001/02 and the short 2002/03 both hold the label 2002 with the move (a
+    # 2003 start, or changing rules on); a winter game and the 2003 season hold one row, and so do the Northern Irish
+    # records, whose save names are "Irish First Division" and "Irish League Cup".
+    for name, year, start, changing, want in (("League of Ireland Premier Division", 2002, 2003, 0, 2),
+                                              ("League of Ireland First Division", 2002, 2002, 1, 2),
+                                              ("FAI Cup", 2002, 2003, 1, 2),
+                                              ("FAI Cup", 2002, 2002, 0, 1),
+                                              ("FAI Cup", 2003, 2003, 1, 1),
+                                              ("League of Ireland Cup", 2002, 2002, 1, 1),
+                                              ("Irish First Division", 2002, 2003, 1, 1),
+                                              ("Irish League Cup", 2002, 2003, 1, 1)):
+        got = history_check.two_seasons(name, year, start, changing)
         if got != want:
-            bad.append(f"titles_allowed {name} {year} (start {start}): {got}, not {want}")
+            bad.append(f"two_seasons {name} {year} (start {start}, changing {changing}): {got}, not {want}")
     # Open item 176: a record that holds the championships of several states a year in the data (Autumn 2013, the
     # Brazilian Northeast record: 4 rows a year, 3 in 2011 and 2012). Before the start it may hold that count; in the
     # start year at most the count of the year before (the game's own row takes the place of its state's data row);

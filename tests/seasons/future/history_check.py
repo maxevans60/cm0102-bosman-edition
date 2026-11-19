@@ -520,24 +520,27 @@ TITLES_OF_YEAR.update({("Belgian Third Division", 2012): 2, ("Belgian National D
 # The League of Ireland's calendar move (docs/research/2026-11-15-ireland-calendar-2003.md, decision 8): the 2001/02
 # season keeps the original's label, the year it ends (2002), and the short season 2002/03 (5 July 2002 to 8 February
 # 2003) takes the label 2002 too, in the game's rows (season_calendar_label, src/recomp_rt/win/season_calendar.c) and
-# in the researched rows (tools/seasons/make_history_table.py, IRISH_MOVE). Two real seasons, one label, in every
-# year: the game writes the short season itself in a game with changing rules on from 2001 or 2002. Real seasons:
-# docs/research/history-0.6.0/ireland.md and ireland.check.md (RSSSF, Wikipedia, read 17 October 2026).
-TWO_SEASONS = {(n, 2002): 2 for n in ("League of Ireland Premier Division", "League of Ireland First Division",
-                                      "FAI Cup", "League of Ireland Cup", "Irish Premier Division",
-                                      "Irish First Division", "Irish Senior Challenge Cup", "Irish League Cup")}
+# in the researched rows (tools/seasons/make_history_table.py, label_of). Real seasons: docs/research/history-0.6.0/
+# ireland.md and ireland.check.md (RSSSF, Wikipedia, read 17 October 2026). The League Cup was not held in 2002/03
+# (decision 5), so it has one row. The names are those of the save (the records of the Northern Irish league keep
+# the database names "Irish First Division" and "Irish League Cup", so those names are not in the list).
+TWO_SEASONS = ("League of Ireland Premier Division", "League of Ireland First Division", "FAI Cup")
+
+
+def two_seasons(name, year, start, changing):
+    """2 for label 2002 of a League of Ireland competition in a game that has the calendar move: changing rules on, or
+    a start in 2003 or later (decision 2: a 2001 or 2002 start with changing rules off stays winter); else 1."""
+    return 2 if name in TWO_SEASONS and year == 2002 and (changing or start >= 2003) else 1
 
 
 def titles_allowed(name, year, start, most, several, played=True):
     """The rows a competition may hold in a label year: most (1, or 2 for a split season), the count of its
-    SEVERAL_TITLES format from that format's first year, the count of TWO_SEASONS, or the count of TITLES_OF_YEAR.
-    TITLES_OF_YEAR counts only
+    SEVERAL_TITLES format from that format's first year, or the count of TITLES_OF_YEAR. TITLES_OF_YEAR counts only
     before the start year: those rows come from the database, and a game writes its own rows with its own format.
     played False: the game does not play the competition (no .tmp part), so every row comes from the database and
     TITLES_OF_YEAR counts in every year."""
     return max(most, several[0] if year >= several[1] else 1,
-               TITLES_OF_YEAR.get((name, year), 1) if year < start or not played else 1,
-               TWO_SEASONS.get((name, year), 1))
+               TITLES_OF_YEAR.get((name, year), 1) if year < start or not played else 1)
 
 
 def filed_titles(per_year, year, start):
@@ -620,6 +623,7 @@ def check(game, rules=None, changes=()):
             if any(pat.fullmatch(name) for pat, f, k in SEVERAL_TITLES) else (1, 0)
         for y, n in sorted(per_year.items()):
             if n > max(titles_allowed(name, y, start, most, several, cid in game.parts),
+                       two_seasons(name, y, start, game.changing),
                        filed_titles(per_year, y, start)) and y >= start - 1:
                 pairs = "; ".join(f"{r[4][0]} / {r[5][0]}" for r in rs if r[3] == y)
                 faults.append(("duplicate", name, y, f"{n} rows: {pairs}"))
