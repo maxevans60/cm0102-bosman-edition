@@ -27,6 +27,17 @@
 #define COMP_YEAR 0x40u
 #define COMP_TABLE 0xb1u
 #define A_LEAGUE_MAX 13             /* AusNsl::create_table 0x411b82 */
+#define COMPS 0xae23d0u             /* the club_comp table (0x6b bytes a record) */
+#define COMP_SIZE 0x6bu
+#define KEY_LOWER 0x9cf764u         /* "A Lower Division" (0x60efd0 at 0x610141) */
+#define KEY_PREMIER 0x9cf6b8u       /* "A Premier Division" (0x60efd0 at 0x60fb7f) */
+
+/* The record of a spare division ("A Lower Division", "A Premier Division"), or 0 when the database has none. */
+static uint32_t spare_division(uint32_t key)
+{
+    int32_t k = (int32_t)rd32(g_mem, key);
+    return k >= 0 ? rd32(g_mem, COMPS) + (uint32_t)k * COMP_SIZE : 0;
+}
 
 int season_closed_step(uint32_t rec, const char *league, const char *tag, int season, int edition, int want)
 {
@@ -37,7 +48,8 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     uint32_t *at = calloc((size_t)count, sizeof *at);
     int *action = calloc((size_t)count, sizeof *action);
     unsigned *from = calloc((size_t)count, sizeof *from), *to = calloc((size_t)count, sizeof *to);
-    if (!club || !at || !action || !from || !to) rt_fatal("closed league: no memory for the season change");
+    int *pool = calloc((size_t)count, sizeof *pool);
+    if (!club || !at || !action || !from || !to || !pool) rt_fatal("closed league: no memory for the season change");
     int n = 0;
     for (int i = 0; i < count; i++) {
         uint32_t c = table + (uint32_t)i * CLUB_SIZE;
@@ -56,9 +68,22 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     }
     ClosedResult r;
     season_closed_plan(league, season, want, club, n, action, &r);
-    /* s073-16: a club that leaves the league takes the place of a club that joins (season_closed_places). */
-    for (int i = 0; i < n; i++) from[i] = action[i] == CLOSED_JOIN ? rd32(g_mem, at[i] + CLUB_DIVISION) : 0;
-    season_closed_places(club, action, from, n, to);
+    /* s073-16: a club that leaves the league, or a club of the nation with no division or in a spare division, takes
+     * the place of a club that joins (season_closed_places). */
+    uint32_t spare1 = spare_division(KEY_LOWER), spare2 = spare_division(KEY_PREMIER);
+    int gaps = 0;
+    for (int i = 0; i < n; i++) {
+        uint32_t div = rd32(g_mem, at[i] + CLUB_DIVISION);
+        /* A place only in a division of the league's nation: not a spare division, not a New Zealand division. */
+        from[i] = action[i] == CLOSED_JOIN && div && rd32(g_mem, div + REC_NATION) == nation ? div : 0;
+        gaps += from[i] != 0;
+        pool[i] = !club[i].in_league && !club[i].human && !club[i].reserve && (!div || div == spare1 || div == spare2) &&
+                  rd32(g_mem, at[i] + CLUB_NATION) == nation &&
+                  season_closed_club(league, club[i].name, club[i].short_name) < 0;
+    }
+    int places = season_closed_places(club, action, from, pool, n, to);
+    if (places < gaps)
+        fprintf(stderr, "recomp: %s: %d: %d places of the clubs that join stay empty\n", tag, edition, gaps - places);
     for (int i = 0; i < n && !rt_unwinding; i++) {
         if (action[i] == CLOSED_FOLD || action[i] == CLOSED_CUT) {
             wr32(g_mem, at[i] + CLUB_LAST_DIVISION, rec);
@@ -66,9 +91,14 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
             fprintf(stderr, "recomp: %s: %d: %.50s %s%s\n", tag, edition, club[i].name,
                     action[i] == CLOSED_FOLD ? "folds: it goes to no division" : "leaves for a club of the season",
                     to[i] ? ", to the place of a club that joins" : "");
+        } else if (action[i] == CLOSED_STAY && to[i]) {
+            uint32_t old = rd32(g_mem, at[i] + CLUB_DIVISION);
+            if (old) wr32(g_mem, at[i] + CLUB_LAST_DIVISION, old);
+            wr32(g_mem, at[i] + CLUB_DIVISION, to[i]);
+            fprintf(stderr, "recomp: %s: %d: %.50s takes the place of a club that joins\n", tag, edition, club[i].name);
         } else if (action[i] == CLOSED_JOIN) {
-            uint32_t from = rd32(g_mem, at[i] + CLUB_DIVISION);
-            if (from) wr32(g_mem, at[i] + CLUB_LAST_DIVISION, from);
+            uint32_t was = rd32(g_mem, at[i] + CLUB_DIVISION);
+            if (was) wr32(g_mem, at[i] + CLUB_LAST_DIVISION, was);
             wr32(g_mem, at[i] + CLUB_DIVISION, rec);
             int players = season_records_fill_club(at[i], edition);
             fprintf(stderr, "recomp: %s: %d: %.50s joins with %d players, %d of them new with a contract\n", tag, edition,
@@ -85,6 +115,7 @@ int season_closed_step(uint32_t rec, const char *league, const char *tag, int se
     free(action);
     free(from);
     free(to);
+    free(pool);
     return r.count;
 }
 

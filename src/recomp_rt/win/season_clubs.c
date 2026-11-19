@@ -594,7 +594,8 @@ static int best_fill(const Club *club, int count, const Division *div, int ncomp
  * The list of season S names the clubs of the next real season of a league that plays in one calendar year (list 2024
  * holds San Diego FC, who first play in 2025), and a database can lack a club of the list. The plan of the season
  * change (season_closed.h) puts this right, with changing rules on only. */
-static void closed_moves(Club *club, int count, const Division *div, int ncomps, int season)
+static void closed_moves(Club *club, int count, const Division *div, int ncomps, int season, uint32_t spare1,
+                         uint32_t spare2)
 {
     if (!season_changing_rules()) return;
     for (int t = 0; t < ncomps; t++) {
@@ -604,7 +605,8 @@ static void closed_moves(Club *club, int count, const Division *div, int ncomps,
         ClosedClub *list = calloc((size_t)count + 1, sizeof *list);
         int *of = calloc((size_t)count + 1, sizeof *of), *action = calloc((size_t)count + 1, sizeof *action);
         unsigned *from = calloc((size_t)count + 1, sizeof *from), *to = calloc((size_t)count + 1, sizeof *to);
-        if (!list || !of || !action || !from || !to) rt_fatal("club moves: no memory for a closed league");
+        int *pool = calloc((size_t)count + 1, sizeof *pool);
+        if (!list || !of || !action || !from || !to || !pool) rt_fatal("club moves: no memory for a closed league");
         int n = 0;
         for (int i = 0; i < count; i++) {
             if (club[i].national) continue;
@@ -621,17 +623,30 @@ static void closed_moves(Club *club, int count, const Division *div, int ncomps,
         }
         ClosedResult r;
         season_closed_plan(league, season, d->want, list, n, action, &r);
+        int gaps = 0;
+        for (int k = 0; k < n; k++) {
+            const Club *c = &club[of[k]];
+            /* A place only in a division of the league's nation: not a spare division, not a New Zealand division. */
+            from[k] = action[k] == CLOSED_JOIN && c->div && rd32(g_mem, c->div + COMP_NATION) == d->nation ? c->div : 0;
+            gaps += from[k] != 0;
+            pool[k] = !list[k].in_league && !list[k].reserve && c->nation == d->nation &&
+                      (!c->div || c->div == spare1 || c->div == spare2) &&
+                      season_closed_club(league, list[k].name, list[k].short_name) < 0;
+        }
+        /* s073-16: a club that leaves the league, or a club of the nation with no division or in a spare division, takes
+         * the place of a club that joins (season_closed_places). */
+        int places = season_closed_places(list, action, from, pool, n, to);
+        if (places < gaps)
+            fprintf(stderr, "recomp: club moves: %s of %d: %d places of the clubs that join stay empty\n", d->name, season,
+                    gaps - places);
         for (int k = 0; k < n; k++)
-            from[k] = action[k] == CLOSED_JOIN ? club[of[k]].div : 0;
-        /* s073-16: a club that leaves the league takes the place of a club that joins (season_closed_places). */
-        int places = season_closed_places(list, action, from, n, to);
-        for (int k = 0; k < n; k++)
-            if (action[k] != CLOSED_STAY) club[of[k]].div = action[k] == CLOSED_JOIN ? d->at : to[k];
-        fprintf(stderr, "recomp: club moves: %s of %d: %d clubs, %d join, %d fold, %d leave (%d to the places of the "
-                        "clubs that join), %d not in this database\n",
+            if (action[k] != CLOSED_STAY || to[k]) club[of[k]].div = action[k] == CLOSED_JOIN ? d->at : to[k];
+        fprintf(stderr, "recomp: club moves: %s of %d: %d clubs, %d join, %d fold, %d leave, %d take the places of the "
+                        "clubs that join, %d not in this database\n",
                 d->name, season, r.count, r.joined, r.folded, r.cut, places, r.missing);
         free(from);
         free(to);
+        free(pool);
         free(list);
         free(of);
         free(action);
@@ -1035,7 +1050,7 @@ static void move_clubs(int season)
     if (to_lower)
         fprintf(stderr, "recomp: club moves: %d clubs that leave a group division of a new form go to its lower division\n",
                 to_lower);
-    closed_moves(club, count, div, ncomps, season);
+    closed_moves(club, count, div, ncomps, season, spare1, spare2);
     /* Write the moves. */
     int moved = 0;
     for (int i = 0; i < count; i++) {
