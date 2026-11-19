@@ -74,6 +74,7 @@
                                          * +0x1f with the day of the year, 0x5faa1f, 0x5faa75) */
 #define KEY_OFC 0x9cf8a0u               /* the key of the OFC Nations Cup (no host row: it calls no find_hosts) */
 #define KEY_EURO 0x9cf7a4u
+#define COMP_OBJECTS 0xadadfcu       /* the competition objects by key id (read at 0x777b29) */
 #define CHOICE_OPEN 0xfeu               /* not decided: drawn 5 years before (0x5faa9b..0x5faaae) */
 
 /* The key global of each class with host rows (the comp column of init, read by find_hosts). The Oceania
@@ -707,6 +708,52 @@ uint32_t rt_intl_history_host(uint32_t cup, uint32_t club)
         fprintf(stderr, "recomp: season intl: history host of %s %d: %s\n", win_str(rd32(g_mem, cup + 4u) + NATION_NAME),
                 year, win_str(nation_at(id) + NATION_NAME));
     return rt_unwinding ? club : side;
+}
+
+/* Issue 146. NationalTeams::post_qualified_nations_news 0x7779e0 asks find_next_hosts 0x5fa7d0 for the hosts (0x777b02).
+ * That lookup takes no year: it gives the first decided row of the competition, so an edition could get the hosts of
+ * an older one, or the empty row of a Euro with no host place (2020, 2028), whose text (0x777e0d) then read the name
+ * of nation row -1. In a season game the news takes the hosts of its own edition. Host k (0 or 1) of the edition, or
+ * -1. The empty rows stay empty, because a host of the row takes a place at the finals (0x57be34). */
+static int news_host(uint32_t key, int year, int k)
+{
+    int ids[6];
+    int n = season_intl_host_ids(key, year, ids);
+    if (n > 0) return k < n ? ids[k] : -1;
+    const char *names = key == rd32(g_mem, KEY_EURO) ? season_intl_news_hosts("euro_champ", year) : NULL;
+    for (int i = 0; names && i < k; i++) names = strchr(names, ';') ? strchr(names, ';') + 1 : NULL;
+    if (!names) return -1;
+    char one[64];
+    snprintf(one, sizeof one, "%.*s", (int)strcspn(names, ";"), names);
+    return nation_by_names(one);
+}
+
+/* When the news is made (0x777b07): parts 4 and 5 of the item take the hosts of the edition at +0x40 of the
+ * competition (the year of part 6, 0x777b31). */
+void rt_intl_news_hosts(uint32_t key, uint32_t first_at, uint32_t second_at)
+{
+    if (!season_intl_on()) return;
+    uint32_t comp = rd32(g_mem, rd32(g_mem, COMP_OBJECTS) + key * 4u);
+    if (!readable(comp)) return;
+    int year = (int16_t)rd16(g_mem, comp + 0x40u), first = news_host(key, year, 0), second = news_host(key, year, 1);
+    if (first < 0) return;
+    wr32(g_mem, first_at, (uint32_t)first);
+    wr32(g_mem, second_at, (uint32_t)second);
+    if (logging())
+        fprintf(stderr, "recomp: season intl: qualified news of %s %d names the hosts %s%s%s\n",
+                win_str(rd32(g_mem, comp + 4u) + NATION_NAME), year, win_str(nation_at(first) + NATION_NAME),
+                second >= 0 ? ";" : "", second >= 0 ? win_str(nation_at(second) + NATION_NAME) : "");
+}
+
+/* When the text is written (0x777d07): part 0 is the competition (0x777a56), so a save with a news item of an older
+ * version shows the same hosts. With no host known, the first host is nation row 0, the value that 0x777ae3 sets
+ * before the lookup, so the text never reads row -1. */
+uint32_t rt_intl_news_text_host(uint32_t key, uint32_t year, uint32_t stored, uint32_t k)
+{
+    if (!season_intl_on()) return stored;
+    int first = news_host(key, (int16_t)year, 0);
+    if (first >= 0) return (uint32_t)(k ? news_host(key, (int16_t)year, 1) : first);
+    return !k && (int32_t)stored < 0 ? 0u : stored;
 }
 
 /* A save made before 0.6.2 holds no rows after the table (a 0.6.0 or 0.6.1 game, or a game past 2030 whose

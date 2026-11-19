@@ -10,7 +10,7 @@
  * season_national_fill fills such a side after the top-up, as the top-up does for clubs: a national side (club id
  * from clubs - 2 x nations, database_is_national_team 0x53b900) with fewer than FILL_TO players it can field (in
  * its squad slots, not injured and in no other national squad) takes the
- * players of its nation (staff +0x1a, or the second nationality +0x1e, as 0x53d980 reads both) by current ability (player row +0x05), those not injured (status 2 of
+ * players of its nation (of_nation: the first nation, or a second nation as the original's pick allows it) by current ability (player row +0x05), those not injured (status 2 of
  * Injury::get_player_injury_status 0x62c400, as count_available_players 0x90da0f skips), and for an under-21 side
  * (id from clubs - nations, 0x5409b0) only those born in the year 21 before the game year or later, and none in
  * the squad of another national side (called_up). */
@@ -35,6 +35,9 @@
 #define CLUB_NATION 0x53u
 #define CLUB_SQUAD 0xd7u
 #define SQUAD 50
+#define KEY_NO_SECOND 0x9cf434u     /* the key nation that the pick takes no second nationals for (0x76acea) */
+#define PLAYER_FLAGS 0xae2d0cu      /* rows of 79 bytes by staff id (0x76cf03..0x76cf12) */
+#define PLAYER_FLAGS_SIZE 79u
 #define FILL_TO 15                  /* the squad check of 0x90d2f0 (0x90d469) */
 
 static int readable(uint32_t p) { return p >= 0x10000u && p < 0xfff00000u; }
@@ -70,6 +73,26 @@ static int injured(uint32_t player)
 #define REMOVE_SELECTION 0x896c60u   /* thiscall STORE (side, staff, flag, 1) */
 
 static int in_squad(uint32_t club, uint32_t sp);
+
+/* Issue 141: who counts as a player of the nation, as the original's squad pick reads it. His first nation always
+ * counts. His second nation counts only with no cap (+0x22, 0x76cefc), with mask 2 of the player table row +0xc clear
+ * (0x76cf12), for a nation other than the key nation of 0x76acea, and when the nation has a higher reputation (+0x8e)
+ * than his first nation (0x76cf40), or else lies on the continent (+0x71) of his club's nation and has +0x85 of 5 or
+ * more (0x76cf42..0x76cf57). A player in the squad of his second nation loses his first nation at his first match
+ * there: NationalTeams::record_international_result 0x76b600 swaps the two nations (0x76b7a9..0x76b7b9). */
+static int of_nation(uint32_t sp, uint32_t nation)
+{
+    uint32_t first = rd32(g_mem, sp + 0x1a);
+    if (first == nation) return 1;
+    if (!readable(first) || rd32(g_mem, sp + 0x1e) != nation || g_mem[sp + 0x22] ||
+        rd32(g_mem, nation) == rd32(g_mem, KEY_NO_SECOND)) return 0;
+    uint32_t id = rd32(g_mem, sp), table = rd32(g_mem, PLAYER_FLAGS);
+    if (id < rd32(g_mem, STAFF_COUNT) && readable(table) && (g_mem[table + id * PLAYER_FLAGS_SIZE + 0xc] & 2)) return 0;
+    if ((int16_t)rd16(g_mem, nation + 0x8eu) > (int16_t)rd16(g_mem, first + 0x8eu)) return 1;
+    uint32_t club = rd32(g_mem, sp + 0x39), home = readable(club) ? rd32(g_mem, club + CLUB_NATION) : 0;
+    if (readable(home) && rd32(g_mem, nation + 0x71u) != rd32(g_mem, home + 0x71u)) return 0;
+    return (int8_t)g_mem[nation + 0x85u] >= 5;
+}
 
 static int can_join(uint32_t sp, uint32_t nation)
 {
@@ -174,7 +197,7 @@ static void fill_side(uint32_t club)
         int best_ca = -1;
         for (uint32_t i = 0; readable(staff) && i < count; i++) {
             uint32_t sp = staff + i * STAFF_SIZE, pr = rd32(g_mem, sp + 0x61);
-            if (!readable(pr) || (rd32(g_mem, sp + 0x1a) != nation && rd32(g_mem, sp + 0x1e) != nation)) continue;
+            if (!readable(pr) || !of_nation(sp, nation)) continue;
             if (u21 && (int16_t)rd16(g_mem, sp + 0x12) < born_from) continue;
             int ca = (int16_t)rd16(g_mem, pr + 5);
             if (ca <= best_ca || !can_join(sp, nation)) continue;
@@ -200,7 +223,7 @@ static void fill_side(uint32_t club)
     for (uint32_t j = 0; j < SQUAD; j++) slots += rd32(g_mem, club + CLUB_SQUAD + 4 * j) != 0;
     for (uint32_t i = 0; readable(staff) && i < count; i++) {
         uint32_t sp = staff + i * STAFF_SIZE;
-        if (!readable(rd32(g_mem, sp + 0x61)) || (rd32(g_mem, sp + 0x1a) != nation && rd32(g_mem, sp + 0x1e) != nation)) continue;
+        if (!readable(rd32(g_mem, sp + 0x61)) || !of_nation(sp, nation)) continue;
         if (u21 && (int16_t)rd16(g_mem, sp + 0x12) < born_from) continue;
         data++;
         elsewhere += bsearch(&sp, busy, (size_t)nbusy, sizeof *busy, by_address) != NULL;
@@ -241,7 +264,7 @@ static int u21_short(uint32_t club, int *have)
     uint32_t staff = rd32(g_mem, STAFF), count = rd32(g_mem, STAFF_COUNT);
     for (uint32_t i = 0; n < FILL_TO && readable(staff) && i < count; i++) {
         uint32_t sp = staff + i * STAFF_SIZE;
-        if (!readable(rd32(g_mem, sp + 0x61)) || (rd32(g_mem, sp + 0x1a) != nation && rd32(g_mem, sp + 0x1e) != nation)) continue;
+        if (!readable(rd32(g_mem, sp + 0x61)) || !of_nation(sp, nation)) continue;
         if ((int16_t)rd16(g_mem, sp + 0x12) < born_from || in_squad(club, sp) || !can_join(sp, nation)) continue;
         n += !bsearch(&sp, busy, (size_t)nbusy, sizeof *busy, by_address);
     }
@@ -419,7 +442,7 @@ static void u21_without_seniors(uint32_t nation)
         int best_ca = -1;
         for (uint32_t i = 0; readable(staff) && i < count; i++) {
             uint32_t sp = staff + i * STAFF_SIZE, pr = rd32(g_mem, sp + 0x61);
-            if (!readable(pr) || (rd32(g_mem, sp + 0x1a) != nation && rd32(g_mem, sp + 0x1e) != nation)) continue;
+            if (!readable(pr) || !of_nation(sp, nation)) continue;
             if ((int16_t)rd16(g_mem, sp + 0x12) < born_from) continue;
             int ca = (int16_t)rd16(g_mem, pr + 5);
             if (ca <= best_ca || in_squad(u21, sp) || !can_join(sp, nation)) continue;
