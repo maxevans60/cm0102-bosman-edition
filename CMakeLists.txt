@@ -736,6 +736,7 @@ if(EXISTS "${CM0102_EXE}")
         DEPENDS "${CMAKE_SOURCE_DIR}/tools/seasons/make_history_table.py"
             "${CMAKE_SOURCE_DIR}/docs/research/history-0.6.0/plan.tsv"
             "${CMAKE_SOURCE_DIR}/docs/research/history-0.6.0/plan-official.tsv"
+            "${CMAKE_SOURCE_DIR}/docs/research/history-0.6.0/plan-fixes.tsv"
             "${CMAKE_SOURCE_DIR}/src/recomp_rt/win/season_history_table.c"
         COMMENT "Checking the competition history table"
         VERBATIM)
