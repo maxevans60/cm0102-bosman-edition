@@ -948,8 +948,9 @@ Q48_SAVE_ROWS = {"start.sav": [Q48_COPA_2001], "prematch.sav": [Q48_COPA_2001]}
 # 2026, open item 160). The two games split after some days in the original too (item 184: by 28 days with the group
 # off); the group's marks keep more players at their clubs, which brings that split inside the 14 days of the check.
 # season-code-off, which a new game compares with history-q48-off, runs with it off too. The group stays on in every
-# other run.
-PAIR_KEEP = {"RECOMP_ORIGINAL_FAULTS": "keep:club_regulars"}
+# other run. Group callup_counts (open item 300) acts only in a season game, so it acts in rules-on and not in
+# history-q48-off. The pair runs with it off too.
+PAIR_KEEP = {"RECOMP_ORIGINAL_FAULTS": "keep:club_regulars,callup_counts"}
 
 
 # Issue 145 and 165 (0.7.3 slice 15, docs/research/history-rows/): in a new 2001 game with changing rules on, the
@@ -964,8 +965,10 @@ HISTORY_ROWS_NO_LISTS = {"RECOMP_HISTORY_ROWS": "fhc"}
 # a new 2001 game with changing rules on is one, so rules-on-q48 takes it and the 0.7.2 build does not. The game then
 # plays differently. This is the planned fix of the item. The lead bisect of 19 November 2026 (lists part off) finds
 # the first difference at merge 7f0ef429 (item 295), and rules-on-q48 equals rules-on-q48-ref with the group off. So
-# rules-on-q48 runs with group club_keys off, and tests/seasons/club_key_twins_run.py checks the fix.
-CLUB_KEYS_OFF = {"RECOMP_ORIGINAL_FAULTS": "keep:club_keys"}
+# rules-on-q48 runs with group club_keys off, and tests/seasons/club_key_twins_run.py checks the fix. Group
+# callup_counts (open item 300) also acts only in a season game, and the 0.7.2 build has no such fix, so rules-on-q48
+# runs with it off too, and tests/seasons/callup_counts_run.py checks the fix.
+CLUB_KEYS_OFF = {"RECOMP_ORIGINAL_FAULTS": "keep:club_keys,callup_counts"}
 
 
 def q48_runs(runs, new_game):
