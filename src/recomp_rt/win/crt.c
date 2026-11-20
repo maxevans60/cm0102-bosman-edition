@@ -27,7 +27,8 @@ RT_REPLACE(0094f0f0, memmove)
 
 /* qsort 0x945333, cdecl (base, count, width, compare). For the compare of the player history lists
  * (0x7c6d40) the runtime sorts in host code with the same steps, the same stack writes and the same eax
- * (qsort6.c); every other compare keeps the recompiled qsort. RECOMP_QSORT=original turns the host sort
+ * (qsort6.c), and so for the compares that qsort6_host_cmp lists (qsort6_cmp.c); every other compare keeps the
+ * recompiled qsort. RECOMP_QSORT=original turns the host sort
  * off; RECOMP_QSORT=check runs both on each call and stops the program at the first row, stack byte or
  * eax that differs. */
 #define QSORT 0x945333u
@@ -107,9 +108,13 @@ static void keep_sorted_rows(const uint8_t *rows, uint32_t base, uint32_t num, u
 
 static int insert_off;             /* the self-test: 1 tests qsort6's own sorted path */
 
-static uint8_t *host_sort(uint8_t *rows, uint32_t base, uint32_t num, uint32_t width)
+static uint8_t *host_sort(uint8_t *rows, uint32_t base, uint32_t num, uint32_t width, uint32_t cmp)
 {
-    qsort6_stack st = {g_mem, cpu.esp - 4, base, cpu.ebp, cpu.ebx, cpu.esi, cpu.edi, HISTORY_CMP, 0};
+    qsort6_stack st = {g_mem, cpu.esp - 4, base, cpu.ebp, cpu.ebx, cpu.esi, cpu.edi, cmp, 0, NULL};
+    if (cmp != HISTORY_CMP) {            /* the other host compares: the plain steps, no sorted path */
+        st.fn = qsort6_host_cmp(cmp);
+        return qsort6(rows, num, width, &st);
+    }
     if (!sorted_path_on() || num < 2 || width < 5) return qsort6(rows, num, width, &st);
     int head = head_in_order(rows, base, num, width);
     if (head && insert_off) st.sorted = qsort6_strict(rows + (size_t)(num - 2) * width, 2, width);
@@ -141,7 +146,7 @@ static uint8_t *host_sort(uint8_t *rows, uint32_t base, uint32_t num, uint32_t w
 }
 
 /* Both sorts from the same rows and stack; the original's result stays. 0 when all is equal. */
-static int qsort_check(uint32_t base, uint32_t num, uint32_t width)
+static int qsort_check(uint32_t base, uint32_t num, uint32_t width, uint32_t cmp)
 {
     size_t bytes = (size_t)num * width;
     uint32_t low = cpu.esp - QSORT6_BELOW, span = QSORT6_BELOW + QSORT6_ABOVE;
@@ -150,7 +155,7 @@ static int qsort_check(uint32_t base, uint32_t num, uint32_t width)
     memcpy(copy, g_mem + base, bytes);
     memcpy(before, g_mem + low, span);
     uint32_t eax_in = cpu.eax;
-    uint8_t *eax = host_sort(copy, base, num, width);
+    uint8_t *eax = host_sort(copy, base, num, width, cmp);
     uint32_t want = eax ? base + (uint32_t)(eax - copy) : eax_in;
     memcpy(host, g_mem + low, span);
     memcpy(g_mem + low, before, span);
@@ -177,18 +182,39 @@ RT_WRAP(00945333, qsort)
         const char *v = getenv("RECOMP_QSORT");
         qsort_mode = !v ? 0 : !strcmp(v, "check") ? 1 : !strcmp(v, "original") ? 2 : 0;
     }
-    if (cmp != HISTORY_CMP || qsort_mode == 2) { o_00945333(); return; }
+    if (!qsort6_host_cmp(cmp) || qsort_mode == 2) { o_00945333(); return; }
     if (qsort_mode == 1) {
-        if (qsort_check(base, num, width)) abort();
+        if (qsort_check(base, num, width, cmp)) abort();
         if (!qsort_checked++) atexit(print_qsort_checked);
         return;
     }
     if (qsort_mode == 3) {
-        if (qsort_check(base, num, width)) test_fails++;
+        if (qsort_check(base, num, width, cmp)) test_fails++;
         return;
     }
-    uint8_t *eax = host_sort(g_mem + base, base, num, width);
+    uint8_t *eax = host_sort(g_mem + base, base, num, width, cmp);
     rt_ret_cdecl(eax ? (uint32_t)(eax - g_mem) : cpu.eax);
+}
+
+/* The bsearch 0x946464 in host code (bsearch6.c), for the compares that qsort6 has. RECOMP_QSORT=original runs
+ * the original, as for qsort. */
+void o_00946464(void);
+
+static int qsort_mode_value(void)
+{
+    if (qsort_mode < 0) {
+        const char *v = getenv("RECOMP_QSORT");
+        qsort_mode = !v ? 0 : !strcmp(v, "check") ? 1 : !strcmp(v, "original") ? 2 : 0;
+    }
+    return qsort_mode;
+}
+
+RT_WRAP(00946464, bsearch)
+{
+    uint32_t key = rt_arg(0), base = rt_arg(1), num = rt_arg(2), width = rt_arg(3), cmp = rt_arg(4);
+    if (!bsearch6_supported(cmp) || !key || !base || qsort_mode_value() == 2) { o_00946464(); return; }
+    bsearch6_stack st = {g_mem, cpu.esp, cpu.ebp, cpu.ebx, cpu.esi, cpu.edi};
+    rt_ret_cdecl(bsearch6(&st, key, base, num, width, cmp));
 }
 
 /* RECOMP_QSORT_TEST: before the game starts, sorts rows made from a fixed seed with both sorts (the
@@ -328,6 +354,41 @@ int qsort6_self_test(void)
     qsort6_insert_max_visit = 20000;
     if (insert_sorts == insert_before) test_fails++;     /* qsort6_insert must have run */
     fprintf(stderr, "qsort test: %llu sorts by qsort6_insert\n", (unsigned long long)(insert_sorts - insert_before));
+    /* The other host compares (qsort6_cmp.c): rows made from a few keys, so many compare equal, with the
+     * special values of each compare (-1 for 0x757ea0 and 0x844740, ids that differ by 0x80000000 or more, NULL
+     * and clubs of one reputation for 0x4b0810). Each sort runs in check mode. */
+    {
+        static const uint32_t others[] = {0x757ea0, 0x844740, 0x83b670, 0x4b0810};
+        static const uint32_t widths[] = {8, 8, 12, 4};
+        static const uint32_t keys[] = {0, 1, 2, 3, 7, 0x7fffffffu, 0x80000000u, 0x80000001u, 0xfffffffeu, 0xffffffffu};
+        uint32_t clubs = rt_alloc(8 * 0x100);
+        for (int c = 0; c < 8; c++) {
+            int16_t rep = (int16_t)(c < 3 ? 5 : c == 3 ? -32768 : c == 4 ? 32767 : (int)(test_random() % 200) - 100);
+            memcpy(g_mem + clubs + 0x100u * (uint32_t)c + 0x80, &rep, 2);
+        }
+        uint32_t others_mem = rt_alloc(MAX * 12);
+        uint8_t *orows = malloc(MAX * 12);
+        for (int o = 0; o < 4; o++) {
+            uint32_t w = widths[o], cmp = others[o];
+            static const uint32_t sizes[] = {0, 1, 2, 3, 7, 8, 9, 10, 16, 17, 31, 64, 100, 255, 257, 1000, 3001};
+            for (size_t z = 0; z < sizeof sizes / sizeof *sizes; z++)
+                for (int k = 0; k < (sizes[z] < 100 ? 12 : 3); k++) {
+                    uint32_t num = sizes[z], few = 1 + test_random() % 6;
+                    for (uint32_t i = 0; i < num; i++) {
+                        uint32_t v[3];
+                        for (int j = 0; j < 3; j++) v[j] = test_random() % 3 ? keys[test_random() % few] : keys[test_random() % 10];
+                        if (cmp == 0x4b0810) v[0] = test_random() % 9 == 0 ? 0 : clubs + 0x100u * (test_random() % 8);
+                        memcpy(orows + (size_t)i * w, v, w);
+                    }
+                    memcpy(g_mem + others_mem, orows, (size_t)num * w);
+                    uint32_t args[4] = {others_mem, num, w, cmp};
+                    cpu.eax = 0x5a5a5a5au;
+                    rt_callback(QSORT, 4, args);
+                    sorts++;
+                }
+        }
+        free(orows);
+    }
     free(rows);
     qsort_mode = -1;
     fprintf(stderr, "qsort test: %d sorts, %d differ\n", sorts, test_fails);
