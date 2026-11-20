@@ -18,7 +18,9 @@
  *   12 with no bound (0x78ad93..0x78adb0, byte4 1) and 12 clubs of the lower pool ([0x9cf8b8], at most 30,
  *   0x78ad57..0x78ad75) at places 0 to 11 (0x4afbd0 at 0x78addc, byte4 2 at 0x78ae0a). With more than 20 such
  *   clubs it wrote past its 32 places (push 0xc0). The wrap hides the clubs after the first 20 in table order
- *   (club +0x57 = 0 for the call), then puts each of them, byte4 1, in place of the last lower places.
+ *   (club +0x57 = 0 for the call), then puts each of them, byte4 1, in place of the last lower places. With fewer
+ *   than 12 lower clubs ([0x9cf8b8]) it lends the lower division to Premier and First Division clubs for the call
+ *   (lend_nir_lower), else 0x4afbd0 boxes "comp_util..cpp 241".
  *   WelLgeCup::collect_entrants 0x927010 makes 6 groups of 3 from 18 pointers (calloc at 0x92702a, +0xf2 = 18 at
  *   0x927020): every Welsh Premier club ([0x9cf94c]) with no bound (0x9270cf), then a box at 0x92716b
  *   (wel_lge_cup.cpp 743) when fewer than 18. With a Premier of 12 (2010/11 to 2025/26) the wrap lends the
@@ -59,7 +61,9 @@
 #define KEY_WEL_LOWER 0x9cf960u
 #define KEY_WALES 0x9cf510u
 
+#define KEY_NIR_LOWER 0x9cf8b8u
 #define NIR_TOP 20                      /* 32 places less the 12 lower places of 0x78ae11 */
+#define NIR_LOWER 12                    /* the lower places: need 12 at 0x78add4, the copy to 0x48 at 0x78ae11 */
 #define WEL_LGE_PLACES 18
 #define FA_CONF 22
 #define MOST_HELD 64
@@ -163,26 +167,66 @@ static int put_held(uint32_t list, int places, int end, const Held *held, int n,
 
 static int nir_lower_place(uint32_t at) { return g_mem[at + 4] == 2; }
 
+/* The lower pool needs 12 clubs: 0x4afbd0 (need 12 at 0x78add4) boxes "comp_util..cpp 241" with fewer (0x4afbef
+ * to 0x4afc64), and then 0x78ade4..0x78ae14 copies 12 entries of the stack list all the same, the last ones stale.
+ * The rules table can leave fewer (Northern Ireland 2008/09: a Premiership of 12 and a Championship of 17 take
+ * clubs of the lower division; release set row ta2001). Lends the lower division to Premier and First Division
+ * clubs for the call: first the held ones (put_held would put them in lower places), then the last of the others
+ * in table order. Returns the count; lent[] keeps each club's own division. */
+static int lend_nir_lower(int range, const Held *held, int n, Held *lent)
+{
+    int lower = 0, k = 0;
+    uint32_t div = 0;
+    for (int i = 0; i < range; i++)
+        if (in_key(club_at(i), KEY_NIR_LOWER)) {
+            lower++;
+            if (!div) div = rd32(g_mem, club_at(i) + CLUB_DIVISION);
+        }
+    if (!div || lower >= NIR_LOWER) return 0;
+    for (int h = 0; h < n && lower + k < NIR_LOWER; h++, k++) {
+        lent[k] = held[h];
+        wr32(g_mem, held[h].club + CLUB_DIVISION, div);
+    }
+    for (int i = range - 1; i >= 0 && lower + k < NIR_LOWER; i--) {
+        uint32_t c = club_at(i);
+        if (!in_key(c, KEY_NIR_PRM) && !in_key(c, KEY_NIR_FIRST)) continue;
+        lent[k].club = c;
+        lent[k].division = rd32(g_mem, c + CLUB_DIVISION);
+        wr32(g_mem, c + CLUB_DIVISION, div);
+        k++;
+    }
+    fprintf(stderr, "recomp: league sizes: Irish Cup: %d lower clubs, %d Premier and First Division clubs lent to "
+                    "the lower places\n", lower, k);
+    return k;
+}
+
 void o_0078ac90(void);
 
 RT_WRAP(0078ac90, nir_cup_entrants)
 {
     uint32_t cup = cpu.ecx;
-    Held held[MOST_HELD];
-    int n = 0;
+    Held held[MOST_HELD], lent[NIR_LOWER];
+    int n = 0, m = 0;
     if (season_sizes_on() && readable(rd32(g_mem, CLUBS))) {
         int range = all_clubs() - 2 * (int)rd32(g_mem, CLUB_COUNT_LESS);
         n = hide_after(KEY_NIR_PRM, KEY_NIR_FIRST, NIR_TOP, range, held);
+        m = lend_nir_lower(range, held, n, lent);
     }
     o_0078ac90();
+    give_back(lent, m);
     give_back(held, n);
-    if (!n || rt_unwinding) return;
+    if ((!n && !m) || rt_unwinding) return;
     uint32_t list = rd32(g_mem, cup + CUP_LIST);
     int places = (int16_t)rd16(g_mem, cup + CUP_CLUBS);
     if (!readable(list) || places <= 0) return;
-    int left = put_held(list, places, places, held, n, nir_lower_place, 1);
+    for (int i = 0; i < places; i++)        /* a lent club is a Premier or First Division club: byte4 1 */
+        for (int k = 0; k < m; k++)
+            if (rd32(g_mem, list + ENTRY * (uint32_t)i) == lent[k].club) g_mem[list + ENTRY * (uint32_t)i + 4] = 1;
+    if (!n) return;
+    int left = put_held(list, places, places, held, n, nir_lower_place, 1), lower = 0;
+    for (int i = 0; i < places; i++) lower += nir_lower_place(list + ENTRY * (uint32_t)i);
     fprintf(stderr, "recomp: league sizes: Irish Cup: %d Premier and First Division clubs, %d lower places\n",
-            NIR_TOP + n, 32 - NIR_TOP - n + left);
+            NIR_TOP + n, lower);
     if (left) fprintf(stderr, "recomp: league sizes: fault: Irish Cup: %d clubs found no place\n", left);
 }
 
