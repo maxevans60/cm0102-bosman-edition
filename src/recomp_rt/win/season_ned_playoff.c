@@ -200,6 +200,13 @@ static uint32_t round_table(uint32_t self, NedPoForm form, int legs)
         /* Fixed pairs (no draw, 0x51c5e4..0x51c5f1) and no home swap (0x51e8b7..0x51ea3d), as the play-off of six. */
         wr16(g_mem, t + 0x0d, rd16(g_mem, t + 0x0d) | 0x200u);
         g_mem[t + 0x0b] &= (uint8_t)~0x09u;
+        /* Two legs 3 days apart (EngFirst's semi-final has 4, +0x22 at 0x572b20), so that a day is free between the
+         * second leg and the next draw. A clash move of a second leg can go to that day (fixture_season_end.c, the
+         * bound of a tie with fixed pairs). With 4 days the second leg was on the day before the draw and a move had
+         * no day left: in sp2021 (2022/23) round 0 was drawn on day 133 of 2023, its first legs played on day 136
+         * and its second legs on day 140, round 1 was drawn on day 141, and add_fixture's clash move took FC
+         * Volendam v Sparta Rotterdam from day 140 to day 143. Round 1 was drawn without its winner. */
+        if (g_mem[t + 0x21] == 2) g_mem[t + 0x22] = 3;
     }
     game_free(eng);
     for (int r = 0; table && r < rounds && !rt_unwinding; r++)
@@ -322,6 +329,24 @@ static void side_set(uint32_t tie, int k, const Side *v)
     wr16(g_mem, tie + 0x0eu + 2u * (uint32_t)k, (uint16_t)v->round);
 }
 
+/* A tie of the round before with no winner on the draw day. Cup::draw_round 0x51c410 waits only for a side whose
+ * list slot holds no club yet (0x51c47c..0x51c4b1, then 0x51c4e9 moves the draw dates on). A side that waits for the
+ * winner of a tie has slot -1, which that test skips (0x51c47f, 0x51c49b), so the round is built without the club and
+ * its tie is never played. The round dates (round_table) and the bound of a moved leg (fixture_season_end.c) keep each
+ * leg before the next draw, so this is only a log of the case that they cannot cover: a moved leg with no free day
+ * before the draw. */
+static void log_missing(uint32_t self, int bracket, int round, uint32_t base, int ties)
+{
+    for (int t = 0; round > 0 && t < ties; t++)
+        for (int k = 0; k < 2; k++) {
+            Side s;
+            side_get(base + (uint32_t)t * TIE_SIZE, k, &s);
+            if (s.slot < 0 && s.tie >= 0)
+                fprintf(stderr, "recomp: ned playoff\twaits\t%d\tbracket %d\tround %d\ttie %d of the round before has no "
+                        "winner on the draw day\n", season_of(self), bracket, round, s.tie);
+        }
+}
+
 void season_ned_playoff_draw_round(uint32_t cup, int round)
 {
     uint32_t self = st_league_of(KEY_FIRST);
@@ -333,11 +358,13 @@ void season_ned_playoff_draw_round(uint32_t cup, int round)
     if (!ned_po_round(form, round, &o) || !st_readable(ties) || !st_readable(list)) return;
     uint32_t base = rd32(g_mem, ties + 4u * (uint32_t)round);
     if (!st_readable(base)) return;
+    for (int t = 0; t < o.ties; t++)
+        if (g_mem[base + (uint32_t)t * TIE_SIZE + TIE_BUILT]) return;     /* a round already built */
+    log_missing(self, bracket, round, base, o.ties);
     Side have[2 * NED_PO_MAX_TIES], want[2 * NED_PO_MAX_TIES];
     int index[2 * NED_PO_MAX_TIES], sides = 2 * o.ties;
     for (int t = 0; t < o.ties; t++) {
         uint32_t tie = base + (uint32_t)t * TIE_SIZE;
-        if (g_mem[tie + TIE_BUILT]) return;              /* a round already built */
         for (int k = 0; k < 2; k++) {
             Side *s = &have[2 * t + k];
             side_get(tie, k, s);

@@ -147,6 +147,9 @@ typedef struct {
  * results against the fourth of a group of four are not left out: inference, see the doc). */
 void season_nl_rank(SeasonNlRow *rows, int n);
 
+/* season_nl.c: the record of the UEFA Nations League takes its identity when a history row lands on it. */
+void season_nl_history_record(uint32_t rec);
+
 /* The leagues of the next edition. rows: the edition's results in any order (sorted on return). Writes the
  * league of each row of the sorted rows into next[]. The group winners go up and the last go down as the
  * edition says, then the leagues are filled to the sizes of `to` from the overall ranking: a league with room

@@ -230,14 +230,24 @@ static void test_places(void)
                       {"Union Omaha", 1, 0, 0, 30}, {"Chicago Fire", 1, 0, 0, 90}, {"Inter Miami CF", 0, 0, 0, 60}};
     int a[] = {CLOSED_JOIN, CLOSED_JOIN, CLOSED_CUT, CLOSED_CUT, CLOSED_CUT, CLOSED_STAY, CLOSED_JOIN};
     unsigned from[] = {32, 33, 31, 31, 31, 31, 0}, to[7];
-    int filled = season_closed_places(c, a, from, 7, to);
+    int filled = season_closed_places(c, a, from, NULL, 7, to);
     CHECK(filled == 2, "places filled %d", filled);
     CHECK(to[3] == 32 && to[4] == 33 && to[2] == 0, "places: %u %u %u", to[3], to[4], to[2]);
     CHECK(to[0] == 0 && to[1] == 0 && to[5] == 0 && to[6] == 0, "only a club that leaves moves");
     /* More places than clubs that leave: the rest stay empty. */
     a[2] = a[3] = CLOSED_STAY;
-    filled = season_closed_places(c, a, from, 7, to);
+    filled = season_closed_places(c, a, from, NULL, 7, to);
     CHECK(filled == 1 && to[4] == 32 && to[2] == 0 && to[3] == 0, "one club, two places: %d %u", filled, to[4]);
+    /* A running game: no club leaves, so the club of the pool with the highest reputation takes each place (a 2005
+     * start on the October 2026 database emptied the A-League one club a season). */
+    int none[] = {CLOSED_JOIN, CLOSED_JOIN, CLOSED_STAY, CLOSED_STAY, CLOSED_STAY, CLOSED_STAY, CLOSED_STAY};
+    int pool[] = {0, 0, 1, 1, 0, 0, 0};
+    filled = season_closed_places(c, none, from, pool, 7, to);
+    CHECK(filled == 2 && to[3] == 32 && to[2] == 33 && to[4] == 0 && to[6] == 0, "pool: %d %u %u", filled, to[3], to[2]);
+    /* A club that leaves comes before the pool. */
+    none[4] = CLOSED_CUT;
+    filled = season_closed_places(c, none, from, pool, 7, to);
+    CHECK(filled == 2 && to[4] == 32 && to[3] == 33 && to[2] == 0, "cut first: %u %u", to[4], to[3]);
 }
 
 int main(void)

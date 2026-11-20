@@ -279,7 +279,8 @@ void season_closed_plan(const char *league, int season, int want, const ClosedCl
     *result = r;
 }
 
-int season_closed_places(const ClosedClub *clubs, const int *actions, const unsigned *from, int n, unsigned *to)
+int season_closed_places(const ClosedClub *clubs, const int *actions, const unsigned *from, const int *pool, int n,
+                         unsigned *to)
 {
     int filled = 0;
     for (int i = 0; i < n; i++) to[i] = 0;
@@ -288,6 +289,10 @@ int season_closed_places(const ClosedClub *clubs, const int *actions, const unsi
         int best = -1;
         for (int i = 0; i < n; i++)
             if (actions[i] == CLOSED_CUT && !to[i] && (best < 0 || clubs[i].reputation > clubs[best].reputation)) best = i;
+        int cut = best >= 0;
+        for (int i = 0; !cut && pool && i < n; i++)
+            if (pool[i] && actions[i] == CLOSED_STAY && !to[i] && (best < 0 || clubs[i].reputation > clubs[best].reputation))
+                best = i;
         if (best < 0) break;
         to[best] = from[j];
         filled++;

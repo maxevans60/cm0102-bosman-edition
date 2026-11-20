@@ -517,6 +517,22 @@ TITLES_OF_YEAR.update({("Belgian Third Division", 2012): 2, ("Belgian National D
                        ("Belgian Division 1", 2012): 2, ("French CFA", 2013): 4})
 
 
+# The League of Ireland's calendar move (docs/research/2026-11-15-ireland-calendar-2003.md, decision 8): the 2001/02
+# season keeps the original's label, the year it ends (2002), and the short season 2002/03 (5 July 2002 to 8 February
+# 2003) takes the label 2002 too, in the game's rows (season_calendar_label, src/recomp_rt/win/season_calendar.c) and
+# in the researched rows (tools/seasons/make_history_table.py, label_of). Real seasons: docs/research/history-0.6.0/
+# ireland.md and ireland.check.md (RSSSF, Wikipedia, read 17 October 2026). The League Cup was not held in 2002/03
+# (decision 5), so it has one row. The names are those of the save (the records of the Northern Irish league keep
+# the database names "Irish First Division" and "Irish League Cup", so those names are not in the list).
+TWO_SEASONS = ("League of Ireland Premier Division", "League of Ireland First Division", "FAI Cup")
+
+
+def two_seasons(name, year, start, changing):
+    """2 for label 2002 of a League of Ireland competition in a game that has the calendar move: changing rules on, or
+    a start in 2003 or later (decision 2: a 2001 or 2002 start with changing rules off stays winter); else 1."""
+    return 2 if name in TWO_SEASONS and year == 2002 and (changing or start >= 2003) else 1
+
+
 def titles_allowed(name, year, start, most, several, played=True):
     """The rows a competition may hold in a label year: most (1, or 2 for a split season), the count of its
     SEVERAL_TITLES format from that format's first year, or the count of TITLES_OF_YEAR. TITLES_OF_YEAR counts only
@@ -607,6 +623,7 @@ def check(game, rules=None, changes=()):
             if any(pat.fullmatch(name) for pat, f, k in SEVERAL_TITLES) else (1, 0)
         for y, n in sorted(per_year.items()):
             if n > max(titles_allowed(name, y, start, most, several, cid in game.parts),
+                       two_seasons(name, y, start, game.changing),
                        filed_titles(per_year, y, start)) and y >= start - 1:
                 pairs = "; ".join(f"{r[4][0]} / {r[5][0]}" for r in rs if r[3] == y)
                 faults.append(("duplicate", name, y, f"{n} rows: {pairs}"))
@@ -1278,7 +1295,18 @@ def duty_clashes(game):
     match of 3 September; its own pick held 2, and the senior side's for 4 September none. A club match on its
     nation's match day is no fault in itself: clubs play on international match days, and a clash is a fault only
     when a picked player is due in two places. The Olympic count above has no PICK_AHEAD limit: Olympic squads are not
-    read from these picks. One fault per competition and year, with its first case."""
+    read from these picks. One fault per competition and year, with its first case.
+    duty-clash-linked-u21 is the same fault for the squad of an under-21 side (the second side of its nation in
+    nat_club.dat, 0x540a2a..0x540a40) whose senior side plays the next day: the linked under-21 match that add_fixture
+    0x5aa680 adds the day before a senior match (ReserveComp::add_b_or_under21_fixture 0x7e6720, called at 0x5aab09),
+    whose squad the senior match's check 0x76bab0 picks. That pick leaves out a club's regulars when the club has a
+    match within a day (with open item 299 of 0.6.2 the day before the linked match too), but takes its players of
+    playing-time mood -10 or less (the gate of select_squad, contract +0x3d, 0x76cd6f): original design, item 162.
+    The mood moves after the pick, so the save does not show it. In release set row t2002 (seed 73) a replay with a
+    log at the pick (run-logs/0.7.3-s073-19/r299/rep8) showed the re-pick of day 231 of 2003 leave out the Huracán
+    regular (mood 100) and keep 4 Huracán players of mood -16, -96, -91 and -50, whose moods at the save of day 243
+    were 6, -99, -6 and 20. The check name lets history_known.tsv accept this one case as design, and no other
+    duty clash."""
     sav = game.sav
     staff = sav.read("staff.dat") if sav.has("staff.dat") else b""
     injury = sav.read("injury.dat") if sav.has("injury.dat") else b""
@@ -1317,6 +1345,9 @@ def duty_clashes(game):
             if comp.get("nation", -1) < 0 and not FRIENDLY.match(comp.get("name", "")) and home in called and \
                     away in called:
                 club_matches.append((day, cid, home, away))
+    by_nation = collections.defaultdict(list)    # nation: its side ids (the senior side's is the lower, nat_club.dat)
+    for sid in game.sides:
+        by_nation[game.club(sid)[1]].append(sid)
     faults, seen = [], set()
     for day, cid, home, away in sorted(club_matches):
         name = game.comps[cid]["name"]
@@ -1330,7 +1361,10 @@ def duty_clashes(game):
         if hit:
             c, side, d = hit
             seen.add((name, year))
-            faults.append(("duty-clash", name, year, f"{game.club(c)[0]} on {when} has "
+            nation = game.club(side)[1]
+            linked = side == max(by_nation.get(nation, [side])) and min(by_nation.get(nation, [side])) in \
+                national.get(d + 1, ())
+            faults.append(("duty-clash-linked-u21" if linked else "duty-clash", name, year, f"{game.club(c)[0]} on {when} has "
                                                      f"{called[c][side]} players in the squad of {game.club(side)[0]}, "
                                                      f"which plays on {datetime.date.fromordinal(d)}"))
             continue

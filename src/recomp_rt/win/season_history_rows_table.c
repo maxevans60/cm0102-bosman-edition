@@ -49,6 +49,9 @@ const SeasonHistRowFix season_history_row_fixes[] = {
     {"European Football Championship", 1988, 2, "Holland", "", ""},
     {"European Football Championship", 1992, 2, "Denmark", "", ""},
     {"European Football Championship", 1996, 2, "Germany", "", ""},
+    {"African Cup of Nations", 2012, 3, "Zambia", "Equatorial Guinea|Gabon", "Equatorial Guinea"},
+    {"Oceania Nations Cup", 2012, 3, "Tahiti", "Solomon Islands", "Solomon Islands"},
+    {"Oceania Nations Cup", 2012, 2, "Tahiti", "New Zealand", "New Zealand"},
 };
 const int season_history_row_fixes_count = (int)(sizeof season_history_row_fixes / sizeof season_history_row_fixes[0]);
 

@@ -1869,6 +1869,16 @@ static int entry_unfinished(int e, int year, const char **file)
     return seen;
 }
 
+/* 1 when an entry holds a league that stalled in an earlier season (season_sizes_cro_behind). */
+static int entry_behind(int e, int year)
+{
+    uint32_t buf[COMPS_MAX];
+    int n = season_change_entry_comps(e, buf, COMPS_MAX);
+    for (int i = 0; i < n && !rt_unwinding; i++)
+        if (season_sizes_cro_behind(buf[i], year)) return 1;
+    return 0;
+}
+
 int season_playoffs_hold(void)
 {
     if (!season_game_changes()) return 0;
@@ -1877,6 +1887,20 @@ int season_playoffs_hold(void)
         uint32_t at = ENTRIES + (uint32_t)e * ENTRY_SIZE;
         int upd = (int16_t)rd16(g_mem, at + ENTRY_UPDATE_DAY);
         held[e] = 0;
+        /* A save of a game whose Croatian leagues stalled (0.7.2 and 0.7.3 before the fix in season_sizes_cro_loaded:
+         * the HNL holds last season's edition after its update day). The entry changes its season today, as on its own
+         * day, once the South has its table back. */
+        if (upd >= 0 && upd < LATE_DAY && today > upd && entry_behind(e, year)) {
+            held_day[e] = (int16_t)upd;
+            held[e] = 1;
+            wr16(g_mem, at + ENTRY_UPDATE_DAY, (uint16_t)today);
+            if (logged[e] != today + 1)
+                fprintf(stderr, "recomp: season change: entry %d holds last season's edition after its update day %d "
+                                "of %d: it changes its season on day %d\n", e, upd, year, today);
+            logged[e] = today + 1;
+            any = 1;
+            continue;
+        }
         if (upd < 0 || upd >= LATE_DAY || today < upd || today - upd > WAIT_DAYS) continue;
         const char *file = "";
         int p = playoffs_on() ? entry_playoffs(e, year, &file) : 0;

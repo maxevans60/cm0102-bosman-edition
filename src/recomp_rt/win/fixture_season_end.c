@@ -181,22 +181,17 @@ static int before(int y1, int d1, int y2, int d2) { return y1 < y2 || (y1 == y2 
  * 0x51c569..0x51c580), the ties of round r at [+0xad] + 4r (0x35 bytes each: home and away places s16 +0 and +2,
  * drawn +0x34; 0x51c449..0x51c4b7) and the places at +0xa7 (6 bytes each, the club +0; 0x51c485..0x51c491). The
  * fixture is a tie of round r when a drawn tie of r has its two clubs (fixture +0x1c and +0x20). A league object
- * has none of these, so no tie matches. */
+ * has none of these, so no tie matches there, and its play-off brackets are searched instead (next_round_day). When
+ * the next round has fixed pairs (+0xd flag 0x200, Cup::draw_round 0x51c5e4..0x51c5f1), the draw puts each winner
+ * in its tie, so the bound is the next round's draw day (s16 +0, year offset s8 +2) in place of its match day. */
 #define FIX_HOME 0x1cu
 #define FIX_AWAY 0x20u
-static int next_round_day(uint32_t rec, uint32_t fix, int *y, int *d)
+#define CUP_STAGE_VTABLE 0x00969468u  /* Cup_Stage (0x522e80) */
+static int cup_next_round(uint32_t cup, uint32_t home, uint32_t away, int playoff, int *y, int *d)
 {
-    uint32_t table = rd32(g_mem, COMP_OBJECTS);
-    if (!readable(rec) || !readable(table)) return 0;
-    int32_t id = (int32_t)rd32(g_mem, rec);
-    if (id < 0 || id > 0xffff) return 0;
-    uint32_t cup = rd32(g_mem, table + 4u * (uint32_t)id);
-    if (!readable(cup)) return 0;
     uint32_t rounds_at = rd32(g_mem, cup + 0xa3u), ties_at = rd32(g_mem, cup + 0xadu), places = rd32(g_mem, cup + 0xa7u);
     int rounds = (int16_t)rd16(g_mem, cup + 0x3cu);
-    uint32_t home = rd32(g_mem, fix + FIX_HOME), away = rd32(g_mem, fix + FIX_AWAY);
-    if (rounds < 2 || rounds > 32 || !readable(rounds_at) || !readable(ties_at) || !readable(places) || !home || !away)
-        return 0;
+    if (rounds < 2 || rounds > 32 || !readable(rounds_at) || !readable(ties_at) || !readable(places)) return 0;
     for (int r = 0; r + 1 < rounds; r++) {
         uint32_t ties = rd32(g_mem, ties_at + 4u * (uint32_t)r);
         int n = (int16_t)rd16(g_mem, rounds_at + 0x68u * (uint32_t)r + 0x1au);
@@ -208,10 +203,48 @@ static int next_round_day(uint32_t rec, uint32_t fix, int *y, int *d)
             uint32_t ch = rd32(g_mem, places + 6u * (uint32_t)h), ca = rd32(g_mem, places + 6u * (uint32_t)a);
             if (!((ch == home && ca == away) || (ch == away && ca == home))) continue;
             uint32_t next = rounds_at + 0x68u * (uint32_t)(r + 1);
-            *d = (int16_t)rd16(g_mem, next + 3u);
-            *y = (int16_t)rd16(g_mem, cup + 0x40u) + (int8_t)g_mem[next + 5u];
+            if (playoff && (rd16(g_mem, next + 0x0du) & 0x200u)) {
+                /* A play-off round of fixed pairs: the draw puts the winner in its tie (season_playoffs_draw_round,
+                 * season_ned_playoff_draw_round), and Cup::draw_round builds a side that waits for a winner (slot -1)
+                 * without its club (0x51c47f, 0x51c49b), so the winner must be known on the draw day. A base cup
+                 * keeps the match day: its draw waits for a club that is not known yet (0x51c4e9). */
+                *d = (int16_t)rd16(g_mem, next);
+                *y = (int16_t)rd16(g_mem, cup + 0x40u) + (int8_t)g_mem[next + 2u];
+            } else {
+                *d = (int16_t)rd16(g_mem, next + 3u);
+                *y = (int16_t)rd16(g_mem, cup + 0x40u) + (int8_t)g_mem[next + 5u];
+            }
             return *d >= 0 && *d < 366;
         }
+    }
+    return 0;
+}
+
+static int next_round_day(uint32_t rec, uint32_t fix, int *y, int *d)
+{
+    uint32_t table = rd32(g_mem, COMP_OBJECTS);
+    if (!readable(rec) || !readable(table)) return 0;
+    int32_t id = (int32_t)rd32(g_mem, rec);
+    if (id < 0 || id > 0xffff) return 0;
+    uint32_t obj = rd32(g_mem, table + 4u * (uint32_t)id);
+    uint32_t home = rd32(g_mem, fix + FIX_HOME), away = rd32(g_mem, fix + FIX_AWAY);
+    if (!readable(obj) || !home || !away) return 0;
+    if (cup_next_round(obj, home, away, 0, y, d)) return 1;         /* a cup: a league has no tie there */
+    /* A league's play-off is a Cup_Stage in the league's stage array (+0xc, count +0x2c), with the league's record:
+     * the play-offs of season_playoffs.c and the Dutch nacompetitie (sp2021, 2022/23: FC Volendam v Sparta Rotterdam,
+     * the second leg of round 0 on day 140 of 2023, was moved by add_fixture's clash move to day 143, two days after
+     * the draw of round 1 on day 141, and round 1 was drawn without its winner). Stages that a league deleted keep
+     * their pointers (HolFirst::start_new_season 0x5f6436..0x5f644a), and another Cup_Stage can take the freed block,
+ * so a stage counts only with the league's record (+4) and year (+0x40), as bracket_of in season_ned_playoff.c.
+ * Returns 2 for such a stage. */
+    uint32_t stages = rd32(g_mem, obj + 0x0cu);
+    int count = (int32_t)rd32(g_mem, obj + 0x2cu);
+    if (!readable(stages) || count < 1 || count > 16) return 0;
+    for (int i = 0; i < count; i++) {
+        uint32_t st = rd32(g_mem, stages + 4u * (uint32_t)i);
+        if (readable(st) && rd32(g_mem, st) == CUP_STAGE_VTABLE && rd32(g_mem, st + 4u) == rd32(g_mem, obj + 4u) &&
+            rd16(g_mem, st + 0x40u) == rd16(g_mem, obj + 0x40u) && cup_next_round(st, home, away, 1, y, d))
+            return 2;
     }
     return 0;
 }
@@ -450,8 +483,8 @@ RT_WRAP(005ab510, fixture_new_date)
     if (test_mode() == 2 && new_year == year && new_day > day) last = new_day;
     int last_year = day < last ? year : year + 1;
     /* A cup tie stays before its next round's match day (jap-cup-stall). */
-    int round_year, round_day, cup_tie = next_round_day(rec, fix, &round_year, &round_day) &&
-                                         before(year, day, round_year, round_day);
+    int round_year, round_day, kind = next_round_day(rec, fix, &round_year, &round_day);
+    int cup_tie = kind && before(year, day, round_year, round_day);
     if (cup_tie && (last < 0 || SITES[site].cup_only || before(round_year, round_day, last_year, last)))
         last_year = round_year, last = round_day;
     else
@@ -487,14 +520,16 @@ RT_WRAP(005ab510, fixture_new_date)
         if (free_day(manager, fix, y, d)) {
             fprintf(stderr, "recomp: fixtures: a match of %.40s moves from day %d of %d to day %d of %d, before its "
                             "%s on day %d (the %s move gave day %d of %d)\n",
-                    name, day, year, d, y, leg ? "other leg" : cup_tie ? "next round" : "season change", last,
+                    name, day, year, d, y, leg ? "other leg" : cup_tie ? (kind == 2 ? "next draw" : "next round") : "season change", last,
                     SITES[site].what,
                     new_day, new_year);
             return;
         }
         if (rt_unwinding) return;
     }
-    if (cup_tie) {
+    /* A league's play-off tie with no free day before the next draw is not moved past it: it goes on as a league
+     * match before the update day (the branches below), mostly keeping its old day before the draw. */
+    if (cup_tie && kind == 1) {
         wr16(g_mem, fix + FIX_YEAR, (uint16_t)new_year);
         wr16(g_mem, fix + FIX_DAY, (uint16_t)new_day);
         g_mem[fix + FIX_SLICE] = new_slice;
@@ -509,7 +544,7 @@ RT_WRAP(005ab510, fixture_new_date)
         g_mem[fix + FIX_SLICE] = new_slice;
         fprintf(stderr, "recomp: fixtures: a match of %.40s goes to day %d of %d after its %s on day %d "
                         "(no free day before it, the old day %d of %d is not in the future)\n",
-                name, new_day, new_year, leg ? "other leg" : "season change", last, day, year);
+                name, new_day, new_year, leg ? "other leg" : cup_tie ? "next draw" : "season change", last, day, year);
         return;
     }
     /* A kept date on or before the previous leg of its tie would put the legs out of order (item 90): the first
@@ -521,7 +556,7 @@ RT_WRAP(005ab510, fixture_new_date)
         g_mem[fix + FIX_SLICE] = new_slice;
         fprintf(stderr, "recomp: fixtures: a match of %.40s goes to day %d of %d after its %s on day %d (its first leg "
                         "is on day %d of %d, its old day %d of %d)\n",
-                name, new_day, new_year, leg ? "other leg" : "season change", last, prev_day, prev_year, day, year);
+                name, new_day, new_year, leg ? "other leg" : cup_tie ? "next draw" : "season change", last, prev_day, prev_year, day, year);
         return;
     }
     wr16(g_mem, fix + FIX_YEAR, (uint16_t)year);
@@ -536,7 +571,7 @@ RT_WRAP(005ab510, fixture_new_date)
     kept_site = site;
     fprintf(stderr, "recomp: fixtures: a match of %.40s stays on day %d of %d (no free day before its %s "
                     "on day %d; the %s move gave day %d of %d)\n",
-            name, day, year, leg ? "other leg" : "season change", last, SITES[site].what, new_day, new_year);
+            name, day, year, leg ? "other leg" : cup_tie ? "next draw" : "season change", last, SITES[site].what, new_day, new_year);
 }
 
 /* The moves by one day that set the date with no call of 0x5ab510 (den-stall-2, the maintainer under O259):

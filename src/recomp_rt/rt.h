@@ -347,9 +347,16 @@ uint32_t rt_holiday_refuses_loan(uint32_t club);
 uint32_t rt_holiday_below_asking(uint32_t option, uint32_t slot);
 uint32_t rt_callup_released(uint32_t slot);
 /* Group club_regulars (open item 160; win/original_faults.c): the marks at 0x777704 and 0x777729 and the new pick of a
- * kept squad at 0x76bba8 and 0x76be1b. keep:club_regulars turns off both. */
+ * kept squad at 0x76bba8 and 0x76be1b, and of a kept B squad (0x76bc76, 0x76bec7) or under-21 squad (0x76bd34,
+ * 0x76bf85) through rt_squad_kept_at with the window end offset of that squad (open item 299). keep:club_regulars
+ * turns off all of them. */
 uint32_t rt_callup_mark_all(void);
+/* Group callup_counts (open item 300; win/original_faults.c): record_club_call_ups 0x7771c0 also writes the call-up
+ * count of the club that sorts last (0x777426, 0x777401). */
+uint32_t rt_callup_count_last(uint32_t club);
 uint32_t rt_squad_kept(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture);
+uint32_t rt_squad_kept_at(uint32_t nt, uint32_t side, uint32_t record, uint32_t fixture, uint32_t window);
+void rt_link_marks(uint32_t nt, uint32_t fixture, uint32_t on);
 /* Open item 187 (win/original_faults.c, tools/recomp/original_faults.py at 0x4cc03d): the move of a one-contract
  * player to the linked side sets his contract's placement bit and the move back clears it, as the other moves do.
  * rt_squad_move_test: RECOMP_SQUAD_MOVE_TEST=1 at the first start report (season_report.c). */
