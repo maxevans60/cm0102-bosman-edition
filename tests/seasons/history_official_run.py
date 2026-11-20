@@ -34,6 +34,8 @@ ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, HERE)
 import season_dates_run as sdr  # noqa: E402
 import season_history_run as shr  # noqa: E402
+sys.path.insert(0, os.path.join(HERE, "..", "..", "tools", "seasons"))
+from make_history_table import label_of  # noqa: E402  the label the game keeps (the Irish short season: 2002)
 
 HIST = os.path.join(ROOT, "docs", "research", "history-0.6.0")
 EURO, OFC, WC = "European Football Championship", "Oceania Nations Cup", "FIFA World Cup"
@@ -72,7 +74,7 @@ def planned(db, start):
                 if r["action"] == "clear":
                     c.setdefault(int(r["label"]), set())
                 else:
-                    c[int(r["label"])].add((r["first"], r["second"]))
+                    c[label_of(r)].add((r["first"], r["second"]))
     return want
 
 

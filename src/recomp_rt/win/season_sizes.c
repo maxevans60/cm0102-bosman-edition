@@ -2154,7 +2154,8 @@ static void sizes_new_game(int start_year)
     }
 }
 
-/* After a load: the counts of the loaded game. It only reads the objects. */
+/* After a load: the counts of the loaded game. It reads the objects, and gives the empty Druga HNL South its table back
+ * (season_sizes_cro_loaded). */
 static void sizes_loaded(int start_year)
 {
     (void)start_year;
@@ -2164,6 +2165,7 @@ static void sizes_loaded(int start_year)
     nlone_down = 0;
     nstays = 0;
     if (!sizes_on()) return;
+    season_sizes_cro_loaded();          /* release set sp2021: the empty South needs its table */
     uint32_t comps[512];
     int n = season_change_comps(comps, 512);
     for (int i = 0; i < n && !rt_unwinding; i++)

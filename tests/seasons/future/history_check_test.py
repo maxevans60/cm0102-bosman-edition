@@ -484,6 +484,20 @@ def titles_rule():
         got = history_check.titles_allowed(name, year, start, 1, (1, 0), played)
         if got != want:
             bad.append(f"titles_allowed {name} {year} (start {start}, played {played}): {got}, not {want}")
+    # The Irish calendar move (two_seasons): 2001/02 and the short 2002/03 both hold the label 2002 with the move (a
+    # 2003 start, or changing rules on); a winter game and the 2003 season hold one row, and so do the Northern Irish
+    # records, whose save names are "Irish First Division" and "Irish League Cup".
+    for name, year, start, changing, want in (("League of Ireland Premier Division", 2002, 2003, 0, 2),
+                                              ("League of Ireland First Division", 2002, 2002, 1, 2),
+                                              ("FAI Cup", 2002, 2003, 1, 2),
+                                              ("FAI Cup", 2002, 2002, 0, 1),
+                                              ("FAI Cup", 2003, 2003, 1, 1),
+                                              ("League of Ireland Cup", 2002, 2002, 1, 1),
+                                              ("Irish First Division", 2002, 2003, 1, 1),
+                                              ("Irish League Cup", 2002, 2003, 1, 1)):
+        got = history_check.two_seasons(name, year, start, changing)
+        if got != want:
+            bad.append(f"two_seasons {name} {year} (start {start}, changing {changing}): {got}, not {want}")
     # Open item 176: a record that holds the championships of several states a year in the data (Autumn 2013, the
     # Brazilian Northeast record: 4 rows a year, 3 in 2011 and 2012). Before the start it may hold that count; in the
     # start year at most the count of the year before (the game's own row takes the place of its state's data row);
@@ -1186,6 +1200,17 @@ def main():
         got = history_check.known_status(rng, *args)
         if got != want_:
             bad.append(f"known_status range {args} is {got}, not {want_}")
+    # the LFA President's Cup ended after 2002/03: the first missing year (2003 or 2004) is real history with changing rules
+    # on while the save is before 2015; a game's FAW Premier Cup final of 2007 is a game result, known and never accepted
+    for args, want_ in ((("missing", "President's Cup", 2004, "on", 2006), "accepted"),
+                        (("missing", "President's Cup", 2003, "on", 2004), "accepted"),
+                        (("missing", "President's Cup", 2004, "off", 2006), None),
+                        (("missing", "President's Cup", 2004, "on", 2015), None),
+                        (("same-final", "FAW Premier Cup", 2007, "on", 2007), "known"),
+                        (("same-final", "FAW Premier Cup", 2008, "on", 2008), None)):
+        got = history_check.known_status(real, *args)
+        if got != want_:
+            bad.append(f"known_status real {args} is {got}, not {want_}")
     if history_check.is_known(known, "gap", "B Cup", 2001, "off") is not True or \
             history_check.is_known(known, "gap", "B Cup", 2001, "on") is not False:
         bad.append("is_known does not follow the rules condition")

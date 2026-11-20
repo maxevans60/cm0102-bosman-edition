@@ -13,7 +13,8 @@ and 2023 for October 2023, 2019 for October 2019; April 2024 holds both and gets
 the one before it was made; the missing edition before the start is added: 2025 (Chelsea / Paris Saint-Germain) for
 December 2025 and May 2026, 2017 for October 2018, 2023 for October 2024; October 2026 holds 2025 and gets none. The
 2025 row counts before a start in 2025 only (the rules table plays it in 2024/25), so a 2001 game, which plays the
-2025 edition itself, gets no row of it. The databases are in test-fixtures, outside the repo, so this check is
+2025 edition itself, gets no row of it. The OFC Nations Cup (0.7.3, release set full2): September 2010 ODB
+gets 2008 and October 2016 gets 2016; September 2012 holds 2012 and gets none. The databases are in test-fixtures, outside the repo, so this check is
 not in ctest. Exit code 1 on a failure.
 """
 import os
@@ -66,6 +67,12 @@ def main(argv):
         got = {label for comp, label in gap_plan(root, name, start) if comp == cwc}
         if got != want:
             bad.append(f"{name}: {cwc} rows added {sorted(got)}, want {sorted(want)}")
+    ofc = "Oceania Nations Cup"
+    for name, start, want in (("September 2010 ODB", 2010, {"2008"}), ("October 2016", 2016, {"2016"}),
+                              ("September 2012", 2012, set())):
+        got = {label for comp, label in gap_plan(root, name, start) if comp == ofc}
+        if got != want:
+            bad.append(f"{name}: {ofc} rows added {sorted(got)}, want {sorted(want)}")
     plan = []
     shifts = {r["database"]: r for r in hg.read_tsv(hg.SHIFTS)}
     hf.gap_rows("December 2025", 2025, data_folder(os.path.join(root, "December 2025")), hf.research_rows(),
