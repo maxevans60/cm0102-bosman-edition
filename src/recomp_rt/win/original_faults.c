@@ -6,6 +6,7 @@
 #include "win.h"
 #include "season.h"
 #include "season_intl.h"
+#include "season_names.h"
 #include "../rt.h"
 
 #include <stdio.h>
@@ -611,11 +612,12 @@ uint32_t rt_callup_mark_all(void)
  * 7935, the highest in Japan's squad) had no record for Japan's friendly of 11 September 2007, and find_new_fixture_date
  * 0x5ab510 moved its AFC Champions League first leg of 30 August to 12 September, with 5 players in Japan's squad.
  * Here the loop's end (0x777426) goes back once to the write of a run (0x7772f7) with the club of the open run (esi),
- * and the write leaves at 0x777401, where the slot counter at esp + 0x13 is 50 only on that pass. 1 when the fix acts
- * and a run is open. */
+ * and the write leaves at 0x777401, where the slot counter at esp + 0x13 is 50 only on that pass. The fix acts only in
+ * a season game (season_game_changes): the base 3.9.68 game, a 2001 game with changing rules off, keeps the original
+ * (decision L2). 1 when the fix acts and a run is open. */
 uint32_t rt_callup_count_last(uint32_t club)
 {
-    return club && fixes_on_group(CALLUP_COUNTS);
+    return club && fixes_on_group(CALLUP_COUNTS) && season_game_changes();
 }
 
 /* A kept squad is picked again for a match when one of its players is a regular of a club with a continental match
