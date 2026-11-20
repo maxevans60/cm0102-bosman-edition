@@ -22,3 +22,19 @@ Not copied:
 
 To update one: clone its repository, copy the same folder over this one, keep the note at its top, and change the
 commit above.
+
+## Plugins
+
+| Plugin | From | Version | Licence | How |
+|---|---|---|---|---|
+| `codex` (OpenAI's Codex in Claude Code: `/codex:review`, `/codex:adversarial-review`, `/codex:rescue`, `/codex:status`, `/codex:result`, `/codex:cancel`, `/codex:setup`) | openai/codex-plugin-cc, marketplace `openai-codex` | 1.0.6 (db52e28) | Apache-2.0 | `.claude/settings.json`: `extraKnownMarketplaces` and `enabledPlugins` |
+
+The settings offer it; they do not install it. On your own computer, once per clone, after trusting the folder:
+`claude plugin install codex@openai-codex --scope project`, then `/codex:setup` in Claude Code. It needs Node 18.18+, the
+Codex CLI (`npm install -g @openai/codex`, which `/codex:setup` can do) and a ChatGPT plan or an OpenAI API key
+(`!codex login`); its use counts against that plan's Codex limits. A cloud session (Claude Code on the web) does not
+install plugins a repository enables, so it is not there.
+
+What it sends: a Codex review or rescue sends the code and the diff it works on to OpenAI. Its stop-time review gate
+(a Codex review each time Claude stops) is off unless `/codex:setup` turns it on; leave it off unless you want every turn
+reviewed.
