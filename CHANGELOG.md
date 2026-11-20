@@ -58,6 +58,7 @@ Saves from 0.7.2 and earlier load in 0.7.3. Do not open a season game saved by 0
 - Croatia: a game made in a season with one Croatian second tier no longer stops the HNL after a save and load. The Druga HNL South gets its table back at the load, and a 0.7.2 save in which the HNL already stalled changes its season on the first day after the load.
 - Ireland: the Setanta Sports Cup starts its next edition on 20 June when the Irish season change falls in February. Before, from the calendar move of 2003 the cup missed editions and held the Irish league back.
 - The Netherlands: a play-off leg that a clash moves stays before the next draw. Before, the winner could miss the next round and the Eerste Divisie season change came 60 days late.
+- Northern Ireland: in a season game the Irish Cup no longer stops with the box "comp_util..cpp 241" when the lower division holds fewer than 12 clubs, as in 2008/09 in a 2001 start. Clubs of the two higher divisions fill the free places of that round.
 - MLS: when a club joins and no club leaves, a club of the American lower divisions takes the free place, so the A-League keeps enough clubs for the US Open Cup.
 
 ### Faults of the original
@@ -86,6 +87,7 @@ These change how a season game plays from the same save, by plan. The base game 
 - The Netherlands: the knockout of 2005/06 plays two legs where real life played some third matches.
 - A 0.7.2 save loaded during a season from 2009/10 to 2018/19 plays the Belgian play-off rounds from its next season.
 - The Friendly menu keeps the original's list of European competitions.
+- A new game that starts in the season of a July finals tournament plays that edition again in its first year. A September 2011 start plays the Copa América 2011, which ended in July, with its own result (item 303).
 
 ### Tests
 
