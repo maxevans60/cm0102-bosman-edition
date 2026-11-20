@@ -33,11 +33,15 @@ Saves from 0.7.2 and earlier load in 0.7.3. Do not open a season game saved by 0
 - League phase draw: from 2024/25 the Champions League, the Europa League and the Conference League draw the league phase from pots. The Champions League and the Europa League have four pots of nine, and each club meets two clubs of each pot, one at home and one away. The Conference League has six pots of six, and each club meets one club of each pot. A club never meets a club of its own nation and meets at most two clubs of another nation. The pots follow club reputation, highest first, because the game keeps no club coefficient. Only with changing rules on (issue 147).
 - A Conference League holder takes a Europa League place, as the real access rule says.
 - UEFA Cup 2001/02 to 2003/04: the qualifying rounds and the first round play on their real dates. Before, the first round of 2003/04 came the day after an international match day.
+- AFC Champions League and other club matches: a club match no longer lands next to a national match that calls up the club's players. The original wrote no call-up count for the last club of each national squad. Only in a season game (item 300).
+- A linked B or under-21 squad no longer takes the regulars of a club that plays the day before its match. Before, a Copa Sudamericana club of 1 September 2003 had three players in Argentina's under-21 squad for 2 September (item 299).
 
 ### History, hosts and nations
 
 - Competition history: rows that were wrong in the season databases show the right result. Examples: the 2026 World Cup host is the USA, the Copa Libertadores 2022 runner-up is Athletico Paranaense, the Euro 2020 host is England and Euro 2024 has no third place. Each row has a source in `docs/research/history-rows/` (issue 145).
 - The Conference League, the Nations League and the Greek Super Cup show their own history of winners (issues 145 and 165).
+- OFC Nations Cup: the history holds the editions of 2008 to 2024 that a database lacks, with 2020 cancelled. The 2012 hosts are the Solomon Islands for the OFC Nations Cup and Equatorial Guinea for the Africa Cup of Nations.
+- More history rows are corrected, each with a source: the DFB-Pokal 2015/16, Serie C and Lega Pro 2015 to 2019, the Olympics of 2012 and 2016, the Danish Cup 2018/19, the A-League 2019 and some Brazilian state championships. The League of Ireland's short 2002/03 season shows under 2002, and the President's Cup shows no edition from 2003 to 2014.
 - Euro 2028, World Cup 2030 and Euro 2032 show their real hosts in the news, two hosts each where a tournament has more (issue 146).
 - A player with a second nation no longer shows the wrong nation, such as Kevin De Bruyne as Burundi in the October 2026 database. A save that already holds the wrong nation keeps it (issue 141).
 
@@ -48,6 +52,13 @@ Saves from 0.7.2 and earlier load in 0.7.3. Do not open a season game saved by 0
 - The competition arrow on the history screens of the Intercontinental Cup and the other world club competitions lists their own group, not the European competitions (issue 163).
 - A human move of a loaned player inside a club and its linked side keeps the player in one squad slot. The Action menu does not offer a move that would do nothing (issue 159).
 - The site's roadmap shows Done only for issues closed as completed (issue 138).
+
+### Leagues and cups that stopped
+
+- Croatia: a game made in a season with one Croatian second tier no longer stops the HNL after a save and load. The Druga HNL South gets its table back at the load, and a 0.7.2 save in which the HNL already stalled changes its season on the first day after the load.
+- Ireland: the Setanta Sports Cup starts its next edition on 20 June when the Irish season change falls in February. Before, from the calendar move of 2003 the cup missed editions and held the Irish league back.
+- The Netherlands: a play-off leg that a clash moves stays before the next draw. Before, the winner could miss the next round and the Eerste Divisie season change came 60 days late.
+- MLS: when a club joins and no club leaves, a club of the American lower divisions takes the free place, so the A-League keeps enough clubs for the US Open Cup.
 
 ### Faults of the original
 
@@ -63,6 +74,7 @@ These change how a season game plays from the same save, by plan. The base game 
 - A Conference League holder takes a Europa League place (above).
 - The Greek Super Cup history rows in a game that starts in 2001 with changing rules on.
 - The key id fix of item 295.
+- The call-up count fix of item 300.
 
 ### Known limits
 
@@ -70,14 +82,14 @@ These change how a season game plays from the same save, by plan. The base game 
 - Argentina: the two inter-zone derby matches of 2023 and 2025 are not played. In 2004 to 2006 the promoción takes the place of the Reducido. The clubs of each zone come from the club ids, because no source gives the lists of every season. The tie-break of the 2025 final is not known, and it goes to penalties (item 291).
 - A 2001 start with changing rules off on a later database does not get the item 295 fix, so the box "Database.cpp 13126" can still show in that game.
 - A club that joins MLS in a running game can start with a thin squad (item 294).
+- The play-offs, splits and cup formats listed for 0.7.4 (issues 167 to 193) are not played yet.
 - The Netherlands: the knockout of 2005/06 plays two legs where real life played some third matches.
 - A 0.7.2 save loaded during a season from 2009/10 to 2018/19 plays the Belgian play-off rounds from its next season.
 - The Friendly menu keeps the original's list of European competitions.
-- Copa Sudamericana 2003: a club can play the day before an under-21 friendly of its nation, as in 0.7.2 (item 299).
 
 ### Tests
 
-- The full release set ran on the release candidate with seed 73. Each league slice has season runs that check the count and the places played, and the same-save set shows that the base game is unchanged.
+- The release set ran with seed 73. Each fault it found is fixed, and the rows of each fix ran again. Each league slice has season runs that check the count and the places played, and the same-save set shows that the base game is unchanged.
 
 ## 0.7.2 (pre-release)
 
