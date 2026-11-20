@@ -181,22 +181,17 @@ static int before(int y1, int d1, int y2, int d2) { return y1 < y2 || (y1 == y2 
  * 0x51c569..0x51c580), the ties of round r at [+0xad] + 4r (0x35 bytes each: home and away places s16 +0 and +2,
  * drawn +0x34; 0x51c449..0x51c4b7) and the places at +0xa7 (6 bytes each, the club +0; 0x51c485..0x51c491). The
  * fixture is a tie of round r when a drawn tie of r has its two clubs (fixture +0x1c and +0x20). A league object
- * has none of these, so no tie matches. */
+ * has none of these, so no tie matches there, and its play-off brackets are searched instead (next_round_day). When
+ * the next round has fixed pairs (+0xd flag 0x200, Cup::draw_round 0x51c5e4..0x51c5f1), the draw puts each winner
+ * in its tie, so the bound is the next round's draw day (s16 +0, year offset s8 +2) in place of its match day. */
 #define FIX_HOME 0x1cu
 #define FIX_AWAY 0x20u
-static int next_round_day(uint32_t rec, uint32_t fix, int *y, int *d)
+#define CUP_STAGE_VTABLE 0x00969468u  /* Cup_Stage (0x522e80) */
+static int cup_next_round(uint32_t cup, uint32_t home, uint32_t away, int *y, int *d)
 {
-    uint32_t table = rd32(g_mem, COMP_OBJECTS);
-    if (!readable(rec) || !readable(table)) return 0;
-    int32_t id = (int32_t)rd32(g_mem, rec);
-    if (id < 0 || id > 0xffff) return 0;
-    uint32_t cup = rd32(g_mem, table + 4u * (uint32_t)id);
-    if (!readable(cup)) return 0;
     uint32_t rounds_at = rd32(g_mem, cup + 0xa3u), ties_at = rd32(g_mem, cup + 0xadu), places = rd32(g_mem, cup + 0xa7u);
     int rounds = (int16_t)rd16(g_mem, cup + 0x3cu);
-    uint32_t home = rd32(g_mem, fix + FIX_HOME), away = rd32(g_mem, fix + FIX_AWAY);
-    if (rounds < 2 || rounds > 32 || !readable(rounds_at) || !readable(ties_at) || !readable(places) || !home || !away)
-        return 0;
+    if (rounds < 2 || rounds > 32 || !readable(rounds_at) || !readable(ties_at) || !readable(places)) return 0;
     for (int r = 0; r + 1 < rounds; r++) {
         uint32_t ties = rd32(g_mem, ties_at + 4u * (uint32_t)r);
         int n = (int16_t)rd16(g_mem, rounds_at + 0x68u * (uint32_t)r + 0x1au);
@@ -208,10 +203,42 @@ static int next_round_day(uint32_t rec, uint32_t fix, int *y, int *d)
             uint32_t ch = rd32(g_mem, places + 6u * (uint32_t)h), ca = rd32(g_mem, places + 6u * (uint32_t)a);
             if (!((ch == home && ca == away) || (ch == away && ca == home))) continue;
             uint32_t next = rounds_at + 0x68u * (uint32_t)(r + 1);
-            *d = (int16_t)rd16(g_mem, next + 3u);
-            *y = (int16_t)rd16(g_mem, cup + 0x40u) + (int8_t)g_mem[next + 5u];
+            if (rd16(g_mem, next + 0x0du) & 0x200u) {
+                /* Fixed pairs: the draw puts the winner in its tie (season_playoffs_draw_round, season_ned_playoff_
+                 * draw_round), so the winner must be known on the draw day. */
+                *d = (int16_t)rd16(g_mem, next);
+                *y = (int16_t)rd16(g_mem, cup + 0x40u) + (int8_t)g_mem[next + 2u];
+            } else {
+                *d = (int16_t)rd16(g_mem, next + 3u);
+                *y = (int16_t)rd16(g_mem, cup + 0x40u) + (int8_t)g_mem[next + 5u];
+            }
             return *d >= 0 && *d < 366;
         }
+    }
+    return 0;
+}
+
+static int next_round_day(uint32_t rec, uint32_t fix, int *y, int *d)
+{
+    uint32_t table = rd32(g_mem, COMP_OBJECTS);
+    if (!readable(rec) || !readable(table)) return 0;
+    int32_t id = (int32_t)rd32(g_mem, rec);
+    if (id < 0 || id > 0xffff) return 0;
+    uint32_t obj = rd32(g_mem, table + 4u * (uint32_t)id);
+    uint32_t home = rd32(g_mem, fix + FIX_HOME), away = rd32(g_mem, fix + FIX_AWAY);
+    if (!readable(obj) || !home || !away) return 0;
+    if (cup_next_round(obj, home, away, y, d)) return 1;            /* a cup: a league has no tie there */
+    /* A league's play-off is a Cup_Stage in the league's stage array (+0xc, count +0x2c), with the league's record:
+     * the play-offs of season_playoffs.c and the Dutch nacompetitie (sp2021, 2022/23: FC Volendam v Sparta Rotterdam,
+     * the second leg of round 0 on day 140 of 2023, was moved by add_fixture's clash move to day 143, two days after
+     * the draw of round 1 on day 141, and round 1 was drawn without its winner). Stages that a league deleted keep
+     * their pointers (HolFirst::start_new_season 0x5f6436..0x5f644a), so only a live Cup_Stage counts. */
+    uint32_t stages = rd32(g_mem, obj + 0x0cu);
+    int count = (int32_t)rd32(g_mem, obj + 0x2cu);
+    if (!readable(stages) || count < 1 || count > 16) return 0;
+    for (int i = 0; i < count; i++) {
+        uint32_t st = rd32(g_mem, stages + 4u * (uint32_t)i);
+        if (readable(st) && rd32(g_mem, st) == CUP_STAGE_VTABLE && cup_next_round(st, home, away, y, d)) return 1;
     }
     return 0;
 }
