@@ -1202,6 +1202,14 @@ static void nl_record_to_europe(const SeasonCompDef *d, uint32_t rec, int loadin
                 (int)rd32(g_mem, rec), d->comp, (int)rd32(g_mem, euro), loading ? " (repaired at load)" : "");
 }
 
+/* A history row of the Nations League written before its first edition (the lists of season_history.c, issue 145):
+ * the record takes the short name, continent and colours of the Nations League at once, as nl_make does at the first
+ * edition. Without it the history screen and the record show a European winner under the free Asian record. */
+void season_nl_history_record(uint32_t rec)
+{
+    if (rec && rec == season_comps_record(season_nl_comp.record)) nl_record_to_europe(&season_nl_comp, rec, 0);
+}
+
 static uint32_t nl_make(const SeasonCompDef *d, uint32_t rec, int year, int loading)
 {
     NlConf *c = conf_of_def(d);

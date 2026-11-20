@@ -15,6 +15,11 @@ competition and label years whose history rows the game clears (`clear`), and th
 (`add`), with the club names as that database writes them. The names go into C as Latin-1 bytes, the encoding of
 the game data.
 
+plan-fixes.tsv (0.7.3) holds hand-kept rows in the columns of plan.tsv plus `sources`: data faults of a season
+database of 2010/11 or later (two rows of one label where real history has one, the newer row one year early: 0.6.2
+open items 58 and 59), each cleared and written again from its sources. history_fill.py does not write it, so a
+--write run keeps it. A row with an empty source is not valid.
+
 plan-official.tsv (0.6.2 open item 149) holds the rows of the official data sets (3.9.60, 3.9.65, 3.9.68) for every
 later start year: start_year is the first start year of a row and last_start its last (empty: every later one).
 Each data set becomes one entry that holds from its first start year on (`last` NO_LAST), and each row carries
@@ -28,6 +33,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 PLAN = os.path.join(ROOT, "docs", "research", "history-0.6.0", "plan.tsv")
 PLAN_OFFICIAL = os.path.join(ROOT, "docs", "research", "history-0.6.0", "plan-official.tsv")
+PLAN_FIXES = os.path.join(ROOT, "docs", "research", "history-0.6.0", "plan-fixes.tsv")
 NO_LAST = 0xffff        # a row of plan-official.tsv with no last start year: every later start year
 OUT = os.path.join(ROOT, "src", "recomp_rt", "win", "season_history_table.c")
 
@@ -68,6 +74,8 @@ def validate(rows):
                 bad.append(f"{where}: {n!r} is longer than {NAME_MAX} bytes")
         if r["action"] == "add" and not r["first"]:
             bad.append(f"{where}: no winner")
+        if "sources" in r and not r["sources"]:
+            bad.append(f"{where}: no source")
         key = (r["action"], r["database"], r["competition"], r["label"], r.get("part", ""), r.get("first", ""),
                r.get("second", ""))
         if key in seen:
@@ -127,6 +135,9 @@ def irish_faults(rows):
 def make():
     dbs = {}
     for r in read_plan(PLAN):
+        k = (r["database"], int(r["start_year"]), 0)
+        dbs.setdefault(k, {"clear": [], "add": []})[r["action"]].append(r)
+    for r in read_plan(PLAN_FIXES):                 # hand-kept data fixes, after the rows of history_fill.py
         k = (r["database"], int(r["start_year"]), 0)
         dbs.setdefault(k, {"clear": [], "add": []})[r["action"]].append(r)
     official = read_plan(PLAN_OFFICIAL) if os.path.isfile(PLAN_OFFICIAL) else []

@@ -79,6 +79,40 @@ RUNS = {
     "off2026": ("October 2026", 2026, "off", {
         "hosts": {(WC, 2026): "United States", (EURO, 2020): "England"}, "second": {(LIB, 2022): "Paranaense"},
         "ecl": ECL_ROWS, "nl": NL_ROWS, "greek": greek(2026), "no_cwc_from": 2000}),
+    # Data fixes of plan-fixes.tsv (docs/research/history-0.6.0/): one row a label, from its sources.
+    "oct2016": ("October 2016", 2016, "on", {"nations": ["Germany", "Italy"], "rows": {
+        ("DFB-Pokal", 2015): ("Wolfsburg", "Dortmund"), ("DFB-Pokal", 2016): ("Bayern", "Dortmund"),
+        ("Lega Pro girone A", 2016): ("Cittadella", "Pordenone"), ("Lega Pro girone B", 2015): ("Ascoli", ""),
+        ("Lega Pro girone B", 2016): ("Ars et Labor", "Pisa"), ("Lega Pro girone C", 2015): ("Salernitana", "Benevento"),
+        ("Lega Pro girone C", 2016): ("Benevento", "Foggia")}}),
+    "sep2012": ("September 2012", 2012, "on", {"rows": {
+        ("English Isthmian League Premier Division", 2011): ("Sutton United", ""),
+        ("English Isthmian League Premier Division", 2012): ("Billericay", "")}}),
+    "sep2010": ("September 2010 ODB", 2010, "on", {"nations": ["Brazil"], "rows": {
+        ("Campeonato Pernambucano", 2009): ("Sport Club do Recife", "Capibaribe"),
+        ("Campeonato Paranaense", 2009): ("Atlético Paranaense", "")}}),
+    "oct2015": ("October 2015", 2015, "on", {"nations": ["Italy"], "rows": {
+        ("Lega Pro girone B", 2015): ("Ascoli", ""), ("Lega Pro girone C", 2015): ("Salernitana", "Benevento")}}),
+    "oct2018": ("October 2018", 2018, "on", {"nations": ["Italy"], "rows": {
+        ("Serie C girone B", 2015): ("Ascoli", ""), ("Serie C girone C", 2015): ("Salernitana", "Benevento"),
+        ("Serie C girone A", 2016): ("Cittadella", "Pordenone"), ("Serie C girone B", 2016): ("SPAL", "Pisa"),
+        ("Serie C girone C", 2016): ("Benevento", "Foggia"), ("Serie C girone A", 2017): ("Cremonese", "Alessandria"),
+        ("Serie C girone B", 2017): ("Venezia", "Parma"), ("Serie C girone C", 2017): ("Foggia", "Lecce")}}),
+    "oct2017": ("October 2017", 2017, "on", {"nations": ["Italy"], "rows": {
+        ("Football at the Summer Olympics", 2012): ("Mexico", "Brazil"),
+        ("Football at the Summer Olympics", 2016): ("Brazil", "Germany"),
+        ("Serie C girone A", 2016): ("Cittadella", "Pordenone"), ("Serie C girone B", 2016): ("Ars et Labor", "Pisa"),
+        ("Serie C girone C", 2016): ("Benevento", "Foggia"), ("Serie C girone A", 2017): ("Cremonese", "Alessandria"),
+        ("Serie C girone B", 2017): ("Venezia", "Parma"), ("Serie C girone C", 2017): ("Foggia", "Lecce")}}),
+    "oct2019": ("October 2019", 2019, "on", {"nations": ["Denmark", "Italy"], "nl": upto(NL_ROWS, 2019), "nl_europe": True, "rows": {
+        ("Danish Cup", 2018): ("Bröndby", "Silkeborg"), ("Danish Cup", 2019): ("Midtjylland", "Bröndby"),
+        ("Serie C girone B", 2019): ("Pordenone", "Triestina"), ("Serie C girone C", 2019): ("Juve Stabia", "Trapani"),
+        ("Supercoppa Serie C", 2018): ("Padova", "Livorno"), ("Supercoppa Serie C", 2019): ("Pordenone", "Entella")}}),
+    "nov2020": ("November 2020", 2020, "on", {"nations": ["Australia"], "rows": {("A-League", 2019): ("Sydney FC", "Perth Glory")}}),
+    "oct2022": ("October 2022", 2022, "on", {"nations": ["Brazil"], "rows": {
+        ("Campeonato Paulista Série A1", 2021): ("São Paulo", "Palmeiras"),
+        ("Campeonato Baiano", 2019): ("Esporte Clube Bahia", "Bahia de Feira"),
+        ("Campeonato Baiano", 2021): ("Alagoinhas", "Bahia de Feira")}}),
     "played2026": ("December 2025", 2025, "on", {"days": 400, "hosts": {(WC, 2026): "United States"}}),
     "r2001": (None, 2001, "on", {"ecl": {}, "nl": {}, "greek": greek(2001)}),
     "base": (None, 2001, "off", {"ecl": {}, "nl": {}, "greek": {}}),
@@ -112,6 +146,11 @@ def check(save, want):
             r = one(comp, year)
             if r and not has(name(r[at]), text):
                 fails.append(f"{comp} {year} {field}: {name(r[at])!r}, wanted {text!r}")
+    for (comp, year), parts in want.get("rows", {}).items():
+        r = one(comp, year)
+        for at, text in enumerate(parts, 2):
+            if r and not has(name(r[at]), text):
+                fails.append(f"{comp} {year} place {at - 1}: {name(r[at])!r}, wanted {text!r}")
     for key, names in (("ecl", ECL), ("nl", NL), ("greek", (GREEK,))):
         if key not in want:
             continue
@@ -126,6 +165,10 @@ def check(save, want):
             for at, text in enumerate(parts, 2):
                 if year in got and not has(name(got[year][at]), text):
                     fails.append(f"{names[0]} {year} place {at - 1}: {name(got[year][at])!r}, wanted {text!r}")
+    if want.get("nl_europe"):
+        confs = sorted({game.continents.get(v["continent"], "") for v in game.comps.values() if v["name"] in NL})
+        if confs != ["UEFA"]:
+            fails.append(f"{NL[0]} record continent: {confs}, wanted UEFA")
     if want.get("no_club_hosts"):
         bad = sorted({(game.comps[r[0]]["name"], r[1], name(r[5])) for r in game.rows
                       if r[2] in game.sides and r[5] >= 0 and r[5] not in game.sides})
@@ -142,7 +185,7 @@ def run(key, program, game, dbs, work):
     db, start, rules, want = RUNS[key]
     leg = os.path.join(work, key)
     o = {"program": program, "game": game, "rules": rules, "seed": 1, "start": start, "last": 2300, "extra": [],
-         "database": os.path.join(dbs, db) if db else None, "nations": ["England", "Greece"], "timeout": 3600}
+         "database": os.path.join(dbs, db) if db else None, "nations": ["England", "Greece"] + want.get("nations", []), "timeout": 3600}
     code, took, box = soak_run.new_game_leg(o, leg, want.get("days", 3))
     save = os.path.join(leg, "user", "samesave.sav")
     fails = [] if code == 0 and not box else [f"the run ended with code {code}, box {box}"]

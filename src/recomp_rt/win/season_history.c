@@ -21,6 +21,7 @@
 #include "season_titles.h"
 #include "season_bra_states.h"
 #include "season_history_start.h"
+#include "season_nl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -588,6 +589,7 @@ static void apply_rows(int N)
         wr16(g_mem, r + 8, nw[k].label);
         for (int f = 0; f < 4; f++) wr32(g_mem, r + 0xa + 4 * (uint32_t)f, nw[k].place[f]);
         written++;
+        season_nl_history_record(nw[k].comp);
     }
     free(nw);
     free(freed);

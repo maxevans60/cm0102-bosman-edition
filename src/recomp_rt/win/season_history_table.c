@@ -34344,6 +34344,8 @@ static const SeasonHistRow rows_17[] = {
 };
 static const SeasonHistClear clears_18[] = {
     {"FIFA World Cup", 2007, 0, 0},
+    {"Brazilian Pernambuco State Championship", 2009, 0, 0},
+    {"Brazilian Paran\341 State Championship", 2009, 0, 0},
 };
 static const SeasonHistRow rows_18[] = {
     {"US Open Cup", 2002, {"Columbus Crew", "Los Angeles Galaxy", "", ""}, {"United States", "United States", "", ""}, 0, 0},
@@ -34359,6 +34361,8 @@ static const SeasonHistRow rows_18[] = {
     {"FIFA World Cup", 2010, {"Spain", "Holland", "Germany", "South Africa"}, {"", "", "", ""}, 0, 0},
     {"African Cup of Nations", 2010, {"Egypt", "Ghana", "Nigeria", "Angola"}, {"", "", "", ""}, 0, 0},
     {"Oceania Nations Cup", 2008, {"New Zealand", "New Caledonia", "", ""}, {"", "", "", ""}, 0, 0},
+    {"Brazilian Pernambuco State Championship", 2009, {"Sport Club do Recife", "Clube N\341utico Capibaribe", "", ""}, {"Brazil", "Brazil", "", ""}, 0, 0},
+    {"Brazilian Paran\341 State Championship", 2009, {"Clube Atl\351tico Paranaense", "", "", ""}, {"Brazil", "", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_19[] = {
 };
@@ -34437,22 +34441,62 @@ static const SeasonHistRow rows_24[] = {
     {"Oceania Nations Cup", 2016, {"New Zealand", "Papua New Guinea", "", "Papua New Guinea"}, {"", "", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_25[] = {
+    {"German Cup", 2015, 0, 0},
+    {"Italian Serie C1/A", 2016, 0, 0},
+    {"Italian Serie C1/B", 2015, 0, 0},
+    {"Italian Serie C1/B", 2016, 0, 0},
 };
 static const SeasonHistRow rows_25[] = {
     {"African Cup of Nations", 2002, {"Cameroon", "Senegal", "Nigeria", "Mali"}, {"", "", "", ""}, 0, 0},
     {"Oceania Nations Cup", 2016, {"New Zealand", "Papua New Guinea", "", "Papua New Guinea"}, {"", "", "", ""}, 0, 0},
+    {"German Cup", 2015, {"VfL Wolfsburg", "Borussia Dortmund", "", ""}, {"Germany", "Germany", "", ""}, 0, 0},
+    {"German Cup", 2016, {"FC Bayern M\374nchen", "Borussia Dortmund", "", ""}, {"Germany", "Germany", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2016, {"Cittadella", "Pordenone", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2015, {"Ascoli Picchio", "", "", ""}, {"Italy", "", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2016, {"Societ\340 Polisportiva Ars et Labor", "Pisa", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2015, {"Salernitana", "Benevento", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2016, {"Benevento", "Foggia", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_26[] = {
+    {"Italian Serie C1/B", 2015, 0, 0},
+    {"Italian Serie C1/A", 2016, 0, 0},
+    {"Italian Serie C1/B", 2016, 0, 0},
+    {"Italian Serie C1/A", 2017, 0, 0},
+    {"Italian Serie C1/B", 2017, 0, 0},
+    {"Olympic Games", 2012, 0, 0},
 };
 static const SeasonHistRow rows_26[] = {
     {"African Cup of Nations", 2002, {"Cameroon", "Senegal", "Nigeria", "Mali"}, {"", "", "", ""}, 0, 0},
     {"African Cup of Nations", 2017, {"Cameroon", "Egypt", "Burkina Faso", "Gabon"}, {"", "", "", ""}, 0, 0},
     {"Oceania Nations Cup", 2016, {"New Zealand", "Papua New Guinea", "", "Papua New Guinea"}, {"", "", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2015, {"Ascoli Picchio", "", "", ""}, {"Italy", "", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2015, {"Salernitana", "Benevento", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2016, {"Cittadella", "Pordenone", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2016, {"Societ\340 Polisportiva Ars et Labor", "Pisa", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2016, {"Benevento", "Foggia", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2017, {"Cremonese", "Alessandria", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2017, {"Venezia", "Parma", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2017, {"Foggia", "Lecce", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Olympic Games", 2012, {"Mexico", "Brazil", "", ""}, {"", "", "", ""}, 0, 0},
+    {"Olympic Games", 2016, {"Brazil", "Germany", "Nigeria", ""}, {"", "", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_27[] = {
+    {"Italian Serie C1/B", 2015, 0, 0},
+    {"Italian Serie C1/A", 2016, 0, 0},
+    {"Italian Serie C1/B", 2016, 0, 0},
+    {"Italian Serie C1/A", 2017, 0, 0},
+    {"Italian Serie C1/B", 2017, 0, 0},
 };
 static const SeasonHistRow rows_27[] = {
     {"FIFA Club World Championship", 2017, {"Real Madrid C.F.", "Gr\352mio Foot-Ball Porto-Alegrense", "", ""}, {"Spain", "Brazil", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2015, {"Ascoli Calcio", "", "", ""}, {"Italy", "", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2015, {"US Salernitana 1919", "Benevento Calcio", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2016, {"AS Cittadella", "Pordenone Calcio", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2016, {"SPAL 2013", "AC Pisa 1909", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2016, {"Benevento Calcio", "Foggia Calcio", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2017, {"US Cremonese", "US Alessandria 1912", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2017, {"Venezia FC", "Parma Calcio 1913", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2017, {"Foggia Calcio", "US Lecce", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_28[] = {
 };
@@ -34460,9 +34504,27 @@ static const SeasonHistRow rows_28[] = {
     {"African Cup of Nations", 2019, {"Algeria", "Senegal", "Nigeria", "Egypt"}, {"", "", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_29[] = {
+    {"Italian Serie C1/A", 2016, 0, 0},
+    {"Italian Serie C1/B", 2016, 0, 0},
+    {"Italian Serie C1/A", 2017, 0, 0},
+    {"Italian Serie C1/B", 2017, 0, 0},
+    {"Italian Serie C1/B", 2019, 0, 0},
+    {"Danish Cup", 2018, 0, 0},
 };
 static const SeasonHistRow rows_29[] = {
     {"African Cup of Nations", 2019, {"Algeria", "Senegal", "Nigeria", "Egypt"}, {"", "", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2016, {"AS Cittadella", "Pordenone Calcio", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2016, {"SPAL", "AC Pisa 1909", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2016, {"Benevento Calcio", "Foggia Calcio", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/A", 2017, {"US Cremonese", "US Alessandria Calcio 1912", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2017, {"Venezia FC", "Parma Calcio 1913", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2017, {"Foggia Calcio", "US Lecce", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C1/B", 2019, {"Pordenone Calcio", "US Triestina", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2019, {"SS Juve Stabia", "Trapani Calcio", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian C1 Super Cup", 2018, {"Calcio Padova", "AS Livorno", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Italian C1 Super Cup", 2019, {"Pordenone Calcio", "Virtus Entella", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+    {"Danish Cup", 2018, {"Br\366ndby IF", "Silkeborg IF", "", ""}, {"Denmark", "Denmark", "", ""}, 0, 0},
+    {"Danish Cup", 2019, {"FC Midtjylland", "Br\366ndby IF", "", ""}, {"Denmark", "Denmark", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_30[] = {
     {"US Open Cup", 2019, 0, 0},
@@ -34472,10 +34534,12 @@ static const SeasonHistRow rows_30[] = {
 };
 static const SeasonHistClear clears_31[] = {
     {"US Open Cup", 2019, 0, 0},
+    {"Australian National Soccer League", 2019, 0, 0},
 };
 static const SeasonHistRow rows_31[] = {
     {"US Open Cup", 2019, {"Atlanta United FC", "Minnesota United FC", "", ""}, {"United States", "United States", "", ""}, 0, 0},
     {"African Cup of Nations", 2019, {"Algeria", "Senegal", "Nigeria", "Egypt"}, {"", "", "", ""}, 0, 0},
+    {"Australian National Soccer League", 2019, {"Sydney FC", "Perth Glory", "", ""}, {"Australia", "Australia", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_32[] = {
     {"US Open Cup", 2019, 0, 0},
@@ -34500,10 +34564,16 @@ static const SeasonHistRow rows_34[] = {
 };
 static const SeasonHistClear clears_35[] = {
     {"US Open Cup", 2019, 0, 0},
+    {"Brazilian S\343o Paulo State Championship", 2021, 0, 0},
+    {"Brazilian Bahia State Championship", 2019, 0, 0},
+    {"Brazilian Bahia State Championship", 2021, 0, 0},
 };
 static const SeasonHistRow rows_35[] = {
     {"US Open Cup", 2019, {"Atlanta United FC", "Minnesota United FC", "", ""}, {"United States", "United States", "", ""}, 0, 0},
     {"African Cup of Nations", 2021, {"Senegal", "Egypt", "Cameroon", "Cameroon"}, {"", "", "", ""}, 0, 0},
+    {"Brazilian S\343o Paulo State Championship", 2021, {"S\343o Paulo Futebol Clube", "Sociedade Esportiva Palmeiras", "", ""}, {"Brazil", "Brazil", "", ""}, 0, 0},
+    {"Brazilian Bahia State Championship", 2019, {"Esporte Clube Bahia", "AD Bahia de Feira (BA)", "", ""}, {"Brazil", "Brazil", "", ""}, 0, 0},
+    {"Brazilian Bahia State Championship", 2021, {"Alagoinhas Atl\351tico Clube (BA)", "AD Bahia de Feira (BA)", "", ""}, {"Brazil", "Brazil", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_36[] = {
     {"US Open Cup", 2019, 0, 0},
@@ -34551,6 +34621,20 @@ static const SeasonHistRow rows_41[] = {
     {"Argentine Premier Division", 2026, {"Belgrano de C\363rdoba", "River Plate", "", ""}, {"Argentina", "Argentina", "", ""}, 0, 0},
 };
 static const SeasonHistClear clears_42[] = {
+    {"English Isthmian League Premier Division", 2011, 0, 0},
+};
+static const SeasonHistRow rows_42[] = {
+    {"English Isthmian League Premier Division", 2011, {"Sutton United", "", "", ""}, {"England", "", "", ""}, 0, 0},
+    {"English Isthmian League Premier Division", 2012, {"Billericay Town", "", "", ""}, {"England", "", "", ""}, 0, 0},
+};
+static const SeasonHistClear clears_43[] = {
+    {"Italian Serie C1/B", 2015, 0, 0},
+};
+static const SeasonHistRow rows_43[] = {
+    {"Italian Serie C1/B", 2015, {"Ascoli Picchio", "", "", ""}, {"Italy", "", "", ""}, 0, 0},
+    {"Italian Serie C2/A", 2015, {"Salernitana", "Benevento", "", ""}, {"Italy", "Italy", "", ""}, 0, 0},
+};
+static const SeasonHistClear clears_44[] = {
     {"African CAF Cup", 2001, 2002, 65535},
     {"African CAF Cup", 2002, 2002, 65535},
     {"African Champions League", 2001, 2002, 65535},
@@ -36572,7 +36656,7 @@ static const SeasonHistClear clears_42[] = {
     {"FIFA World Cup", 2026, 2026, 65535},
     {"Oceania Nations Cup", 2026, 2026, 65535},
 };
-static const SeasonHistRow rows_42[] = {
+static const SeasonHistRow rows_44[] = {
     {"American Major League", 2002, {"Los Angeles Galaxy", "New England Revolution", "", ""}, {"United States", "United States", "", ""}, 2002, 65535},
     {"US Open Cup", 2002, {"Columbus Crew", "Los Angeles Galaxy", "", ""}, {"United States", "United States", "", ""}, 2002, 65535},
     {"American A-League", 2002, {"Milwaukee Rampage", "Richmond Kickers", "", ""}, {"United States", "United States", "", ""}, 2002, 65535},
@@ -38157,7 +38241,7 @@ static const SeasonHistRow rows_42[] = {
     {"African Cup of Nations", 2025, {"Morocco", "Senegal", "Nigeria", "Morocco"}, {"", "", "", ""}, 2026, 65535},
     {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "United States"}, {"", "", "", ""}, 2026, 65535},
 };
-static const SeasonHistClear clears_43[] = {
+static const SeasonHistClear clears_45[] = {
     {"African CAF Cup", 2001, 2002, 65535},
     {"African CAF Cup", 2002, 2002, 65535},
     {"African Champions League", 2001, 2002, 65535},
@@ -40331,7 +40415,7 @@ static const SeasonHistClear clears_43[] = {
     {"FIFA World Cup", 2026, 2026, 65535},
     {"Oceania Nations Cup", 2026, 2026, 65535},
 };
-static const SeasonHistRow rows_43[] = {
+static const SeasonHistRow rows_45[] = {
     {"American Major League", 2002, {"Los Angeles Galaxy", "New England Revolution", "", ""}, {"United States", "United States", "", ""}, 2002, 65535},
     {"US Open Cup", 2002, {"Columbus Crew", "Los Angeles Galaxy", "", ""}, {"United States", "United States", "", ""}, 2002, 65535},
     {"American A-League", 2002, {"Milwaukee Rampage", "Richmond Kickers", "", ""}, {"United States", "United States", "", ""}, 2002, 65535},
@@ -42038,7 +42122,7 @@ static const SeasonHistRow rows_43[] = {
     {"African Cup of Nations", 2025, {"Morocco", "Senegal", "Nigeria", "Morocco"}, {"", "", "", ""}, 2026, 65535},
     {"FIFA World Cup", 2026, {"Spain", "Argentina", "England", "United States"}, {"", "", "", ""}, 2026, 65535},
 };
-static const SeasonHistClear clears_44[] = {
+static const SeasonHistClear clears_46[] = {
     {"African CAF Cup", 2001, 2003, 65535},
     {"African CAF Cup", 2002, 2003, 65535},
     {"African CAF Cup", 2003, 2003, 65535},
@@ -44343,7 +44427,7 @@ static const SeasonHistClear clears_44[] = {
     {"FIFA World Cup", 2026, 2026, 65535},
     {"Oceania Nations Cup", 2026, 2026, 65535},
 };
-static const SeasonHistRow rows_44[] = {
+static const SeasonHistRow rows_46[] = {
     {"Argentine Premier Division", 2002, {"Independiente", "Boca Juniors", "", ""}, {"Argentina", "Argentina", "", ""}, 2003, 65535},
     {"Argentine Premier Division", 2002, {"River Plate", "Boca Juniors", "", ""}, {"Argentina", "Argentina", "", ""}, 2003, 65535},
     {"Argentine Second Division", 2002, {"Atl\351tico Rafaela", "Argentinos Juniors", "", ""}, {"Argentina", "Argentina", "", ""}, 2003, 65535},
@@ -46190,32 +46274,34 @@ const SeasonHistDb season_history_dbs[] = {
     {"April 2011 SIM", 2010, 0, clears_15, 0, rows_15, 23},
     {"December 2010 SIM", 2010, 0, clears_16, 0, rows_16, 10},
     {"February 2011 ODB", 2010, 0, clears_17, 0, rows_17, 2},
-    {"September 2010 ODB", 2010, 0, clears_18, 1, rows_18, 13},
+    {"September 2010 ODB", 2010, 0, clears_18, 3, rows_18, 15},
     {"March 2012 SIM", 2011, 0, clears_19, 0, rows_19, 24},
     {"Autumn 2013", 2013, 0, clears_20, 8, rows_20, 15},
     {"March 2014", 2013, 0, clears_21, 0, rows_21, 1},
     {"April 2015", 2014, 0, clears_22, 0, rows_22, 1},
     {"October 2014", 2014, 0, clears_23, 0, rows_23, 1},
     {"April 2017", 2016, 0, clears_24, 0, rows_24, 2},
-    {"October 2016", 2016, 0, clears_25, 0, rows_25, 2},
-    {"October 2017", 2017, 0, clears_26, 0, rows_26, 3},
-    {"October 2018", 2018, 0, clears_27, 0, rows_27, 1},
+    {"October 2016", 2016, 0, clears_25, 4, rows_25, 9},
+    {"October 2017", 2017, 0, clears_26, 6, rows_26, 13},
+    {"October 2018", 2018, 0, clears_27, 5, rows_27, 9},
     {"March 2020", 2019, 0, clears_28, 0, rows_28, 1},
-    {"October 2019", 2019, 0, clears_29, 0, rows_29, 1},
+    {"October 2019", 2019, 0, clears_29, 6, rows_29, 13},
     {"April 2021", 2020, 0, clears_30, 1, rows_30, 1},
-    {"November 2020", 2020, 0, clears_31, 1, rows_31, 2},
+    {"November 2020", 2020, 0, clears_31, 2, rows_31, 3},
     {"April 2022", 2021, 0, clears_32, 1, rows_32, 2},
     {"October 2021", 2021, 0, clears_33, 1, rows_33, 2},
     {"April 2023", 2022, 0, clears_34, 1, rows_34, 2},
-    {"October 2022", 2022, 0, clears_35, 1, rows_35, 2},
+    {"October 2022", 2022, 0, clears_35, 4, rows_35, 5},
     {"April 2024", 2023, 0, clears_36, 1, rows_36, 1},
     {"October 2023", 2023, 0, clears_37, 1, rows_37, 4},
     {"October 2024", 2024, 0, clears_38, 1, rows_38, 2},
     {"December 2025", 2025, 0, clears_39, 1, rows_39, 2},
     {"May 2026", 2025, 0, clears_40, 1, rows_40, 2},
     {"October 2026", 2026, 0, clears_41, 1, rows_41, 4},
-    {"3.9.60", 2002, 65535, clears_42, 2020, rows_42, 1583},
-    {"3.9.65", 2002, 65535, clears_43, 2172, rows_43, 1705},
-    {"3.9.68", 2003, 65535, clears_44, 2303, rows_44, 1826},
+    {"September 2012", 2012, 0, clears_42, 1, rows_42, 2},
+    {"October 2015", 2015, 0, clears_43, 1, rows_43, 2},
+    {"3.9.60", 2002, 65535, clears_44, 2020, rows_44, 1583},
+    {"3.9.65", 2002, 65535, clears_45, 2172, rows_45, 1705},
+    {"3.9.68", 2003, 65535, clears_46, 2303, rows_46, 1826},
 };
-const int season_history_dbs_count = 45;
+const int season_history_dbs_count = 47;
