@@ -524,14 +524,24 @@ const PORT = 8097;
         && coffee[0].shown, JSON.stringify(coffee));
     // The bar's buttons are one height at every size (a phone showed Buy me a coffee shorter than Account and Help).
     const barSizes = [];
+    let sideways = null;
     for (const [name, opts] of [['computer', { viewport: { width: 1280, height: 800 } }],
       ['phone', { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true }],
       ['iPad', { viewport: { width: 1080, height: 810 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }],
-      ['small window', { viewport: { width: 600, height: 700 } }]]) {
+      ['small window', { viewport: { width: 600, height: 700 } }],
+      ['phone sideways', { viewport: { width: 844, height: 390 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true }]]) {
       const ctx = await b.newContext(opts);
       const bp = await ctx.newPage();
       await bp.goto(`http://127.0.0.1:${PORT}/`);
       await bp.waitForSelector('#coffee-open:not([hidden])', { timeout: 30000 });
+      if (name === 'phone sideways') {
+        // The bar is a column at the right edge: the game's stage has the screen's whole height (an iPhone held sideways,
+        // 21 November 2026: the bar above took an eighth of it).
+        sideways = await bp.evaluate(() => { const bar = document.getElementById('bar').getBoundingClientRect(), st = document.getElementById('stage').getBoundingClientRect();
+          const shown = [...document.querySelectorAll('#bar > button, #bar > a')].filter((e) => e.offsetParent !== null).map((e) => e.getBoundingClientRect());
+          return { barW: Math.round(bar.width), barRight: Math.round(bar.right), barH: Math.round(bar.height), stageH: Math.round(st.height), stageW: Math.round(st.width),
+            vw: innerWidth, vh: innerHeight, column: shown.every((r, i) => i === 0 || r.top > shown[i - 1].top), inBar: shown.every((r) => r.bottom <= bar.bottom + 0.5) }; });
+      }
       const hs = await bp.evaluate(() => [...document.querySelectorAll('#bar > button, #bar > a')].filter((e) => e.offsetParent !== null)
         .map((e) => `${e.id}=${Math.round(e.getBoundingClientRect().height * 10) / 10}`));
       const coarse = await bp.evaluate(() => matchMedia('(pointer: coarse)').matches);
@@ -541,6 +551,9 @@ const PORT = 8097;
     check('the bar\'s buttons, Buy me a coffee among them, are one height on a computer, a phone, an iPad and a small window',
       barSizes.every((row) => { const hs = row.split(': ')[1].split(' ').map((x) => x.split('=')[1]); return hs.length >= 2 && hs.every((h) => h === hs[0]) && row.includes('coffee-open'); }),
       barSizes.join(' | '));
+    check('a phone held sideways: the bar is a column at the right edge, and the game has the whole height',
+      sideways && sideways.column && sideways.inBar && sideways.barRight === sideways.vw && sideways.barW <= 60 && sideways.stageH === sideways.vh
+        && sideways.stageW === sideways.vw - sideways.barW, JSON.stringify(sideways));
     await p.click('#help-open');
     const helpText = (await p.textContent('#help')).replace(/\s+/g, ' ');
     const made = await p.evaluate(() => { const m = document.getElementById('made'), svg = m.querySelector('svg'), r = m.getBoundingClientRect();
@@ -799,7 +812,8 @@ const PORT = 8097;
         const r = shown.map((e) => e.getBoundingClientRect());
         return { n: shown.length, inside: r.every((x) => x.left >= 0 && x.right <= innerWidth + 0.5), heights: [...new Set(r.map((x) => Math.round(x.height)))],
           cls: document.getElementById('bar').className, title: document.querySelector('#bar .brand').offsetParent !== null,
-          made: document.getElementById('made').offsetParent !== null };
+          made: document.getElementById('made').offsetParent !== null,
+          labels: [...document.querySelectorAll('#bar > button span, #bar > a span')].some((e) => e.offsetParent !== null) };
       });
       await pg.tap('#fullscreen');
       await pg.waitForFunction(() => document.getElementById('app').classList.contains('fs'), null, { timeout: 5000 }).catch(() => {});
@@ -810,7 +824,8 @@ const PORT = 8097;
     const small = await fullScreenOn({ width: 360, height: 740 });
     const phone = await fullScreenOn({ width: 844, height: 390 });
     check('the bar fits a phone held sideways, upright and a small phone: icons only, every button on screen, one height',
-      [phone, upright, small].every((x) => x.bar.n >= 6 && x.bar.inside && x.bar.heights.length === 1 && /compact/.test(x.bar.cls))
+      [phone, upright, small].every((x) => x.bar.n >= 6 && x.bar.inside && x.bar.heights.length === 1 && !x.bar.labels)
+        && /compact/.test(upright.bar.cls) && /compact/.test(small.bar.cls)       // sideways: a column, icons only by itself
         && upright.bar.title && !small.bar.title,
       [phone, upright, small].map((x) => JSON.stringify(x.bar)).join(' | '));
     await upright.ctx.close();

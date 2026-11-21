@@ -704,6 +704,10 @@ One system for every part of the page (`index.html`, its `:root`), from the UI s
 - **On a phone held upright** (under 640px) each row of a list is a card: its name, then its size, date and place,
   then its buttons, all on the screen; the lists do not scroll on their own, the dialog does. The columns of a table,
   scrolled sideways, hid Play, Download and Get past the edge (the screens review, `test/screens.mjs`).
+- **On a phone held sideways** (landscape, 520px high or less) the bar is a column of icons at the right edge, not a
+  row above the game: the game has the screen's whole height. An iPhone showed the bar above taking an eighth of the
+  height while the room beside the game stayed empty (21 November 2026); on a phone of 814 by 380 the game is now 608
+  by 380 instead of 528 by 330. Full screen keeps its own place for the buttons (`layout.js`, barPlace).
 - **Zoom stays off** (`user-scalable=no`), against the usual rule, on purpose: two fingers on the game are its mouse
   wheel and its right click, and a page zoomed by a pinch would leave the game half out of view. Every field is 16px,
   so no browser zooms into one either.

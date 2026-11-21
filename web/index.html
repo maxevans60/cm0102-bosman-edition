@@ -392,6 +392,18 @@
   #log { margin: 4px 0 0; padding: 8px 10px; max-height: 34vh; overflow: auto; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
     color: var(--muted); white-space: pre-wrap; background: var(--bg); border-radius: var(--r); border: 1px solid var(--line); }
 
+  /* A phone held sideways: the bar is a column at the right edge, so the game has the screen's whole height (an
+     iPhone, 21 November 2026: the bar above it took an eighth of that height, beside empty room at both sides). Icons
+     only; a column too short for every button scrolls. */
+  @media (orientation: landscape) and (max-height: 520px) {
+    #app:not(.fs) { flex-direction: row; }
+    #app:not(.fs) #bar { order: 2; height: auto; width: auto; flex-direction: column; justify-content: flex-start; gap: 4px;
+      padding: 6px; border-bottom: 0; border-left: 1px solid var(--line); overflow-y: auto; overscroll-behavior: contain; }
+    #app:not(.fs) #bar .brand, #app:not(.fs) #bar #status, #app:not(.fs) #bar button span, #app:not(.fs) #bar a.coffee span { display: none; }
+    #app:not(.fs) #bar button, #app:not(.fs) #bar a.coffee { flex: none; width: 42px; height: 36px; padding: 0; justify-content: center; }
+    #app:not(.fs) #stage { min-width: 0; }
+  }
+
   /* Full screen: the bar becomes a small set of buttons over the corner of the game. */
   #app.fs #bar { position: absolute; top: calc(8px + env(safe-area-inset-top)); right: calc(8px + env(safe-area-inset-right));
     z-index: 6; height: auto; padding: 4px; gap: 4px; border: 1px solid var(--line); border-radius: var(--r-lg);
