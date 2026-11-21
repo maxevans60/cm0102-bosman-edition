@@ -7,7 +7,8 @@
 // NODE_PATH=$(npm root -g) node web/test/make-videos.mjs <folder> [editor|app]
 //   → <folder>/editor.mp4 and <folder>/app.mp4 (and <folder>/<name>-project/, the HyperFrames project, to edit or
 //   render again: node .claude/skills/hyperframes/scripts/plugin-cli.mjs render, in it)
-// CM_SELLER and CM_COFFEE_URL, as on the server, name the footer's maker and the coffee link.
+// CM_SELLER and CM_COFFEE_URL, as on the server, name the footer's maker and the coffee link. CM_VIDEO_MUSIC (or
+// CM_VIDEO_MUSIC_APP, CM_VIDEO_MUSIC_EDITOR) names a music file for the films (videos-compose.mjs; not in git).
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
@@ -100,7 +101,9 @@ async function recorder(name) {
     const capture = join(tmp, `${name}-capture.mp4`), mp4 = join(OUT, file), project = join(OUT, `${name}-project`);
     execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', webm, '-c:v', 'libx264', '-preset', 'slow', '-crf', '14', '-r', '30', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', capture]);
     rmSync(project, { recursive: true, force: true });
-    const seconds = composeVideo({ dir: project, capture, log: { captions } });
+    // The music of this film: CM_VIDEO_MUSIC_<NAME> (APP, EDITOR), else CM_VIDEO_MUSIC for both, else none.
+    const music = process.env[`CM_VIDEO_MUSIC_${name.toUpperCase()}`] || process.env.CM_VIDEO_MUSIC || null;
+    const seconds = composeVideo({ dir: project, capture, log: { captions }, music });
     writeFileSync(join(project, 'steps.json'), JSON.stringify(captions, null, 1));
     render(project, `${mp4}.part.mp4`);
     renameSync(`${mp4}.part.mp4`, mp4);

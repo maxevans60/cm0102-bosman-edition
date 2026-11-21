@@ -3,11 +3,14 @@
 // the step points at), and an end card. make-videos.mjs records the capture and the steps' times; this writes the
 // project, and render() makes the MP4 with the HyperFrames CLI (telemetry off).
 //
+// Music (optional): a track under the whole film from its start, faded in over MUSIC_FADE_IN s and out over the end
+// card's last MUSIC_FADE_OUT s, at MUSIC_VOLUME (a Suno track mastered at -13.5 LUFS comes to about -18 LUFS: under a
+// tutorial with no voice, background, not a soundtrack).
 // 1920x1080 at 30 fps. The capture (1280x800, the page's viewport) sits 1:1 in a frame at the top; the captions sit
 // under it, inside the title-safe box (the frame inside the action-safe box).
 import { execFileSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join, resolve, dirname } from 'node:path';
+import { extname, join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -17,6 +20,7 @@ export const CLI_VERSION = '0.9.70';
 const W = 1920, H = 1080, VW = 1280, VH = 800;
 const FRAME = { left: (W - VW) / 2, top: 60 };
 const INTRO = 3.8, OUTRO = 3.2, ENTER = 0.45;
+export const MUSIC_VOLUME = 0.6, MUSIC_FADE_IN = 0.5, MUSIC_FADE_OUT = 4;
 const COLORS = { ground: '#0b0d10', panel: '#151a20', line: '#29313b', text: '#e8ebef', muted: '#97a2af', accent: '#35b673' };
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -190,11 +194,13 @@ function outro({ text, sub }) {
 }
 
 // Writes the project into dir (index.html, compositions/, assets/capture.mp4). Returns its length in seconds.
-export function composeVideo({ dir, capture, log }) {
+export function composeVideo({ dir, capture, log, music = null }) {
   const p = plan(log);
   mkdirSync(join(dir, 'compositions'), { recursive: true });
   mkdirSync(join(dir, 'assets'), { recursive: true });
   copyFileSync(capture, join(dir, 'assets', 'capture.mp4'));
+  const musicFile = music ? `music${extname(music).toLowerCase() || '.mp3'}` : null;
+  if (music) copyFileSync(music, join(dir, 'assets', musicFile));
   const total = r2(INTRO + p.length + OUTRO);
   const host = (id, start, duration, kind = 'graphics', lane = 0) => `  <div id="${id}" data-composition-id="${id}" data-composition-src="compositions/${id}.html" data-start="${start}" data-duration="${duration}" data-track-index="${lane}" data-track-kind="${kind}" data-width="${W}" data-height="${H}"></div>`;
   const vars = JSON.stringify([
@@ -208,6 +214,7 @@ ${host('intro', 0, INTRO)}
 ${host('screen', INTRO, p.length)}
 ${host('captions', INTRO, p.length, 'captions', 1)}
 ${host('outro', r2(INTRO + p.length), OUTRO)}
+${musicFile ? `  <audio id="music" class="clip" src="assets/${musicFile}" data-start="0" data-duration="${total}" data-track-index="2" data-volume="${MUSIC_VOLUME}" data-fade-in="${MUSIC_FADE_IN}" data-fade-out="${MUSIC_FADE_OUT}"></audio>` : ''}
 </div>`, `window.__timelines['main'] = gsap.timeline({ paused: true });`).replace('<html lang="en">', `<html lang="en" data-composition-variables='${vars.replace(/'/g, '&#39;')}'>`);
   writeFileSync(join(dir, 'index.html'), index);
   writeFileSync(join(dir, 'compositions', 'intro.html'), intro({ title: p.title.text, sub: p.title.sub }));
