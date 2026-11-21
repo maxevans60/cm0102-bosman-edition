@@ -61,6 +61,7 @@ const OVERLAY = String.raw`(() => {
 })();`;
 
 const browser = await chromium.launch();
+let current = null;                                      // the film being recorded: a failure leaves its screen
 
 // The parts of the capture that are cut out of the film ([start, end] on its clock), and a time on the film's clock.
 function cutTime(cuts, t) {
@@ -79,6 +80,7 @@ async function recorder(name) {
     recordVideo: { dir, size: { width: 1280, height: 800 } } });
   await ctx.addInitScript(OVERLAY);
   const p = await ctx.newPage();
+  current = { name, p };
   const t0 = Date.now();                                 // the capture starts with the page
   const now = () => (Date.now() - t0) / 1000;
   p.on('dialog', (d) => d.accept());
@@ -222,7 +224,7 @@ async function editorVideo() {
   await p.waitForSelector('#editor[open] .ed-row', { timeout: 120000 });
   await v.say('The editor lists the players of the save, best first', 'Search by a player\'s name or by a club', 3600);
   await v.type('#editor-search', 'del piero');
-  await p.waitForFunction(() => document.querySelectorAll('.ed-row').length === 1);
+  await p.waitForFunction(() => /piero/i.test(document.querySelector('.ed-row')?.textContent ?? ''), null, { timeout: 60000 });
   await v.say('Pick the player', '', 1400);
   await v.click('.ed-row');
   await p.waitForSelector('#editor-form [data-f="Pace"]');
@@ -258,7 +260,7 @@ async function editorVideo() {
   await v.click('#editor-new');
   await p.waitForSelector('#editor .ed-row', { timeout: 180000 });
   await v.type('#editor-search', 'del piero');
-  await p.waitForFunction(() => document.querySelectorAll('.ed-row').length === 1);
+  await p.waitForFunction(() => /piero/i.test(document.querySelector('.ed-row')?.textContent ?? ''), null, { timeout: 60000 });
   await v.click('.ed-row');
   await p.waitForSelector('#editor-form [data-f="club"]');
   await v.say('Move a player to another club, change his contract or ratings', '', 2800);
@@ -355,6 +357,9 @@ try {
   const which = process.argv[3];
   if (!which || which === 'editor') await editorVideo();
   if (!which || which === 'app') await appVideo();
+} catch (err) {
+  if (current) await current.p.screenshot({ path: join(OUT, `${current.name}-failed.png`) }).catch(() => {});
+  throw err;
 } finally {
   await browser.close();
   rmSync(tmp, { recursive: true, force: true });
