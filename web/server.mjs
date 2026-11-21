@@ -35,7 +35,7 @@ const SEASON_TABLES = ['rules.tsv', 'names.tsv', 'clubs.tsv', 'club_records.tsv'
 export const PAGE_FILES = ['index.html', 'loader.js', 'layout.js', 'touch.js', 'keyboard.js', 'saves.js', 'ui.js', 'account.js', 'savedit.js', 'dataset.js', 'datasets.js', 'zip.js', 'editor.js', 'setspanel.js', 'tactics.js', 'report.js', 'play.js', 'release.js', 'progress.js', 'tacticsync.js', 'room.js', 'upload.js', 'lastvisit.js', 'disk.js', 'vault.js', 'stats.js', 'engine.js', 'direct.js', 'sw.js',
   'manifest.webmanifest', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'privacy.html', 'terms.html', 'refunds.html', 'pricing.html'];
 // The server's own files; it also imports saves.js, savedit.js, dataset.js and zip.js of the page (PAGE_FILES).
-export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'library.mjs', 'rgn.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'notify.mjs', 'spool.mjs', 'admin.html', 'package.json'];
+export const SERVER_FILES = ['server.mjs', 'cloud.mjs', 'library.mjs', 'auth.mjs', 'billing.mjs', 's3.mjs', 'stats.mjs', 'notify.mjs', 'spool.mjs', 'admin.html', 'package.json'];
 const PAGES = Object.fromEntries([['/', 'index.html'], ...['privacy', 'terms', 'refunds', 'pricing'].map((p) => [`/${p}`, `${p}.html`]),
   ...PAGE_FILES.map((f) => [`/${f}`, f])]);
 // The pages of the site's terms: the seller, the contact and the price come from the settings (CM_SELLER, CM_CONTACT,

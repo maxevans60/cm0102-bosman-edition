@@ -6,12 +6,12 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { CARDS_AT_ONCE, createLibrary, entryFields } from '../library.mjs';
+import { createLibrary, entryFields } from '../library.mjs';
 import { createS3 } from '../s3.mjs';
 import { createStats } from '../stats.mjs';
 import { createApp } from '../server.mjs';
 import { writeZip } from '../zip.js';
-import { fakeDataSet, fakeRgn as rgn, fakeS3 } from './fakes.mjs';
+import { fakeDataSet, fakeS3 } from './fakes.mjs';
 
 const TOKEN = 't'.repeat(24);
 let tmp, s3fake, s3, server, base, direct = false;
@@ -33,7 +33,7 @@ after(() => { server.close(); s3fake.close(); rmSync(tmp, { recursive: true, for
 
 const admin = (path, { method = 'GET', body, headers = {} } = {}) => fetch(`${base}${path}`, { method, body: body === undefined ? undefined : typeof body === 'string' || body instanceof Uint8Array ? body : JSON.stringify(body),
   headers: { authorization: `Bearer ${TOKEN}`, ...(body && !(body instanceof Uint8Array) ? { 'content-type': 'application/json' } : {}), ...headers } });
-const dataSetZip = async (folder = '2011 update', extra = []) => writeZip([...Object.entries(fakeDataSet()).map(([name, data]) => ({ name: `${folder}/${name}`, data })), ...extra]);
+const dataSetZip = async (folder = '2011 update') => writeZip(Object.entries(fakeDataSet()).map(([name, data]) => ({ name: `${folder}/${name}`, data })));
 const list = async () => (await (await fetch(`${base}/api/library`)).json()).entries;
 
 test('the fields of an entry: a folder name, a season of the game, a short note', () => {
@@ -123,49 +123,4 @@ test('the admin changes an entry and takes one away; the page cannot', async () 
   assert.deepEqual((await list()).map((e) => e.id), [older.id]);
   assert.ok(!s3fake.objects.has(`library/${newest.id}.zip`), 'its zip is gone');
   assert.match(logs.join(' '), /library: 2025 update \(2025\) removed/);
-});
-
-test('the title card: made when a database comes, given to everyone, made later for older ones, gone with its database', async () => {
-  direct = false;
-  const logo = rgn(64, 48, (x) => (x < 32 ? 0xf800 : 0x001f));
-  const upload = async (zip, name) => {
-    const start = await (await admin('/api/admin/library', { method: 'POST', body: { size: zip.length } })).json();
-    await admin(`/api/admin/library/${start.id}/body`, { method: 'PUT', body: zip });
-    return (await (await admin(`/api/admin/library/${start.id}/done`, { method: 'POST', body: { name, season: 2014 } })).json());
-  };
-  const withCard = await upload(await dataSetZip('October 2014', [{ name: 'October 2014/logo.RGN', data: logo }]), 'October 2014');
-  const without = await upload(await dataSetZip('Plain 2014'), 'Plain 2014');
-  assert.deepEqual([withCard.card, without.card], [true, false]);
-  const got = await fetch(`${base}/api/library/${withCard.id}/card`);
-  assert.equal(got.status, 200);
-  assert.equal(got.headers.get('content-type'), 'image/png');
-  assert.match(got.headers.get('cache-control'), /public, max-age=\d+/);
-  assert.deepEqual([...new Uint8Array(await got.arrayBuffer()).subarray(1, 4)], [80, 78, 71]);
-  assert.equal((await fetch(`${base}/api/library/${without.id}/card`)).status, 404);
-  assert.equal((await fetch(`${base}/api/library/${withCard.id}/nothing`)).status, 404);
-  assert.equal((await list()).find((e) => e.id === withCard.id).card, true, 'the list says which have one');
-  // A database added before the cards: no card field. The admin's Make their pictures reads its zip once.
-  const ix = JSON.parse(Buffer.from(s3fake.objects.get('library/index.json').body).toString());
-  delete ix.entries.find((e) => e.id === withCard.id).card;
-  s3fake.objects.delete(`library/${withCard.id}.png`);
-  await s3.put('library/index.json', Buffer.from(JSON.stringify(ix)), { type: 'application/json' });
-  assert.equal((await fetch(`${base}/api/admin/library/cards`, { method: 'POST' })).status, 401, 'only the admin');
-  const made = await (await admin('/api/admin/library/cards', { method: 'POST' })).json();
-  assert.deepEqual(made, { made: ['October 2014'], none: [], left: 0 }, 'only those without one are read');
-  assert.ok(s3fake.objects.has(`library/${withCard.id}.png`));
-  assert.deepEqual(await (await admin('/api/admin/library/cards', { method: 'POST' })).json(), { made: [], none: [], left: 0 }, 'a second time: nothing to do');
-  // Many of them: CARDS_AT_ONCE a call, and left says how many remain.
-  const many = JSON.parse(Buffer.from(s3fake.objects.get('library/index.json').body).toString());
-  for (let i = 0; i < CARDS_AT_ONCE + 2; i++) many.entries.push({ ...many.entries.find((e) => e.id === without.id), id: `00000000000000c${i}`, name: `Old ${i}` });
-  for (const e of many.entries) if (e.id.startsWith('00000000000000c')) delete e.card;
-  await s3.put('library/index.json', Buffer.from(JSON.stringify(many)), { type: 'application/json' });
-  const first = await (await admin('/api/admin/library/cards', { method: 'POST' })).json();
-  assert.deepEqual([first.made.length + first.none.length, first.left], [CARDS_AT_ONCE, 2]);
-  const second = await (await admin('/api/admin/library/cards', { method: 'POST' })).json();
-  assert.deepEqual([second.none.length, second.left], [2, 0], 'a database whose zip is missing: no card');
-  for (let i = 0; i < CARDS_AT_ONCE + 2; i++) await admin(`/api/admin/library/00000000000000c${i}`, { method: 'DELETE' });
-  assert.match(logs.join(' '), /library: pictures made for 1, 0 without one/);
-  assert.equal((await admin(`/api/admin/library/${withCard.id}`, { method: 'DELETE' })).status, 204);
-  assert.ok(!s3fake.objects.has(`library/${withCard.id}.png`), 'the card goes with its database');
-  await admin(`/api/admin/library/${without.id}`, { method: 'DELETE' });
 });

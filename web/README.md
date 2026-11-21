@@ -583,18 +583,8 @@ edit makes it the player's own. The admin page's **Database library** section ad
 Download gives it; its name, season and a note), changes those or removes it: the zip goes straight to the store with a
 signed link (else through the server) to `library/incoming/`, and the server lists it only once it holds the 20
 database files (`inspectSetZip`, at most 128 MB). The store keeps `library/index.json` and `library/<id>.zip`. Routes:
-`GET /api/library`, `GET /api/library/<id>` (`?direct=get` for a link), `GET /api/library/<id>/card`; for the admin
-(`CM_ADMIN_EMAILS` or the token) `GET|POST /api/admin/library`, `PUT …/<id>/body`, `POST …/<id>/done`,
-`PATCH|DELETE …/<id>`, `POST /api/admin/library/cards`. It needs the bucket.
-
-**Title cards (`rgn.mjs`).** An Update Team release brings its intro pictures (`logo.rgn`: the release's title card,
-800x600, "CM0102 … October 2024 Data Update"). When a database comes into the library, the server reads its
-`logo.rgn` (else `splash.rgn`; the game's RGN format: a header of 12 numbers, then 16-bit pixels, `src/si/rgn_loader.c`),
-makes it 200x150 and keeps it as `library/<id>.png` (about 50 KB); the list says `card: true`, and the library's list
-shows it beside the name (64x48, 80x60 on a phone), or the season in a box of that size. The admin page's **Make their
-pictures** reads the zips of the databases added before the cards, once. Only on the page: the game never reads a data
-set's pictures (Q205, `src/recomp_rt/win/files.c`), since its intro allocates by each picture's colours, and a card in
-place of the 520x520 logo of 46 colours would change the game's later days (Q152, `tools/release/make_intro_logo.py`).
+`GET /api/library`, `GET /api/library/<id>` (`?direct=get` for a link); for the admin (`CM_ADMIN_EMAILS` or the token)
+`GET|POST /api/admin/library`, `PUT …/<id>/body`, `POST …/<id>/done`, `PATCH|DELETE …/<id>`. It needs the bucket.
 
 **Data sets in Saved games.** The Saved games dialog lists the data sets under the saves (`setspanel.js`,
 `datasets.js`), as it lists the saves:

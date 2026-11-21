@@ -246,31 +246,14 @@ function renderLibrary() {
       <button id="lib-add" class="give on">${editing ? 'Save changes' : 'Add to the library'}</button>${editing ? '<button id="lib-cancel">Cancel</button>' : ''}
       <span id="lib-msg" class="small"></span>
     </div>
-    ${library.some((e) => e.card === undefined) ? `<p class="small muted">Some databases came before the pictures: <button id="lib-cards">Make their pictures</button>
-      <span id="lib-cards-msg"></span></p>` : ''}
-    ${library.length ? `<div class="scroll"><table><thead><tr><th>Picture</th><th>Name</th><th>Season</th><th>Size</th><th>Note</th><th>Added</th><th></th></tr></thead><tbody>
-      ${library.map((e) => `<tr><td>${e.card ? `<img src="/api/library/${esc(e.id)}/card" width="64" height="48" alt="" loading="lazy" style="display:block;border-radius:4px">` : `<span class="small muted">${e.card === false ? 'none' : '–'}</span>`}</td><td>${esc(e.name)}</td><td>${seasonText(e.season)}</td><td>${mb(e.size)}</td><td class="small" style="white-space:normal">${esc(e.note)}</td>
+    ${library.length ? `<div class="scroll"><table><thead><tr><th>Name</th><th>Season</th><th>Size</th><th>Note</th><th>Added</th><th></th></tr></thead><tbody>
+      ${library.map((e) => `<tr><td>${esc(e.name)}</td><td>${seasonText(e.season)}</td><td>${mb(e.size)}</td><td class="small" style="white-space:normal">${esc(e.note)}</td>
         <td class="small">${esc(when(e.added))}</td><td><button data-lib-edit="${esc(e.id)}">Edit</button> <button data-lib-remove="${esc(e.id)}">Remove</button></td></tr>`).join('')}
     </tbody></table></div>` : '<p class="muted">Nothing in the library yet.</p>'}</section>`;
   const say = (t, bad = false) => { $('lib-msg').textContent = t; $('lib-msg').className = `small ${bad ? 'bad' : 'muted'}`; };
   if (editing) { $('lib-name').value = editing.name; $('lib-season').value = String(editing.season); $('lib-note').value = editing.note; }
   else $('lib-file').onchange = () => { const f = $('lib-file').files[0]; if (f && !$('lib-name').value) $('lib-name').value = f.name.replace(/\.zip$/i, '').slice(0, 60); };
   if ($('lib-cancel')) $('lib-cancel').onclick = () => { editing = null; renderLibrary(); };
-  // The title cards of the databases added before the pictures (library.mjs, POST /api/admin/library/cards).
-  if ($('lib-cards')) $('lib-cards').onclick = async () => {
-    $('lib-cards').disabled = true;
-    $('lib-cards-msg').textContent = 'Reading each zip… (a few seconds each)';
-    let made = 0, none = 0, d = null;
-    do {                                               // a few zips a call (library.mjs, CARDS_AT_ONCE), until none is left
-      const r = await fetch('/api/admin/library/cards', { method: 'POST', credentials: 'same-origin', headers: { 'x-cm': '1' } }).catch(() => null);
-      d = await r?.json().catch(() => null);
-      if (!r?.ok) { $('lib-cards-msg').textContent = `Not made: ${d?.error ?? `HTTP ${r?.status ?? 'no answer'}`}`; $('lib-cards').disabled = false; return; }
-      made += d.made.length; none += d.none.length;
-      $('lib-cards-msg').textContent = `Reading each zip… ${made + none} done, ${d.left} to go`;
-    } while (d.left > 0 && d.made.length + d.none.length > 0);
-    await loadLibrary();
-    say(`Pictures made for ${made}; ${none} have no picture in their zip.`);
-  };
   $('lib-add').onclick = async () => {
     const fields = { name: $('lib-name').value.trim(), season: Number($('lib-season').value), note: $('lib-note').value.trim() };
     $('lib-add').disabled = true;
