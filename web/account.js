@@ -61,36 +61,55 @@ export function otherDeviceName(name, taken) {
 export const BIG_SAVE = 100 << 20;
 export const BIG_EVERY_MS = 10 * 60000;
 
-// The plan of one sync: what to do with each save, from the local files, the cloud's list and the state.
+// The plan of one sync: what to do with each save, from the local files, the cloud's list and the state. A save changed
+// both here and in the cloud: the one here goes up over the cloud's when it is the newer (its time against the cloud's
+// saved); else both are kept, the cloud's as "… (other device)".
 // local: Map name -> { size, mtime }, cloud: Map name -> { etag, rawSize, saved }, state: name -> { etag, size, mtime,
-// removed, upAt }. held: the large saves that wait (BIG_EVERY_MS).
+// removed, upAt, sending }. held: the large saves that wait (BIG_EVERY_MS). Each job has why, for the log.
+//
+// A cloud copy that this device sent itself is not a change made elsewhere: an upload can go through after its tab
+// closed (a save sent when the tab is left), and the page then never records its etag. The next start took the cloud's
+// new etag for another device's save and brought it down as "… (other device)", at every reload (an iPhone, 21 November
+// 2026). The copy is this device's when its length and save time are those of the file here, or of the version this
+// device was sending (state.sending, written before an upload starts).
 export function planSync(local, cloud, state, { replace = true, now = Date.now(), force = false } = {}) {
   const jobs = [], settle = {}, forget = [], held = [];
   for (const name of new Set([...local.keys(), ...cloud.keys(), ...Object.keys(state)])) {
     const l = local.get(name), c = cloud.get(name), e = state[name];
     const localChanged = Boolean(l) && (!e || e.size !== l.size || e.mtime !== l.mtime);
+    // The same length and the same save time to the millisecond (the upload names the file's own mtime as saved).
+    const isCopyOf = (v) => Boolean(v && c) && c.rawSize === v.size && c.saved === v.mtime;
     if (!l && !c) { forget.push(name); continue; }
     if (!c) {                                                     // only here
       if (e && !localChanged) { if (!e.removed) settle[name] = { ...e, removed: true }; continue; }   // removed from the cloud
-      jobs.push({ do: 'up', name, base: 'none' });
+      jobs.push({ do: 'up', name, base: 'none', why: 'only here' });
       continue;
     }
-    if (!l) { jobs.push({ do: 'down', name }); continue; }        // only in the cloud: a new save from elsewhere
+    if (!l) { jobs.push({ do: 'down', name, why: 'only in the cloud' }); continue; }        // a new save from elsewhere
     if (!e) {
       // Both, never synced here (the first sign-in on a device with a copy): the same save when its length and time agree.
       if (c.rawSize === l.size && Math.abs((c.saved ?? 0) - l.mtime) < 2000) settle[name] = { etag: c.etag, size: l.size, mtime: l.mtime };
-      else jobs.push({ do: 'both', name, cloud: c });
+      else if (l.mtime > (c.saved ?? 0)) jobs.push({ do: 'up', name, base: c.etag, why: 'here and in the cloud, never synced on this device; the save here is the newer' });
+      else jobs.push({ do: 'both', name, cloud: c, why: 'here and in the cloud, never synced on this device; the cloud\'s is the newer' });
       continue;
     }
     const cloudChanged = c.etag !== e.etag;
-    if (!localChanged && !cloudChanged) continue;
-    if (!localChanged) { if (replace) jobs.push({ do: 'down', name }); continue; }
-    if (!cloudChanged) {
-      if (!force && l.size >= BIG_SAVE && e.upAt && now >= e.upAt && now - e.upAt < BIG_EVERY_MS) { held.push(name); continue; }
-      jobs.push({ do: 'up', name, base: e.etag });
+    if (cloudChanged && isCopyOf(l)) { settle[name] = { etag: c.etag, size: l.size, mtime: l.mtime }; continue; }
+    if (cloudChanged && isCopyOf(e.sending)) {                    // this device's upload; the save here changed since
+      jobs.push({ do: 'up', name, base: c.etag, why: 'changed here since this device sent the cloud\'s copy' });
       continue;
     }
-    jobs.push({ do: 'both', name, cloud: c });
+    if (!localChanged && !cloudChanged) continue;
+    if (!localChanged) { if (replace) jobs.push({ do: 'down', name, why: 'changed in the cloud, not here' }); continue; }
+    if (!cloudChanged) {
+      if (!force && l.size >= BIG_SAVE && e.upAt && now >= e.upAt && now - e.upAt < BIG_EVERY_MS) { held.push(name); continue; }
+      jobs.push({ do: 'up', name, base: e.etag, why: 'changed here' });
+      continue;
+    }
+    // Changed on both sides: the newer save wins when it is the one here (it goes up over the cloud's; the store keeps
+    // the cloud's earlier versions). When the cloud's is the newer, both are kept, so the game played here is not lost.
+    if (l.mtime > (c.saved ?? 0)) { jobs.push({ do: 'up', name, base: c.etag, why: 'changed here and in the cloud; the save here is the newer' }); continue; }
+    jobs.push({ do: 'both', name, cloud: c, why: 'changed here and in the cloud; the cloud\'s is the newer' });
   }
   return { jobs, settle, forget, held };
 }
@@ -156,6 +175,10 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const rawSize = bytes.size ?? bytes.length;
     const mb = (n) => `${(n / 1048576).toFixed(0)} MB`;
     if (limits.raw && rawSize > limits.raw) return tooBig(name, before, `${mb(rawSize)}; the cloud takes ${mb(limits.raw)}`);
+    // The version going up, kept before it goes: if the tab closes after the store took it but before its answer came, the
+    // next start knows the cloud's copy for this device's own (planSync), not another device's.
+    state.saves[name] = { ...(state.saves[name] ?? {}), sending: { size: rawSize, mtime: before.mtime } };
+    keep();
     const packed = await gzip(bytes), body = packed.blob;       // a Blob: the same body for each try
     bytes = null;
     try { return await send(name, base, signal, before, body, rawSize); } finally { await packed.done(); }
@@ -242,6 +265,8 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
     const local = new Map(listSaves(FS).saves.map((f) => [f.name, { size: f.size, mtime: +f.mtime }]));
     const cloud = new Map(saves.map((s) => [s.name, s]));
     const plan = planSync(local, cloud, state.saves, { replace, force });
+    for (const job of plan.jobs) log(`page: cloud saves: ${job.name}: ${job.do === 'both' ? 'kept twice' : job.do} (${job.why})`);
+    for (const n of Object.keys(plan.settle)) if (state.saves[n]?.etag !== plan.settle[n].etag && !plan.settle[n].removed) log(`page: cloud saves: ${n}: the cloud has this very file (sent from here), nothing to move`);
     held = new Set(plan.held);
     Object.assign(state.saves, plan.settle);
     for (const n of plan.forget) delete state.saves[n];

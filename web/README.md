@@ -421,8 +421,18 @@ gzip-compressed, under the account's Google id. The page (`account.js`):
   deleted in Saved games, so a deletion reaches the other devices). It goes up over the version it read; when another
   device wrote meanwhile, it reads and merges again. settings.txt stays on each device: it holds what suits that
   device (the picture size, the window).
-- A save changed on two devices since they last synced is kept twice, nothing is lost: the other device's version as
-  "<name> (other device).sav", in both places.
+- A save changed on two devices since they last synced: when the one in this browser is the newer (its time against
+  the time the cloud's was saved), it goes up over the cloud's and nothing comes down; the store keeps the cloud's
+  earlier versions (the bucket's snapshots). When the cloud's is the newer, both are kept, nothing is lost: the other
+  device's version as "<name> (other device).sav", in both places. A player asked for it (21 November 2026): "if the
+  browser's version is newer than the cloud's, use it and update the cloud".
+- A cloud copy that this device sent itself is not a change made elsewhere. An upload can go through after its tab
+  closed (a large save goes when the tab is left), and the page then never recorded the cloud's new etag: the next start
+  took the copy for another device's and brought it down as "(other device)", at every reload (an iPhone, 21 November
+  2026). The page now keeps the version it sends before it sends it (`sending` in the sync's state), and a copy whose
+  length and save time, to the millisecond, are those of the file here or of that version is this device's own
+  (`planSync`): nothing moves, or the newer save here goes up over it. The engine log says why each save moves
+  (`page: cloud saves: <name>: up (changed here)`).
 - While the game runs, a save in the browser is never replaced from the cloud; only new ones come in.
 - Saved games shows where each save is, and Remove takes one out of the cloud (it stays in the browser).
 - Account has Sign out and Delete account (the account and all its cloud saves). `/privacy` says what is kept.

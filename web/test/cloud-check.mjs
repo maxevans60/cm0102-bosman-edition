@@ -64,7 +64,7 @@ const PLAYER = { sub: '4000004', email: 'player@example.com', email_verified: tr
 const keyOf = (name) => `saves/${PLAYER.sub}/${Buffer.from(name).toString('base64url')}.gz`;
 const cloudBytes = (name) => { const o = s3fake.objects.get(keyOf(name)); return o ? gunzipSync(o.body) : null; };
 // What another device does: a save straight into the store, as the server would put it.
-const putFromElsewhere = (name, raw) => s3.put(keyOf(name), gzipSync(raw), { type: 'application/gzip', metadata: { 'raw-size': raw.length, saved: Date.now() } });
+const putFromElsewhere = (name, raw, saved = Date.now()) => s3.put(keyOf(name), gzipSync(raw), { type: 'application/gzip', metadata: { 'raw-size': raw.length, saved } });
 const localBytes = (page, name) => page.evaluate((n) => { try { return Array.from(window.Module.FS.readFile(`/user/${n}`)); } catch { return null; } }, name);
 const localNames = (page) => page.evaluate(() => window.Module.FS.readdir('/user').filter((n) => n.endsWith('.sav')).sort());
 const same = (arr, buf) => Array.isArray(arr) && Buffer.from(arr).equals(buf);
@@ -127,9 +127,23 @@ try {
   check('it shows as Only here', (await a.$$eval('#saves-list td.cloud', (tds) => tds.map((t) => t.textContent.trim()))).includes('Only here'));
   await a.click('#saves-close');
 
-  // Two devices at once: another device saves Harbour City, then this one saves it again. Both versions are kept.
+  // Two devices, the save here the newer: another device sent an older version of Harbour City (saved an hour ago), then
+  // this one saves it. The version here goes up over the cloud's, and nothing comes down (a player: "if the browser's
+  // version is newer than the cloud's, use it and update the cloud", 21 November 2026).
+  const olderThere = fakeSaveBytes(44), newerHere = fakeSaveBytes(55);
+  const getsBefore = s3fake.requests.filter((r) => r.startsWith('GET') && r.includes(keyOf(harbour).split('/').pop())).length;
+  await putFromElsewhere(harbour, olderThere, Date.now() - 3600e3);
+  await a.evaluate(([n, b]) => window.Module.FS.writeFile(`/user/${n}`, new Uint8Array(b)), [harbour, Array.from(newerHere)]);
+  await waitFor('the newer save here to go up', () => cloudBytes(harbour)?.equals(newerHere));
+  const getsAfter = s3fake.requests.filter((r) => r.startsWith('GET') && r.includes(keyOf(harbour).split('/').pop())).length;
+  check('changed on both sides, the save here the newer: it goes up over the cloud\'s, nothing comes down, no second copy',
+    cloudBytes(harbour)?.equals(newerHere) && same(await localBytes(a, harbour), newerHere) && getsAfter === getsBefore
+      && !(await localNames(a)).some((n) => /other device/.test(n)), `${getsAfter - getsBefore} downloads; ${(await localNames(a)).join(', ')}`);
+
+  // Two devices at once, the other device's save the newer: another device saves Harbour City (its time a minute ahead),
+  // while this one saves it too. Both versions are kept, so neither device's game is lost.
   const elsewhere = fakeSaveBytes(22), here = fakeSaveBytes(33);
-  await putFromElsewhere(harbour, elsewhere);
+  await putFromElsewhere(harbour, elsewhere, Date.now() + 60000);
   await a.evaluate(([n, b]) => window.Module.FS.writeFile(`/user/${n}`, new Uint8Array(b)), [harbour, Array.from(here)]);
   const other = 'Harbour City 2001-07-14 (other device).sav';
   await waitFor('both versions', () => cloudBytes(other) !== null && cloudBytes(harbour)?.equals(here));
@@ -299,13 +313,13 @@ try {
   await waitFor('the other device\'s save', async () => same(await localBytes(c, other), elsewhere));
   check('a new save of the cloud came in', same(await localBytes(c, other), elsewhere));
   check('the save of this device was not replaced while the game runs', same(await localBytes(c, harbour), Buffer.from(mine)));
-  // Its own Harbour City and the cloud's differ, never synced: kept twice. The cloud's comes in under a name that is
-  // free in both places ("(other device)" is taken in the cloud already).
+  // Its own Harbour City and the cloud's differ, never synced, and the one here is the newer (its game wrote it at
+  // this start): it goes up over the cloud's, and nothing comes down for it (the store keeps the cloud's earlier versions).
   const other2 = 'Harbour City 2001-07-14 (other device) (2).sav';
-  await waitFor('both kept', () => cloudBytes(harbour)?.equals(Buffer.from(mine)) && cloudBytes(other2)?.equals(here));
-  check('a device that signs in with its own version: both kept, under free names',
-    same(await localBytes(c, other2), here) && cloudBytes(other2)?.equals(here) && cloudBytes(harbour)?.equals(Buffer.from(mine))
-      && cloudBytes(other)?.equals(elsewhere), (await localNames(c)).join(', '));
+  await waitFor('the newer one here up', () => cloudBytes(harbour)?.equals(Buffer.from(mine)));
+  check('a device that signs in with its own, newer version: it goes up over the cloud\'s, no second copy',
+    cloudBytes(harbour)?.equals(Buffer.from(mine)) && same(await localBytes(c, harbour), Buffer.from(mine)) && !cloudBytes(other2)
+      && !(await localNames(c)).includes(other2) && cloudBytes(other)?.equals(elsewhere), (await localNames(c)).join(', '));
 
   // ---- A free account buys Cloud Saves while its game runs: Paddle's checkout, the webhook, the saves go up. ----
   google.user = { sub: '5000005', email: 'free@example.com', email_verified: true, name: 'Free Player' };

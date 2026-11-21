@@ -502,18 +502,20 @@ test('the sync plan: what goes up, what comes down, what is kept twice', async (
     upNow: { etag: '"1"', size: 10, mtime: 100 },
     downNow: { etag: '"1"', size: 10, mtime: 100 },
     both: { etag: '"1"', size: 10, mtime: 100 },
+    newerHere: { etag: '"1"', size: 10, mtime: 100 },
     goneThere: { etag: '"1"', size: 10, mtime: 100 },
     goneButChanged: { etag: '"1"', size: 10, mtime: 100 },
     removed: { etag: null, size: 10, mtime: 100, removed: true },
     gone: { etag: '"1"', size: 10, mtime: 100 },
   };
-  const local = L([['same', 10, 100], ['upNow', 11, 200], ['downNow', 10, 100], ['both', 12, 300], ['goneThere', 10, 100],
+  const local = L([['same', 10, 100], ['upNow', 11, 200], ['downNow', 10, 100], ['both', 12, 300], ['newerHere', 14, 600], ['goneThere', 10, 100],
     ['goneButChanged', 13, 400], ['removed', 10, 100], ['newHere', 5, 50], ['firstTimeSame', 20, 1000], ['firstTimeOther', 21, 1000]]);
-  const cloud = C([['same', '"1"'], ['upNow', '"1"'], ['downNow', '"2"'], ['both', '"2"'], ['newThere', '"9"'],
+  const cloud = C([['same', '"1"'], ['upNow', '"1"'], ['downNow', '"2"'], ['both', '"2"', 13, 400], ['newerHere', '"2"', 15, 500], ['newThere', '"9"'],
     ['firstTimeSame', '"5"', 20, 1500], ['firstTimeOther', '"6"', 22, 1000]]);
   let p = planSync(local, cloud, state);
+  // Changed on both sides: kept twice when the cloud's is the newer (both), sent over it when the one here is (newerHere).
   assert.deepEqual(kinds(p), ['both both', 'both firstTimeOther', 'down downNow', 'down newThere', 'up goneButChanged none',
-    'up newHere none', 'up upNow "1"'].sort());
+    'up newHere none', 'up newerHere "2"', 'up upNow "1"'].sort());
   assert.deepEqual(p.settle.goneThere, { ...state.goneThere, removed: true }, 'removed from the cloud elsewhere: kept here, not sent again');
   assert.deepEqual(p.settle.firstTimeSame, { etag: '"5"', size: 20, mtime: 1000 }, 'the same length and time: the same save');
   assert.deepEqual(p.forget, ['gone']);
@@ -522,6 +524,28 @@ test('the sync plan: what goes up, what comes down, what is kept twice', async (
   assert.ok(!kinds(p).includes('down downNow') && kinds(p).includes('down newThere'));
   assert.equal(otherDeviceName('Arsenal.sav', new Set()), 'Arsenal (other device).sav');
   assert.equal(otherDeviceName('Arsenal.sav', new Set(['arsenal (other device).sav'])), 'Arsenal (other device) (2).sav');
+});
+
+test('the cloud\'s copy that this device sent itself is not taken for a change elsewhere (a reload downloaded it each time)', async () => {
+  // An iPhone fetched its save from the cloud at every reload though its own copy was the newer one (21 November 2026):
+  // an upload that went through after the tab was left, whose new etag the page never recorded, looked like a change
+  // made on another device, and the save came down again (as "… (other device)") at the next start.
+  const { planSync } = await import('../account.js');
+  const L = (entries) => new Map(entries.map(([n, size, mtime]) => [n, { size, mtime }]));
+  const C = (entries) => new Map(entries.map(([n, etag, rawSize, saved]) => [n, { etag, rawSize, saved }]));
+  const state = {
+    sentAsIs: { etag: '"1"', size: 10, mtime: 100 },                                   // the upload of 500 went, unrecorded
+    sentThenSaved: { etag: '"1"', size: 10, mtime: 100, sending: { size: 20, mtime: 500 } },  // and saved again since
+    elsewhere: { etag: '"1"', size: 10, mtime: 100, sending: { size: 20, mtime: 500 } },      // another device's, newer
+  };
+  const local = L([['sentAsIs', 20, 500], ['sentThenSaved', 30, 900], ['elsewhere', 30, 900]]);
+  const cloud = C([['sentAsIs', '"2"', 20, 500], ['sentThenSaved', '"2"', 20, 500], ['elsewhere', '"3"', 25, 1000]]);
+  for (const replace of [true, false]) {
+    const p = planSync(local, cloud, state, { replace });
+    assert.deepEqual(p.jobs.map((j) => `${j.do} ${j.name}${j.base ? ` ${j.base}` : ''}`).sort(), ['both elsewhere', 'up sentThenSaved "2"']);
+    assert.deepEqual(p.settle.sentAsIs, { etag: '"2"', size: 20, mtime: 500 }, 'the cloud has this very file: nothing goes either way');
+    assert.ok(p.jobs.every((j) => typeof j.why === 'string' && j.why), 'each job says why, for the log');
+  }
 });
 
 test('a large save that went up less than 10 minutes ago waits; it goes when that time is past, or when the tab is left', async () => {
