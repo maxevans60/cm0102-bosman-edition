@@ -19,19 +19,31 @@
 // those as it reads a real mouse (SDL_emscriptenevents.c: mousemove and mousedown on the canvas, mouseup on the
 // document, wheel on the canvas; a button event carries no place, so a move goes first). A mouse or a trackpad on a
 // touch device sends mouse events of its own, which pass through untouched.
+//
+// The game reads the mouse once a frame: its pump (0x68d520) handles every message that waits, then the input code
+// looks at the button flags and at the place of the last WM_MOUSEMOVE (0x68d922; a button message carries no place for
+// it, docs/research/2026-10-13-input-inventory.md section 1). So a press and the moves that follow it in the same frame
+// read as a press where the moves ended, and a press and its release in the same frame as no press. Each made press
+// therefore stands alone for CLICK_MS: the moves and the release that come in that time wait, and go after it (the last
+// place only). A drag of a player onto another (a substitution, Tactics_Screen::swap_slots 0x8ab7e0, called from the
+// drop at 0x8a1d22) then starts on the player the finger touched first, not on the one it had reached.
 export const SLOP = 12;          // CSS pixels a finger may wander and still be a tap or a long press
+export const SLOP_MIN = 6;       // on a small picture: rows a few pixels high, so a drag to the next row is a drag
+export const SLOP_GAME = 10;     // ... the slop there is this many of the picture's own pixels, kept in SLOP_MIN..SLOP
 export const LONG_MS = 450;      // a press this long without a move puts the right button down
 export const CLICK_MS = 80;      // from a made button down to its up: the game sees them in different input polls
 export const WHEEL_PX = 36;      // finger travel for one step of the wheel
 
 // onRightUsed(): the armed right click was used (or disarmed); the page's button shows it.
-export function mountTouch({ canvas, stage, fx, onFirstTouch = () => {}, onTap = () => {}, onRightUsed = () => {} }) {
+// pictureWidth(): the width of the game's picture in its own pixels (1280, or 800 in classic mode).
+export function mountTouch({ canvas, stage, fx, pictureWidth = () => 1280, onFirstTouch = () => {}, onTap = () => {}, onRightUsed = () => {} }) {
   let mode = 'idle';              // idle | pending | drag | right | scroll | done (right: the long press's button is down)
   let first = null;               // the first finger: {id, x0, y0, x, y, t0, button}
   let longTimer = 0, upTimer = 0, pendingUp = null, started = false;
   let scroll = null;              // {y, acc, moved, t0}
   let rightArmed = false;         // the page's Right click button: the next tap is a click of the right button
   let hold = null;                // the ring that grows under a held finger
+  let gate = null;                // a made press's CLICK_MS: {move, up, timer}, what waits for its end
 
   const send = (type, x, y, button, buttons) => canvas.dispatchEvent(new MouseEvent(type, {
     bubbles: true, cancelable: true, view: window, clientX: x, clientY: y, screenX: x, screenY: y, button, buttons }));
@@ -68,7 +80,31 @@ export function mountTouch({ canvas, stage, fx, onFirstTouch = () => {}, onTap =
   function flushUp() {
     clearTimeout(upTimer);
     if (pendingUp) { const p = pendingUp; pendingUp = null; send('mouseup', p.x, p.y, p.button, 0); }
+    gateEnd();
   }
+
+  // The press of a drag or a long press: down now, alone in the game's frame for CLICK_MS.
+  function press(x, y, button) {
+    flushUp();
+    send('mousemove', x, y, 0, 0);
+    send('mousedown', x, y, button, button === 2 ? 2 : 1);
+    gate = { move: null, up: null, timer: setTimeout(gateEnd, CLICK_MS) };
+  }
+  function gateEnd() {
+    if (!gate) return;
+    const g = gate;
+    gate = null;
+    clearTimeout(g.timer);
+    if (g.move) send('mousemove', g.move.x, g.move.y, 0, g.move.buttons);
+    if (g.up) send('mouseup', g.up.x, g.up.y, g.up.button, 0);
+  }
+  const moveTo = (x, y, buttons) => { if (gate) gate.move = { x, y, buttons }; else send('mousemove', x, y, 0, buttons); };
+  const upAt = (x, y, button) => { if (gate) gate.up = { x, y, button }; else send('mouseup', x, y, button, 0); };
+  // How far a finger may wander for a tap: SLOP_GAME of the picture's pixels, in SLOP_MIN..SLOP CSS pixels.
+  const slop = () => {
+    const w = canvas.getBoundingClientRect().width, pw = pictureWidth();
+    return w > 0 && pw > 0 ? Math.min(SLOP, Math.max(SLOP_MIN, SLOP_GAME * w / pw)) : SLOP;
+  };
 
   function click(x, y, button) {
     flushUp();
@@ -103,9 +139,7 @@ export function mountTouch({ canvas, stage, fx, onFirstTouch = () => {}, onTap =
         holdEnd();
         navigator.vibrate?.(15);                              // Android: the press is felt (iOS has no vibration for pages)
         ping(first.x, first.y, 'right');
-        flushUp();
-        send('mousemove', first.x, first.y, 0, 0);
-        send('mousedown', first.x, first.y, 2, 2);
+        press(first.x, first.y, 2);
         if (rightArmed) { rightArmed = false; onRightUsed(); }
       }, LONG_MS);
     } else if (mode === 'pending' && e.touches.length === 2) {
@@ -126,17 +160,16 @@ export function mountTouch({ canvas, stage, fx, onFirstTouch = () => {}, onTap =
       if (!t) return;
       first.x = t.clientX;
       first.y = t.clientY;
-      if (mode === 'pending' && Math.hypot(t.clientX - first.x0, t.clientY - first.y0) > SLOP) {
+      if (mode === 'pending' && Math.hypot(t.clientX - first.x0, t.clientY - first.y0) > slop()) {
         clearTimeout(longTimer);
         holdEnd();
         mode = 'drag';
         first.button = rightArmed ? 2 : 0;                     // armed: the drag is the right button's
         if (rightArmed) { rightArmed = false; onRightUsed(); ping(first.x0, first.y0, 'right'); }
-        send('mousemove', first.x0, first.y0, 0, 0);
-        send('mousedown', first.x0, first.y0, first.button, first.button === 2 ? 2 : 1);
+        press(first.x0, first.y0, first.button);
       }
-      if (mode === 'drag') send('mousemove', t.clientX, t.clientY, 0, first.button === 2 ? 2 : 1);
-      else if (mode === 'right') send('mousemove', t.clientX, t.clientY, 0, 2);
+      if (mode === 'drag') moveTo(t.clientX, t.clientY, first.button === 2 ? 2 : 1);
+      else if (mode === 'right') moveTo(t.clientX, t.clientY, 2);
     } else if (mode === 'scroll' && e.touches.length >= 2) {
       const c = centre(e.touches);
       scroll.acc += c.y - scroll.y;
@@ -171,7 +204,7 @@ export function mountTouch({ canvas, stage, fx, onFirstTouch = () => {}, onTap =
         click(first.x, first.y, 0);
       }
     } else if ((mode === 'drag' || mode === 'right') && find(e.changedTouches, first.id)) {
-      send('mouseup', first.x, first.y, mode === 'right' ? 2 : first.button, 0);
+      upAt(first.x, first.y, mode === 'right' ? 2 : first.button);
     } else if (mode === 'scroll' && !scroll.moved && !cancelled && performance.now() - scroll.t0 < 400) {
       const c = centre([...e.touches, ...e.changedTouches]);
       ping(c.x, c.y, 'right');

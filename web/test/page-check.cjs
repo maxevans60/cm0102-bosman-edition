@@ -666,6 +666,39 @@ const PORT = 8097;
     const rightTwo = await withSecondFinger(600), leftTwo = await withSecondFinger(50);
     check('a second finger during a drag: the first finger\'s lift still lets the button go (right and left)',
       /^down2 .*up2@\d+$/.test(rightTwo) && /^down0 .*up0@\d+$/.test(leftTwo), `${rightTwo} | ${leftTwo}`);
+    // The game reads the place of the last move of a frame, not of the press (its pump 0x68d520, WM_MOUSEMOVE 0x68d922):
+    // a drag's press stands alone for 80 ms, so it is read where the finger first touched (an iPhone report: a player
+    // dragged onto another for a substitution opened the player he had reached instead). A lift in that time waits too.
+    const dragTimes = (dy, small) => t.evaluate(async ({ x, y, dy: d }) => {
+      const out = [], c = document.getElementById('canvas');
+      const log = (e) => out.push({ type: e.type, b: e.buttons, y: Math.round(e.clientY), t: performance.now() });
+      c.addEventListener('mousedown', log, true); c.addEventListener('mousemove', log, true); document.addEventListener('mouseup', log, true);
+      const T = (ty) => new Touch({ identifier: 7, target: c, clientX: x, clientY: ty });
+      const fire = (type, touches, changed) => c.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, touches, targetTouches: touches, changedTouches: changed }));
+      fire('touchstart', [T(y)], [T(y)]);
+      fire('touchmove', [T(y - d)], [T(y - d)]);
+      fire('touchmove', [T(y - d - 20)], [T(y - d - 20)]);
+      fire('touchend', [], [T(y - d - 20)]);
+      await new Promise((r) => setTimeout(r, 250));
+      c.removeEventListener('mousedown', log, true); c.removeEventListener('mousemove', log, true); document.removeEventListener('mouseup', log, true);
+      return out;
+    }, { x: at.x, y: small ? small.y : at.y, dy });
+    const quick = await dragTimes(40);
+    const down = quick.find((e) => e.type === 'mousedown'), after = quick.filter((e) => e.t > down.t);
+    check('a drag\'s press stands alone for 80 ms: read where the finger touched first, then the last place and the lift',
+      down.y === at.y && after.length === 2 && after[0].type === 'mousemove' && after[0].b === 1 && after[0].y === at.y - 60
+        && after[0].t - down.t >= 75 && after[1].type === 'mouseup' && after[1].y === at.y - 60,
+      JSON.stringify(quick.map((e) => [e.type, e.y, Math.round(e.t - quick[0].t)])));
+    // A small picture (a phone): rows a few pixels high, so a move of 8 pixels to the next row is a drag, not a tap.
+    await t.setViewportSize({ width: 420, height: 320 });
+    await t.waitForTimeout(300);
+    const sb = await t.locator('#canvas').boundingBox();
+    const smallAt = { y: Math.round(sb.y + sb.height * 0.6) };
+    const nudge = await dragTimes(8, smallAt);
+    check('on a small picture a move of 8 pixels is a drag (a substitution with the next row)',
+      nudge.some((e) => e.type === 'mousedown' && e.y === smallAt.y) && nudge.at(-1).type === 'mouseup' && nudge.at(-1).y === smallAt.y - 28,
+      JSON.stringify(nudge.map((e) => [e.type, e.y])));
+    await t.setViewportSize({ width: 1024, height: 768 });
     check('no page errors on the touch device', terrors.length === 0, terrors.join('; '));
     await tc.close();
     // A Mac: Control and a click is the right button there (and a trackpad's only easy right-button drag); the browser

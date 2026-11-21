@@ -710,7 +710,17 @@ One system for every part of the page (`index.html`, its `:root`), from the UI s
 
 The game needs the right button for much of its tactics: a right click on a player, in the list or on the board,
 opens his instructions (Passing, Tackling, Forward Runs, Marking and the rest). A long press is that click, but a
-finger that wanders more than 12 pixels before 450 ms makes it a drag, and on the board a drag moves the player.
+finger that wanders more than 12 pixels before 450 ms makes it a drag, and on the board a drag moves the player. On a
+small picture (a phone) the limit is 10 of the picture's pixels, at least 6 on the screen: the rows of a list are a few
+pixels high there, and a drag onto the next row must be a drag.
+
+A substitution, or a swap of two players, is a drag of one player onto the other in the list (the drop at 0x8a1d22
+calls `Tactics_Screen::swap_slots`, 0x8ab7e0). The game reads the mouse once a frame: its pump (0x68d520) handles
+every message that waits, and the place it then uses is that of the last move (WM_MOUSEMOVE, 0x68d922; a button
+message carries none). The page sent a drag's press and the finger's moves together, so the game read the press where
+the finger had got to, two or three rows on. A drag that then starts and ends on the same player is a click on him, and
+his page opens: a player on an iPhone could not make a substitution that way (21 November 2026). Now a press made by the page stands alone for
+80 ms (`CLICK_MS`): the moves and a lift that come in that time wait and go after it.
 The Right click button (`touch.js`, armRight) has no timing: tap it, then tap the player, and that one tap is the
 right click; the button turns green while it waits and is off again after it. The long press shows a ring that fills
 under the finger and, on Android, the phone buzzes when it becomes the right click. Both opened a player's

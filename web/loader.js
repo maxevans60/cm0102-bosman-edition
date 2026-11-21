@@ -195,7 +195,7 @@ const layout = mountLayout({ app: $('app'), bar: $('bar'), stage: $('stage'), ca
 // The Right click button (touch devices): the next tap on the game is a click of the right button. A long press does
 // the same, but a finger that wanders turns it into a drag, and on the tactics board a drag moves the player.
 const setRightButton = (on) => $('right-click').setAttribute('aria-pressed', String(on));
-const touch = mountTouch({ canvas, stage: $('stage'), fx: $('fx'), onFirstTouch: resumeAudio, onTap: (x, y) => keyboard?.onTap(x, y),
+const touch = mountTouch({ canvas, stage: $('stage'), fx: $('fx'), pictureWidth: () => layout.picture.w, onFirstTouch: resumeAudio, onTap: (x, y) => keyboard?.onTap(x, y),
   onRightUsed: () => setRightButton(false) });
 $('right-click').onclick = () => {
   const on = !touch.rightArmed;
