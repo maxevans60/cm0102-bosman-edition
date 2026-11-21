@@ -184,12 +184,23 @@
   #sets .sets-head span { text-transform: none; letter-spacing: 0; font-weight: 400; }
   #sets-list { flex: none; }
   #sets-lib { flex: 1 1 auto; }
-  #sets-lib:has(tr + tr + tr + tr) { min-height: 150px; }      /* two databases and part of a third at least: it shows that it scrolls */
+  #sets-lib:has(tr + tr + tr + tr) { min-height: 180px; }      /* two databases (rows of a 48px picture) and part of a third at least: it shows that it scrolls */
   /* A shadow at the edge where more databases are (it goes at the list's end): the list scrolls, and says so. */
   #sets-lib { background: linear-gradient(var(--panel) 40%, transparent) top / 100% 30px no-repeat local,
     linear-gradient(transparent, var(--panel) 60%) bottom / 100% 30px no-repeat local,
     linear-gradient(rgba(0, 0, 0, .55), transparent) top / 100% 12px no-repeat scroll,
     linear-gradient(transparent, rgba(0, 0, 0, .55)) bottom / 100% 12px no-repeat scroll; }
+  /* A library database: its title card (or its season in a box of the same size), then its name and note. */
+  #sets-lib .lib-db { display: flex; align-items: center; gap: 12px; }
+  #sets-lib .lib-card { flex: none; width: 64px; height: 48px; border-radius: var(--r-sm); border: 1px solid var(--line);
+    background: var(--raised); object-fit: cover; }
+  #sets-lib .lib-card.none { display: grid; place-items: center; color: var(--muted); font-size: 11px; font-weight: 600; }
+  @media (max-width: 640px) {
+    #sets-lib .lib-card { width: 80px; height: 60px; font-size: 13px; }
+    /* Get at the end of the season and size line: one button, it needs no line of its own. */
+    #sets-lib tr { align-items: center; }
+    #sets-lib td.acts { flex: none; margin: 0 0 0 auto; }
+  }
   #sets-note { margin: 8px 0 0; white-space: pre-line; }
   #sets-note:empty { display: none; }
   #sets .row { margin-top: 10px; flex-wrap: wrap; }

@@ -331,3 +331,11 @@ export function coffeeEvent(type, { email = 'fan@example.com', id = 501, level =
     },
   };
 }
+
+// An RGN of w x h pixels (header of 12 numbers, then 16-bit pixels): RGB565 by default, else RGB555.
+export function fakeRgn(w, h, pixel, { green = 0x07e0 } = {}) {
+  const b = new Uint8Array(48 + w * h * 2), dv = new DataView(b.buffer);
+  [w, h, w * h * 2, 0, 32, 64, 0, 16, 0xf800, green, 0x001f, 0].forEach((v, i) => dv.setInt32(i * 4, v, true));
+  for (let i = 0; i < w * h; i++) dv.setUint16(48 + i * 2, pixel(i % w, Math.floor(i / w)), true);
+  return b;
+}
