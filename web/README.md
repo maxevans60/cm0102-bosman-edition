@@ -895,8 +895,8 @@ the access, with `recomp: guard: an access to guest …` in the log and the stac
 
 ## Not yet
 
-- The server hands out the base game only: the season databases of the desktop downloads (`Seasons/*.zip`) are not on
-  it. A player brings a data set of their own (Saved games, Data sets: Upload) or makes one in the data set editor.
+- The server hands out the base game, plus the databases the admin puts in the library (Saved games, Databases).
+  The season databases of the desktop downloads (`Seasons/*.zip`) are not on it unless the admin adds them.
 - The engine runs on the page's main thread. The concept design moves it to a Web Worker, with the new screens
   beside it.
 - The touch and keyboard parts are checked in a desktop browser that plays a touch device, with the real SDL
