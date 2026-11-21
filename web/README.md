@@ -234,6 +234,17 @@ the tab's peak while writing 2.2 GB instead of 3.8, the write 0.4 s instead of 6
 2.3 GB instead of 3.0. What is left is the file itself and the vault's copy of it until the browser has stored it; the
 first save of a large game, with nothing to size the room from, is as before.
 
+**After a save: one copy, not three (`vault.js` putParts, `saves.js` storedFirst).** An iPhone (Safari 27, the JSPI
+engine) closed the tab right after the game saved, "in the game" by the sudden-stop mark (21 November 2026). The
+page's check every 2 seconds then started two jobs at once: the vault stored the new save as one Blob of its whole size,
+a copy of it beside the file the game had written, and the cloud upload read the save at once, while the vault still
+stored it, and made one more Blob of it from memory. With a save of a few hundred MB that is three copies of it and the
+game, past what iOS gives a tab. Now the vault stores a written file in parts of 4 MB, each a Blob of its own written
+on its own, as a cloud download is stored; a file that changes meanwhile is stored at the next round. The parts of the
+version a save replaces go in the same round, when no other record (an older copy) names them. The upload waits for
+the vault to store a save it finds in memory, then reads the stored copy from the browser's storage. The vault check
+counts the Blobs made from memory: none is larger than 4 MB, for the store or for the upload.
+
 **A write counts when it is committed (`vault.js`, committed).** An IndexedDB request's success comes before its
 transaction commits, and the commit can still fail: a full disk, or the room the browser gives the site
 (QuotaExceededError). The vault once took the request's success as stored and dropped the save from memory; after a

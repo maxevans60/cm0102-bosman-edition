@@ -11,7 +11,7 @@
 //
 // What was last the same is kept in the user folder itself (.cloud-sync.json): per save, the cloud's ETag and the size
 // and time of the local file at that moment.
-import { SAVE_DIR, listSaves, readBlobNow, saveName, storeSaveStream } from './saves.js';
+import { SAVE_DIR, listSaves, readBlobNow, saveName, storeSaveStream, storedFirst } from './saves.js';
 import { downDirect, upDirect } from './direct.js';
 import { toDisk } from './disk.js';
 
@@ -149,6 +149,7 @@ export function createCloudSync({ FS, sync, log, toast, account, onWrote = () =>
   }
 
   async function up(name, base, signal) {
+    await storedFirst(FS, `${SAVE_DIR}/${name}`);              // a save just written: read the stored copy, not memory
     const before = stat(name);
     let bytes = readBlobNow(FS, `${SAVE_DIR}/${name}`);       // with the stat above: the same version of the file
     if (bytes instanceof Promise) bytes = await bytes;          // a placeholder: from the browser's storage

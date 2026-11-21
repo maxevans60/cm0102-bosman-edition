@@ -200,6 +200,18 @@ export async function readView(FS, path) { return vaultRef ? vaultRef.view(path)
 export async function readBlob(FS, path) { return vaultRef ? vaultRef.blob(path) : new Blob([fileView(FS, path)]); }
 // The same at once for a file in memory (a Blob made now, so it matches a stat taken just before), a promise only for a
 // placeholder, whose contents do not change while it waits.
+// A save the game has just written (in memory, not yet in the vault): the vault stores it now, and the reader then
+// takes the stored copy. The cloud upload once read it at once, while the vault was storing it: a Blob of the whole
+// file made from memory, a third copy of the save in the tab beside the file and the vault's (an iPhone closed the tab
+// after a save, 21 November 2026). Without the vault, or when the store fails, the reader takes it from memory as before.
+export async function storedFirst(FS, path) {
+  if (!vaultRef?.active) return;
+  let node = null;
+  try { node = FS.lookupPath(path).node; } catch { return; }
+  if (isAway(node)) return;
+  try { await vaultRef.persist({ force: true }); } catch { /* it stays in memory: read from there */ }
+}
+
 export function readBlobNow(FS, path) {
   let node = null;
   try { node = FS.lookupPath(path).node; } catch { /* not this FS */ }

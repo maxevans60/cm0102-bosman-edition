@@ -223,16 +223,53 @@ const WEB = path.resolve(__dirname, '..');
           writeFile(p, data) { const n = n2.get(p) ?? { path: p }; n2.set(p, n); n.contents = data; n.usedBytes = data.length; n.mtime = Date.now(); }, stat(p) { return { mode: 0o100644, size: n2.get(p).usedBytes, mtime: new Date(n2.get(p).mtime) }; } }; })(), stable: 0 });
         await other.open(); other.active = true;
         out.nextVisit = (await other.mount()).files;
-        // The parts stay while a record names them (the save and its older copy), and go at the next start once none does.
-        out.partsKept = (await partKeys()).length;
+        // The parts stay while a record names them (the save and its older copy), and go at the vault's round once none
+        // does (and at the next start, for parts that a closed tab left).
+        const streamedId = (await vault.records()).find((rec) => rec.key === '/user/Streamed 2.sav')?.partsId;
+        const partsOf = async (id) => (await partKeys()).filter((k) => k.startsWith(`${PART}${id}:`)).length;
+        out.partsKept = await partsOf(streamedId);
         FS.unlink('/user/Streamed 2.sav');
+        await vault.persist();
+        out.partsWhileCopy = await partsOf(streamedId);
         FS.unlink('/user/backups/Streamed (before edit).sav');
         await vault.persist();
+        out.partsAfterRound = await partsOf(streamedId);
         const third = createVault({ FS: (() => { const n3 = new Map(); return { ...FS, lookupPath(p) { if (n3.has(p)) return { node: n3.get(p) }; if (dirs.has(p)) return { node: { path: p } }; throw enoent(p); },
           writeFile(p, data) { const n = n3.get(p) ?? { path: p }; n3.set(p, n); n.contents = data; n.usedBytes = data.length; n.mtime = Date.now(); }, stat(p) { return { mode: 0o100644, size: n3.get(p).usedBytes, mtime: new Date(n3.get(p).mtime) }; } }; })(), stable: 0 });
         await third.open(); third.active = true;
         await third.mount();
-        out.partsAfter = (await partKeys()).length;
+        out.partsAfter = await partsOf(streamedId);
+        // A save the game wrote goes into the storage in parts of 4 MB, never as one Blob of its size: that Blob was a
+        // second copy of the save in the tab's memory beside the game's own (an iPhone closed the tab after a save,
+        // 21 November 2026). Saved again, the parts of the version it replaces go at the same round.
+        const RealBlob = Blob, copies = [];
+        globalThis.Blob = class extends RealBlob {
+          constructor(parts = [], o) { super(parts, o); for (const x of parts) if (ArrayBuffer.isView(x) || x instanceof ArrayBuffer) copies.push(x.byteLength); }
+        };
+        const wname = '/user/Written 2003-05-01.sav', partsBefore3 = (await partKeys()).length;
+        try {
+          FS.writeFile(wname, make(11));
+          await vault.persist();
+          const wn = FS.lookupPath(wname).node;
+          out.written = { largestCopy: Math.max(0, ...copies), state: wn.vault, inMemory: wn.contents.length, parts: (await partKeys()).length - partsBefore3 };
+          const wb = new Uint8Array(await (await vault.blob(wname)).arrayBuffer());
+          out.writtenSame = wb.length === SIZE && wb.every((x, i) => x === pattern(i, 11));
+          const anew = (salt) => { vault.openForGame(FS.lookupPath(wname).node, 577); FS.writeFile(wname, make(salt)); vault.settle(FS.lookupPath(wname).node); };
+          anew(12); await vault.persist();
+          anew(13); await vault.persist();
+          out.writtenPartsAfter = (await partKeys()).length - partsBefore3;
+          const wb2 = new Uint8Array(await (await vault.blob(wname)).arrayBuffer());
+          out.writtenSameAfter = wb2.length === SIZE && wb2[1000] === pattern(1000, 13) && wb2[SIZE - 1] === pattern(SIZE - 1, 13);
+          // The cloud upload reads a save the game just wrote: it waits for the vault to store it and reads the stored
+          // copy, not a Blob made from the file in memory (the upload once made a third copy while the vault stored).
+          const { storedFirst, readBlobNow } = await import('/saves.js');
+          anew(14);
+          copies.length = 0;
+          await storedFirst(FS, wname);
+          const ub = readBlobNow(FS, wname);
+          const ublob = ub instanceof Promise ? await ub : ub;
+          out.uploadRead = { state: FS.lookupPath(wname).node.vault, size: ublob.size, largestCopy: Math.max(0, ...copies) };
+        } finally { globalThis.Blob = RealBlob; }
         // A game file (gameFile, loader.js): a placeholder of its size that reads from its source (the browser's cache) in
         // pieces when the game opens it, never whole; the page reads it whole through the vault (the editor); the vault's
         // rounds and records leave it alone (it is no save of the player's).
@@ -286,7 +323,13 @@ const WEB = path.resolve(__dirname, '..');
     check('it reads back whole, and the game reads a piece across two parts', r.streamSame && r.streamPiece?.n === 30 && r.streamPiece.same && r.streamPiece.state === 'lazy', JSON.stringify(r.streamPiece));
     check('renamed and copied (the editor\'s older copy), it keeps its bytes', r.streamRenamed && r.streamCopied === true, JSON.stringify([r.streamRenamed, r.streamCopied]));
     check('a stream that is no save is refused, and leaves no parts and no file', typeof r.streamBad === 'string' && r.streamBadParts === 0 && !r.streamBadFile, JSON.stringify([r.streamBad, r.streamBadParts]));
-    check('the parts stay while a record names them, and go at the next start once none does', r.partsKept >= 3 && r.partsAfter === 0, JSON.stringify([r.partsKept, r.partsAfter]));
+    check('a save the game wrote goes into the storage in parts of 4 MB, never as one copy of its size; it reads back the same',
+      r.written?.largestCopy <= 4 * MB && r.written.state === 'out' && r.written.inMemory === 0 && r.written.parts === 5 && r.writtenSame, JSON.stringify(r.written));
+    check('saved twice more: the parts of the versions it replaced go at the same round, and it reads the last version',
+      r.writtenPartsAfter === 5 && r.writtenSameAfter, `${r.writtenPartsAfter} parts`);
+    check('the cloud upload of a save just written waits for the vault and reads the stored copy, not one made from memory',
+      r.uploadRead?.state === 'out' && r.uploadRead.size === SIZE && r.uploadRead.largestCopy <= 4 * MB, JSON.stringify(r.uploadRead));
+    check('the parts stay while a record names them, and go at the vault\'s round once none does', r.partsKept >= 3 && r.partsWhileCopy === r.partsKept && r.partsAfterRound === 0 && r.partsAfter === 0, JSON.stringify([r.partsKept, r.partsWhileCopy, r.partsAfterRound, r.partsAfter]));
     check('a save the player picked (Upload) stays readable after its file is deleted (Chromium kept only a reference)',
       r.copiesFiles === false && r.pickedWhy === null && r.pickedSame === true, JSON.stringify([r.copiesFiles, r.pickedWhy, r.pickedSame]));
     check('it stays through the vault\'s round, reads back the same, and the next visit lists it', r.uploadKept === 0 && r.uploadSame && r.nextVisit >= 2, JSON.stringify([r.uploadKept, r.uploadSame, r.nextVisit]));

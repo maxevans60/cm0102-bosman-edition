@@ -146,6 +146,28 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     return blobOf(rec);
   }
   const dropParts = (id) => request('readwrite', (s) => committed(s, s.delete(IDBKeyRange.bound(`${PART}${id}:`, `${PART}${id}:\uffff`))));
+  const newPartsId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+  const writing = new Set();                    // the ids of parts being written, whose main record is not there yet
+
+  // A file of the user folder into the storage as parts of PIECE bytes, each a Blob of its own written on its own:
+  // a Blob of the whole file was a second copy of it in the tab's memory, beside the file (an iPhone closed the tab
+  // after the game saved, 21 November 2026). still(): the file is still the version being stored; when it changed
+  // meanwhile, its parts go and the call gives null (the next round stores the new version). Else { partsId, parts }.
+  async function putParts(bytes, size, still) {
+    const id = newPartsId();
+    writing.add(id);
+    let n = 0;
+    try {
+      for (let at = 0; at < size || n === 0; at += PIECE, n++) {
+        if (!still()) { await dropParts(id); return null; }
+        await put(partKey(id, n), { part: true, blob: new Blob([bytes.subarray(at, Math.min(size, at + PIECE))]) });
+      }
+      return { partsId: id, parts: n };
+    } catch (e) {
+      await dropParts(id).catch(() => {});
+      throw e;
+    } finally { writing.delete(id); }
+  }
 
   const lookup = (path) => { try { return FS.lookupPath(path).node; } catch { return null; } };
   const pathOf = (node) => { try { return FS.getPath(node); } catch { return null; } };
@@ -271,7 +293,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   // The parts that no record names (a deleted or replaced file, a download that stopped): removed at the start.
   async function dropUnnamedParts(named) {
     const ids = await request('readonly', (s) => done(s.getAllKeys(IDBKeyRange.bound(PART, `${PART}\uffff`))));
-    const gone = new Set(ids.map((k) => k.slice(PART.length, k.lastIndexOf(':'))).filter((id) => !named.has(id)));
+    const gone = new Set(ids.map((k) => k.slice(PART.length, k.lastIndexOf(':'))).filter((id) => !named.has(id) && !writing.has(id)));
     for (const id of gone) await dropParts(id);
     return gone.size;
   }
@@ -322,7 +344,8 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   // and iOS closed the tab). check(head, size): why the file is refused (its first bytes, at most a part, and its size),
   // or null. Resolves to why, or null once it is stored and the user folder has its placeholder.
   async function adoptStream(path, stream, mtime = Date.now(), check = () => null) {
-    const id = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+    const id = newPartsId();
+    writing.add(id);
     const reader = stream.getReader();
     let buf = new Uint8Array(PIECE), fill = 0, n = 0, size = 0, head = null;
     const flush = async () => {
@@ -348,20 +371,23 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       await flush();
       buf = null;
       const why = check(head ?? new Uint8Array(0), size);
-      if (why) { await dropParts(id); return why; }
+      if (why) { await dropParts(id); writing.delete(id); return why; }
     } catch (e) {
       reader.cancel().catch(() => {});
       await dropParts(id).catch(() => {});
+      writing.delete(id);
       throw e;
     }
-    await serial(async () => {
-      for (const other of [...managed]) if (other.vaultKey === path) { const q = alive(other); if (q && q !== path) await rekey(other, q); }
-      await put(path, { size, mtime, partsId: id, parts: n });
-      mine.add(path);
-      const old = lookup(path);
-      if (old) managed.delete(old);
-      placeholder(path, size, mtime);
-    });
+    try {
+      await serial(async () => {
+        for (const other of [...managed]) if (other.vaultKey === path) { const q = alive(other); if (q && q !== path) await rekey(other, q); }
+        await put(path, { size, mtime, partsId: id, parts: n });
+        mine.add(path);
+        const old = lookup(path);
+        if (old) managed.delete(old);
+        placeholder(path, size, mtime);
+      });
+    } finally { writing.delete(id); }
     return null;
   }
 
@@ -538,8 +564,10 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       for (const [p, node] of written()) {
         if (inUse(node) || (!force && Date.now() - node.mtime < stable)) continue;
         for (const other of [...managed]) if (other !== node && other.vaultKey === p) { const q = alive(other); if (q && q !== p) await rekey(other, q); }
-        const size = node.usedBytes, mtime = node.mtime;
-        await put(p, { size, mtime, blob: new Blob([node.contents ? node.contents.subarray(0, size) : new Uint8Array(0)]) });
+        const size = node.usedBytes, mtime = node.mtime, bytes = node.contents ?? new Uint8Array(0);
+        const parts = await putParts(bytes, size, () => lookup(p) === node && node.mtime === mtime && node.usedBytes === size && node.contents === bytes);
+        if (!parts) continue;                                       // changed while it was stored: the next round
+        await put(p, { size, mtime, ...parts });
         mine.add(p);
         stored++;
         if (lookup(p) !== node || node.mtime !== mtime || node.usedBytes !== size || node.vault) continue;   // changed meanwhile
@@ -554,6 +582,8 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
         mine.delete(k);
         if (there.has(k)) { await del(k); removed++; }
       }
+      // The parts of the versions just replaced, and of the files just removed, when no other record names them.
+      if (stored || removed) await dropUnnamedParts(new Set((await records()).map((r) => r.partsId).filter(Boolean)));
       return { stored, removed };
     });
   }
