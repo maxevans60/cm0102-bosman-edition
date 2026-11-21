@@ -124,6 +124,13 @@ export function coffeeUrl(v) {
   try { const u = new URL(String(v ?? '')); return u.protocol === 'https:' ? u.href.replace(/\/$/, u.pathname === '/' ? '/' : '') : null; }
   catch { return null; }
 }
+// The YouTube channel of the how-to videos (CM_YOUTUBE_URL), when it is an https address of YouTube: the page links to
+// it (its footer, Help).
+export function youtubeUrl(v) {
+  const href = coffeeUrl(v);
+  try { return href && /^(www\.|m\.)?youtube\.com$|^youtu\.be$/.test(new URL(href).hostname) ? href : null; }
+  catch { return null; }
+}
 
 function sendTemplated(req, res, file, site) {
   const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -338,6 +345,7 @@ export function createApp({ gameDir, buildDir, asyncifyDir = null, manifestPath,
           engines: inv.engines.map((e) => ({ base: e.base, suspend: e.suspend, version: e.version, bytes: e.wasm.size })),
           shell: SHELL,
           coffee: coffeeUrl(site.coffee),
+          youtube: youtubeUrl(site.youtube),                                // the video guides (CM_YOUTUBE_URL)
           maker: site.seller ? String(site.seller).slice(0, 80) : null,
           library: Boolean(library),                                       // Get a database (library.mjs)      // the footer's "Made with ♥ by" (CM_SELLER)
           stats: stats ? { mode: statsMode } : null,
@@ -443,7 +451,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     : paddle ? `, sold with Paddle (${paddle.env})` : ', no payments (BMC_WEBHOOK_SECRET and CM_COFFEE_URL, web/deploy/README.md)'}`
     : `accounts and cloud saves: off${someSet ? `, missing ${missing.join(', ')}` : ''} (web/README.md, "Cloud saves")`);
   const port = Number(process.env.PORT ?? 8080), host = process.env.HOST ?? '127.0.0.1';
-  const site = { seller: process.env.CM_SELLER, contact: process.env.CM_CONTACT, price: process.env.CM_PRICE, coffee: process.env.CM_COFFEE_URL };
+  const site = { seller: process.env.CM_SELLER, contact: process.env.CM_CONTACT, price: process.env.CM_PRICE, coffee: process.env.CM_COFFEE_URL, youtube: process.env.CM_YOUTUBE_URL };
   if ((paddle || coffee) && (!site.seller || !site.contact))
     console.log('payments: set CM_SELLER and CM_CONTACT, which the terms, refunds and privacy pages name');
   console.log(stats ? `statistics: on (${process.env.CM_STATS === 'optout' ? 'opt-out' : 'opt-in: the page asks first'}), ${s3FromEnv(process.env) ? 'kept in the bucket' : 'in memory only'}; admin page /admin for ${admins.filter((e) => e.trim()).length} email(s)${process.env.CM_ADMIN_TOKEN ? ' and the token' : ''}`

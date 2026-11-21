@@ -179,6 +179,17 @@ fly secrets set CM_COFFEE_URL=https://buymeacoffee.com/<your name>
 Only an `https` address is taken; without it nothing shows. The button opens the page in a new tab, and it hides in
 full screen so it never covers the game.
 
+## The video guides
+
+The game page's footer gets a "Video guides" link and Help a line about the two how-to videos when the server knows
+the YouTube channel:
+
+```bash
+fly secrets set CM_YOUTUBE_URL=https://www.youtube.com/@CM0102inBrowser
+```
+
+Only an `https` address of youtube.com or youtu.be is taken; without it nothing shows.
+
 ## Straight to Tigris
 
 Saves and data sets go from the browser to Tigris and back without passing the machine (`web/README.md`, "Straight to

@@ -192,10 +192,16 @@ test('a Buy Me a Coffee link (CM_COFFEE_URL): in files.json when it is an https 
   assert.equal(coffeeUrl('https://buymeacoffee.com/someone'), 'https://buymeacoffee.com/someone');
   for (const bad of [undefined, '', 'http://buymeacoffee.com/x', 'javascript:alert(1)', 'not a url']) assert.equal(coffeeUrl(bad), null, String(bad));
   assert.equal((await (await fetch(`${base}/files.json`)).json()).coffee, null, 'none set: none');
-  const two = createApp({ gameDir, buildDir, manifestPath, site: { coffee: 'https://buymeacoffee.com/someone' } });
+  const { youtubeUrl } = await import('../server.mjs');
+  assert.equal(youtubeUrl('https://www.youtube.com/@CM0102inBrowser'), 'https://www.youtube.com/@CM0102inBrowser');
+  assert.equal(youtubeUrl('https://youtu.be/abc'), 'https://youtu.be/abc');
+  for (const bad of [undefined, '', 'http://www.youtube.com/@x', 'https://youtube.com.evil.example/@x', 'https://buymeacoffee.com/x']) assert.equal(youtubeUrl(bad), null, String(bad));
+  assert.equal((await (await fetch(`${base}/files.json`)).json()).youtube, null, 'none set: none');
+  const two = createApp({ gameDir, buildDir, manifestPath, site: { coffee: 'https://buymeacoffee.com/someone', youtube: 'https://www.youtube.com/@CM0102inBrowser' } });
   await new Promise((r) => two.listen(0, '127.0.0.1', r));
   try {
     const info = await (await fetch(`http://127.0.0.1:${two.address().port}/files.json`)).json();
     assert.equal(info.coffee, 'https://buymeacoffee.com/someone');
+    assert.equal(info.youtube, 'https://www.youtube.com/@CM0102inBrowser', 'the video guides, for the footer and Help');
   } finally { two.close(); }
 });

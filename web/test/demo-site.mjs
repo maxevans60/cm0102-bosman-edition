@@ -55,7 +55,7 @@ export async function startDemoSite({ adminToken } = {}) {
   await s3.put('library/index.json', Buffer.from(JSON.stringify({ entries: libEntries })), { type: 'application/json' });
   const server = createApp({ gameDir: game, buildDir: build, manifestPath: join(tmp, 'manifest.tsv'), cloud, library,
     stats: createStats({ store: statsStore(null) }), statsMode: 'optout', adminToken,
-    site: { seller: process.env.CM_SELLER || '', price: '£5 a month', coffee } });
+    site: { seller: process.env.CM_SELLER || '', price: '£5 a month', coffee, youtube: process.env.CM_YOUTUBE_URL } });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   const BASE = `http://127.0.0.1:${server.address().port}`;
   const close = async () => {

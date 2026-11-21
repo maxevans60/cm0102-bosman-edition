@@ -1220,6 +1220,12 @@ async function start() {
     extra: () => ({ engine: `${info.chosen.suspend ?? 'unknown'} ${info.chosen.version}`, vault: Boolean(vault?.active), cloud: Boolean(account.me?.user?.cloud) }) });
   mountStatsChoice(info);
   $('made').innerHTML = madeWith(info.maker);            // the page's footer
+  // The video guides (CM_YOUTUBE_URL): in the footer and in Help.
+  if (info.youtube) {
+    $('made').insertAdjacentHTML('beforeend', ` · <a href="${esc(info.youtube)}" target="_blank" rel="noopener">Video guides</a>`);
+    for (const a of document.querySelectorAll('a.youtube')) a.href = info.youtube;
+    $('help-videos').hidden = false;
+  }
   // Buy me a coffee (CM_COFFEE_URL on the server): in the bar and in Help.
   if (info.coffee) {
     for (const a of document.querySelectorAll('a.coffee')) a.href = info.coffee;
