@@ -761,11 +761,15 @@ try {
       const buttons = rows.flatMap((tr) => [...tr.querySelectorAll('button')]);
       const right = Math.max(...buttons.map((b) => b.getBoundingClientRect().right));
       const lists = [...document.querySelectorAll('#sets .dlg-list')].map((l) => l.scrollHeight - l.clientHeight);
+      const libRows = [...document.querySelectorAll('#sets-lib tr')].filter((tr) => tr.querySelector('button'));
       return { rows: rows.length, right, width: innerWidth, listsScroll: lists.some((d) => d > 1),
+        cards: libRows.every((tr) => tr.querySelector('.lib-card')), getBeside: libRows.every((tr) => {
+          const g = tr.querySelector('[data-lib-get]').getBoundingClientRect(), size = tr.querySelector('td.num').getBoundingClientRect();
+          return Math.abs((g.top + g.bottom) / 2 - (size.top + size.bottom) / 2) < 12; }),
         headHidden: getComputedStyle(document.querySelector('#sets-lib tr')).display === 'none' };
     });
-    check('a phone: every list\'s buttons on the screen, each row a card, and only the dialog scrolls',
-      phone.rows >= 9 && phone.right <= phone.width && !phone.listsScroll && phone.headHidden, JSON.stringify(phone));
+    check('a phone: every list\'s buttons on the screen, each row a card (a library one with its picture or season box, Get beside its size), and only the dialog scrolls',
+      phone.rows >= 9 && phone.right <= phone.width && !phone.listsScroll && phone.headHidden && phone.cards && phone.getBeside, JSON.stringify(phone));
     await shot(p, 'databases-phone');
     await lctx.close();
   }

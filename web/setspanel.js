@@ -149,13 +149,18 @@ export function mountSetsPanel({ FS, root, sync, log, toast, module, cloud = () 
   // ---- Get a database: the library of the server (library.mjs), each database for a season. ----
   // The library's list, always on the Databases tab under the player's own (asked again a minute after the last time).
   const head = $('sets-lib-head');
+  // A database's title card (library.mjs, rgn.mjs: the release's intro picture), or its season in a box of the same
+  // size, so the names line up. Decorative: the name beside it says what it is.
+  const card = (e) => (e.card
+    ? `<img class="lib-card" src="/api/library/${encodeURIComponent(e.id)}/card" width="64" height="48" alt="" loading="lazy" decoding="async">`
+    : `<span class="lib-card none" aria-hidden="true">${seasonText(e.season)}</span>`);
   function drawLibrary() {
     const have = new Set(listDataSets(FS, root).map((s) => s.library?.id).filter(Boolean));
     head.hidden = lib.hidden = !entries.length;
     head.innerHTML = `Available to download <span>· ${entries.length} database${entries.length === 1 ? '' : 's'}, free</span>`;
     $('sets-step1').innerHTML = entries.length ? '<b>Get</b> a database below, or upload your own' : '<b>Upload</b> a database, or make one from the game\'s data';
     lib.innerHTML = entries.length ? `<table><tr><th>Database</th><th>Season</th><th class="num">Size</th><th></th></tr>
-      ${entries.map((e, i) => `<tr><td>${esc(e.name)}${e.note ? `<div class="small">${esc(e.note)}</div>` : ''}</td><td>${seasonText(e.season)}</td>
+      ${entries.map((e, i) => `<tr><td><div class="lib-db">${card(e)}<div>${esc(e.name)}${e.note ? `<div class="small">${esc(e.note)}</div>` : ''}</div></div></td><td>${seasonText(e.season)}</td>
         <td class="num">${MB(e.size)}</td><td class="acts"><div class="btns"><button class="primary" data-lib-get="${i}">${have.has(e.id) ? 'Get again' : 'Get'}</button></div></td></tr>`).join('')}</table>` : '';
   }
   async function showLibrary() {

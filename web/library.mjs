@@ -5,20 +5,23 @@
 // The store holds:
 //   library/index.json             { entries: [{ id, name, season, note, size, rawSize, added }] }
 //   library/<id>.zip               the data set: its 20 database files (and the Data files it brings), as a zip
+//   library/<id>.png               its title card (rgn.mjs): the release's intro picture, small, for the page only
 //   library/incoming/<id>.zip      an upload of the admin page, until it is checked
 // The admin page uploads a zip (straight to the store with a signed link where the pages go direct, else through this
 // server), then names it: the server checks that it holds the 20 database files (cloud.mjs inspectSetZip) and only then
 // lists it. A player's download goes straight from the store where it can, else through this server.
 import { randomBytes } from 'node:crypto';
 import { inspectSetZip, validSetName } from './cloud.mjs';
+import { cardOfZip } from './rgn.mjs';
 
-export const MAX_LIBRARY_ZIP = 128 << 20;            // a data set with its extra files, zipped (the 2001/02 data: some 20 MB)
+export const MAX_LIBRARY_ZIP = 128 << 20;
+export const CARDS_AT_ONCE = 6;                     // zips read by one call of the admin's Make their pictures            // a data set with its extra files, zipped (the 2001/02 data: some 20 MB)
 // The season a database is for: the game's seasons (datasets.js, seasons_db.h, 2001/02 to 2025/26), and one more for a
 // database of the season after the game's last (an update of October 2026 is 2026/27): Use starts that one in the game's
 // last season, its players keeping their ages (setspanel.js).
 export const FIRST_SEASON = 2001, LAST_SEASON = 2026;
 const INDEX = 'library/index.json';
-const zipKey = (id) => `library/${id}.zip`, incomingKey = (id) => `library/incoming/${id}.zip`;
+const zipKey = (id) => `library/${id}.zip`, incomingKey = (id) => `library/incoming/${id}.zip`, cardKey = (id) => `library/${id}.png`;
 const validId = (id) => typeof id === 'string' && /^[0-9a-f]{16}$/.test(id);
 
 function send(res, status, body) {
@@ -64,15 +67,30 @@ export function createLibrary({ s3, presign = (m, k, o) => s3.presign?.(m, k, o)
     cachedAt = Date.now();
   }
   const listed = (ix) => [...ix.entries].sort((a, b) => b.season - a.season || a.name.localeCompare(b.name));
+  // The title card of a database's zip into the store (rgn.mjs); true when it has one.
+  async function makeCard(id, zip) {
+    const png = await cardOfZip(zip);
+    if (png) await s3.put(cardKey(id), Buffer.from(png), { type: 'image/png' });
+    return Boolean(png);
+  }
 
   // For everyone: the list, and a database (a signed link of the store, or the zip through this server).
   async function handle(req, res, url) {
     const path = url.pathname;
     if (req.method !== 'GET' && req.method !== 'HEAD') { req.resume(); send(res, 405, { error: 'GET only' }); return; }
     if (path === '/api/library') { send(res, 200, { entries: listed(await index()) }); return; }
-    const id = path.slice('/api/library/'.length);
+    const [id, part] = path.slice('/api/library/'.length).split('/');
     const entry = validId(id) ? (await index()).entries.find((e) => e.id === id) : null;
     if (!entry) { send(res, 404, { error: 'no such database in the library' }); return; }
+    if (part === 'card') {
+      const r = entry.card ? await s3.get(cardKey(id)) : null;
+      if (!r) { send(res, 404, { error: 'this database has no picture' }); return; }
+      // The picture of an id never changes (a new upload is a new id): a week in the browser's cache.
+      res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': r.headers['content-length'], 'Cache-Control': 'public, max-age=604800' });
+      r.pipe(res);
+      return;
+    }
+    if (part !== undefined) { send(res, 404, { error: 'not found' }); return; }
     if (url.searchParams.get('direct') === 'get') {
       send(res, 200, isDirect() ? { direct: true, url: presign('GET', zipKey(id)).url, size: entry.size } : { direct: false });
       return;
@@ -108,6 +126,24 @@ export function createLibrary({ s3, presign = (m, k, o) => s3.presign?.(m, k, o)
       } else send(res, 200, { id: fresh, direct: false });
       return;
     }
+    // POST /api/admin/library/cards: the title card of each database that has none yet (those added before the
+    // pictures came), one zip at a time, CARDS_AT_ONCE a call so that no request runs for minutes. { made, none, left }:
+    // the names of those that got one and of those with no picture, and how many are still to read (call again).
+    if (id === 'cards' && !step && method === 'POST') {
+      req.resume();
+      const ix = await index(true), made = [], none = [];
+      for (const e of ix.entries) {
+        if (e.card !== undefined) continue;
+        if (made.length + none.length >= CARDS_AT_ONCE) break;
+        const zip = await s3.getBuffer(zipKey(e.id));
+        e.card = zip ? await makeCard(e.id, zip) : false;
+        (e.card ? made : none).push(e.name);
+      }
+      await writeIndex(ix);
+      if (made.length || none.length) log(`library: pictures made for ${made.length}, ${none.length} without one`);
+      send(res, 200, { made, none, left: ix.entries.filter((e) => e.card === undefined).length });
+      return;
+    }
     if (!validId(id)) { req.resume(); send(res, 400, { error: 'not a library id' }); return; }
     if (step === 'body' && method === 'PUT') {
       if (Number(req.headers['content-length']) > MAX_LIBRARY_ZIP) { req.resume(); send(res, 413, { error: `a database may be ${MAX_LIBRARY_ZIP >> 20} MB at most, zipped` }); return; }
@@ -120,12 +156,14 @@ export function createLibrary({ s3, presign = (m, k, o) => s3.presign?.(m, k, o)
       if (bad) { send(res, 400, { error: bad }); return; }
       const h = await s3.head(incomingKey(id));
       if (!h) { send(res, 404, { error: 'no upload of that id: send the zip first' }); return; }
-      const { why, rawSize } = h.size > MAX_LIBRARY_ZIP ? { why: `it is larger than ${MAX_LIBRARY_ZIP >> 20} MB` } : inspectSetZip(await s3.getBuffer(incomingKey(id)));
+      const zip = h.size > MAX_LIBRARY_ZIP ? null : await s3.getBuffer(incomingKey(id));
+      const { why, rawSize } = zip ? inspectSetZip(zip) : { why: `it is larger than ${MAX_LIBRARY_ZIP >> 20} MB` };
       if (why) { await s3.delete(incomingKey(id)); send(res, 422, { error: `not a data set: ${why}` }); return; }
       await s3.copy(incomingKey(id), zipKey(id), { metadata: { 'raw-size': rawSize }, type: 'application/zip' });
       await s3.delete(incomingKey(id));
+      const card = await makeCard(id, zip).catch(() => false);
       const ix = await index(true);
-      const entry = { id, ...fields, size: h.size, rawSize, added: new Date().toISOString() };
+      const entry = { id, ...fields, size: h.size, rawSize, card, added: new Date().toISOString() };
       await writeIndex({ ...ix, entries: [...ix.entries.filter((e) => e.id !== id), entry] });
       log(`library: ${fields.name} (${fields.season}) added, ${Math.round(h.size / 1048576)} MB`);
       send(res, 201, entry);
@@ -145,6 +183,7 @@ export function createLibrary({ s3, presign = (m, k, o) => s3.presign?.(m, k, o)
       const ix = await index(true), old = ix.entries.find((e) => e.id === id);
       await writeIndex({ ...ix, entries: ix.entries.filter((e) => e.id !== id) });
       await s3.delete(zipKey(id));
+      if (old?.card) await s3.delete(cardKey(id)).catch(() => {});
       if (old) log(`library: ${old.name} (${old.season}) removed`);
       send(res, 204);
       return;
