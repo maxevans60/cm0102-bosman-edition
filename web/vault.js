@@ -19,6 +19,11 @@
 // - the page removes only the records it knows (mounted or stored by it): another tab's are not its own. Two tabs of
 //   the game removed each other's new saves every 2 seconds that way, and a Download of such a save then gave an empty
 //   file (loader.js now lets one tab play at a time; this is the second guard).
+// The game files (/game) can be placeholders too (gameFile, loader.js): a file the browser keeps in its cache storage
+// is read in pieces from there, as a save is from the vault, and the 467 MB of game files are no longer in the page's
+// memory (the game reads 18 MB of them on the way to its first screen; the tab's JS heap was 497 MB, 21 November
+// 2026). Such a placeholder has a source (node.vaultSource: its Blob, from the cache) and no record: nothing of the
+// vault's store, rounds or IDBFS touches it.
 // The rest of the user folder (settings.txt, game.cfg, the fitted .lng files, the notes of the data sets) stays with
 // IDBFS. Without JSPI (an Asyncify build, an old browser) the vault is off and the page works as before; files that an
 // earlier visit put in the vault then come back into the user folder (materialize).
@@ -133,6 +138,13 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     if (parts.length !== rec.parts) throw new Error(`the browser's storage has ${parts.length} of the ${rec.parts} parts of this file`);
     return new Blob(parts.map((x) => x.blob));
   }
+  // A placeholder's Blob: a game file's from its source (the cache), a vault file's from its record.
+  async function sourceOf(node) {
+    if (node.vaultSource) return node.vaultSource();
+    const rec = await get(node.vaultKey);
+    if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
+    return blobOf(rec);
+  }
   const dropParts = (id) => request('readwrite', (s) => committed(s, s.delete(IDBKeyRange.bound(`${PART}${id}:`, `${PART}${id}:\uffff`))));
 
   const lookup = (path) => { try { return FS.lookupPath(path).node; } catch { return null; } };
@@ -177,14 +189,15 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     if ((flags & O_ACCMODE) !== 0) return load(node);
     if (node.vault === 'lazy') return null;
     if (node.vaultBlob) { lazy(node); return null; }
-    return serial(async () => {
+    const take = async () => {
       if (node.vault !== 'out') return;
-      const rec = await get(node.vaultKey);
-      if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
+      const blob = await sourceOf(node);
       if (node.vault !== 'out') return;
-      readInPieces(node, await blobOf(rec));
+      readInPieces(node, blob);
       lazy(node);
-    });
+    };
+    // A game file needs nothing of the vault's store, so it does not wait behind a round of it.
+    return node.vaultSource ? take() : serial(take);
   }
   // Before a read of the game at position, of length bytes: the pieces it needs. null when they are all there.
   function readForGame(node, position, length) {
@@ -395,9 +408,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     if (loading.has(node)) return loading.get(node);
     const p = serial(async () => {
       if (!isAway(node)) return;
-      const rec = await get(node.vaultKey);
-      if (!rec) throw new Error(`the browser's storage has no ${node.vaultKey}`);
-      const bytes = new Uint8Array(await (await blobOf(rec)).arrayBuffer());
+      const bytes = new Uint8Array(await (await sourceOf(node)).arrayBuffer());
       if (!isAway(node)) return;
       node.contents = bytes;
       node.usedBytes = bytes.length;
@@ -413,6 +424,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   // host/posix.c) can wait for the browser's storage. Returns false when this engine or browser cannot (no JSPI): the
   // caller then instantiates as Emscripten does.
   let gameOpens = 0;                            // the engine's own opens in progress: FS.open lets those through
+  let gameFiles = 0;                            // game files made placeholders (gameFile)
   function instantiate(info, receive, wasmUrl) {
     const env = info?.env, orig = env?.__syscall_openat;
     const wasi = info?.wasi_snapshot_preview1 ?? env, origRead = wasi?.fd_read;
@@ -425,10 +437,10 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
       return decoder.decode(b.subarray(ptr, e));
     };
     env.__syscall_openat = new WebAssembly.Suspending((dirfd, path, flags, varargs) => {
-      if (!active || !memory) return orig(dirfd, path, flags, varargs);
+      if (!memory || (!active && !gameFiles)) return orig(dirfd, path, flags, varargs);
       let p = cstr(path);
       if (!p.startsWith('/')) p = `${FS.cwd().replace(/\/$/, '')}/${p}`;
-      const node = p.startsWith('/user/') ? lookup(p) : null;
+      const node = (active && p.startsWith('/user/')) || (gameFiles && p.startsWith('/game/')) ? lookup(p) : null;
       if (!node || !isAway(node)) return orig(dirfd, path, flags, varargs);
       const open = () => {
         gameOpens++;
@@ -441,7 +453,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     });
     if (typeof origRead === 'function') {
       const read = new WebAssembly.Suspending((fd, iov, iovcnt, pnum) => {
-        const stream = active && memory ? FS.streams[fd] : null, node = stream?.node;
+        const stream = (active || gameFiles) && memory ? FS.streams[fd] : null, node = stream?.node;
         if (node?.vault !== 'lazy') return origRead(fd, iov, iovcnt, pnum);
         const words = new Uint32Array(memory.buffer);
         let length = 0;
@@ -549,6 +561,18 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   // For the page: the file's bytes (a copy the caller may change) or a Blob (for a download or an upload), without
   // bringing a placeholder's contents into the engine's memory. A placeholder whose record is gone fails: its node has
   // no contents, and a Download once made an empty file of it.
+  // A game file (gameFile) as a placeholder of the engine's file system: its size, and source() for its Blob when the
+  // game or the page opens it. Not one of the vault's records: no round stores, moves or removes it.
+  function gameFile(path, size, source) {
+    FS.mkdirTree(path.slice(0, path.lastIndexOf('/')));
+    FS.writeFile(path, new Uint8Array(0));
+    const node = lookup(path);
+    node.usedBytes = size;
+    node.vaultSource = source;
+    node.vaultSize = size;
+    evict(node);
+    gameFiles++;
+  }
   async function record(node, path) {
     const rec = await serial(() => get(node.vaultKey));
     if (!rec) throw new Error(`the browser's storage no longer has ${path.slice(path.lastIndexOf('/') + 1)}`);
@@ -556,6 +580,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
   async function bytes(path) {
     const node = lookup(path);
+    if (isAway(node) && node.vaultSource) return new Uint8Array(await (await node.vaultSource()).arrayBuffer());
     if (isAway(node)) return new Uint8Array(await (await blobOf(await record(node, path))).arrayBuffer());
     return FS.readFile(path);
   }
@@ -567,6 +592,7 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
   }
   async function blob(path) {
     const node = lookup(path);
+    if (isAway(node) && node.vaultSource) return node.vaultSource();
     if (isAway(node)) return blobOf(await record(node, path));
     const n = node ?? FS.lookupPath(path).node;
     return new Blob([n.contents instanceof Uint8Array ? n.contents.subarray(0, n.usedBytes ?? n.contents.length) : FS.readFile(path)]);
@@ -594,7 +620,8 @@ export function createVault({ FS: fsOrGetter, log = () => {}, idb = globalThis.i
     stop,
     set active(on) { active = Boolean(on); },
     open, migrateFrom, mount, materialize, clear, instantiate, wrapFS, persist, bytes, view, blob, owns, records,
-    openForGame, readForGame, settle, adopt, adoptStream, copy, dropUnnamedParts,
+    openForGame, readForGame, settle, adopt, adoptStream, copy, dropUnnamedParts, gameFile,
+    get gameFiles() { return gameFiles; },
     held: () => [...managed].filter((n) => n.vault === 'in').length,
   };
 }

@@ -233,6 +233,27 @@ const WEB = path.resolve(__dirname, '..');
         await third.open(); third.active = true;
         await third.mount();
         out.partsAfter = (await partKeys()).length;
+        // A game file (gameFile, loader.js): a placeholder of its size that reads from its source (the browser's cache) in
+        // pieces when the game opens it, never whole; the page reads it whole through the vault (the editor); the vault's
+        // rounds and records leave it alone (it is no save of the player's).
+        const gsize = 9 * MB + 77, gbytes = make(9).subarray(0, gsize);
+        let sourced = 0;
+        vault.gameFile('/game/Data/language.ldb', gsize, async () => { sourced++; return new Blob([gbytes]); });
+        const gnode = FS.lookupPath('/game/Data/language.ldb').node;
+        out.gamePlaceholder = { state: gnode.vault, inMemory: gnode.contents.length, size: FS.stat('/game/Data/language.ldb').size };
+        reads.length = 0;
+        const gw = vault.openForGame(gnode, 0);
+        if (gw) await gw;
+        const gwait = vault.readForGame(gnode, 4 * MB - 50, 100);
+        if (gwait) await gwait;
+        const gbuf = new Uint8Array(100), gn = gnode.stream_ops.read({ node: gnode }, gbuf, 0, 100, 4 * MB - 50);
+        out.gameRead = { n: gn, same: gbuf.every((x, i) => x === pattern(4 * MB - 50 + i, 9)), largest: Math.max(0, ...reads), state: gnode.vault, sourced };
+        vault.settle(gnode);
+        const gb = await vault.bytes('/game/Data/language.ldb');
+        out.gameBytes = { length: gb.length, same: gb.every((x, i) => x === pattern(i, 9)) };
+        await vault.persist();
+        out.gameNotStored = !(await vault.records()).some((rec) => rec.key.startsWith('/game/'));
+        out.gameCount = vault.gameFiles;
         // Without the vault (an Asyncify engine): the file is in the user folder, in memory, as before.
         useVault(null);
         out.plainWhy = await storeSave(FS, 'Plain.sav', new Blob([save(1000, 1)]));
@@ -277,6 +298,11 @@ const WEB = path.resolve(__dirname, '..');
     check('a file not yet in the vault is not copied by it (the editor copies it itself)', r.copyOfFresh === false, String(r.copyOfFresh));
     check('a file that is not a save is refused and not stored; an empty one says so',
       /not a saved game/.test(r.junk ?? '') && r.junkStored === false && /empty \(0 bytes\)/.test(r.empty ?? ''), JSON.stringify([r.junk, r.junkStored, r.empty]));
+    check('a game file is a placeholder of its size: nothing of it in memory', r.gamePlaceholder?.state === 'out' && r.gamePlaceholder.inMemory === 0 && r.gamePlaceholder.size === 9 * MB + 77, JSON.stringify(r.gamePlaceholder));
+    check('the game reads it in pieces from its source (the cache), across two pieces, never whole',
+      r.gameRead?.n === 100 && r.gameRead.same && r.gameRead.largest <= 4 * MB && r.gameRead.state === 'lazy' && r.gameRead.sourced === 1, JSON.stringify(r.gameRead));
+    check('the page reads it whole through the vault (the editor), and the vault\'s rounds and records leave it alone',
+      r.gameBytes?.length === 9 * MB + 77 && r.gameBytes.same && r.gameNotStored === true && r.gameCount === 1, JSON.stringify([r.gameBytes, r.gameNotStored, r.gameCount]));
     check('without the vault a save goes into the user folder in memory, as before', r.plainWhy === null && r.plain?.inMemory === 0x416ec + 1000 && r.plain.state === null, JSON.stringify([r.plainWhy, r.plain]));
   } finally {
     await browser.close();

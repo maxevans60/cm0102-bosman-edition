@@ -393,8 +393,15 @@ async function keepStorage() {
 // A game file that did not come (the connection dropped, the transfer was cut short, the server failed) is asked for
 // again after these pauses before the start stops; a phone on mobile data loses its connection now and then.
 const FILE_TRIES = [2000, 5000, 10000];
+// Game files out of the page's memory (vault.js, gameFile): with a JSPI engine and the browser's cache storage, a file
+// larger than this stays in the cache, and the game reads it from there in pieces when it opens it. Smaller ones (272
+// files, 1.8 MB) come into memory: each lazy file costs a look in the cache at its first open.
+const LAZY_MIN = 64 << 10;
+// A lazy game file in the list download gives: where the cache keeps it, and its size.
+const lazyFile = (f) => ({ lazy: true, url: fileUrl(f), size: f.size });
+const isLazy = (v) => Boolean(v?.lazy);
 
-async function download(files, cache, onBytes, counts, signal) {
+async function download(files, cache, onBytes, counts, signal, { lazy = false } = {}) {
   const out = new Map();
   let next = 0;
   // The body of r into an array of the file's size; got(n) counts the bytes as they come.
@@ -418,9 +425,40 @@ async function download(files, cache, onBytes, counts, signal) {
       const f = files[next++];
       const url = fileUrl(f);
       const kept = cache ? await cache.match(url) : undefined;
+      const leave = lazy && cache && f.size > LAZY_MIN;     // stays in the cache: not read now
       let buf;
-      if (kept) buf = await readAll(kept, f, true);
-      else {
+      if (kept && leave) { onBytes(f.size, true); buf = lazyFile(f); }
+      else if (kept) buf = await readAll(kept, f, true);
+      else if (leave) {
+        // Into the cache as it comes (the response as the server sent it: a new Response with its headers and the
+        // decoded body was refused, "Cache.put() encountered a network error"), counted on the way by reading the other
+        // copy, whose pieces are dropped: nothing of the file stays in the page's memory.
+        for (let i = 0; ; i++) {
+          let got = 0;
+          try {
+            const r = await fetch(url, { signal });
+            if (!r.ok) throw Object.assign(new Error(`${f.path}: HTTP ${r.status}`), { again: r.status >= 500 });
+            const storing = cache.put(url, r.clone());
+            const reader = r.body.getReader();
+            for (;;) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              got += value.length;
+              onBytes(value.length, false);
+            }
+            await storing;
+            if (got !== f.size) { await cache.delete(url); throw Object.assign(new Error(`${f.path}: ${got} of ${f.size} bytes`), { again: true }); }
+            buf = lazyFile(f);
+            break;
+          } catch (e) {
+            if (got) onBytes(-got, false);
+            const again = e.name !== 'AbortError' && (e instanceof TypeError || e.again);
+            if (!again || i >= FILE_TRIES.length || signal?.aborted) throw e;
+            log(`page: ${f.path}: ${e.message}; asked for again in ${FILE_TRIES[i] / 1000} s`);
+            await new Promise((ok) => setTimeout(ok, FILE_TRIES[i]));
+          }
+        }
+      } else {
         for (let i = 0; ; i++) {
           let got = 0;
           try {
@@ -447,12 +485,34 @@ async function download(files, cache, onBytes, counts, signal) {
   return out;
 }
 
-// The files into the engine's file system, without a copy (the file system keeps the arrays).
-function install(FS, files) {
+// The files into the engine's file system, without a copy (the file system keeps the arrays). A lazy file (download,
+// LAZY_MIN) becomes a placeholder that reads from the cache (vault.gameFile); the files must all be in memory when the
+// vault could not hook the engine's open and read.
+function install(FS, files, gameFile) {
+  let lazy = 0, lazyBytes = 0;
   for (const [path, data] of files) {
     const full = `/game/${path}`;
     FS.mkdirTree(full.slice(0, full.lastIndexOf('/')));
-    FS.writeFile(full, data, { canOwn: true });
+    if (isLazy(data)) {
+      const { url, size } = data;
+      gameFile(full, size, async () => {
+        const r = await gameCache?.match(url);
+        if (!r) throw new Error(`the browser's cache no longer has the game file ${path}: load the page again`);
+        return r.blob();
+      });
+      lazy++; lazyBytes += size;
+    } else FS.writeFile(full, data, { canOwn: true });
+  }
+  return { lazy, lazyBytes };
+}
+let gameCache = null;                                 // the cache that the lazy game files are read from
+// The lazy files of the list into memory, from the cache: the way back when the engine's open could not be hooked.
+async function bringIn(files) {
+  for (const [path, data] of files) {
+    if (!isLazy(data)) continue;
+    const r = await gameCache?.match(data.url);
+    if (!r) throw new Error(`the browser's cache no longer has the game file ${path}`);
+    files.set(path, new Uint8Array(await r.arrayBuffer()));
   }
 }
 
@@ -741,8 +801,21 @@ function runEngine(files, info) {
       const M = window.Module, FS = M.FS;
       saveInPlay = watchSaveInPlay(FS);                // which save a report sends by default
       reserveSaveRoom(FS, { when: () => Boolean(vault?.active) });   // a save being written gets its room at once (room.js)
-      install(FS, files);
-      files.clear();
+      const lazyOnes = [...files.values()].filter(isLazy).length;
+      if (lazyOnes && !hooked) {
+        // The vault did not hook this engine: the game cannot read the cache in pieces, so every file comes in whole.
+        log(`page: the engine's reads could not be hooked: the ${lazyOnes} large game files come into memory`);
+        M.addRunDependency('game-files');
+        bringIn(files).then(() => { install(FS, files); files.clear(); M.removeRunDependency('game-files'); },
+          (e) => fail('A game file did not load', `${e.message ?? e}.`));
+      } else {
+        const { lazy, lazyBytes } = install(FS, files, (...a) => vault.gameFile(...a));
+        files.clear();
+        if (lazy) {
+          useVault(vault);                               // the page's reads of /game (the editor) go through the vault
+          log(`page: ${lazy} game files (${mb(lazyBytes)}) stay in the browser's cache until the game opens them`);
+        }
+      }
       FS.mkdirTree('/user');
       const idbfs = M.IDBFS || FS.filesystems.IDBFS;           // newer Emscripten has no FS.filesystems
       if (!skipWorkFiles(idbfs, (p) => Boolean(vault?.owns(p)))) log('page: this engine\'s IDBFS has no sets: the working files go to IndexedDB too');
@@ -1217,12 +1290,17 @@ async function start() {
   let got = 0, compileError = null, files;
   // The engine is checked while the files load; if this browser cannot compile it, the download stops.
   const compiled = engineCompiles(info).then((err) => { if (err) { compileError = err; abort.abort(); } });
+  // Large game files stay in the cache (LAZY_MIN) when the game can read them from there: a JSPI engine, the vault
+  // wanted, and a cache. runEngine falls back to memory if its hook does not take.
+  const lazyGame = Boolean(cache) && vaultWanted() && info.chosen.suspend === 'jspi' && typeof WebAssembly.Suspending === 'function';
+  gameCache = cache;
   try {
     files = await download(info.files, cache, (n) => {
       got += n;
+      if (!$('bar-fill')) return;                       // the box shows something else now (a file failed)
       $('bar-fill').style.width = `${(100 * got / info.totalBytes).toFixed(1)}%`;
       $('bytes').textContent = `${mb(got)} of ${mb(info.totalBytes)}${toGet > 0 ? speed(got) : ''}`;
-    }, counts, abort.signal);
+    }, counts, abort.signal, { lazy: lazyGame });
     await compiled;
   } catch (e) {
     await compiled;

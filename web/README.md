@@ -186,6 +186,21 @@ stored in part records of 4 MB, each written on its own (`vault.adoptStream`; ke
 an iPhone still closed the tab when the whole save was one Blob. Readers join the parts into one Blob of the storage
 (`blobOf`), a rename or an older copy keeps or shares them, and each start removes the parts that no record names.
 
+**The game files out of memory (`loader.js` LAZY_MIN, `vault.js` gameFile).** The page once read all 467 MB of game
+files into the engine's in-memory file system at every start, though the game reads 18 MB of them on the way to its
+first screen: the tab's JS heap was 497 MB at that screen, and an iPhone gives a tab about 2 GB. With a JSPI engine,
+the vault wanted and the browser's cache storage, a file larger than 64 KB (491 files, 465 MB) now goes from the
+download straight into the cache (counted on the way, never kept in memory), and the engine's file system gets a
+placeholder of its size; when the game opens it, the vault takes its Blob from the cache (`response.blob()`) and the
+game reads the pieces it needs, as it reads a save (below). The 272 smaller files (1.8 MB) come into memory as before.
+The page's own reads of them (the editor copies the game's database for New data set) go through the vault
+(`readBytes`). Measured with the live engine and the real files (21 November 2026): the first screen with a JS heap of
+30 MB instead of 497 MB and the tab's process 504 MB instead of 936 MB; a new game and a holiday 792 MB at the most
+instead of 1151 MB; a start from the cache 1.7 s, its files ready in 0.4 s instead of being read. With `-seed 7` the
+game's own dump of its first news screen is the same, byte for byte, as before. Without JSPI (the Asyncify engine of
+Safari and the iPad, before JSPI), without a cache (an http address that is not this computer), or when the engine's
+reads could not be hooked, every file comes into memory as before.
+
 **Where the saves live (the vault, `vault.js`).** IDBFS keeps every file of the user folder in memory and reads all of
 it at the start, so a player with many saves ran the tab out of memory. With the vault on, saves, older copies and the
 files of the data sets live in an IndexedDB store of their own (`cm0102-vault`), as Blobs that the browser keeps on
@@ -281,7 +296,9 @@ Delete removes a save or an older copy (with Cloud Saves, a save in the cloud go
 zip of every save, older copy and data set, as the save folder holds them, or, when that is more than a zip holds (4 GB:
 six saves of 690 MB pass it), a part of at most 3.5 GB at each press (`zipParts`), the button naming the next one (`zipOfBlobs`, `zip.js`: the files are stored
 as they are and the zip is made of their Blobs, so the vault's files go from disk and a backup needs no memory). While the game runs,
-the page keeps the game files and the whole user folder in memory: every save, older copy and data set. A browser that
+without the vault (an Asyncify engine, or `?vault=0`) the page keeps the game files and the whole user folder in memory:
+every save, older copy and data set (with the vault, the game files stay in the browser's cache too: The game files
+out of memory). A browser that
 runs out of memory stops the game with "Array buffer allocation failed"; the page then says so and suggests closing the
 tab and opening the game in a new one.
 
@@ -779,9 +796,10 @@ What to know about the Asyncify engine:
   grows as the game's heap grows. Every block of the game sits where it sits on the desktop.
 - Time: the game's screen loop never returns. With JSPI the runtime's sleeps hand the time to the page: the idle
   sleep, and a short one at least every 12 ms while the game polls for input (`rt_web_yield`).
-- Files: the page writes the game files into Emscripten's file system before `main` starts; the runtime's POSIX host
+- Files: the page puts the game files into Emscripten's file system before `main` starts; the runtime's POSIX host
   (`host/posix.c`) reads them as on Linux. The page keeps the game files in the browser's cache storage, each under
-  its version (its SHA-256 in the manifest), so a later start downloads nothing. The user folder `/user` is kept in
+  its version (its SHA-256 in the manifest), so a later start downloads nothing. With a JSPI engine, the files larger
+  than 64 KB are placeholders that the game reads from the cache in pieces (The game files out of memory). The user folder `/user` is kept in
   IndexedDB (a save at once, everything else every 15 seconds and when the tab is hidden or closed), and the page
   asks the browser to keep its storage.
 - SDL2 is Emscripten's port: it draws on the canvas, takes the mouse and keys, and plays the sound.
