@@ -300,6 +300,13 @@
   #made svg { width: 12px; height: 12px; fill: var(--heart); }
   #made:empty, #app.fs #made { display: none; }
   @media (max-height: 520px) { #made { display: none; } }
+  /* The footer reaches the screen's bottom edge: the strip the page keeps clear there (an iPhone's home bar, Safari's
+     toolbar over the page) takes the footer's colour, its words above it, instead of an empty band under the footer
+     (an iPhone 17 Pro Max, 21 November 2026). Where the footer does not show, the page keeps its own padding. */
+  @media (min-height: 521px) {
+    #app:not(.fs):has(> #made:not(:empty)) { padding-bottom: 0; }
+    #made { height: calc(26px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); }
+  }
   .check { display: flex; gap: 8px; align-items: flex-start; } .check input { margin-top: 3px; }
   .warn { border-left: 3px solid var(--warn); padding: 2px 0 2px 10px; margin: 6px 0 8px !important; }
   .promo { border: 1px solid var(--accent); border-radius: var(--r); padding: 7px 10px; margin: 8px 0 !important; }
