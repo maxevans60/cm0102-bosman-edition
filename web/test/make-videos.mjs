@@ -9,14 +9,16 @@
 //   render again: node .claude/skills/hyperframes/scripts/plugin-cli.mjs render, in it)
 // CM_VIDEO_SITE: the site to record (default https://cm0102-web.fly.dev; or a local server with the game's files,
 // http://127.0.0.1:8080). Each film starts in a new browser profile, so it downloads the game files once (cut out).
+// The page's scripts (web/*.js) come from this checkout, so a change to the page shows before it is deployed.
 // CM_VIDEO_SAVE: a saved game of the real game, Juventus in 2001/02 (the editor film edits Del Piero in it); a new game
 // with Italy and Juventus, saved on its first day, is enough. CM_VIDEO_MUSIC (or CM_VIDEO_MUSIC_APP,
 // CM_VIDEO_MUSIC_EDITOR) names a music file for the films (videos-compose.mjs; not in git).
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { composeVideo, render } from './videos-compose.mjs';
 
 const require = createRequire(import.meta.url);
@@ -28,6 +30,8 @@ if (!process.env.CM_VIDEO_SAVE) throw new Error('CM_VIDEO_SAVE: a .sav of the re
 const SAVE = { name: basename(process.env.CM_VIDEO_SAVE), buffer: readFileSync(process.env.CM_VIDEO_SAVE), mimeType: 'application/octet-stream' };
 mkdirSync(OUT, { recursive: true });
 const tmp = mkdtempSync(join(tmpdir(), 'cm0102-videos-'));
+const WEB = resolve(fileURLToPath(import.meta.url), '../..');
+const PAGE_JS = new Set(readdirSync(WEB).filter((f) => f.endsWith('.js') && f !== 'sw.js'));
 
 // Places on the game's own screen, in its pixels (the picture is 1280x800, scaled into the canvas's box).
 const GAME = { w: 1280, h: 800 };
@@ -77,8 +81,12 @@ async function recorder(name) {
   const dir = join(tmp, `video-${name}`);
   // A new profile: no game files, no saves, the game's first start (its Game Settings).
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, acceptDownloads: true,
-    recordVideo: { dir, size: { width: 1280, height: 800 } } });
+    serviceWorkers: 'block', recordVideo: { dir, size: { width: 1280, height: 800 } } });
   await ctx.addInitScript(OVERLAY);
+  // The page's own scripts from this checkout (the films show the page about to be released); the engine, the game
+  // files and the server's answers from the site. The service worker is off: it would answer for the page.
+  await ctx.route((url) => url.origin === new URL(BASE).origin && PAGE_JS.has(url.pathname.slice(1)), (route) =>
+    route.fulfill({ contentType: 'text/javascript', body: readFileSync(join(WEB, new URL(route.request().url()).pathname.slice(1))) }));
   const p = await ctx.newPage();
   current = { name, p };
   const t0 = Date.now();                                 // the capture starts with the page

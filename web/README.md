@@ -885,7 +885,8 @@ What to know about the Asyncify engine:
   Save Game; the Tactics tab; the Databases tab: Get a database from the library, Use; Full screen, Cloud Saves, Help,
   Add to Home Screen), 1920x1080 H.264. The page is recorded in Chromium (1280x800) on a real site, `CM_VIDEO_SITE`
   (default `https://cm0102-web.fly.dev`; or a local server with the game's files), with the real engine, so the game's
-  own screens are in them; each film starts in a new browser profile. `CM_VIDEO_SAVE` is a save of the real game,
+  own screens are in them; each film starts in a new browser profile. The page's scripts (`web/*.js`) come from this
+  checkout (the service worker off), so a change to the page is in the films before it is deployed. `CM_VIDEO_SAVE` is a save of the real game,
   Juventus in 2001/02 (a new game with Italy, Juventus taken, saved on its first day): the films upload it. The waits
   (the game files' download, the game starting and its Game Settings, a save loading) are recorded but cut out of the
   capture. The game's own buttons are pressed at places in its 1280x800 picture (`AT` in the script), held 150 ms as a
